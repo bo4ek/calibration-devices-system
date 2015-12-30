@@ -351,7 +351,7 @@
                             {{'REQUIRED' | translate}}
                         </p>
 
-                        <p class="help-block"
+                        <p class="help-block street-required"
                            ng-if="clientForm.street.$invalid">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
@@ -472,7 +472,7 @@
                         <p class="help-block"
                            ng-if="clientForm.firstDeviceCount.$error.required || clientForm.firstDeviceCount.$invalid">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'TYPEAHEAD_ERROR' | translate}}
+                            {{'REQUIRED' | translate}}
                         </p>
 
                         <p class="help-block"
@@ -556,7 +556,7 @@
                             <p class="help-block"
                                ng-if="clientForm.secondDeviceCount.$error.required || clientForm.secondDeviceCount.$invalid">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'TYPEAHEAD_ERROR' | translate}}
+                                {{'REQUIRED' | translate}}
                             </p>
 
                             <p class="help-block"
