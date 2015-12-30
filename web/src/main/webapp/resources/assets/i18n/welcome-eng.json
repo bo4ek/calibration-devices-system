@@ -214,6 +214,8 @@
   "CONSUMPTION_STATUS": "Consumption status",
   "UPLOAD_BBI_FILE": "Upload BBI",
   "UPLOAD_ARCHIVE": "Upload archive",
+  "RECENT_DATA":"Recent data",
+  "ARCHIVE":"Archive",
   "FILE_NAME": "File name",
   "DATE_TIME": "Date",
   "TEMPERATURE": "Temperature",

@@ -196,10 +196,10 @@
                             </ui-select-choices>
                         </ui-select>
 
-                        <p class="help-block" ng-hide="selectedValues.selectedRegion">
+                        <!--<p class="help-block" ng-hide="selectedValues.selectedRegion">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'TYPEAHEAD_ERROR' | translate}}
-                        </p>
+                        </p>-->
 
                         <p class="help-block" ng-if="clientForm.region.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -230,10 +230,16 @@
                             </ui-select-choices>
                         </ui-select>
 
-                        <p class="help-block" ng-hide="selectedValues.selectedDistrict">
+                        <!--<p class="help-block" ng-hide="selectedValues.selectedDistrict">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'TYPEAHEAD_ERROR' | translate}}
+                        </p>-->
+
+                        <p class="help-block" ng-if="clientForm.district.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
                         </p>
+
                     </div>
                 </div>
                 <!--Locality-->
@@ -267,10 +273,10 @@
                         </i>
                         </a>
 
-                        <p class="help-block" ng-hide="selectedValues.selectedLocality">
+                       <!-- <p class="help-block" ng-hide="selectedValues.selectedLocality">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'TYPEAHEAD_ERROR' | translate}}
-                        </p>
+                        </p>-->
 
                         <p class="help-block" ng-if="clientForm.district.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -298,6 +304,11 @@
                                 <span ng-bind-html="index"></span>
                             </ui-select-choices>
                         </ui-select>
+
+                        <p class="help-block" ng-if="clientForm.index.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
 
                     </div>
                 </div>
@@ -337,15 +348,14 @@
                         </div>
                         <p class="help-block" ng-if="clientForm.streetType.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'TYPEAHEAD_ERROR' | translate}}
+                            {{'REQUIRED' | translate}}
                         </p>
 
                         <p class="help-block"
                            ng-if="clientForm.street.$invalid">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'STREET_ERROR' | translate}}
+                            {{'REQUIRED' | translate}}
                         </p>
-
                     </div>
                 </div>
                 <!--Building-->
