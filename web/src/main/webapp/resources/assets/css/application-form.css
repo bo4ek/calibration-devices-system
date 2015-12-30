@@ -28,6 +28,14 @@
     margin-right: 0 !important;
 }
 
+#firstDeviceComment, #secondDeviceComment {
+    width: 100% !important;
+}
+
+p.street-required {
+    padding-left: 5px;
+}
+
 #counterNumber {
     padding-left: 0px;
     padding-right: 0px;
