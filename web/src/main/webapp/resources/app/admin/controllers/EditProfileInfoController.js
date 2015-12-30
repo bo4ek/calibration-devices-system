@@ -1,5 +1,5 @@
 angular
-    .module('employeeModule')
+    .module('adminModule')
     .controller('EditProfileInfoController', ['$rootScope', '$scope', '$modalInstance', '$log', '$modal', '$timeout', '$state', '$http', 'ProfileService', 'user',
 
         function ($rootScope, $scope, $modalInstance, $log, $modal, $timeout, $state, $http, profileService, user) {
@@ -70,7 +70,7 @@ angular
                             $scope.closeModal();
                             $modal.open({
                                 animation: true,
-                                templateUrl: 'resources/app/provider/views/modals/employee-editing-success.html',
+                                templateUrl: 'resources/app/admin/views/modals/employee-editing-success.html',
                                 controller: function ($modalInstance) {
                                     this.ok = function () {
                                         $modalInstance.close();

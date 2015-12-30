@@ -1,0 +1,45 @@
+<div id="page-wrapper" class="container-fluid">
+	<h2>{{'GENERAL_INFORMATION' | translate }}</h2>
+	<img src="resources/assets/AdminLTE-master/img/User_icon.png"
+		style="width: 250px;" alt="User Image" />
+
+	<table class="profile-info">
+		<tr>
+			<td>{{'USERNAME' | translate }}</td>
+			<td>{{user.username}}</td>
+		</tr>
+		<tr>
+			<td>{{'FIRST_NAME' | translate }}</td>
+			<td>{{user.firstName != null ? user.firstName : 'NO_DATA' | translate}}</td>
+		</tr>
+		<tr>
+			<td>{{'LAST_NAME' | translate }}</td>
+			<td>{{user.lastName != null ? user.lastName : 'NO_DATA' | translate}}</td>
+		</tr>
+		<tr>
+			<td>{{'MIDDLE_NAME' | translate }}</td>
+			<td>{{user.middleName != null ? user.middleName : 'NO_DATA' | translate}}</td>
+		</tr>
+		<tr>
+			<td>{{'EMAIL' | translate }}</td>
+			<td> {{user.email != null ? user.email : 'NO_DATA' | translate}}</td>
+		</tr>
+		<tr>
+			<td>{{'PHONE_NUMBER_TWO' | translate }}</td>
+			<td> {{user.phone != null ? user.phone : 'NO_DATA' | translate}}</td>
+		</tr>
+		<tr>
+			<td>{{'SECOND_PHONE' | translate }}</td>
+			<td> {{user.secondPhone != null ? user.secondPhone : 'NO_DATA' | translate}}</td>
+		</tr>
+	</table>
+
+	<button type="reset" class="btn btn-warning" ng-click="logout()">
+		{{'LOG_OUT' | translate }}</button>
+
+	<button type="button" class="btn btn-primary"
+		ng-click="openEditProfileModal()">
+		{{'EDIT_PROFIL' | translate }}
+		<span class="glyphicon glyphicon-pencil"></span>
+	</button>
+</div>
