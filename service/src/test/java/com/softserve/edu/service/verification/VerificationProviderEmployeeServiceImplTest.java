@@ -120,7 +120,7 @@ public class VerificationProviderEmployeeServiceImplTest {
     public void testCountByProviderEmployeeTasks() {
         Long expected = 1L;
         String username = "username";
-        when(verificationRepository.countByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED)).thenReturn(expected);
+        when(verificationRepository.countByProviderEmployeeUsernameAndStatus(username, Status.IN_PROGRESS)).thenReturn(expected);
 
         Assert.assertEquals(expected, verificationProviderEmployeeService.countByProviderEmployeeTasks(username));
 
