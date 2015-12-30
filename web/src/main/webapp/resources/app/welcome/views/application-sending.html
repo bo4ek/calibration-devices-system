@@ -17,6 +17,7 @@
             <form id="clientForm" name="clientForm" role="form"
                   class="form-horizontal form-group" ng-submit="sendApplicationData()"
                   novalidate>
+                <!--LastName-->
                 <div class="form-group" show-errors>
                     <label for="lastName" class="col-md-2 control-label">
                         {{'LAST_NAME' | translate}} </label>
@@ -24,11 +25,10 @@
                     <div class="col-md-8">
                         <input id="lastName" name="lastName" class="form-control"
                                type="text" ng-model="formData.lastName"
-
                                popover="{{'ALPHABETIC_INFO' | translate}}"
                                popover-trigger="focus" popover-placement="right"
-                               ng-pattern="FIRST_LAST_NAME_REGEX" required> <span
-                            class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"></span>
+                               ng-pattern="FIRST_LAST_NAME_REGEX" required>
+                        <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"></span>
 
                         <p class="help-block" ng-if="clientForm.lastName.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -41,6 +41,7 @@
                         </p>
                     </div>
                 </div>
+                <!--FirstName-->
                 <div class="form-group" show-errors>
                     <label for="firstName" class="col-md-2 control-label">
                         {{'FIRST_NAME' | translate}} </label>
@@ -64,7 +65,7 @@
                         </p>
                     </div>
                 </div>
-
+                <!--MiddleName-->
                 <div class="form-group" show-errors>
                     <label for="middleName" class="col-md-2 control-label">
                         {{'MIDDLE_NAME' | translate}} </label>
@@ -89,20 +90,17 @@
                         </p>
                     </div>
                 </div>
+                <!--Email-->
                 <div class="form-group" show-errors>
                     <label for="email" class="col-md-2 control-label">
                         {{'EMAIL' | translate}} </label>
 
                     <div class="col-md-8">
                         <input id="email" name="email" type="email" class="form-control"
-                               ng-model="formData.email" placeholder="example@gmail.com"
-                               ng-pattern="EMAIL_REGEX" required> <span
-                            class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"></span>
-
-                        <p class="help-block" ng-if="clientForm.email.$error.email">
-                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'EMAIL_ERROR' | translate}}<i>example@gmail.com</i>
-                        </p>
+                               ng-model="formData.email1" placeholder="example@gmail.com"
+                               ng-pattern="EMAIL_REGEX" required>
+                        <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign">
+                        </span>
 
                         <p class="help-block" ng-if="clientForm.email.$error.pattern">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -115,39 +113,40 @@
                         </p>
                     </div>
                 </div>
+                <!--Telephone-->
                 <div class="form-group" show-errors>
                     <label for="phoneNumber" class="col-md-2 control-label">
-                        {{'PHONE_NUMBER' | translate}} </label>
+                        {{'PHONE_NUMBER' | translate}}
+                    </label>
 
                     <div class="col-md-8">
-                        <div>
-                            <div class="input-group">
-                                <span class="input-group-addon">+380</span>
-                                <input id="phoneNumber" name="phoneNumber" type="tel"
-                                       class="form-control col-md-8 " ng-model="formData.phone"
-                                       placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX" required>
+                        <div class="input-group">
+                            <span class="input-group-addon">+380</span>
+                            <input id="phoneNumber" name="phoneNumber" type="tel"
+                                   class="form-control col-md-8 " ng-model="formData.phone"
+                                   placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX" required>
+                            <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                  style="margin-right:20px"></span>
 
-                                <div class="input-group-addon btn btn-default btn-circle"
-                                     ng-click="checkboxModel = !checkboxModel">
-                                    <i class="glyphicon glyphicon-plus"></i>
-                                </div>
-
+                            <div class="input-group-addon btn btn-default btn-circle"
+                                 ng-click="checkboxModel = !checkboxModel">
+                                <i class="glyphicon glyphicon-plus"></i>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <p class="help-block col-md-8 col-md-offset-2"
-                           ng-if="clientForm.phoneNumber.$error.pattern">
-                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'PHONE_NUMBER_ERROR' | translate}}</p>
 
-                        <p class="help-block col-md-8 col-md-offset-2"
-                           ng-if="clientForm.email.$error.required">
-                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'REQUIRED' | translate}}
-                        </p>
                     </div>
+                    <p class="help-block col-md-8 col-md-offset-2"
+                       ng-if="clientForm.phoneNumber.$error.pattern">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'PHONE_NUMBER_ERROR' | translate}}</p>
+
+                    <p class="help-block col-md-8 col-md-offset-2"
+                       ng-if="clientForm.phoneNumber.$error.required">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'REQUIRED' | translate}}
+                    </p>
                 </div>
+                <!--Additional telephone-->
                 <div class="form-group" show-errors ng-show="checkboxModel">
                     <label for="phoneNumberSecond" class="col-md-2 control-label">
                         {{'SECOND_PHONE' | translate}} </label>
@@ -174,6 +173,7 @@
                         </p>
                     </div>
                 </div>
+                <!--Region-->
                 <div class="form-group" show-errors>
                     <label for="region" class="col-md-2 control-label">
                         {{'REGION' | translate}}
@@ -183,58 +183,75 @@
                         <ui-select class="form-control" type="text" theme="select2"
                                    ng-model="selectedValues.selectedRegion"
                                    on-select="receiveDistricts(selectedValues.selectedRegion)"
-                                   name="region" required>
+                                   name="region" id="region" required>
                             <ui-select-match placeholder="{{'SELECT_REGION' | translate}}" allow-clear="true">
                                 {{$select.selected.designation}}
+
+                                <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                      style="margin-right:20px"></span>
+
                             </ui-select-match>
                             <ui-select-choices repeat="region in regions | filter: $select.search">
                                 <span ng-bind-html="region.designation"></span>
                             </ui-select-choices>
                         </ui-select>
 
-                        <p class="help-block">
+                        <p class="help-block" ng-hide="selectedValues.selectedRegion">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'TYPEAHEAD_ERROR' | translate}}
                         </p>
+
+                        <p class="help-block" ng-if="clientForm.region.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+
                     </div>
                 </div>
-
+                <!--District-->
                 <div class="form-group" show-errors>
                     <label for="district" class="col-md-2 control-label">
-                        {{'DISTRICT' | translate}} </label>
+                        {{'DISTRICT' | translate}}
+                    </label>
 
                     <div class="col-md-8">
                         <ui-select class="form-control" type="text" theme="select2"
                                    ng-model="selectedValues.selectedDistrict"
                                    ng-disabled="!selectedValues.selectedRegion"
                                    on-select="receiveLocalitiesAndProviders(selectedValues.selectedDistrict)"
-                                   name="district" required>
+                                   name="district" id="district" required>
                             <ui-select-match placeholder="{{'SELECT_DISTRICT' | translate}}" allow-clear="true">
                                 {{$select.selected.designation}}
+                                <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                      style="margin-right:20px"></span>
                             </ui-select-match>
                             <ui-select-choices repeat="district in districts | filter: $select.search">
                                 <span ng-bind-html="district.designation"></span>
                             </ui-select-choices>
                         </ui-select>
 
-                        <p class="help-block">
+                        <p class="help-block" ng-hide="selectedValues.selectedDistrict">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'TYPEAHEAD_ERROR' | translate}}
                         </p>
                     </div>
                 </div>
+                <!--Locality-->
                 <div class="form-group" show-errors>
                     <label for="locality" class="col-md-2 control-label">
-                        {{'LOCALITY' | translate}} </label>
+                        {{'LOCALITY' | translate}}
+                    </label>
 
                     <div class="col-md-8">
                         <ui-select class="form-control" type="text" theme="select2"
                                    ng-model="selectedValues.selectedLocality"
                                    ng-disabled="!selectedValues.selectedDistrict"
                                    on-select="receiveStreets(selectedValues.selectedLocality,selectedValues.selectedDistrict)"
-                                   name="locality" required>
+                                   name="locality" id="locality" required>
                             <ui-select-match placeholder="{{'SELECT_LOCALITY' | translate}}" allow-clear="true">
                                 {{$select.selected.designation}}
+                                <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                      style="margin-right:20px"></span>
                             </ui-select-match>
                             <ui-select-choices
                                     repeat="locality in localities | filter: $select.search | unique:'designation' ">
@@ -244,19 +261,25 @@
                         <a ng-if="!isProvidersExist
                         && selectedValues.selectedDistrict
                         && selectedValues.selectedLocality
-                        "
-                           style="color: #b27e77"
+                        " style="color: #b27e77"
                            ng-click="feedbackModalNoProvider()"> <i class="fa fa-info-circle">
                             <ins>{{'PROVIDER_NOT_FOUND' | translate }}</ins>
                         </i>
                         </a>
 
-                        <p class="help-block">
+                        <p class="help-block" ng-hide="selectedValues.selectedLocality">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'TYPEAHEAD_ERROR' | translate}}
                         </p>
+
+                        <p class="help-block" ng-if="clientForm.district.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+
                     </div>
                 </div>
+                <!--Index-->
                 <div class="form-group" show-errors>
                     <label for="index" class="col-md-2 control-label"> {{'INDEX' | translate}}</label>
 
@@ -265,9 +288,11 @@
                                    ng-model="selectedValues.selectedIndex"
                                    ng-disabled="!selectedValues.selectedLocality"
                                    on-select="receiveStreetsTypes()"
-                                   name="index" required>
+                                   name="index" id="index" required>
                             <ui-select-match placeholder="{{'SELECT_MAIL_INDEX' | translate}}" allow-clear="true">
                                 {{$select.selected}}
+                                <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                      style="margin-right:20px"></span>
                             </ui-select-match>
                             <ui-select-choices repeat="index in indexes | filter: $select.search">
                                 <span ng-bind-html="index"></span>
@@ -276,12 +301,12 @@
 
                     </div>
                 </div>
+                <!--Street-->
                 <div class="form-group" show-errors>
-                    <label for="street" class="col-md-2 control-label">
-                        {{'STREET' | translate}} </label>
+                    <label for="street" class="col-md-2 control-label">{{'STREET' | translate}}</label>
 
                     <div class="col-md-8">
-                        <div class="pull-left col-lg-3" id="typeStreet">
+                        <div class="pull-left col-xs-3" id="typeStreet">
                             <ui-select class="form-control" type="text" theme="select2"
                                        ng-model="selectedValues.selectedStreetType"
                                        ng-disabled="!selectedValues.selectedIndex"
@@ -297,7 +322,7 @@
 
 
                         </div>
-                        <div class="col-md-9" id="streetBox"
+                        <div class="col-xs-9" id="streetBox"
                              ng-class="{'has-success' : selectedValues.selectedStreet  && selectedValues.selectedIndex,
                                         'has-error' : !selectedValues.selectedStreet &&  clientForm.street.$dirty && selectedValues.selectedIndex}">
                             <input name="street" class="form-control"
@@ -323,9 +348,9 @@
 
                     </div>
                 </div>
+                <!--Building-->
                 <div class="form-group" show-errors>
-                    <label for="building" class="col-md-2 control-label">
-                        {{'BUILDING' | translate}} </label>
+                    <label for="building" class="col-md-2 control-label">{{'BUILDING' | translate}}</label>
 
                     <div class="col-md-8">
                         <div class="input-group" style="width: 100%">
@@ -333,8 +358,8 @@
                                    ng-model="selectedValues.selectedBuilding"
                                    typehead="building as building.designation for building in buildings | filter: $viewValue | limitTo: 4"
                                    ng-pattern="BUILDING_REGEX" required>
-                            <span
-                                    class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign building-ok"></span>
+                            <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign building-ok"></span>
+
                             <span class="input-group-addon">
                                 <input type="checkbox" ng-model="defaultValue.privateHouse"
                                        ng-change="changeFlat(clientForm)">
@@ -354,7 +379,7 @@
                         </p>
                     </div>
                 </div>
-
+                <!--Flat-->
                 <div class="form-group" show-errors ng-hide="defaultValue.privateHouse">
                     <label for="flat" class="col-md-2 control-label">{{'FLAT' | translate}}</label>
 
@@ -378,12 +403,13 @@
                         </p>
                     </div>
                 </div>
+                <!--FirstDevice-->
                 <div class="form-group" show-errors>
-                    <label for="device" class="col-md-2 control-label">
+                    <label for="firstDeviceCount" class="col-md-2 control-label">
                         {{'COUNTER_CATEGORY' | translate}} </label>
 
                     <div class="col-md-8 ">
-                        <div class="pull-left col-md-2" id="counterNumber">
+                        <div class="pull-left col-xs-2" id="counterNumber">
                             <ui-select class="form-control" type="text" theme="select2"
                                        ng-model="selectedValues.firstDeviceCount"
                                        search-enabled="false"
@@ -397,7 +423,7 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        <div class="col-md-3" id="deviceBox">
+                        <div class="col-xs-3">
                             <ui-select class="form-control" type="text" theme="select2"
                                        ng-model="selectedValues.firstSelectedDeviceType"
                                        search-enabled="false"
@@ -414,7 +440,7 @@
                             </ui-select>
 
                         </div>
-                        <div class="col-md-7 input-group pull-right" id="deviceBox">
+                        <div class="col-xs-7 input-group pull-right">
                             <ui-select class="form-control" type="text" theme="select2"
                                        ng-model="selectedValues.firstSelectedProvider"
                                        search-enable="false"
@@ -432,6 +458,7 @@
                                 <i class="glyphicon glyphicon-plus input-block-level"></i>
                             </div>
                         </div>
+
                         <p class="help-block"
                            ng-if="clientForm.firstDeviceCount.$error.required || clientForm.firstDeviceCount.$invalid">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -445,7 +472,7 @@
                         </p>
                     </div>
                 </div>
-
+                <!--Comment-->
                 <div class="form-group">
                     <label for="firstDeviceComment" class="col-md-2 control-label">
                         {{'APPLICATION_COMMENT' | translate}}
@@ -458,20 +485,21 @@
                                   ng-model="firstDeviceComment" maxlength="254"></textarea>
                     </div>
                 </div>
+                <!--Second device. Comment to second device-->
                 <div ng-show="isSecondDevice">
                     <div class="form-group" show-errors>
                         <label for="device2" class="col-md-2 control-label">
                             {{'COUNTER_CATEGORY' | translate}} </label>
 
                         <div class="col-md-8 ">
-                            <div class="pull-left col-md-2" id="counterNumber">
+                            <div class="pull-left col-xs-2" id="counterNumber">
                                 <ui-select class="form-control" type="text" theme="select2"
                                            ng-required="isSecondDevice"
                                            ng-model="selectedValues.secondDeviceCount"
                                            search-enabled="false"
                                            name="secondDeviceCount"
                                            id="counterNumber">
-                                    <ui-select-match placeholder="Кількість">
+                                    <ui-select-match placeholder="РљС–Р»СЊРєС–СЃС‚СЊ">
                                         {{$select.selected}}
                                     </ui-select-match>
                                     <ui-select-choices repeat="value in values ">
@@ -479,14 +507,14 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
-                            <div class="col-md-3" id="deviceBox">
+                            <div class="col-xs-3" id="deviceBox">
                                 <ui-select class="form-control" type="text" theme="select2"
                                            ng-model="selectedValues.secondSelectedDeviceType"
                                            search-enabled="false"
                                            on-select="getProvidersByLocalityAndDeviceType(selectedValues.selectedLocality,selectedValues.secondSelectedDeviceType,'secondDeviceGroup')"
                                            id="secondSelectedDeviceType"
                                            name="secondSelectedDeviceType">
-                                    <ui-select-match placeholder="Тип лічильника">
+                                    <ui-select-match placeholder="РўРёРї Р»С–С‡РёР»СЊРЅРёРєР°">
                                         {{$select.selected | translate}}
                                     </ui-select-match>
                                     <ui-select-choices
@@ -502,12 +530,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-7 input-group pull-right" id="deviceBox">
+                            <div class="col-xs-7 input-group pull-right" id="deviceBox">
                                 <ui-select class="form-control" type="text" theme="select2"
                                            ng-model="selectedValues.secondSelectedProvider"
                                            search-enable="false"
                                            name="secondDeviceProvider">
-                                    <ui-select-match placeholder="Провайдер">
+                                    <ui-select-match placeholder="РџСЂРѕРІР°Р№РґРµСЂ">
                                         {{ $select.selected.designation}}
                                     </ui-select-match>
                                     <ui-select-choices repeat="provider in secondDeviceProviders">
@@ -531,7 +559,6 @@
                     <div class="form-group">
                         <label for="secondDeviceComment" class="col-md-2 control-label">
                             {{'APPLICATION_COMMENT' | translate}}
-
                         </label>
 
                         <div class="col-md-8">
@@ -542,8 +569,7 @@
                         </div>
                     </div>
                 </div>
-
-
+                <!--Buttons-->
                 <div class="form-group ">
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-success  pull-right text-uppercase">
@@ -563,7 +589,6 @@
                         </button>
                     </div>
                 </div>
-
             </form>
         </div>
 
@@ -590,11 +615,9 @@
                     {{'APP_SENT' | translate}}<a href="#/application-status/{{code}}">
                     <b>{{code}} </b> </a>><br>
                     {{'APP_SENT_INFO' | translate}}
-
                 </div>
                 <br>
             </div>
         </div>
     </div>
-
 </section>
