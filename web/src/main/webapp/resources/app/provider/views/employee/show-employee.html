@@ -56,14 +56,14 @@
                                        class="table table-bordered table-hover table-responsive users_table">
 
                                     <tbody>
-                                    <tr ng-repeat="user in $data" ng-class="{incorrect : !user.available}">
+                                    <tr ng-repeat="user in $data" ng-class="{incorrect : !user.isAvaliable}">
                                         <td data-title="'USERNAME'|translate " sortable="'username'"
                                             filter="{ 'username': 'text' }">{{
                                             user.username }}
                                         </td>
-                                        <td data-title="'ROLE' |translate" sortable="'role'"
+                                        <!--<td data-title="'ROLE' |translate" sortable="'role'"
                                             filter="{ 'role': 'text' }">{{ user.roles }}
-                                        </td>
+                                        </td>-->
                                         <td data-title="'FIRST_NAME'|translate" sortable="'firstName'"
                                             filter="{ 'firstName': 'text' }">{{
                                             user.firstName }}
@@ -81,10 +81,10 @@
                                             user.secondPhone }}
                                         </td>
                                         <td data-title="'EMPLOYEE_CAPACITY'|translate">
-                                            <a ng-if="user.numberOfVerifications" ng-click="showCapacity(user.username)"
+                                            <a ng-if="user.countOfVerification" ng-click="showCapacity(user.username)"
                                                class="cursor-pointer">
-                                                {{user.numberOfVerifications }}</a>
-                                            <span ng-if="!user.numberOfVerifications"> {{ user.numberOfVerifications}}</span>
+                                                {{user.countOfVerification }}</a>
+                                            <span ng-if="!user.countOfVerification"> {{ user.countOfVerification}}</span>
                                         </td>
                                         <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
                                             <i class="glyphicon glyphicon-edit verification_protocol_user_icon"

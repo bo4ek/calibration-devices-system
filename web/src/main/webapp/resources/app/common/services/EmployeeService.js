@@ -5,6 +5,20 @@ angular
             getAll: function (pageNumber, itemsPerPage) {
                 console.log(pageNumber);
                 return getData('employee/admin/users/' + pageNumber + "/" + itemsPerPage);
+            },
+            getPage: function (currentPage, itemsPerPage, searchObj, filterObj) {
+                console.log(currentPage);
+                var field;
+                var value;
+                for (var key in filterObj) {
+                    field = key;
+                    value = filterObj[field];
+                }
+                if (value != 'asc') {
+                    field = "-" + field;
+                }
+                return getData('employee/admin/users/' + currentPage + '/' + itemsPerPage + '/' +
+                    field, searchObj);
             }
         };
 

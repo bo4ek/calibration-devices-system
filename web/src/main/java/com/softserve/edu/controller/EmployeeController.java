@@ -215,27 +215,26 @@ public class EmployeeController {
                     .distinct()
                     .collect(Collectors.toList());
 
-            boolean isProviderAdmin = userRoles.contains(UserRole.PROVIDER_ADMIN.name());
+            /*boolean isProviderAdmin = userRoles.contains(UserRole.PROVIDER_ADMIN.name());
             boolean isCalibratorAdmin = userRoles.contains(UserRole.CALIBRATOR_ADMIN.name());
-            boolean isStateVerificatorAdmin = userRoles.contains(UserRole.STATE_VERIFICATOR_ADMIN.name());
+            boolean isStateVerificatorAdmin = userRoles.contains(UserRole.STATE_VERIFICATOR_ADMIN.name());*/
 
-            if (!isProviderAdmin && !isCalibratorAdmin && !isStateVerificatorAdmin) {
-                resultList.add(new UsersPageItem(
-                                providerEmployee.getUsername(),
-                                userRoles,
-                                providerEmployee.getFirstName(),
-                                providerEmployee.getLastName(),
-                                providerEmployee.getMiddleName(),
-                                providerEmployee.getPhone(),
-                                providerEmployee.getSecondPhone(),
-                                providerEmployee.getOrganization().getName(),
-                                verificationProviderEmployeeService.countByProviderEmployeeTasks(providerEmployee.getUsername()),
-                                verificationProviderEmployeeService.countByCalibratorEmployeeTasks(providerEmployee.getUsername()),
-                                verificationProviderEmployeeService.countByStateVerificatorEmployeeTasks(providerEmployee.getUsername()),
-                                providerEmployee.getIsAvailable()
-                        )
-                );
-            }
+            resultList.add(new UsersPageItem(
+                            providerEmployee.getUsername(),
+                            userRoles,
+                            providerEmployee.getFirstName(),
+                            providerEmployee.getLastName(),
+                            providerEmployee.getMiddleName(),
+                            providerEmployee.getPhone(),
+                            providerEmployee.getSecondPhone(),
+                            providerEmployee.getOrganization().getName(),
+                            verificationProviderEmployeeService.countByProviderEmployeeTasks(providerEmployee.getUsername()),
+                            verificationProviderEmployeeService.countByCalibratorEmployeeTasks(providerEmployee.getUsername()),
+                            verificationProviderEmployeeService.countByStateVerificatorEmployeeTasks(providerEmployee.getUsername()),
+                            providerEmployee.getIsAvailable()
+                    )
+            );
+
         }
         return resultList;
     }

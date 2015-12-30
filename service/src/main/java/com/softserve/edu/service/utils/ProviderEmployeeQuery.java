@@ -62,6 +62,9 @@ public class ProviderEmployeeQuery {
                                             String firstName, String lastName, String organization, String telephone, String secondTelephone,
                                             Long idOrganization) {
         Predicate queryPredicate = cb.conjunction();
+        queryPredicate = cb.and(cb.isNotMember(UserRole.CALIBRATOR_ADMIN, root.get("userRoles")), queryPredicate);
+        queryPredicate = cb.and(cb.isNotMember(UserRole.PROVIDER_ADMIN, root.get("userRoles")), queryPredicate);
+        queryPredicate = cb.and(cb.isNotMember(UserRole.STATE_VERIFICATOR_ADMIN, root.get("userRoles")), queryPredicate);
         if (idOrganization != null) {
             queryPredicate = cb.and(cb.equal(joinSearch.get("id"), idOrganization), queryPredicate);
         }

@@ -14,34 +14,16 @@ angular
             }, {
                 total: 0,
                 getData: function ($defer, params) {
-                    var pageNumber = params.page();
-                    var itemsPerPage = params.count();
-                    var sortCriteria = params.sorting();
-                    var filterCriteria = params.filter();
-
-                    if (!Object.keys(filterCriteria).length && sortCriteria.lastName == 'asc') {
-                        employeeService
-                            .getAll(pageNumber - 1, itemsPerPage + 1)
-                            .success(function (result) {
-
-                                $scope.totalEmployee = result.totalItems;
-                                //$scope.totalEmployee = result.length;
-                                params.total(result.totalItems);
-
-                                $defer.resolve(result);
-
-                            });
-                        return;
-                    }
-                    //userService.getPage(pageNumber, itemsPerPage, filterCriteria, sortCriteria)
-                    //    .success(function (result) {
-                    //        $scope.totalEmployee = result.totalItems;
-                    //        $defer.resolve(result.content);
-                    //        params.total(result.totalItems);
-                    //        $scope.cantAddNewEmployee();
-                    //    }, function (result) {
-                    //        $log.debug('error fetching data:', result);
-                    //    });
+                    userService.getPage(params.page(), params.count(), params.filter(), params.sorting())
+                        .success(function (result) {
+                            $scope.totalEmployee = result.totalItems;
+                            $defer.resolve(result.content);
+                            //$scope.totalEmployee = result.length;
+                            params.total(result.totalItems);
+                            $scope.cantAddNewEmployee();
+                        }, function (result) {
+                            $log.debug('error fetching data:', result);
+                        });
                 }
             });
 
