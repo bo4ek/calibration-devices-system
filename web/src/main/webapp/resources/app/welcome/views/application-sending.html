@@ -509,7 +509,7 @@
                                            search-enabled="false"
                                            name="secondDeviceCount"
                                            id="counterNumber">
-                                    <ui-select-match placeholder="РљС–Р»СЊРєС–СЃС‚СЊ">
+                                    <ui-select-match placeholder="{{'NUMBER_OF_COUNTERS' | translate}}">
                                         {{$select.selected}}
                                     </ui-select-match>
                                     <ui-select-choices repeat="value in values ">
@@ -524,7 +524,7 @@
                                            on-select="getProvidersByLocalityAndDeviceType(selectedValues.selectedLocality,selectedValues.secondSelectedDeviceType,'secondDeviceGroup')"
                                            id="secondSelectedDeviceType"
                                            name="secondSelectedDeviceType">
-                                    <ui-select-match placeholder="РўРёРї Р»С–С‡РёР»СЊРЅРёРєР°">
+                                    <ui-select-match placeholder="{{'TYPE_OF_COUNTER' | translate}}">
                                         {{$select.selected | translate}}
                                     </ui-select-match>
                                     <ui-select-choices
@@ -545,7 +545,7 @@
                                            ng-model="selectedValues.secondSelectedProvider"
                                            search-enable="false"
                                            name="secondDeviceProvider">
-                                    <ui-select-match placeholder="РџСЂРѕРІР°Р№РґРµСЂ">
+                                    <ui-select-match placeholder="{{'SELECT_PROVIDER' | translate}}">
                                         {{ $select.selected.designation}}
                                     </ui-select-match>
                                     <ui-select-choices repeat="provider in secondDeviceProviders">
@@ -601,7 +601,6 @@
                 </div>
             </form>
         </div>
-
         <div class="progress col-md-8 col-md-offset-2" ng-show="appProgress"
              style="padding-left:0px;padding-right:0px;height: 30px">
 
