@@ -105,6 +105,11 @@ angular
                     url: '/404',
                     templateUrl: 'resources/app/admin/views/404.html'
                 })
+                .state("profile-info", {
+                    url: '/profile-info',
+                    templateUrl: 'resources/app/admin/views/profile-info.html',
+                    controller: 'ProfileInfoController'
+                })
                 .state("measuring-equipment-admin", {
                     url: '/calibration-module',
                     templateUrl: 'resources/app/admin/views/measurement-equipments.html',
@@ -174,6 +179,8 @@ define(['controllers/TopNavBarController', 'controllers/MainPanelController',
     'controllers/SysAdminEditModalController',
     'controllers/SysAdminDeleteModalController',
     'controllers/UsersController',
+    'controllers/ProfileInfoController',
+    'controllers/EditProfileInfoController',
     'controllers/SysAdminAddModalController',
     'controllers/InternationalizationController',
     'controllers/agreement/AgreementController',
@@ -185,6 +192,7 @@ define(['controllers/TopNavBarController', 'controllers/MainPanelController',
     'services/AgreementService',
     'services/SettingsService',
     'services/UsersService',
+    'services/ProfileService',
     'services/RoleService',
     'services/ResponseObserver',
     'services/MeasuringEquipmentServiceAdmin',

@@ -31,7 +31,17 @@ angular
                     .then(function (result) {
                         return result.status;
                     });
+            },
+            loggedInUser: function () {
+                return getLoginUser();
             }
+        }
+
+        function getLoginUser() {
+            return $http.get('loginuser')
+                .then(function (result) {
+                    return result.data;
+                });
         }
 
         function getData(url, params) {
