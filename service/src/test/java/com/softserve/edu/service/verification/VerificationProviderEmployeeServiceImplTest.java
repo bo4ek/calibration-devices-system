@@ -101,7 +101,7 @@ public class VerificationProviderEmployeeServiceImplTest {
     public void testGetVerificationListbyProviderEmployee() {
         List<Verification> expected = Collections.singletonList(verification);
         String username = "username";
-        when(verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED)).thenReturn(expected);
+        when(verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.IN_PROGRESS)).thenReturn(expected);
 
         Assert.assertEquals(expected, verificationProviderEmployeeService.getVerificationListByProviderEmployee(username));
     }

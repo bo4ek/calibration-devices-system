@@ -88,7 +88,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      */
     @Transactional
     public List<Verification> getVerificationListByProviderEmployee(String username) {
-        return verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED);
+        return verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.IN_PROGRESS);
     }
 
     /**
