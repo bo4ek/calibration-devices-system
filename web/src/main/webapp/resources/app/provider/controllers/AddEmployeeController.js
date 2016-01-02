@@ -370,8 +370,9 @@ angular
                     function (data) {
                         if (data.status == 201) {
                             $rootScope.$broadcast('new-employee-added');
-                            $scope.closeModal();
-                            $scope.resetEmployeeForm();
+                            $rootScope.$broadcast('close-form');
+                            /*$scope.closeModal();*/
+                            /*$scope.resetEmployeeForm();*/
                             toaster.pop('success', $filter('translate')('INFORMATION'),
                                 $filter('translate')('SUCCESSFUL_ADD_EMPLOYEE'));
                         } else {
@@ -397,9 +398,22 @@ angular
 
             /* Closes the modal window
              */
-            $rootScope.closeModal = function () {
-                $modalInstance.close();
+            $scope.closeModal = function () {
+                /*if($scope.isShownForm) {*/
+                    $modal.open({
+                        animation: true,
+                        templateUrl: 'resources/app/common/views/modals/close-alert.html',
+                        controller: 'VerificationCloseAlertController',
+                        size: 'md'
+                    })
+                /*}else {
+                    $modalInstance.close();
+                }*/
             };
+
+            $scope.$on('close-form', function(event, args) {
+                $modalInstance.close();
+            });
 
             //   $log.info(employeeFormData);
         }]);
