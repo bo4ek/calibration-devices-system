@@ -19,13 +19,14 @@ angular
         '$rootScope',
         '$scope',
         '$translate',
+        '$modal',
         '$modalInstance',
         '$filter',
         'AddressService',
         'OrganizationService',
         'UserService',
         'regions',
-        function ($rootScope, $scope, $translate, $modalInstance, $filter,
+        function ($rootScope, $scope, $translate, $modal, $modalInstance, $filter,
                   addressService, organizationService, userService, regions) {
 
             $scope.blockSearchFunctions = false;
@@ -167,13 +168,18 @@ angular
              * Closes the modal window for adding new
              * organization.
              */
-            $rootScope.closeModal = function (close) {
-                $scope.resetOrganizationForm();
-                if(close === true) {
-                    $modalInstance.close();
-                }
-                $modalInstance.dismiss();
+            $rootScope.closeModal = function () {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/admin/views/modals/close-alert.html',
+                    controller: 'AdminCloseAlertController',
+                    size: 'md'
+                })
             };
+
+            $scope.$on('close-modal', function(event, args) {
+                $modalInstance.dismiss();
+            });
 
             /**
              * Checks whereas given username is available to use
@@ -497,10 +503,10 @@ angular
                 organizationService.saveOrganization($scope.organizationFormData)
                     .then(function (data) {
                         if (data == 201) {
-                            $scope.closeModal(true);
                      //       $scope.resetOrganizationForm();
                             $rootScope.onTableHandling();
                         }
+                        $modalInstance.close();
                     });
             }
 
