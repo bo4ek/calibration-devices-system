@@ -110,6 +110,7 @@
 			'controllers/InternationalizationController',
 			'controllers/NavigationController',
 			'controllers/WelcomePageController',
+			'controllers/WelcomeCloseAlertController',
 			'controllers/DetailsController', 'controllers/FeedbackController',
 			'controllers/ChatController', 'services/DataReceivingService',
 			'services/DataSendingService', 'directives/OnStartupMessage',
