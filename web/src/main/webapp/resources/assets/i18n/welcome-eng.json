@@ -454,6 +454,7 @@
   "CREATE_TASK_FOR_TEAM": "Task for team",
   "CHOOSE": "Choose",
   "YEAR_OF_COUNTER_PRODUCTION": "Year of counter production",
+  "EMPLOYEE_PRODUCTIVITY" : "'Employee productivity'",
   "DATE_OF_REMOVE": "Date when counter will be removed",
   "DATE_OF_INSTALLATION": "Date of counter installation",
   "COUNTER_NUMBER_REGEX": "Only figures! No more than 8 characters!",
