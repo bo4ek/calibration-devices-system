@@ -815,8 +815,10 @@
             <button type="submit" class="btn btn-success col-md-2 col-sm-12 col-xs-12 col-lg-2">
                 {{'ADD' | translate}}
             </button>
-            <input type="reset" class="btn btn-warning col-md-2 col-sm-12 col-xs-12 col-lg-2"
-                   value="{{'CLEAR_FORM' | translate }}" ng-click="resetOrganizationForm()">
+            <button type="button" class="btn btn-warning col-md-2 col-sm-12 col-xs-12 col-lg-2"
+                    ng-click="resetApplicationForm()">
+                   {{'CLEAR_FORM' | translate }}
+            </button>
 
             <input type="button" class="btn btn-danger col-md-2 col-sm-12 col-xs-12 col-lg-2 pull-right"
                    value="{{'CLOSE' | translate}}" ng-click="closeModal()"/>

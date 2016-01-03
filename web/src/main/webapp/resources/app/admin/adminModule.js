@@ -202,6 +202,7 @@ define(['controllers/TopNavBarController', 'controllers/MainPanelController',
     'services/UnsuitabilityReasonService',
     'controllers/UnsuitabilityReasonDeleteModalController',
     'controllers/UnsuitabilityReasonAddModalController',
-    'controllers/AdminCloseAlertController'
+    'controllers/AdminCloseAlertController',
+    'controllers/AdminResetAlertController'
 ], function () {
 });

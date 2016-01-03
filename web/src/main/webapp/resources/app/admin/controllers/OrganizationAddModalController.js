@@ -124,17 +124,32 @@ angular
             /**
              * Closes modal window on browser's back/forward button click.
              */
-            $rootScope.$on('$locationChangeStart', function () {
+            /*$rootScope.$on('$locationChangeStart', function () {
                 $modalInstance.close();
-            });
+            });*/
 
             /**
              * Reset organization form
              */
+
+            $scope.resetApplicationForm = function () {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/admin/views/modals/reset-alert.html',
+                    controller: 'AdminResetAlertController',
+                    size: 'md'
+                })
+            };
+
+            $scope.$on('reset-form', function(event, args){
+                $scope.resetOrganizationForm();
+            });
+
             $scope.resetOrganizationForm = function () {
                 $scope.$broadcast('show-errors-reset');
                 $scope.organizationForm.$setPristine();
                 $scope.organizationForm.$setUntouched();
+                $scope.organizationFormData = [];
                 $scope.organizationFormData.types = undefined;
                 $scope.organizationFormData.counters = undefined;
                 $scope.organizationFormData.region = undefined;
@@ -162,6 +177,8 @@ angular
                 $scope.serviceArea.region = undefined;
                 $scope.serviceArea = {};
                 $scope.organizationFormData.serviceArea = null;
+
+                $log.debug("$scope.resetApplicationForm");
             };
 
             /**
@@ -180,6 +197,9 @@ angular
             $scope.$on('close-modal', function(event, args) {
                 $modalInstance.dismiss();
             });
+
+
+
 
             /**
              * Checks whereas given username is available to use
