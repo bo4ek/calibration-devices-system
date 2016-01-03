@@ -16,14 +16,35 @@ public class UnfitnessCertificate extends BaseCertificate {
      * @param calibrationTest one of calibration test that is assigned to
      *                        the verification
      */
-    public UnfitnessCertificate(Verification verification,
-                                CalibrationTest calibrationTest) {
+    public UnfitnessCertificate(Verification verification, CalibrationTest calibrationTest) {
         super(verification, calibrationTest);
     }
 
+    /**
+     *
+     * @return Returns the identification number of the accreditation certificate,
+     * that the calibrator's company owns.
+     */
     @Override
     @Placeholder(name = "UNFITNESS_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
         return super.getVerificationCertificateNumber();
+    }
+
+    /**
+     * @return get the sign of the document, which contains the metrological characteristics
+     */
+    @Placeholder(name = "COUNTER_TYPE_GOST")
+    public String getCounterTypeGost() {
+        return getVerification().getCounter().getCounterType().getGost();
+    }
+
+    /**
+     * @return get the name of the document, which contains the metrological characteristics
+     */
+    @Placeholder(name = "CALIBRATION_TYPE")
+    public String getCalibrationType() {
+        return getVerification().getTask().getModule().getCalibrationType();
+
     }
 }
