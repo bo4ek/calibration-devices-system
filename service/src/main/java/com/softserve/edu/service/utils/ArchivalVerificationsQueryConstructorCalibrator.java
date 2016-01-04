@@ -157,7 +157,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
         
         if(employee == null) {
-        	queryPredicate = cb.and(root.get("calibratorEmployee").isNull());   	
+        	queryPredicate = cb.and(root.get("calibratorEmployee").isNull(), queryPredicate);
         }         	
 
         return queryPredicate;
