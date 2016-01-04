@@ -60,7 +60,8 @@ public enum FormatText implements Operation {
             throw exception;
         }
 
-        XWPFDocument newDocument = new XWPFDocument(templateDocument.getPackage());
+        XWPFDocument newDocument =
+                new XWPFDocument(templateDocument.getPackage());
 
         List<XWPFParagraph> paragraphs = newDocument.getParagraphs();
 

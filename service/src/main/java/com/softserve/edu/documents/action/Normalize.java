@@ -22,6 +22,8 @@ public enum Normalize implements Operation {
                               FileParameters fileParameters) throws IOException {
         InputStream inputStream = sourceFile.getContent().getInputStream();
 
+        
+        
         XWPFDocument templateDocument = new XWPFDocument(inputStream);
         inputStream.close();
 

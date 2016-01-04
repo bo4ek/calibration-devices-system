@@ -16,15 +16,11 @@ public class UnfitnessCertificate extends BaseCertificate {
      * @param calibrationTest one of calibration test that is assigned to
      *                        the verification
      */
-    public UnfitnessCertificate(Verification verification, CalibrationTest calibrationTest) {
+    public UnfitnessCertificate(Verification verification,
+                                CalibrationTest calibrationTest) {
         super(verification, calibrationTest);
     }
 
-    /**
-     *
-     * @return Returns the identification number of the accreditation certificate,
-     * that the calibrator's company owns.
-     */
     @Override
     @Placeholder(name = "UNFITNESS_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
