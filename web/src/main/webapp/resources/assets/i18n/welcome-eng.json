@@ -487,6 +487,7 @@
   "NO_INFO_IN_PERIOD": "There no information on selected date range",
   "COUNT_OF_VERIFICATIONS": "Count of verifications",
   "VERIFICATIONS_RECEIVED": "verifications received",
+  "VERIFICATIONS_PROCESSED": "verifications processed",
   "INFO_ABOUT_EMPLOYEE_VERIFICATIONS": "Information about employee verifications",
   "CONFIRM": "Confirm",
   "SELECT_EMPLOYEE_TO_ASSIGN": "Please select employee to assign verification",
