@@ -397,9 +397,19 @@ angular
                     $log.debug($scope.codes.length);
                 }
             };
+
             $scope.closeAlert = function () {
-                $location.path('/resources/app/welcome/views/start.html');
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/welcome/views/modals/close-alert.html',
+                    controller: 'WelcomeCloseAlertController',
+                    size: 'md'
+                });
             };
+
+            $scope.$on('close-form', function(event, args) {
+                $location.path('/resources/app/welcome/views/start.html');
+            });
 
             /**
              * Modal window used to send questions to administration

@@ -19,13 +19,14 @@ angular
         '$rootScope',
         '$scope',
         '$translate',
+        '$modal',
         '$modalInstance',
         '$filter',
         'AddressService',
         'OrganizationService',
         'UserService',
         'regions',
-        function ($rootScope, $scope, $translate, $modalInstance, $filter,
+        function ($rootScope, $scope, $translate, $modal, $modalInstance, $filter,
                   addressService, organizationService, userService, regions) {
 
             $scope.blockSearchFunctions = false;
@@ -123,17 +124,32 @@ angular
             /**
              * Closes modal window on browser's back/forward button click.
              */
-            $rootScope.$on('$locationChangeStart', function () {
+            /*$rootScope.$on('$locationChangeStart', function () {
                 $modalInstance.close();
-            });
+            });*/
 
             /**
              * Reset organization form
              */
+
+            $scope.resetApplicationForm = function () {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/admin/views/modals/reset-alert.html',
+                    controller: 'AdminResetAlertController',
+                    size: 'md'
+                })
+            };
+
+            $scope.$on('reset-form', function(event, args){
+                $scope.resetOrganizationForm();
+            });
+
             $scope.resetOrganizationForm = function () {
                 $scope.$broadcast('show-errors-reset');
                 $scope.organizationForm.$setPristine();
                 $scope.organizationForm.$setUntouched();
+                $scope.organizationFormData = [];
                 $scope.organizationFormData.types = undefined;
                 $scope.organizationFormData.counters = undefined;
                 $scope.organizationFormData.region = undefined;
@@ -161,19 +177,29 @@ angular
                 $scope.serviceArea.region = undefined;
                 $scope.serviceArea = {};
                 $scope.organizationFormData.serviceArea = null;
+
+                $log.debug("$scope.resetApplicationForm");
             };
 
             /**
              * Closes the modal window for adding new
              * organization.
              */
-            $rootScope.closeModal = function (close) {
-                $scope.resetOrganizationForm();
-                if(close === true) {
-                    $modalInstance.close();
-                }
-                $modalInstance.dismiss();
+            $rootScope.closeModal = function () {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/admin/views/modals/close-alert.html',
+                    controller: 'AdminCloseAlertController',
+                    size: 'md'
+                })
             };
+
+            $scope.$on('close-modal', function(event, args) {
+                $modalInstance.dismiss();
+            });
+
+
+
 
             /**
              * Checks whereas given username is available to use
@@ -497,10 +523,10 @@ angular
                 organizationService.saveOrganization($scope.organizationFormData)
                     .then(function (data) {
                         if (data == 201) {
-                            $scope.closeModal(true);
                      //       $scope.resetOrganizationForm();
                             $rootScope.onTableHandling();
                         }
+                        $modalInstance.close();
                     });
             }
 
