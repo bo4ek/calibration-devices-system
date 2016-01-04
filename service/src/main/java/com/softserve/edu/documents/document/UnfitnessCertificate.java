@@ -26,4 +26,21 @@ public class UnfitnessCertificate extends BaseCertificate {
     public String getVerificationCertificateNumber() {
         return super.getVerificationCertificateNumber();
     }
+
+    /**
+     * @return get the sign of the document, which contains the metrological characteristics
+     */
+    @Placeholder(name = "COUNTER_TYPE_GOST")
+    public String getCounterTypeGost() {
+        return getVerification().getCounter().getCounterType().getGost();
+    }
+
+    /**
+     * @return get the name of the document, which contains the metrological characteristics
+     */
+    @Placeholder(name = "CALIBRATION_TYPE")
+    public String getCalibrationType() {
+        return getVerification().getTask().getModule().getCalibrationType();
+
+    }
 }
