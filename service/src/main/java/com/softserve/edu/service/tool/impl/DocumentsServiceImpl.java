@@ -1,6 +1,5 @@
 package com.softserve.edu.service.tool.impl;
 
-import com.softserve.edu.common.Constants;
 import com.softserve.edu.documents.DocumentFactory;
 import com.softserve.edu.documents.FileFactory;
 import com.softserve.edu.documents.document.Document;
@@ -8,13 +7,9 @@ import com.softserve.edu.documents.parameter.FileFormat;
 import com.softserve.edu.documents.parameter.FileParameters;
 import com.softserve.edu.documents.parameter.FileSystem;
 import com.softserve.edu.documents.resources.DocumentType;
-import com.softserve.edu.entity.enumeration.verification.Status;
-import com.softserve.edu.entity.organization.Organization;
-import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.repository.CalibrationTestRepository;
-import com.softserve.edu.repository.OrganizationRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
 import com.softserve.edu.service.tool.DocumentService;
@@ -24,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.*;
 
 /**

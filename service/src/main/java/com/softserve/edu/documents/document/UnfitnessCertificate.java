@@ -16,8 +16,7 @@ public class UnfitnessCertificate extends BaseCertificate {
      * @param calibrationTest one of calibration test that is assigned to
      *                        the verification
      */
-    public UnfitnessCertificate(Verification verification,
-                                CalibrationTest calibrationTest) {
+    public UnfitnessCertificate(Verification verification, CalibrationTest calibrationTest) {
         super(verification, calibrationTest);
     }
 

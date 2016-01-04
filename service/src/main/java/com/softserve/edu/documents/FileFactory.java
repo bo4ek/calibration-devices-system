@@ -90,10 +90,8 @@ public class FileFactory {
                 throw new RuntimeException(exception);
             }
         }
-
         return file;
     }
-
 
     public static FileObject buildReportFile(List<TableExportColumn> data, FileParameters fileParameters) throws Exception {
         FileObject file = FileUtils.createFile(fileParameters.getFileSystem(), fileParameters.getFileName());

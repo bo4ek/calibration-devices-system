@@ -96,8 +96,7 @@ public class DocumentsController {
                             @PathVariable Long testID,
                             @PathVariable FileFormat fileFormat)
             throws IOException, IllegalStateException {
-        FileObject file = documentService.buildFile(verificationCode,
-                testID, documentType, fileFormat);
+        FileObject file = documentService.buildFile(verificationCode, testID, documentType, fileFormat);
         sendFile(response, fileFormat, file);
     }
 
@@ -121,8 +120,8 @@ public class DocumentsController {
                             @PathVariable String verificationCode,
                             @PathVariable FileFormat fileFormat)
             throws IOException, IllegalStateException {
-        FileObject file = documentService.buildFile(verificationCode,
-                documentType, fileFormat);
+        FileObject file = documentService.buildFile(verificationCode, documentType, fileFormat);
+        System.out.println(file.getContent().getSize());
         sendFile(response, fileFormat, file);
     }
 

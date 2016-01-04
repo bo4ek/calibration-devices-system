@@ -1,6 +1,5 @@
 package com.softserve.edu.entity.catalogue.Team;
 
-
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
