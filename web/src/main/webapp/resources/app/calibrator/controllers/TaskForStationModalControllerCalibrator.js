@@ -140,6 +140,10 @@ angular
                 $scope.moduleSerialNumbers = [];
             };
 
+            $scope.$watch('myDatePicker.pickerDate', function() {
+                $scope.receiveModuleNumbers();
+            });
+
             /**
              * makes asynchronous request to the server
              * and receives the calibration modules info
