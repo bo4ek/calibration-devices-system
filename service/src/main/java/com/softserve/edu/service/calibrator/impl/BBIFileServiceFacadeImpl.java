@@ -16,6 +16,7 @@ import com.softserve.edu.service.calibrator.BBIFileServiceFacade;
 import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
+import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import com.softserve.edu.service.verification.VerificationService;
 import net.lingala.zip4j.core.ZipFile;
@@ -57,6 +58,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private VerificationService verificationService;
     @Autowired
     private CounterTypeService counterTypeService;
+    @Autowired
+    private DeviceService deviceService;
     @Autowired
     private OrganizationService organizationService;
 
@@ -146,9 +149,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     Verification verification = verificationService.findById(correspondingVerification);
                     verification.setStatus(Status.CREATED_BY_CALIBRATOR);
                     verificationService.saveVerification(verification);
-                } catch (NoSuchElementException e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_COUNTER_SIZE_AND_SYMBOL;
-                    logger.info(e);
                 } catch (Exception e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
@@ -157,9 +157,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 try {
                     updateVerificationFromMap(correspondingVerificationMap, correspondingVerification);
                     parseAndSaveBBIFile(bbiFile, correspondingVerification, bbiFile.getName());
-                } catch (NoSuchElementException e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_COUNTER_SIZE_AND_SYMBOL;
-                    logger.info(e);
                 } catch (IOException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
@@ -286,9 +283,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
         String sizeAndSymbol = verificationData.get(Constants.COUNTER_SIZE_AND_SYMBOL);
         String[] parts = sizeAndSymbol.split(" ");
-        if (parts.length < Constants.MIN_LENGTH) {
-            throw new NoSuchElementException();
-        }
         String standardSize = parts[0] + " " + parts[1];
         String symbol = parts[2];
         if (parts.length > Constants.MIN_LENGTH) {
@@ -297,12 +291,18 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             }
         }
         CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
+
+//        If there is no such symbol and standartSize of Counter in DB - create new counterType
+//        with default deviceType "Water" and deviceName "Лічильник холодної води" and deviceId 65466
+//         which is already in DB
         if (counterType == null) {
-            throw new NoSuchElementException();
+            Long deviceId = 65466L;
+            String deviceName = deviceService.getById(deviceId).getDeviceName();
+            counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
+            counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
         }
         Counter counter = new Counter(verificationData.get(Constants.YEAR),
-                verificationData.get(Constants.COUNTER_NUMBER), counterType, verificationData.get(Constants.STAMP));
-
+                    verificationData.get(Constants.COUNTER_NUMBER), counterType, verificationData.get(Constants.STAMP));
         return counter;
     }
 }
