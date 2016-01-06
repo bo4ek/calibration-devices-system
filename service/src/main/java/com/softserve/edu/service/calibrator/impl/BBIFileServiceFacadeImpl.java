@@ -5,6 +5,7 @@ import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
+import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.io.*;
 import java.sql.*;
 import java.text.ParseException;
@@ -147,6 +149,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verification.setStatus(Status.CREATED_BY_CALIBRATOR);
                     verificationService.saveVerification(verification);
                 } catch (NoSuchElementException e) {
+                    //System.out.println("HERE!!!");
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_COUNTER_SIZE_AND_SYMBOL;
                     logger.info(e);
                 } catch (Exception e) {
@@ -243,6 +246,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 verificationMap.put(Constants.STREET, rs.getString("Street"));
                 verificationMap.put(Constants.BUILDING, rs.getString("Building"));
                 verificationMap.put(Constants.FLAT, rs.getString("Apartment"));
+
+                verificationMap.put(Constants.CITY_ID, rs.getString("CityID"));
+                verificationMap.put(Constants.DISTRICT_ID, rs.getString("DistrictID"));
+                verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
+                verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
+
                 bbiFilesToVerification.put(rs.getString("FileNumber"), verificationMap);
             }
         }
@@ -297,6 +306,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             }
         }
         CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
+        // Check this block of code. The main problem - if there is no such symbol and standartSize of Counter in DB
+        // it throws the exception and uploading of the archive failing.
         if (counterType == null) {
             throw new NoSuchElementException();
         }
