@@ -421,9 +421,10 @@ angular
                 $log.debug(ID);
                 var modalInstance = $modal.open({
                     animation: true,
+                    backdrop: 'static',
                     templateUrl: 'resources/app/provider/views/modals/mailComment.html',
                     controller: 'MailSendingModalControllerProvider',
-                    size: 'md',
+                    size: 'md'
 
                 });
 

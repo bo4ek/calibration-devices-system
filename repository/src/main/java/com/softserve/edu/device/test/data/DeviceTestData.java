@@ -31,6 +31,7 @@ public interface DeviceTestData {
     long getTestimony();
     int getCounterProductionYear();
     String getCounterType2();
+    int getDeviceTypeId();
 
     long getTestSpecifiedConsumption(int testIndex);
     long getTestLowerConsumptionLimit(int testIndex);

@@ -3,17 +3,12 @@ package com.softserve.edu.documents.document;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.documents.document.meta.Placeholder;
 import com.softserve.edu.entity.Address;
-import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 
-import java.math.BigInteger;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -36,7 +31,6 @@ public abstract class BaseCertificate implements Document {
     /**
      * Constructor.
      *
-     * @param documentType    documentType file to be used for writing this document.
      * @param verification    entity to get document's data from.
      * @param calibrationTest one of calibration test that is assigned to the verification
      */

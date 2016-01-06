@@ -1,18 +1,18 @@
 angular
-    .module('welcomeModule')
-    .controller('WelcomeCloseAlertController', ['$scope', '$log', '$modalInstance',  '$rootScope',
+    .module('adminModule')
+    .controller('AdminResetAlertController', ['$scope', '$log', '$modalInstance',  '$rootScope',
         function ($scope, $log, $modalInstance, $rootScope) {
 
-            $rootScope.$on('$locationChangeStart', function () {
+            /*$rootScope.$on('$locationChangeStart', function () {
                 $modalInstance.close();
-            });
+            });*/
 
             $scope.cancel = function () {
                 $modalInstance.close();
             };
 
             $scope.submit = function() {
-                $rootScope.$broadcast('close-form');
+                $rootScope.$broadcast('reset-form');
                 $modalInstance.close();
             };
         }]);

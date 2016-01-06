@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Iterator;
 
 public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private InputStream reader;
@@ -29,7 +32,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("year", readLongValueReversed(2)); //0x800002 + 0x02
         resultMap.put("hour", readLongValueReversed(1)); //0x800004
         resultMap.put("minute", readLongValueReversed(1)); //0x800005
-        resultMap.put("second" ,readLongValueReversed(1)); //0x800006
+        resultMap.put("second", readLongValueReversed(1)); //0x800006
         resultMap.put("dayOfWeek", readLongValueReversed(1)); //0x800007
         resultMap.put("unixTime", readLongValueReversed(4) * 1000); //0x800008 + 0x04
         resultMap.put("regStart", readConsecutiveBytesReversed(4)); //0x80000c + 0x04
@@ -55,7 +58,8 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("counterProductionYear", readLongValueReversed(4)); //0x80007c+0x04
         resultMap.put("counterType2", readConsecutiveBytesAsUTF8(16)); //0x800080+0x10
         resultMap.put("fileOpened", readLongValueReversed(4)); //0x800090+0x04
-        count = reader.skip(108); //0x800100 now
+        resultMap.put("deviceTypeId", readLongValueReversed(4)); // 0x800094+0x04 DeviceType WATER(1), THERMAL(2), ELECTRICAL(3), GASEOUS(4)
+        count = reader.skip(104); //0x800100 now
         for (int i = 1; i <= Constants.TEST_COUNT; ++i) {
             readTest(i);
             if (i != Constants.TEST_COUNT) {
@@ -77,15 +81,14 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     /**
      * Reads specified amount of bytes from InputStream reader and
      * concatenates them in reversed order.
-     * @param amount
-     *          amount of bytes to read.
-     * @return
-     *          string which contains concatenated bytes in reverse order.
+     *
+     * @param bytesAmount amount of bytes to read.
+     * @return string which contains concatenated bytes in reverse order.
      * @throws IOException
      */
-    private String readConsecutiveBytesReversed(int amount) throws IOException {
-        byte[] byteArray = new byte[amount];
-        reader.read(byteArray, 0, amount);
+    private String readConsecutiveBytesReversed(int bytesAmount) throws IOException {
+        byte[] byteArray = new byte[bytesAmount];
+        reader.read(byteArray, 0, bytesAmount);
         ArrayUtils.reverse(byteArray);
         return new String(byteArray, "UTF-8");
     }
@@ -93,28 +96,26 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     /**
      * Reads specified amount of bytes from InputStream reader
      * and converts them into UTF8 string.
-     * @param amount
-     *          amount of bytes to read.
-     * @return
-     *          string which contains UTF8 symbols.
+     *
+     * @param bytesAmount amount of bytes to read.
+     * @return string which contains UTF8 symbols.
      * @throws IOException
      */
-    private String readConsecutiveBytesAsUTF8(int amount) throws IOException {
-        byte[] byteArray = new byte[amount];
-        reader.read(byteArray, 0, amount);
+    private String readConsecutiveBytesAsUTF8(int bytesAmount) throws IOException {
+        byte[] byteArray = new byte[bytesAmount];
+        reader.read(byteArray, 0, bytesAmount);
         return new String(byteArray, "UTF-8");
     }
 
     /**
      * Reads specified amount of bytes from InputStream reader
      * into a long variable.
-     * @param amount
-     *          amount of bytes to read.
-     * @return
-     *          long value.
+     *
+     * @param bytesAmount amount of bytes to read.
+     * @return long value.
      * @throws IOException
      */
-    private long readLongValue(int bytesAmount) throws  IOException {
+    private long readLongValue(int bytesAmount) throws IOException {
         long result = 0;
         for (int i = 0; i < bytesAmount; ++i) {
             result <<= 8;
@@ -126,10 +127,9 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     /**
      * Reads specified amount of bytes from InputStream reader
      * in reverse order into a long variable.
-     * @param amount
-     *          amount of bytes to read.
-     * @return
-     *          long value.
+     *
+     * @param bytesAmount amount of bytes to read.
+     * @return long value.
      * @throws IOException
      */
     private long readLongValueReversed(int bytesAmount) throws IOException {
@@ -167,6 +167,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
      * Reads image size. Then reads next imageSize bytes and
      * converts byteArray to String base64 variable.
      * Finally, skips all blank bytes reserved for image.
+     *
      * @return Image written in base64 string.
      * @throws IOException
      */
@@ -175,7 +176,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     public String readImageBase64() throws IOException, DecoderException {
         final int ALLOCATED_IMAGE_SIZE = 16380;
 
-        int imageSize = (int)readLongValue(4);
+        int imageSize = (int) readLongValue(4);
         byte[] decodedHex = new byte[imageSize];
         reader.read(decodedHex, 0, imageSize);
         String encodedHexB64 = Base64.encodeBase64String(decodedHex);

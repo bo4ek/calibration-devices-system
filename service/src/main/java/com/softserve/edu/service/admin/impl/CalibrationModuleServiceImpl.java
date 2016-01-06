@@ -103,7 +103,9 @@ public class CalibrationModuleServiceImpl implements CalibrationModuleService {
         List<CalibrationModule> modules = calibrationModuleRepository.findAll(filter);
         if (modules != null) {
             for (CalibrationModule module : modules) {
-                NumbersList.add(module.getSerialNumber());
+                if (module.getDeviceType().contains(deviceType)) {
+                    NumbersList.add(module.getSerialNumber());
+                }
             }
         }
         return NumbersList;

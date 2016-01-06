@@ -35,6 +35,7 @@ angular
         '$rootScope',
         '$scope',
         '$translate',
+        '$modal',
         '$modalInstance',
         '$filter',
         '$timeout',
@@ -42,7 +43,7 @@ angular
         'UserService',
         'DevicesService',
         'OrganizationService', '$log', 'regions',
-        function ($rootScope, $scope, $translate, $modalInstance, $filter, $timeout,
+        function ($rootScope, $scope, $translate, $modal, $modalInstance, $filter, $timeout,
                   addressService,
                   userService, devicesService, organizationService, $log, regions) {
 
@@ -814,11 +815,10 @@ angular
                     $rootScope.organizationId).then(
                     function (data) {
                         if (data == 200) {
-                            $scope.closeModal(true);
                             console.log(data);
                             $rootScope.onTableHandling();
                         }
-
+                        $modalInstance.close();
                     });
             }
 
@@ -826,12 +826,18 @@ angular
              * Closes edit modal window.
              */
 
-            $scope.closeModal = function (close) {
-                if (close === true) {
-                    $modalInstance.close();
-                }
-                $modalInstance.dismiss();
+            $scope.closeModal = function () {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/admin/views/modals/close-alert.html',
+                    controller: 'AdminCloseAlertController',
+                    size: 'md'
+                })
             };
+
+            $scope.$on('close-modal', function(event, args) {
+                $modalInstance.dismiss();
+            });
 
             $scope.ORGANIZATION_NAME_REGEX = /^(?=.{5,50}$).*/;
             $scope.PHONE_REGEX = /^[1-9]\d{8}$/;

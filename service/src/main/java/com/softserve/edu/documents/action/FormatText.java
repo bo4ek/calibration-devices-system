@@ -2,6 +2,7 @@ package com.softserve.edu.documents.action;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Font;
+import com.lowagie.text.pdf.BaseFont;
 import com.softserve.edu.documents.parameter.FileParameters;
 import com.softserve.edu.documents.resources.DocumentFont;
 import com.softserve.edu.documents.resources.DocumentFontFactory;
@@ -131,9 +132,11 @@ public enum FormatText implements Operation {
         }
     }
 
-    private String align(StringBuilder textInRun, Font font,
-                         Double contentWidth) {
+    private String align(StringBuilder textInRun, Font font, Double contentWidth) {
+        if (font.getSize() <= 0f) font.setSize(12);
+
         Double paragraphWidth = getStringWidth(textInRun.toString(), font);
+
         int index = textInRun.lastIndexOf(FormattingTokens.RIGHT_SIDE.toString());
 
         double epsilon = 0.0001;

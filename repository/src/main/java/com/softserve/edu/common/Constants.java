@@ -47,13 +47,16 @@ public interface Constants {
     // region Address details
 
     String CITY = "Місто";
+    String CITY_ID = "Id міста";
     String REGION = "Район";
+    String DISTRICT_ID = "Id району";
     String ADDRESS = "Адреса";
     String BUILDING = "Будинок";
     String FLAT = "Квартира";
     String ENTRANCE = "Під'їзд";
     String FLOOR = "Поверх";
     String STREET = "Вулиця";
+    String STREET_ID = "Id вулиці";
 
     // endregion
 
@@ -61,6 +64,7 @@ public interface Constants {
 
     // region Personal info
 
+    String CUSTOMER_ID = "Id замовника";
     String FULL_NAME_SHORT = "ПІБ";
     String PHONE_NUMBER = "Телефон";
     String FULL_NAME_CUSTOMER = "ПІБ замовника";

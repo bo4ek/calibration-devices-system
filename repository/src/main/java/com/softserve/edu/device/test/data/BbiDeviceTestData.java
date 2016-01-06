@@ -144,6 +144,10 @@ public class BbiDeviceTestData implements DeviceTestData {
     }
 
     @Override
+    public int getDeviceTypeId() { return (int) getIntegerValue("deviceTypeId");
+    }
+
+    @Override
     public long getTestSpecifiedConsumption(int testIndex) {
         return getLongValue("test" + testIndex + "specifiedConsumption");
     }

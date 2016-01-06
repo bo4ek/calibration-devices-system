@@ -1,18 +1,10 @@
 package com.softserve.edu.service.tool;
 
-
-import com.softserve.edu.documents.document.Document;
 import com.softserve.edu.documents.parameter.FileFormat;
 import com.softserve.edu.documents.resources.DocumentType;
-import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
 import org.apache.commons.vfs2.FileObject;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-import java.util.Map;
 
 public interface DocumentService {
 

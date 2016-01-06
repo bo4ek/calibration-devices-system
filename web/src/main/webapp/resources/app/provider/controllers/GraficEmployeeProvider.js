@@ -3,22 +3,32 @@
  */
 angular
     .module('employeeModule')
-    .controller('GraficEmployeeProvider', ['$scope', '$log',
-        function ($scope, $log) {
+    .controller('GraficEmployeeProvider', ['$translate', '$scope', '$log', '$filter',
+        function ($translate, $scope, $log, $filter) {
             $scope.displayGrafic = function (graficData) {
 
                 $scope.listMonth = [];
                 $scope.getXdata = function (monthNumber, year) {
-                    var monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень',
-                        'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
+                    var moment = require('moment');
+                    var monthNames = [];
+                    var count = 0;
+                    if ($translate.use()=='ukr') {
+                        moment.locale('uk')
+                    }
+                    if ($translate.use()=='eng') {
+                        moment.locale('en')
+                    }
+
+                    while (count < 12) monthNames.push(moment().month(count++).format("MMMM"));
                     return monthNames[monthNumber] + ' ' + year;
                 };
+
                 if(!graficData.length==0) {
                     for (var i = 0; i < graficData[0].monthList.length; i++) {
                         $scope.listMonth.push($scope.getXdata(graficData[0].monthList[i].month, graficData[0].monthList[i].year));
                     }
                 }else{
-                    $scope.listMonth.push('За даний період немає інформації про працівників');
+                    $scope.listMonth.push($filter('translate')('NO_INFO_IN_PERIOD'));
                 }
 
                 $log.debug(graficData)
@@ -29,11 +39,11 @@ angular
                                 type: 'column'
                             },
                             title: {
-                                text: "'Продуктивність працівників'",
+                                text: $filter('translate')('EMPLOYEE_PRODUCTIVITY'),
                                 x: -20 //center
                             },
                             subtitle: {
-                                text: 'Графік з кількості відпрацьованих заявок працівниками',
+                                text: $filter('translate')('COUNT_OF_VERIFICATION_CHART_TITLE'),
                                 x: -20
                             },
 
@@ -44,13 +54,13 @@ angular
                             yAxis: {
                                 min: 0,
                                 title: {
-                                    text: 'Кількість виконаних заявок '
+                                    text: $filter('translate')('COUNT_OF_VERIFICATIONS')
                                 }
                             },
                             tooltip: {
                                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                '<td style="padding:0"><b>{point.y:.1f} опрацьовано заявок</b></td></tr>',
+                                '<td style="padding:0"><b>{point.y:.1f}'+' '+ $filter('translate')('VERIFICATIONS_PROCESSED') + '</b></td></tr>',
                                 footerFormat: '</table>',
                                 shared: true,
                                 useHTML: true
@@ -68,7 +78,7 @@ angular
                 } else {
                     $scope.chartConfig = {
                         title: {
-                            text: 'За вказаний період заявки не надходили',
+                            text: $filter('translate')('NO_INFO_IN_PERIOD'),
                             x: -20 //center
                         }
                     }
@@ -76,5 +86,3 @@ angular
             }
         }
     ]);
-
-
