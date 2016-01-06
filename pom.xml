@@ -160,9 +160,10 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.12.4</version>
                     <configuration>
                         <skipTests>false</skipTests>
-                        <argLine>@{surefireArgLine}</argLine>
+                        <argLine>${surefireArgLine}</argLine>
                     </configuration>
                 </plugin>
             </plugins>
