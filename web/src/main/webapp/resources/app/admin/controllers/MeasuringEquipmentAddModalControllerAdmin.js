@@ -45,9 +45,7 @@ angular
 
                 $scope.deviceTypeData = [
                     {id: 'WATER', label: $filter('translate')('WATER')},
-                    {id: 'THERMAL', label: $filter('translate')('THERMAL')},
-                    {id: 'ELECTRICAL', label: $filter('translate')('ELECTRICAL')},
-                    {id: 'GASEOUS', label: $filter('translate')('GASEOUS')}
+                    {id: 'THERMAL', label: $filter('translate')('THERMAL')}
                 ];
 
                 $scope.moduleTypeData = [

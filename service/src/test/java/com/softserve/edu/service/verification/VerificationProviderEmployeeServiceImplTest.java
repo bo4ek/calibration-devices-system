@@ -51,7 +51,7 @@ public class VerificationProviderEmployeeServiceImplTest {
         User mockUser = mock(User.class);
         ClientData mockClientData = mock(ClientData.class);
         Device mockDevice = mock(Device.class);
-        Device.DeviceType type = Device.DeviceType.ELECTRICAL;
+        Device.DeviceType type = Device.DeviceType.THERMAL;
         String device = type.name();
 
         when(verificationRepository.findOne(anyString())).thenReturn(verification);
