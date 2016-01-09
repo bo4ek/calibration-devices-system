@@ -324,7 +324,7 @@ angular
                         animation: true,
                         templateUrl: 'resources/app/verificator/views/modals/mailComment.html',
                         controller: 'TestRejectControllerVerificator',
-                        size: 'md',
+                        size: 'md'
 
                     });
                 if ($scope.idsOfVerifications.length === 0) {
@@ -518,7 +518,7 @@ angular
                     animation: true,
                     templateUrl: 'resources/app/provider/views/modals/initiate-verification.html',
                     controller: 'AddingVerificationsControllerProvider',
-                    size: 'lg',
+                    size: 'lg'
                 });
             };
 

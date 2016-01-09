@@ -14,7 +14,16 @@ angular
 
             $scope.noChanges = true;
 
+            $rootScope.$on('$locationChangeStart', function () {
+                $modalInstance.close();
+            });
+
             if ($rootScope.organization[1]){
                 $scope.noChanges = false;
             }
-        } ]);
+
+            $rootScope.closeModal = function () {
+                $modalInstance.dismiss();
+            };
+        }
+    ]);
