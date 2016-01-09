@@ -22,8 +22,6 @@ public enum Normalize implements Operation {
                               FileParameters fileParameters) throws IOException {
         InputStream inputStream = sourceFile.getContent().getInputStream();
 
-        
-        
         XWPFDocument templateDocument = new XWPFDocument(inputStream);
         inputStream.close();
 
@@ -53,11 +51,9 @@ public enum Normalize implements Operation {
         int size = runs.size();
         for (int i = 0; i < size; i++) {
             int runFontSize = runs.get(0).getFontSize();
-
             if (runFontSize > fontSize) {
                 fontSize = runFontSize;
             }
-
             sourceParagraph.removeRun(0);
         }
 
@@ -66,7 +62,6 @@ public enum Normalize implements Operation {
         run2.setBold(isBold);
         run2.setFontSize(fontSize);
         run2.setItalic(isItalic);
-
         sourceParagraph.addRun(run2);
     }
 }

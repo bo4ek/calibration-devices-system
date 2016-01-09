@@ -7,7 +7,10 @@ import com.softserve.edu.documents.document.VerificationCertificate;
 import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
 import org.springframework.util.Assert;
+
+import java.util.List;
 
 public class DocumentFactory {
     /**
@@ -34,7 +37,8 @@ public class DocumentFactory {
                 document = new VerificationCertificate(verification, calibrationTest);
                 break;
             case UNFITNESS_CERTIFICATE:
-                document = new UnfitnessCertificate(verification, calibrationTest);
+                List<CalibrationTestData> calibrationTestDatas = calibrationTest.getCalibrationTestDataList();
+                document = new UnfitnessCertificate(verification, calibrationTest, calibrationTestDatas);
                 break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
@@ -42,14 +46,14 @@ public class DocumentFactory {
 
         return document;
     }
-    
-	public static Document buildInfoDoc(DocumentType documentType, Verification verification) {
-		
-		Assert.notNull(verification, Verification.class.getSimpleName() + " can't be null");
-		Assert.notNull(documentType, CalibrationTest.class.getSimpleName() + " can't be null");
 
-		Document document;
-		document = new InfoDocument(verification);
-		return document;
-	}
+    public static Document buildInfoDoc(DocumentType documentType, Verification verification) {
+
+        Assert.notNull(verification, Verification.class.getSimpleName() + " can't be null");
+        Assert.notNull(documentType, CalibrationTest.class.getSimpleName() + " can't be null");
+
+        Document document;
+        document = new InfoDocument(verification);
+        return document;
+    }
 }

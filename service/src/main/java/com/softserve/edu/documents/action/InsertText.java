@@ -51,7 +51,8 @@ public enum InsertText implements Operation {
     /**
      * Replace column names with actual data in the supplied paragraph
      *
-     * @param sourceParagraph paragraph to copy runs from
+     * @param newDocument
+     * @param columnsNamesValues
      */
     private void replaceColumnsWithData(XWPFDocument newDocument,
                                         Map<String, Object> columnsNamesValues) {

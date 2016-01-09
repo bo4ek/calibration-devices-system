@@ -99,7 +99,7 @@ public class CalibrationTestController {
      * Edit calibration-test in database
      *
      * @param testDTO           object with calibration-test data
-     * @param calibrationTestId
+     * @param calibrationTestId id parameter of calibration test
      * @return a response body with http status {@literal OK} if calibration-test
      * successfully edited or else http status {@literal CONFLICT}
      */
@@ -120,7 +120,7 @@ public class CalibrationTestController {
     /**
      * Deletes selected calibration-test by Id
      *
-     * @param calibrationTestId
+     * @param calibrationTestId id parameter of calibration test
      * @return a response body with http status {@literal OK} if calibration-test
      * successfully deleted
      */
@@ -241,7 +241,7 @@ public class CalibrationTestController {
      * Edit calibration test manual
      *
      * @param cTestManualDTO object with calibration-test-manual
-     * @param verificationId
+     * @param verificationId id parameter of verification
      * @return httpStatus 200 OK if everything went well
      */
     @RequestMapping(value = "editTestManual/{verificationId}/{verificationEdit}", method = RequestMethod.POST)
@@ -366,7 +366,7 @@ public class CalibrationTestController {
     /**
      * get protocol
      *
-     * @param verificationId
+     * @param verificationId id parameter of verification
      * @return protocol
      */
     @RequestMapping(value = "getTest/{verificationId}", method = RequestMethod.GET)
@@ -387,7 +387,7 @@ public class CalibrationTestController {
     /**
      * update test
      *
-     * @param verificationId
+     * @param verificationId id parameter of verification
      * @return httpStatus 200 OK if everything went well
      */
     @RequestMapping(value = "editTest/{verificationId}", method = RequestMethod.POST)

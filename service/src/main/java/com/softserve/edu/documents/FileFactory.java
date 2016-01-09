@@ -7,15 +7,12 @@ import com.softserve.edu.documents.parameter.FileFormat;
 import com.softserve.edu.documents.parameter.FileParameters;
 import com.softserve.edu.documents.utils.FileUtils;
 import com.softserve.edu.service.utils.export.TableExportColumn;
-import com.softserve.edu.service.utils.export.TableExporter;
 import com.softserve.edu.service.utils.export.XlsTableExporter;
 import org.apache.commons.vfs2.FileObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * Factory for creating files.
@@ -33,7 +30,6 @@ public class FileFactory {
     public static FileObject buildFile(FileParameters fileParameters) {
         List<Operation> operations;
         FileFormat fileFormat = fileParameters.getFileFormat();
-
         switch (fileFormat) {
             case DOCX:
                 operations = OperationChain.DOCX_CHAIN.getOperations();
@@ -45,14 +41,12 @@ public class FileFactory {
                 throw new IllegalArgumentException(fileFormat.name() +
                         " is not supported");
         }
-
         return runOperations(operations, fileParameters);
     }
 
     public static FileObject buildInfoFile(FileParameters fileParameters) {
         List<Operation> operations;
         FileFormat fileFormat = fileParameters.getFileFormat();
-
         switch (fileFormat) {
             case DOCX:
                 operations = OperationChain.INFO_DOCX_CHAIN.getOperations();
@@ -64,7 +58,6 @@ public class FileFactory {
                 throw new IllegalArgumentException(fileFormat.name() +
                         " is not supported");
         }
-
         return runOperations(operations, fileParameters);
     }
 

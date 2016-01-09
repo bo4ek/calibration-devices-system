@@ -18,6 +18,7 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * Singleton.
@@ -60,9 +61,9 @@ public enum DocxToPdf implements Operation {
         PdfWriter writer;
 
         resultPdfDocument = new Document();
-        System.err.println("pdfFile is null" + pdfFile == null);
+        //System.err.println("pdfFile is null" + pdfFile == null);
         OutputStream outputStream = pdfFile.getContent().getOutputStream();
-       
+
         try {
             writer = PdfWriter.getInstance(resultPdfDocument, outputStream);
         } catch (DocumentException exception) {
@@ -100,7 +101,7 @@ public enum DocxToPdf implements Operation {
      */
     private void copyParagraphs(XWPFDocument sourceDocxDocument,
                                 Document targetPdfDocument) throws IOException {
-        java.util.List<XWPFParagraph> docxParagraphs =
+        List<XWPFParagraph> docxParagraphs =
                 sourceDocxDocument.getParagraphs();
         Paragraph pdfParagraph;
 
@@ -125,11 +126,9 @@ public enum DocxToPdf implements Operation {
      * @throws IOException if font file is invalid
      */
     public Paragraph createParagraph(XWPFParagraph docxParagraph)
-            throws  IOException, InvalidFormatException {
+            throws IOException, InvalidFormatException {
         String text = docxParagraph.getText();
-
         XWPFRun run = docxParagraph.getRuns().get(0);
-
         int fontSize = run.getFontSize();
         if (fontSize < 1) {
             fontSize = 12;
@@ -138,13 +137,13 @@ public enum DocxToPdf implements Operation {
                 Element.ALIGN_CENTER : Element.ALIGN_LEFT;
         int style = !run.isBold() ? 0 : Font.BOLD;
         style = !run.isItalic() ? style : Font.ITALIC;
-        
+
         Font font = DocumentFontFactory.INSTANCE.buildFont(DocumentFont.FREE_SERIF,
                 fontSize, style);
 
         Paragraph paragraph = new Paragraph(text, font);
         paragraph.setAlignment(align);
-
         return paragraph;
+
     }
 }

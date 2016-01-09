@@ -121,7 +121,6 @@ public class DocumentsController {
                             @PathVariable FileFormat fileFormat)
             throws IOException, IllegalStateException {
         FileObject file = documentService.buildFile(verificationCode, documentType, fileFormat);
-        System.out.println(file.getContent().getSize());
         sendFile(response, fileFormat, file);
     }
 

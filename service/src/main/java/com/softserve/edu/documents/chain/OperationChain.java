@@ -89,5 +89,7 @@ public enum OperationChain {
 
     public List<Operation> getOperations() {
         return operations;
-    };
+    }
+
+    ;
 }

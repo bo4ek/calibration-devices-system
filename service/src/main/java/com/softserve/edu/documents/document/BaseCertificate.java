@@ -60,7 +60,6 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "CALIBRATOR_COMPANY_ADDRESS")
     public String getCalibratorCompanyAddress() {
         Address address = getVerification().getCalibrator().getAddress();
-
         return address.getLocality() + ", " +
                 address.getStreet() + ", " +
                 address.getBuilding();
@@ -139,7 +138,7 @@ public abstract class BaseCertificate implements Document {
     }
 
     @Placeholder(name = "OWNER_ADDRESS")
-    public String getOwnerAdress() {
+    public String getOwnerAddress() {
         Address ownerAddress = getVerification().getClientData().getClientAddress();
         return ownerAddress.getRegion() + " обл., "
                 + ownerAddress.getDistrict() + " р-н, "
@@ -174,7 +173,7 @@ public abstract class BaseCertificate implements Document {
      * @return the date of CalibrationTest.
      */
     @Placeholder(name = "PROTOCOL_DATE")
-    public String getCalibrationTestDate () {
+    public String getCalibrationTestDate() {
         return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getCalibrationTest().getDateTest());
     }
 
@@ -192,11 +191,14 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
         return getVerification().getTask().getModule().getCalibrationType();
-
     }
 
     private void setVerification(Verification verification) {
         this.verification = verification;
+    }
+
+    private void setCalibrationTest(CalibrationTest calibrationTest) {
+        this.calibrationTest = calibrationTest;
     }
 
     protected Verification getVerification() {
@@ -207,9 +209,6 @@ public abstract class BaseCertificate implements Document {
         return calibrationTest;
     }
 
-    private void setCalibrationTest(CalibrationTest calibrationTest) {
-        this.calibrationTest = calibrationTest;
-    }
 }
 
 
