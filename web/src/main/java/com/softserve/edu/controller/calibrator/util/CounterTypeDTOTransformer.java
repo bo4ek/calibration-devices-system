@@ -34,7 +34,8 @@ public class CounterTypeDTOTransformer {
                     counterType.getId(),
                     counterType.getSymbol(),
                     counterType.getStandardSize(),
-                    counterType.getDevice().getDeviceType().toString()
+                    counterType.getDevice().getDeviceType().toString(),
+                    counterType.getManufacturer()
             ));
         }
         return resultList;

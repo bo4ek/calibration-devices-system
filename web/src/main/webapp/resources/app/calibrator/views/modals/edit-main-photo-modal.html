@@ -5,16 +5,16 @@
 
 <div class="modal-body">
     <form name="clientForm" class="form-group" novalidate>
-    <div class="form-group col-md-6" style="width: 430px; height: 430px">
-        <img id="mainPhoto" src='{{photo}}' width="100%" height="100%" ng-class="{ 'rotated90': rotateIndex == 1, 'rotated180': rotateIndex == 2,
+        <div class="form-group col-md-6" style="width: 430px; height: 430px">
+            <img id="mainPhoto" src='{{photo}}' width="100%" height="100%" ng-class="{ 'rotated90': rotateIndex == 1, 'rotated180': rotateIndex == 2,
             'rotated270': rotateIndex == 3, 'rotated0': rotateIndex == 4}">
-    </div>
+        </div>
 
-    <div class="form-group col-md-6" ng-if="photoId == 'testMainPhoto'">
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label class="control-label">{{'COUNTER_NUMBER' | translate }}</label>
-            </div>
+        <div class="form-group col-md-6" ng-if="photoId == 'testMainPhoto'">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'COUNTER_NUMBER' | translate }}</label>
+                </div>
 
                 <div class="form-group col-md-6" show-errors>
                     <input type="text"
@@ -29,130 +29,187 @@
                     </p>
                 </div>
 
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label class="control-label">{{'ACCUMULATED_VOLUME' | translate }}</label>
             </div>
-            <div class="form-group col-md-6" show-errors>
-                <input type="text" ng-model="newValues.accumulatedVolume"
-                       class="form-control "
-                       id="accumulatedVolume"
-                       name="accumulatedVolume"
-                       required>
-                <!--ng-change="checkAll('accumulatedVolume')"-->
-                <!--<p class="validation-message" ng-show="accumulatedVolume.isValid">-->
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'ACCUMULATED_VOLUME' | translate }}</label>
+                </div>
+                <div class="form-group col-md-6" show-errors>
+                    <input type="text" ng-model="newValues.accumulatedVolume"
+                           class="form-control "
+                           id="accumulatedVolume"
+                           name="accumulatedVolume"
+                           required>
+                    <!--ng-change="checkAll('accumulatedVolume')"-->
+                    <!--<p class="validation-message" ng-show="accumulatedVolume.isValid">-->
                     <!--{{'ACCUMULATEDVOLUME_REGEX' | translate}}</p>-->
 
-                <p class="help-block" ng-if="clientForm.accumulatedVolume.$error.required">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    {{'REQUIRED' | translate}}
-                </p>
+                    <p class="help-block" ng-if="clientForm.accumulatedVolume.$error.required">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'REQUIRED' | translate}}
+                    </p>
 
+                </div>
             </div>
-        </div>
 
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'STANDART_SIZE_OF_COUNTER' | translate}}</label>
+                </div>
+                <div class="form-group col-md-6" show-errors>
+                    <ui-select ng-model="newValues.counterStandard" type="text" theme="select2"
+                               name="standardSize"
+                               id="standardSize"
+                               class="form-control col-md-6"
+                               on-select = "eraseCounterSymbol();eraseCounterManufacturer();"
+                               required>
+                        <ui-select-match
+                                placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                allow-clear="false">
+                            {{$select.selected.standardSize | translate}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="counterStandard in countersTypes | unique: 'standardSize' | filter: $select.search">
+                            <span ng-bind-html="counterStandard.standardSize | translate "></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <p class="help-block" ng-if="clientForm.standardSize.$error.required">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'REQUIRED' | translate}}
+                    </p>
+                </div>
+            </div>
 
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label class="control-label">{{'YEAR_OF_COUNTER_PRODUCTION' | translate }}</label>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'TYPE WATER' | translate}}</label>
+                </div>
+                <div class="form-group select-dropdown-typewater">
+                    <ui-select  ng-model="selectedTypeWater" type="text" theme="select2"
+                                name="type"
+                                id="type"
+                                class="form-group col-md-6"
+                                ng-change="changeTypeWater(selectedTypeWater)">
+                        <ui-select-match
+                                placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                allow-clear="false">
+                            {{$select.selected.type | translate}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="typeWater in statusTypeWater | filter: $select.search">
+                            <span ng-bind-html="typeWater.type | translate "></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
-            <div class="form-group col-md-6" show-errors>
-                <input type="number"
-                       ng-model="newValues.counterYear"
-                       class="form-control"
-                       id="counterYear"
-                       name="counterYear"
-                       required>
-                <p class="help-block" ng-if="clientForm.counterYear.$error.required">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    {{'REQUIRED' | translate}}
-                </p>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label class="control-label">{{'ORGANIZATION_SERVICE_TYPE_ADMIN' | translate}}</label>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
+                </div>
+                <div class="form-group col-md-6" show-errors>
+                    <ui-select ng-model="newValues.counterType" type="text" theme="select2"
+                               name="symbol"
+                               id="symbol"
+                               class="form-control col-md-6"
+                               on-select = "eraseCounterManufacturer()"
+                               required>
+                        <ui-select-match
+                                placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                allow-clear="false">
+                            {{$select.selected.symbol | translate}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="counterType in countersTypes
+                        | filter: $select.search
+                        | filter:newValues.counterStandard.standardSize
+                        | filter:selectedTypeWater.type
+                        | unique: 'symbol'">
+                            <span ng-bind-html="counterType.symbol | translate "></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <p class="help-block" ng-if="clientForm.symbol.$error.required">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'REQUIRED' | translate}}
+                    </p>
+                </div>
             </div>
-            <div class="form-group select-dropdown-typewater">
-                <ui-select  ng-model="selectedTypeWater" theme="select2"
-                            search-enabled="false"
-                            name="type"
-                            id="type"
-                            class="form-group col-md-6"
-                            ng-change="changeTypeWater(selectedTypeWater)">
-                    <ui-select-match
-                            placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
-                            allow-clear="false">
-                        {{$select.selected.type | translate}}
-                    </ui-select-match>
-                    <ui-select-choices repeat="typeWater in statusTypeWater">
-                        <span ng-bind-html="typeWater.type | translate "></span>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'MANUFACTURER' | translate}}</label>
+                </div>
+                <div class="form-group col-md-6" show-errors>
+                    <ui-select ng-model="newValues.counterManufacturer" type="text" theme="select2"
+                               name="manufacturer"
+                               id="manufacturer"
+                               class="form-control col-md-6"
+                               required>
+                        <ui-select-match
+                                placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                allow-clear="false">
+                            {{$select.selected.manufacturer | translate}}
+                        </ui-select-match>
+                        <ui-select-choices repeat="counterManufacture in countersTypes
+                        | filter: $select.search
+                        | filter:newValues.counterStandard.standardSize
+                        | filter:selectedTypeWater.type
+                        | filter:newValues.counterType.symbol
+                        | unique: 'manufacturer'">
+                            <span ng-bind-html="counterManufacture.manufacturer | translate "></span>
+                        </ui-select-choices>
+                    </ui-select>
+                    <p class="help-block" ng-if="clientForm.manufacturer.$error.required">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'REQUIRED' | translate}}
+                    </p>
+                </div>
             </div>
-            <div class="form-group col-md-6" show-errors>
-                <ui-select ng-model="newValues.counterType" theme="select2"
-                           search-enabled="false"
-                           name="symbol"
-                           id="symbol"
-                           class="form-control col-md-6"
-                           ng-change="changeType(newValues.counterType)"
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'YEAR_OF_COUNTER_PRODUCTION' | translate }}</label>
+                </div>
+                <div class="form-group col-md-6" show-errors>
+                    <input type="number"
+                           ng-model="newValues.counterYear"
+                           class="form-control"
+                           id="counterYear"
+                           name="counterYear"
                            required>
-                    <ui-select-match
-                            placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
-                            allow-clear="false">
-                        {{$select.selected.symbol | translate}}
-                    </ui-select-match>
-                    <ui-select-choices repeat="counterType in countersTypes | filter:selectedTypeWater.type">
-                        <span ng-bind-html="counterType.symbol | translate "></span>
-                    </ui-select-choices>
-                </ui-select>
-                <p class="help-block" ng-if="clientForm.symbol.$error.required">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    {{'REQUIRED' | translate}}
-                </p>
+                    <p class="help-block" ng-if="clientForm.counterYear.$error.required">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'REQUIRED' | translate}}
+                    </p>
+                </div>
             </div>
+
         </div>
 
+        <div class="form-group col-md-6" ng-if="photoType == 'begin'">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'INITIAL_VALUE' | translate }}</label>
+                </div>
+                <div class="form-group col-md-6" id="client-form" ng-class="floorValidation.css">
+                    <input type="number" id="value"
+                           ng-model="newValues.counterValue"
+                           class="form-control ">
 
-
-    </div>
-
-    <div class="form-group col-md-6" ng-if="photoType == 'begin'">
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label class="control-label">{{'INITIAL_VALUE' | translate }}</label>
-            </div>
-            <div class="form-group col-md-6" id="client-form" ng-class="floorValidation.css">
-                <input type="number" id="value"
-                       ng-model="newValues.counterValue"
-                       class="form-control ">
-
-                <!--ng-change="checkAll('counterValue')"-->
-                <!--<p class="validation-message" ng-show="entranceValidation.isValid">-->
+                    <!--ng-change="checkAll('counterValue')"-->
+                    <!--<p class="validation-message" ng-show="entranceValidation.isValid">-->
                     <!--{{'DOOR_CODE_REGEX' | translate}}</p>-->
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="form-group col-md-6" ng-if="photoType == 'end'">
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label class="control-label">{{'TERMINAL_VALUE' | translate }}</label>
-            </div>
-            <div class="form-group col-md-6">
-                <input type="number" ng-model="newValues.counterValue"  class="form-control" required >
+        <div class="form-group col-md-6" ng-if="photoType == 'end'">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'TERMINAL_VALUE' | translate }}</label>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="number" ng-model="newValues.counterValue"  class="form-control" required >
+                </div>
             </div>
         </div>
-    </div>
     </form>
 </div>
 

@@ -24,10 +24,12 @@ angular
             $scope.newValues.counterYear = null;
             $scope.newValues.accumulatedVolume = null;
             $scope.newValues.counterValue = null;
-            $scope.photoType = null;
-            $scope.photoIndex = null;
+            $scope.newValues.counterStandard = null;
+            $scope.newValues.counterManufacturer = null;
             $scope.newValues.counterType = null;
             $scope.countersTypes=[];
+            $scope.photoType = null;
+            $scope.photoIndex = null;
 
             $scope.isChanged = false;
 
@@ -104,7 +106,8 @@ angular
                         $scope.countersTypes = $scope.countersTypesAllData;
                         var currentCounterType = findCounterTypeById(parentScope.TestForm.counterTypeId, $scope.countersTypes);
                         $scope.newValues.counterType = currentCounterType;
-
+                        $scope.newValues.counterStandard = currentCounterType;
+                        $scope.newValues.counterManufacturer = currentCounterType;
                     })
             }
 
@@ -128,9 +131,17 @@ angular
              */
             $scope.changeTypeWater = function (typeWater) {
                 $scope.setStatusTypeWater(typeWater.type);
+                $scope.eraseCounterSymbol();
+                $scope.eraseCounterManufacturer();
+            };
+
+            $scope.eraseCounterSymbol = function () {
                 $scope.newValues.counterType = null;
             };
 
+            $scope.eraseCounterManufacturer = function () {
+                $scope.newValues.counterManufacturer = null;
+            };
 
             /**
              * reset countersTypes to get all countersTypes
@@ -210,7 +221,7 @@ angular
                             parentScope.TestForm.accumulatedVolume = $scope.newValues.accumulatedVolume;
                             parentScope.TestForm.counterProductionYear = $scope.newValues.counterYear;
                             parentScope.TestForm.typeWater = $scope.newValues.counterType.typeWater;
-                            parentScope.TestForm.standardSize = $scope.newValues.counterType.standardSize;
+                            parentScope.TestForm.standardSize = $scope.newValues.counterStandard.standardSize;
                             parentScope.TestForm.symbol = $scope.newValues.counterType.symbol;
                             parentScope.TestForm.counterTypeId = $scope.newValues.counterType.id;
                         } else {
