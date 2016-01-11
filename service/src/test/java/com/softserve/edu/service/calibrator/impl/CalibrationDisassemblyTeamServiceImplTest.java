@@ -153,7 +153,7 @@ public class CalibrationDisassemblyTeamServiceImplTest extends Assert {
         final String name = "Name";
         final Date date = new Date(2015, 1,1);
         final Set<Device.DeviceType> specialization = new HashSet<>();
-        specialization.add(Device.DeviceType.ELECTRICAL);
+        specialization.add(Device.DeviceType.THERMAL);
         final String leaderFullName = "Vova T T";
         final String leaderPhone = "9090104";
         final String leaderEmail = "c@gmail.com";

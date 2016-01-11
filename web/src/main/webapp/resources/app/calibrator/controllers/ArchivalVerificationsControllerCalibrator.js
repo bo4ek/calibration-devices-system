@@ -52,8 +52,6 @@ angular
 
             //new select measurementDeviceType for search
             $scope.deviceTypeData = [
-                {id: 'ELECTRICAL', label: null},
-                {id: 'GASEOUS', label: null},
                 {id: 'WATER', label: null},
                 {id: 'THERMAL', label: null}
             ];
@@ -72,10 +70,8 @@ angular
                     $scope.statusData[2].label = 'Перевірено придатний';
                     $scope.statusData[3].label = 'Перевірено непридатний';
 
-                    $scope.deviceTypeData[0].label = 'Електричний';
-                    $scope.deviceTypeData[1].label = 'Газовий';
-                    $scope.deviceTypeData[2].label = 'Водний';
-                    $scope.deviceTypeData[3].label = 'Термальний';
+                    $scope.deviceTypeData[0].label = 'Водний';
+                    $scope.deviceTypeData[1].label = 'Термальний';
 
                     $scope.protocolStatusData[0].label = 'Придатний';
                     $scope.protocolStatusData[1].label = 'Не придатний';
@@ -86,10 +82,8 @@ angular
                     $scope.statusData[2].label = 'Tested OK';
                     $scope.statusData[3].label = 'Tested NOK';
 
-                    $scope.deviceTypeData[0].label = 'Electrical';
-                    $scope.deviceTypeData[1].label = 'Gaseous';
-                    $scope.deviceTypeData[2].label = 'Water';
-                    $scope.deviceTypeData[3].label = 'Thermal';
+                    $scope.deviceTypeData[0].label = 'Water';
+                    $scope.deviceTypeData[1].label = 'Thermal';
 
                     $scope.protocolStatusData[0].label = 'SUCCESS';
                     $scope.protocolStatusData[1].label = 'FAILED';

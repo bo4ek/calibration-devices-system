@@ -26,8 +26,6 @@ public abstract class BaseCertificate implements Document {
      */
     private CalibrationTest calibrationTest;
 
-    public BaseCertificate () {}
-
     /**
      * Constructor.
      *
@@ -36,7 +34,6 @@ public abstract class BaseCertificate implements Document {
      */
     public BaseCertificate(Verification verification, CalibrationTest calibrationTest) {
         super();
-
         setVerification(verification);
         setCalibrationTest(calibrationTest);
     }
@@ -64,11 +61,9 @@ public abstract class BaseCertificate implements Document {
     public String getCalibratorCompanyAddress() {
         Address address = getVerification().getCalibrator().getAddress();
 
-        String addresToReturn = address.getLocality() + ", " +
+        return address.getLocality() + ", " +
                 address.getStreet() + ", " +
                 address.getBuilding();
-
-        return addresToReturn;
     }
 
     /**
@@ -138,11 +133,9 @@ public abstract class BaseCertificate implements Document {
     public String getOwnerFullName() {
         ClientData ownerData = getVerification().getClientData();
 
-        String fullName = ownerData.getLastName() + " " +
+        return ownerData.getLastName() + " " +
                 ownerData.getFirstName() + " " +
                 ownerData.getMiddleName();
-
-        return fullName;
     }
 
     @Placeholder(name = "OWNER_ADDRESS")
@@ -164,11 +157,9 @@ public abstract class BaseCertificate implements Document {
     public String getStateVerificatorShortName() {
         User stateVerificatorEmployee = getVerification().getStateVerificatorEmployee();
 
-        String fullName = stateVerificatorEmployee.getLastName() + " "
+        return stateVerificatorEmployee.getLastName() + " "
                 + stateVerificatorEmployee.getFirstName().charAt(0) + "."
                 + stateVerificatorEmployee.getMiddleName().charAt(0) + ".";
-
-        return fullName;
     }
 
     /**
@@ -187,6 +178,23 @@ public abstract class BaseCertificate implements Document {
         return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getCalibrationTest().getDateTest());
     }
 
+    /**
+     * @return get the sign of the document, which contains the metrological characteristics
+     */
+    @Placeholder(name = "COUNTER_TYPE_GOST")
+    public String getCounterTypeGost() {
+        return getVerification().getCounter().getCounterType().getGost();
+    }
+
+    /**
+     * @return get the name of the document, which contains the metrological characteristics
+     */
+    @Placeholder(name = "CALIBRATION_TYPE")
+    public String getCalibrationType() {
+        return getVerification().getTask().getModule().getCalibrationType();
+
+    }
+
     private void setVerification(Verification verification) {
         this.verification = verification;
     }
@@ -199,7 +207,9 @@ public abstract class BaseCertificate implements Document {
         return calibrationTest;
     }
 
-    protected void setCalibrationTest(CalibrationTest calibrationTest) {
+    private void setCalibrationTest(CalibrationTest calibrationTest) {
         this.calibrationTest = calibrationTest;
     }
 }
+
+

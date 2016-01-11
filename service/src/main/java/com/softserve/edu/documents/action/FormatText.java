@@ -132,11 +132,19 @@ public enum FormatText implements Operation {
         }
     }
 
+    /**
+     * @param textInRun    string from document, that should be edited
+     * @param font         font size of text
+     * @param contentWidth width of the targeted raw
+     * @return string of formatted text with wished width
+     */
     private String align(StringBuilder textInRun, Font font, Double contentWidth) {
-        if (font.getSize() <= 0f) font.setSize(12);
+        float b = font.getSize();
+        if (b <= 0f) {
+            font.setSize(BaseFont.AWT_MAXADVANCE);
+        }
 
         Double paragraphWidth = getStringWidth(textInRun.toString(), font);
-
         int index = textInRun.lastIndexOf(FormattingTokens.RIGHT_SIDE.toString());
 
         double epsilon = 0.0001;
@@ -156,18 +164,14 @@ public enum FormatText implements Operation {
     public double getContentWidth(XWPFDocument document) {
         CTBody body = document.getDocument().getBody();
         CTSectPr docSp = body.getSectPr();
-
         CTSectPr sectPr = document.getDocument().getBody().getSectPr();
         if (sectPr == null) return -1;
         CTPageSz pageSize = sectPr.getPgSz();
-
         CTPageMar margin = docSp.getPgMar();
-
         BigInteger pageWidth = pageSize.getW();
         pageWidth = pageWidth.add(BigInteger.ONE);
         BigInteger totalMargins = margin.getLeft().add(margin.getRight());
         BigInteger contentWidth = pageWidth.subtract(totalMargins);
-
         return contentWidth.doubleValue();
     }
 }

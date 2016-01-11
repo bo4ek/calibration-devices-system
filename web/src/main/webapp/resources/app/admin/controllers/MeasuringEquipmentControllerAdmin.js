@@ -104,9 +104,7 @@ angular
 
             $scope.deviceTypeData = [
                 {id: 'WATER', label: $filter('translate')('WATER')},
-                {id: 'THERMAL', label: $filter('translate')('THERMAL')},
-                {id: 'ELECTRICAL', label: $filter('translate')('ELECTRICAL')},
-                {id: 'GASEOUS', label: $filter('translate')('GASEOUS')}
+                {id: 'THERMAL', label: $filter('translate')('THERMAL')}
             ];
 
             $scope.moduleTypeData = [
@@ -117,8 +115,6 @@ angular
             $scope.setTypeDataLanguage = function () {
                 $scope.deviceTypeData[0].label = $filter('translate')('WATER');
                 $scope.deviceTypeData[1].label = $filter('translate')('THERMAL');
-                $scope.deviceTypeData[2].label = $filter('translate')('ELECTRICAL');
-                $scope.deviceTypeData[3].label = $filter('translate')('GASEOUS');
 
                 $scope.moduleTypeData[0].label = $filter('translate')('INSTALLATION_FIX');
                 $scope.moduleTypeData[1].label = $filter('translate')('INSTALLATION_PORT');
