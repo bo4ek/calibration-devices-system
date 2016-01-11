@@ -49,7 +49,4 @@ public class Address {
     public String getFlat(){
         return flat;
     }
-
-
-
 }
