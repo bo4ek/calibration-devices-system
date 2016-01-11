@@ -133,7 +133,7 @@ angular
             ];
 
             $scope.selectedDismantled  = {
-                name: $scope.statusDismantled[0]
+                name: null
             };
 
             $scope.setTypeDataL = function () {

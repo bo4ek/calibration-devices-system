@@ -6,7 +6,7 @@ angular
             location.href = url;
         }
         $scope.downloadReport = function (documentType) {
-            var url = "doc/report/"  + documentType +"/xls";
+            var url = "doc/report/" + documentType + "/xls";
             location.href = url;
         }
 
@@ -18,7 +18,7 @@ angular
             frameDoc.documentElement.innerHTML = "";
             var container = document.getElementById('pdf').contentWindow.document.body;
 
-            renderPDF(url, container).then(function(success){
+            renderPDF(url, container).then(function (success) {
                 console.log(success);
                 setTimeout("document.getElementById('pdf').contentWindow.print()", 500);
             })
@@ -26,19 +26,19 @@ angular
         };
 
         function renderPDF(url, canvasContainer) {
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 PDFJS.disableWorker = true;
-                PDFJS.getDocument(url).then(function(pdfDoc) {
-                    renderPages(pdfDoc).then(function(success) {
+                PDFJS.getDocument(url).then(function (pdfDoc) {
+                    renderPages(pdfDoc).then(function (success) {
                         resolve(success);
                     });
                 });
             });
 
             function renderPages(pdfDoc) {
-                return new Promise(function(resolve, reject) {
+                return new Promise(function (resolve, reject) {
                     for (var num = 1; num <= pdfDoc.numPages; num++)
-                        pdfDoc.getPage(num).then(function(page) {
+                        pdfDoc.getPage(num).then(function (page) {
                             renderPage(page);
                             resolve("all pages rendered");
                         });
@@ -46,7 +46,7 @@ angular
             }
 
             function renderPage(page) {
-                return new Promise(function(resolve, reject) {
+                return new Promise(function (resolve, reject) {
                     var scale = 1;
                     var viewport = page.getViewport(scale);
                     var canvas = document.createElement('canvas');

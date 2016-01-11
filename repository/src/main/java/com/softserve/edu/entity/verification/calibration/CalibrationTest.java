@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * Calibration Test entity.
  * Contains data about measurement device calibration test.

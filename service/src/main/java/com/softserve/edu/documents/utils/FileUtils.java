@@ -45,7 +45,7 @@ public class FileUtils {
             if (!fileToReturn.exists())
                 fileToReturn.createFile();
         } catch (FileSystemException e) {
-            logger.error("", e);
+            logger.error("can't create file", e);
             throw new RuntimeException(e);
         }
 

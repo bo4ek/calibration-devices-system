@@ -11,8 +11,8 @@ body {
 }
 
 .unreadClass {
-	background: rgba(0, 255, 0, 0.2);
-	color: black;
+    background: rgba(0, 255, 0, 0.2);
+    color: black;
 }
 
 .preview-protocol-image .modal-dialog {
@@ -20,27 +20,27 @@ body {
 
 }
 
-.incorrect{
-    color: rgba(0,0,0,0.35);
+.incorrect {
+    color: rgba(0, 0, 0, 0.35);
 }
 
 #coloredBadge {
-	background: #00FF00;
-	color: black;
+    background: #00FF00;
+    color: black;
 }
 
 .sendButton {
-	position: relative;
-	top: -10px;
+    position: relative;
+    top: -10px;
 }
 
- .myCircleButton {
-	position:relative;
-	left: 15px;
-	top: -10px;
-	background: #00FF00;
-	color: black;
-	width: 25px;
+.myCircleButton {
+    position: relative;
+    left: 15px;
+    top: -10px;
+    background: #00FF00;
+    color: black;
+    width: 25px;
     height: 25px;
     text-align: center;
     border-radius: 15px;
@@ -55,11 +55,11 @@ body {
     padding-top: 0;
     padding-left: 0;
     padding-right: 0;
-    }
+}
 
-  [ng\:cloak],[ng-cloak],.ng-cloak {
-  	display:none !important;
- }
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
 
 .nav,
 .pagination,
@@ -79,47 +79,44 @@ body {
 
 #page-wrapper .test-panel-title {
     width: 212px;
-    float:left;
+    float: left;
 }
 
 #page-wrapper .test-panel-title .ng-binding {
-    float:right;
+    float: right;
 }
 
-#page-wrapper .test-panel-title.clock{
+#page-wrapper .test-panel-title.clock {
     margin-top: 35px;
 }
 
 #page-wrapper .form-group.symbol {
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 #page-wrapper .form-group.standartsize {
-    padding-left: 0px;
+    padding-left: 0;
 }
 
-
-#page-wrapper .date-block{
+#page-wrapper .date-block {
     margin-top: 30px;
     float: left;
     width: 50%;
 }
 
-
-.select-dropdown-typewater{
+.select-dropdown-typewater {
     width: 100%;
 }
 
-
 #page-wrapper .test-panel-fild-content {
-    margin-left:15px;
+    margin-left: 15px;
 
 }
 
 @media (min-width: 768px) {
     #page-wrapper {
         position: inherit;
-        //margin: 0 0 0 250px;
+    / / margin : 0 0 0 250 px;
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
     }
@@ -169,8 +166,6 @@ body {
 .navbar-top-links .dropdown-messages {
     margin-left: 5px;
 }
-
-
 
 .navbar-top-links .dropdown-tasks {
     margin-left: -59px;
@@ -231,7 +226,7 @@ body {
     .sidebar {
         z-index: 1;
         position: absolute;
-        //width: 250px;
+    / / width : 250 px;
         margin-top: 56px;
     }
 
@@ -462,7 +457,6 @@ input[type="radio"], input[type="checkbox"] {
     display: none;
 }
 
-
 .form-group .has-error .help-block {
     display: block;
 }
@@ -493,10 +487,11 @@ input[type="radio"], input[type="checkbox"] {
 
 .fa-times-circle-o {
     font-size: 6.5em;
-    color:red;
+    color: red;
     padding-right: 5px;
 }
- .uploadFile > .drop-box {
+
+.uploadFile > .drop-box {
     background: #F8F8F8;
     border: 5px dashed #DDD;
     width: 100%;
@@ -506,8 +501,8 @@ input[type="radio"], input[type="checkbox"] {
     margin-top: 15px;
 }
 
-.uploadFile .progress span  {
-    color:  #000;
+.uploadFile .progress span {
+    color: #000;
 }
 
 .uploadFile .alert {
@@ -520,9 +515,10 @@ input[type="radio"], input[type="checkbox"] {
     height: 1000px;
 }
 
-  h3 b{
-color:#003712;
+h3 b {
+    color: #003712;
 }
+
 .modal .modal-body {
     /*max-height: 1620px;*/
 }
@@ -531,17 +527,17 @@ color:#003712;
     border-radius: 0px;
 }
 
-.archive_parsing_results{
-    height:250px;
+.archive_parsing_results {
+    height: 250px;
     overflow: scroll;
 }
 
-.close_to_header{
+.close_to_header {
     border-radius: 0 !important;
     margin: 0 !important;
 }
 
-.header_for_results{
+.header_for_results {
     margin-left: 0;
     margin-right: 0;
 }
@@ -558,9 +554,84 @@ color:#003712;
     background-image: none;
     border: 1px solid #ccc;
     border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+form[name='CalibrationTestForm'] input {
+    font-size: 21px;
+    font-weight: bold;
+    padding: 0 5px;
+}
+
+.first-column {
+    width: 35%;
+    float: left;
+}
+
+.second-column {
+    width: 65%;
+    float: right;
+    padding-left: 30px;
+}
+
+form[name='CalibrationTestForm'] table {
+    width: 400px;
+    overflow: scroll;
+}
+
+form[name='CalibrationTestForm'] .scroll-wrapper {
+    overflow-x: scroll;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+form[name='CalibrationTestForm'] .control-label {
+    width: 90px;
+}
+
+form[name='CalibrationTestForm'] .control-image-label {
+    width: 200px;
+}
+
+form[name='CalibrationTestForm'] .image-td {
+    width: 200px;
+    height: 200px;
+}
+
+.rotated0 {
+}
+
+.rotated90 {
+    /* Firefox */
+    -moz-transform: rotate(90deg);
+    /* Safari and Chrome */
+    -webkit-transform: rotate(90deg);
+    /* Opera */
+    -o-transform: rotate(90deg);
+}
+
+.rotated180 {
+    /* Firefox */
+    -moz-transform: rotate(180deg);
+    /* Safari and Chrome */
+    -webkit-transform: rotate(180deg);
+    /* Opera */
+    -o-transform: rotate(180deg);
+}
+
+.rotated270 {
+    /* Firefox */
+    -moz-transform: rotate(270deg);
+    /* Safari and Chrome */
+    -webkit-transform: rotate(270deg);
+    /* Opera */
+    -o-transform: rotate(270deg);
+}
+
+form[name='CalibrationTestForm'] tr > td {
+    min-height: 30px;
 }

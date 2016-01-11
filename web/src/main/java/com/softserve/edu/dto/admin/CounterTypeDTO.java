@@ -38,11 +38,12 @@ public class CounterTypeDTO {
         this.name = name;
     }
 
-    public CounterTypeDTO(Long id, String symbol, String standardSize,String typeWater) {
+    public CounterTypeDTO(Long id, String symbol, String standardSize,String typeWater, String manufacturer) {
         this.id=id;
         this.symbol=symbol;
         this.standardSize=standardSize;
         this.typeWater = typeWater;
+        this.manufacturer = manufacturer;
     }
 
 }

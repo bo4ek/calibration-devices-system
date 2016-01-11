@@ -29,9 +29,7 @@ public interface Constants {
     String DOCUMENT_DATE = "Дата документа";
     String DOCUMENT_NUMBER = "№ документа";
     String VALID_UNTIL = "Придатний до";
-
     String COUNTERS_NUMBER = "Кількість лічильників";
-
     String PROVIDER = "Провайдер";
     String VERIFICATION_ID = "Номер повірки";
     String COUNTER_NUMBER = "Номер лічильника";
@@ -39,10 +37,15 @@ public interface Constants {
     String COUNTER_SIZE_AND_SYMBOL = "Розмір і символ лічильника";
     String YEAR = "Рік випуску лічильника";
     String STAMP = "Номер пломби";
-
     String NUMBER_SEPARATOR = "-";
-
     String DEFAULT_DB_TABLE_NAME = "Subscribers";
+
+    //reasons o counter unusability
+    String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
+    String RATED_FLAW = "номінальною витратою";
+    String TRANSIENT_FLAW = "перехідною витратою";
+    String MINIMAL_FLAW = "мінімальною витратою";
+    String NO_REASON = "причину не вказано";
 
     // region Address details
 
