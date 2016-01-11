@@ -31,7 +31,7 @@
                        class="table table-bordered table-hover users_table">
                     <tbody>
                     <tr ng-repeat="organization in $data">
-                        <td data-title="'NAME' | translate" sortable="'name'"
+                        <td data-title="'NAME_ORGANIZATION' | translate" sortable="'name'"
                             filter="{ 'name': 'text' }">
                             {{ organization.name }}
                         </td>
@@ -62,7 +62,7 @@
                                 </i>
                             </center>
                         </td>
-                        <td data-title="'REMOVE' | translate" class="control_buttons">
+                        <td data-title="'ORGANIZATION_CHANGES_HISTORY' | translate" class="control_buttons">
                             <center>
                                 <i class="glyphicon glyphicon-remove-sign cancel_icon"
                                    ng-click="openOrganizationEditHistoryModal(organization.id)">

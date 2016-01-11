@@ -33,6 +33,16 @@ public class Verification {
     @Setter(AccessLevel.PRIVATE)
     private String id;
 
+    @Override
+    public String toString() {
+        return "Verification{" +
+                "id='" + id + '\'' +
+                ", status=" + status +
+                ", readStatus=" + readStatus +
+                ", taskStatus=" + taskStatus +
+                '}';
+    }
+
     @Enumerated(EnumType.STRING)
     private Status status;
 

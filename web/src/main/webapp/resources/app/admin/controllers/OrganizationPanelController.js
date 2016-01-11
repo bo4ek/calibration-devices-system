@@ -188,7 +188,6 @@ angular
                         var organizationDTOModal = $modal
                             .open({
                                 animation: true,
-                                backdrop: 'static',
                                 controller: 'OrganizationEditHistoryModalController',
                                 templateUrl: 'resources/app/admin/views/modals/organization-edit-history-modal.html',
                                 size: 'lg'
