@@ -38,6 +38,12 @@ angular
                     });
             },
 
+            signTestProtocol: function (testId) {
+                return $http.put("calibrator/calibrationTests/signTest/" + testId)
+                    .then(function (result) {
+                        return result.status;
+                    });
+            },
 
             deleteCalibrationTest: function (calibrationTestId) {
                 var url = 'calibrator/calibrationTests/delete/' + calibrationTestId;

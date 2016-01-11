@@ -423,6 +423,20 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
+    @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.PUT)
+    public ResponseEntity signTestProtocol(@PathVariable String verificationId) {
+        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
+        try {
+            CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
+            calibrationTest.setSigned(true);
+            testRepository.save(calibrationTest);
+        } catch (Exception e) {
+            logger.error("Cannot sing protocol", e);
+            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return responseEntity;
+    }
+
 
 }
 

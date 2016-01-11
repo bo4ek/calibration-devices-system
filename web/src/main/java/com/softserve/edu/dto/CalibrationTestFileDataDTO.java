@@ -51,11 +51,12 @@ public class CalibrationTestFileDataDTO {
     private Long conterId;
 
     private String standardSize;
-    
+
     private String symbol;
 
     private Long counterTypeId;
 
+    private boolean signed;
 
     public CalibrationTestFileDataDTO() {
     }
@@ -112,7 +113,7 @@ public class CalibrationTestFileDataDTO {
             testDataDTO.setActualConsumption(convertImpulsesPerSecToCubicMetersPerHour(
                     testData.getTestCorrectedCurrentConsumption(i),
                     testData.getImpulsePricePerLitre()));
-           testDataDTO.setCalculationError(countCalculationError(testDataDTO.getVolumeInDevice(),
+            testDataDTO.setCalculationError(countCalculationError(testDataDTO.getVolumeInDevice(),
                     testDataDTO.getVolumeOfStandard()));
             testDataDTO.setBeginPhoto(testData.getBeginPhoto(i));
             testDataDTO.setEndPhoto(testData.getEndPhoto(i));
@@ -121,7 +122,7 @@ public class CalibrationTestFileDataDTO {
         }
     }
 
-    public CalibrationTestFileDataDTO(CalibrationTest calibrationTest,CalibrationTestService testService,Verification verification) {
+    public CalibrationTestFileDataDTO(CalibrationTest calibrationTest, CalibrationTestService testService, Verification verification) {
         this.fileName = calibrationTest.getName();
         Counter counter = verification.getCounter();
         this.counterNumber = counter.getNumberCounter();
@@ -131,11 +132,12 @@ public class CalibrationTestFileDataDTO {
         this.installmentNumber = verification.getInstallmentNumber();
         this.latitude = calibrationTest.getLatitude();
         this.longitude = calibrationTest.getLongitude();
-        this.testPhoto = testService.getPhotoAsString(calibrationTest.getPhotoPath(),calibrationTest);
+        this.testPhoto = testService.getPhotoAsString(calibrationTest.getPhotoPath(), calibrationTest);
         this.consumptionStatus = calibrationTest.getConsumptionStatus();
         this.testResult = calibrationTest.getTestResult();
         this.listTestData = new ArrayList();
         this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
+        this.signed = calibrationTest.isSigned();
         int testNumber = 1;
         List<CalibrationTestIMG> calibrationTestIMGList;
         CalibrationTestIMG calibrationTestIMG;
@@ -160,13 +162,13 @@ public class CalibrationTestFileDataDTO {
             for (int orderPhoto = 0; orderPhoto < calibrationTestIMGList.size(); orderPhoto++) {
                 calibrationTestIMG = calibrationTestIMGList.get(orderPhoto);
                 if (orderPhoto == 0) {
-                    testDataDTO.setBeginPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(),calibrationTest));
+                    testDataDTO.setBeginPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(), calibrationTest));
                 } else {
-                    testDataDTO.setEndPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(),calibrationTest));
+                    testDataDTO.setEndPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(), calibrationTest));
                 }
             }
             testDataDTO.setTestPosition(calibrationTestData.getTestPosition());
-            testDataDTO.setTestTime(round(calibrationTestData.getDuration(),1));
+            testDataDTO.setTestTime(round(calibrationTestData.getDuration(), 1));
             testDataDTO.setTestResult(calibrationTestData.getTestResult());
             testDataDTO.setConsumptionStatus(calibrationTestData.getConsumptionStatus());
             listTestData.add(testDataDTO);
@@ -348,5 +350,13 @@ public class CalibrationTestFileDataDTO {
 
     public void setTypeWater(String typeWater) {
         this.typeWater = typeWater;
+    }
+
+    public boolean isSigned() {
+        return signed;
+    }
+
+    public void setSigned(boolean signed) {
+        this.signed = signed;
     }
 }

@@ -37,6 +37,9 @@ public class CalibrationTest {
 
     private String photoPath;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean signed;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "name",
