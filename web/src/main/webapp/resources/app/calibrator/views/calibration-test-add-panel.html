@@ -292,9 +292,10 @@
                 <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-success btn-md" ng-click="updateCalibrationTest()"
                         >{{'EDIT_CHANGES' | translate}}
                 </button>
-                <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" type="submit" class="btn btn-warning btn-md"
+                <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" type="submit"
+                        class="btn btn-warning btn-md"
                         ng-click="signCalibrationTest()">
-                    Підписати
+                    {{'SIGN_PROTOCOL' | translate}}
                 </button>
                 <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"ng-show="!fileLoaded"
                         ng-click="fileName = uploadBbiFile(testId)">
