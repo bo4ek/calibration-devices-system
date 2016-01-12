@@ -267,3 +267,7 @@ a {
 }
 
 button:focus { outline:0 !important; }
+
+.row{
+    margin-right: 0px !important;
+}

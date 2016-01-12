@@ -111,7 +111,7 @@
             <div class="col-md-8">
                 <input id="calibrationInterval" name="calibrationInterval" class="form-control"
                        type="number" ng-model="$root.countersType.calibrationInterval"
-                       min="1" max="4" required>
+                       ng-pattern="INSPECTION_INTERVAL_REGEX" min="1" required>
 							<span class="form-control-feedback glyphicon
 						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
 
@@ -120,9 +120,15 @@
                     {{'REQUIRED' | translate}}
                 </p>
 
-                <p class="help-block" ng-if="editCounterTypeForm.calibrationInterval.$error.min || editCounterTypeForm.calibrationInterval.$error.max">
+                <p class="help-block" ng-if="editCounterTypeForm.calibrationInterval.$error.min">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'INCORRECT_VALUE_INSPECTION_INTERVAL' | translate }}
+                </p>
+
+                <p class="help-block"
+                   ng-if="addCounterTypeForm.calibrationInterval.$error.pattern">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{'INCORRECT_VALUE_INSPECTION_INTERVAL_INPUT' | translate }}
                 </p>
             </div>
         </div>
