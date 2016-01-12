@@ -134,7 +134,7 @@
             <div class="col-md-8">
                 <input id="yearIntroduction" name="yearIntroduction" class="form-control"
                        type="number" ng-model="addCounterTypeFormData.yearIntroduction"
-                       ng-pattern="YEAR_REGEX" required>
+                       ng-pattern="YEAR_REGEX" ng-max="currentYear" required>
 							<span class="form-control-feedback glyphicon
 						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
 
@@ -146,6 +146,11 @@
                 <p class="help-block" ng-if="addCounterTypeForm.yearIntroduction.$error.pattern">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL' | translate }}
+                </p>
+
+                <p class="help-block" ng-if="addCounterTypeForm.yearIntroduction.$error.max">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{'INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL_MAX' | translate }}
                 </p>
             </div>
         </div>
