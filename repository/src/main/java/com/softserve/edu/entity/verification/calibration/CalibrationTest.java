@@ -40,6 +40,9 @@ public class CalibrationTest {
     @Column(columnDefinition = "boolean default false")
     private boolean signed;
 
+    @Column
+    private byte[] signedDocument;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "name",
