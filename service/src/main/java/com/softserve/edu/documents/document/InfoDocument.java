@@ -53,6 +53,12 @@ public class InfoDocument  implements Document {
 			if (device != null) {			
 			Device.DeviceType deviceType = device.getDeviceType();
 			switch (deviceType) {
+//                case ELECTRICAL:
+//                    deviceName += "електрики";
+//                    break;
+//                case GASEOUS:
+//                    deviceName += "газу";
+//                    break;
 				case THERMAL:
 					deviceName += "тепла";
 					break;
