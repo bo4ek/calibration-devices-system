@@ -17,10 +17,10 @@
                            on-select="setDeviceId(addCounterTypeFormData.name)"
                            name="name" id="name" required>
                     <ui-select-match placeholder="{{'SELECT_NAME_OF_COUNTER' | translate}}" allow-clear="true">
-                        {{$select.selected.designation}}
+                        {{$select.selected.designation}} ({{$select.selected.deviceType | translate}})
                     </ui-select-match>
                     <ui-select-choices repeat="name in names | filter: $select.search">
-                        <span ng-bind-html="name.designation"></span>
+                        <span>{{name.designation}} ({{name.deviceType | translate}})</span>
                     </ui-select-choices>
                 </ui-select>
 

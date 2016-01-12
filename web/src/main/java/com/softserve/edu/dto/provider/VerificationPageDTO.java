@@ -1,6 +1,5 @@
 package com.softserve.edu.dto.provider;
 
-
 import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
@@ -32,20 +31,15 @@ public class VerificationPageDTO {
     private Verification.ReadStatus readStatus;
     private boolean isUpload;
     private Integer processTimeExceeding;
-
-
     private Long protocolId;
     private String protocolDate;
     private String protocolStatus;
-
     private String measurementDeviceId;
     private String measurementDeviceType;
-
     private DocumentType documentType;
     private String documentTypeName;
     private String documentDate;
-
-    private  Long  calibrationTestId;
+    private Long calibrationTestId;
     private String address;
     private String nameProvider;
     private String nameCalibrator;
@@ -59,18 +53,15 @@ public class VerificationPageDTO {
     private Long counterId;
     private Boolean isManual;
 
-
-
     public VerificationPageDTO() {
     }
 
     public VerificationPageDTO(String id, Date initialDate, String surname, String street, String region,
-                               Status status, Verification.ReadStatus readStatus, User providerEmployee, User calibratorEmployee, User stateVerificatorEmployee,
-                               String name, String fullName, String district, String locality, String phone, boolean isUpload, Integer processTimeExceeding,
-                               CalibrationTest calibrationTest,
-                               Device device,
+                               Status status, Verification.ReadStatus readStatus, User providerEmployee,
+                               User calibratorEmployee, User stateVerificatorEmployee, String name, String fullName,
+                               String district, String locality, String phone, boolean isUpload,
+                               Integer processTimeExceeding, CalibrationTest calibrationTest, Device device,
                                String documentType, String documentDate) {
-
         this.id = id;
         this.initialDate = initialDate;
         this.surname = surname;
@@ -117,14 +108,14 @@ public class VerificationPageDTO {
                 this.protocolStatus = calibrationTest.getTestResult().toString();
                 logger.debug("protocolStatus = " + protocolStatus);
                 if (protocolStatus == Verification.CalibrationTestResult.SUCCESS.toString()) {
-                    logger.debug("documentType = " +  this.documentType);
+                    logger.debug("documentType = " + this.documentType);
                     this.documentType = DocumentType.VERIFICATION_CERTIFICATE;
                     this.documentTypeName = "СПП";
                 } else {
                     this.documentType = DocumentType.UNFITNESS_CERTIFICATE;
                     this.documentTypeName = "Довідка про непридатність";
                 }
-                logger.debug("documentType = " +  this.documentType);
+                logger.debug("documentType = " + this.documentType);
             }
         }
         if (device != null) {
@@ -141,12 +132,11 @@ public class VerificationPageDTO {
     }
 
     public VerificationPageDTO(String id, Date initialDate, String surname, String street, String region,
-                               Status status, Verification.ReadStatus readStatus, User providerEmployee, User calibratorEmployee, User stateVerificatorEmployee,
-                               String name, String fullName, String district, String locality, String phone, boolean isUpload, Integer processTimeExceeding,
-                               CalibrationTest calibrationTest, Long calibrationTestId,
-                               Device device,
-                               String documentType, String documentDate) {
-
+                               Status status, Verification.ReadStatus readStatus, User providerEmployee,
+                               User calibratorEmployee, User stateVerificatorEmployee, String name, String fullName,
+                               String district, String locality, String phone, boolean isUpload,
+                               Integer processTimeExceeding, CalibrationTest calibrationTest, Long calibrationTestId,
+                               Device device, String documentType, String documentDate) {
         this.id = id;
         this.initialDate = initialDate;
         this.surname = surname;
@@ -193,14 +183,14 @@ public class VerificationPageDTO {
                 this.protocolStatus = calibrationTest.getTestResult().toString();
                 logger.debug("protocolStatus = " + protocolStatus);
                 if (protocolStatus == Verification.CalibrationTestResult.SUCCESS.toString()) {
-                    logger.debug("documentType = " +  this.documentType);
+                    logger.debug("documentType = " + this.documentType);
                     this.documentType = DocumentType.VERIFICATION_CERTIFICATE;
                     this.documentTypeName = "СПП";
                 } else {
                     this.documentType = DocumentType.UNFITNESS_CERTIFICATE;
                     this.documentTypeName = "Довідка про непридатність";
                 }
-                logger.debug("documentType = " +  this.documentType);
+                logger.debug("documentType = " + this.documentType);
             }
         }
         if (device != null) {
@@ -217,11 +207,9 @@ public class VerificationPageDTO {
         this.calibrationTestId = calibrationTestId;
     }
 
-
     public VerificationPageDTO(Long count) {
         this.countOfWork = count;
     }
-
 
     public VerificationPageDTO(String id, Date initialDate, String surname, String street, String region,
                                Status status, Verification.ReadStatus readStatus, User providerEmployee,
@@ -230,8 +218,7 @@ public class VerificationPageDTO {
                                boolean isUpload, Integer processTimeExceeding,
                                CalibrationTest calibrationTest,
                                Device device,
-                               String documentType, String documentDate,String address, String building,String flat) {
-
+                               String documentType, String documentDate, String address, String building, String flat) {
         this.id = id;
         this.initialDate = initialDate;
         this.surname = surname;
@@ -240,9 +227,9 @@ public class VerificationPageDTO {
         this.region = region;
         this.status = status;
         this.readStatus = readStatus;
-        this.address=address;
-        this.building =building;
-        this.flat =flat;
+        this.address = address;
+        this.building = building;
+        this.flat = flat;
         if (providerEmployee != null) {
             if (providerEmployee.getMiddleName() != null) {
                 this.providerEmployee = providerEmployee.getLastName() + " " + providerEmployee.getFirstName() + " " + providerEmployee.getMiddleName();
@@ -281,14 +268,14 @@ public class VerificationPageDTO {
                 this.protocolStatus = calibrationTest.getTestResult().toString();
                 logger.debug("protocolStatus = " + protocolStatus);
                 if (protocolStatus == Verification.CalibrationTestResult.SUCCESS.toString()) {
-                    logger.debug("documentType = " +  this.documentType);
+                    logger.debug("documentType = " + this.documentType);
                     this.documentType = DocumentType.VERIFICATION_CERTIFICATE;
                     this.documentTypeName = "СПП";
                 } else {
                     this.documentType = DocumentType.UNFITNESS_CERTIFICATE;
                     this.documentTypeName = "Довідка про непридатність";
                 }
-                logger.debug("documentType = " +  this.documentType);
+                logger.debug("documentType = " + this.documentType);
             }
         }
         if (device != null) {
@@ -367,7 +354,6 @@ public class VerificationPageDTO {
     public void setStatus(Status status) {
         this.status = status;
     }
-
 
     public String getProviderEmployee() {
         return providerEmployee;
@@ -575,7 +561,6 @@ public class VerificationPageDTO {
         this.nameCalibrator = nameCalibrator;
     }
 
-
     public String getBuilding() {
         return building;
     }
@@ -608,7 +593,6 @@ public class VerificationPageDTO {
         this.standardSize = standardSize;
     }
 
-
     public Integer getRealiseYear() {
         return realiseYear;
     }
@@ -632,7 +616,4 @@ public class VerificationPageDTO {
     public void setNumberCounter(String numberCounter) {
         this.numberCounter = numberCounter;
     }
-
 }
-
-

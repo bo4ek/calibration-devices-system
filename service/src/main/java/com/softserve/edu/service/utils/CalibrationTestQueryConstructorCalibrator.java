@@ -1,7 +1,6 @@
 package com.softserve.edu.service.utils;
 
 import com.softserve.edu.entity.device.Device;
-;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import org.apache.commons.lang.StringUtils;
