@@ -524,7 +524,7 @@ h3 b {
 }
 
 .input-group-addon {
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .archive_parsing_results {
@@ -562,9 +562,19 @@ h3 b {
 }
 
 form[name='CalibrationTestForm'] input {
-    font-size: 21px;
+    font-size: 18px;
     font-weight: bold;
     padding: 0 5px;
+}
+
+#editMainPhotoForm input {
+    font-weight: bold;
+    padding: 0 12px;
+}
+
+#editMainPhotoForm .select2-chosen, #editMainPhotoForm .select2-result-label {
+    font-weight: bold;
+    padding: 6px 12px;
 }
 
 .first-column {
