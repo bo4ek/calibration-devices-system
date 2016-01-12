@@ -46,8 +46,8 @@ public enum Normalize implements Operation {
 
         boolean isBold = runs.get(0).isBold();
         boolean isItalic = runs.get(0).isItalic();
-        int fontSize = 0;
 
+        int fontSize = 0;
         int size = runs.size();
         for (int i = 0; i < size; i++) {
             int runFontSize = runs.get(0).getFontSize();

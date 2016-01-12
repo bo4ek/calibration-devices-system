@@ -1,6 +1,5 @@
 package com.softserve.edu.controller.client.application;
 
-
 import com.softserve.edu.dto.DeviceLightDTO;
 import com.softserve.edu.dto.application.ApplicationFieldDTO;
 import com.softserve.edu.dto.application.ClientMailDTO;

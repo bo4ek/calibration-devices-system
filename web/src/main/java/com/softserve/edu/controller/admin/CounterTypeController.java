@@ -3,9 +3,7 @@ package com.softserve.edu.controller.admin;
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.dto.admin.CounterTypeDTO;
 import com.softserve.edu.entity.device.CounterType;
-import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.service.admin.CounterTypeService;
-import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,8 @@ public class CounterTypeController {
 
     @Autowired
     private CounterTypeService counterTypeService;
+
+
 
     /**
      * Add counter type
@@ -110,7 +110,8 @@ public class CounterTypeController {
         CounterType counterType = counterTypeService.findById(id);
         CounterTypeDTO counterTypeDTO = new CounterTypeDTO(
                 counterType.getId(),
-                counterType.getName(),
+                counterType.getDevice().getDeviceName(),
+                counterType.getDevice().getDeviceType().toString(),
                 counterType.getSymbol(),
                 counterType.getStandardSize(),
                 counterType.getManufacturer(),
@@ -118,6 +119,7 @@ public class CounterTypeController {
                 counterType.getYearIntroduction(),
                 counterType.getGost(),
                 counterType.getDevice().getId()
+
         );
         return counterTypeDTO;
     }
@@ -173,7 +175,8 @@ public class CounterTypeController {
         for (CounterType counterType : list) {
             resultList.add(new CounterTypeDTO(
                     counterType.getId(),
-                    counterType.getName(),
+                    counterType.getDevice().getDeviceName(),
+                    counterType.getDevice().getDeviceType().toString(),
                     counterType.getSymbol(),
                     counterType.getStandardSize(),
                     counterType.getManufacturer(),
