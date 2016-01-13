@@ -138,13 +138,28 @@ angular
 
             };
 
+
+           $rootScope.closeDelete = function(id) {
+               $rootScope.counterTypeId = id;
+               $modal.open({
+                   animation : true,
+                   templateUrl: 'resources/app/admin/views/modals/close-alert-delete.html',
+                   controller : 'AdminCloseAlertDeleteController'
+
+               })
+           };
+
+            $scope.$on('delete', function(event, args) {
+                $scope.deleteCounterType($rootScope.counterTypeId);
+            });
+
             /**
              * deleting of counter type
              * @param id
              */
             $scope.deleteCounterType = function (id) {
-                $rootScope.counterTypeId = id;
-                console.log($rootScope.counterTypeId);
+
+                console.log(id);
                 counterTypeService.deleteCounterType(id).then(function () {
                     toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_DELETED_COUNTER_TYPE'));
                 });

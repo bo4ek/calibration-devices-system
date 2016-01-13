@@ -22,9 +22,9 @@ public class DistrictAndStreetComparator implements Comparator<Verification> {
         if (district1.compareToIgnoreCase(district2)==0) {
              if (street1.compareToIgnoreCase(street2)==0){
                  if (bulding1.compareToIgnoreCase(bulding2)==0){
-                     return (flat1.compareToIgnoreCase(flat2));
-                 } else return (bulding1.compareToIgnoreCase(bulding2));
-             } else return (street1.compareToIgnoreCase(street2));
+                     return flat1.compareToIgnoreCase(flat2);
+                 } else return bulding1.compareToIgnoreCase(bulding2);
+             } else return street1.compareToIgnoreCase(street2);
         } else return  district1.compareToIgnoreCase(district2);
     }
 }
