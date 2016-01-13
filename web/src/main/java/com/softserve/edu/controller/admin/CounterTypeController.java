@@ -46,8 +46,9 @@ public class CounterTypeController {
                     counterTypeDTO.getGost(),
                     counterTypeDTO.getDeviceId()
             );
+            logger.info("New counter type was created with params:" + counterTypeDTO);
         } catch (Exception e) {
-            logger.error("Got exeption while add counter type ",e);
+            logger.error("Got exception while add counter type ",e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -75,8 +76,9 @@ public class CounterTypeController {
                     counterTypeDTO.getGost(),
                     counterTypeDTO.getDeviceId()
             );
+            logger.info("Counter type with id= "+counterTypeId + " was edit successfully");
         } catch (Exception e) {
-            logger.error("Got exeption while editing counter type ",e);
+            logger.error("Got exception while editing counter type ",e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -93,8 +95,9 @@ public class CounterTypeController {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             counterTypeService.removeCounterType(counterTypeId);
+            logger.info("Counter type with id= "+counterTypeId + " was deleted successfully");
         } catch (Exception e) {
-            logger.error("Got exeption while remove counter type ",e);
+            logger.error("Got exception while remove counter type ",e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -105,7 +108,7 @@ public class CounterTypeController {
      * @param id Long id of counter type
      * @return counterTypeDTO
      */
-    @RequestMapping(value = "get/{id}")
+    @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public CounterTypeDTO getCounterType(@PathVariable("id") Long id) {
         CounterType counterType = counterTypeService.findById(id);
         CounterTypeDTO counterTypeDTO = new CounterTypeDTO(

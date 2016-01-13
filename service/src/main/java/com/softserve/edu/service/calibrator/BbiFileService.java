@@ -14,5 +14,7 @@ public interface BbiFileService {
 
     File findBbiFileByFileName(String fileName);
 
+    String findBBIByFileName(String fileName);
+
     DeviceTestData parseBbiFile(InputStream fileStream, String fileName) throws IOException, DecoderException;
 }
