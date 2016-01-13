@@ -43,7 +43,7 @@ angular.module('employeeModule')
 
         $scope.selectedData = {};
         $scope.selectedData.selectedStreetType = "";
-        $scope.selectedData.dismantled = true;
+        $scope.selectedData.dismantled = false;
         $scope.selectedData.sealPresence = true;
 
         $scope.applicationCodes = [];
