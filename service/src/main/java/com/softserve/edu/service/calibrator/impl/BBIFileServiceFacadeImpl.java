@@ -329,10 +329,10 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         if (counterType == null) {
             long deviceId = (long) deviceTestData.getDeviceTypeId();
             if (deviceId == 1) {
-                deviceId = 65466;
+                deviceId = Constants.DEFAULT_WATER_DEVICE_ID;
             }
             if (deviceId == 2) {
-                deviceId = 65468;
+                deviceId = Constants.DEFAULT_THERMAL_DEVICE_ID;
             }
             String deviceName = deviceService.getById(deviceId).getDeviceName();
             counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
