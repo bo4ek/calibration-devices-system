@@ -547,8 +547,7 @@ public class CalibratorVerificationController {
      */
     @RequestMapping(value = "/checkInfo/{verificationId}", method = RequestMethod.GET)
     public boolean checkIfAdditionalInfoExists(@PathVariable String verificationId) {
-        boolean exists = calibratorService.checkIfAdditionalInfoExists(verificationId);
-        return exists;
+        return calibratorService.checkIfAdditionalInfoExists(verificationId);
     }
 
     /**

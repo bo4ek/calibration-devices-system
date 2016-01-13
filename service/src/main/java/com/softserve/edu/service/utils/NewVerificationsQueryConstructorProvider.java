@@ -24,11 +24,7 @@ public class NewVerificationsQueryConstructorProvider {
 	static Logger logger = Logger.getLogger(NewVerificationsQueryConstructorProvider.class);
 	
 	/**
-	 * Method dynamically builds query to database depending on input parameters specified. 
-	 *
-	 * @param lastNameToSearch
-* 		search by client's last name
-	 * @param firstNameToSearch
+	 * Method dynamically builds query to database depending on input parameters specified.
 	 * @param providerId
 	 * 		search by organization ID
 	 * @param startDateToSearch
@@ -109,8 +105,6 @@ public class NewVerificationsQueryConstructorProvider {
 	 * @param startDateToSearch
 	 * @param endDateToSearch
 	 * @param idToSearch
-	 * @param lastNameToSearch
-	 * @param firstNameToSearch
 	 * @param streetToSearch
 	 * @param providerEmployee
 	 * @return Predicate
