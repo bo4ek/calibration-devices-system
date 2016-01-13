@@ -1,5 +1,6 @@
 package com.softserve.edu.service.calibrator.data.test.impl;
 
+import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
@@ -90,8 +91,16 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         verification.setStatus(Status.TEST_COMPLETED);
         /**
          * number of calibration module, which was used to test this device
+         * WARNING! Temporal solution for further discuss
          */
-        verification.setCalibrationModule(calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber()));
+
+        CalibrationModule moduleId = calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber());
+        if (moduleId == null) {
+            verification.setCalibrationModule(calibrationModuleRepository.findOne(1l));
+        }else{
+            verification.setCalibrationModule(moduleId);
+        }
+
         verificationRepository.save(verification);
         return calibrationTest.getId();
     }
