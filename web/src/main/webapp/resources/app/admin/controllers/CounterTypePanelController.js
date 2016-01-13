@@ -160,8 +160,12 @@ angular
             $scope.deleteCounterType = function (id) {
 
                 console.log(id);
-                counterTypeService.deleteCounterType(id).then(function () {
-                    toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_DELETED_COUNTER_TYPE'));
+                counterTypeService.deleteCounterType(id).then(function (status) {
+                    if (status == 409){
+                        toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_DELETED_COUNTER_TYPE'));
+                    } else {
+                        toaster.pop('info', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_DELETED_COUNTER_TYPE'));
+                    }
                 });
                 $timeout(function() {
                     console.log('delete with timeout');

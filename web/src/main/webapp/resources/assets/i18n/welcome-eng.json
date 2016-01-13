@@ -420,6 +420,7 @@
   "SUCCESSFUL_ADDED_COUNTER_TYPE": "Counter type was successful added",
   "SUCCESSFUL_EDITED_COUNTER_TYPE": "Counter type was successful edited",
   "SUCCESSFUL_DELETED_COUNTER_TYPE": "Counter type was successful deleted",
+  "ERROR_DELETED_COUNTER_TYPE": "Counter type can not be deleted",
   "SURE_DELETED_COUNTER_TYPE": "Submit delete counter type",
   "WATER": "Cold water",
   "THERMAL": "Hot water",
