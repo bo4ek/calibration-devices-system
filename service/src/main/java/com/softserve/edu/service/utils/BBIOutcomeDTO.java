@@ -9,7 +9,8 @@ public class BBIOutcomeDTO {
         NO_CORRESPONDING_VERIFICATION,
         BBI_IS_NOT_VALID,
         INVALID_VERIFICATION_CODE,
-        INVALID_COUNTER_SIZE_AND_SYMBOL
+        INVALID_COUNTER_SIZE_AND_SYMBOL,
+        BBI_FILE_IS_ALREADY_IN_DATABASE
     }
 
     private String verificationID;

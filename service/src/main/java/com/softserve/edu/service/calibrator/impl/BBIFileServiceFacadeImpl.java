@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,18 +68,21 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     @Autowired
     private OrganizationService organizationService;
 
+
     @Transactional
-    public DeviceTestData parseBBIFileWithoutSaving(File BBIFile, String originalFileName) {
-        DeviceTestData deviceTestData = null;
-        try {
-            inStream = FileUtils.openInputStream(BBIFile);
-            bufferedInputStream = new BufferedInputStream(inStream);
-            bufferedInputStream.mark(inStream.available());
-            deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
-            bufferedInputStream.reset();
-        } catch (Exception e) {
-            logger.info(e);
+    public DeviceTestData parseBBIFileWithoutSaving(File BBIFile, String originalFileName) throws IOException, DecoderException {
+        String bbiName = bbiFileService.findBBIByFileName(originalFileName);
+        if (bbiName != null) {
+            throw new FileAlreadyExistsException(originalFileName);
         }
+
+        inStream = FileUtils.openInputStream(BBIFile);
+        bufferedInputStream = new BufferedInputStream(inStream);
+        bufferedInputStream.mark(inStream.available());
+        DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
+        bufferedInputStream.reset();
+
+
         return deviceTestData;
     }
 
@@ -164,23 +168,32 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             Map<String, String> correspondingVerificationMap = verificationMapFromUnpackedFiles.get(bbiFile.getName());
             String correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
-            DeviceTestData deviceTestData = parseBBIFileWithoutSaving(bbiFile, bbiFile.getName());
+            DeviceTestData deviceTestData;
             if (correspondingVerification == null) {
                 try {
+                    deviceTestData = parseBBIFileWithoutSaving(bbiFile, bbiFile.getName());
                     correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
                             calibratorEmployee, deviceTestData);
+
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                     Verification verification = verificationService.findById(correspondingVerification);
                     verification.setStatus(Status.CREATED_BY_CALIBRATOR);
                     verificationService.saveVerification(verification);
+                } catch (FileAlreadyExistsException e) {
+                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
+                    logger.info(e);
                 } catch (Exception e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
                 }
             } else {
                 try {
+                    deviceTestData = parseBBIFileWithoutSaving(bbiFile, bbiFile.getName());
                     updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
+                } catch (FileAlreadyExistsException e) {
+                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
+                    logger.info(e);
                 } catch (IOException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
@@ -310,6 +323,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Verification verification = verificationService.findById(verificationId);
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);
+        verificationService.saveVerification(verification);
 
     }
 

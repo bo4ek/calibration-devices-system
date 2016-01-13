@@ -84,8 +84,20 @@ angular
              * Resets employee form
              */
 
+            $rootScope.resetEmployeeForm = function() {
+                $modal.open({
+                    animation : true,
+                    templateUrl: 'resources/app/common/views/modals/reset-alert.html',
+                    controller : 'ResetFormAddEmployeeController'
+                })
+            };
 
-            $scope.resetEmployeeForm = function () {
+            $scope.$on('submitReset', function(event, args) {
+                $scope.submitResetEmployeeForm();
+            });
+
+
+            $scope.submitResetEmployeeForm = function () {
                 $scope.$broadcast('show-errors-reset');
                 if ($scope.employeeForm) {
                     $scope.employeeForm.$setPristine();
@@ -95,7 +107,7 @@ angular
                 $scope.employeeFormData = null;
             };
 
-            $scope.resetEmployeeForm();
+            $scope.submitResetEmployeeForm();
 
             /**
              * Calls resetOrganizationForm after the view loaded

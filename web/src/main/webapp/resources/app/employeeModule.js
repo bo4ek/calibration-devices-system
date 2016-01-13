@@ -256,6 +256,7 @@
         'provider/controllers/DetailsModalControllerProvider',
         'provider/controllers/SendingModalControllerProvider',
         'provider/controllers/AddEmployeeController',
+        'provider/controllers/ResetFormAddEmployeeController',
         'provider/controllers/AddressModalControllerProvider',
         'provider/controllers/UsersController',
         'provider/controllers/SettingsControllerProvider',
