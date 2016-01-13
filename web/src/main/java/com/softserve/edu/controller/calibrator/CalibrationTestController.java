@@ -79,7 +79,6 @@ public class CalibrationTestController {
     @Autowired
     private VerificationService verificationService;
     private ResponseEntity responseEntity;
-    private CalibrationTest byVerificationId;
 
     /**
      * Finds all calibration-tests form database
@@ -431,7 +430,7 @@ public class CalibrationTestController {
         String data = "Our document";
         byte[] signedDocument = data.getBytes();
         try {
-            CalibrationTest calibrationTest = byVerificationId;
+            CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
             calibrationTest.setSigned(true);
             //code signing document
             calibrationTest.setSignedDocument(signedDocument);
