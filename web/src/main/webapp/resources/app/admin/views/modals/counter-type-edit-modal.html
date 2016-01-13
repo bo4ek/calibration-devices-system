@@ -111,7 +111,7 @@
             <div class="col-md-8">
                 <input id="calibrationInterval" name="calibrationInterval" class="form-control"
                        type="number" ng-model="$root.countersType.calibrationInterval"
-                       ng-pattern="INSPECTION_INTERVAL_REGEX" min="1" required>
+                       min="1" required>
 							<span class="form-control-feedback glyphicon
 						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
 
@@ -126,7 +126,7 @@
                 </p>
 
                 <p class="help-block"
-                   ng-if="addCounterTypeForm.calibrationInterval.$error.pattern">
+                   ng-if="addCounterTypeForm.calibrationInterval.$error.number">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'INCORRECT_VALUE_INSPECTION_INTERVAL_INPUT' | translate }}
                 </p>
@@ -141,7 +141,7 @@
             <div class="col-md-8">
                 <input id="yearIntroduction" name="yearIntroduction" class="form-control"
                        type="number" ng-model="$root.countersType.yearIntroduction"
-                       ng-pattern="YEAR_REGEX" ng-max="currentYear" required>
+                       ng-min="1950" ng-max="currentYear" required>
 							<span class="form-control-feedback glyphicon
 						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
 
@@ -150,9 +150,14 @@
                     {{'REQUIRED' | translate}}
                 </p>
 
-                <p class="help-block" ng-if="editCounterTypeForm.yearIntroduction.$error.pattern">
+                <p class="help-block" ng-if="editCounterTypeForm.yearIntroduction.$error.number">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL' | translate }}
+                </p>
+
+                <p class="help-block" ng-if="addCounterTypeForm.yearIntroduction.$error.min">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{'INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL_MIN' | translate }}
                 </p>
 
                 <p class="help-block" ng-if="addCounterTypeForm.yearIntroduction.$error.max">

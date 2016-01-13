@@ -280,6 +280,7 @@
   "INCORRECT_VALUE_INSPECTION_INTERVAL": "Min calobration interval 1 year",
   "INCORRECT_VALUE_INSPECTION_INTERVAL_INPUT": "Enter integer numbers only",
   "INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL": "Incorrect value input example: 2003",
+  "INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL_MIN": "Can't set year, minimal year is 1950",
   "INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL_MAX": "Can't set year, higher than current",
   "INCORRECT_VALUE_GOST": "Incorrect value input example: 3850-2000 or 3585",
   "ALL_FIELDS_REQUIRED": "* All fields are required",
