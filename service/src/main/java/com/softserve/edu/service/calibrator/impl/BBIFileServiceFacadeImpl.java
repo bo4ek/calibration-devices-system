@@ -265,10 +265,14 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 verificationMap.put(Constants.BUILDING, rs.getString("Building"));
                 verificationMap.put(Constants.FLAT, rs.getString("Apartment"));
 
-                verificationMap.put(Constants.CITY_ID, rs.getString("CityID"));
-                verificationMap.put(Constants.DISTRICT_ID, rs.getString("DistrictID"));
-                verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
-                verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
+                try {
+                    verificationMap.put(Constants.CITY_ID, rs.getString("CityID"));
+                    verificationMap.put(Constants.DISTRICT_ID, rs.getString("DistrictID"));
+                    verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
+                    verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
+                }catch (SQLException e){
+                    logger.info("User was trying to upload old archive format", e);
+                }
 
                 bbiFilesToVerification.put(rs.getString("FileNumber"), verificationMap);
             }
