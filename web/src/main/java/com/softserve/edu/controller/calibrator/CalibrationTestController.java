@@ -33,8 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -79,6 +78,8 @@ public class CalibrationTestController {
 
     @Autowired
     private VerificationService verificationService;
+    private ResponseEntity responseEntity;
+    private CalibrationTest byVerificationId;
 
     /**
      * Finds all calibration-tests form database
@@ -245,7 +246,7 @@ public class CalibrationTestController {
      * @return httpStatus 200 OK if everything went well
      */
     @RequestMapping(value = "editTestManual/{verificationId}/{verificationEdit}", method = RequestMethod.POST)
-    public ResponseEntity editTestManual(@PathVariable String verificationId, @PathVariable boolean verificationEdit ,@RequestBody CalibrationTestManualDTO cTestManualDTO) {
+    public ResponseEntity editTestManual(@PathVariable String verificationId, @PathVariable boolean verificationEdit, @RequestBody CalibrationTestManualDTO cTestManualDTO) {
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
             CalibrationTestDataManual cTestDataManual = calibrationTestDataManualService.findByVerificationId(verificationId);
@@ -429,12 +430,13 @@ public class CalibrationTestController {
         //mock
         String data = "Our document";
         byte[] signedDocument = data.getBytes();
-
         try {
-            CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
+            CalibrationTest calibrationTest = byVerificationId;
             calibrationTest.setSigned(true);
             //code signing document
             calibrationTest.setSignedDocument(signedDocument);
+
+            //end
             testRepository.save(calibrationTest);
         } catch (Exception e) {
             logger.error("Cannot sing protocol", e);
