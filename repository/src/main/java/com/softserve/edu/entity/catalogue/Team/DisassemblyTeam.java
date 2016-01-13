@@ -43,7 +43,7 @@ public class DisassemblyTeam {
     private String leaderEmail;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "verificatorId")
+    @JoinColumn(name = "calibratorId")
     private Organization organization;
 
     @OneToMany(mappedBy = "team")
