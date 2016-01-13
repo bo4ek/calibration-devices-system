@@ -39,6 +39,13 @@ public class BbiFileServiceImpl implements BbiFileService {
     }
 
     @Override
+    public String findBBIByFileName(String fileName){
+        String bbiName = uploadBbiRepository.findBBIProtocolByFileName(fileName);
+        return bbiName;
+    }
+
+
+    @Override
     public DeviceTestData parseBbiFile(InputStream fileStream, String fileName) throws IOException, DecoderException {
         DeviceTestDataParser parser = testDataParserFactory.getParser(fileName);
         DeviceTestData parsedData = parser.parse(fileStream);

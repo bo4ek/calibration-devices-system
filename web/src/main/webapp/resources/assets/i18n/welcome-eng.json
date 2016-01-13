@@ -561,6 +561,7 @@
   "SUCCESSFUL_EDITED_CALIBRATION_MODULE" : "Installation module was successfully edited",
   "NO_CORRESPONDING_VERIFICATION" : "No corresponding_verification",
   "BBI_IS_NOT_VALID" : "bbi is not valid",
+  "BBI_FILE_IS_ALREADY_IN_DATABASE" : "BBI file is already in database",
   "INVALID_VERIFICATION_CODE" : "Invalid verification code",
   "PLEASE_DESCRIBE_REASON_OF_PROTOCOL_REJECTION": "Please explain why verification is being rejected",
   "REASON_OF_PROTOCOL_REJECTION": "Please provide the detailed reason why this protocol needs to be rejected",
