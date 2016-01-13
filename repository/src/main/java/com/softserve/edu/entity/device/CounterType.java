@@ -3,8 +3,6 @@ package com.softserve.edu.entity.device;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
 
 /**
  * CounterType Entity represents more global essence then Counter Entity.
@@ -59,4 +57,6 @@ public class CounterType {
         this.gost = gost;
         this.device = device;
     }
+
+
 }

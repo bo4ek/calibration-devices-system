@@ -1,12 +1,8 @@
 package com.softserve.edu.service.admin;
 
 
-import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.service.utils.ListToPageTransformer;
-
-import java.util.List;
-import java.util.Set;
 
 public interface CounterTypeService {
     /**
@@ -20,7 +16,7 @@ public interface CounterTypeService {
      * @param gost
      * @param deviceId
      */
-    void addCounterType(String name, String symbol, String standardSize, String manufacturer,
+    void addCounterType(String name ,String symbol, String standardSize, String manufacturer,
                         Integer calibrationInterval, Integer yearIntroduction, String gost, Long deviceId);
 
     /**

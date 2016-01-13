@@ -72,6 +72,8 @@ public class Device {
     public enum DeviceType {
         WATER(1),
         THERMAL(2);
+//        ELECTRICAL(3),
+//        GASEOUS(4);
 
         private int id;
 

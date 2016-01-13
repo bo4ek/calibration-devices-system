@@ -98,7 +98,7 @@
   "ORGANIZATION_SERVICE_AREA_ADMIN": "Organization service area",
   "ORGANIZATION_CHOOSE_TYPE_ADMIN": "Choose type of organization",
   "ORGANIZATION_TELEPHONE_NUMBER_ADMIN": "Organization phone number",
-  "FILL_YOUR_SYSTEM_ADMINISTRATOR_FOR_ORGANIZATION": "Fill you system administrator for organization",
+  "FILL_YOUR_SYSTEM_ADMINISTRATOR_FOR_ORGANIZATION": "Fill yours system administrator for organization",
   "SUCCESSFUL_CREATED_ORGANIZATION": "Organization have been created",
   "SUCCESSFUL_EDITED_ORGANIZATION": "Organization have been changed",
   "SUCCESSFUL_CREATED_ADMIN": "Admin have been created",
@@ -277,8 +277,10 @@
   "INCORRECT_VALUE_INPUT_ADD_EMPLOYEE": "Incorrect value input!",
   "INCORRECT_VALUE_SYMBOL": "Incorrect value input example: LVK-15-01",
   "INCORRECT_VALUE_MANUFACTURER": "Incorrect value input example: PJSC \u0022Elektrotermometriya\u0022",
-  "INCORRECT_VALUE_INSPECTION_INTERVAL": "Max calobration interval 4 years",
+  "INCORRECT_VALUE_INSPECTION_INTERVAL": "Min calobration interval 1 year",
+  "INCORRECT_VALUE_INSPECTION_INTERVAL_INPUT": "Enter integer numbers only",
   "INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL": "Incorrect value input example: 2003",
+  "INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL_MAX": "Can't set year, higher than current",
   "INCORRECT_VALUE_GOST": "Incorrect value input example: 3850-2000 or 3585",
   "ALL_FIELDS_REQUIRED": "* All fields are required",
   "ORGANIZATION_NAME_LENGTH": "Organization name should be 5 to 50 characters",
@@ -712,6 +714,6 @@
   "DELETE_SAVED_FILTER":"Delete saved filter",
   "NO_FILTER_NAME":"Filter name is not set",
   "SELECT_FILTER":"Choose filter",
-  "ORGANIZATION_CHANGES_HISTORY": "Changes history"
-
+  "ORGANIZATION_CHANGES_HISTORY": "Changes history",
+  "SIGN_PROTOCOL": "Sign"
 }

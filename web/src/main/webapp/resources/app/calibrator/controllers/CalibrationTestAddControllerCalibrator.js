@@ -63,21 +63,24 @@ angular
             };
 
             $scope.showEditMainPhotoModal = function (id) {
-                var modalInstance =  $modal.open({
-                    animation: true,
-                    windowClass: 'preview-protocol-image',
-                    templateUrl: 'resources/app/calibrator/views/modals/edit-main-photo-modal.html',
-                    controller: 'EditPhotoController',
-                    size: 'md',
-                    resolve: {
-                         photoId: function() {
-                            return id;
-                        },
-                         parentScope: function() {
-                            return $scope;
+                console.log($scope.TestForm.signed);
+                if(!$scope.TestForm.signed) {
+                    var modalInstance = $modal.open({
+                        animation: true,
+                        windowClass: 'preview-protocol-image',
+                        templateUrl: 'resources/app/calibrator/views/modals/edit-main-photo-modal.html',
+                        controller: 'EditPhotoController',
+                        size: 'md',
+                        resolve: {
+                            photoId: function () {
+                                return id;
+                            },
+                            parentScope: function () {
+                                return $scope;
+                            }
                         }
-                    }
-                });
+                    });
+                }
             };
 
             $scope.setMainPhoto = function (data) {
@@ -168,6 +171,16 @@ angular
 
             $scope.closeForm = function(){
                 window.history.back();
+            }
+
+            $scope.signCalibrationTest = function () {
+                calibrationTestServiceCalibrator
+                    .signTestProtocol($scope.testId)
+                    .then(function(status) {
+                        if(status==200){
+                            $scope.TestForm.signed = true;
+                        }
+                    })
             }
 
             /**

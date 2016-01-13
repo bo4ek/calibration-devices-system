@@ -31,7 +31,7 @@
                     <tbody>
                     <tr ng-repeat="counterType in $data">
                         <td data-title="'COUNTER_NAME' | translate " sortable="'name'"
-                            filter="{ 'name': 'text' }">{{ counterType.name}}
+                            filter="{ 'name': 'text' }">{{ counterType.name}} ({{counterType.typeWater | translate}})
                         </td>
                         <td data-title="'SYMBOL' | translate " sortable="'symbol'"
                             filter="{ 'symbol': 'text' }">{{ counterType.symbol}}

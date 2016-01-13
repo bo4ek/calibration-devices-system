@@ -33,6 +33,21 @@ public class CounterTypeDTO {
         this.gost = gost;
         this.deviceId = deviceId;
     }
+
+    public CounterTypeDTO(Long id, String name, String typeWater, String symbol, String standardSize, String manufacturer,
+                          Integer calibrationInterval, Integer yearIntroduction, String gost, Long deviceId) {
+        this.id = id;
+        this.name = name;
+        this.typeWater = typeWater;
+        this.symbol = symbol;
+        this.standardSize = standardSize;
+        this.manufacturer = manufacturer;
+        this.calibrationInterval = calibrationInterval;
+        this.yearIntroduction = yearIntroduction;
+        this.gost = gost;
+        this.deviceId = deviceId;
+    }
+
     public CounterTypeDTO(Long id, String name){
         this.id = id;
         this.name = name;
@@ -45,5 +60,6 @@ public class CounterTypeDTO {
         this.typeWater = typeWater;
         this.manufacturer = manufacturer;
     }
+
 
 }

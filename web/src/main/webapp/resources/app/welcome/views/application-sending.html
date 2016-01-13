@@ -346,7 +346,7 @@
                                    typeahead="street as street.designation for street in streets | filter: $viewValue | limitTo: 4"
                                    typeahead-editable="false"
                                    typeahead-on-select="receiveBuildings(selectedValues.selectedStreet)"
-                                   ng-pattern="STREET_REGEX" required
+                                   required
                                    placeholder="{{'NAME_OF_STREET' | translate}}">
 
                             <span class="form-control-feedback street_ok_padding glyphicon form-horizontal glyphicon glyphicon-ok-sign"></span>

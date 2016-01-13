@@ -55,6 +55,7 @@ public class CalibrationTestFileDataDTO {
 
     private Long counterTypeId;
 
+    private boolean signed;
 
     public CalibrationTestFileDataDTO() {
     }
@@ -133,6 +134,7 @@ public class CalibrationTestFileDataDTO {
         this.testResult = calibrationTest.getTestResult();
         this.listTestData = new ArrayList();
         this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
+        this.signed = calibrationTest.isSigned();
         int testNumber = 1;
         List<CalibrationTestIMG> calibrationTestIMGList;
         CalibrationTestIMG calibrationTestIMG;
@@ -345,5 +347,13 @@ public class CalibrationTestFileDataDTO {
 
     public void setTypeWater(String typeWater) {
         this.typeWater = typeWater;
+    }
+
+    public boolean isSigned() {
+        return signed;
+    }
+
+    public void setSigned(boolean signed) {
+        this.signed = signed;
     }
 }

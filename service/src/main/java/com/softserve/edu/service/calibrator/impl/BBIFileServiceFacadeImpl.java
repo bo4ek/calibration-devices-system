@@ -44,6 +44,8 @@ import java.util.Date;
 public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private static final String[] bbiExtensions = {"bbi", "BBI"};
     private static final String[] dbfExtensions = {"db", "dbf", "DB", "DBF"};
+    private static InputStream inStream;
+    private static BufferedInputStream bufferedInputStream;
 
     private final Logger logger = Logger.getLogger(BBIFileServiceFacadeImpl.class);
 
@@ -65,6 +67,25 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     @Autowired
     private OrganizationService organizationService;
 
+    @Transactional
+    public DeviceTestData parseBBIFileWithoutSaving(File BBIFile, String originalFileName) {
+        DeviceTestData deviceTestData = null;
+        try {
+            inStream = FileUtils.openInputStream(BBIFile);
+            bufferedInputStream = new BufferedInputStream(inStream);
+            bufferedInputStream.mark(inStream.available());
+            deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
+            bufferedInputStream.reset();
+        } catch (Exception e) {
+            logger.info(e);
+        }
+        return deviceTestData;
+    }
+
+    public void saveBBIFile(DeviceTestData deviceTestData, String verificationID, String originalFileName) throws IOException {
+        calibratorService.uploadBbi(bufferedInputStream, verificationID, originalFileName);
+        calibrationTestService.createNewTest(deviceTestData, verificationID);
+    }
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
@@ -143,11 +164,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             Map<String, String> correspondingVerificationMap = verificationMapFromUnpackedFiles.get(bbiFile.getName());
             String correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
+            DeviceTestData deviceTestData = parseBBIFileWithoutSaving(bbiFile, bbiFile.getName());
             if (correspondingVerification == null) {
                 try {
                     correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
-                            calibratorEmployee);
-                    parseAndSaveBBIFile(bbiFile, correspondingVerification, bbiFile.getName());
+                            calibratorEmployee, deviceTestData);
+                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                     Verification verification = verificationService.findById(correspondingVerification);
                     verification.setStatus(Status.CREATED_BY_CALIBRATOR);
                     verificationService.saveVerification(verification);
@@ -157,8 +179,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
             } else {
                 try {
-                    updateVerificationFromMap(correspondingVerificationMap, correspondingVerification);
-                    parseAndSaveBBIFile(bbiFile, correspondingVerification, bbiFile.getName());
+                    updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
+                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 } catch (IOException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
@@ -254,7 +276,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return bbiFilesToVerification;
     }
 
-    private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee)
+    private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData)
             throws ParseException {
 
         Address address = new Address(verificationData.get(Constants.REGION), verificationData.get(Constants.CITY),
@@ -266,7 +288,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
         Long calibratorOrganisationId = calibratorEmployee.getOrganization().getId();
         Organization calibrator = organizationService.getOrganizationById(calibratorOrganisationId);
-        Counter counter = getCounterFromVerificationData(verificationData);
+        Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
         String verId = verificationService.getNewVerificationDailyIdByDeviceType(date,
                 counter.getCounterType().getDevice().getDeviceType());
@@ -278,16 +300,16 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return verificationId;
     }
 
-    private void updateVerificationFromMap(Map<String, String> verificationData, String verificationId)
+    private void updateVerificationFromMap(Map<String, String> verificationData, String verificationId, DeviceTestData deviceTestData)
             throws Exception {
 
         Verification verification = verificationService.findById(verificationId);
-        Counter counter = getCounterFromVerificationData(verificationData);
+        Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);
 
     }
 
-    private Counter getCounterFromVerificationData(Map<String, String> verificationData) {
+    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) {
 
         String sizeAndSymbol = verificationData.get(Constants.COUNTER_SIZE_AND_SYMBOL);
         String[] parts = sizeAndSymbol.split(" ");
@@ -301,16 +323,23 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
 
 //        If there is no such symbol and standartSize of Counter in DB - create new counterType
-//        with default deviceType "Water" and deviceName "Лічильник холодної води" and deviceId 65466
+//        with default deviceType "Лічильник холодної води" (deviceId 65466) if deviceTypeId in bbi is "1"
+//        or "Лічильник гарячої води" (deviceId 65466) if deviceTypeId in bbi is "2"
 //        which is already in DB
         if (counterType == null) {
-            Long deviceId = 65466L;
+            long deviceId = (long) deviceTestData.getDeviceTypeId();
+            if (deviceId == 1) {
+                deviceId = 65466;
+            }
+            if (deviceId == 2) {
+                deviceId = 65468;
+            }
             String deviceName = deviceService.getById(deviceId).getDeviceName();
             counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
             counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
         }
         Counter counter = new Counter(verificationData.get(Constants.YEAR),
-                    verificationData.get(Constants.COUNTER_NUMBER), counterType, verificationData.get(Constants.STAMP));
+                verificationData.get(Constants.COUNTER_NUMBER), counterType, verificationData.get(Constants.STAMP));
         return counter;
     }
 }

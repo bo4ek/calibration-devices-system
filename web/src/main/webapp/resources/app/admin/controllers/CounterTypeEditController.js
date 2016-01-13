@@ -113,9 +113,11 @@ angular
             /**RegExp for editing form
              * @type {RegExp}
              */
-            $scope.SYMBOL_REGEX = /^([A-ZА-ЯЇІЄ']{1,10}([-]{1}[\d]{1,4}){1,5})$/;
-            $scope.MANAFUCTURER_REGEX = /^([A-ZА-ЯЇІЄ]{1,7}([ ]{1}["]?[A-ZА-ЯЇІЄ'][a-zа-яіїє']{1,30}["]?)*)$/;
-            $scope.YEAR_REGEX = /^([12]{1}[09]{1}[\d]{2})$/;
-            $scope.GOST_REGEX = /^([\d]{4}([-][\d]{1,4})?)$/;
+
+            $scope.currentDate = new Date();
+            $scope.currentYear = $scope.currentDate.getFullYear();
+            $scope.YEAR_REGEX = /^(19[\d]{2}|20[\d]{2})$/;
+            $scope.INSPECTION_INTERVAL_REGEX = /^[0-9]*$/;
+
         }
     ]);

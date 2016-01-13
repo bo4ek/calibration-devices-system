@@ -17,10 +17,10 @@
                            on-select="setDeviceId(addCounterTypeFormData.name)"
                            name="name" id="name" required>
                     <ui-select-match placeholder="{{'SELECT_NAME_OF_COUNTER' | translate}}" allow-clear="true">
-                        {{$select.selected.designation}}
+                        {{$select.selected.designation}} ({{$select.selected.deviceType | translate}})
                     </ui-select-match>
                     <ui-select-choices repeat="name in names | filter: $select.search">
-                        <span ng-bind-html="name.designation"></span>
+                        <span>{{name.designation}} ({{name.deviceType | translate}})</span>
                     </ui-select-choices>
                 </ui-select>
 
@@ -103,7 +103,7 @@
             <div class="col-md-8">
                 <input id="calibrationInterval" name="calibrationInterval" class="form-control"
                        type="number" ng-model="addCounterTypeFormData.calibrationInterval"
-                       min="1" required>
+                       ng-pattern="INSPECTION_INTERVAL_REGEX" min="1" required>
                 <span class="form-control-feedback glyphicon
 						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
 
@@ -113,9 +113,15 @@
                 </p>
 
                 <p class="help-block"
-                   ng-if="addCounterTypeForm.calibrationInterval.$error.min || addCounterTypeForm.calibrationInterval.$error.max">
+                   ng-if="addCounterTypeForm.calibrationInterval.$error.min">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'INCORRECT_VALUE_INSPECTION_INTERVAL' | translate }}
+                </p>
+
+                <p class="help-block"
+                   ng-if="addCounterTypeForm.calibrationInterval.$error.pattern">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{'INCORRECT_VALUE_INSPECTION_INTERVAL_INPUT' | translate }}
                 </p>
             </div>
         </div>
@@ -128,7 +134,7 @@
             <div class="col-md-8">
                 <input id="yearIntroduction" name="yearIntroduction" class="form-control"
                        type="number" ng-model="addCounterTypeFormData.yearIntroduction"
-                       ng-pattern="YEAR_REGEX" required>
+                       ng-pattern="YEAR_REGEX" ng-max="currentYear" required>
 							<span class="form-control-feedback glyphicon
 						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
 
@@ -140,6 +146,11 @@
                 <p class="help-block" ng-if="addCounterTypeForm.yearIntroduction.$error.pattern">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL' | translate }}
+                </p>
+
+                <p class="help-block" ng-if="addCounterTypeForm.yearIntroduction.$error.max">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{'INCORRECT_VALUE_YEAR_INSPECTION_INTERVAL_MAX' | translate }}
                 </p>
             </div>
         </div>
