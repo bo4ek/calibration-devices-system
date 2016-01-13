@@ -40,6 +40,9 @@ public interface Constants {
     String NUMBER_SEPARATOR = "-";
     String DEFAULT_DB_TABLE_NAME = "Subscribers";
 
+    long DEFAULT_WATER_DEVICE_ID = 65466;
+    long DEFAULT_THERMAL_DEVICE_ID = 65468;
+
     //reasons o counter unusability
     String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
     String RATED_FLAW = "номінальною витратою";

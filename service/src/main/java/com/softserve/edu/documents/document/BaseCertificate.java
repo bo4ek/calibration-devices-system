@@ -7,8 +7,6 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Service;
@@ -21,8 +19,7 @@ import java.util.Locale;
  * of all certificates.
  * All certificates extend this class.
  */
-@Setter
-@Getter
+
 @Service
 @Configurable
 public abstract class BaseCertificate implements Document {
@@ -31,11 +28,11 @@ public abstract class BaseCertificate implements Document {
     /**
      * Verification that is used for getting information for this document.
      */
-    private Verification verification;
+    protected Verification verification;
     /**
      * One of calibration test that is assigned to the verification.
      */
-    private CalibrationTest calibrationTest;
+    protected CalibrationTest calibrationTest;
 
     /**
      * Constructor
@@ -53,7 +50,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATOR_COMPANY_NAME")
     public String getStateVerificatorCompanyName() {
-        return getVerification().getStateVerificator().getName();
+        return verification.getStateVerificator().getName();
     }
 
     /**
@@ -61,7 +58,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATOR_COMPANY_ADDRESS")
     public String getCalibratorCompanyAddress() {
-        Address address = getVerification().getStateVerificator().getAddress();
+        Address address = verification.getStateVerificator().getAddress();
         return address.getLocality() + ", " +
                 address.getStreet() + ", " +
                 address.getBuilding();
@@ -72,8 +69,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATOR_ACC_CERT_NAME")
     public String getCalibratorCompanyAccreditationCertificateNumber() {
-        //return getVerification().getCalibrator().getCertificateNumber();
-        return getVerification().getStateVerificator().getCertificateNumber();
+        return verification.getStateVerificator().getCertificateNumber();
     }
 
     /**
@@ -81,8 +77,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATOR_ACC_CERT_DATE_GRANTED")
     public String getCalibratorCompanyAccreditationCertificateGrantedDate() {
-        //return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getVerification().getCalibrator().getCertificateGrantedDate());
-        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getVerification().getStateVerificator().getCertificateGrantedDate());
+        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(verification.getStateVerificator().getCertificateGrantedDate());
     }
 
     /**
@@ -90,23 +85,29 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
-        String verificationId = "***";
+        String verificationId = String.valueOf(verification.getId());
         String subdivisionId = "***";
         try {
-            subdivisionId = String.valueOf(getVerification().getTask().getTeam().getId());
-            verificationId = String.valueOf(getVerification().getId());
+            subdivisionId = String.valueOf(verification.getTask().getTeam().getId());
         } catch (Exception e) {
             logger.error("no team found for this verification");
         }
+
         return String.format("%s-%s-Д", subdivisionId, verificationId);
     }
 
     /**
      * @return the device's name
      */
+    //mock
     @Placeholder(name = "DEV_NAME")
     public String getDeviceName() {
-        return getVerification().getCounter().getCounterType().getDevice().getDeviceName();
+        String manufacturer = verification.getCounter().getCounterType().getDevice().getDeviceName();
+        if (manufacturer != null) {
+            return verification.getCounter().getCounterType().getDevice().getDeviceName();
+        } else {
+            return "не вказано";
+        }
     }
 
     /**
@@ -114,7 +115,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "DEV_SIGN")
     public String getDeviceSign() {
-        return getVerification().getCounter().getCounterType().getSymbol();
+        return verification.getCounter().getCounterType().getSymbol();
     }
 
     /**
@@ -122,7 +123,12 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "DEV_MAN_SER")
     public String getDeviceManufacturerSerial() {
-        return getVerification().getCounter().getNumberCounter();
+        String manufacturerSerial = verification.getCounter().getNumberCounter();
+        if (manufacturerSerial != null) {
+            return verification.getCounter().getNumberCounter();
+        } else {
+            return "не вказано";
+        }
     }
 
     /**
@@ -130,7 +136,12 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "MAN_NAME")
     public String getManufacturerName() {
-        return getVerification().getCounter().getCounterType().getManufacturer();
+        String manufecturerName = verification.getCounter().getCounterType().getManufacturer();
+        if (manufecturerName != null) {
+            return manufecturerName;
+        } else {
+            return "не вказано";
+        }
     }
 
     /**
@@ -138,21 +149,25 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "OWNER_NAME")
     public String getOwnerFullName() {
-        ClientData ownerData = getVerification().getClientData();
-
+        ClientData ownerData = verification.getClientData();
         return ownerData.getLastName() + " " +
                 ownerData.getFirstName() + " " +
                 ownerData.getMiddleName();
     }
 
     /**
-     *
      * @return Address of counter's owner
      */
     @Placeholder(name = "OWNER_ADDRESS")
     public String getOwnerAddress() {
-        Address ownerAddress = getVerification().getClientData().getClientAddress();
-        return ownerAddress.getRegion() + " обл., "
+        Address ownerAddress = verification.getClientData().getClientAddress();
+        String region = ownerAddress.getRegion();
+        if (region != null) {
+            region = "";
+        } else {
+            region += " обл., ";
+        }
+        return region
                 + ownerAddress.getDistrict() + " р-н, "
                 + ownerAddress.getLocality() + ", "
                 + ownerAddress.getStreet() + " "
@@ -166,7 +181,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATOR_SHORT_NAME")
     public String getStateVerificatorShortName() {
-        User stateVerificatorEmployee = getVerification().getStateVerificatorEmployee();
+        User stateVerificatorEmployee = verification.getStateVerificatorEmployee();
         return stateVerificatorEmployee.getLastName() + " "
                 + stateVerificatorEmployee.getFirstName().charAt(0) + "."
                 + stateVerificatorEmployee.getMiddleName().charAt(0) + ".";
@@ -177,7 +192,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "EFF_DATE")
     public String getVerificationCertificateEffectiveUntilDate() {
-        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getVerification().getExpirationDate());
+        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(verification.getExpirationDate());
     }
 
     /**
@@ -185,7 +200,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "PROTOCOL_DATE")
     public String getCalibrationTestDate() {
-        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getCalibrationTest().getDateTest());
+        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(calibrationTest.getDateTest());
     }
 
     /**
@@ -193,7 +208,12 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "COUNTER_TYPE_GOST")
     public String getCounterTypeGost() {
-        return getVerification().getCounter().getCounterType().getGost();
+        String gost = verification.getCounter().getCounterType().getGost();
+        if (gost != null) {
+            return gost;
+        } else {
+            return "не вказано";
+        }
     }
 
     /**
@@ -201,6 +221,11 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
-        return getVerification().getCalibrationModule().getCalibrationType();
+        String calibrationType = verification.getCalibrationModule().getCalibrationType();
+        if (calibrationType != null) {
+            return calibrationType;
+        } else {
+            return "не вказано";
+        }
     }
 }

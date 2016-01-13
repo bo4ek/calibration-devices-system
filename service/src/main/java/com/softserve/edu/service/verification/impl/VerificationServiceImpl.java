@@ -505,7 +505,10 @@ public class VerificationServiceImpl implements VerificationService {
         }
         verification.setStatus(status);
         verification.setReadStatus(Verification.ReadStatus.UNREAD);
-        verification.setExpirationDate(new Date());
+
+        if (verification.getExpirationDate() == null) {
+            verification.setExpirationDate(new Date());
+        }
         verificationRepository.save(verification);
     }
 
@@ -707,6 +710,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     /**
      * update counter info
+     *
      * @param verificationId
      * @param deviceName
      * @param dismantled
@@ -723,8 +727,8 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional
     public void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence,
-                            Long dateOfDismantled,Long dateOfMounted, String numberCounter, String releaseYear,
-                            String symbol, String standardSize,String comment, Long deviceId) {
+                            Long dateOfDismantled, Long dateOfMounted, String numberCounter, String releaseYear,
+                            String symbol, String standardSize, String comment, Long deviceId) {
         Verification verification = verificationRepository.findOne(verificationId);
 
         verification.setCounterStatus(dismantled);
@@ -740,7 +744,7 @@ public class VerificationServiceImpl implements VerificationService {
             counter.setNumberCounter(numberCounter);
             counter.setReleaseYear(releaseYear);
 
-            if(counterType != null) {
+            if (counterType != null) {
                 counter.setCounterType(counterType);
             }
             counterRepository.save(counter);
@@ -754,6 +758,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     /**
      * update additional info
+     *
      * @param entrance
      * @param doorCode
      * @param floor
@@ -795,6 +800,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     /**
      * update client Info
+     *
      * @param verificationId
      * @param clientData
      */
@@ -829,12 +835,13 @@ public class VerificationServiceImpl implements VerificationService {
 
     /**
      * for finding symbols by deviceType the organization work with
+     *
      * @param deviceType
      * @return
      */
     @Override
     @Transactional
-    public Set<String> findSymbolsByDeviceType (String deviceType) {
+    public Set<String> findSymbolsByDeviceType(String deviceType) {
         return counterTypeRepository.findSymbolsByDeviceType(deviceType);
     }
 

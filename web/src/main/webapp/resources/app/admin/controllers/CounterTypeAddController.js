@@ -94,8 +94,8 @@ angular
 
             $scope.currentDate = new Date();
             $scope.currentYear = $scope.currentDate.getFullYear();
-            $scope.YEAR_REGEX = /^(19[\d]{2}|20[\d]{2})$/;
-            $scope.INSPECTION_INTERVAL_REGEX = /^[0-9]*$/;
+//            $scope.YEAR_REGEX = /^(19[\d]{2}|20[\d]{2})$/;
+//            $scope.INSPECTION_INTERVAL_REGEX = /^[0-9]*$/;
 
         }
     ]);

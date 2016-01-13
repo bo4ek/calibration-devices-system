@@ -35,17 +35,17 @@ public class UnfitnessCertificate extends BaseCertificate {
     @Placeholder(name = "REASON_UNSUITABLE")
     public String getReasonUnusable() {
         String reasons = Constants.MEASURING_ERROR_MESSAGE;
-        if (!getCalibrationTest().getCalibrationTestDataList().isEmpty()) {
-            if (getCalibrationTest().getCalibrationTestDataList().get(0).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
+        if (!calibrationTest.getCalibrationTestDataList().isEmpty()) {
+            if (calibrationTest.getCalibrationTestDataList().get(0).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.RATED_FLAW;
-            } else if (getCalibrationTest().getCalibrationTestDataList().get(1).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
+            } else if (calibrationTest.getCalibrationTestDataList().get(1).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.TRANSIENT_FLAW;
-            } else if (getCalibrationTest().getCalibrationTestDataList().get(2).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
+            } else if (calibrationTest.getCalibrationTestDataList().get(2).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.MINIMAL_FLAW;
             }
         } else {
             //todo get reason from view, if CalibrationTestResult is not SUCCESS OR FAILED
-            return getVerification().getDevice().getUnsuitabilitySet().iterator().next().getName();
+            return verification.getDevice().getUnsuitabilitySet().iterator().next().getName();
         }
         return Constants.NO_REASON;
     }
