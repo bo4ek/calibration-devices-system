@@ -133,6 +133,7 @@ angular
 
             $scope.setTypeDataLanguage();
 
+            //TODO check situation when there not Protocol
             if ( $scope.hasProtocol){
                 getProtocolTest($scope.testId);
             }else{
@@ -179,6 +180,22 @@ angular
                     .then(function(status) {
                         if(status==200){
                             $scope.TestForm.signed = true;
+                            $modal.open({
+                                animation: true,
+                                templateUrl: 'resources/app/calibrator/views/modals/calibration-test-signing-success.html',
+                                controller: function ($modalInstance) {
+                                    this.ok = function () {
+                                        $modalInstance.close();
+                                        if($scope.hasProtocol){
+                                            window.history.back();
+                                        }else{
+                                            window.history.go(-2);
+                                        }
+                                    }
+                                },
+                                controllerAs: 'successController',
+                                size: 'md'
+                            });
                         }
                     })
             }
