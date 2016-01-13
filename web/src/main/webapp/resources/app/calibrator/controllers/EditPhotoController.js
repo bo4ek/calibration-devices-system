@@ -2,8 +2,8 @@ angular
     .module('employeeModule')
 
     .controller('EditPhotoController', ['$scope', '$rootScope', '$route', '$log', '$modalInstance',
-        '$timeout', 'photoId', 'CalibrationTestServiceCalibrator', 'parentScope', '$translate',
-        function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, calibrationTestServiceCalibrator, parentScope, $translate) {
+        '$timeout', 'photoId', 'CalibrationTestServiceCalibrator', 'parentScope', '$translate', 'DataReceivingServiceCalibrator',
+        function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, calibrationTestServiceCalibrator, parentScope, $translate, dataReceivingService) {
 
             /**
              * Closes modal window on browser's back/forward button click.
@@ -102,17 +102,34 @@ angular
             function getAllCountersTypes() {
                 calibrationTestServiceCalibrator.getCountersTypes()
                     .then(function (result) {
-                        $scope.countersTypesAllData = result.data;
-                        $scope.countersTypes = $scope.countersTypesAllData;
+                        $scope.countersTypes = result.data;
                         var currentCounterType = findCounterTypeById(parentScope.TestForm.counterTypeId, $scope.countersTypes);
-                        $scope.newValues.counterType = currentCounterType;
                         $scope.newValues.counterStandard = currentCounterType;
-                        $scope.newValues.counterManufacturer = currentCounterType;
+
                     })
             }
 
             getAllCountersTypes();
 
+
+            $scope.receiveAllSymbols = function(standardSize, deviceType) {
+                $scope.symbols = [];
+                dataReceivingService.findAllSymbolsByStandardSizeAndDeviceType(standardSize, deviceType)
+                    .success(function(symbols) {
+                        $scope.symbols = symbols;
+                        $scope.newValues.counterType = undefined;
+                        $scope.newValues.counterManufacturer = undefined;
+                    });
+            };
+
+            $scope.receiveAllManufacturers = function(symbol) {
+                $scope.manufactures = [];
+                dataReceivingService.findAllManufactures(symbol)
+                    .success(function(manufactures) {
+                        $scope.manufactures = manufactures;
+                        $scope.newValues.counterManufacturer = undefined;
+                    });
+            };
 
 
             /**

@@ -29,6 +29,15 @@ angular
         findAllSymbols: function(deviceId) {
             return getCalibratorData('symbols/' + deviceId);
         },
+
+        findAllSymbolsByStandardSizeAndDeviceType: function(standardSize, deviceId) {
+            return getCalibratorData('symbols/' + standardSize + "/" + deviceId);
+        },
+
+        findAllManufactures : function(symbol) {
+            return getCalibratorData('manufactures/' + symbol);
+        },
+
         findStandardSizesBySymbol: function(symbol, deviceId) {
             return getCalibratorData('standardSizes/' + symbol + "/" + deviceId);
         },

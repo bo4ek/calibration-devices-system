@@ -58,5 +58,18 @@ public class CounterType {
         this.device = device;
     }
 
-
+    @Override
+    public String toString() {
+        return "CounterType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", standardSize='" + standardSize + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", calibrationInterval=" + calibrationInterval +
+                ", yearIntroduction=" + yearIntroduction +
+                ", gost='" + gost + '\'' +
+                ", device=" + device +
+                '}';
+    }
 }

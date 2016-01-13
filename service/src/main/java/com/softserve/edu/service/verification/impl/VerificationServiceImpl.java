@@ -929,4 +929,27 @@ public class VerificationServiceImpl implements VerificationService {
         verificationRepository.save(verification);
 
     }
+
+    /**
+     * for finding manufactures by symbol
+     * @param symbol
+     * @return
+     */
+    @Override
+    @Transactional
+    public Set<String> findManufacturerBySymbol (String symbol) {
+        return counterTypeRepository.findManufacturerBySymbol(symbol);
+    }
+
+    /**
+     * for finding symbol by standardSize and deviceType
+     * @param standardSize
+     * @param deviceType
+     * @return
+     */
+    @Override
+    @Transactional
+    public Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType) {
+        return counterTypeRepository.findSymbolByStandardSizeAndDeviceType (standardSize, deviceType);
+    }
 }

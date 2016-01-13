@@ -60,8 +60,8 @@
                     <ui-select ng-model="newValues.counterStandard" type="text" theme="select2"
                                name="standardSize"
                                id="standardSize"
-                               class="form-control col-md-6"
-                               on-select = "eraseCounterSymbol();eraseCounterManufacturer();"
+                               class="form-control col-md-6">
+                               <!--on-select = "receiveAllSymbols(newValues.counterStandard.standardSize)"-->
                                required>
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
@@ -88,7 +88,8 @@
                                 name="type"
                                 id="type"
                                 class="form-group col-md-6"
-                                ng-change="changeTypeWater(selectedTypeWater)">
+                                ng-change="changeTypeWater(selectedTypeWater)"
+                                on-select = "receiveAllSymbols(newValues.counterStandard.standardSize, selectedTypeWater.type)">
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
@@ -110,19 +111,16 @@
                                name="symbol"
                                id="symbol"
                                class="form-control col-md-6"
-                               on-select = "eraseCounterManufacturer()"
+                               on-select = "receiveAllManufacturers($item)"
                                required>
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
-                            {{$select.selected.symbol | translate}}
+                            {{$select.selected | translate}}
                         </ui-select-match>
-                        <ui-select-choices repeat="counterType in countersTypes
-                        | filter: $select.search
-                        | filter:newValues.counterStandard.standardSize
-                        | filter:selectedTypeWater.type
+                        <ui-select-choices repeat="counterType in symbols
                         | unique: 'symbol'">
-                            <span ng-bind-html="counterType.symbol | translate "></span>
+                            <span ng-bind-html="counterType | translate "></span>
                         </ui-select-choices>
                     </ui-select>
                     <p class="help-block" ng-if="clientForm.symbol.$error.required">
@@ -145,15 +143,11 @@
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
-                            {{$select.selected.manufacturer | translate}}
+                            {{$select.selected | translate}}
                         </ui-select-match>
-                        <ui-select-choices repeat="counterManufacture in countersTypes
-                        | filter: $select.search
-                        | filter:newValues.counterStandard.standardSize
-                        | filter:selectedTypeWater.type
-                        | filter:newValues.counterType.symbol
+                        <ui-select-choices repeat="counterManufacture in manufactures
                         | unique: 'manufacturer'">
-                            <span ng-bind-html="counterManufacture.manufacturer | translate "></span>
+                            <span ng-bind-html="counterManufacture | translate "></span>
                         </ui-select-choices>
                     </ui-select>
                     <p class="help-block" ng-if="clientForm.manufacturer.$error.required">
