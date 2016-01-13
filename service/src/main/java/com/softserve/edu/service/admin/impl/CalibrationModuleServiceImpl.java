@@ -2,8 +2,6 @@ package com.softserve.edu.service.admin.impl;
 
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
-import com.softserve.edu.entity.user.User;
-import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.repository.UserRepository;
 import com.softserve.edu.service.admin.CalibrationModuleService;

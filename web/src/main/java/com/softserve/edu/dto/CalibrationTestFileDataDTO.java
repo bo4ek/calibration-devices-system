@@ -9,7 +9,6 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTestIMG;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.entity.verification.Verification.ConsumptionStatus;
 
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -51,7 +50,7 @@ public class CalibrationTestFileDataDTO {
     private Long conterId;
 
     private String standardSize;
-    
+
     private String symbol;
 
     private Long counterTypeId;
@@ -69,8 +68,6 @@ public class CalibrationTestFileDataDTO {
         this.latitude = latitude;
         this.longitude = longitude;
         this.testPhoto = testPhoto;
-
-
     }
 
     public CalibrationTestFileDataDTO(DeviceTestData testData) {
@@ -112,7 +109,7 @@ public class CalibrationTestFileDataDTO {
             testDataDTO.setActualConsumption(convertImpulsesPerSecToCubicMetersPerHour(
                     testData.getTestCorrectedCurrentConsumption(i),
                     testData.getImpulsePricePerLitre()));
-           testDataDTO.setCalculationError(countCalculationError(testDataDTO.getVolumeInDevice(),
+            testDataDTO.setCalculationError(countCalculationError(testDataDTO.getVolumeInDevice(),
                     testDataDTO.getVolumeOfStandard()));
             testDataDTO.setBeginPhoto(testData.getBeginPhoto(i));
             testDataDTO.setEndPhoto(testData.getEndPhoto(i));
@@ -121,17 +118,17 @@ public class CalibrationTestFileDataDTO {
         }
     }
 
-    public CalibrationTestFileDataDTO(CalibrationTest calibrationTest,CalibrationTestService testService,Verification verification) {
+    public CalibrationTestFileDataDTO(CalibrationTest calibrationTest, CalibrationTestService testService, Verification verification) {
         this.fileName = calibrationTest.getName();
         Counter counter = verification.getCounter();
         this.counterNumber = counter.getNumberCounter();
         this.testDate = calibrationTest.getDateTest();
         this.accumulatedVolume = calibrationTest.getCapacity();
         this.counterProductionYear = Integer.valueOf(counter.getReleaseYear());
-        this.installmentNumber = verification.getInstallmentNumber();
+        this.installmentNumber = verification.getCalibrationModule().getModuleId();
         this.latitude = calibrationTest.getLatitude();
         this.longitude = calibrationTest.getLongitude();
-        this.testPhoto = testService.getPhotoAsString(calibrationTest.getPhotoPath(),calibrationTest);
+        this.testPhoto = testService.getPhotoAsString(calibrationTest.getPhotoPath(), calibrationTest);
         this.consumptionStatus = calibrationTest.getConsumptionStatus();
         this.testResult = calibrationTest.getTestResult();
         this.listTestData = new ArrayList();
@@ -160,13 +157,13 @@ public class CalibrationTestFileDataDTO {
             for (int orderPhoto = 0; orderPhoto < calibrationTestIMGList.size(); orderPhoto++) {
                 calibrationTestIMG = calibrationTestIMGList.get(orderPhoto);
                 if (orderPhoto == 0) {
-                    testDataDTO.setBeginPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(),calibrationTest));
+                    testDataDTO.setBeginPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(), calibrationTest));
                 } else {
-                    testDataDTO.setEndPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(),calibrationTest));
+                    testDataDTO.setEndPhoto(testService.getPhotoAsString(calibrationTestIMG.getImgName(), calibrationTest));
                 }
             }
             testDataDTO.setTestPosition(calibrationTestData.getTestPosition());
-            testDataDTO.setTestTime(round(calibrationTestData.getDuration(),1));
+            testDataDTO.setTestTime(round(calibrationTestData.getDuration(), 1));
             testDataDTO.setTestResult(calibrationTestData.getTestResult());
             testDataDTO.setConsumptionStatus(calibrationTestData.getConsumptionStatus());
             listTestData.add(testDataDTO);

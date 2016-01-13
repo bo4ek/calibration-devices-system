@@ -7,6 +7,11 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -16,7 +21,13 @@ import java.util.Locale;
  * of all certificates.
  * All certificates extend this class.
  */
+@Setter
+@Getter
+@Service
+@Configurable
 public abstract class BaseCertificate implements Document {
+    private Logger logger = Logger.getLogger(BaseCertificate.class);
+
     /**
      * Verification that is used for getting information for this document.
      */
@@ -27,23 +38,14 @@ public abstract class BaseCertificate implements Document {
     private CalibrationTest calibrationTest;
 
     /**
-     * Constructor.
+     * Constructor
      *
      * @param verification    entity to get document's data from.
      * @param calibrationTest one of calibration test that is assigned to the verification
      */
     public BaseCertificate(Verification verification, CalibrationTest calibrationTest) {
-        super();
-        setVerification(verification);
-        setCalibrationTest(calibrationTest);
-    }
-
-    /**
-     * @return the calibrator company's name.
-     */
-    @Placeholder(name = "CALIBRATOR_COMPANY_NAME")
-    public String getCalibratorCompanyName() {
-        return getVerification().getCalibrator().getName();
+        this.verification = verification;
+        this.calibrationTest = calibrationTest;
     }
 
     /**
@@ -57,9 +59,9 @@ public abstract class BaseCertificate implements Document {
     /**
      * @return the calibrator's address.
      */
-    @Placeholder(name = "CALIBRATOR_COMPANY_ADDRESS")
+    @Placeholder(name = "VERIFICATOR_COMPANY_ADDRESS")
     public String getCalibratorCompanyAddress() {
-        Address address = getVerification().getCalibrator().getAddress();
+        Address address = getVerification().getStateVerificator().getAddress();
         return address.getLocality() + ", " +
                 address.getStreet() + ", " +
                 address.getBuilding();
@@ -68,29 +70,35 @@ public abstract class BaseCertificate implements Document {
     /**
      * @return the calibrator company's certificate identification number.
      */
-    @Placeholder(name = "CALIBRATOR_ACC_CERT_NAME")
+    @Placeholder(name = "VERIFICATOR_ACC_CERT_NAME")
     public String getCalibratorCompanyAccreditationCertificateNumber() {
-        return getVerification().getCalibrator().getCertificateNumber();
+        //return getVerification().getCalibrator().getCertificateNumber();
+        return getVerification().getStateVerificator().getCertificateNumber();
     }
 
     /**
-     * @return the date when the calibrator company received the certificate, that allows
-     * it to.
+     * @return the date when the verificator company received the certificate, that allows it to provide verifications
      */
-    @Placeholder(name = "CALIBRATOR_ACC_CERT_DATE_GRANTED")
+    @Placeholder(name = "VERIFICATOR_ACC_CERT_DATE_GRANTED")
     public String getCalibratorCompanyAccreditationCertificateGrantedDate() {
-        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getVerification().getCalibrator().getCertificateGrantedDate());
+        //return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getVerification().getCalibrator().getCertificateGrantedDate());
+        return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(getVerification().getStateVerificator().getCertificateGrantedDate());
     }
 
     /**
-     * @return Returns the identification number of the accreditation certificate,
-     * that the calibrator's company owns.
+     * @return Returns the identification number of the team, that was making verification
      */
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
-        String teamId = String.valueOf(getVerification().getTask().getTeam().getId());
-        String verificationId = String.valueOf(getVerification().getId());
-        return teamId + "-" + verificationId;
+        String verificationId = "***";
+        String subdivisionId = "***";
+        try {
+            subdivisionId = String.valueOf(getVerification().getTask().getTeam().getId());
+            verificationId = String.valueOf(getVerification().getId());
+        } catch (Exception e) {
+            logger.error("no team found for this verification");
+        }
+        return String.format("%s-%s-Д", subdivisionId, verificationId);
     }
 
     /**
@@ -98,7 +106,7 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "DEV_NAME")
     public String getDeviceName() {
-        return getVerification().getCounter().getCounterType().getName();
+        return getVerification().getCounter().getCounterType().getDevice().getDeviceName();
     }
 
     /**
@@ -126,7 +134,7 @@ public abstract class BaseCertificate implements Document {
     }
 
     /**
-     * @return the owner's full name - surName + name + middleName
+     * @return Owner's full name - surName + name + middleName
      */
     @Placeholder(name = "OWNER_NAME")
     public String getOwnerFullName() {
@@ -137,6 +145,10 @@ public abstract class BaseCertificate implements Document {
                 ownerData.getMiddleName();
     }
 
+    /**
+     *
+     * @return Address of counter's owner
+     */
     @Placeholder(name = "OWNER_ADDRESS")
     public String getOwnerAddress() {
         Address ownerAddress = getVerification().getClientData().getClientAddress();
@@ -155,7 +167,6 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "VERIFICATOR_SHORT_NAME")
     public String getStateVerificatorShortName() {
         User stateVerificatorEmployee = getVerification().getStateVerificatorEmployee();
-
         return stateVerificatorEmployee.getLastName() + " "
                 + stateVerificatorEmployee.getFirstName().charAt(0) + "."
                 + stateVerificatorEmployee.getMiddleName().charAt(0) + ".";
@@ -170,7 +181,7 @@ public abstract class BaseCertificate implements Document {
     }
 
     /**
-     * @return the date of CalibrationTest.
+     * @return the date of the test execution
      */
     @Placeholder(name = "PROTOCOL_DATE")
     public String getCalibrationTestDate() {
@@ -186,27 +197,10 @@ public abstract class BaseCertificate implements Document {
     }
 
     /**
-     * @return get the name of the document, which contains the metrological characteristics
+     * @return get the calibration type from module's characteristics, which was used to test
      */
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
-        return getVerification().getTask().getModule().getCalibrationType();
+        return getVerification().getCalibrationModule().getCalibrationType();
     }
-
-    private void setVerification(Verification verification) {
-        this.verification = verification;
-    }
-
-    private void setCalibrationTest(CalibrationTest calibrationTest) {
-        this.calibrationTest = calibrationTest;
-    }
-
-    protected Verification getVerification() {
-        return verification;
-    }
-
-    public CalibrationTest getCalibrationTest() {
-        return calibrationTest;
-    }
-
 }

@@ -1,7 +1,7 @@
 package com.softserve.edu.service.calibrator.data.test.impl;
 
-import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.tool.MailService;
 import org.apache.commons.codec.binary.Base64;
@@ -16,7 +16,6 @@ import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.exceptions.NotAvailableException;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -46,6 +46,8 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Autowired
     private VerificationRepository verificationRepository;
     @Autowired
+    private CalibrationModuleRepository calibrationModuleRepository;
+    @Autowired
     MailService mailService;
 
     private Logger logger = Logger.getLogger(CalibrationTestServiceImpl.class);
@@ -53,10 +55,9 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Override
     @Transactional
     public long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException {
-
         Verification verification = verificationRepository.findOne(verificationId);
         CalibrationTest calibrationTest = new CalibrationTest(deviceTestData.getFileName(),
-                deviceTestData.getLatitude(), deviceTestData.getLongitude(),deviceTestData.getUnixTime(),  verification,
+                deviceTestData.getLatitude(), deviceTestData.getLongitude(), deviceTestData.getUnixTime(), verification,
                 deviceTestData.getInitialCapacity(), deviceTestData.getTemperature());
         BufferedImage buffered = ImageIO.read(new ByteArrayInputStream(
                 Base64.decodeBase64(deviceTestData.getTestPhoto())));
@@ -87,7 +88,10 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         }
         testRepository.save(calibrationTest);
         verification.setStatus(Status.TEST_COMPLETED);
-        verification.setInstallmentNumber(deviceTestData.getInstallmentNumber());
+        /**
+         * number of calibration module, which was used to test this device
+         */
+        verification.setCalibrationModule(calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber()));
         verificationRepository.save(verification);
         return calibrationTest.getId();
     }
@@ -97,11 +101,13 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     public CalibrationTest findTestById(Long testId) {
         return testRepository.findOne(testId);
     }
+
     @Override
     @Transactional
     public CalibrationTest findByVerificationId(String verifId) {
         return testRepository.findByVerificationId(verifId);
     }
+
     @Override
     @Transactional
     public CalibrationTestList findAllCalibrationTests() {
@@ -248,7 +254,6 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
             verificationRepository.save(verification);
         }
     }
-
 
 
 }

@@ -11,7 +11,7 @@ import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 
 @com.softserve.edu.documents.document.meta.Document
-public class InfoDocument  implements Document {
+public class InfoDocument implements Document {
 	  private Verification verification;
 	  
 	    public InfoDocument (Verification verification) {

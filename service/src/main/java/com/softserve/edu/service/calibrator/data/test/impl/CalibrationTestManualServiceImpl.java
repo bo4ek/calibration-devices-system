@@ -17,14 +17,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
 
 /**
  * Created by Misha on 12/13/2015.
@@ -50,8 +46,6 @@ public class CalibrationTestManualServiceImpl implements CalibrationTestManualSe
     private VerificationRepository verificationRepository;
 
     private Logger logger = Logger.getLogger(CalibrationTestManualServiceImpl.class);
-
-
 
     @Override
     public CalibrationTestManual findTestManual(Long id) {

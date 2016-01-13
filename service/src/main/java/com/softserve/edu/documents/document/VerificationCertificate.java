@@ -19,21 +19,4 @@ public class VerificationCertificate extends BaseCertificate {
     public VerificationCertificate(Verification verification, CalibrationTest calibrationTest) {
         super(verification, calibrationTest);
     }
-
-    /**
-     * @return get the sign of the document, which contains the metrological characteristics
-     *//*
-    @Placeholder(name = "COUNTER_TYPE_GOST")
-    public String getCounterTypeGost() {
-        return getVerification().getCounter().getCounterType().getGost();
-    }
-
-    *//**
-     * @return get the name of the document, which contains the metrological characteristics
-     *//*
-    @Placeholder(name = "CALIBRATION_TYPE")
-    public String getCalibrationType() {
-        return getVerification().getTask().getModule().getCalibrationType();
-
-    }*/
 }

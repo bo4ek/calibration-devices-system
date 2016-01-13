@@ -7,10 +7,7 @@ import com.softserve.edu.documents.document.VerificationCertificate;
 import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
-import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
 import org.springframework.util.Assert;
-
-import java.util.List;
 
 public class DocumentFactory {
     /**
@@ -37,8 +34,7 @@ public class DocumentFactory {
                 document = new VerificationCertificate(verification, calibrationTest);
                 break;
             case UNFITNESS_CERTIFICATE:
-                List<CalibrationTestData> calibrationTestDatas = calibrationTest.getCalibrationTestDataList();
-                document = new UnfitnessCertificate(verification, calibrationTest, calibrationTestDatas);
+                document = new UnfitnessCertificate(verification, calibrationTest);
                 break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");

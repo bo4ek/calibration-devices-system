@@ -2,6 +2,7 @@ package com.softserve.edu.entity.verification;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.softserve.edu.common.Constants;
+import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
@@ -32,16 +33,6 @@ public class Verification {
     @Id
     @Setter(AccessLevel.PRIVATE)
     private String id;
-
-    @Override
-    public String toString() {
-        return "Verification{" +
-                "id='" + id + '\'' +
-                ", status=" + status +
-                ", readStatus=" + readStatus +
-                ", taskStatus=" + taskStatus +
-                '}';
-    }
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -98,7 +89,10 @@ public class Verification {
 
     private String rejectedMessage;
     private String comment;
-    private Integer installmentNumber;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "moduleId")
+    private CalibrationModule calibrationModule;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "verification")
     private Set<BbiProtocol> bbiProtocols;
@@ -222,5 +216,15 @@ public class Verification {
     public enum ConsumptionStatus {
         IN_THE_AREA,
         NOT_IN_THE_AREA
+    }
+
+    @Override
+    public String toString() {
+        return "Verification{" +
+                "id='" + id + '\'' +
+                ", status=" + status +
+                ", readStatus=" + readStatus +
+                ", taskStatus=" + taskStatus +
+                '}';
     }
 }
