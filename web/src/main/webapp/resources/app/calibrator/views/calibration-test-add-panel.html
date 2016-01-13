@@ -303,14 +303,14 @@
                          ng-click="fileName = uploadBbiFile(testId)">
                     </img> {{ 'UPLOAD_BBI_FILE' | translate }}
                 </button>
-                <ui-select ng-if="hasProtocol && isVerification"  ng-model="selectedStatus" ng-disabled="TestForm.signed" style="width:140px" theme="select2"
+                <ui-select ng-if="hasProtocol && isVerification"  ng-model="selectedStatus.label" ng-disabled="TestForm.signed" style="width:140px" theme="select2"
                            search-enabled="false"
                            on-select="setStatus($item)"
                            >
                     <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}" >
                         {{$select.selected.label}}
                     </ui-select-match>
-                    <ui-select-choices  repeat="status in statusData">
+                    <ui-select-choices  repeat="status.label as status in statusData">
                         <span ng-bind-html="status.label"></span>
                     </ui-select-choices>
                 </ui-select>
