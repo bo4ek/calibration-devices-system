@@ -28,11 +28,11 @@ public abstract class BaseCertificate implements Document {
     /**
      * Verification that is used for getting information for this document.
      */
-    private Verification verification;
+    protected Verification verification;
     /**
      * One of calibration test that is assigned to the verification.
      */
-    private CalibrationTest calibrationTest;
+    protected CalibrationTest calibrationTest;
 
     /**
      * Constructor

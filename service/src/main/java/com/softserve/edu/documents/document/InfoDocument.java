@@ -104,8 +104,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "OWNER_NAME")
     public String getOwnerFullName() {
         ClientData ownerData = getVerification().getClientData();
-        String fullName = ownerData.getLastName() + " " + ownerData.getFirstName() + " " + ownerData.getMiddleName();
-        return fullName;
+        return ownerData.getLastName() + " " + ownerData.getFirstName() + " " + ownerData.getMiddleName();
     }
 
     @Placeholder(name = "OWNER_PHONE")
