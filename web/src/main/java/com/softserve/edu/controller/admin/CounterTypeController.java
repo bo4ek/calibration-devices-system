@@ -60,7 +60,7 @@ public class CounterTypeController {
      * @return a response body with http status {@literal OK} if counter type
      * successfully edited or else http status {@literal CONFLICT}
      */
-    @RequestMapping(value = "edit/{counterTypeId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "edit/{counterTypeId}", method = RequestMethod.POST)
     public ResponseEntity editCounterType(@RequestBody CounterTypeDTO counterTypeDTO,
                                              @PathVariable Long counterTypeId) {
         HttpStatus httpStatus = HttpStatus.OK;
