@@ -199,6 +199,7 @@ public abstract class BaseCertificate implements Document {
      * @return the date of the test execution
      */
     @Placeholder(name = "PROTOCOL_DATE")
+
     public String getCalibrationTestDate() {
         return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(calibrationTest.getDateTest());
     }
