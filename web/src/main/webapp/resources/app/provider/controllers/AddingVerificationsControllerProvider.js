@@ -39,7 +39,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
         $scope.selectedData = {};
         $scope.selectedData.selectedStreetType = "";
-        $scope.selectedData.dismantled = true;
+        $scope.selectedData.dismantled = false;
         $scope.selectedData.sealPresence = true;
 
         $scope.applicationCodes = [];
@@ -456,7 +456,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.selectedData.index = undefined;
 
             $scope.addInfo.serviceability = true;
-            $scope.selectedData.dismantled = true;
+            $scope.selectedData.dismantled = false;
             $scope.selectedData.sealPresence = true;
             $scope.selectedData.selectedCount = '1';
             $scope.selectedData.calibratorRequired = false;

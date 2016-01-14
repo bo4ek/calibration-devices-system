@@ -50,10 +50,7 @@ angular
                 $scope.TestForm = data;
                 for (var i = 0; i < $scope.statusData.length; i++) {
                     if ($scope.statusData[i].id === data.status) {
-                        $scope.selectedStatus = {
-                            label: $scope.statusData[i].label,
-                            id: $scope.statusData[i].id
-                        };
+                        $scope.setStatus($scope.statusData[i]);
                     }
                 }
                 var date = $scope.TestForm.testDate;
@@ -133,6 +130,7 @@ angular
 
             $scope.setTypeDataLanguage();
 
+            //TODO check situation when there not Protocol
             if ( $scope.hasProtocol){
                 getProtocolTest($scope.testId);
             }else{
@@ -174,11 +172,34 @@ angular
             }
 
             $scope.signCalibrationTest = function () {
+                retranslater();
                 calibrationTestServiceCalibrator
-                    .signTestProtocol($scope.testId)
-                    .then(function(status) {
-                        if(status==200){
-                            $scope.TestForm.signed = true;
+                    .editTestProtocol(protocol, $scope.testId)
+                    .then(function (status) {
+                        if (status == 200) {
+                            calibrationTestServiceCalibrator
+                                .signTestProtocol($scope.testId)
+                                .then(function (status) {
+                                    if (status == 200) {
+                                        $scope.TestForm.signed = true;
+                                        $modal.open({
+                                            animation: true,
+                                            templateUrl: 'resources/app/calibrator/views/modals/calibration-test-signing-success.html',
+                                            controller: function ($modalInstance) {
+                                                this.ok = function () {
+                                                    $modalInstance.close();
+                                                    if ($scope.hasProtocol) {
+                                                        window.history.back();
+                                                    } else {
+                                                        window.history.go(-2);
+                                                    }
+                                                }
+                                            },
+                                            controllerAs: 'successController',
+                                            size: 'md'
+                                        });
+                                    }
+                                })
                         }
                     })
             }

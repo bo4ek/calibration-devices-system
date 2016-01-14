@@ -61,5 +61,18 @@ public class CounterTypeDTO {
         this.manufacturer = manufacturer;
     }
 
-
+    @Override
+    public String toString() {
+        return "CounterTypeDTO{" +
+                "name='" + name + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", standardSize='" + standardSize + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", calibrationInterval=" + calibrationInterval +
+                ", yearIntroduction=" + yearIntroduction +
+                ", gost='" + gost + '\'' +
+                ", deviceId=" + deviceId +
+                ", typeWater='" + typeWater + '\'' +
+                '}';
+    }
 }
