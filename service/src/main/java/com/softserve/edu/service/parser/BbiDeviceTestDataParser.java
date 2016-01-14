@@ -6,6 +6,7 @@ import com.softserve.edu.device.test.data.DeviceTestData;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -20,8 +21,10 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private InputStream reader;
     private Map<String, Object> resultMap;
 
+    private final Logger logger = Logger.getLogger(BbiDeviceTestDataParser.class);
+
     @Override
-    public DeviceTestData parse(InputStream deviceTestDataStream) throws IOException, DecoderException {
+    public DeviceTestData parse(InputStream deviceTestDataStream) throws IOException, DecoderException, NullPointerException {
         final int EMPTY_BYTES_BETWEEN_TESTS = 180;
         resultMap = new HashMap<>();
         reader = new BufferedInputStream(deviceTestDataStream);
@@ -69,12 +72,11 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("fullInstallmentNumber", readConsecutiveBytesAsUTF8(32)); //0x0x80064c+32
         count = reader.skip(2452); //go to images
 
-        resultMap.put("testPhoto", readImageBase64());
-        for (int i = 0; i < 12; ++i) {
-            String imageKey = "test" + (i / 2 + 1) + (i % 2 == 0 ? "begin" : "end") + "Photo";
-            resultMap.put(imageKey, readImageBase64());
-        }
-
+            resultMap.put("testPhoto", readImageBase64());
+            for (int i = 0; i < 12; ++i) {
+                String imageKey = "test" + (i / 2 + 1) + (i % 2 == 0 ? "begin" : "end") + "Photo";
+                resultMap.put(imageKey, readImageBase64());
+            }
         return new BbiDeviceTestData(resultMap);
     }
 
@@ -173,16 +175,30 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
      */
 
 
-    public String readImageBase64() throws IOException, DecoderException {
+    public String readImageBase64() throws IOException, DecoderException, NegativeArraySizeException {
         final int ALLOCATED_IMAGE_SIZE = 16380;
 
-        int imageSize = (int) readLongValue(4);
-        byte[] decodedHex = new byte[imageSize];
-        reader.read(decodedHex, 0, imageSize);
-        String encodedHexB64 = Base64.encodeBase64String(decodedHex);
+        String encodedHexB64 = null;
 
-        // skips all empty bytes till the next image beginning.
-        long count = reader.skip(ALLOCATED_IMAGE_SIZE - imageSize);
-        return encodedHexB64;
+        int imageSize = (int) readLongValue(4);
+        if (imageSize < 1 || imageSize > ALLOCATED_IMAGE_SIZE) {
+            imageSize = 0;
+            byte[] decodedHex = new byte[imageSize];
+            reader.read(decodedHex, 0, imageSize);
+            encodedHexB64 = Base64.encodeBase64String(decodedHex);
+
+            // skips all empty bytes till the next image beginning.
+            long count = reader.skip(ALLOCATED_IMAGE_SIZE - imageSize);
+            System.out.println(encodedHexB64 + "dasdsadsadfasdgflkhdsgklsdjh");
+            return encodedHexB64;
+        } else {
+            byte[] decodedHex = new byte[imageSize];
+            reader.read(decodedHex, 0, imageSize);
+            encodedHexB64 = Base64.encodeBase64String(decodedHex);
+
+            // skips all empty bytes till the next image beginning.
+            long count = reader.skip(ALLOCATED_IMAGE_SIZE - imageSize);
+            return encodedHexB64;
+        }
     }
 }

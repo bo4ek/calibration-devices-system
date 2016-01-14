@@ -70,7 +70,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
 
     @Transactional
-    public DeviceTestData parseBBIFileWithoutSaving(File BBIFile, String originalFileName) throws IOException, DecoderException {
+    public DeviceTestData parseBBIFileWithoutSaving(File BBIFile, String originalFileName) throws IOException, DecoderException, NegativeArraySizeException {
         String bbiName = bbiFileService.findBBIByFileName(originalFileName);
         if (bbiName != null) {
             throw new FileAlreadyExistsException(originalFileName);
@@ -93,7 +93,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException {
+            throws IOException, DecoderException, NegativeArraySizeException {
         DeviceTestData deviceTestData;
         try (InputStream inputStream = FileUtils.openInputStream(BBIfile)) {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);
@@ -106,14 +106,14 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
 
     public DeviceTestData parseAndSaveBBIFile(MultipartFile BBIfile, String verificationID, String originalFileName)
-            throws IOException, NoSuchElementException, DecoderException {
+            throws IOException, NoSuchElementException, DecoderException, NegativeArraySizeException {
         DeviceTestData deviceTestData = parseAndSaveBBIFile(BBIfile.getInputStream(), verificationID, originalFileName);
         return deviceTestData;
     }
 
     @Transactional
     public DeviceTestData parseAndSaveBBIFile(InputStream inputStream, String verificationID, String originalFileName)
-            throws IOException, DecoderException {
+            throws IOException, DecoderException, NegativeArraySizeException {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         bufferedInputStream.mark(inputStream.available());
         DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
@@ -182,6 +182,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 } catch (FileAlreadyExistsException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
                     logger.info(e);
+                }catch (NullPointerException e){
+                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
+                    logger.info("Wrong image in BBI file", e);
                 } catch (Exception e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
@@ -197,6 +200,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 } catch (IOException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
+                }catch (NegativeArraySizeException e){
+                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
+                    logger.info("Wrong image in BBI file", e);
                 } catch (Exception e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
                     logger.info(e);

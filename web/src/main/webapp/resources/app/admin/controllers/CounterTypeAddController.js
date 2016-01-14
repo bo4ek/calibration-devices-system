@@ -13,6 +13,7 @@ angular
                   counterTypeService) {
 
             $scope.addCounterTypeFormData = {};
+            $scope.currentTime = {};
             $scope.names = devices.data;
             /**
              * init all Standard Size of counter type for selector
