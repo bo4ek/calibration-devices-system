@@ -15,7 +15,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -27,7 +26,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Future;
 
 import static org.springframework.ui.velocity.VelocityEngineUtils.mergeTemplateIntoString;
 

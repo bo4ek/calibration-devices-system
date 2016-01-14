@@ -47,8 +47,6 @@ public class CalibrationModuleController {
     @RequestMapping(value = "get/{id}")
     public CalibrationModuleDTO getCalibrationModule(@PathVariable("id") Long id) {
         CalibrationModule calibrationModule = calibrationModuleService.findModuleById(id);
-
-
         return new CalibrationModuleDTO(calibrationModule.getModuleId(),
                 calibrationModule.getDeviceType().stream().map(Device.DeviceType::toString).collect(Collectors.toList()),
                 calibrationModule.getOrganizationCode(), calibrationModule.getCondDesignation(),
@@ -221,8 +219,7 @@ public class CalibrationModuleController {
             }
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
             LocalDateTime localDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-            String isoLocalDateString = localDate.format(dbDateTimeFormatter);
-            return isoLocalDateString;
+            return localDate.format(dbDateTimeFormatter);
         } else {
             return null;
         }
