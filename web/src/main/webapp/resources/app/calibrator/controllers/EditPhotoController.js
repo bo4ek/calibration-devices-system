@@ -19,6 +19,7 @@ angular
 
             $scope.photoId = photoId;
             $scope.parentScope = parentScope;
+
             $scope.newValues = {};
             $scope.newValues.counterNumber = null;
             $scope.newValues.counterYear = null;
@@ -27,7 +28,11 @@ angular
             $scope.newValues.counterStandard = null;
             $scope.newValues.counterManufacturer = null;
             $scope.newValues.counterType = null;
-            $scope.countersTypes=[];
+
+            $scope.countersTypes = [];
+            $scope.standardSizes = [];
+            $scope.symbols = [];
+            $scope.manufacturers = [];
             $scope.photoType = null;
             $scope.photoIndex = null;
 
@@ -75,8 +80,6 @@ angular
                 {type: 'THERMAL'}
             ];
 
-
-
             $scope.setStatusTypeWater = function (typeWater) {
                 $scope.selectedTypeWater.type = typeWater;
             };
@@ -95,52 +98,45 @@ angular
                 return counterType;
             }
 
-
             /**
-             * receive all counters types for selection
+             * set current manufacturer
              */
-            function getAllCountersTypes() {
+            function getCurrentCounterManufacturer() {
                 calibrationTestServiceCalibrator.getCountersTypes()
                     .then(function (result) {
-                        $scope.countersTypes = result.data;
-                        var currentCounterType = findCounterTypeById(parentScope.TestForm.counterTypeId, $scope.countersTypes);
-                        $scope.newValues.counterStandard = currentCounterType;
-
+                        $scope.countersTypesAll = result.data;
+                        var currentCounterType = findCounterTypeById(parentScope.TestForm.counterTypeId, $scope.countersTypesAll);
+                        $scope.newValues.counterManufacturer = currentCounterType;
                     })
             }
+            getCurrentCounterManufacturer();
 
-            getAllCountersTypes();
-
+            /**
+             * get all standardSizes and set current
+             */
+            function getAllStandardSizes() {
+                    dataReceivingService.findAllStandardSize()
+                        .success(function(standardSize) {
+                            $scope.standardSizes = standardSize;
+                            $scope.newValues.counterStandardSize = parentScope.TestForm.standardSize;
+                        })
+                }
+            getAllStandardSizes();
 
             $scope.receiveAllSymbols = function(standardSize, deviceType) {
-                $scope.symbols = [];
                 dataReceivingService.findAllSymbolsByStandardSizeAndDeviceType(standardSize, deviceType)
                     .success(function(symbols) {
                         $scope.symbols = symbols;
-                        $scope.newValues.counterType = undefined;
-                        $scope.newValues.counterManufacturer = undefined;
+                        $scope.eraseInformationAboutCounter();
                     });
             };
 
-            $scope.receiveAllManufacturers = function(symbol) {
-                $scope.manufactures = [];
-                dataReceivingService.findAllManufactures(symbol)
-                    .success(function(manufactures) {
-                        $scope.manufactures = manufactures;
+            $scope.receiveAllManufacturer = function(standardSize, deviceType, symbol) {
+                calibrationTestServiceCalibrator.getFilteredCounterTypes(standardSize, deviceType, symbol)
+                    .then(function (result) {
+                        $scope.manufacturers = result.data;
                         $scope.newValues.counterManufacturer = undefined;
-                    });
-            };
-
-
-            /**
-             * change typeWater when changed counterType
-             */
-            $scope.changeType = function (counterType) {
-                if (counterType == undefined) {
-                    resetCountersTypes();
-                } else {
-                    $scope.setStatusTypeWater(counterType.typeWater)
-                }
+                    })
             };
 
             /**
@@ -148,30 +144,18 @@ angular
              */
             $scope.changeTypeWater = function (typeWater) {
                 $scope.setStatusTypeWater(typeWater.type);
-                $scope.eraseCounterSymbol();
-                $scope.eraseCounterManufacturer();
             };
 
-            $scope.eraseCounterSymbol = function () {
-                $scope.newValues.counterType = null;
+            $scope.eraseInformationAboutCounter = function () {
+                $scope.newValues.counterType = undefined;
+                $scope.newValues.counterManufacturer = undefined;
             };
-
-            $scope.eraseCounterManufacturer = function () {
-                $scope.newValues.counterManufacturer = null;
-            };
-
-            /**
-             * reset countersTypes to get all countersTypes
-             */
-            function resetCountersTypes() {
-                $scope.countersTypes = $scope.countersTypesAllData;
-            }
-
 
                 if (photoId == "testMainPhoto") {
                     $scope.newValues.counterNumber = parentScope.TestForm.counterNumber;
                     $scope.newValues.counterYear = parentScope.TestForm.counterProductionYear;
                     $scope.newValues.accumulatedVolume = parentScope.TestForm.accumulatedVolume;
+                    $scope.newValues.counterType = parentScope.TestForm.symbol;
                     $scope.setStatusTypeWater(parentScope.TestForm.typeWater);
                 } else {
                     var idSplit = photoId.split("Photo");
@@ -237,10 +221,10 @@ angular
                             parentScope.TestForm.counterNumber = $scope.newValues.counterNumber;
                             parentScope.TestForm.accumulatedVolume = $scope.newValues.accumulatedVolume;
                             parentScope.TestForm.counterProductionYear = $scope.newValues.counterYear;
-                            parentScope.TestForm.typeWater = $scope.newValues.counterType.typeWater;
-                            parentScope.TestForm.standardSize = $scope.newValues.counterStandard.standardSize;
-                            parentScope.TestForm.symbol = $scope.newValues.counterType.symbol;
-                            parentScope.TestForm.counterTypeId = $scope.newValues.counterType.id;
+                            parentScope.TestForm.typeWater = $scope.newValues.counterManufacturer.typeWater;
+                            parentScope.TestForm.standardSize = $scope.newValues.counterManufacturer.standardSize;
+                            parentScope.TestForm.symbol = $scope.newValues.counterManufacturer.symbol;
+                            parentScope.TestForm.counterTypeId = $scope.newValues.counterManufacturer.id;
                         } else {
                             if ($scope.photoType == 'begin') {
                                 parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;

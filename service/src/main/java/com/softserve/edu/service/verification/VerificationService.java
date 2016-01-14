@@ -167,8 +167,7 @@ public interface VerificationService {
 
     Set<String> findStandardSizesBySymbolAndDeviceType(String symbol, String deviceType);
 
-    Set<String> findManufacturerBySymbol(String symbol);
-
     Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType);
 
+    Set<String> findAllStandardSizes();
 }

@@ -938,17 +938,6 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     /**
-     * for finding manufactures by symbol
-     * @param symbol
-     * @return
-     */
-    @Override
-    @Transactional
-    public Set<String> findManufacturerBySymbol (String symbol) {
-        return counterTypeRepository.findManufacturerBySymbol(symbol);
-    }
-
-    /**
      * for finding symbol by standardSize and deviceType
      * @param standardSize
      * @param deviceType
@@ -957,6 +946,16 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional
     public Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType) {
-        return counterTypeRepository.findSymbolByStandardSizeAndDeviceType (standardSize, deviceType);
+        return counterTypeRepository.findSymbolByStandardSizeAndDeviceType(standardSize, deviceType);
+    }
+
+    /**
+     * find all standardSizes
+     * @return
+     */
+    @Override
+    @Transactional
+    public Set<String> findAllStandardSizes() {
+        return counterTypeRepository.findAllStandardSizes();
     }
 }

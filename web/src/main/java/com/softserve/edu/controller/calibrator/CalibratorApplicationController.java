@@ -183,16 +183,6 @@ public class CalibratorApplicationController {
     }
 
     /**
-     * get all manufacturer by symbol from counter_type
-     * @param symbol
-     * @return
-     */
-    @RequestMapping(value = "manufactures/{symbol}", method = RequestMethod.GET)
-    public Set<String> findManufacturerBySymbol(@PathVariable String symbol) {
-        return verificationService.findManufacturerBySymbol(symbol);
-    }
-
-    /**
      * get all symbols by standardSize and DeviceType from counter_type
      * @param standardSize
      * @param deviceType
@@ -201,6 +191,15 @@ public class CalibratorApplicationController {
     @RequestMapping(value = "symbols/{standardSize}/{deviceType}", method = RequestMethod.GET)
     public Set<String> findSymbolByStandardSizeAndDeviceType(@PathVariable String standardSize, @PathVariable String deviceType) {
         return verificationService.findSymbolByStandardSizeAndDeviceType(standardSize, deviceType);
+    }
+
+    /**
+     * get all standardSize from counter_type
+     * @return
+     */
+    @RequestMapping(value = "standardSizes/", method = RequestMethod.GET)
+    public Set<String> findAllStandardSizes() {
+        return verificationService.findAllStandardSizes();
     }
 
     /**

@@ -57,19 +57,21 @@
                     <label class="control-label">{{'STANDART_SIZE_OF_COUNTER' | translate}}</label>
                 </div>
                 <div class="form-group col-md-6" show-errors>
-                    <ui-select ng-model="newValues.counterStandard" type="text" theme="select2"
+                    <ui-select ng-model="newValues.counterStandardSize" type="text" theme="select2"
                                name="standardSize"
                                id="standardSize"
-                               class="form-control col-md-6">
-                               <!--on-select = "receiveAllSymbols(newValues.counterStandard.standardSize)"-->
+                               class="form-control col-md-6"
+                               on-select = "eraseInformationAboutCounter();"
                                required>
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
-                            {{$select.selected.standardSize | translate}}
+                            {{$select.selected | translate}}
                         </ui-select-match>
-                        <ui-select-choices repeat="counterStandard in countersTypes | unique: 'standardSize' | filter: $select.search">
-                            <span ng-bind-html="counterStandard.standardSize | translate "></span>
+                        <ui-select-choices repeat="counterStandardSize in standardSizes
+                        | unique: 'standardSize'
+                        | filter: $select.search">
+                            <span ng-bind-html="counterStandardSize | translate "></span>
                         </ui-select-choices>
                     </ui-select>
                     <p class="help-block" ng-if="clientForm.standardSize.$error.required">
@@ -89,7 +91,7 @@
                                 id="type"
                                 class="form-group col-md-6"
                                 ng-change="changeTypeWater(selectedTypeWater)"
-                                on-select = "receiveAllSymbols(newValues.counterStandard.standardSize, selectedTypeWater.type)">
+                                on-select = "receiveAllSymbols(newValues.counterStandardSize, selectedTypeWater.type)">
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
@@ -111,8 +113,10 @@
                                name="symbol"
                                id="symbol"
                                class="form-control col-md-6"
-                               on-select = "receiveAllManufacturers($item)"
+                               on-select = "receiveAllManufacturer(newValues.counterStandardSize, selectedTypeWater.type, newValues.counterType)"
                                required>
+
+                        <!--on-select = "receiveAllManufacturers($item)"-->
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
@@ -143,11 +147,11 @@
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
-                            {{$select.selected | translate}}
+                            {{$select.selected.manufacturer | translate}}
                         </ui-select-match>
-                        <ui-select-choices repeat="counterManufacture in manufactures
+                        <ui-select-choices repeat="counterManufacture in manufacturers
                         | unique: 'manufacturer'">
-                            <span ng-bind-html="counterManufacture | translate "></span>
+                            <span ng-bind-html="counterManufacture.manufacturer | translate "></span>
                         </ui-select-choices>
                     </ui-select>
                     <p class="help-block" ng-if="clientForm.manufacturer.$error.required">

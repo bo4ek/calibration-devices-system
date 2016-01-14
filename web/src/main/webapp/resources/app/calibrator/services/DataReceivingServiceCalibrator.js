@@ -34,8 +34,8 @@ angular
             return getCalibratorData('symbols/' + standardSize + "/" + deviceId);
         },
 
-        findAllManufactures : function(symbol) {
-            return getCalibratorData('manufactures/' + symbol);
+        findAllStandardSize : function() {
+            return getCalibratorData('standardSizes/');
         },
 
         findStandardSizesBySymbol: function(symbol, deviceId) {

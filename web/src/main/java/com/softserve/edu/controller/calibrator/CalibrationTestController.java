@@ -164,6 +164,18 @@ public class CalibrationTestController {
         return listOfCounterType;
     }
 
+    @RequestMapping(value = "getFilteredCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
+    public List<CounterTypeDTO> getCountersTest(@PathVariable String standardSize, @PathVariable String deviceType, @PathVariable String symbol) {
+        List listOfCounterType = null;
+        try {
+            listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findAllBySymbol(standardSize, deviceType, symbol));
+        } catch (Exception e) {
+            logger.error("failed to get list of CounterTyp" + e.getMessage());
+            logger.error(e);
+        }
+        return listOfCounterType;
+    }
+
 
     /**
      * get all calibration module for handmade protocol
