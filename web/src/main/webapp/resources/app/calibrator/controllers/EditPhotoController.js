@@ -109,7 +109,6 @@ angular
                         $scope.newValues.counterManufacturer = currentCounterType;
                     })
             }
-            getCurrentCounterManufacturer();
 
             /**
              * get all standardSizes and set current
@@ -121,7 +120,6 @@ angular
                             $scope.newValues.counterStandardSize = parentScope.TestForm.standardSize;
                         })
                 }
-            getAllStandardSizes();
 
             $scope.receiveAllSymbols = function(standardSize, deviceType) {
                 dataReceivingService.findAllSymbolsByStandardSizeAndDeviceType(standardSize, deviceType)
@@ -157,6 +155,8 @@ angular
                     $scope.newValues.accumulatedVolume = parentScope.TestForm.accumulatedVolume;
                     $scope.newValues.counterType = parentScope.TestForm.symbol;
                     $scope.setStatusTypeWater(parentScope.TestForm.typeWater);
+                    getCurrentCounterManufacturer();
+                    getAllStandardSizes();
                 } else {
                     var idSplit = photoId.split("Photo");
                     $scope.photoType = idSplit[0];
