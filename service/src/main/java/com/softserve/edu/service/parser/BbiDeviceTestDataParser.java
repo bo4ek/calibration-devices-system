@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Iterator;
 
 public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private InputStream reader;
@@ -72,11 +69,11 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("fullInstallmentNumber", readConsecutiveBytesAsUTF8(32)); //0x0x80064c+32
         count = reader.skip(2452); //go to images
 
-            resultMap.put("testPhoto", readImageBase64());
-            for (int i = 0; i < 12; ++i) {
-                String imageKey = "test" + (i / 2 + 1) + (i % 2 == 0 ? "begin" : "end") + "Photo";
-                resultMap.put(imageKey, readImageBase64());
-            }
+        resultMap.put("testPhoto", readImageBase64());
+        for (int i = 0; i < 12; ++i) {
+            String imageKey = "test" + (i / 2 + 1) + (i % 2 == 0 ? "begin" : "end") + "Photo";
+            resultMap.put(imageKey, readImageBase64());
+        }
         return new BbiDeviceTestData(resultMap);
     }
 
@@ -142,7 +139,6 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         return result;
     }
 
-
     private void readTest(int testIndex) throws IOException {
         resultMap.put("test" + testIndex + "specifiedConsumption", readLongValueReversed(4)); //0x800100+0x04
         resultMap.put("test" + testIndex + "lowerConsumptionLimit", readLongValueReversed(4)); //0x800104+0x04
@@ -173,12 +169,10 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
      * @return Image written in base64 string.
      * @throws IOException
      */
-
-
     public String readImageBase64() throws IOException, DecoderException, NegativeArraySizeException {
         final int ALLOCATED_IMAGE_SIZE = 16380;
 
-        String encodedHexB64 = null;
+        String encodedHexB64;
 
         int imageSize = (int) readLongValue(4);
         if (imageSize < 1 || imageSize > ALLOCATED_IMAGE_SIZE) {
@@ -189,7 +183,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
 
             // skips all empty bytes till the next image beginning.
             long count = reader.skip(ALLOCATED_IMAGE_SIZE - imageSize);
-            System.out.println(encodedHexB64 + "dasdsadsadfasdgflkhdsgklsdjh");
+            System.out.println(encodedHexB64 + "skips all empty bytes till the next image beginning");
             return encodedHexB64;
         } else {
             byte[] decodedHex = new byte[imageSize];

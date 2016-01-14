@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @RestController
 @RequestMapping(value = "/admin/counter-type/")
 public class CounterTypeController {
@@ -24,10 +23,9 @@ public class CounterTypeController {
     @Autowired
     private CounterTypeService counterTypeService;
 
-
-
     /**
      * Add counter type
+     *
      * @param counterTypeDTO object with counter type data
      * @return a response body with http status {@literal OK} if counter type
      * successfully edited or else http status {@literal CONFLICT}
@@ -48,7 +46,7 @@ public class CounterTypeController {
             );
             logger.info("New counter type was created with params:" + counterTypeDTO);
         } catch (Exception e) {
-            logger.error("Got exception while add counter type ",e);
+            logger.error("Got exception while add counter type ", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -56,13 +54,14 @@ public class CounterTypeController {
 
     /**
      * Edit counter type
+     *
      * @param counterTypeDTO object with counter type data
      * @return a response body with http status {@literal OK} if counter type
      * successfully edited or else http status {@literal CONFLICT}
      */
     @RequestMapping(value = "edit/{counterTypeId}", method = RequestMethod.POST)
     public ResponseEntity editCounterType(@RequestBody CounterTypeDTO counterTypeDTO,
-                                             @PathVariable Long counterTypeId) {
+                                          @PathVariable Long counterTypeId) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             counterTypeService.editCounterType(
@@ -76,9 +75,9 @@ public class CounterTypeController {
                     counterTypeDTO.getGost(),
                     counterTypeDTO.getDeviceId()
             );
-            logger.info("Counter type with id= "+counterTypeId + " was edit successfully");
+            logger.info("Counter type with id= " + counterTypeId + " was edit successfully");
         } catch (Exception e) {
-            logger.error("Got exception while editing counter type ",e);
+            logger.error("Got exception while editing counter type ", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -86,6 +85,7 @@ public class CounterTypeController {
 
     /**
      * Delete counter type
+     *
      * @param counterTypeId Long id of counter type
      * @return a response body with http status {@literal OK} if counter type
      * successfully edited or else http status {@literal CONFLICT}
@@ -95,9 +95,9 @@ public class CounterTypeController {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             counterTypeService.removeCounterType(counterTypeId);
-            logger.info("Counter type with id= "+counterTypeId + " was deleted successfully");
+            logger.info("Counter type with id= " + counterTypeId + " was deleted successfully");
         } catch (Exception e) {
-            logger.error("Got exception while remove counter type ",e);
+            logger.error("Got exception while remove counter type ", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -105,6 +105,7 @@ public class CounterTypeController {
 
     /**
      * Get counter type with id
+     *
      * @param id Long id of counter type
      * @return counterTypeDTO
      */
@@ -129,6 +130,7 @@ public class CounterTypeController {
 
     /**
      * Build page by SortCriteria, SortOrder and Searching data
+     *
      * @param pageNumber
      * @param itemsPerPage
      * @param sortCriteria
@@ -138,8 +140,8 @@ public class CounterTypeController {
      */
     @RequestMapping(value = "{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<CounterTypeDTO> pageCounterTypeWithSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage,
-                                                           @PathVariable String sortCriteria, @PathVariable String sortOrder,
-                                                           CounterTypeDTO searchData) {
+                                                             @PathVariable String sortCriteria, @PathVariable String sortOrder,
+                                                             CounterTypeDTO searchData) {
         ListToPageTransformer<CounterType> queryResult = counterTypeService.getCounterTypeBySearchAndPagination(
                 pageNumber,
                 itemsPerPage,
@@ -159,6 +161,7 @@ public class CounterTypeController {
 
     /**
      * Build page without sorting, ordering and searching data
+     *
      * @param pageNumber
      * @param itemsPerPage
      * @return
@@ -170,10 +173,11 @@ public class CounterTypeController {
 
     /**
      * Convert list of counter types to list CounterTypeDTO
+     *
      * @param list
      * @return
      */
-    public static List<CounterTypeDTO> toCounterTypeDtoFromList(List<CounterType> list){
+    public static List<CounterTypeDTO> toCounterTypeDtoFromList(List<CounterType> list) {
         List<CounterTypeDTO> resultList = new ArrayList<>();
         for (CounterType counterType : list) {
             resultList.add(new CounterTypeDTO(

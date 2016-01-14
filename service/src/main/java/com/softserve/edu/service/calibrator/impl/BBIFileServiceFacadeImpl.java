@@ -50,7 +50,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     private final Logger logger = Logger.getLogger(BBIFileServiceFacadeImpl.class);
 
-
     @Autowired
     private BbiFileService bbiFileService;
 
@@ -182,7 +181,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 } catch (FileAlreadyExistsException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
                     logger.info(e);
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
                     logger.info("Wrong image in BBI file", e);
                 } catch (Exception e) {
@@ -200,7 +199,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 } catch (IOException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                     logger.info(e);
-                }catch (NegativeArraySizeException e){
+                } catch (NegativeArraySizeException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
                     logger.info("Wrong image in BBI file", e);
                 } catch (Exception e) {
@@ -289,7 +288,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verificationMap.put(Constants.DISTRICT_ID, rs.getString("DistrictID"));
                     verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
                     verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     logger.info("User was trying to upload old archive format", e);
                 }
 
@@ -334,7 +333,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) {
-
         String sizeAndSymbol = verificationData.get(Constants.COUNTER_SIZE_AND_SYMBOL);
         String[] parts = sizeAndSymbol.split(" ");
         String standardSize = parts[0] + " " + parts[1];
@@ -345,25 +343,23 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             }
         }
         CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
-
-//        If there is no such symbol and standartSize of Counter in DB - create new counterType
-//        with default deviceType "Лічильник холодної води" (deviceId 65466) if deviceTypeId in bbi is "1"
-//        or "Лічильник гарячої води" (deviceId 65466) if deviceTypeId in bbi is "2"
-//        which is already in DB
+        /**
+         * If there is no such counterType, a new one will be created. After that super admin under his login
+         * should complete all necessary data about this device, otherwise there will be no full data about this device
+         * and NullPointerException will be generated
+         */
         if (counterType == null) {
-            long deviceId = (long) deviceTestData.getDeviceTypeId();
-            if (deviceId == 1) {
-                deviceId = Constants.DEFAULT_WATER_DEVICE_ID;
+            try {
+                long deviceId = (long) deviceTestData.getDeviceTypeId();
+                String deviceName = deviceService.getById(deviceId).getDeviceName();
+                counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
+                counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
+                logger.info("Device with id=" + counterType.getId() + " was created");
+            } catch (Exception e) {
+                logger.error("There is no such device with such id " + deviceTestData.getDeviceTypeId(), e);
             }
-            if (deviceId == 2) {
-                deviceId = Constants.DEFAULT_THERMAL_DEVICE_ID;
-            }
-            String deviceName = deviceService.getById(deviceId).getDeviceName();
-            counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
-            counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
         }
-        Counter counter = new Counter(verificationData.get(Constants.YEAR),
+        return new Counter(verificationData.get(Constants.YEAR),
                 verificationData.get(Constants.COUNTER_NUMBER), counterType, verificationData.get(Constants.STAMP));
-        return counter;
     }
 }
