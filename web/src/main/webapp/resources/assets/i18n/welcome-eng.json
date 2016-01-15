@@ -720,5 +720,6 @@
   "NO_FILTER_NAME":"Filter name is not set",
   "SELECT_FILTER":"Choose filter",
   "ORGANIZATION_CHANGES_HISTORY": "Changes history",
-  "SIGN_PROTOCOL": "Sign"
+  "SIGN_PROTOCOL": "Sign",
+  "SUCCESS_SIGNED": "Document signed successfully"
 }
