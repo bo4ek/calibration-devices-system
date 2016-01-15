@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 import java.sql.*;
@@ -69,7 +68,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
 
     @Transactional
-    public DeviceTestData parseBBIFileWithoutSaving(File BBIFile, String originalFileName) throws IOException, DecoderException, NegativeArraySizeException {
+    public DeviceTestData parseBBIFile(File BBIFile, String originalFileName) throws IOException, DecoderException, NegativeArraySizeException {
         String bbiName = bbiFileService.findBBIByFileName(originalFileName);
         if (bbiName != null) {
             throw new FileAlreadyExistsException(originalFileName);
@@ -170,7 +169,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             DeviceTestData deviceTestData;
             if (correspondingVerification == null) {
                 try {
-                    deviceTestData = parseBBIFileWithoutSaving(bbiFile, bbiFile.getName());
+                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
                     correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
                             calibratorEmployee, deviceTestData);
 
@@ -190,7 +189,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
             } else {
                 try {
-                    deviceTestData = parseBBIFileWithoutSaving(bbiFile, bbiFile.getName());
+                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
                     updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 } catch (FileAlreadyExistsException e) {
@@ -349,15 +348,24 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
          * and NullPointerException will be generated
          */
         if (counterType == null) {
-            try {
-                long deviceId = (long) deviceTestData.getDeviceTypeId();
-                String deviceName = deviceService.getById(deviceId).getDeviceName();
-                counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
-                counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
-                logger.info("Device with id=" + counterType.getId() + " was created");
-            } catch (Exception e) {
-                logger.error("There is no such device with such id " + deviceTestData.getDeviceTypeId(), e);
+            int deviceTypeId = deviceTestData.getDeviceTypeId(); //deviceTypeId comes from bbi file (1 - WATER; 2 - THERMAL)
+            String deviceType = null;
+            Long deviceId;
+            switch (deviceTypeId) {
+                case 1:
+                    deviceType = "WATER";
+                    break;
+                case 2:
+                    deviceType = "THERMAL";
+                    break;
             }
+            List<Device> devices = deviceService.getAllByDeviceType(deviceType);
+            deviceId = devices.get(0).getId();
+            String deviceName = deviceService.getById(deviceId).getDeviceName();
+            counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
+            counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
+            logger.info("Device with id=" + counterType.getId() + " was created");
+
         }
         return new Counter(verificationData.get(Constants.YEAR),
                 verificationData.get(Constants.COUNTER_NUMBER), counterType, verificationData.get(Constants.STAMP));

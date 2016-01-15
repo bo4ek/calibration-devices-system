@@ -18,5 +18,7 @@ public interface DeviceRepository extends CrudRepository<Device, Long> {
 
 	public List<Device> findByDeviceName(String deviceName );
 
+    public List<Device> findByDeviceType(Device.DeviceType deviceType);
+
 
 }

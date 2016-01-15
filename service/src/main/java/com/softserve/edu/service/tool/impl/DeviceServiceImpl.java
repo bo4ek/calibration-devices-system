@@ -75,11 +75,16 @@ public class DeviceServiceImpl implements DeviceService {
 
 	@Override
 	@Transactional
-	public List<Device> getAllByType(String device) {
+	public List<Device> getAllByDeviceName(String device) {
 		return (List<Device>) deviceRepository.findByDeviceName(device);
 	}
 
-	@Override
+    @Override
+    public List<Device> getAllByDeviceType(String deviceType) {
+        return (List<Device>) deviceRepository.findByDeviceType(Device.DeviceType.valueOf(deviceType));
+    }
+
+    @Override
 	@Transactional
 	public void addDeviceCategory(String deviceType, String deviceName) {
 		Device deviceCategory = new Device(Device.DeviceType.valueOf(deviceType), deviceName);

@@ -201,7 +201,7 @@ public class ClientApplicationController {
      */
     @RequestMapping(value = "devices/{deviceType}", method = RequestMethod.GET)
     public List<ApplicationFieldDTO> getAllByType(@PathVariable String deviceType) {
-        return deviceService.getAllByType(deviceType).stream()
+        return deviceService.getAllByDeviceName(deviceType).stream()
                 .map(device -> new ApplicationFieldDTO(device.getId(), device.getDeviceName()))
                 .collect(Collectors.toList());
     }

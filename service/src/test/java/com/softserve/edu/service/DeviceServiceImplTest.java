@@ -110,13 +110,13 @@ public class DeviceServiceImplTest {
 	@Test
 	public void testGetAllByType() {
 		when(deviceRepository.findByDeviceName(deviceName)).thenReturn(null);
-		Assert.assertNull(deviceService.getAllByType(deviceName));
+		Assert.assertNull(deviceService.getAllByDeviceName(deviceName));
 	}
 
 	@Test
 	public void testSecondGetAllByType() {
 		when(deviceRepository.findByDeviceName(deviceName)).thenReturn(devices);
-		Assert.assertEquals(deviceRepository.findByDeviceName(deviceName), deviceService.getAllByType(deviceName));
+		Assert.assertEquals(deviceRepository.findByDeviceName(deviceName), deviceService.getAllByDeviceName(deviceName));
 	}
 
 }

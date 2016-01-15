@@ -20,7 +20,9 @@ public interface DeviceService {
                                                                         String deviceType, String deviceName,
                                                                         String sortCriteria, String sortOrder);
 
-    List<Device> getAllByType(String device);
+    List<Device> getAllByDeviceName(String device);
+
+    List<Device> getAllByDeviceType(String deviceType);
 
     void addDeviceCategory(String deviceType, String deviceName);
 
