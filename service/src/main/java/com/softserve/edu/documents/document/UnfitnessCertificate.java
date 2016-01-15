@@ -2,19 +2,25 @@ package com.softserve.edu.documents.document;
 
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.documents.document.meta.Placeholder;
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
+import org.apache.log4j.Logger;
+
+import java.util.Set;
 
 /**
  * Represents an unfitness certificate.
  */
 @com.softserve.edu.documents.document.meta.Document
 public class UnfitnessCertificate extends BaseCertificate {
+    private Logger logger = Logger.getLogger(UnfitnessCertificate.class.getSimpleName());
+
     /**
      * Constructor for UnfitnessCertificate
      *
-     * @param verification         entity, which contains document's data
-     * @param calibrationTest      calibration test that is assigned to the verification
+     * @param verification    entity, which contains document's data
+     * @param calibrationTest calibration test that is assigned to the verification
      */
     public UnfitnessCertificate(Verification verification, CalibrationTest calibrationTest) {
         super(verification, calibrationTest);
@@ -35,18 +41,24 @@ public class UnfitnessCertificate extends BaseCertificate {
     @Placeholder(name = "REASON_UNSUITABLE")
     public String getReasonUnusable() {
         String reasons = Constants.MEASURING_ERROR_MESSAGE;
-        if (!calibrationTest.getCalibrationTestDataList().isEmpty()) {
-            if (calibrationTest.getCalibrationTestDataList().get(0).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
+        try {
+            if (calibrationTest.getCalibrationTestDataList().get(0).getTestResult()
+                    .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.RATED_FLAW;
-            } else if (calibrationTest.getCalibrationTestDataList().get(1).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
+            } else if (calibrationTest.getCalibrationTestDataList().get(1).getTestResult()
+                    .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.TRANSIENT_FLAW;
-            } else if (calibrationTest.getCalibrationTestDataList().get(2).getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
+            } else if (calibrationTest.getCalibrationTestDataList().get(2).getTestResult()
+                    .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.MINIMAL_FLAW;
+            } else {
+                //todo: Here should be the reason from reasons_unsuitability returned
+                //reason should be stated by calibrator or verificator
+                return Constants.NOT_SPECIFIED;
             }
-        } else {
-            //todo get reason from view, if CalibrationTestResult is not SUCCESS OR FAILED
-            return verification.getDevice().getUnsuitabilitySet().iterator().next().getName();
+        } catch (Exception e) {
+            logger.error("Data about one of the calibration tests is corrupted " + e);
+            return Constants.NOT_SPECIFIED;
         }
-        return Constants.NO_REASON;
     }
 }

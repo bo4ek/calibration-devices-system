@@ -20,7 +20,6 @@ import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
-import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.BBIFileServiceFacade;
@@ -45,7 +44,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -59,15 +57,13 @@ public class CalibratorVerificationController {
     private static final String contentExtensionPattern = "^.*\\.(bbi|BBI|)$";
     private static final String archiveExtensionPattern = "^.*\\.(zip|ZIP|)$";
 
-    private final Logger logger = Logger.getLogger(CalibratorVerificationController.class);
+    private final Logger logger = Logger.getLogger(CalibratorVerificationController.class.getSimpleName());
+
     @Autowired
     VerificationService verificationService;
 
     @Autowired
     ProviderService providerService;
-
-    @Autowired
-    private CounterTypeService counterService;
 
     @Autowired
     private DeviceService deviceService;
@@ -225,7 +221,10 @@ public class CalibratorVerificationController {
      */
     @RequestMapping(value = "calibration-test/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<CalibrationTestDTO> pageCalibrationTestWithSearch(@PathVariable Integer pageNumber,
-                                                                     @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder, CalibrationTestSearch searchData) {
+                                                                     @PathVariable Integer itemsPerPage,
+                                                                     @PathVariable String sortCriteria,
+                                                                     @PathVariable String sortOrder,
+                                                                     CalibrationTestSearch searchData) {
         ListToPageTransformer<CalibrationTest> queryResult = verificationService
                 .findPageOfCalibrationTestsByVerificationId(
                         pageNumber,
@@ -247,10 +246,8 @@ public class CalibratorVerificationController {
                         searchData.getMeasurementDeviceType(),
                         sortCriteria,
                         sortOrder);
-
         List<CalibrationTestDTO> content = CalibratorTestPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
-
     }
 
     /**
@@ -372,11 +369,10 @@ public class CalibratorVerificationController {
         return bbiOutcomeDTOList;
     }
 
-
-
     @RequestMapping(value = "archive/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<VerificationPageDTO> getPageOfArchivalVerificationsByOrganizationId(@PathVariable Integer pageNumber,
-                                                                                       @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
+                                                                                       @PathVariable Integer itemsPerPage,
+                                                                                       @PathVariable String sortCriteria,
                                                                                        @PathVariable String sortOrder,
                                                                                        ArchiveVerificationsFilterAndSort searchData,
                                                                                        @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
@@ -429,7 +425,7 @@ public class CalibratorVerificationController {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
             Date gottenDate = verificationService.getNewVerificationEarliestDateByCalibrator(organization);
-            Date date = null;
+            Date date;
             if (gottenDate != null) {
                 date = new Date(gottenDate.getTime());
             } else {
@@ -455,7 +451,7 @@ public class CalibratorVerificationController {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
             Date gottenDate = verificationService.getArchivalVerificationEarliestDateByCalibrator(organization);
-            Date date = null;
+            Date date;
             if (gottenDate != null) {
                 date = new Date(gottenDate.getTime());
             } else {
@@ -463,8 +459,7 @@ public class CalibratorVerificationController {
             }
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
             LocalDateTime localDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-            String isoLocalDateString = localDate.format(dbDateTimeFormatter);
-            return isoLocalDateString;
+            return localDate.format(dbDateTimeFormatter);
         } else {
             return null;
         }
@@ -478,7 +473,7 @@ public class CalibratorVerificationController {
      */
     @RequestMapping(value = "find/uploadFile", method = RequestMethod.GET)
     public List<String> getBbiFile(@RequestParam String idVerification) {
-        List<String> data = new ArrayList();
+        List<String> data;
         String fileName = calibratorService.findBbiFileByOrganizationId(idVerification);
         data = Arrays.asList(idVerification, fileName);
         return data;
@@ -497,7 +492,6 @@ public class CalibratorVerificationController {
         return checkedUser.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE);
     }
 
-
     /**
      * get list of employees if it calibrator admin
      * or get data about employee.
@@ -510,8 +504,7 @@ public class CalibratorVerificationController {
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         User employee = calibratorEmployeeService.oneCalibratorEmployee(user.getUsername());
         List<String> role = usersService.getRoles(user.getUsername());
-        return calibratorEmployeeService
-                .getAllCalibrators(role, employee);
+        return calibratorEmployeeService.getAllCalibrators(role, employee);
     }
 
     /**
@@ -542,7 +535,7 @@ public class CalibratorVerificationController {
      * check if additional info exists for the
      * the verification
      *
-     * @param verificationId
+     * @param verificationId id of the verification
      * @return {@literal true} if yes, or {@literal false} if not.
      */
     @RequestMapping(value = "/checkInfo/{verificationId}", method = RequestMethod.GET)
@@ -551,7 +544,7 @@ public class CalibratorVerificationController {
     }
 
     /**
-     * method for updation counter info
+     * method for updating counter info
      * @param counterInfo
      * @return
      */

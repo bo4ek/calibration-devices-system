@@ -45,7 +45,7 @@ public interface Constants {
     String RATED_FLAW = "номінальною витратою";
     String TRANSIENT_FLAW = "перехідною витратою";
     String MINIMAL_FLAW = "мінімальною витратою";
-    String NO_REASON = "причину не вказано";
+    String NOT_SPECIFIED = "не вказано";
 
     // region Address details
 

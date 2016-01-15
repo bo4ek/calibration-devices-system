@@ -120,8 +120,12 @@ public class DocumentsController {
                             @PathVariable String verificationCode,
                             @PathVariable FileFormat fileFormat)
             throws IOException, IllegalStateException {
-        FileObject file = documentService.buildFile(verificationCode, documentType, fileFormat);
-        sendFile(response, fileFormat, file);
+        try {
+            FileObject file = documentService.buildFile(verificationCode, documentType, fileFormat);
+            sendFile(response, fileFormat, file);
+        } catch (Exception e) {
+            log.error("Cannot download document " + e);
+        }
     }
 
     /**

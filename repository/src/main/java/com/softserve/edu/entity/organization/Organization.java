@@ -93,7 +93,6 @@ public class Organization {
     @Enumerated(EnumType.STRING)
     private Set<Device.DeviceType> deviceTypes = new HashSet<>();
 
-
     @ManyToMany
     @JoinTable(name = "ORGANIZATION_LOCALITY", joinColumns = @JoinColumn(name = "organizationId"),
             inverseJoinColumns = @JoinColumn(name = "localityId"))

@@ -47,7 +47,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private static InputStream inStream;
     private static BufferedInputStream bufferedInputStream;
 
-    private final Logger logger = Logger.getLogger(BBIFileServiceFacadeImpl.class);
+    private final Logger logger = Logger.getLogger(BBIFileServiceFacadeImpl.class.getSimpleName());
 
     @Autowired
     private BbiFileService bbiFileService;
@@ -57,15 +57,18 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Autowired
     private CalibrationTestService calibrationTestService;
+
     @Autowired
     private VerificationService verificationService;
+
     @Autowired
     private CounterTypeService counterTypeService;
+
     @Autowired
     private DeviceService deviceService;
+
     @Autowired
     private OrganizationService organizationService;
-
 
     @Transactional
     public DeviceTestData parseBBIFile(File BBIFile, String originalFileName) throws IOException, DecoderException, NegativeArraySizeException {
@@ -73,14 +76,11 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         if (bbiName != null) {
             throw new FileAlreadyExistsException(originalFileName);
         }
-
         inStream = FileUtils.openInputStream(BBIFile);
         bufferedInputStream = new BufferedInputStream(inStream);
         bufferedInputStream.mark(inStream.available());
         DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
         bufferedInputStream.reset();
-
-
         return deviceTestData;
     }
 
@@ -97,16 +97,19 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);
             calibrationTestService.createNewTest(deviceTestData, verificationID);
         } catch (DecoderException e) {
-            throw e;
+            logger.error("error " + e);
         }
-        return deviceTestData;
+        return null;
     }
-
 
     public DeviceTestData parseAndSaveBBIFile(MultipartFile BBIfile, String verificationID, String originalFileName)
             throws IOException, NoSuchElementException, DecoderException, NegativeArraySizeException {
-        DeviceTestData deviceTestData = parseAndSaveBBIFile(BBIfile.getInputStream(), verificationID, originalFileName);
-        return deviceTestData;
+        try {
+            return parseAndSaveBBIFile(BBIfile.getInputStream(), verificationID, originalFileName);
+        } catch (Exception e) {
+            logger.error("Error " + e);
+        }
+        return null;
     }
 
     @Transactional
@@ -132,9 +135,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(MultipartFile archiveFile, String originalFileName,
                                                              User calibratorEmployee) throws IOException, ZipException,
             SQLException, ClassNotFoundException, ParseException {
-        List<BBIOutcomeDTO> resultsOfBBIProcessing = parseAndSaveArchiveOfBBIfiles(archiveFile.getInputStream(),
-                originalFileName, calibratorEmployee);
-        return resultsOfBBIProcessing;
+        return parseAndSaveArchiveOfBBIfiles(archiveFile.getInputStream(), originalFileName, calibratorEmployee);
     }
 
     @Transactional
@@ -179,13 +180,13 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verificationService.saveVerification(verification);
                 } catch (FileAlreadyExistsException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                    logger.info(e);
+                    logger.error("error " + e);
                 } catch (NullPointerException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
-                    logger.info("Wrong image in BBI file", e);
+                    logger.error("Wrong image in BBI file " + e);
                 } catch (Exception e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                    logger.info(e);
+                    logger.error("error " + e);
                 }
             } else {
                 try {
@@ -194,16 +195,16 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 } catch (FileAlreadyExistsException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                    logger.info(e);
+                    logger.error("error 3" + e);
                 } catch (IOException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                    logger.info(e);
+                    logger.error("error " + e);
                 } catch (NegativeArraySizeException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
-                    logger.info("Wrong image in BBI file", e);
+                    logger.error("Wrong image in BBI file " + e.getMessage());
                 } catch (Exception e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
-                    logger.info(e);
+                    logger.error("error " + e);
                 }
             }
             if (reasonOfRejection == null) {
@@ -288,7 +289,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
                     verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
                 } catch (SQLException e) {
-                    logger.info("User was trying to upload old archive format", e);
+                    logger.error("User was trying to upload old archive format" + e);
                 }
 
                 bbiFilesToVerification.put(rs.getString("FileNumber"), verificationMap);

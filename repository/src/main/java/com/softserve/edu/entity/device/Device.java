@@ -53,6 +53,7 @@ public class Device {
     private Set<CounterType> counterTypeSet;
 
     @OneToMany(mappedBy = "device")
+    @JsonBackReference
     private Set<UnsuitabilityReason> unsuitabilitySet;
 
     public Device(String number, Set<Verification> verifications, Manufacturer manufacturer) {

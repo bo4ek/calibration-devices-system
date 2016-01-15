@@ -242,8 +242,7 @@ public class CalibrationTestController {
                     , cTestManual.getGenerateNumberTest(), cTestManual.getPathToScan(), cTestManual.getId()));
             responseEntity = new ResponseEntity(cTestDataManualDTO, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("failed to get manual protocol" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get manual protocol" + e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -270,7 +269,7 @@ public class CalibrationTestController {
                     , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit);
         } catch (Exception e) {
             logger.error("failed to edit calibration test manual" + e.getMessage());
-            logger.error(e); //
+            logger.error(e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -389,7 +388,7 @@ public class CalibrationTestController {
             Verification verification = verificationService.findById(verificationId);
             responseEntity = new ResponseEntity((new CalibrationTestFileDataDTO(calibrationTest, testService, verification)), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("failed to get protocol" + e.getMessage());
+            logger.error("failed to get protocol " + e.getMessage());
             logger.error(e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

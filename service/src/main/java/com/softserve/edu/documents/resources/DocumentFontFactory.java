@@ -94,15 +94,12 @@ public enum DocumentFontFactory {
             String path = file.getURL().getPath();
 
             try {
-                baseFontObject = BaseFont.createFont(path,
-                        BaseFont.IDENTITY_H, false);
-            } catch (DocumentException exception) {
-                logger.info(exception);
+                baseFontObject = BaseFont.createFont(path, BaseFont.IDENTITY_H, false);
+            } catch (DocumentException e) {
+                logger.error("font could not be created" + e);
             }
-
             baseFontMap.put(font, baseFontObject);
         }
-
         return baseFontObject;
     }
 
