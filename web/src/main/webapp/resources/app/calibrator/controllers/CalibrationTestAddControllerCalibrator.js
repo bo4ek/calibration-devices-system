@@ -4,8 +4,8 @@
 angular
     .module('employeeModule')
     .controller('CalibrationTestAddControllerCalibrator', ['$rootScope', '$translate', '$scope', '$modal', '$http', '$log',
-        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout',
-        function ($rootScope, $translate, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload,  $timeout) {
+        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout', 'toaster', '$filter',
+        function ($rootScope, $translate, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload,  $timeout, toaster, $filter) {
 
             $scope.testId = $location.search().param;
             $scope.hasProtocol = $location.search().loadProtocol || false;
@@ -182,22 +182,7 @@ angular
                                 .then(function (status) {
                                     if (status == 200) {
                                         $scope.TestForm.signed = true;
-                                        $modal.open({
-                                            animation: true,
-                                            templateUrl: 'resources/app/calibrator/views/modals/calibration-test-signing-success.html',
-                                            controller: function ($modalInstance) {
-                                                this.ok = function () {
-                                                    $modalInstance.close();
-                                                    if ($scope.hasProtocol) {
-                                                        window.history.back();
-                                                    } else {
-                                                        window.history.go(-2);
-                                                    }
-                                                }
-                                            },
-                                            controllerAs: 'successController',
-                                            size: 'md'
-                                        });
+                                        toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
                                     }
                                 })
                         }
