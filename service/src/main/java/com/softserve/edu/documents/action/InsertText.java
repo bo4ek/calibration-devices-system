@@ -114,7 +114,7 @@ public enum InsertText implements Operation {
             try {
                 columnValue = columnsNamesValues.get(substring).toString();
             } catch (Exception e) {
-                logger.error("Map value is null for " + substring + " " + e);
+                logger.error(substring + " for document has not been specified " + e);
             }
             if (columnValue == null) {
                 continue;
