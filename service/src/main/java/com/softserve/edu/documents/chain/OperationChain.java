@@ -2,13 +2,14 @@ package com.softserve.edu.documents.chain;
 
 import com.softserve.edu.documents.action.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents standard chains of actions to generate files.
  */
-public enum OperationChain {
+public enum OperationChain implements Serializable {
     /**
      * Chain of actions to generate a docx file.
      */

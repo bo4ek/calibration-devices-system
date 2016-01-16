@@ -5,7 +5,6 @@ import org.springframework.hateoas.ResourceSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CalibrationTestListDTO extends ResourceSupport{
     private List<CalibrationTestDTO> calibrationTests = new ArrayList<>();
 

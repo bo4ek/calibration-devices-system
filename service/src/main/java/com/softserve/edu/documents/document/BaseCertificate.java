@@ -72,7 +72,7 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "VERIFICATOR_ACC_CERT_NAME")
     public String getCalibratorCompanyAccreditationCertificateNumber() {
         try {
-            String s = verification.getStateVerificator().getCertificateNumber();
+            String s =  verification.getStateVerificator().getCertificateNumber();
             if (s == null) {
                 throw new NullPointerException();
             }

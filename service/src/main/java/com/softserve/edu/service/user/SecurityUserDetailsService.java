@@ -1,5 +1,7 @@
 package com.softserve.edu.service.user;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.sun.xml.internal.ws.developer.Serialization;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Transient;
 import javax.sql.DataSource;
 import java.util.List;
 
@@ -74,8 +77,8 @@ public class SecurityUserDetailsService extends JdbcDaoImpl {
         private Long organizationId;
 
         @Setter
+        @Transient
         private List<GrantedAuthority> authorities;
-
 
         public CustomUserDetails(String username, String password, boolean enabled, Long organizationId) {
             super(username, password, enabled, true, true, true, AuthorityUtils.NO_AUTHORITIES);

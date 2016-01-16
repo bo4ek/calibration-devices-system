@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.apache.log4j.Logger;
 
 public class Filter implements Specification {
 
@@ -253,12 +254,13 @@ public class Filter implements Specification {
     }
 
     public static class FilterBuilder {
+        private final Logger logger = Logger.getLogger(Filter.class.getSimpleName());
+
         private List<Condition> conditions;
 
         public FilterBuilder() {
             conditions = new ArrayList<>();
         }
-
 
         public FilterBuilder setSearchList(List<Map<String, Object>> searchList) {
             for (Map<String, Object> entry : searchList) {
@@ -274,7 +276,7 @@ public class Filter implements Specification {
                     try {
                         this.conditions.addAll(buildBetweenDatesPredicateFromStrings(entry.get("key").toString(), (List) entry.get("value")));
                     } catch (ParseException e) {
-                        e.printStackTrace();
+                        logger.error("map error " + e);
                     }
                 } else {
                     this.conditions.add(new Condition.Builder()

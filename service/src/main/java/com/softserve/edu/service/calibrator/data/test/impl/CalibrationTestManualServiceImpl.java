@@ -153,7 +153,7 @@ public class CalibrationTestManualServiceImpl implements CalibrationTestManualSe
 
     @Override
     public byte[] getScanDoc(String uri) throws IOException {
-        byte[] scanDoc = null;
+        byte[] scanDoc;
         Path scanDocPath = Paths.get(localStorage + uri);
         DirectoryStream<Path> pathDirectoryStream = Files.newDirectoryStream(scanDocPath);
         Iterator<Path> iterator = pathDirectoryStream.iterator();
@@ -172,7 +172,6 @@ public class CalibrationTestManualServiceImpl implements CalibrationTestManualSe
         return Long.valueOf(number.toString());
     }
 
-    @Transactional
     private void setPathToScan(Long id, String pathToScan) {
         if (id != 0) {
             CalibrationTestManual testManual = findTestManual(id);

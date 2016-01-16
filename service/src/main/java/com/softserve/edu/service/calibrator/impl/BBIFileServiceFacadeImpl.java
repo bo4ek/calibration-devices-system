@@ -201,7 +201,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     logger.error("error " + e);
                 } catch (NegativeArraySizeException e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
-                    logger.error("Wrong image in BBI file " + e.getMessage());
+                    logger.error("Wrong image in BBI file " + e);
                 } catch (Exception e) {
                     reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
                     logger.error("error " + e);

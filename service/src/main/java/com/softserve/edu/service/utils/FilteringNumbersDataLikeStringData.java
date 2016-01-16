@@ -7,6 +7,7 @@ import org.hibernate.jpa.criteria.compile.RenderingContext;
 import org.hibernate.jpa.criteria.expression.function.BasicFunctionExpression;
 import org.hibernate.jpa.criteria.expression.function.FunctionExpression;
 
+import javax.persistence.Transient;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Selection;
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import java.io.Serializable;
 public class FilteringNumbersDataLikeStringData<Y extends Number> extends BasicFunctionExpression<String> implements FunctionExpression<String>, Serializable {
     public static final String FCT_NAME = "str";
 
+    @Transient
     private final Selection<Y> selection;
 
     public FilteringNumbersDataLikeStringData(CriteriaBuilder criteriaBuilder, Selection<Y> selection) {
