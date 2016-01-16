@@ -1,7 +1,5 @@
 package com.softserve.edu.service.user;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.sun.xml.internal.ws.developer.Serialization;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
