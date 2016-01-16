@@ -75,7 +75,6 @@ public class SecurityUserDetailsService extends JdbcDaoImpl {
         private Long organizationId;
 
         @Setter
-        @Transient
         private List<GrantedAuthority> authorities;
 
         public CustomUserDetails(String username, String password, boolean enabled, Long organizationId) {

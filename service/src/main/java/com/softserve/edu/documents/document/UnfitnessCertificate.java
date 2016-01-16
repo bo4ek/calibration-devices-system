@@ -7,8 +7,6 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
 import org.apache.log4j.Logger;
 
-import java.util.Set;
-
 /**
  * Represents an unfitness certificate.
  */
@@ -52,9 +50,8 @@ public class UnfitnessCertificate extends BaseCertificate {
                     .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.MINIMAL_FLAW;
             } else {
-                //todo: Here should be the reason from reasons_unsuitability returned
-                //reason should be stated by calibrator or verificator
-                return Constants.NOT_SPECIFIED;
+                //DB need to be changed due to new reasons of unsuitability
+                return "причина з довідника";
             }
         } catch (Exception e) {
             logger.error("Data about one of the calibration tests is corrupted " + e);

@@ -19,8 +19,7 @@ import java.util.Locale;
  * Methods of this class are being called through reflection in MetaDataReader
  */
 public abstract class BaseCertificate implements Document {
-    private Logger logger = Logger.getLogger(BaseCertificate.class.getSimpleName());
-
+    protected Logger logger = Logger.getLogger(BaseCertificate.class.getSimpleName());
     /**
      * Verification that is used for getting information for this document.
      */
@@ -48,6 +47,10 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "VERIFICATOR_COMPANY_NAME")
     public String getStateVerificatorCompanyName() {
         try {
+            String s = verification.getStateVerificator().getName();
+            if (s == null) {
+                throw new Exception();
+            }
             return verification.getStateVerificator().getName();
         } catch (Exception e) {
             logger.error("Vereficator's name had not been specified " + e);
@@ -60,10 +63,18 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATOR_COMPANY_ADDRESS")
     public String getCalibratorCompanyAddress() {
-        Address address = verification.getStateVerificator().getAddress();
-        return address.getLocality() + ", " +
-                address.getStreet() + ", " +
-                address.getBuilding();
+        try {
+            Address address = verification.getStateVerificator().getAddress();
+            if (address == null) {
+                throw new Exception();
+            }
+            return address.getLocality() + ", " +
+                    address.getStreet() + ", " +
+                    address.getBuilding();
+        } catch (Exception e) {
+            logger.error("address" + e);
+            return Constants.NOT_SPECIFIED;
+        }
     }
 
     /**
@@ -72,7 +83,7 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "VERIFICATOR_ACC_CERT_NAME")
     public String getCalibratorCompanyAccreditationCertificateNumber() {
         try {
-            String s =  verification.getStateVerificator().getCertificateNumber();
+            String s = verification.getStateVerificator().getCertificateNumber();
             if (s == null) {
                 throw new NullPointerException();
             }
@@ -89,8 +100,7 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "VERIFICATOR_ACC_CERT_DATE_GRANTED")
     public String getCalibratorCompanyAccreditationCertificateGrantedDate() {
         try {
-            return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
-                    .format(verification.getStateVerificator().getCertificateGrantedDate());
+            return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA")).format(verification.getStateVerificator().getCertificateGrantedDate());
         } catch (Exception e) {
             logger.error("Vereficator's certificate granted date has not been specified " + e);
             return Constants.NOT_SPECIFIED;
@@ -102,22 +112,27 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
-        String verificationId = String.valueOf(verification.getId());
-        String subdivisionId = Constants.NOT_SPECIFIED; //temporary solution
         try {
-            subdivisionId = String.valueOf(verification.getTask().getTeam().getId());
+            String verificationId = String.valueOf(verification.getId());
+            String subdivisionId = String.valueOf(verification.getTask().getTeam().getId());
+            return String.format("%s-%s-Д", subdivisionId, verificationId);
         } catch (Exception e) {
             logger.error("Team for this verification has not been specified " + e);
+            return Constants.NOT_SPECIFIED;
         }
-        return String.format("%s-%s-Д", subdivisionId, verificationId);
     }
 
     /**
      * @return the device's name
      */
+
     @Placeholder(name = "DEV_NAME")
     public String getDeviceName() {
         try {
+            String s = verification.getCounter().getCounterType().getDevice().getDeviceName();
+            if (s == null) {
+                throw new NullPointerException();
+            }
             return verification.getCounter().getCounterType().getDevice().getDeviceName();
         } catch (Exception e) {
             logger.error("Device name for this counter type has not been specified " + e);
@@ -131,6 +146,10 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "DEV_SIGN")
     public String getDeviceSign() {
         try {
+            String s = verification.getCounter().getCounterType().getSymbol();
+            if (s == null) {
+                throw new NullPointerException();
+            }
             return verification.getCounter().getCounterType().getSymbol();
         } catch (Exception e) {
             logger.error("Symbol for counterType had not been specified " + e);
@@ -144,6 +163,10 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "DEV_MAN_SER")
     public String getDeviceManufacturerSerial() {
         try {
+            String s = verification.getCounter().getNumberCounter();
+            if (s == null) {
+                throw new NullPointerException();
+            }
             return verification.getCounter().getNumberCounter();
         } catch (Exception e) {
             logger.error("Counter number for this counter has not been specified " + e);
@@ -157,6 +180,10 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "MAN_NAME")
     public String getManufacturerName() {
         try {
+            String s = verification.getCounter().getCounterType().getManufacturer();
+            if (s == null) {
+                throw new NullPointerException();
+            }
             return verification.getCounter().getCounterType().getManufacturer();
         } catch (Exception e) {
             logger.error("Manufacturer for this counter type has not been specified " + e);
@@ -169,10 +196,18 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "OWNER_NAME")
     public String getOwnerFullName() {
-        ClientData ownerData = verification.getClientData();
-        return ownerData.getLastName() + " " +
-                ownerData.getFirstName() + " " +
-                ownerData.getMiddleName();
+        try {
+            ClientData ownerData = verification.getClientData();
+            if (ownerData == null) {
+                throw new NullPointerException();
+            }
+            return ownerData.getLastName() + " " +
+                    ownerData.getFirstName() + " " +
+                    ownerData.getMiddleName();
+        } catch (Exception e) {
+            logger.error("Data about owner has not been specified " + e);
+            return Constants.NOT_SPECIFIED;
+        }
     }
 
     /**
@@ -182,6 +217,9 @@ public abstract class BaseCertificate implements Document {
     public String getOwnerAddress() {
         try {
             Address ownerAddress = verification.getClientData().getClientAddress();
+            if (ownerAddress == null) {
+                throw new NullPointerException();
+            }
             return ownerAddress.getRegion() + " обл., "
                     + ownerAddress.getDistrict() + " р-н, "
                     + ownerAddress.getLocality() + ", "
@@ -200,10 +238,18 @@ public abstract class BaseCertificate implements Document {
      */
     @Placeholder(name = "VERIFICATOR_SHORT_NAME")
     public String getStateVerificatorShortName() {
-        User stateVerificatorEmployee = verification.getStateVerificatorEmployee();
-        return stateVerificatorEmployee.getLastName() + " "
-                + stateVerificatorEmployee.getFirstName().charAt(0) + "."
-                + stateVerificatorEmployee.getMiddleName().charAt(0) + ".";
+        try {
+            User stateVerificatorEmployee = verification.getStateVerificatorEmployee();
+            if (stateVerificatorEmployee == null) {
+                throw new NullPointerException();
+            }
+            return stateVerificatorEmployee.getLastName() + " "
+                    + stateVerificatorEmployee.getFirstName().charAt(0) + "."
+                    + stateVerificatorEmployee.getMiddleName().charAt(0) + ".";
+        } catch (Exception e) {
+            logger.error("Data about User has not been specified " + e);
+            return Constants.NOT_SPECIFIED;
+        }
     }
 
     /**
@@ -238,6 +284,10 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "COUNTER_TYPE_GOST")
     public String getCounterTypeGost() {
         try {
+            String s = verification.getCounter().getCounterType().getGost();
+            if (s == null) {
+                throw new NullPointerException();
+            }
             return verification.getCounter().getCounterType().getGost();
         } catch (Exception e) {
             logger.error("GOST for counterType has not been specified" + e);
@@ -251,6 +301,10 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
         try {
+            String s = verification.getCalibrationModule().getCalibrationType();
+            if (s == null) {
+                throw new NullPointerException();
+            }
             return verification.getCalibrationModule().getCalibrationType();
         } catch (Exception e) {
             logger.error("Calibration type for this module had not been specified " + e);

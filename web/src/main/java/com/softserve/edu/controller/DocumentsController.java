@@ -30,7 +30,7 @@ import java.io.InputStream;
 @RestController
 @RequestMapping(value = "/doc")
 public class DocumentsController {
-    static Logger log = Logger.getLogger(DocumentsController.class.getName());
+    static Logger log = Logger.getLogger(DocumentsController.class);
 
     @Autowired
     DocumentService documentService;

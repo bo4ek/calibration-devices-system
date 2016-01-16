@@ -23,7 +23,6 @@ import java.io.Serializable;
 public class FilteringNumbersDataLikeStringData<Y extends Number> extends BasicFunctionExpression<String> implements FunctionExpression<String>, Serializable {
     public static final String FCT_NAME = "str";
 
-    @Transient
     private final Selection<Y> selection;
 
     public FilteringNumbersDataLikeStringData(CriteriaBuilder criteriaBuilder, Selection<Y> selection) {

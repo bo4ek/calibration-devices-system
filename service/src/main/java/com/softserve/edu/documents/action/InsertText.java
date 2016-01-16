@@ -9,6 +9,7 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
  */
 public enum InsertText implements Operation {
     INSTANCE;
+
+    private Logger logger = Logger.getLogger(InsertText.class);
 
     @Override
     public FileObject perform(FileObject sourceFile,
@@ -107,18 +110,20 @@ public enum InsertText implements Operation {
         for (String match : allMatches) {
             int indexOfColumn = textInRunBuilder.indexOf(match);
             String substring = match.substring(1).trim();
-            String columnValue = columnsNamesValues.get(substring).toString();
-
+            String columnValue = null;
+            try {
+                columnValue = columnsNamesValues.get(substring).toString();
+            } catch (Exception e) {
+                logger.error("Map value is null for " + substring + " " + e);
+            }
             if (columnValue == null) {
                 continue;
             }
-
             textInRunBuilder.replace(
                     indexOfColumn,
                     indexOfColumn + match.length(),
                     columnValue);
         }
-
         return textInRunBuilder.toString();
     }
 }
