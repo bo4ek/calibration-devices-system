@@ -205,23 +205,7 @@ angular
                                     $rootScope.onTableHandling();
                                 }
                                 if(status==200){
-                                    $modal.open({
-                                        animation: true,
-                                        templateUrl: 'resources/app/calibrator/views/modals/calibration-test-edited-success.html',
-                                        controller: function ($modalInstance) {
-                                            this.ok = function () {
-                                                $modalInstance.close();
-                                                if($scope.hasProtocol){
-                                                    window.history.back();
-                                                }else{
-                                                    window.history.go(-2);
-                                                }
-                                            }
-                                        },
-                                        controllerAs: 'successController',
-                                        size: 'md'
-                                    });
-
+                                    toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_EDITED'));
                                 }
                             });
             }
