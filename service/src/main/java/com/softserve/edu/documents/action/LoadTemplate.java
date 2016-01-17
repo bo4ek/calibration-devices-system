@@ -37,8 +37,7 @@ public enum LoadTemplate implements Operation {
             IOUtils.copy(inputStream, outputStream);
         } catch (IOException exception) {
             log.error("exception while trying to load template" +
-                    template.getName().toString() +
-                    ": ", exception);
+                    template.getName().toString(), exception);
             throw exception;
         }
 

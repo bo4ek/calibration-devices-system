@@ -111,8 +111,7 @@ public enum DocxToPdf implements Operation {
                 targetPdfDocument.add(pdfParagraph);
             } catch (Exception e) {
                 logger.error("exception while trying to copy docx paragraph " +
-                        docxParagraph.toString() + ": ");
-                logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+                        docxParagraph.toString(), e);
                 throw new IOException("The output file couldn't be reached.");
             }
         }
