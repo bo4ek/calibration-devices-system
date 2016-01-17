@@ -1,28 +1,42 @@
 angular
     .module('employeeModule')
-    .controller('DocumentController', ['$rootScope', '$scope', '$sce', '$http', '$modal', 'DocumentService', function ($rootScope, $scope, $sce, $http, $modal, documentService) {
+    .controller('DocumentController', ['$rootScope', '$scope', '$sce', '$http', '$modal', 'DocumentService', 'toaster', '$filter', function ($rootScope, $scope, $sce, $http, $modal, documentService, toaster, $filter) {
         $scope.downloadDocument = function (documentType, verificationId, fileFormat) {
-            var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
-            location.href = url;
-        }
+            documentService.isSignedCertificate(verificationId).then(
+                function (result) {
+                    if (result.data) {
+                        var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
+                        location.href = url;
+                    } else {
+                        toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_DOWNLOAD_UNSIGNED_DOCUMENT'));
+                    }
+                }
+            )
+        };
         $scope.downloadReport = function (documentType) {
             var url = "doc/report/" + documentType + "/xls";
             location.href = url;
-        }
-
+        };
         $scope.printDocument = function (verification) {
-            var documentType = verification.status == 'TEST_OK' ? 'VERIFICATION_CERTIFICATE' : 'UNFITNESS_CERTIFICATE';
-            var url = "doc/" + documentType + "/" + verification.id + "/pdf";
-            var frame = document.getElementById('pdf');
-            var frameDoc = frame.contentDocument || frame.contentWindow.document;
-            frameDoc.documentElement.innerHTML = "";
-            var container = document.getElementById('pdf').contentWindow.document.body;
+            documentService.isSignedCertificate(verification.id).then(
+                function (result) {
+                    if (result.data) {
+                        var documentType = verification.status == 'TEST_OK' ? 'VERIFICATION_CERTIFICATE' : 'UNFITNESS_CERTIFICATE';
+                        var url = "doc/" + documentType + "/" + verification.id + "/pdf";
+                        var frame = document.getElementById('pdf');
+                        var frameDoc = frame.contentDocument || frame.contentWindow.document;
+                        frameDoc.documentElement.innerHTML = "";
+                        var container = document.getElementById('pdf').contentWindow.document.body;
 
-            renderPDF(url, container).then(function (success) {
-                console.log(success);
-                setTimeout("document.getElementById('pdf').contentWindow.print()", 500);
-            })
-
+                        renderPDF(url, container).then(function (success) {
+                            console.log(success);
+                            setTimeout("document.getElementById('pdf').contentWindow.print()", 500);
+                        })
+                    } else {
+                        toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_PRINT_UNSIGNED_DOCUMENT'));
+                    }
+                }
+            )
         };
 
         function renderPDF(url, canvasContainer) {

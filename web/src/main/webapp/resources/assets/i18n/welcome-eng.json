@@ -721,5 +721,7 @@
   "SELECT_FILTER":"Choose filter",
   "ORGANIZATION_CHANGES_HISTORY": "Changes history",
   "SIGN_PROTOCOL": "Sign",
-  "SUCCESS_SIGNED": "Document signed successfully"
+  "SUCCESS_SIGNED": "Document signed successfully",
+  "ERROR_DOWNLOAD_UNSIGNED_DOCUMENT": "Unable to load unsigned document",
+  "ERROR_PRINT_UNSIGNED_DOCUMENT": "Unable to print unsigned document"
 }

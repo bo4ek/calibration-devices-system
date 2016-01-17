@@ -12,6 +12,13 @@ angular
                         console.log(fileURL);
                         return file;
                     });
+            },
+            isSignedCertificate: function(verificationId) {
+                var url = "certificate/isSigned/" + verificationId;
+                return $http.get(url)
+                    .success(function (result) {
+                        return result;
+                    });
             }
         };
     });
