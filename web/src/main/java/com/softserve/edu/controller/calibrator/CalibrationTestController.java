@@ -172,7 +172,7 @@ public class CalibrationTestController {
     }
 
     @RequestMapping(value = "getCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
-    public List<CounterTypeDTO> getCountersTest(@PathVariable String standardSize, @PathVariable String deviceType, @PathVariable String symbol) {
+    public List<CounterTypeDTO> getCountersTypesByStandardSizeAndDeviceTypeAndSymbol(@PathVariable String standardSize, @PathVariable String deviceType, @PathVariable String symbol) {
         List listOfCounterType = null;
         try {
             listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findByStandardSizeAndDeviceTypeAndSymbol(standardSize, deviceType, symbol));

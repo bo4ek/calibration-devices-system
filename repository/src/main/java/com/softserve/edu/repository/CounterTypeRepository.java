@@ -39,4 +39,11 @@ public interface CounterTypeRepository extends CrudRepository<CounterType, Long>
 
     @Query(value = "SELECT ct.standardSize FROM COUNTER_TYPE ct ", nativeQuery = true)
     Set<String> findAllStandardSizes();
+
+    @Query(value = "select result.calibrationInterval from (select ct.calibrationInterval,ct.yearIntroduction " +
+            "from counter_type ct INNER JOIN device d ON ct.deviceId = d.id " +
+            "where ct.standardSize = ?1 AND ct.symbol = ?2 AND ct.manufacturer = ?3 AND d.deviceType = ?4 " +
+            "AND ct.yearIntroduction <= ?5) as result having max(result.yearIntroduction)", nativeQuery = true)
+    String findCalibrationInterval(String standardSize, String symbol, String manufacturer, String deviceType, Integer yearIntroduction);
+
 }
