@@ -85,6 +85,7 @@ public enum InsertText implements Operation {
     }
 
     /**
+     * Replace placeholders in document with actual data
      * @param textInRun
      * @param columnsNamesValues
      * @return
@@ -114,7 +115,7 @@ public enum InsertText implements Operation {
             try {
                 columnValue = columnsNamesValues.get(substring).toString();
             } catch (Exception e) {
-                logger.error(substring + " for document has not been specified " + e);
+                logger.error(substring + " for document has not been specified ", e);
             }
             if (columnValue == null) {
                 continue;

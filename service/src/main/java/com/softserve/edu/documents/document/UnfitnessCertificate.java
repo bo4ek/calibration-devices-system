@@ -51,10 +51,10 @@ public class UnfitnessCertificate extends BaseCertificate {
                 return reasons + Constants.MINIMAL_FLAW;
             } else {
                 //DB need to be changed due to new reasons of unsuitability
-                return "причина з довідника";
+                return Constants.NOT_SPECIFIED;
             }
         } catch (Exception e) {
-            logger.error("Data about one of the calibration tests is corrupted " + e);
+            logger.error("Data about one of the calibration tests is corrupted ", e);
             return Constants.NOT_SPECIFIED;
         }
     }

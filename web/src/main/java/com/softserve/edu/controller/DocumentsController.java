@@ -30,7 +30,7 @@ import java.io.InputStream;
 @RestController
 @RequestMapping(value = "/doc")
 public class DocumentsController {
-    static Logger log = Logger.getLogger(DocumentsController.class);
+    private final static Logger log = Logger.getLogger(DocumentsController.class);
 
     @Autowired
     DocumentService documentService;
@@ -124,7 +124,7 @@ public class DocumentsController {
             FileObject file = documentService.buildFile(verificationCode, documentType, fileFormat);
             sendFile(response, fileFormat, file);
         } catch (Exception e) {
-            log.error("Cannot download document " + e);
+            log.error("Cannot download document ", e);
         }
     }
 

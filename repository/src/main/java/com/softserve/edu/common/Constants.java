@@ -37,7 +37,6 @@ public interface Constants {
     String COUNTER_SIZE_AND_SYMBOL = "Розмір і символ лічильника";
     String YEAR = "Рік випуску лічильника";
     String STAMP = "Номер пломби";
-    String NUMBER_SEPARATOR = "-";
     String DEFAULT_DB_TABLE_NAME = "Subscribers";
 
     //reasons o counter unusability
@@ -74,7 +73,7 @@ public interface Constants {
     String FULL_NAME = "ПІБ працівника";
     String FIRST_NAME = "Ім'я";
     String LAST_NAME = "Прізвище";
-    String MIDDLE_NAME = "По-батькові";
+    String MIDDLE_NAME = "По батькові";
 
     // endregion
 

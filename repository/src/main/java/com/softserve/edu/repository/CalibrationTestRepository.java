@@ -25,10 +25,10 @@ public interface CalibrationTestRepository extends CrudRepository<CalibrationTes
     CalibrationTest findById(Long id);
 
     CalibrationTest findByVerificationId(String verifId);
+
     CalibrationTest findByVerification(Verification verification);
 
-
     public Page<CalibrationTest> findAll(Pageable pageable);
-    Page<CalibrationTest> findByNameLikeIgnoreCase(String name, Pageable pageable);
 
+    Page<CalibrationTest> findByNameLikeIgnoreCase(String name, Pageable pageable);
 }

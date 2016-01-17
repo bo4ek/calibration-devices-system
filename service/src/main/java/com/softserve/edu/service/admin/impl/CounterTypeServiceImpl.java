@@ -1,10 +1,8 @@
 package com.softserve.edu.service.admin.impl;
 
-import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.repository.CounterRepository;
 import com.softserve.edu.repository.CounterTypeRepository;
-import com.softserve.edu.repository.DeviceRepository;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.ArchivalCounterTypeQueryConstructorAdmin;
@@ -18,7 +16,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class CounterTypeServiceImpl implements CounterTypeService{

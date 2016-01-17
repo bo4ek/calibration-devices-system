@@ -276,7 +276,7 @@ public class Filter implements Specification {
                     try {
                         this.conditions.addAll(buildBetweenDatesPredicateFromStrings(entry.get("key").toString(), (List) entry.get("value")));
                     } catch (ParseException e) {
-                        logger.error("map error " + e);
+                        logger.error("map error ", e);
                     }
                 } else {
                     this.conditions.add(new Condition.Builder()
