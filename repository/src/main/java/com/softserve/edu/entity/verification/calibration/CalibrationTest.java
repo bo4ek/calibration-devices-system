@@ -40,7 +40,7 @@ public class CalibrationTest {
     @Column(columnDefinition = "boolean default false")
     private boolean signed;
 
-    @Column
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] signedDocument;
 
     @Embedded
