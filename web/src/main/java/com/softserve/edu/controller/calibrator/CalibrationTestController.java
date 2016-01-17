@@ -2,10 +2,13 @@ package com.softserve.edu.controller.calibrator;
 
 import com.softserve.edu.controller.calibrator.util.CalibrationModuleDTOTransformer;
 import com.softserve.edu.controller.calibrator.util.CounterTypeDTOTransformer;
+import com.softserve.edu.documents.parameter.FileFormat;
+import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.dto.*;
 import com.softserve.edu.dto.admin.CalibrationModuleDTO;
 import com.softserve.edu.dto.admin.CounterTypeDTO;
 import com.softserve.edu.entity.device.Counter;
+import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
@@ -22,9 +25,11 @@ import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataManualS
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestManualService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.exceptions.NotAvailableException;
+import com.softserve.edu.service.tool.DocumentService;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
 import com.softserve.edu.service.verification.VerificationService;
+import org.apache.commons.vfs2.FileObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,6 +84,9 @@ public class CalibrationTestController {
     @Autowired
     private VerificationService verificationService;
     private ResponseEntity responseEntity;
+
+    @Autowired
+    private DocumentService documentService;
 
     /**
      * Finds all calibration-tests form database
@@ -158,20 +166,18 @@ public class CalibrationTestController {
         try {
             listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findAll());
         } catch (Exception e) {
-            logger.error("failed to get list of CounterTyp" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get list of CounterTyp", e);
         }
         return listOfCounterType;
     }
 
-    @RequestMapping(value = "getFilteredCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
+    @RequestMapping(value = "getCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
     public List<CounterTypeDTO> getCountersTest(@PathVariable String standardSize, @PathVariable String deviceType, @PathVariable String symbol) {
         List listOfCounterType = null;
         try {
-            listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findAllBySymbol(standardSize, deviceType, symbol));
+            listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findByStandardSizeAndDeviceTypeAndSymbol(standardSize, deviceType, symbol));
         } catch (Exception e) {
-            logger.error("failed to get list of CounterTyp" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get list of CounterTyp", e);
         }
         return listOfCounterType;
     }
@@ -437,16 +443,15 @@ public class CalibrationTestController {
     @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.PUT)
     public ResponseEntity signTestProtocol(@PathVariable String verificationId) {
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
-        //mock
-        String data = "Our document";
-        byte[] signedDocument = data.getBytes();
         try {
+            Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
             calibrationTest.setSigned(true);
-            //code signing document
-            calibrationTest.setSignedDocument(signedDocument);
-
-            //end
+            DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
+            FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
+            byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
+            file.getContent().getInputStream().read(documentByteArray);
+            calibrationTest.setSignedDocument(documentByteArray);
             testRepository.save(calibrationTest);
         } catch (Exception e) {
             logger.error("Cannot sing protocol", e);

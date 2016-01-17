@@ -1,5 +1,6 @@
 package com.softserve.edu.documents;
 
+import com.softserve.edu.documents.action.DocxToPdf;
 import com.softserve.edu.documents.action.FormatText;
 import com.softserve.edu.documents.action.Operation;
 import com.softserve.edu.documents.chain.OperationChain;
@@ -44,6 +45,26 @@ public class FileFactory {
         return runOperations(operations, fileParameters);
     }
 
+    /**
+     * Convert file in .docx to format in @fileParameters.
+     * @param file file in docx format.
+     * @param fileParameters parameters of the needed file.
+     * @return file in new format
+     */
+    public static FileObject convertFile(FileObject file, FileParameters fileParameters) {
+        Operation operation;
+        FileFormat fileFormat = fileParameters.getFileFormat();
+        switch (fileFormat) {
+            case PDF:
+                operation = DocxToPdf.INSTANCE;
+                break;
+            default:
+                throw new IllegalArgumentException(fileFormat.name() +
+                        " is not supported");
+        }
+        return performOperation(operation, file, fileParameters);
+    }
+
     public static FileObject buildInfoFile(FileParameters fileParameters) {
         List<Operation> operations;
         FileFormat fileFormat = fileParameters.getFileFormat();
@@ -82,6 +103,19 @@ public class FileFactory {
                         operation.getClass().getSimpleName() + ": ", exception);
                 throw new RuntimeException(exception);
             }
+        }
+        return file;
+    }
+
+    private static FileObject performOperation(Operation operation, FileObject file,
+                                            FileParameters fileParameters) {
+
+        try {
+            file = operation.perform(file, fileParameters);
+        } catch (IOException exception) {
+            logger.error("exception while trying to perform operation " +
+                    operation.getClass().getSimpleName() + ": ", exception);
+            throw new RuntimeException(exception);
         }
         return file;
     }

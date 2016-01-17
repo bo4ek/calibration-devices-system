@@ -7,6 +7,7 @@ import com.softserve.edu.documents.parameter.FileFormat;
 import com.softserve.edu.documents.parameter.FileParameters;
 import com.softserve.edu.documents.parameter.FileSystem;
 import com.softserve.edu.documents.resources.DocumentType;
+import com.softserve.edu.documents.utils.FileUtils;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.repository.CalibrationTestRepository;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -155,6 +158,43 @@ public class DocumentsServiceImpl implements DocumentService {
         fileParameters.setFileName(documentType.toString());
 
         return FileFactory.buildFile(fileParameters);
+    }
+
+    /**
+     * Return signed document from database and if needs convert it to desired format.
+     *
+     * @param verificationCode code of verification
+     * @param fileFormat       desired format of document
+     * @param documentType     type of the needed document
+     * @return signed document
+     */
+    @Override
+    public FileObject getSignedDocument(String verificationCode, FileFormat fileFormat, DocumentType documentType) throws IOException {
+        Verification verification = verificationRepository.findOne(verificationCode);
+        Set<CalibrationTest> calibrationTests = verification.getCalibrationTests();
+        CalibrationTest calibrationTest = calibrationTests.iterator().next();
+        byte[] file = calibrationTest.getSignedDocument();
+        FileParameters fileParameters = new FileParameters(documentType,
+                fileFormat);
+        fileParameters.setFileSystem(FileSystem.RAM);
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd:MM:yyyy");
+        fileParameters.setFileName(String.format("%s-%s", fileParameters.getDocumentType().toString(), DATE_FORMAT.format(new Date())));
+        FileObject fileDocx = FileUtils.createFile(fileParameters.getFileSystem(),
+                fileParameters.getFileName() + "_docx");
+
+        fileDocx.getContent().getOutputStream().write(file);
+
+        switch (fileFormat) {
+            case PDF: {
+                return FileFactory.convertFile(fileDocx, fileParameters);
+            }
+            case DOCX: {
+                return fileDocx;
+            }
+            default: {
+                throw new IllegalArgumentException();
+            }
+        }
     }
 
     @Override

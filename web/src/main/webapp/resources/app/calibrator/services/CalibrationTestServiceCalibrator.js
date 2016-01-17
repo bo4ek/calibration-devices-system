@@ -134,8 +134,8 @@ angular
                     })
             },
 
-            getFilteredCounterTypes: function (standardSize, deviceType, symbol) {
-                return $http.get('calibrator/calibrationTests/getFilteredCountersTypes/' + standardSize + '/' + deviceType + '/' + symbol)
+            getAllCounterTypesByStandardSizeAndDeviceTypeAndSymbol: function (standardSize, deviceType, symbol) {
+                return $http.get('calibrator/calibrationTests/getCountersTypes/' + standardSize + '/' + deviceType + '/' + symbol)
                     .then(function (result) {
                         return result;
                     })

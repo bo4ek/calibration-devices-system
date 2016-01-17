@@ -121,8 +121,9 @@ public class DocumentsController {
                             @PathVariable FileFormat fileFormat)
             throws IOException, IllegalStateException {
         try {
-            FileObject file = documentService.buildFile(verificationCode, documentType, fileFormat);
-            sendFile(response, fileFormat, file);
+            sendFile(response, fileFormat, documentService.getSignedDocument(verificationCode, fileFormat, documentType));
+        } catch (IllegalArgumentException e) {
+            log.error("Format is not supported", e);
         } catch (Exception e) {
             log.error("Cannot download document ", e);
         }

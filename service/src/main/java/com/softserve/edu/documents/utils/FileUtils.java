@@ -42,13 +42,14 @@ public class FileUtils {
         try {
             fileToReturn = manager.resolveFile(filePath);
 
-            if (!fileToReturn.exists())
+            if (!fileToReturn.exists()) {
                 fileToReturn.createFile();
+            }
+            fileToReturn.close();
         } catch (FileSystemException e) {
             logger.error("can't create file", e);
             throw new RuntimeException(e);
         }
-
         return fileToReturn;
     }
 
