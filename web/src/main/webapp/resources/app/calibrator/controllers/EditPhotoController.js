@@ -25,11 +25,8 @@ angular
             $scope.newValues.counterYear = null;
             $scope.newValues.accumulatedVolume = null;
             $scope.newValues.counterValue = null;
-            $scope.newValues.counterStandard = null;
             $scope.newValues.counterManufacturer = null;
-            $scope.newValues.counterType = null;
-
-            $scope.countersTypes = [];
+            $scope.newValues.counterSymbol = null;
             $scope.standardSizes = [];
             $scope.symbols = [];
             $scope.manufacturers = [];
@@ -99,7 +96,7 @@ angular
             }
 
             /**
-             * set current manufacturer
+             * get all counterType and set current manufacturer name
              */
             function getCurrentCounterManufacturer() {
                 calibrationTestServiceCalibrator.getCountersTypes()
@@ -111,7 +108,7 @@ angular
             }
 
             /**
-             * get all standardSizes and set current
+             * get all standardSizes from counter_type table and set current from bbi
              */
             function getAllStandardSizes() {
                     dataReceivingService.findAllStandardSize()
@@ -121,16 +118,27 @@ angular
                         })
                 }
 
-            $scope.receiveAllSymbols = function(standardSize, deviceType) {
+            /**
+             * get all symbols from counter_type by standardSize and deviceType
+             * @param standardSize - from counter_type table
+             * @param deviceType - from counter_type table
+             */
+            $scope.getAllSymbolsByStandardSizeAndDeviceType = function(standardSize, deviceType) {
                 dataReceivingService.findAllSymbolsByStandardSizeAndDeviceType(standardSize, deviceType)
                     .success(function(symbols) {
                         $scope.symbols = symbols;
-                        $scope.eraseInformationAboutCounter();
+                        $scope.eraseCurrentSymbolAndManufacturer();
                     });
             };
 
-            $scope.receiveAllManufacturer = function(standardSize, deviceType, symbol) {
-                calibrationTestServiceCalibrator.getFilteredCounterTypes(standardSize, deviceType, symbol)
+            /**
+             * get all manufacturer from counter_type by standardSize,deviceType and symbol
+             * @param standardSize
+             * @param deviceType
+             * @param symbol
+             */
+            $scope.getAllManufacturerByStandardSizeAndDeviceTypeAndSymbol = function(standardSize, deviceType, symbol) {
+                calibrationTestServiceCalibrator.getAllCounterTypesByStandardSizeAndDeviceTypeAndSymbol(standardSize, deviceType, symbol)
                     .then(function (result) {
                         $scope.manufacturers = result.data;
                         $scope.newValues.counterManufacturer = undefined;
@@ -144,8 +152,11 @@ angular
                 $scope.setStatusTypeWater(typeWater.type);
             };
 
-            $scope.eraseInformationAboutCounter = function () {
-                $scope.newValues.counterType = undefined;
+            /**
+             * erase current counterType and manufacturer
+             */
+            $scope.eraseCurrentSymbolAndManufacturer = function () {
+                $scope.newValues.counterSymbol = undefined;
                 $scope.newValues.counterManufacturer = undefined;
             };
 
@@ -153,7 +164,7 @@ angular
                     $scope.newValues.counterNumber = parentScope.TestForm.counterNumber;
                     $scope.newValues.counterYear = parentScope.TestForm.counterProductionYear;
                     $scope.newValues.accumulatedVolume = parentScope.TestForm.accumulatedVolume;
-                    $scope.newValues.counterType = parentScope.TestForm.symbol;
+                    $scope.newValues.counterSymbol = parentScope.TestForm.symbol;
                     $scope.setStatusTypeWater(parentScope.TestForm.typeWater);
                     getCurrentCounterManufacturer();
                     getAllStandardSizes();

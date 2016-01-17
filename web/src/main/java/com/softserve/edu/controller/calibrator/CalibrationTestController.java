@@ -166,20 +166,18 @@ public class CalibrationTestController {
         try {
             listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findAll());
         } catch (Exception e) {
-            logger.error("failed to get list of CounterTyp" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get list of CounterTyp", e);
         }
         return listOfCounterType;
     }
 
-    @RequestMapping(value = "getFilteredCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
+    @RequestMapping(value = "getCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
     public List<CounterTypeDTO> getCountersTest(@PathVariable String standardSize, @PathVariable String deviceType, @PathVariable String symbol) {
         List listOfCounterType = null;
         try {
-            listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findAllBySymbol(standardSize, deviceType, symbol));
+            listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findByStandardSizeAndDeviceTypeAndSymbol(standardSize, deviceType, symbol));
         } catch (Exception e) {
-            logger.error("failed to get list of CounterTyp" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get list of CounterTyp", e);
         }
         return listOfCounterType;
     }

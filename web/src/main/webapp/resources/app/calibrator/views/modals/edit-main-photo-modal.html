@@ -61,7 +61,7 @@
                                name="standardSize"
                                id="standardSize"
                                class="form-control col-md-6"
-                               on-select = "eraseInformationAboutCounter();"
+                               on-select = "eraseCurrentSymbolAndManufacturer();"
                                required>
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
@@ -91,7 +91,7 @@
                                 id="type"
                                 class="form-group col-md-6"
                                 ng-change="changeTypeWater(selectedTypeWater)"
-                                on-select = "receiveAllSymbols(newValues.counterStandardSize, selectedTypeWater.type)">
+                                on-select = "getAllSymbolsByStandardSizeAndDeviceType(newValues.counterStandardSize, selectedTypeWater.type)">
                         <ui-select-match
                                 placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
                                 allow-clear="false">
@@ -109,11 +109,11 @@
                     <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
                 </div>
                 <div class="form-group col-md-6" show-errors>
-                    <ui-select ng-model="newValues.counterType" type="text" theme="select2"
+                    <ui-select ng-model="newValues.counterSymbol" type="text" theme="select2"
                                name="symbol"
                                id="symbol"
                                class="form-control col-md-6"
-                               on-select = "receiveAllManufacturer(newValues.counterStandardSize, selectedTypeWater.type, newValues.counterType)"
+                               on-select = "getAllManufacturerByStandardSizeAndDeviceTypeAndSymbol(newValues.counterStandardSize, selectedTypeWater.type, newValues.counterSymbol)"
                                required>
 
                         <!--on-select = "receiveAllManufacturers($item)"-->

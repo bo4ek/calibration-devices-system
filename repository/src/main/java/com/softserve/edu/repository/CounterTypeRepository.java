@@ -19,7 +19,7 @@ public interface CounterTypeRepository extends CrudRepository<CounterType, Long>
 
     @Query(value = "SELECT * FROM COUNTER_TYPE ct INNER JOIN DEVICE d ON ct.deviceId = d.id " +
             "WHERE ct.standardSize = ?1 AND d.deviceType = ?2 AND ct.symbol = ?3", nativeQuery = true)
-    List<CounterType> findAllBySymbol(String standardSize, String deviceType, String symbol);
+    List<CounterType> findByStandardSizeAndDeviceTypeAndSymbol(String standardSize, String deviceType, String symbol);
 
     CounterType findOneBySymbolAndStandardSize(String symbol, String standardSize);
 
