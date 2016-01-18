@@ -87,7 +87,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     public void saveBBIFile(DeviceTestData deviceTestData, String verificationID, String originalFileName) throws IOException {
         calibratorService.uploadBbi(bufferedInputStream, verificationID, originalFileName);
         calibrationTestService.createNewTest(deviceTestData, verificationID);
-        bufferedInputStream.close();;
+        bufferedInputStream.close();
         inStream.close();
     }
 
@@ -150,7 +150,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         List<File> listOfBBIfiles = new ArrayList<>(FileUtils.listFiles(directoryWithUnpackedFiles, bbiExtensions, true));
         List<BBIOutcomeDTO> resultsOfBBIProcessing = processListOfBBIFiles(bbiFileNamesToVerificationMap, listOfBBIfiles,
                 calibratorEmployee);
-        FileUtils.forceDeleteOnExit(directoryWithUnpackedFiles);
+        FileUtils.forceDelete(directoryWithUnpackedFiles);
         return resultsOfBBIProcessing;
     }
 
@@ -162,7 +162,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
      */
     private List<BBIOutcomeDTO> processListOfBBIFiles(Map<String, Map<String, String>> verificationMapFromUnpackedFiles,
                                                       List<File> listOfBBIfiles, User calibratorEmployee) throws
-            ParseException {
+            ParseException, IOException {
         List<BBIOutcomeDTO> resultsOfBBIProcessing = new ArrayList<>();
 
         for (File bbiFile : listOfBBIfiles) {
@@ -217,6 +217,11 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (FileNotFoundException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
                 logger.error("File is not found", e);
+            } finally {
+                if (inStream != null) {
+                    inStream.close();
+                    bufferedInputStream.close();
+                }
             }
             if (reasonOfRejection == null) {
                 resultsOfBBIProcessing.add(BBIOutcomeDTO.accept(bbiFile.getName(), correspondingVerification));
