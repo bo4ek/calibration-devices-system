@@ -87,6 +87,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     public void saveBBIFile(DeviceTestData deviceTestData, String verificationID, String originalFileName) throws IOException {
         calibratorService.uploadBbi(bufferedInputStream, verificationID, originalFileName);
         calibrationTestService.createNewTest(deviceTestData, verificationID);
+        bufferedInputStream.close();;
+        inStream.close();
     }
 
     @Override
@@ -148,7 +150,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         List<File> listOfBBIfiles = new ArrayList<>(FileUtils.listFiles(directoryWithUnpackedFiles, bbiExtensions, true));
         List<BBIOutcomeDTO> resultsOfBBIProcessing = processListOfBBIFiles(bbiFileNamesToVerificationMap, listOfBBIfiles,
                 calibratorEmployee);
-        FileUtils.forceDelete(directoryWithUnpackedFiles);
+        FileUtils.forceDeleteOnExit(directoryWithUnpackedFiles);
         return resultsOfBBIProcessing;
     }
 
@@ -165,47 +167,56 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
         for (File bbiFile : listOfBBIfiles) {
             Map<String, String> correspondingVerificationMap = verificationMapFromUnpackedFiles.get(bbiFile.getName());
-            String correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
+            String correspondingVerification = null;
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
             DeviceTestData deviceTestData;
-            if (correspondingVerification == null) {
-                try {
-                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                    correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
-                            calibratorEmployee, deviceTestData);
+            try {
+                if (correspondingVerificationMap == null) {
+                    throw new FileNotFoundException();
+                }
+                correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
+                if (correspondingVerification == null) {
+                    try {
+                        deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                        correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
+                                calibratorEmployee, deviceTestData);
 
-                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-                    Verification verification = verificationService.findById(correspondingVerification);
-                    verification.setStatus(Status.CREATED_BY_CALIBRATOR);
-                    verificationService.saveVerification(verification);
-                } catch (FileAlreadyExistsException e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                    logger.error("error " + e);
-                } catch (NullPointerException e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
-                    logger.error("Wrong image in BBI file " + e);
-                } catch (Exception e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                    logger.error("error " + e);
+                        saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
+                        Verification verification = verificationService.findById(correspondingVerification);
+                        verification.setStatus(Status.CREATED_BY_CALIBRATOR);
+                        verificationService.saveVerification(verification);
+                    } catch (FileAlreadyExistsException e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
+                        logger.error("BBI file is already in database ", e);
+                    } catch (NullPointerException e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
+                        logger.error("Wrong image in BBI file ", e);
+                    } catch (Exception e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
+                        logger.error("BBI is not valid ", e);
+                    }
+                } else {
+                    try {
+                        deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                        updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
+                        saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
+                    } catch (FileAlreadyExistsException e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
+                        logger.error("BBI file is already in database ", e);
+                    } catch (IOException e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
+                        logger.error("BBI is not valid ", e);
+                    } catch (NegativeArraySizeException e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
+                        logger.error("Wrong image in BBI file ", e);
+                    } catch (Exception e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
+                        logger.error("Invalid verification code ", e);
+                    }
                 }
-            } else {
-                try {
-                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                    updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
-                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-                } catch (FileAlreadyExistsException e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                    logger.error("error 3" + e);
-                } catch (IOException e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                    logger.error("error " + e);
-                } catch (NegativeArraySizeException e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
-                    logger.error("Wrong image in BBI file " + e);
-                } catch (Exception e) {
-                    reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
-                    logger.error("error " + e);
-                }
+            } catch (FileNotFoundException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
+                logger.error("File is not found", e);
             }
             if (reasonOfRejection == null) {
                 resultsOfBBIProcessing.add(BBIOutcomeDTO.accept(bbiFile.getName(), correspondingVerification));

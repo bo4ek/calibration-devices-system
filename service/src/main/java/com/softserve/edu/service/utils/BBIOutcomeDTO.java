@@ -11,7 +11,8 @@ public class BBIOutcomeDTO {
         INVALID_VERIFICATION_CODE,
         INVALID_COUNTER_SIZE_AND_SYMBOL,
         BBI_FILE_IS_ALREADY_IN_DATABASE,
-        WRONG_IMAGE_IN_BBI
+        WRONG_IMAGE_IN_BBI,
+        NAME_OF_BBI_FILE_DOES_NOT_MATCH
     }
 
     private String verificationID;
