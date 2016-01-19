@@ -117,6 +117,9 @@ public class CalibratorApplicationController {
                    verificationDTO.getTimeFrom(),
                    verificationDTO.getTimeTo()
            );
+
+           System.out.println(info);
+           System.out.println(counter);
            Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
            Organization provider = providerService.findById(verificationDTO.getProviderId());
 

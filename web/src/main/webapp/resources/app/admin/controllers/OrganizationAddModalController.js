@@ -105,7 +105,7 @@ angular
                 var lang = $translate.use();
                 if (lang === 'ukr') {
                     moment.locale('uk');
-                    $scope.typeData[0].label = 'Постачальник послуг';
+                    $scope.typeData[0].label = 'Надавач послуг';
                     $scope.typeData[1].label = 'Вимірювальна лабораторія';
                     $scope.typeData[2].label = 'Уповноважена повірочна лабораторія';
                     $scope.counterData[0].label = 'Холодна вода';
