@@ -446,6 +446,16 @@ public class CalibrationTestController {
         try {
             Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
+
+            Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
+                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                    getDeviceType(verification), getYearIntroduction(verification));
+
+            Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
+                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                    getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
+
+            calibrationTest.setCalibrationInterval(calibrationInterval);
             calibrationTest.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
@@ -460,6 +470,25 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
+    private String getStandardSize(Verification verification) {
+        return verification.getCounter().getCounterType().getStandardSize();
+    }
+
+    private String getSymbol(Verification verification) {
+        return verification.getCounter().getCounterType().getSymbol();
+    }
+
+    private String getManufacturer(Verification verification) {
+        return verification.getCounter().getCounterType().getManufacturer();
+    }
+
+    private String getDeviceType(Verification verification) {
+        return verification.getDevice().getDeviceType().toString();
+    }
+
+    private Integer getYearIntroduction(Verification verification) {
+        return Integer.parseInt(verification.getCounter().getReleaseYear());
+    }
 
 }
 

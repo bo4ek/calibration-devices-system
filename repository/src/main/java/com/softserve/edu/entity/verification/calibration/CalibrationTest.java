@@ -35,6 +35,9 @@ public class CalibrationTest {
     @Enumerated(EnumType.STRING)
     private Verification.CalibrationTestResult testResult;
 
+    @Column(columnDefinition = "int default 0")
+    private Integer calibrationInterval;
+
     private String photoPath;
 
     @Column(columnDefinition = "boolean default false")
