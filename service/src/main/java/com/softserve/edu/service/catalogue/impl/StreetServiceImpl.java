@@ -20,4 +20,9 @@ public class StreetServiceImpl implements StreetService {
     public List<Street> getStreetsCorrespondingLocality(Long localityId) {
         return streetRepository.findByLocalityId(localityId);
     }
+
+    @Override
+    public Street findStreetById(Long id) {
+        return streetRepository.findOne(id);
+    }
 }

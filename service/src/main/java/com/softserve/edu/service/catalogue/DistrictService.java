@@ -10,4 +10,6 @@ public interface DistrictService {
 
     District findDistrictByDesignationAndRegion(String designation, Long region);
 
+    District findDistrictById(Long id);
+
 }

@@ -8,4 +8,6 @@ public interface StreetService {
 
     List<Street> getStreetsCorrespondingLocality(Long localityId);
 
+    Street findStreetById(Long id);
+
 }

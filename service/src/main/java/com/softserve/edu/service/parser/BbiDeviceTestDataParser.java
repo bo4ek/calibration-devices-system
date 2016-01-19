@@ -183,7 +183,6 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
 
             // skips all empty bytes till the next image beginning.
             long count = reader.skip(ALLOCATED_IMAGE_SIZE - imageSize);
-            System.out.println(encodedHexB64 + "skips all empty bytes till the next image beginning");
             return encodedHexB64;
         } else {
             byte[] decodedHex = new byte[imageSize];

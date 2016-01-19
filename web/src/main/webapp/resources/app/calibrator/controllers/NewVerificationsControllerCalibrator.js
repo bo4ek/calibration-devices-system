@@ -106,7 +106,7 @@ angular
                 {id: 'IN_PROGRESS', label: null},
                 {id: 'TEST_PLACE_DETERMINED', label: null},
                 {id: 'SENT_TO_TEST_DEVICE', label: null},
-                {id: 'TEST_COMPLETED', label: null},
+                {id: 'TEST_COMPLETED', label: null}
             ];
 
             $scope.setTypeDataLanguage = function () {
@@ -606,8 +606,7 @@ angular
                     backdrop: 'static',
                     templateUrl: 'resources/app/calibrator/views/modals/initiate-verification.html',
                     controller: 'AddingVerificationsControllerCalibrator',
-                    size: 'lg',
-
+                    size: 'lg'
                 });
                 modalInstance.result.then(function () {
                     $scope.tableParams.reload();

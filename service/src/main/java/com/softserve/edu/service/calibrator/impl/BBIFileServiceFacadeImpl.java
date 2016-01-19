@@ -17,6 +17,10 @@ import com.softserve.edu.service.calibrator.BBIFileServiceFacade;
 import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
+import com.softserve.edu.service.catalogue.DistrictService;
+import com.softserve.edu.service.catalogue.LocalityService;
+import com.softserve.edu.service.catalogue.RegionService;
+import com.softserve.edu.service.catalogue.StreetService;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import com.softserve.edu.service.verification.VerificationService;
@@ -69,6 +73,18 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Autowired
     private OrganizationService organizationService;
+
+    @Autowired
+    private LocalityService localityService;
+
+    @Autowired
+    private DistrictService districtService;
+
+    @Autowired
+    private StreetService streetService;
+
+    @Autowired
+    private RegionService regionService;
 
     @Transactional
     public DeviceTestData parseBBIFile(File BBIFile, String originalFileName) throws IOException, DecoderException, NegativeArraySizeException {
@@ -317,12 +333,38 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData)
             throws ParseException {
 
-        Address address = new Address(verificationData.get(Constants.REGION), verificationData.get(Constants.CITY),
-                verificationData.get(Constants.STREET), verificationData.get(Constants.BUILDING),
-                verificationData.get(Constants.FLAT));
-        ClientData clientData = new ClientData(verificationData.get(Constants.FIRST_NAME),
-                verificationData.get(Constants.LAST_NAME), verificationData.get(Constants.MIDDLE_NAME),
-                verificationData.get(Constants.PHONE_NUMBER), address);
+        String cityName = null;
+        String regionName = null;
+        String streetName = null;
+        ClientData clientData = null;
+
+        try {
+            Long cityIdLong = Long.parseLong(verificationData.get(Constants.CITY_ID));
+            cityName = localityService.findById(cityIdLong).getDesignation();
+
+            Long districtIdLong = Long.parseLong(verificationData.get(Constants.DISTRICT_ID));
+            regionName = districtService.findDistrictById(districtIdLong).getDesignation();
+
+            Long streetIdLong = Long.parseLong(verificationData.get(Constants.STREET_ID));
+            streetName = streetService.findStreetById(streetIdLong).getDesignation();
+        }catch (NumberFormatException e){
+            logger.info("Old *.db format", e);
+        }
+
+        if (cityName != null && regionName != null && streetName != null){
+            Address address = new Address(regionName, cityName,
+                    streetName, verificationData.get(Constants.BUILDING), verificationData.get(Constants.FLAT));
+            clientData = new ClientData(verificationData.get(Constants.FIRST_NAME),
+                    verificationData.get(Constants.LAST_NAME), verificationData.get(Constants.MIDDLE_NAME),
+                    verificationData.get(Constants.PHONE_NUMBER), address);
+        }else{
+            Address address = new Address(verificationData.get(Constants.REGION), verificationData.get(Constants.CITY),
+                    verificationData.get(Constants.STREET), verificationData.get(Constants.BUILDING),
+                    verificationData.get(Constants.FLAT));
+            clientData = new ClientData(verificationData.get(Constants.FIRST_NAME),
+                    verificationData.get(Constants.LAST_NAME), verificationData.get(Constants.MIDDLE_NAME),
+                    verificationData.get(Constants.PHONE_NUMBER), address);
+        }
 
         Long calibratorOrganisationId = calibratorEmployee.getOrganization().getId();
         Organization calibrator = organizationService.getOrganizationById(calibratorOrganisationId);

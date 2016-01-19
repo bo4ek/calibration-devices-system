@@ -25,4 +25,9 @@ public class DistrictServiceImpl implements DistrictService {
     public District findDistrictByDesignationAndRegion(String designation, Long region){
         return districtRepository.findByDesignationAndRegionId(designation, region);
     }
+
+    @Override
+    public District findDistrictById(Long id) {
+        return districtRepository.findOne(id);
+    }
 }
