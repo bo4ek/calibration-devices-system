@@ -63,9 +63,15 @@ public class VerificationPageDTOTransformer {
                 verificationPageDTO.setCounterId(verification.getCounter().getId());
             } else if (set != null) {
                 List<CounterType> listCounterType = new ArrayList<>(set);
-                verificationPageDTO.setSymbol(listCounterType.get(0).getSymbol());
-                verificationPageDTO.setStandardSize(listCounterType.get(0).getStandardSize());
-                verificationPageDTO.setRealiseYear(listCounterType.get(0).getYearIntroduction());
+
+                //Check this pls, ask for further requirements. Here's only the view on the page new-verifications.html
+                // no updates are made to DB. This part of the code calls only when user didn't enter counter details (symbol, size and year)
+//                verificationPageDTO.setSymbol(listCounterType.get(0).getSymbol());
+//                verificationPageDTO.setStandardSize(listCounterType.get(0).getStandardSize());
+//                verificationPageDTO.setRealiseYear(listCounterType.get(0).getYearIntroduction());
+                verificationPageDTO.setSymbol("-");
+                verificationPageDTO.setStandardSize("-");
+                verificationPageDTO.setRealiseYear(0);
                 verificationPageDTO.setDismantled(verification.isCounterStatus());
             }
             resultList.add(verificationPageDTO);
