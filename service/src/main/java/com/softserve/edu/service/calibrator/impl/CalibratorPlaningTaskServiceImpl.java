@@ -561,7 +561,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             }
 
             try {
-                time.add(verification.getProcessTimeExceeding().toString());
+                time.add(verification.getInfo().getTimeFrom() + "-" + verification.getInfo().getTimeTo());
             } catch (Exception ex) {
                 time.add(" ");
                 logger.error(ex);

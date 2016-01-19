@@ -3,7 +3,6 @@ package com.softserve.edu.entity.verification.calibration;
 import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.enumeration.verification.Status;
-import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
 import lombok.EqualsAndHashCode;
@@ -69,4 +68,17 @@ public class CalibrationTask {
         this.status = Status.TEST_PLACE_DETERMINED;
     }
 
+    @Override
+    public String toString() {
+        return "CalibrationTask{" +
+                "id=" + id +
+                ", module=" + module +
+                ", status=" + status +
+                ", team=" + team +
+                ", createTaskDate=" + createTaskDate +
+                ", dateOfTask=" + dateOfTask +
+                ", user=" + user +
+                ", verifications=" + verifications +
+                '}';
+    }
 }
