@@ -5,12 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 /**
@@ -47,6 +44,7 @@ public class AdditionalInfo {
     private String notes;
 
     @OneToOne
+    @JoinColumn(name = "verification_id")
     private Verification verification;
 
     public AdditionalInfo(int entrance, int  doorCode, int floor, Date dateOfVerif, LocalTime timeFrom,
@@ -142,5 +140,22 @@ public class AdditionalInfo {
         if (serviceability != null) {
             this.serviceability = serviceability;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AdditionalInfo{" +
+                "id=" + id +
+                ", entrance=" + entrance +
+                ", doorCode=" + doorCode +
+                ", floor=" + floor +
+                ", dateOfVerif=" + dateOfVerif +
+                ", timeFrom=" + timeFrom +
+                ", timeTo=" + timeTo +
+                ", serviceability=" + serviceability +
+                ", noWaterToDate=" + noWaterToDate +
+                ", notes='" + notes + '\'' +
+                ", verification=" + verification +
+                '}';
     }
 }

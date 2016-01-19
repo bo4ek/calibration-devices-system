@@ -97,17 +97,19 @@ public class CalibratorVerificationController {
 
     @RequestMapping(value = "edit/{verificationID}", method = RequestMethod.PUT)
     public ResponseEntity editVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
-                                  @PathVariable String verificationID,
-                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                           @PathVariable String verificationID,
+                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
         Verification verification = verificationService.findById(verificationID);
+
         if (calibrator == null || verification == null) {
             throw new RuntimeException();
         }
         updateVerificationData(verification, verificationDTO, calibrator);
         try {
             verificationService.saveVerification(verification);
+            logger.info("Verification was saved with parameters: "+verification);
         } catch (Exception e) {
             logger.error("GOT EXCEPTION WHILE UPDATING VERIFICATION", e);
             httpStatus = HttpStatus.CONFLICT;
@@ -175,7 +177,7 @@ public class CalibratorVerificationController {
                 searchData.getRealiseYear(),
                 searchData.getDismantled(),
                 searchData.getBuilding(),
-                sortCriteria, sortOrder, calibratorEmployee,arrayList);
+                sortCriteria, sortOrder, calibratorEmployee, arrayList);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
@@ -349,9 +351,8 @@ public class CalibratorVerificationController {
      * @return List of DTOs containing BBI filename, verification id, outcome of parsing (true/false)
      */
     @RequestMapping(value = "new/upload-archive", method = RequestMethod.POST)
-    public
-    List<BBIOutcomeDTO> uploadFileArchive(@RequestBody MultipartFile file,
-                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+    public List<BBIOutcomeDTO> uploadFileArchive(@RequestBody MultipartFile file,
+                                                 @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
 
         List<BBIOutcomeDTO> bbiOutcomeDTOList = null;
@@ -545,6 +546,7 @@ public class CalibratorVerificationController {
 
     /**
      * method for updating counter info
+     *
      * @param counterInfo
      * @return
      */
@@ -566,6 +568,7 @@ public class CalibratorVerificationController {
 
     /**
      * method for updation additional info
+     *
      * @param infoDTO
      * @return
      */
@@ -586,6 +589,7 @@ public class CalibratorVerificationController {
 
     /**
      * method for updating client information
+     *
      * @param clientDTO
      * @return
      */
@@ -667,6 +671,7 @@ public class CalibratorVerificationController {
         info.setNotes(verificationDTO.getNotes());
         if (verificationDTO.getTimeFrom() != null) {
             info.setTimeFrom(verificationDTO.getTimeFrom());
+            info.setTimeTo(verificationDTO.getTimeTo());
         }
 
         Organization provider = providerService.findById(verificationDTO.getProviderId());

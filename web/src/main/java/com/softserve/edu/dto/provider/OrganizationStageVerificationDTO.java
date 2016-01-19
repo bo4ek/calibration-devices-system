@@ -263,4 +263,48 @@ public class OrganizationStageVerificationDTO {
 		this.verificationId = verificationId;
 	}
 
+    @Override
+    public String toString() {
+        return "OrganizationStageVerificationDTO{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", secondPhone='" + secondPhone + '\'' +
+                ", comment='" + comment + '\'' +
+                ", region='" + region + '\'' +
+                ", locality='" + locality + '\'' +
+                ", district='" + district + '\'' +
+                ", street='" + street + '\'' +
+                ", building='" + building + '\'' +
+                ", flat='" + flat + '\'' +
+                ", providerId=" + providerId +
+                ", calibratorId=" + calibratorId +
+                ", calibratorName='" + calibratorName + '\'' +
+                ", deviceName='" + deviceName + '\'' +
+                ", deviceType=" + deviceType +
+                ", deviceId=" + deviceId +
+                ", verificationId='" + verificationId + '\'' +
+                ", dismantled=" + dismantled +
+                ", dateOfDismantled=" + dateOfDismantled +
+                ", dateOfMounted=" + dateOfMounted +
+                ", numberCounter='" + numberCounter + '\'' +
+                ", sealPresence=" + sealPresence +
+                ", releaseYear='" + releaseYear + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", standardSize='" + standardSize + '\'' +
+                ", entrance='" + entrance + '\'' +
+                ", doorCode='" + doorCode + '\'' +
+                ", floor='" + floor + '\'' +
+                ", dateOfVerif=" + dateOfVerif +
+                ", timeFrom='" + timeFrom + '\'' +
+                ", timeTo='" + timeTo + '\'' +
+                ", serviceability=" + serviceability +
+                ", noWaterToDate=" + noWaterToDate +
+                ", notes='" + notes + '\'' +
+                ", initialDate=" + initialDate +
+                ", expirationDate=" + expirationDate +
+                '}';
+    }
 }
