@@ -77,7 +77,7 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "VERIFICATOR_ACC_CERT_NAME")
     public String getCalibratorCompanyAccreditationCertificateNumber() {
         try {
-            return verification.getStateVerificator().getCertificateNumber();
+            return verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumrAuthoriz();
         } catch (Exception e) {
             logger.error("Vereficator's certificate number has not been specified ", e);
             return Constants.NOT_SPECIFIED;
