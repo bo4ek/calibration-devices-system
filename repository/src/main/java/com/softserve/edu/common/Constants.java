@@ -30,7 +30,7 @@ public interface Constants {
     String DOCUMENT_NUMBER = "№ документа";
     String VALID_UNTIL = "Придатний до";
     String COUNTERS_NUMBER = "Кількість лічильників";
-    String PROVIDER = "Провайдер";
+    String PROVIDER = "Надавач послуг";
     String VERIFICATION_ID = "Номер повірки";
     String COUNTER_NUMBER = "Номер лічильника";
     String COUNTER_TYPE = "Тип лічильника";

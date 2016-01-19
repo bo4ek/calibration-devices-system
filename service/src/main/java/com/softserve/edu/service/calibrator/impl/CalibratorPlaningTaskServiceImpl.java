@@ -450,31 +450,31 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
         // region Define lists
 
-        // Дата завдання
+        // Task Date
         List<String> taskDate = new ArrayList<>();
-        // Провайдер
+        // Provider
         List<String> provider = new ArrayList<>();
-        // Район
+        // District
         List<String> district = new ArrayList<>();
-        // Адреса
+        // Address
         List<String> address = new ArrayList<>();
-        // Будинок
+        // Building
         List<String> building = new ArrayList<>();
-        // Квартира
+        // Flat
         List<String> flat = new ArrayList<>();
-        // Під'їзд
+        // Entrace
         List<String> entrance = new ArrayList<>();
-        // Поверх
+        // Floor
         List<String> floor = new ArrayList<>();
-        // К-ть лічильників
+        // Number of counters
         List<String> countersNumber = new ArrayList<>();
-        // ПІБ
+        // Full name
         List<String> fullName = new ArrayList<>();
-        // Телефон
+        // phone number
         List<String> telephone = new ArrayList<>();
-        // Бажаний час
+        // Desired time
         List<String> time = new ArrayList<>();
-        // Примітка
+        // Comment
         List<String> comment = new ArrayList<>();
 
         // endregion
@@ -603,38 +603,38 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
         // region Define lists
 
-        // Ідентифікатор заявки
+        // Verification Id
         List<String> id = new ArrayList<>();
-        // Прізвище абонента
+        // Surname
         List<String> surname = new ArrayList<>();
-        // Ім'я абонента
+        // Name
         List<String> name = new ArrayList<>();
-        // По-батькові абонента
+        // Middle name
         List<String> middle = new ArrayList<>();
-        // Місто
+        // City
         List<String> city = new ArrayList<>();
         List<String> cityId = new ArrayList<>();
-        // Район
+        // District
         List<String> district = new ArrayList<>();
         List<String> districtId = new ArrayList<>();
-        // Сектор
+        // Sector
         List<String> sector = new ArrayList<>();
-        // Вулиця
+        // Street
         List<String> street = new ArrayList<>();
         List<String> streetId = new ArrayList<>();
-        // Номер будинку
+        // Building
         List<String> building = new ArrayList<>();
-        // Номер квартири
+        // Flat
         List<String> flat = new ArrayList<>();
-        // Телефон
+        // phonenumber
         List<String> telephone = new ArrayList<>();
-        // Бажана дата та час перевірки
+        // Desired time
         List<String> datetime = new ArrayList<>();
-        // Номер лічильника
+        // Counter number
         List<String> counterNumber = new ArrayList<>();
-        // Коментар
+        // Comments
         List<String> comment = new ArrayList<>();
-        // Замовник
+        // Custumer
         List<String> customer = new ArrayList<>();
 
         // endregion
