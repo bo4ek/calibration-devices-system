@@ -7,10 +7,10 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
+import com.softserve.edu.service.admin.OrganizationService;
 import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -30,6 +30,9 @@ public abstract class BaseCertificate implements Document {
      * Calibration test that is assigned to the verification of a counter.
      */
     protected CalibrationTest calibrationTest;
+
+
+    protected OrganizationService organizationService;
 
     /**
      * Constructor
@@ -98,14 +101,15 @@ public abstract class BaseCertificate implements Document {
         }
     }
 
+    //TODO
     /**
      * @return Returns the identification number of the team, that was making verification
      */
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
+        String verificationId = verification.getId();
         try {
-            String verificationId = verification.getId();
-            String subdivisionId = verification.getTask().getTeam().getId();
+            String subdivisionId = "0000";
             return String.format("%s-%s-Д", subdivisionId, verificationId);
         } catch (Exception e) {
             logger.error("Team for this verification has not been specified ", e);
@@ -116,7 +120,6 @@ public abstract class BaseCertificate implements Document {
     /**
      * @return the device's name
      */
-
     @Placeholder(name = "DEV_NAME")
     public String getDeviceName() {
         try {

@@ -390,6 +390,7 @@ angular
 
                             $q.all($scope.secondAplicationCodes).then(function (valuesOfSecond) {
                                 if (valuesOfSecond.length > 0) {
+
                                     Array.prototype.push.apply($scope.codes, valuesOfSecond[0].data);
                                 }
                                 $scope.appProgress = false;
