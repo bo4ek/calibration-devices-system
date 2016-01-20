@@ -15,19 +15,21 @@ import com.softserve.edu.repository.catalogue.LocalityRepository;
 import com.softserve.edu.repository.catalogue.StreetRepository;
 import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
 import com.softserve.edu.service.tool.MailService;
-import com.softserve.edu.service.utils.ZipArchiver;
 import com.softserve.edu.service.utils.export.DbTableExporter;
 import com.softserve.edu.service.utils.export.TableExportColumn;
 import com.softserve.edu.service.utils.export.XlsTableExporter;
 import com.softserve.edu.specification.CalibrationTaskSpecificationBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -398,10 +400,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         String filename = calibrationTask.getModule().getModuleNumber() + "-" +
                 dateFormat.format(calibrationTask.getDateOfTask()) + "_";
 
-        File zipFile = File.createTempFile(filename, "." + Constants.ZIP_EXTENSION);
-        zipFile.setWritable(true);
-        zipFile.setReadable(true);
-        zipFile.setExecutable(true);
         File xlsFile = File.createTempFile(filename, "." + Constants.XLS_EXTENSION);
         xlsFile.setWritable(true);
         xlsFile.setReadable(true);
@@ -420,15 +418,8 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             List<TableExportColumn> dataForDb = getDataForDb(calibrationTask, verifications);
             db.exportToFile(dataForDb, dbFile);
 
-            List<File> files = new ArrayList<>();
-            files.add(xlsFile);
-            files.add(dbFile);
-
-            ZipArchiver zip = new ZipArchiver();
-            zip.createZip(files, zipFile);
-
             String email = calibrationTask.getModule().getEmail();
-            mailService.sendMailWithAttachments(email, Constants.TASK + " " + calibrationTask.getId(), " ", zipFile);
+            mailService.sendMailWithAttachments(email, Constants.TASK + " " + calibrationTask.getId(), " ", xlsFile, dbFile);
             calibrationTask.setStatus(Status.SENT_TO_TEST_DEVICE);
             for (Verification verification : verifications) {
                 verification.setStatus(Status.SENT_TO_TEST_DEVICE);
@@ -439,9 +430,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         } catch (Exception ex) {
             logger.error(ex);
             throw new RuntimeException(ex);
-        } finally {
-            xlsFile.delete();
-            dbFile.delete();
         }
     }
 
@@ -754,9 +742,12 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             }
 
             try {
-                counterNumber.add(verification.getCounter().getNumberCounter());
+                if (verification.getCounter().getNumberCounter() != null) {
+                    counterNumber.add(verification.getCounter().getNumberCounter());
+                } else {
+                    counterNumber.add("-");
+                }
             } catch (Exception ex) {
-                counterNumber.add("-");
                 logger.error(ex);
             }
 
