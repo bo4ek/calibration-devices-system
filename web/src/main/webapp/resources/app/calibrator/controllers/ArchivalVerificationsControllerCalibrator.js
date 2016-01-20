@@ -72,8 +72,8 @@ angular
                     $scope.statusData[2].label = 'Перевірено придатний';
                     $scope.statusData[3].label = 'Перевірено непридатний';
 
-                    $scope.deviceTypeData[0].label = 'Водний';
-                    $scope.deviceTypeData[1].label = 'Термальний';
+                    $scope.deviceTypeData[0].label = 'Холодна вода';
+                    $scope.deviceTypeData[1].label = 'Гаряча вода';
 //                    $scope.deviceTypeData[2].label = 'Електричний';
 //                    $scope.deviceTypeData[3].label = 'Газовий';
 
@@ -86,8 +86,8 @@ angular
                     $scope.statusData[2].label = 'Tested OK';
                     $scope.statusData[3].label = 'Tested NOK';
 
-                    $scope.deviceTypeData[0].label = 'Water';
-                    $scope.deviceTypeData[1].label = 'Thermal';
+                    $scope.deviceTypeData[0].label = 'Cold water';
+                    $scope.deviceTypeData[1].label = 'Hot water';
 //                    $scope.deviceTypeData[2].label = 'Electrical';
 //                    $scope.deviceTypeData[3].label = 'Gaseous';
 

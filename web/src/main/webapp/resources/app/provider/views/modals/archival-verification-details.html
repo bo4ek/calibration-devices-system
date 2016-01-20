@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Детальна інформація про повірку</h3>
+    <h3 class="modal-title">{{'DETAIL_INFO' | translate}}</h3>
 </div>
 
 <div class="modal-body">
@@ -8,19 +8,19 @@
 
         <thead>
         <tr>
-            <th colspan="2" class="text-center text-info">Повірочна інформація</th>
+            <th colspan="2" class="text-center text-info">{{'VERIFICATION_INFO' | translate}}</th>
         </tr>
         </thead>
 
         <tbody>
 
         <tr>
-            <th>Лічильник</th>
-            <th>{{verificationData.device}}</th>
+            <th>{{'COUNTER_' | translate}}</th>
+            <th>{{verificationData.device | translate}}{{verificationData.deviceNumber}}</th>
         </tr>
 
         <tr>
-            <th>Дата закінчення терміну дії повірки</th>
+            <th>{{'VERIFICATION_EXPIRATION_DATE' | translate}}</th>
             <th>{{verificationData.expirationDate}}</th>
         </tr>
 
@@ -60,5 +60,5 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="close()">Закрити</button>
+    <button class="btn btn-primary" ng-click="close()">{{'CLOSE' | translate}}</button>
 </div>

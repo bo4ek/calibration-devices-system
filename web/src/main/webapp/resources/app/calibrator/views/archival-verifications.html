@@ -1,7 +1,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="page-header">Архів повірок</h1>
+            <h1 class="page-header">{{'VERIFICATIONS_ARCHIVE' | translate}}</h1>
         </div>
     </div>
     <div class="row">
@@ -19,7 +19,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span> Останні дані</span>
+                    <span>{{'LAST_DATA' | translate}}</span>
                     <span class="pull-right">{{'VERIFS_FOUND' | translate }}: {{resultsCount}}</span>
                 </div>
                 <div class="panel-body">
@@ -141,7 +141,7 @@
                                         <!-- TODO: add protocol date-->
                                         <td data-title="'PROTOCOL_STATUS' | translate" sortable="'protocol_status'"
                                             filter="{ protocol_status : 'protocolStatus'}">{{
-                                            verification.protocolStatus }}
+                                            verification.protocolStatus | translate}}
                                         </td>
                                         <td data-title="'MEASUREMENT_DEVICE_ID' | translate"
                                             sortable="'measurement_device_id'"
@@ -150,8 +150,8 @@
                                         </td>
                                         <td data-title="'MEASUREMENT_DEVICE_TYPE' | translate"
                                             sortable="'measurement_device_type'"
-                                            filter="{ measurement_device_type : 'deviceType' }">{{
-                                            verification.measurementDeviceType }}
+                                            filter="{ measurement_device_type : 'deviceType' }">
+                                            {{verification.measurementDeviceType | translate}}
                                         </td>
                                         <td data-title="'DOCUMENT_TYPE' | translate" sortable="'protocol_status'"
                                             filter="{ protocol_status : 'protocolStatus'}">{{

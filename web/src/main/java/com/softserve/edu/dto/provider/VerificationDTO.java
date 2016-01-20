@@ -21,6 +21,7 @@ public class VerificationDTO extends ClientStageVerificationDTO {
     private Date initialDate;
     private Date expirationDate;
     private String device;
+    private String deviceNumber;
     private String provider;
     private String providerEmployee;
     private String calibrator;
@@ -44,7 +45,8 @@ public class VerificationDTO extends ClientStageVerificationDTO {
         this.status = status;
         this.initialDate = initialDate;
         this.expirationDate = expirationDate;
-        this.device = device == null ? "" : device.getDeviceType().name() + " : " + device.getNumber();
+        this.device = device == null ? "" : device.getDeviceType().name();
+        this.deviceNumber = device == null ? "" : " : " + device.getNumber();
         this.provider = provider == null ? "" : provider.getName();
         if (providerEmployee != null) {
             if (providerEmployee.getMiddleName() != null) {
