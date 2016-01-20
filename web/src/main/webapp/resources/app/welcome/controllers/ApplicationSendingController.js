@@ -48,7 +48,7 @@ angular
             $scope.BUILDING_REGEX = /^[1-9][0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457])?$/;
             $scope.PHONE_REGEX = /^[1-9]\d{8}$/;
             $scope.PHONE_REGEX_SECOND = /^[1-9]\d{8}$/;
-            $scope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+            $scope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
 
             /**
              * Selected values from select will be temporary saved here.
@@ -302,15 +302,14 @@ angular
             // if(value.deviceType === deviceType) {
             // return value}})
             // }
-
-
             //$scope.selectedValues.firstSelectedDevice = $scope.selectDevice($scope.selectedValues.firstSelectedDeviceType);
-            $scope.selectDevice = function() {
-                angular.forEach($scope.devices, function(value){
-                    if(value.deviceType === $scope.selectedValues.firstSelectedDeviceType){
+
+            $scope.selectDevice = function () {
+                angular.forEach($scope.devices, function (value) {
+                    if (value.deviceType === $scope.selectedValues.firstSelectedDeviceType) {
                         $scope.selectedValues.firstSelectedDevice = value;
                     }
-                    if(value.deviceType === $scope.selectedValues.secondSelectedDeviceType){
+                    if (value.deviceType === $scope.selectedValues.secondSelectedDeviceType) {
                         $scope.selectedValues.secondSelectedDevice = value;
                     }
                 });
@@ -340,7 +339,6 @@ angular
                 if (($scope.selectedValues.selectedStreetType !== undefined)) {
                     $scope.clientForm.streetType.$invalid = false;
                 }
-
             };
 
             $scope.changeFlat = function () {
@@ -369,32 +367,36 @@ angular
                     $scope.formData.street = $scope.selectedValues.selectedStreet.designation || $scope.selectedValues.selectedStreet;
                     $scope.formData.building = $scope.selectedValues.selectedBuilding.designation || $scope.selectedValues.selectedBuilding;
 
-                    for (var i = 0; i < $scope.selectedValues.firstDeviceCount; i++) {
-                        $scope.formData.deviceId = $scope.selectedValues.firstSelectedDevice.id;
-                        $scope.formData.providerId = $scope.selectedValues.firstSelectedProvider.id;
-                        $scope.formData.comment = $scope.firstDeviceComment;
-                        $scope.firstAplicationCodes.push(dataSendingService.sendApplication($scope.formData));
-                    }
-                    // todo sending second device verification bug - fixed (29.12.2015)
-                    $q.all($scope.firstAplicationCodes).then(function (values) {
-                        for (var i = 0; i < ($scope.selectedValues.firstDeviceCount); i++) {
-                            $scope.codes.push(values[i].data);
-                        }
-                        for (var j = 0; j < $scope.selectedValues.secondDeviceCount; j++) {
+                    $scope.formData.deviceId = $scope.selectedValues.firstSelectedDevice.id;
+                    $scope.formData.providerId = $scope.selectedValues.firstSelectedProvider.id;
+                    $scope.formData.comment = $scope.firstDeviceComment;
+                    $scope.formData.quantity = $scope.selectedValues.firstDeviceCount;
+
+                    $scope.firstDeviceVerificationIds = dataSendingService.sendApplication($scope.formData);
+                    $scope.firstAplicationCodes.push($scope.firstDeviceVerificationIds);
+
+                    $q.all($scope.firstAplicationCodes).then(function (valuesOfFirst) {
+
+                        $scope.codes = valuesOfFirst[0].data;
+                        $scope.formData.quantity = $scope.selectedValues.secondDeviceCount;
+
+                        if ($scope.formData.quantity > 0) {
                             $scope.formData.deviceId = $scope.selectedValues.secondSelectedDevice.id;
                             $scope.formData.providerId = $scope.selectedValues.secondSelectedProvider.id;
                             $scope.formData.comment = $scope.secondDeviceComment;
-                            $scope.secondAplicationCodes.push(dataSendingService.sendApplication($scope.formData));
+
+                            $scope.secondDeviceVerificationIds = dataSendingService.sendApplication($scope.formData);
+                            $scope.secondAplicationCodes.push($scope.secondDeviceVerificationIds);
+
+                            $q.all($scope.secondAplicationCodes).then(function (valuesOfSecond) {
+                                if (valuesOfSecond.length > 0) {
+                                    Array.prototype.push.apply($scope.codes, valuesOfSecond[0].data);
+                                }
+                                $scope.appProgress = false;
+                            });
                         }
-                        $q.all($scope.secondAplicationCodes).then(function (values) {
-                            for (var i = 0; i < $scope.selectedValues.secondDeviceCount; i++) {
-                                $scope.codes.push(values[i].data);
-                            }
-                            $scope.appProgress = false;
-                        });
                     });
-                    $log.debug(" $scope.codeslength");
-                    $log.debug($scope.codes.length);
+                    $log.debug(" $scope.codes.length =", $scope.codes.length);
                 }
             };
 
@@ -407,7 +409,7 @@ angular
                 });
             };
 
-            $scope.$on('close-form', function(event, args) {
+            $scope.$on('close-form', function (event, args) {
                 $location.path('/resources/app/welcome/views/start.html');
             });
 

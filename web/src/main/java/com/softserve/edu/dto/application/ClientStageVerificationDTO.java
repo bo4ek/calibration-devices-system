@@ -2,7 +2,11 @@ package com.softserve.edu.dto.application;
 
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.verification.ClientData;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class ClientStageVerificationDTO {
     private String firstName;
     private String lastName;
@@ -10,7 +14,6 @@ public class ClientStageVerificationDTO {
     private String email;
     private String phone;
     private String secondPhone;
-
     private String region;
     private String locality;
     private String district;
@@ -20,8 +23,8 @@ public class ClientStageVerificationDTO {
     private Long providerId;
     private Long deviceId;
     private String verificationId;
-
     private String comment;
+    private int quantity;
 
     protected ClientStageVerificationDTO() {
     }
@@ -66,134 +69,6 @@ public class ClientStageVerificationDTO {
     public ClientStageVerificationDTO(ClientData clientData, Address address, Long providerId, Long deviceId,
                                       String verificationId, String comment) {
         this(clientData, address, providerId, deviceId, verificationId);
-        this.comment = comment;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getLocality() {
-        return locality;
-    }
-
-    public void setLocality(String locality) {
-        this.locality = locality;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getBuilding() {
-        return building;
-    }
-
-    public void setBuilding(String building) {
-        this.building = building;
-    }
-
-    public String getFlat() {
-        return flat;
-    }
-
-    public void setFlat(String flat) {
-        this.flat = flat;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSecondPhone() {
-        return secondPhone;
-    }
-
-    public void setSecondPhone(String secondPhone) {
-        this.secondPhone = secondPhone;
-    }
-
-    public Long getProviderId() {
-        return providerId;
-    }
-
-    public void setProviderId(Long providerId) {
-        this.providerId = providerId;
-    }
-
-    public Long getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(Long deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public String getVerificationId() {
-        return verificationId;
-    }
-
-    public void setVerificationId(String verificationId) {
-        this.verificationId = verificationId;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
         this.comment = comment;
     }
 }

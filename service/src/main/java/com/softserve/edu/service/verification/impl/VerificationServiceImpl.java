@@ -1,5 +1,6 @@
 package com.softserve.edu.service.verification.impl;
 
+import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
@@ -30,6 +31,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -857,11 +859,12 @@ public class VerificationServiceImpl implements VerificationService {
         return counterTypeRepository.findOneBySymbolAndStandardSizeAndDeviceId(symbol, standardSize, deviceId);
     }
 
-
     @Override
     public String getNewVerificationDailyIdByDeviceType(Date date, Device.DeviceType deviceType) {
-        return String.format("%04d", verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(date,
+        String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(date)) + deviceType.getId();
+        String countPart = String.format("%04d", verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(date,
                 deviceType) + 1);
+        return datePart + countPart;
     }
 
     @Override
@@ -939,6 +942,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     /**
      * for finding symbol by standardSize and deviceType
+     *
      * @param standardSize
      * @param deviceType
      * @return
@@ -951,6 +955,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     /**
      * find all standardSizes
+     *
      * @return
      */
     @Override

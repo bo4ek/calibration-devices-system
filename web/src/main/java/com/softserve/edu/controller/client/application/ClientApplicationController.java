@@ -57,34 +57,43 @@ public class ClientApplicationController {
     @Autowired
     private MailService mail;
 
+    /**
+     * Adds new Verification
+     *
+     * @param verificationDTO DTO Object, that contains all necessary data to create new Verification
+     * @return list of Verification's ids, size of which depends on quantity of the one type devices that were selected
+     */
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String saveApplication(@RequestBody ClientStageVerificationDTO verificationDTO) {
-
+    public @ResponseBody List<String> saveApplication(@RequestBody ClientStageVerificationDTO verificationDTO) {
+        List<String> verificationIds = new ArrayList<>();
         ClientData clientData = new ClientData(verificationDTO.getFirstName(),
                 verificationDTO.getLastName(),
                 verificationDTO.getMiddleName(),
                 verificationDTO.getEmail(),
                 verificationDTO.getPhone(),
                 verificationDTO.getSecondPhone(),
-
                 new Address(verificationDTO.getRegion(),
                         verificationDTO.getDistrict(),
                         verificationDTO.getLocality(),
                         verificationDTO.getStreet(),
                         verificationDTO.getBuilding(),
-                        verificationDTO.getFlat()));
+                        verificationDTO.getFlat())
+        );
+
         Organization provider = providerService.findById(verificationDTO.getProviderId());
         Device device = deviceService.getById(verificationDTO.getDeviceId());
-        String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
-        Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
-                Status.SENT, Verification.ReadStatus.UNREAD, null, verificationDTO.getComment(), verificationId);
 
-        verificationService.saveVerification(verification);
-        String name = clientData.getFirstName() + " " + clientData.getLastName();
-        mail.sendMail(clientData.getEmail(), name, verification.getId(), verification.getProvider().getName(), verification.getDevice().getDeviceType().toString());
-        return verification.getId();
+        for (int i = 0; i < verificationDTO.getQuantity(); i++) {
+            String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
+            Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
+                    Status.SENT, Verification.ReadStatus.UNREAD, null, verificationDTO.getComment(), verificationId);
+            verificationService.saveVerification(verification);
+            String name = clientData.getFirstName() + " " + clientData.getLastName();
+            mail.sendMail(clientData.getEmail(), name, verification.getId(), verification.getProvider().getName(), verification.getDevice().getDeviceType().toString());
+            verificationIds.add(verification.getId());
+        }
+        return verificationIds;
     }
-
 
     @RequestMapping(value = "check/{verificationId}", method = RequestMethod.GET)
     public String getClientCode(@PathVariable String verificationId) {
@@ -213,11 +222,9 @@ public class ClientApplicationController {
      */
     @RequestMapping(value = "deviceTypes", method = RequestMethod.GET)
     public List<String> getDeviceTypes() {
-        List<String> list = Arrays.stream(Device.DeviceType.values())
+        return Arrays.stream(Device.DeviceType.values())
                 .map(Device.DeviceType::toString)
                 .collect(Collectors.toList());
-
-        return list;
 
 //        return Stream.of(Device.DeviceType.values())
 //                .map(Device.DeviceType::name)

@@ -17,7 +17,6 @@ angular.module('adminModule').factory('DataReceivingService',
 				findDistrictsByRegionId : function(id) {
 					return getData('districts/' + id);
 				},
-
 				findLocalitiesByDistrictId : function(id) {
 					return getData('localities/' + id);
 				},
