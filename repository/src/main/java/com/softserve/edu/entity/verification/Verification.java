@@ -85,6 +85,9 @@ public class Verification {
     private Date expirationDate;
 
     @Temporal(TemporalType.DATE)
+    private Date signProtocolDate;
+
+    @Temporal(TemporalType.DATE)
     private Date sentToCalibratorDate;
 
     private String rejectedMessage;
@@ -184,6 +187,7 @@ public class Verification {
         this.id = verificationId;
         this.initialDate = initialDate;
         this.expirationDate = null;
+        this.signProtocolDate = null;
         this.sentToCalibratorDate = initialDate;
         this.clientData = clientData;
         this.status = status;

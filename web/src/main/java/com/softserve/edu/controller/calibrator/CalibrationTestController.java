@@ -458,6 +458,7 @@ public class CalibrationTestController {
             validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
 
             verification.setExpirationDate(validityOfCertificate.getTime());
+            verification.setSignProtocolDate(new Date());
             calibrationTest.setCalibrationInterval(calibrationInterval);
             calibrationTest.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;

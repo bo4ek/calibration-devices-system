@@ -244,7 +244,7 @@ public abstract class BaseCertificate implements Document {
     public String getCalibrationTestDate() {
         try {
             return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
-                    .format(calibrationTest.getDateTest());
+                    .format(verification.getSignProtocolDate());
         } catch (Exception e) {
             logger.error("Date for calibration test has not been specified ", e);
             return Constants.NOT_SPECIFIED;
