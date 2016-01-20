@@ -10,7 +10,7 @@ import com.softserve.edu.entity.user.User;
 import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -226,12 +226,8 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "EFF_DATE")
     public String getVerificationCertificateEffectiveUntilDate() {
         try {
-            Integer calibrationInterval = calibrationTest.getCalibrationInterval();
-            Calendar validityOfCertificate = Calendar.getInstance();
-            validityOfCertificate.setTime(verification.getExpirationDate());
-            validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
             return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
-                    .format(validityOfCertificate.getTime());
+                    .format(verification.getExpirationDate());
         } catch (Exception e) {
             logger.error("Calibration interval for this counter type has not been specified ", e);
             return Constants.NOT_SPECIFIED;

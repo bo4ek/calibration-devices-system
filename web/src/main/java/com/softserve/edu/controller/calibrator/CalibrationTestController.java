@@ -39,9 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @RestController
@@ -455,6 +453,11 @@ public class CalibrationTestController {
                     getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
                     getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
 
+            Calendar validityOfCertificate = Calendar.getInstance();
+            validityOfCertificate.setTime(new Date());
+            validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
+
+            verification.setExpirationDate(validityOfCertificate.getTime());
             calibrationTest.setCalibrationInterval(calibrationInterval);
             calibrationTest.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
@@ -463,6 +466,7 @@ public class CalibrationTestController {
             file.getContent().getInputStream().read(documentByteArray);
             calibrationTest.setSignedDocument(documentByteArray);
             testRepository.save(calibrationTest);
+            verificationService.saveVerification(verification);
         } catch (Exception e) {
             logger.error("Cannot sing protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -483,7 +487,7 @@ public class CalibrationTestController {
     }
 
     private String getDeviceType(Verification verification) {
-        return verification.getDevice().getDeviceType().toString();
+        return verification.getCounter().getCounterType().getDevice().getDeviceType().name();
     }
 
     private Integer getYearIntroduction(Verification verification) {

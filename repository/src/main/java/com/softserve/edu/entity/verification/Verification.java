@@ -183,7 +183,7 @@ public class Verification {
                 + counter.getCounterType().getDevice().getDeviceType().getId() + verificationId;*/
         this.id = verificationId;
         this.initialDate = initialDate;
-        this.expirationDate = initialDate;
+        this.expirationDate = null;
         this.sentToCalibratorDate = initialDate;
         this.clientData = clientData;
         this.status = status;

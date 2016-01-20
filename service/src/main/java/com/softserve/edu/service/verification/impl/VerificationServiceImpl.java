@@ -483,7 +483,6 @@ public class VerificationServiceImpl implements VerificationService {
         }
         verification.setStatus(status);
         verification.setReadStatus(Verification.ReadStatus.READ);
-        verification.setExpirationDate(new Date());
         verificationRepository.save(verification);
     }
 
@@ -508,9 +507,6 @@ public class VerificationServiceImpl implements VerificationService {
         verification.setStatus(status);
         verification.setReadStatus(Verification.ReadStatus.UNREAD);
 
-        if (verification.getExpirationDate() == null) {
-            verification.setExpirationDate(new Date());
-        }
         verificationRepository.save(verification);
     }
 

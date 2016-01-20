@@ -51,7 +51,6 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
             mailService.sendAcceptMail(verification.getClientData().getEmail(), verificationId, verification.getDevice().getDeviceType().name());
         }
         verification.setReadStatus(Verification.ReadStatus.READ);
-        verification.setExpirationDate(new Date());
         verificationRepository.save(verification);
     }
     @Transactional
@@ -69,7 +68,6 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
         }
 
-        verification.setExpirationDate(new Date());
         verificationRepository.save(verification);
     }
 
