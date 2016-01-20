@@ -81,8 +81,6 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Verification findByIdAndStateVerificatorId(String id, Long stateVerificatorId);
 
-    Verification findOne(String id);
-
     Long countByProviderEmployeeUsernameAndStatus(String providerEmployeeUsername, Status status);
 
     Long countByCalibratorEmployeeUsernameAndStatus(String providerEmployeeUsername, Status status);
@@ -134,7 +132,6 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     @Query("SELECT COUNT(u.id) FROM Verification u WHERE u.status IN ('IN_PROGRESS', 'PLANNING_TASK', 'TEST_PLACE_DETERMINED', 'SENT_TO_TEST_DEVICE', 'TEST_COMPLETED') and u.calibratorEmployee IS NOT NULL and u.calibrator = :provider")
     int findCountOfAllCalibratorVerificationWithEmployee(@Param("provider") Organization provider);
 
-
     @Query("SELECT COUNT(u.id) FROM Verification u WHERE u.status = 'SENT_TO_VERIFICATOR' and u.stateVerificatorEmployee IS NULL and u.stateVerificator = :provider")
     int findCountOfAllVerificatorVerificationWithoutEmployee(@Param("provider") Organization provider);
 
@@ -146,7 +143,6 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE  u.status NOT IN ('ACCEPTED', 'SENT', 'SENT_TO_PROVIDER') and u.provider = :provider")
     java.sql.Date getEarliestDateOfArchivalVerificationsByProvider(@Param("provider") Organization provider);
-
 
     @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status IN ('IN_PROGRESS', 'TEST_PLACE_DETERMINED', 'SENT_TO_TEST_DEVICE', 'TEST_COMPLETED') and u.calibrator = :calibrator")
     java.sql.Date getEarliestDateOfAllNewVerificationsByCalibrator(@Param("calibrator") Organization calibrator);

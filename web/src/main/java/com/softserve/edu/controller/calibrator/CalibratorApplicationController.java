@@ -153,7 +153,8 @@ public class CalibratorApplicationController {
                     verification.getInfo(),
                     verification.isCounterStatus(),
                     verification.isSealPresence(),
-                    verification.getCounter()
+                    verification.getCounter(),
+                    verification.getDevice()
             );
         } else {
             return null;
