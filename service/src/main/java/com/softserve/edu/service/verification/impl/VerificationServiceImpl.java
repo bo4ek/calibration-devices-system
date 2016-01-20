@@ -790,9 +790,9 @@ public class VerificationServiceImpl implements VerificationService {
 
             additionalInfoRepository.save(info);
         } else {
-            info = new AdditionalInfo(entrance, doorCode, floor, dateOfVerif, serviceability, noWaterToDate,
+            AdditionalInfo newInfo = new AdditionalInfo(entrance, doorCode, floor, dateOfVerif, serviceability, noWaterToDate,
                     notes, timeFrom, timeTo);
-            verification.setInfo(info);
+            verification.setInfo(newInfo);
             verificationRepository.save(verification);
         }
     }
