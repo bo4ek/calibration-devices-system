@@ -394,6 +394,8 @@ angular
                                 }
                                 $scope.appProgress = false;
                             });
+                        } else {
+                            $scope.appProgress = false;
                         }
                     });
                     $log.debug(" $scope.codes.length =", $scope.codes.length);
