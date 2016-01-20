@@ -6,11 +6,12 @@ angular
         '$log',
         '$modal',
         'NotStandardVerificationCalibratorService',
+        'VerificationServiceCalibrator',
         'ngTableParams',
         '$filter',
         'toaster',
 
-        function ($rootScope, $scope, $log, $modal, verificationService, ngTableParams, $filter, toaster) {
+        function ($rootScope, $scope, $log, $modal, verificationService, verificationServiceCalibrator, ngTableParams, $filter, toaster) {
             $scope.totalItems = 0;
             $scope.pageContent = [];
             $scope.tableParams = new ngTableParams({
@@ -58,6 +59,28 @@ angular
                     $scope.checkedItems.splice(index, 1);
                 }
                 checkForEmpty();
+            };
+
+            $scope.openDetails = function (verifId, verifDate, verifReadStatus) {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/calibrator/views/modals/new-verification-details.html',
+                    controller: 'DetailsModalControllerCalibrator',
+                    size: 'lg',
+                    resolve: {
+                        response: function () {
+                            return verificationServiceCalibrator.getNewVerificationDetails(verifId)
+                                .success(function (verification) {
+                                    verification.id = verifId;
+                                    verification.initialDate = verifDate;
+                                    if (verifReadStatus == 'UNREAD') {
+                                        $scope.markAsRead(verifId);
+                                    }
+                                    return verification;
+                                });
+                        }
+                    }
+                });
             };
 
             $scope.openSendingModal = function () {

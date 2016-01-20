@@ -62,8 +62,8 @@ public class VerificationDTO extends ClientStageVerificationDTO {
         this.stateVerificator = stateVerificator == null ? "" : stateVerificator.getName();
         this.stateVerificatorEmployee = stateVerificatorEmployee == null ? "" : stateVerificatorEmployee.getFirstName() + " "
                 + stateVerificatorEmployee.getLastName();
-        this.providerAddress = (calibrator == null) ? null : provider.getAddress();
-        this.calibratorAddress = (stateVerificator == null) ? null : calibrator.getAddress();
+        this.providerAddress = (provider == null) ? null : provider.getAddress();
+        this.calibratorAddress = (calibrator == null) ? null : calibrator.getAddress();
     }
 
     //add new constructor for delegation rejected message

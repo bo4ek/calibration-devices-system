@@ -22,6 +22,7 @@ angular
                 status: false
             };
 
+            $scope.standardVerification = true;
             $scope.additionalInfo = {};
             $scope.toEdit = false;
             $scope.counterInfo = {};
@@ -54,14 +55,17 @@ angular
             $scope.verificationDataMain.initialDate = $scope.verificationData.initialDate;
             $scope.verificationDataMain.id = $scope.verificationData.id;
             $scope.verificationDataMain.rejectedMessage = $scope.verificationData.rejectedMessage;
-            $scope.verificationDataMain.provider = $scope.verificationData.provider;
-            $scope.verificationDataMain.providerAddress.region = $scope.verificationData.providerAddress.region;
-            $scope.verificationDataMain.providerAddress.district = $scope.verificationData.providerAddress.district;
-            $scope.verificationDataMain.providerAddress.locality = $scope.verificationData.providerAddress.locality;
-            $scope.verificationDataMain.providerAddress.street = $scope.verificationData.providerAddress.street;
-            $scope.verificationDataMain.providerAddress.building = $scope.verificationData.providerAddress.building;
-            $scope.verificationDataMain.providerAddress.flat = $scope.verificationData.providerAddress.flat;
-
+            if(!$scope.verificationData.provider) {
+                $scope.standardVerification = false;
+            } else {
+                $scope.verificationDataMain.provider = $scope.verificationData.provider;
+                $scope.verificationDataMain.providerAddress.region = $scope.verificationData.providerAddress.region;
+                $scope.verificationDataMain.providerAddress.district = $scope.verificationData.providerAddress.district;
+                $scope.verificationDataMain.providerAddress.locality = $scope.verificationData.providerAddress.locality;
+                $scope.verificationDataMain.providerAddress.street = $scope.verificationData.providerAddress.street;
+                $scope.verificationDataMain.providerAddress.building = $scope.verificationData.providerAddress.building;
+                $scope.verificationDataMain.providerAddress.flat = $scope.verificationData.providerAddress.flat;
+            }
 
             $scope.moments = [];
 

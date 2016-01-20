@@ -77,7 +77,14 @@
                                             <td data-title="'NOTE' | translate">{{ verification.rejectMessage |
                                                 translate}}
                                             </td>
-
+                                            <td data-title="'ACTIONS' | translate"
+                                                class="control_buttons">
+                                                <i class="fa fa-info-circle info_icon"
+                                                   popover="{{'DETAIL_INFO' | translate}}"
+                                                   popover-trigger="mouseenter"
+                                                   ng-click="openDetails(verification.id, verification.initialDate, verification.readStatus)">
+                                                </i>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

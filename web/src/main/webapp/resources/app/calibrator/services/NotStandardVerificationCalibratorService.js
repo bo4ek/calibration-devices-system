@@ -24,7 +24,7 @@ angular
                         }).error(function (err) {
                             return err;
                         });
-                },
+                }
             };
             function getDataWithParams(url, params) {
                 return $http.get(url, {
