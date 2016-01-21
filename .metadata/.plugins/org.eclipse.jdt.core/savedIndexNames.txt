@@ -1,1 +1,0 @@
-INDEX VERSION 1.127+C:\Users\Konyk\Desktop\Project\calibration-devices-system\.metadata\.plugins\org.eclipse.jdt.core
