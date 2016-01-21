@@ -589,7 +589,7 @@ form[name='CalibrationTestForm'] input {
 }
 
 form[name='CalibrationTestForm'] table {
-    width: 400px;
+/*    width: 400px;*/
     overflow: scroll;
 }
 
@@ -600,7 +600,7 @@ form[name='CalibrationTestForm'] .scroll-wrapper {
 }
 
 form[name='CalibrationTestForm'] .control-label {
-    width: 90px;
+   /* width: 90px;*/
 }
 
 form[name='CalibrationTestForm'] .control-image-label {
@@ -610,6 +610,17 @@ form[name='CalibrationTestForm'] .control-image-label {
 form[name='CalibrationTestForm'] .image-td {
     width: 200px;
     height: 200px;
+}
+
+form[name='CalibrationTestForm'] #titelsColumn {
+    width: 30%;
+}
+
+form[name='CalibrationTestForm'] #testColumnHead {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 1px;
+    text-align: center;
 }
 
 .rotated0 {

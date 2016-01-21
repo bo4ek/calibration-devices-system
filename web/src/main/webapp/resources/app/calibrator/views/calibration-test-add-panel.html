@@ -1,326 +1,355 @@
 <div id="page-wrapper">
-    <div>
-        <h2 class="text-center">{{'FILL_INFO_ABOUT_PROTOCOL' | translate }}</h2>
+<div>
+    <h2 class="text-center">{{'FILL_INFO_ABOUT_PROTOCOL' | translate }}</h2>
+</div>
+<form name="CalibrationTestForm" novalidate style="padding-top: 10px">
+
+<div class="first-column">
+    <div class="row">
+        <label class="control-label" style="min-height: 30px"></label>
     </div>
-    <form name="CalibrationTestForm" novalidate style="padding-top: 10px">
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'FILE_NAME' | translate }}</label>
+        </div>
+        <div class="form-group col-md-7" show-errors>
+            <input type="text" ng-model="TestForm.fileName"  ng-minlength="3" ng-disabled="fileLoaded"
+                   id="fileName" name="fileName" class="form-control " align="right" required>
+        </div>
+    </div>
 
-        <div class="first-column">
-            <div class="row">
-                <label class="control-label" style="min-height: 30px"></label>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'FILE_NAME' | translate }}</label>
-                </div>
-                <div class="form-group col-md-7" show-errors>
-                    <input type="text" ng-model="TestForm.fileName"  ng-minlength="3" ng-disabled="fileLoaded"
-                           id="fileName" name="fileName" class="form-control " align="right" required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'COUNTER_NUMBER' | translate }}</label>
+        </div>
+        <div class="form-group col-md-7" show-errors>
+            <input type="text" ng-model="TestForm.counterNumber" ng-disabled="fileLoaded"
+                   name="counterNumber" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'COUNTER_NUMBER' | translate }}</label>
-                </div>
-                <div class="form-group col-md-7" show-errors>
-                    <input type="text" ng-model="TestForm.counterNumber" ng-disabled="fileLoaded"
-                           name="counterNumber" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'YEAR_OF_COUNTER_PRODUCTION' | translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.counterProductionYear" class="form-control " ng-disabled="fileLoaded"
+                   required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'YEAR_OF_COUNTER_PRODUCTION' | translate }}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.counterProductionYear" class="form-control " ng-disabled="fileLoaded"
-                           required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'DATE_TIME' | translate }}</label>
+        </div>
+        <div class="form-group col-md-7" show-errors>
+            <input type="text" ng-model="TestForm.testDate" ng-disabled="fileLoaded"
+                   name="dateTime" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'DATE_TIME' | translate }}</label>
-                </div>
-                <div class="form-group col-md-7" show-errors>
-                    <input type="text" ng-model="TestForm.testDate" ng-disabled="fileLoaded"
-                           name="dateTime" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'ORGANIZATION_SERVICE_TYPE_ADMIN' | translate}}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
+                   name="typewater" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'ORGANIZATION_SERVICE_TYPE_ADMIN' | translate}}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
-                           name="typewater" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
+        </div>
+        <div class="form-group symbol col-md-3">
+            <input type="text" ng-model="TestForm.standardSize | translate" ng-disabled="fileLoaded"
+                   name="typewater" class="form-control " required>
+        </div>
+        <div class="form-group standartsize col-md-4">
+            <input type="text" ng-model="TestForm.symbol | translate" ng-disabled="fileLoaded"
+                   name="typewater" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
-                </div>
-                <div class="form-group symbol col-md-3">
-                    <input type="text" ng-model="TestForm.standardSize | translate" ng-disabled="fileLoaded"
-                           name="typewater" class="form-control " required>
-                </div>
-                <div class="form-group standartsize col-md-4">
-                    <input type="text" ng-model="TestForm.symbol | translate" ng-disabled="fileLoaded"
-                           name="typewater" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'ACCUMULATED_VOLUME' | translate}}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.accumulatedVolume" ng-disabled="fileLoaded"
+                   name="accumulatedVolume" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'ACCUMULATED_VOLUME' | translate}}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.accumulatedVolume" ng-disabled="fileLoaded"
-                           name="accumulatedVolume" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'SETTING_NUMBER' |
+                translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.installmentNumber" ng-disabled="fileLoaded"
+                   name="settingNumber" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'SETTING_NUMBER' |
-                        translate }}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.installmentNumber" ng-disabled="fileLoaded"
-                           name="settingNumber" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'LATITUDE' | translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.latitude" ng-disabled="fileLoaded"
+                   name="latitude" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'LATITUDE' | translate }}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.latitude" ng-disabled="fileLoaded"
-                           name="latitude" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'LONGITUDE' | translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.longitude" ng-disabled="fileLoaded"
+                   name="longitude" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'LONGITUDE' | translate }}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.longitude" ng-disabled="fileLoaded"
-                           name="longitude" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'CONSUMPTION_LOL_STATUS' |
+                translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.consumptionStatus | translate" ng-disabled="fileLoaded"
+                   name="consumptionStatus" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'CONSUMPTION_LOL_STATUS' |
-                        translate }}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.consumptionStatus | translate" ng-disabled="fileLoaded"
-                           name="consumptionStatus" class="form-control " required>
-                </div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'TEST_RESULT' |
+                translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.testResult | translate" ng-disabled="fileLoaded"
+                   name="testResult" class="form-control " required>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label class="control-label">{{'TEST_RESULT' |
-                        translate }}</label>
-                </div>
-                <div class="form-group col-md-7">
-                    <input type="text" ng-model="TestForm.testResult | translate" ng-disabled="fileLoaded"
-                           name="testResult" class="form-control " required>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-md-12" style="width: 260px; height: 260px">
-                    <img ng-show="fileLoaded" class="rotated0" ng-click="showEditMainPhotoModal('testMainPhoto')" id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}" width="100%" height="100%">
-                </div>
-
-            </div>
+    <div class="row">
+        <div class="form-group col-md-12" style="width: 260px; height: 260px">
+            <img ng-show="fileLoaded" class="rotated0" ng-click="showEditMainPhotoModal('testMainPhoto')" id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}" width="100%" height="100%">
         </div>
 
-        <div class="second-column">
-            <div class="row">
-                <label class="control-label" style="min-height: 30px"></label>
-            </div>
-            <div class="scroll-wrapper">
-                <table class="table table-bordered" style="overflow: scroll; width: 200px">
-                <thead>
-                <tr>
-                    <td>
-                        <label class="control-label">{{'TEST_NUMBER' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'GIVEN_CONSUMPTION' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'ACCEPTABLE_ERROR' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'VOLUME_OF_STANDARD'
-                            | translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'INITIAL_VALUE' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'TERMINAL_VALUE' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'VOLUME_IN_DEVICE' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'TEST_DURATION' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'ACTUAL_CONSUMPTION'
-                            | translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'CONSUMPTION_LOL_STATUS'
-                            | translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'CALCULATION_ERROR' |
-                            translate }}</label>
-                    </td>
-                    <td>
-                        <label class="control-label">{{'TEST_RESULT' | translate }}</label>
-                    </td>
-                </tr>
-                </thead>
+    </div>
 
-                <tbody>
-                    <tr ng-repeat="testData in TestDataFormData">
-                        <td>
-                            <input type="text" style="width: 100px" ng-model="testData.testNumber" ng-disabled="fileLoaded"
-                               class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.givenConsumption" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.acceptableError" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.volumeOfStandard" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.initialValue" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.endValue" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.volumeInDevice" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.testTime" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.actualConsumption" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="text" ng-model="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="number" ng-model="testData.calculationError" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                        <td>
-                            <input type="text"  style="width: 150px"  ng-model="testData.testResult | translate" ng-disabled="fileLoaded"
-                                   class="form-control " required>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-
-            <div class="scroll-wrapper" ng-show="TestDataFormData[0].dataAvailable" style="padding-top: 50px">
-                <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable">
-                            <label class="control-image-label">
-                                {{ testData.testNumber }}
-                            </label>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
-                                <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0"
-                                     ng-click="showEditMainPhotoModal( 'beginPhoto' + $index )" style="width: 200px; height: 200px;"
-                                     data-ng-src="data:image/png;base64,{{testData.beginPhoto}}" width="100%" height="100%">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
-                                <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0"
-                                     ng-click="showEditMainPhotoModal( 'endPhoto' + $index )" style="width: 200px; height: 200px;"
-                                     data-ng-src="data:image/png;base64,{{testData.endPhoto}}" width="100%" height="100%">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
+    <div class="row">
+        <div class="form-group">
+            <ui-select style="width:100%" ng-if="hasProtocol && isVerification"  ng-model="selectedStatus.label" ng-disabled="TestForm.signed" theme="select2"
+                       search-enabled="false"
+                       on-select="setStatus($item)"
+                    >
+                <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}" >
+                    {{$select.selected.label}}
+                </ui-select-match>
+                <ui-select-choices  repeat="status.label as status in statusData">
+                    <span ng-bind-html="status.label"></span>
+                </ui-select-choices>
+            </ui-select>
         </div>
-
-        <div style="padding-top: 30px">
-            <div class="form-group col-md-10">
-                <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-success btn-md" ng-disabled="TestForm.signed"
-                        ng-click="updateCalibrationTest()"
-                        >{{'EDIT_CHANGES' | translate}}
-                </button>
-                <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" ng-show="isVerification" type="submit"
-                        class="btn btn-warning btn-md"
-                        ng-click="signCalibrationTest()">
-                    {{'SIGN_PROTOCOL' | translate}}
-                </button>
-                <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"ng-show="!fileLoaded"
-                        ng-click="fileName = uploadBbiFile(testId)">
-                    <img src="resources/assets/button-icons/upload.png"
-                         ng-click="fileName = uploadBbiFile(testId)">
-                    </img> {{ 'UPLOAD_BBI_FILE' | translate }}
-                </button>
-                <ui-select ng-if="hasProtocol && isVerification"  ng-model="selectedStatus.label" ng-disabled="TestForm.signed" style="width:140px" theme="select2"
-                           search-enabled="false"
-                           on-select="setStatus($item)"
-                           >
-                    <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}" >
-                        {{$select.selected.label}}
-                    </ui-select-match>
-                    <ui-select-choices  repeat="status.label as status in statusData">
-                        <span ng-bind-html="status.label"></span>
-                    </ui-select-choices>
-                </ui-select>
-
-                <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-danger " ng-click="closeForm()"
-                        >{{'CLOSE' | translate}}
-                </button>
-
-            </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-4">
+            <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-success btn-md" ng-disabled="TestForm.signed"
+                    ng-click="updateCalibrationTest()"
+                    >{{'EDIT_CHANGES' | translate}}
+            </button>
         </div>
-    </form>
+        <div class="form-group col-sm-4">
+            <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" ng-show="isVerification" type="submit"
+                    class="btn btn-warning btn-md"
+                    ng-click="signCalibrationTest()">
+                {{'SIGN_PROTOCOL' | translate}}
+            </button>
+        </div>
+            <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"ng-show="!fileLoaded"
+                    ng-click="fileName = uploadBbiFile(testId)">
+                <img src="resources/assets/button-icons/upload.png"
+                     ng-click="fileName = uploadBbiFile(testId)">
+                </img> {{ 'UPLOAD_BBI_FILE' | translate }}
+            </button>
+        <div class="form-group col-sm-4">
+            <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-danger " ng-click="closeForm()"
+                    >{{'CLOSE' | translate}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="second-column">
+
+    <div class="scroll-wrapper">
+        <table class="table table-bordered" style="overflow: scroll">
+            <thead>
+            <tr>
+                <td id="titelsColumn">
+                    <label class="control-label"></label>
+                </td>
+                <td id="testColumnHead" ng-repeat="testData in TestDataFormData">
+                    {{testData.testNumber}}
+                </td>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>
+                    <label class="control-label">{{'GIVEN_CONSUMPTION' |
+                        translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.givenConsumption" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'ACCEPTABLE_ERROR' |
+                        translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.acceptableError" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'VOLUME_OF_STANDARD'
+                        | translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.volumeOfStandard" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'INITIAL_VALUE' |
+                        translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.initialValue" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'TERMINAL_VALUE' |
+                        translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.endValue" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'VOLUME_IN_DEVICE' |
+                        translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.volumeInDevice" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'TEST_DURATION' |
+                        translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.testTime" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'ACTUAL_CONSUMPTION'
+                        | translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.actualConsumption" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'CONSUMPTION_LOL_STATUS'
+                        | translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.consumptionStatus" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'CALCULATION_ERROR' |
+                        translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.calculationError" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="control-label">{{'TEST_RESULT' | translate }}</label>
+                </td>
+                <td ng-repeat="testData in TestDataFormData">
+                    <input type="number" ng-model="testData.testResult" ng-disabled="fileLoaded"
+                           class="form-control " required>
+                </td>
+            </tr>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="scroll-wrapper" ng-show="TestDataFormData[0].dataAvailable" style="padding-top: 50px">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable">
+                    <label class="control-image-label">
+                        {{ testData.testNumber }}
+                    </label>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
+                    <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0"
+                         ng-click="showEditMainPhotoModal( 'beginPhoto' + $index )" style="width: 200px; height: 200px;"
+                         data-ng-src="data:image/png;base64,{{testData.beginPhoto}}" width="100%" height="100%">
+                </td>
+            </tr>
+            <tr>
+                <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
+                    <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0"
+                         ng-click="showEditMainPhotoModal( 'endPhoto' + $index )" style="width: 200px; height: 200px;"
+                         data-ng-src="data:image/png;base64,{{testData.endPhoto}}" width="100%" height="100%">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="padding-top: 30px; width:30%">
+    <div class="form-group">
+
+    </div>
+</div>
+</form>
 </div>
