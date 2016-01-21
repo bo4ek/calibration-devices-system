@@ -287,7 +287,7 @@
                         | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.consumptionStatus" ng-disabled="fileLoaded"
+                    <input type="text" ng-model="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -306,7 +306,7 @@
                     <label class="control-label">{{'TEST_RESULT' | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.testResult" ng-disabled="fileLoaded"
+                    <input type="text" ng-model="testData.testResult | translate" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
