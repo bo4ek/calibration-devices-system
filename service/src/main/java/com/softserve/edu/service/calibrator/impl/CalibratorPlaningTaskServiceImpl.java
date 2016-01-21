@@ -437,32 +437,18 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<TableExportColumn> data = new ArrayList<TableExportColumn>();
 
         // region Define lists
-
-        // Task Date
         List<String> taskDate = new ArrayList<>();
-        // Provider
         List<String> provider = new ArrayList<>();
-        // District
         List<String> district = new ArrayList<>();
-        // Address
         List<String> address = new ArrayList<>();
-        // Building
         List<String> building = new ArrayList<>();
-        // Flat
         List<String> flat = new ArrayList<>();
-        // Entrace
         List<String> entrance = new ArrayList<>();
-        // Floor
         List<String> floor = new ArrayList<>();
-        // Number of counters
         List<String> countersNumber = new ArrayList<>();
-        // Full name
         List<String> fullName = new ArrayList<>();
-        // phone number
         List<String> telephone = new ArrayList<>();
-        // Desired time
         List<String> time = new ArrayList<>();
-        // Comment
         List<String> comment = new ArrayList<>();
 
         // endregion
@@ -471,96 +457,54 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
         for (Verification verification : verifications) {
             SimpleDateFormat simpleTaskDate = new SimpleDateFormat("dd.MM.yyyy");
+            String empty = " ";
+
             try {
                 taskDate.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
-            } catch (Exception ex) {
-                taskDate.add(" ");
-                logger.error(ex);
+            } catch (IllegalArgumentException e) {
+                taskDate.add(empty);
+                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId());
             }
 
-            try {
-                provider.add(verification.getProvider().getName());
-            } catch (Exception ex) {
-                provider.add(" ");
-                logger.error(ex);
+            provider.add(verification.getProvider() !=null && verification.getProvider().getName() != null ? verification.getProvider().getName() : empty);
+
+            if (verification.getClientData() != null){
+                fullName.add(verification.getClientData().getFullName() != null ? verification.getClientData().getFullName() : empty);
+                telephone.add(verification.getClientData().getPhone() != null ? verification.getClientData().getPhone() : empty);
+
+                if (verification.getClientData().getClientAddress() != null){
+                    district.add(verification.getClientData().getClientAddress().getDistrict() != null ? verification.getClientData().getClientAddress().getDistrict() : empty);
+                    address.add(verification.getClientData().getClientAddress().getAddress() != null ? verification.getClientData().getClientAddress().getAddress() : empty);
+                    building.add(verification.getClientData().getClientAddress().getBuilding() != null ? verification.getClientData().getClientAddress().getBuilding() : empty);
+                    flat.add(verification.getClientData().getClientAddress().getFlat() != null ? verification.getClientData().getClientAddress().getFlat() : empty);
+                } else {
+                    district.add(empty);
+                    address.add(empty);
+                    building.add(empty);
+                    flat.add(empty);
+                }
+
+            } else {
+                fullName.add(empty);
+                telephone.add(empty);
+                district.add(empty);
+                address.add(empty);
+                building.add(empty);
+                flat.add(empty);
             }
 
-            try {
-                district.add(verification.getClientData().getClientAddress().getDistrict());
-            } catch (Exception ex) {
-                district.add(" ");
-                logger.error(ex);
+            if (verification.getInfo() != null) {
+                entrance.add(verification.getInfo().getEntrance() != 0 ? String.valueOf(verification.getInfo().getEntrance()) : empty);
+                floor.add(verification.getInfo().getFloor() != 0 ? String.valueOf(verification.getInfo().getFloor()) : empty);
+                time.add(verification.getInfo().getTimeFrom() != null && verification.getInfo().getTimeTo() != null ? verification.getInfo().getTimeFrom() + "-" + verification.getInfo().getTimeTo() : empty);
+            } else {
+                entrance.add(empty);
+                floor.add(empty);
+                time.add(empty);
             }
 
-            try {
-                address.add(verification.getClientData().getClientAddress().getAddress());
-            } catch (Exception ex) {
-                address.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                building.add(verification.getClientData().getClientAddress().getBuilding());
-            } catch (Exception ex) {
-                building.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                flat.add(verification.getClientData().getClientAddress().getFlat().toString());
-            } catch (Exception ex) {
-                flat.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                entrance.add(String.valueOf(verification.getInfo().getEntrance()));
-            } catch (Exception ex) {
-                entrance.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                floor.add(String.valueOf(verification.getInfo().getFloor()));
-            } catch (Exception ex) {
-                floor.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                countersNumber.add(String.valueOf(1));
-            } catch (Exception ex) {
-                countersNumber.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                fullName.add(verification.getClientData().getFullName());
-            } catch (Exception ex) {
-                fullName.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                telephone.add(verification.getClientData().getPhone());
-            } catch (Exception ex) {
-                telephone.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                time.add(verification.getInfo().getTimeFrom() + "-" + verification.getInfo().getTimeTo());
-            } catch (Exception ex) {
-                time.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                comment.add(verification.getComment().toString());
-            } catch (Exception ex) {
-                comment.add(" ");
-                logger.error(ex);
-            }
+            countersNumber.add(String.valueOf(1));
+            comment.add(verification.getComment() != null ? verification.getComment().toString() : empty);
         }
 
         // endregion
@@ -590,220 +534,89 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<TableExportColumn> data = new ArrayList<>();
 
         // region Define lists
-
-        // Verification Id
         List<String> id = new ArrayList<>();
-        // Surname
         List<String> surname = new ArrayList<>();
-        // Name
         List<String> name = new ArrayList<>();
-        // Middle name
-        List<String> middle = new ArrayList<>();
-        // City
+        List<String> middlename = new ArrayList<>();
         List<String> city = new ArrayList<>();
-        List<String> cityId = new ArrayList<>();
-        // District
         List<String> district = new ArrayList<>();
-        List<String> districtId = new ArrayList<>();
-        // Sector
         List<String> sector = new ArrayList<>();
-        // Street
         List<String> street = new ArrayList<>();
-        List<String> streetId = new ArrayList<>();
-        // Building
         List<String> building = new ArrayList<>();
-        // Flat
         List<String> flat = new ArrayList<>();
-        // phonenumber
         List<String> telephone = new ArrayList<>();
-        // Desired time
         List<String> datetime = new ArrayList<>();
-        // Counter number
         List<String> counterNumber = new ArrayList<>();
-        // Comments
-        List<String> comment = new ArrayList<>();
-        // Custumer
+        List<String> comments = new ArrayList<>();
         List<String> customer = new ArrayList<>();
-
         // endregion
 
         // region Fill lists
 
         for (Verification verification : verifications) {
-            try {
-                id.add(verification.getId());
-            } catch (Exception ex) {
-                id.add(" ");
-                logger.error(ex);
-            }
+            String empty = " ";
 
-            try {
-                surname.add(verification.getClientData().getLastName());
-            } catch (Exception ex) {
-                surname.add(" ");
-                logger.error(ex);
-            }
+            id.add(verification.getId() != null ? verification.getId() : empty);
 
-            try {
-                name.add(verification.getClientData().getFirstName());
-            } catch (Exception ex) {
-                name.add(" ");
-                logger.error(ex);
-            }
+            if (verification.getClientData() != null){
+                surname.add(verification.getClientData().getLastName() != null ? verification.getClientData().getLastName() : empty);
+                name.add(verification.getClientData().getFirstName() != null ? verification.getClientData().getFirstName() : empty);
+                middlename.add(verification.getClientData().getMiddleName() != null ? verification.getClientData().getMiddleName() : empty);
+                telephone.add(verification.getClientData().getPhone() != null ? verification.getClientData().getPhone() : empty);
 
-            try {
-                middle.add(verification.getClientData().getMiddleName());
-            } catch (Exception ex) {
-                middle.add(" ");
-                logger.error(ex);
-            }
+                if (verification.getClientData().getClientAddress() != null) {
+                    city.add(verification.getClientData().getClientAddress().getLocality() != null ? verification.getClientData().getClientAddress().getLocality() : empty);
+                    district.add(verification.getClientData().getClientAddress().getDistrict() != null ? verification.getClientData().getClientAddress().getDistrict() : empty);
+                    sector.add(verification.getClientData().getClientAddress().getRegion() !=null ? verification.getClientData().getClientAddress().getRegion() : empty);
+                    street.add(verification.getClientData().getClientAddress().getStreet() != null ? verification.getClientData().getClientAddress().getStreet() : empty);
+                    building.add(verification.getClientData().getClientAddress().getBuilding() != null ? verification.getClientData().getClientAddress().getBuilding() : empty);
+                    flat.add(verification.getClientData().getClientAddress().getFlat() != null ? verification.getClientData().getClientAddress().getFlat() : empty);
+                } else {
+                    city.add(empty);
+                    district.add(empty);
+                    sector.add(empty);
+                    street.add(empty);
+                    building.add(empty);
+                    flat.add(empty);
+                }
 
-            try {
-                city.add(verification.getClientData().getClientAddress().getLocality());
-            } catch (Exception ex) {
-                city.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                String localityTemp = verification.getClientData().getClientAddress().getLocality();
-                cityId.add(localityRepository.findIdByDesignation(localityTemp).toString());
-            } catch (Exception ex) {
-                city.add(" ");
-                logger.error(ex);
-            }
-
-
-            try {
-                district.add(verification.getClientData().getClientAddress().getDistrict());
-            } catch (Exception ex) {
-                district.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                String districtTemp = verification.getClientData().getClientAddress().getDistrict();
-                districtId.add(districtRepository.findIdByDesignation(districtTemp).toString());
-            } catch (Exception ex) {
-                districtId.add(" ");
-                logger.error(ex);
-            }
-
-            // TODO: Now there is details about "Bush".
-            sector.add(" ");
-            /*try {
-                sector.add(verification.getClientData().getClientAddress().getRegion());
-            } catch (Exception ex) {
-                sector.add(" ");
-                logger.error(ex);
-            }*/
-
-            try {
-                street.add(verification.getClientData().getClientAddress().getStreet());
-            } catch (Exception ex) {
-                street.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                streetId.add(verification.getClientData().getClientAddress().getStreet());
-            } catch (Exception ex) {
-                streetId.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                building.add(verification.getClientData().getClientAddress().getBuilding());
-            } catch (Exception ex) {
-                building.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                flat.add(verification.getClientData().getClientAddress().getFlat());
-            } catch (Exception ex) {
-                flat.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                telephone.add(verification.getClientData().getPhone());
-            } catch (Exception ex) {
-                telephone.add(" ");
-                logger.error(ex);
+            } else {
+                surname.add(empty);
+                name.add(empty);
+                middlename.add(empty);
             }
 
             try {
                 SimpleDateFormat simpleTaskDate = new SimpleDateFormat("dd.MM.yyyy");
                 datetime.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
-            } catch (Exception ex) {
-                datetime.add(" ");
-                logger.error(ex);
+            } catch (IllegalArgumentException e) {
+                datetime.add(empty);
+                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId());
             }
 
-            try {
-                if (verification.getCounter().getNumberCounter() != null) {
-                    counterNumber.add(verification.getCounter().getNumberCounter());
-                } else {
-                    counterNumber.add("-");
-                }
-            } catch (Exception ex) {
-                logger.error(ex);
-            }
-
-            try {
-                comment.add(verification.getComment().toString());
-            } catch (Exception ex) {
-                comment.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                customer.add(verification.getCalibratorEmployee().getUsername());
-            } catch (Exception ex) {
-                customer.add(" ");
-                logger.error(ex);
-            }
+            counterNumber.add(verification.getCounter() != null && verification.getCounter().getNumberCounter() != null ? verification.getCounter().getNumberCounter() : "-" );
+            comments.add(verification.getComment() != null ? verification.getComment() : empty);
+            customer.add(verification.getCalibratorEmployee() != null && verification.getCalibratorEmployee().getUsername() != null ? verification.getCalibratorEmployee().getUsername() : empty);
         }
 
         // endregion
 
         // region Fill List<TableExportColumn>
-
-        // ID_Заявки
         data.add(new TableExportColumn("id_pc", "INTEGER", id));
-        // Прізвище_абонента
         data.add(new TableExportColumn("surname", "TEXT", surname));
-        // Ім'я_абонента
         data.add(new TableExportColumn("name", "TEXT", name));
-        // По-батькові_абонента
-        data.add(new TableExportColumn("middlename", "TEXT", middle));
-        // Місто
+        data.add(new TableExportColumn("middlename", "TEXT", middlename));
         data.add(new TableExportColumn("city", "TEXT", city));
-        //data.add(new TableExportColumn("id_city", "TEXT", cityId));
-        // Район
         data.add(new TableExportColumn("district", "TEXT", district));
-        //data.add(new TableExportColumn("id_district", "TEXT", districtId));
-        // Сектор
         data.add(new TableExportColumn("bush", "TEXT", sector));
-        // Вулиця
         data.add(new TableExportColumn("street", "TEXT", street));
-        //data.add(new TableExportColumn("id_street", "TEXT", streetId));
-        // Будинок
         data.add(new TableExportColumn("Building", "TEXT", building));
-        // Квартира
         data.add(new TableExportColumn("Apartment", "TEXT", flat));
-        // Телефон
         data.add(new TableExportColumn("Tel", "TEXT", telephone));
-        // Дата/час_повірки
         data.add(new TableExportColumn("Date_visit", "TEXT", datetime));
-        // Номер_лічильника
         data.add(new TableExportColumn("Counter_number", "TEXT", counterNumber));
-        // Коментар
-        data.add(new TableExportColumn("Note", "TEXT", comment));
-        // Замовник
+        data.add(new TableExportColumn("Note", "TEXT", comments));
         data.add(new TableExportColumn("Customer", "TEXT", customer));
-
         // endregion
 
         return data;
