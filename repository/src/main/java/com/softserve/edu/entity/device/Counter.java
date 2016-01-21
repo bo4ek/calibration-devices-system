@@ -1,6 +1,5 @@
 package com.softserve.edu.entity.device;
 
-
 import com.softserve.edu.entity.verification.Verification;
 import lombok.*;
 

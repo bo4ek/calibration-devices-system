@@ -296,14 +296,6 @@ angular
                 }
             );
 
-
-            //scope.selectDevice = function(deviceType) {
-            // angular.forEach($scope.devices, function(value) {
-            // if(value.deviceType === deviceType) {
-            // return value}})
-            // }
-            //$scope.selectedValues.firstSelectedDevice = $scope.selectDevice($scope.selectedValues.firstSelectedDeviceType);
-
             $scope.selectDevice = function () {
                 angular.forEach($scope.devices, function (value) {
                     if (value.deviceType === $scope.selectedValues.firstSelectedDeviceType) {

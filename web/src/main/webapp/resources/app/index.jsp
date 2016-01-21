@@ -10,7 +10,7 @@
     <title>Виконавець послуг</title>
     <link href="resources/assets/bower_components/ng-table/ng-table.css" rel="stylesheet">
     <link href="resources/assets/bower_components/angular-loading-bar/build/loading-bar.css" rel="stylesheet">
-    <link href="resources/assets/bower_components/bootstrap/dist/css/style.css" rel="stylesheet">
+    <%--<link href="resources/assets/bower_components/bootstrap/dist/css/style.css" rel="stylesheet">--%>
     <link href="resources/assets/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="resources/assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
