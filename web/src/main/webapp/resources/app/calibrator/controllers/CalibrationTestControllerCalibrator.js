@@ -1,8 +1,8 @@
 angular
     .module('employeeModule')
     .controller('CalibrationTestControllerCalibrator', ['$rootScope', '$scope', '$modal', '$http', '$log',
-        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout','ngTableParams', '$translate','VerificationServiceCalibrator', '$sce', '$filter',
-        function ($rootScope, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload, $timeout, ngTableParams, $translate, verificationServiceCalibrator, $sce, $filter) {
+        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout','ngTableParams', '$translate','VerificationServiceCalibrator', '$sce', '$filter', 'toaster',
+        function ($rootScope, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload, $timeout, ngTableParams, $translate, verificationServiceCalibrator, $sce, $filter, toaster) {
 
             $scope.resultsCount = 0;
 
@@ -86,9 +86,6 @@ angular
              *  creat and update manual test
              */
             $scope.createAndUpdateTest = function () {
-                if ($scope.selectedData.numberProtocolManual <= 0 || String($scope.selectedData.numberProtocolManual).match(/\d/g).length > 3) {
-                    $scope.selectedData.numberProtocolManual = null;
-                }
                 $scope.$broadcast('show-errors-check-validity');
                 if($scope.clientForm.$valid) {
                     retranslater();
@@ -99,18 +96,7 @@ angular
                                     $rootScope.onTableHandling();
                                 }
                                 if (status == 200) {
-                                    $modal.open({
-                                        animation: true,
-                                        templateUrl: 'resources/app/calibrator/views/modals/calibration-test-adding-success.html',
-                                        controller: function ($modalInstance) {
-                                            this.ok = function () {
-                                                $modalInstance.close();
-                                                window.history.back();
-                                            };
-                                        },
-                                        controllerAs: 'successController',
-                                        size: 'md'
-                                    });
+                                    toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_ADDED_TEST'));
                                 }
                             })
                     } else {
@@ -120,19 +106,7 @@ angular
                                     $rootScope.onTableHandling();
                                 }
                                 if (status == 200) {
-                                    $modal.open({
-                                        animation: true,
-                                        templateUrl: 'resources/app/calibrator/views/modals/calibration-test-edited-success.html',
-                                        controller: function ($modalInstance) {
-                                            //closeTime($modalInstance);
-                                            this.ok = function () {
-                                                $modalInstance.close();
-                                                window.history.back();
-                                            };
-                                        },
-                                        controllerAs: 'successController',
-                                        size: 'md'
-                                    });
+                                    toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_EDITED'));
                                 }
                             })
                     }
@@ -590,40 +564,6 @@ angular
                 }
                 return
             };
-
-
-
-
-            $scope.checkAll = function (caseForValidation) {
-                switch (caseForValidation) {
-                    case ('numberProtocolManual'):
-                        var numberProtocolManual = $scope.selectedData.numberProtocolManual;
-                        if (numberProtocolManual == null) {
-                        } else if (/^\d{1,3}$/.test(numberProtocolManual)) {
-                            validator('numberProtocolManual', false);
-                        } else {
-                            validator('numberProtocolManual', true);
-                        }
-                        break;
-                }
-            };
-
-            function validator(caseForValidation, isValid) {
-                switch (caseForValidation) {
-                    case ('numberProtocolManual'):
-                        $scope.numberValidation = {
-                            isValid: isValid,
-                            css: isValid ? 'has-error' : 'has-success'
-                        };
-                        break;
-                    case ('time'):
-                        $scope.timeValidation = {
-                            isValid: isValid,
-                            css: isValid ? 'has-error' : 'has-success'
-                        };
-                        break;
-                }
-            }
 
             $scope.closeTestManual = function () {
                 if (!$scope.selectedData.numberProtocol && $scope.pathToScanDoc) {

@@ -28,8 +28,8 @@ public class CalibrationTestManual {
     private Long id;
 
     private String pathToScan;
-    private Integer numberOfTest;
-    private Long generateNumberTest;
+    private String numberOfTest;
+    private String generateNumberTest;
 
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -42,7 +42,7 @@ public class CalibrationTestManual {
     @OneToMany(mappedBy = "calibrationTestManual", cascade = CascadeType.ALL)
     private List<CalibrationTestDataManual> calibrationTestDataManual;
 
-    public CalibrationTestManual(String pathToScan, Integer numberOfTest, Long generateNumberTest, Date dateTest, CalibrationModule calibrationModule) {
+    public CalibrationTestManual(String pathToScan, String numberOfTest, String generateNumberTest, Date dateTest, CalibrationModule calibrationModule) {
         this.pathToScan = pathToScan;
         this.numberOfTest = numberOfTest;
         this.generateNumberTest = generateNumberTest;
