@@ -6,7 +6,6 @@
         </div>
     </div>
 
-
     <div class="row">
 
         <div class="row">
@@ -27,55 +26,60 @@
                                 <div class="table-responsive">
                                     <table show-filter="false" ng-table="tableParams" template-pagination="custom/pager"
                                            class="table table-bordered table-hover users_table">
-
                                         <tbody>
                                         <tr ng-repeat="verification in $data">
-                                            <td data-title="''"><input type="checkbox"
-                                                                       ng-click="resolveVerificationId(verification.id)"/>
+                                            <td data-title="''">
+                                                <input type="checkbox"
+                                                       ng-click="resolveVerificationId(verification.id)"/>
                                             </td>
-                                            <td data-title="'INITIAL_DATE' | translate" class="datecolumn"
-                                            >{{ verification.initialDate | date :
-                                                'dd-MM-yyyy'}}
-                                                <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED'
-                                                    |
-                                                    translate}} {{verification.processTimeExceeding}} {{'DAYS' |
-                                                    translate}}</b>
+                                            <td data-title="'INITIAL_DATE' | translate" class="datecolumn">
+                                                {{ verification.initialDate | date :'dd-MM-yyyy'}}
+                                                <div ng-show="verification.processTimeExceeding>0">
+                                                    <b>
+                                                        {{'TIME_EXCEEDED' | translate}}
+                                                        {{verification.processTimeExceeding}}
+                                                        {{'DAYS' | translate}}
+                                                    </b>
                                                 </div>
                                             </td>
 
-                                            <td data-title="'CLIENT_FULL_NAME' | translate">{{ verification.fullName }}
+                                            <td data-title="'CLIENT_FULL_NAME' | translate">
+                                                {{ verification.fullName }}
                                             </td>
-                                            <td data-title="'DISTRICT' | translate">{{ verification.district}}
+                                            <td data-title="'DISTRICT' | translate">
+                                                {{ verification.district}}
                                             </td>
-                                            <td data-title="'LOCALITY' | translate">{{ verification.locality}}
+                                            <td data-title="'LOCALITY' | translate">
+                                                {{ verification.locality}}
+                                            </td>
+                                            <td data-title="'CLIENT_STREET' | translate">
+                                                {{ verification.street }}
+                                            </td>
+                                            <td data-title="'BUILDING,FLAT' | translate">
+                                                {{ verification.building }},
+                                                {{ verification.flat }}
+                                            </td>
+                                            <td data-title="'SYMBOL' | translate">
+                                                {{ verification.symbol }}
+                                            </td>
+                                            <td data-title="'STANDART_SIZE_OF_COUNTER' | translate">
+                                                {{ verification.standardSize }}
+                                            </td>
+                                            <td data-title="'YEAR_OF_COUNTER_PRODUCTION' | translate">
+                                                {{ verification.realiseYear }}
+                                            </td>
+                                            <td data-title="'STAMP' | translate">
+                                                {{ verification.stamp }}
+                                            </td>
+                                            <td data-title="'PROTOCOL' | translate">
+                                                {{ verification.fileName }}
+                                            </td>
+                                            <td data-title="'TEST_RESULT' | translate">
+                                                {{ verification.testResult | translate}}
                                             </td>
 
-                                            <td data-title="'CLIENT_STREET' | translate">{{ verification.street }}
-                                            </td>
-                                            <td data-title="'BUILDING,FLAT' | translate">{{ verification.building }}, {{
-                                                verification.flat }}
-                                            </td>
-
-                                            <td data-title="'SYMBOL' | translate">{{ verification.symbol }}
-                                            </td>
-                                            <td data-title="'STANDART_SIZE_OF_COUNTER' | translate">{{
-                                                verification.standardSize }}
-                                            </td>
-                                            <td data-title="'YEAR_OF_COUNTER_PRODUCTION' | translate">{{
-                                                verification.realiseYear }}
-                                            </td>
-
-                                            <td data-title="'STAMP' | translate">{{ verification.stamp }}
-                                            </td>
-
-                                            <td data-title="'PROTOCOL' | translate">{{ verification.fileName }}
-                                            </td>
-
-                                            <td data-title="'TEST_RESULT' | translate">{{ verification.testResult |
-                                                translate}}
-                                            </td>
-                                            <td data-title="'NOTE' | translate">{{ verification.rejectMessage |
-                                                translate}}
+                                            <td data-title="'NOTE' | translate">
+                                                {{ verification.rejectMessage | translate}}
                                             </td>
                                             <td data-title="'ACTIONS' | translate"
                                                 class="control_buttons">
@@ -131,17 +135,15 @@
                                                id="datepickerfield" readonly/>
 
                                         <span class="input-group-btn">
-                                                  <button type="button" class="btn btn-default myGroupBtn"
-                                                          ng-show="!isDateDefault()"
-                                                          ng-click="clearDate()">
-                                                      <i class="glyphicon glyphicon-remove"></i>
-                                                  </button>
+                                            <button type="button" class="btn btn-default myGroupBtn"
+                                                    ng-show="!isDateDefault()" ng-click="clearDate()">
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </button>
                                         </span>
                                     </div>
                                 </script>
 
-                                <p id="emptyError" ng-if="allIsEmpty && isClicked"
-                                   class="help-block">
+                                <p id="emptyError" ng-if="allIsEmpty && isClicked" class="help-block">
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                                     {{'SELECT_ONE_VERIFICATION' | translate}}
                                 </p>
@@ -151,8 +153,8 @@
                                             ng-click="openSendingModal()"><span class="glyphicon glyphicon-send"></span>
                                         {{'SEND' | translate}}
                                     </button>
-
                                 </div>
+
                             </div>
                         </div>
                     </div>

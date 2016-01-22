@@ -196,11 +196,6 @@
                             </ui-select-choices>
                         </ui-select>
 
-                        <!--<p class="help-block" ng-hide="selectedValues.selectedRegion">
-                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'TYPEAHEAD_ERROR' | translate}}
-                        </p>-->
-
                         <p class="help-block" ng-if="clientForm.region.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
@@ -276,11 +271,6 @@
                         </i>
                         </a>
 
-                       <!-- <p class="help-block" ng-hide="selectedValues.selectedLocality">
-                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'TYPEAHEAD_ERROR' | translate}}
-                        </p>-->
-
                         <p class="help-block" ng-if="clientForm.district.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
@@ -351,12 +341,6 @@
 
                             <span class="form-control-feedback street_ok_padding glyphicon form-horizontal glyphicon glyphicon-ok-sign"></span>
 
-
-                            <!--<p class="help-block">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                <span ng-show="clientForm.street.$error.pattern"></span>
-                                {{'DOUBLE_NAME_ERROR'| translate}}
-                            </p>-->
                         </div>
 
                         <p class="help-block" ng-if="clientForm.streetType.$error.required">
@@ -386,7 +370,6 @@
                                        ng-change="changeFlat(clientForm)">
                                 {{'PRIVATE_HOUSE' | translate}}</span>
                         </div>
-
 
                         <p class="help-block" ng-if="clientForm.building.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -626,10 +609,7 @@
                  ng-show="!appProgress"
                  class="row col-md-10 alert alert-success alert-dismissible centered" role="alert"
                  style="text-align: center">
-                <!-- <button ng-click="closeAlert()" type="button"
-                         class="close btn-close-alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                 </button>-->
+
                 <br>
                 <div class="text-center" ng-show="!appProgress">
                     {{'APP_SENT' | translate}}

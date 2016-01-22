@@ -321,9 +321,9 @@ angular
                 /**
                  * Check second device selection group
                  */
-                //if (($scope.selectedValues.secondDeviceCount !== undefined)) {
-                //    $scope.clientForm.secondDeviceCount.$invalid = false;
-                //}
+                if (($scope.selectedValues.secondDeviceCount !== undefined)) {
+                    $scope.clientForm.secondDeviceCount.$invalid = false;
+                }
 
                 /**
                  * Check street selection group
@@ -364,25 +364,21 @@ angular
                     $scope.formData.comment = $scope.firstDeviceComment;
                     $scope.formData.quantity = $scope.selectedValues.firstDeviceCount;
 
-                    $scope.firstDeviceVerificationIds = dataSendingService.sendApplication($scope.formData);
-                    $scope.firstAplicationCodes.push($scope.firstDeviceVerificationIds);
+                    $scope.firstAplicationCodes.push(dataSendingService.sendApplication($scope.formData));
 
                     $q.all($scope.firstAplicationCodes).then(function (valuesOfFirst) {
 
                         $scope.codes = valuesOfFirst[0].data;
-                        $scope.formData.quantity = $scope.selectedValues.secondDeviceCount;
 
-                        if ($scope.formData.quantity > 0) {
+                        if ($scope.selectedValues.secondDeviceCount > 0) {
+                            $scope.formData.quantity = $scope.selectedValues.secondDeviceCount;
                             $scope.formData.deviceId = $scope.selectedValues.secondSelectedDevice.id;
                             $scope.formData.providerId = $scope.selectedValues.secondSelectedProvider.id;
                             $scope.formData.comment = $scope.secondDeviceComment;
-
-                            $scope.secondDeviceVerificationIds = dataSendingService.sendApplication($scope.formData);
-                            $scope.secondAplicationCodes.push($scope.secondDeviceVerificationIds);
+                            $scope.secondAplicationCodes.push(dataSendingService.sendApplication($scope.formData));
 
                             $q.all($scope.secondAplicationCodes).then(function (valuesOfSecond) {
                                 if (valuesOfSecond.length > 0) {
-
                                     Array.prototype.push.apply($scope.codes, valuesOfSecond[0].data);
                                 }
                                 $scope.appProgress = false;

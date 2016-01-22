@@ -62,7 +62,7 @@ public class StateVerificatorController {
     @Autowired
     StateVerificatorEmployeeService employeeService;
 
-    private final Logger logger = Logger.getLogger(StateVerificatorController.class);
+    private Logger logger = Logger.getLogger(StateVerificatorController.class);
 
     /**
      * Responds a page according to input data and search value

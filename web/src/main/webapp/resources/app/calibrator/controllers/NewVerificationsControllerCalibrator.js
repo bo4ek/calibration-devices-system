@@ -96,11 +96,11 @@ angular
 
             $scope.doSearch = function () {
                 $scope.tableParams.reload();
-            }
+            };
 
             $scope.selectedStatus = {
                 name: null
-            }
+            };
 
             $scope.statusData = [
                 {id: 'IN_PROGRESS', label: null},
@@ -208,11 +208,9 @@ angular
                 if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
                     return true;
                 }
-                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
-                    && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
-                    return true;
-                }
-                return false;
+                return !!(pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day'));
+
             };
 
 
@@ -361,11 +359,7 @@ angular
                 map.forEach(function (value, key) {
                     setOfStandardSize.add(value.standardSize);
                 }, map);
-                if(setOfStandardSize.size > 1) {
-                    return false
-                }else{
-                    return true;
-                }
+                return setOfStandardSize.size <= 1;
             };
 
             /**
@@ -640,7 +634,7 @@ angular
                             );
                         }
                     }
-                })
+                });
                 /**
                  * executes when modal closing
                  */

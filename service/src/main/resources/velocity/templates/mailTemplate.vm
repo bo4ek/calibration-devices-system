@@ -1,7 +1,7 @@
 <html>
 	<body>
-			Користувач $name надіслав заявку на повірку  $deviceType до $providerName $date.
-            <br>Код Вашої заявки: $applicationId, статус якої ви моежете перевірити за посиланням:
+			Користувач $name надіслав заявку на повірку $deviceType до $providerName $date.
+            <br>Код Вашої заявки: $applicationId, статус якої ви можете перевірити за посиланням:
 				$protocol://$domain:8080/#/application-status/$applicationId
 	</body>
 </html>
