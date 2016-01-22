@@ -728,5 +728,6 @@
   "ERROR_DOWNLOAD_UNSIGNED_DOCUMENT": "Unable to load unsigned document",
   "ERROR_PRINT_UNSIGNED_DOCUMENT": "Unable to print unsigned document",
   "NO_TYPE":"No type",
-  "CHOOSE_AT_LEAST_ONE_VERIFICATION" : "Choose at least one verification"
+  "CHOOSE_AT_LEAST_ONE_VERIFICATION" : "Choose at least one verification",
+  "SUCCESSFUL_ADDED_TEST" : "You have successfully added a new test"
 }
