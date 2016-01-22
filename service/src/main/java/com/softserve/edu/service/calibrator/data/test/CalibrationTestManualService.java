@@ -18,11 +18,11 @@ public interface CalibrationTestManualService {
 
     void deleteTestManual(String verificationId) throws IOException;
 
-    CalibrationTestManual createNewTestManual(String pathToScan, Integer numberOfTest, Long moduleId, Date dateTest);
+    CalibrationTestManual createNewTestManual(String pathToScan, String numberOfTest, Long moduleId, Date dateTest);
 
     String uploadScanDoc(InputStream file, String originalFileFullName, Long id) throws IOException;
 
-    void editTestManual(String pathToScanDoc, Date dateOfTest, Integer numberOfTest, Long moduleId , CalibrationTestManual calibrationTestManual);
+    void editTestManual(String pathToScanDoc, Date dateOfTest, String numberOfTest, Long moduleId , CalibrationTestManual calibrationTestManual);
 
     void deleteScanDoc(String uri, Long id) throws IOException;
 

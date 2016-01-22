@@ -16,16 +16,16 @@ public class CalibrationTestManualDTO {
 
     private String  serialNumber;
     private List<CalibrationTestDataManualDTO>listOfCalibrationTestDataManual;
-    private Integer numberOfTest;
+    private String numberOfTest;
     private Date dateOfTest;
-    private Long generateNumber;
+    private String generateNumber;
     private String pathToScanDoc;
     private Long id;
     private Long moduleId;
 
     public CalibrationTestManualDTO() {}
 
-    public CalibrationTestManualDTO(String serialNumber, Integer numberOfTest, Date dateOfTest, Long generateNumber, String pathToScanDoc, Long id) {
+    public CalibrationTestManualDTO(String serialNumber, String numberOfTest, Date dateOfTest, String generateNumber, String pathToScanDoc, Long id) {
         this.serialNumber = serialNumber;
         this.numberOfTest = numberOfTest;
         this.dateOfTest = dateOfTest;
