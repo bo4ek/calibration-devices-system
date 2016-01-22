@@ -584,6 +584,12 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 surname.add(empty);
                 name.add(empty);
                 middlename.add(empty);
+                city.add(empty);
+                district.add(empty);
+                sector.add(empty);
+                street.add(empty);
+                building.add(empty);
+                flat.add(empty);
             }
 
             try {
