@@ -43,7 +43,7 @@ angular
                 var test = parentScope.TestDataFormData[index];
                 if (test.endValue == 0 || test.initialValue > test.endValue || test.initialValue == 0) {
                     test.testResult = 'RAW';
-                    parentScope.TestForm.testResult = 'RAW';
+                    parentScope.TestForm.testResult = 'FAILED';
                     test.calculationError = null;
                 } else if (test.initialValue == test.endValue) {
                     test.testResult = 'FAILED';
