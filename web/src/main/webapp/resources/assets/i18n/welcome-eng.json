@@ -613,7 +613,7 @@
   "NO_VERIFICATIONS_CHECKED" : "Choose verifications for task creation",
   "TASK_FOR_STATION_CREATED" : "Task for calibration module was successfully created",
   "NO_MODULES_AVAILABLE" : "No modules available",
-  "PRINT_DOCUMENT" : "Print document",  
+  "PRINT_DOCUMENT" : "Print document",
   "RAW":"Raw",
   "Device_Water":"Cold water",
   "Device_Termal":"Hot water",
@@ -715,7 +715,7 @@
   "NOTE" : "Note",
   "VERIFICATION_SUCCESSFULLY_EDITED": "Verification was successfully edited",
   "ERROR_WHILE_EDITING_VERIFICATION": "Error while editing verification",
-  "ACCUMULATEDVOLUME_REGEX":"Only number",  
+  "ACCUMULATEDVOLUME_REGEX":"Only number",
   "SUCCESS_SENT" : "Successfully sent",
   "SUCCESS_ASSIGN_AND_SENT" : "Successfully  assigned employee and sent to calibrator",
   "SUCCESS_REJECTED_AND_SENT" : "Successfully  rejected employee and sent to calibrator",
@@ -727,5 +727,6 @@
   "SUCCESS_SIGNED": "Document signed successfully",
   "ERROR_DOWNLOAD_UNSIGNED_DOCUMENT": "Unable to load unsigned document",
   "ERROR_PRINT_UNSIGNED_DOCUMENT": "Unable to print unsigned document",
-  "SUCCESSFUL_ADDED_TEST" : "You have successfully added a new test"
+  "NO_TYPE":"No type",
+  "CHOOSE_AT_LEAST_ONE_VERIFICATION" : "Choose at least one verification"
 }

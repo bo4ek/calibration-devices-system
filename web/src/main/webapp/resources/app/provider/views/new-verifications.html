@@ -2,7 +2,7 @@
 
     <div class="row header_row">
         <div class="col-md-12">
-            <h1 class="page-header">Нові повірки</h1>
+            <h1 class="page-header">{{'NEW_VERIFICATIONS' | translate}}</h1>
         </div>
     </div>
 
@@ -192,13 +192,13 @@
                             </script>
                             <p id="emptyError" ng-if="allIsEmpty && isClicked" class="help-block">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                Оберіть хоча б одну повірку
+                                {{ 'CHOOSE_AT_LEAST_ONE_VERIFICATION' | translate}}
                             </p>
 
                             <div class="pull-left">
                                 <button type="button" class="btn btn-primary"
                                         ng-click="openSendingModal()"><span class="glyphicon glyphicon-send"></span>
-                                    Надіслати
+                                    {{ 'SEND' | translate}}
                                 </button>
                             </div>
 
