@@ -44,14 +44,20 @@
                     </label>
 
                     <div class="col-md-8">
-                        <input type="text" ng-model="addCalibrationModuleFormData.organizationCode"
-                               id="organizationCode"
-                               name="organizationCode"
-                               class="form-control" popover="Введіть код суб'єкта установки"
-                               popover-trigger="focus" popover-placement="top"
-                               required>
-						 	<span class="form-control-feedback glyphicon
-						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
+                        <ui-select class="form-control" type="text" theme="select2"
+                                   ng-model="selectedValues.selectedOrganizationCode"
+                                   name="organizationCode" id="organizationCode" required>
+                            <ui-select-match placeholder="{{'SELECT_EDRPOU' | translate}}" allow-clear="true">
+                                {{$select.selected}}
+
+                                <span class="form-control-feedback glyphicon
+						 	    form-horizontal glyphicon glyphicon-ok-sign"></span>
+
+                            </ui-select-match>
+                            <ui-select-choices repeat="organizationCode in organizationCodes | filter: $select.search">
+                                <span ng-bind-html="organizationCode"></span>
+                            </ui-select-choices>
+                        </ui-select>
 
                         <p class="help-block" ng-if="addCalibrationModuleForm.organizationCode.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>

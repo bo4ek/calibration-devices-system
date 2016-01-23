@@ -6,6 +6,7 @@ import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.service.admin.CalibrationModuleService;
+import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.utils.TypeConverter;
 import org.apache.log4j.Logger;
@@ -37,6 +38,9 @@ public class CalibrationModuleController {
 
     @Autowired
     private CalibrationModuleService calibrationModuleService;
+
+    @Autowired
+    private OrganizationService organizationService;
 
     /**
      * Get agreement by id
@@ -81,6 +85,16 @@ public class CalibrationModuleController {
 
         return new ResponseEntity(httpStatus);
     }
+
+    /**
+     * Get all organization codes
+     *
+     * @return List of organizationCodes
+     */
+    @RequestMapping(value = "organizationCode", method = RequestMethod.GET)
+    public List<String> getAllOrganizationCodes() {
+        return organizationService.findAllOrganizationCodes();
+}
 
     /**
      * Edit selected calibration module

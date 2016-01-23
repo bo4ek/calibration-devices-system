@@ -20,87 +20,107 @@ angular
         '$filter',
         'MeasuringEquipmentServiceAdmin',
         'calibrationModule',
-        function ($rootScope, $scope, $translate, $modalInstance, $filter,
-                  measuringEquipmentServiceAdmin, calibrationModule) {
+        function ($rootScope, $scope, $translate, $modalInstance, $filter, measuringEquipmentServiceAdmin, calibrationModule) {
 
-            /**
-             * Initialize all variables
-             */
-            $scope.init = function () {
+            $scope.selectedValues = {};
+            $scope.organizationCodes = [];
+            $scope.addCalibrationModuleFormData = {};
+            $scope.addCalibrationModuleFormData.organizationCode = '';
+            $scope.addCalibrationModuleFormData.condDesignation = '';
+            $scope.addCalibrationModuleFormData.serialNumber = '';
+            $scope.addCalibrationModuleFormData.employeeFullName = '';
+            $scope.addCalibrationModuleFormData.telephone = '';
+            $scope.addCalibrationModuleFormData.workDate = '';
+            $scope.addCalibrationModuleFormData.moduleType = '';
+            $scope.addCalibrationModuleFormData.email = '';
+            $scope.addCalibrationModuleFormData.calibrationType = '';
 
-                $scope.addCalibrationModuleFormData = {};
+            $scope.headerTranslate = 'ADD_INSTALLATION';
+            $scope.applyButtonText = 'ADD';
 
-                $scope.addCalibrationModuleFormData.organizationCode = '';
+            $scope.deviceTypeData = [
+                {id: 'WATER', label: $filter('translate')('WATER')},
+                {id: 'THERMAL', label: $filter('translate')('THERMAL')}
+//                    {id: 'ELECTRICAL', label: $filter('translate')('ELECTRICAL')},
+//                    {id: 'GASEOUS', label: $filter('translate')('GASEOUS')}
+            ];
+
+            $scope.moduleTypeData = [
+                {id: 'INSTALLATION_FIX', label: $filter('translate')('INSTALLATION_FIX')},
+                {id: 'INSTALLATION_PORT', label: $filter('translate')('INSTALLATION_PORT')}
+            ];
+
+            if (calibrationModule !== undefined) {
+                $scope.addCalibrationModuleFormData.deviceType = new Array();
+                for (var i in calibrationModule.deviceType) {
+                    $scope.addCalibrationModuleFormData.deviceType[i] = {
+                        id: calibrationModule.deviceType[i],
+                        label: $filter('translate')(calibrationModule.deviceType[i])
+                    }
+                }
+
+                measuringEquipmentServiceAdmin.findAllOrganizationCodes().then(function (respCodes) {
+                    $scope.organizationCodes = respCodes.data;
+                    var index = arrayObjectIndexOf($scope.organizationCodes, calibrationModule.organizationCode);
+                    $scope.selectedValues.selectedOrganizationCode = $scope.organizationCodes[index];
+                });
+
+                $scope.addCalibrationModuleFormData.moduleType = {
+                    id: calibrationModule.moduleType,
+                    label: $filter('translate')(calibrationModule.moduleType)
+                };
+                $scope.addCalibrationModuleFormData.moduleId = calibrationModule.moduleId;
+                $scope.addCalibrationModuleFormData.organizationCode = calibrationModule.organizationCode;
+                $scope.addCalibrationModuleFormData.condDesignation = calibrationModule.condDesignation;
+                $scope.addCalibrationModuleFormData.serialNumber = calibrationModule.serialNumber;
+                $scope.addCalibrationModuleFormData.employeeFullName = calibrationModule.employeeFullName;
+                $scope.addCalibrationModuleFormData.telephone = calibrationModule.telephone;
+                $scope.addCalibrationModuleFormData.workDate = calibrationModule.workDate;
+                $scope.addCalibrationModuleFormData.email = calibrationModule.email;
+                $scope.addCalibrationModuleFormData.calibrationType = calibrationModule.calibrationType;
+                $scope.addCalibrationModuleFormData.workDate = {
+                    endDate: calibrationModule.workDate
+                };
+
+                $scope.headerTranslate = 'EDIT_INSTALLATION';
+                $scope.applyButtonText = 'EDIT';
+            } else {
+
+                measuringEquipmentServiceAdmin.findAllOrganizationCodes()
+                    .success(function (organizationCodes) {
+                        $scope.organizationCodes = organizationCodes;
+                        $scope.selectedValues.selectedOrganizationCode = undefined; //for ui-selects
+                    }
+                );
+
+                $scope.addCalibrationModuleFormData.deviceType = undefined;
                 $scope.addCalibrationModuleFormData.condDesignation = '';
                 $scope.addCalibrationModuleFormData.serialNumber = '';
                 $scope.addCalibrationModuleFormData.employeeFullName = '';
                 $scope.addCalibrationModuleFormData.telephone = '';
                 $scope.addCalibrationModuleFormData.workDate = '';
-                $scope.addCalibrationModuleFormData.moduleType = '';
+                $scope.addCalibrationModuleFormData.moduleType = undefined;
                 $scope.addCalibrationModuleFormData.email = '';
                 $scope.addCalibrationModuleFormData.calibrationType = '';
 
                 $scope.headerTranslate = 'ADD_INSTALLATION';
                 $scope.applyButtonText = 'ADD';
+            }
 
-                $scope.deviceTypeData = [
-                    {id: 'WATER', label: $filter('translate')('WATER')},
-                    {id: 'THERMAL', label: $filter('translate')('THERMAL')}
-//                    {id: 'ELECTRICAL', label: $filter('translate')('ELECTRICAL')},
-//                    {id: 'GASEOUS', label: $filter('translate')('GASEOUS')}
-                ];
 
-                $scope.moduleTypeData = [
-                    {id: 'INSTALLATION_FIX', label: $filter('translate')('INSTALLATION_FIX')},
-                    {id: 'INSTALLATION_PORT', label: $filter('translate')('INSTALLATION_PORT')}
-                ];
-
-                if (calibrationModule !== undefined) {
-                    $scope.addCalibrationModuleFormData.deviceType = new Array();
-                    for (var i in calibrationModule.deviceType) {
-                        $scope.addCalibrationModuleFormData.deviceType[i] = {
-                            id: calibrationModule.deviceType[i],
-                            label: $filter('translate')(calibrationModule.deviceType[i])
-                        }
+            function arrayObjectIndexOf(myArray, searchTerm) {
+                for (var i = 0, len = myArray.length; i < len; i++) {
+                    if (myArray[i] === searchTerm) {
+                        return i;
                     }
-
-                    $scope.addCalibrationModuleFormData.moduleType = {
-                        id: calibrationModule.moduleType,
-                        label: $filter('translate')(calibrationModule.moduleType)
-                    };
-                    $scope.addCalibrationModuleFormData.moduleId = calibrationModule.moduleId;
-                    $scope.addCalibrationModuleFormData.organizationCode = calibrationModule.organizationCode;
-                    $scope.addCalibrationModuleFormData.condDesignation = calibrationModule.condDesignation;
-                    $scope.addCalibrationModuleFormData.serialNumber = calibrationModule.serialNumber;
-                    $scope.addCalibrationModuleFormData.employeeFullName = calibrationModule.employeeFullName;
-                    $scope.addCalibrationModuleFormData.telephone = calibrationModule.telephone;
-                    $scope.addCalibrationModuleFormData.workDate = calibrationModule.workDate;
-                    $scope.addCalibrationModuleFormData.email = calibrationModule.email;
-                    $scope.addCalibrationModuleFormData.calibrationType = calibrationModule.calibrationType;
-                    $scope.addCalibrationModuleFormData.workDate = {
-                        endDate: calibrationModule.workDate
-                    };
-
-                    $scope.headerTranslate = 'EDIT_INSTALLATION';
-                    $scope.applyButtonText = 'EDIT';
-                } else {
-                    $scope.addCalibrationModuleFormData.deviceType = undefined;
-                    $scope.addCalibrationModuleFormData.organizationCode = '';
-                    $scope.addCalibrationModuleFormData.condDesignation = '';
-                    $scope.addCalibrationModuleFormData.serialNumber = '';
-                    $scope.addCalibrationModuleFormData.employeeFullName = '';
-                    $scope.addCalibrationModuleFormData.telephone = '';
-                    $scope.addCalibrationModuleFormData.workDate = '';
-                    $scope.addCalibrationModuleFormData.moduleType = undefined;
-                    $scope.addCalibrationModuleFormData.email = '';
-                    $scope.addCalibrationModuleFormData.calibrationType = '';
-
-                    $scope.headerTranslate = 'ADD_INSTALLATION';
-                    $scope.applyButtonText = 'ADD';
                 }
-            };
-
-            $scope.init();
+                var elem = {
+                    id: length,
+                    orgCode: searchTerm
+                };
+                myArray.push(elem);
+                return (myArray.length - 1);
+            }
 
             /**
              * Closes modal window on browser's back/forward button click.
@@ -155,6 +175,7 @@ angular
              */
             function saveCalibrationModule() {
                 $scope.addCalibrationModuleFormData.workDate = $scope.addCalibrationModuleFormData.workDate.endDate;
+                $scope.addCalibrationModuleFormData.organizationCode = $scope.selectedValues.selectedOrganizationCode;
                 if (calibrationModule === undefined) {
                     measuringEquipmentServiceAdmin.saveCalibrationModule($scope.addCalibrationModuleFormData)
                         .then(function (result) {
