@@ -1,0 +1,60 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{'INSTALL_PRIVATE_KEY' | translate }}</h4>
+    <span id="status">(downloading...)</span>
+    <progress value="0" max="100" id="progress" hidden=1></progress>
+</div>
+<div class="modal-body">
+    <form name="insertPKeyForm" class="form-group" id="installPKeyForm" novalidate>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="control-label">{{'SELECT_CA' | translate }}</label>
+            </div>
+            <div class="form-group col-md-6">
+                <div id="CAsServersSelect" class="form-control">
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="form-group col-md-6">
+                <label class="control-label">{{'SELECT_PKEY' | translate }}</label>
+            </div>
+            <div class="form-group col-md-6">
+                {{'PRIVATE_KEY' | translate }}
+                <input id="PKeyFileName" type="text"
+                       readonly
+                       ng-model="privateKey"
+                       onclick="document.getElementById('PKeyFileInput').click();"
+                       class="form-control"/>
+
+                <div id="buttonitem">
+                    <input id="PKeyFileInput" type="file" ng-model="privateKey" hidden=0/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+
+            </div>
+            <div class="form-group col-md-6">
+                {{'PRIVATE_KEY_PASSWORD' | translate }}<br/>
+                <input id="PKeyPassword" type="password" class="form-control"
+                       disabled="disabled" ng-model="privateKeyPassword">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="PKeyReadButton"
+                    title="Read" class="btn btn-primary"
+                    ng-click="readPrivateKeyButtonClick()">{{'READ_KEY_SIGN_DOC' | translate}}
+            </button>
+            <button class="btn btn-danger" type="button" ng-click="cancel()">{{'CANCEL' | translate}}
+            </button>
+        </div>
+
+    </form>
+</div>
+<script type="text/javascript" src="resources/eusign/euscpt.js"></script>
+<script type="text/javascript" src="resources/eusign/euscpm.js"></script>
+<script async type="text/javascript" src="resources/eusign/euscp.js"></script>
+<script type="text/javascript" src="resources/eusign/signutils.js"></script>

@@ -167,9 +167,9 @@
         <div class="form-group col-sm-4">
             <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" ng-show="isVerification" type="submit"
                     class="btn btn-warning btn-md"
-                    ng-click="signCalibrationTest()">
+                    ng-click="showInstallPrivateKeyModal()">
                 {{'SIGN_PROTOCOL' | translate}}
-            </button>
+            </button><!--ng-click="signCalibrationTest()"-->
         </div>
             <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"ng-show="!fileLoaded"
                     ng-click="fileName = uploadBbiFile(testId)">
