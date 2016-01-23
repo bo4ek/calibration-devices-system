@@ -196,7 +196,7 @@
                     <label class="control-label"></label>
                 </td>
                 <td id="testColumnHead" ng-repeat="testData in TestDataFormData">
-                    {{testData.testNumber}}
+                    {{testData.testNumber | translate}}
                 </td>
             </tr>
             </thead>
@@ -322,7 +322,7 @@
             <tr>
                 <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable">
                     <label class="control-image-label">
-                        {{ testData.testNumber }}
+                        {{ testData.testNumber | translate}}
                     </label>
                 </td>
             </tr>

@@ -249,8 +249,8 @@
     "GIVEN_CONSUMPTION": "Given consumption",
     "ACCEPTABLE_ERROR": "Acceptable error",
     "VOLUME_OF_STANDARD": "Volume of standard",
-    "INITIAL_VALUE": "Initial value",
-    "TERMINAL_VALUE": "Terminal value",
+    "INITIAL_VALUE": "Counter initial value",
+    "TERMINAL_VALUE": "Counter terminal value",
     "VOLUME_IN_DEVICE": "Volume in device",
     "ACTUAL_CONSUMPTION": "Actual consumption",
     "CALCULATION_ERROR": "Calculation error",
@@ -732,5 +732,8 @@
     "ERROR_PRINT_UNSIGNED_DOCUMENT": "Unable to print unsigned document",
     "REASON_UNSUITABILITY_NOT_FOUND": "Reasons not found",
     "REASON_SELECT_PLACEHOLDER": "Select unsuitability reason",
-    "COUNTER_PURPOSE": "Counter purpose"
+    "COUNTER_PURPOSE": "Counter purpose",
+    "Test1": "Test1",
+    "Test2": "Test2",
+    "Test3": "Test3"
 }
