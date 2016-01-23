@@ -729,5 +729,7 @@
     "SIGN_PROTOCOL": "Sign",
     "SUCCESS_SIGNED": "Document signed successfully",
     "ERROR_DOWNLOAD_UNSIGNED_DOCUMENT": "Unable to load unsigned document",
-    "ERROR_PRINT_UNSIGNED_DOCUMENT": "Unable to print unsigned document"
+    "ERROR_PRINT_UNSIGNED_DOCUMENT": "Unable to print unsigned document",
+    "REASON_UNSUITABILITY_NOT_FOUND": "Reasons not found",
+    "REASON_SELECT_PLACEHOLDER": "Select unsuitability reason"
 }
