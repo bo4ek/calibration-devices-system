@@ -427,4 +427,30 @@ angular
                         }
                     });
             };
+
+            /**
+             * Return is positive or negative consumption status result
+             * @param consumptionStatus
+             * @returns {boolean} true - if test result is positive, false - in other case
+             */
+            $scope.consumptionStatusResult = function(consumptionStatus) {
+                if(consumptionStatus == 'IN_THE_AREA') {
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+
+            /**
+             * Return is positive or negative common test result
+             * @param testResult
+             * @returns {boolean} true - if test result is positive, false - in other case
+             */
+            $scope.commonTestResult = function(testResult) {
+                if (testResult == 'SUCCESS') {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }]);

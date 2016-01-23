@@ -120,7 +120,9 @@
         </div>
         <div class="form-group col-md-7">
             <input type="text" ng-model="TestForm.consumptionStatus | translate" ng-disabled="fileLoaded"
-                   name="consumptionStatus" class="form-control " required>
+                   name="consumptionStatus"
+                   ng-class="{'success-result': consumptionStatusResult(TestForm.consumptionStatus), 'failed-result': !consumptionStatusResult(TestForm.consumptionStatus)}"
+                   class="form-control " required>
         </div>
     </div>
 
@@ -131,7 +133,9 @@
         </div>
         <div class="form-group col-md-7">
             <input type="text" ng-model="TestForm.testResult | translate" ng-disabled="fileLoaded"
-                   name="testResult" class="form-control " required>
+                   name="testResult"
+                   ng-class="{'success-result': commonTestResult(TestForm.testResult), 'failed-result': !commonTestResult(TestForm.testResult)}"
+                   class="form-control " required>
         </div>
     </div>
 
@@ -289,7 +293,8 @@
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
                     <input type="text" ng-model="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
-                           class="form-control " required>
+                           ng-class="{'success-result': consumptionStatusResult(testData.consumptionStatus), 'failed-result': !consumptionStatusResult(testData.consumptionStatus)}"
+                           class="form-control" required>
                 </td>
             </tr>
             <tr>
@@ -308,9 +313,9 @@
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
                     <input type="text" ng-model="testData.testResult | translate" ng-disabled="fileLoaded"
+                           ng-class="{'success-result': commonTestResult(testData.testResult), 'failed-result': !commonTestResult(testData.testResult)}"
                            class="form-control " required>
                 </td>
-            </tr>
             </tr>
             </tbody>
         </table>
