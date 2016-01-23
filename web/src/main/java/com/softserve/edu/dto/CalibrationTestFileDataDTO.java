@@ -57,6 +57,10 @@ public class CalibrationTestFileDataDTO {
 
     private boolean signed;
 
+    private Long reasonUnsuitabilityId;
+
+    private String reasonUnsuitabilityName;
+
     public CalibrationTestFileDataDTO() {
     }
 
@@ -135,6 +139,8 @@ public class CalibrationTestFileDataDTO {
         this.listTestData = new ArrayList();
         this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
         this.signed = calibrationTest.isSigned();
+        this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
+        this.reasonUnsuitabilityName = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getName();
         int testNumber = 1;
         List<CalibrationTestIMG> calibrationTestIMGList;
         CalibrationTestIMG calibrationTestIMG;
@@ -355,5 +361,21 @@ public class CalibrationTestFileDataDTO {
 
     public void setSigned(boolean signed) {
         this.signed = signed;
+    }
+
+    public Long getReasonUnsuitabilityId() {
+        return reasonUnsuitabilityId;
+    }
+
+    public void setReasonUnsuitabilityId(Long reasonUnsuitabilityId) {
+        this.reasonUnsuitabilityId = reasonUnsuitabilityId;
+    }
+
+    public String getReasonUnsuitabilityName() {
+        return reasonUnsuitabilityName;
+    }
+
+    public void setReasonUnsuitabilityName(String reasonUnsuitabilityName) {
+        this.reasonUnsuitabilityName = reasonUnsuitabilityName;
     }
 }

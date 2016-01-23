@@ -736,6 +736,7 @@
     "PRIVATE_KEY": "Private key:",
     "SELECT": "SELECT",
     "PRIVATE_KEY_PASSWORD": "Password",
-    "READ_KEY_SIGN_DOC": "READ&SIGN"
-
+    "READ_KEY_SIGN_DOC": "READ&SIGN",
+    "REASON_UNSUITABILITY_NOT_FOUND": "Reasons not found",
+    "REASON_SELECT_PLACEHOLDER": "Select unsuitability reason"
 }

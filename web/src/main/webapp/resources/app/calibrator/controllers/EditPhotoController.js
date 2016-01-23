@@ -235,7 +235,11 @@ angular
                         parentScope.TestForm.typeWater = $scope.newValues.counterManufacturer.typeWater;
                         parentScope.TestForm.standardSize = $scope.newValues.counterManufacturer.standardSize;
                         parentScope.TestForm.symbol = $scope.newValues.counterManufacturer.symbol;
-                        parentScope.TestForm.counterTypeId = $scope.newValues.counterManufacturer.id;
+                        if (parentScope.TestForm.counterTypeId != $scope.newValues.counterManufacturer.id) {
+                            parentScope.TestForm.counterTypeId = $scope.newValues.counterManufacturer.id;
+                            parentScope.selectedReason.selected = undefined;
+                            parentScope.isReasonsUnsuitabilityShown();
+                        }
                     } else {
                         if ($scope.photoType == 'begin') {
                             parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;
@@ -245,8 +249,13 @@ angular
                             $scope.updateValues($scope.photoIndex);
                         }
                         $scope.isChanged = false;
+                        if (parentScope.showReasons) {
+                            parentScope.showReasons = parentScope.isTestRaw();
+                        } else {
+                            parentScope.selectedReason.selected = undefined;
+                            parentScope.isReasonsUnsuitabilityShown();
+                        }
                     }
-
                     switch ($scope.rotateIndex) {
                         case 1:
                         {

@@ -8,6 +8,7 @@ import com.softserve.edu.dto.*;
 import com.softserve.edu.dto.admin.CalibrationModuleDTO;
 import com.softserve.edu.dto.admin.CounterTypeDTO;
 import com.softserve.edu.entity.device.Counter;
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
@@ -15,10 +16,7 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestDataManual;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestManual;
 import com.softserve.edu.exceptions.NotFoundException;
-import com.softserve.edu.repository.CalibrationTestDataRepository;
-import com.softserve.edu.repository.CalibrationTestRepository;
-import com.softserve.edu.repository.CounterRepository;
-import com.softserve.edu.repository.CounterTypeRepository;
+import com.softserve.edu.repository.*;
 import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataManualService;
@@ -51,6 +49,9 @@ public class CalibrationTestController {
 
     @Autowired
     private CalibrationTestDataRepository testDataRepository;
+
+    @Autowired
+    private UnsuitabilityReasonRepository unsuitabilityReasonRepository;
 
     @Autowired
     private CalibrationTestService testService;
@@ -415,6 +416,11 @@ public class CalibrationTestController {
             counter.setReleaseYear(Integer.valueOf(cTestFileDataDTO.getCounterProductionYear()).toString());
             counter.setCounterType(counterTypeService.findById(cTestFileDataDTO.getCounterTypeId()));
             counterRepository.save(counter);
+            UnsuitabilityReason unsuitabilityReason = null;
+            if(cTestFileDataDTO.getReasonUnsuitabilityId() != null) {
+              unsuitabilityReason   = unsuitabilityReasonRepository.findOne(cTestFileDataDTO.getReasonUnsuitabilityId());
+            }
+            calibTest.setUnsuitabilityReason(unsuitabilityReason);
             calibTest.setTestResult(cTestFileDataDTO.getTestResult());
             calibTest.setCapacity(cTestFileDataDTO.getAccumulatedVolume());
             Set<CalibrationTestData> setOfTestDate = testService.getLatestTests(calibTest.getCalibrationTestDataList());

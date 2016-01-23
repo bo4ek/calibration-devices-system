@@ -141,20 +141,21 @@
         </div>
 
     </div>
-
     <div class="row">
         <div class="form-group">
-            <ui-select style="width:100%" ng-if="hasProtocol && isVerification"  ng-model="selectedStatus.label" ng-disabled="TestForm.signed" theme="select2"
-                       search-enabled="false"
-                       on-select="setStatus($item)"
-                    >
-                <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}" >
-                    {{$select.selected.label}}
+            <ui-select style="width:100%" ng-if="showReasons" search-enabled="false"  ng-model="selectedReason.selected" ng-disabled="TestForm.signed || !reasonsUnsuitability.length" theme="select2">
+                <ui-select-match allow-clear="true" placeholder="{{'REASON_SELECT_PLACEHOLDER' | translate}}" >
+                    {{$select.selected.name}}
                 </ui-select-match>
-                <ui-select-choices  repeat="status.label as status in statusData">
-                    <span ng-bind-html="status.label"></span>
+                <ui-select-choices  repeat="reason.name as reason in reasonsUnsuitability">
+                    <span ng-bind-html="reason.name"></span>
                 </ui-select-choices>
             </ui-select>
+            <span ng-if="!reasonsUnsuitability.length && showReasons" style="color: #b27e77">
+               <i class="fa fa-info-circle">
+                   <ins>{{'REASON_UNSUITABILITY_NOT_FOUND' | translate }}</ins>
+               </i>
+            </span>
         </div>
     </div>
     <div class="row">
