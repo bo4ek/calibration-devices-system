@@ -159,13 +159,13 @@ angular
                     "tspAddressPort": ""
                 },
                 {
-                    "issuerCNs":				["Тестовий ЦСК АТ \"ІІТ\""],
-                    "address": 					"ca.iit.com.ua",
-                    "ocspAccessPointAddress":	"ca.iit.com.ua/services/ocsp/",
-                    "ocspAccessPointPort":		"80",
-                    "cmpAddress":				"ca.iit.com.ua",
-                    "tspAddress":				"ca.iit.com.ua",
-                    "tspAddressPort":			"80"
+                    "issuerCNs": ["Тестовий ЦСК АТ \"ІІТ\""],
+                    "address": "ca.iit.com.ua",
+                    "ocspAccessPointAddress": "ca.iit.com.ua/services/ocsp/",
+                    "ocspAccessPointPort": "80",
+                    "cmpAddress": "ca.iit.com.ua",
+                    "tspAddress": "ca.iit.com.ua",
+                    "tspAddressPort": "80"
                 }
             ];
 
@@ -282,7 +282,7 @@ angular
                 }
             };
 
-            $scope.isTestRaw = function() {
+            $scope.isTestRaw = function () {
                 if ($scope.hasProtocol && $scope.isVerification && $scope.TestDataFormData) {
                     for (var i = 0; i < $scope.TestDataFormData.length; i++) {
                         if ($scope.TestDataFormData[i].testResult == 'RAW') {
@@ -359,7 +359,8 @@ angular
                     listTestData: $scope.TestForm.listTestData,
                     counterProductionYear: $scope.TestForm.counterProductionYear,
                     counterTypeId: $scope.TestForm.counterTypeId,
-                    reasonUnsuitabilityId: $scope.getReasonId()
+                    reasonUnsuitabilityId: $scope.getReasonId(),
+                    volumeInDevice: $scope.volumeInDevice
                 }
             }
 
@@ -367,8 +368,8 @@ angular
              * Get id of reason unsuitability by it name
              * @returns {id} of reason unsuitability
              */
-            $scope.getReasonId = function() {
-                if(!$scope.showReasons || !$scope.selectedReason) {
+            $scope.getReasonId = function () {
+                if (!$scope.showReasons || !$scope.selectedReason) {
                     return null;
                 } else {
                     for (var i = 0; i < $scope.reasonsUnsuitability.length; i++) {
@@ -411,7 +412,7 @@ angular
                                 })
                         }
                     })
-            }
+            };
 
             $scope.updateCalibrationTest = function () {
                 retranslater();

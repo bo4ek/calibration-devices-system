@@ -433,6 +433,7 @@ public class CalibrationTestController {
                 calibTestData.setEndValue(calibrationTestDataDTO.getEndValue());
                 calibTestData.setCalculationError(calibrationTestDataDTO.getCalculationError());
                 calibTestData.setTestResult(calibrationTestDataDTO.getTestResult());
+                calibTestData.setVolumeInDevice(calibrationTestDataDTO.getVolumeInDevice());
                 testDataRepository.save(calibTestData);
             }
             testRepository.save(calibTest);

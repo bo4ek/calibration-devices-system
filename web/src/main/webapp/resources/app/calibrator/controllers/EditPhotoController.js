@@ -1,6 +1,5 @@
 angular
     .module('employeeModule')
-
     .controller('EditPhotoController', ['$scope', '$rootScope', '$route', '$log', '$modalInstance',
         '$timeout', 'photoId', 'CalibrationTestServiceCalibrator', 'parentScope', '$translate', 'DataReceivingServiceCalibrator',
         function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, calibrationTestServiceCalibrator,
@@ -55,21 +54,19 @@ angular
                     test.testResult = 'SUCCESS';
                     parentScope.TestForm.testResult = 'SUCCESS';
                     test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
-                    test.volumeInDevice = test.endValue - test.initialValue;
+                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 } else {
                     test.testResult = 'FAILED';
                     parentScope.TestForm.testResult = 'FAILED';
                     test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
-                    test.volumeInDevice = test.endValue - test.initialValue;
+                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 }
                 parentScope.TestDataFormData[index] = test;
             };
 
-
             $scope.calcError = function (initialValue, endValue, volumeOfStandard) {
                 return parseFloat(((endValue - initialValue - volumeOfStandard) / (volumeOfStandard * 100)).toFixed(1));
             };
-
 
             $scope.selectedTypeWater = {
                 type: null
