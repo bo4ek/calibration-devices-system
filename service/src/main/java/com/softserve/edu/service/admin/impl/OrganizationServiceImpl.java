@@ -29,9 +29,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -157,6 +155,20 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional(readOnly = true)
     public Organization getOrganizationById(Long id) {
         return organizationRepository.findOne(id);
+    }
+
+    /**
+     * Fetch all codeEDRPOU of organizations
+     * @return list of codeEDRPOU
+     */
+    @Override
+    public List<String> findAllOrganizationCodes() {
+        Set<Organization> set = organizationRepository.findAll();
+        List<String> list = new ArrayList<>();
+        for (Organization org : set) {
+            list.add(org.getAdditionInfoOrganization().getCodeEDRPOU());
+        }
+        return list;
     }
 
     /**

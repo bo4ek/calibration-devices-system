@@ -59,6 +59,14 @@ angular
                         return result.data;
                     });
             },
+            getReasonsUnsuitability: function (counterTypeId) {
+                var url = 'reasons_unsuitability/' + counterTypeId;
+                return $http.get(url).success(function (data) {
+                    return data;
+                }).error(function (err) {
+                    return err;
+                });
+            },
             getTestProtocol: function (verificationId) {
                 var url = 'calibrator/calibrationTests/getTest/' + verificationId;
                 return $http.get(url)
@@ -87,8 +95,8 @@ angular
             getAllModule: function () {
                 var url = 'calibrator/calibrationTests/getCalibrationModules';
                 return $http.get(url).then(function (result) {
-                        return result;
-                    })
+                    return result;
+                })
             },
             getDataForCompletedTest: function (testId) {
                 var url = ('calibrator/calibrationTests/getTestManual/' + testId)

@@ -1,6 +1,5 @@
 angular
     .module('employeeModule')
-
     .controller('EditPhotoController', ['$scope', '$rootScope', '$route', '$log', '$modalInstance',
         '$timeout', 'photoId', 'CalibrationTestServiceCalibrator', 'parentScope', '$translate', 'DataReceivingServiceCalibrator',
         function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, calibrationTestServiceCalibrator,
@@ -55,21 +54,19 @@ angular
                     test.testResult = 'SUCCESS';
                     parentScope.TestForm.testResult = 'SUCCESS';
                     test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
-                    test.volumeInDevice = test.endValue - test.initialValue;
+                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 } else {
                     test.testResult = 'FAILED';
                     parentScope.TestForm.testResult = 'FAILED';
                     test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
-                    test.volumeInDevice = test.endValue - test.initialValue;
+                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 }
                 parentScope.TestDataFormData[index] = test;
             };
 
-
             $scope.calcError = function (initialValue, endValue, volumeOfStandard) {
                 return parseFloat(((endValue - initialValue - volumeOfStandard) / (volumeOfStandard * 100)).toFixed(1));
             };
-
 
             $scope.selectedTypeWater = {
                 type: null
@@ -178,52 +175,9 @@ angular
                     ? parentScope.TestDataFormData[$scope.photoIndex].initialValue
                     : parentScope.TestDataFormData[$scope.photoIndex].endValue;
             }
+            $scope.rotateIndex = parentScope.rotateIndex;
 
             $scope.photo = document.getElementById(photoId).src;
-
-            switch (document.getElementById(photoId).className) {
-                case "rotated90" :
-                {
-                    $scope.rotateIndex = 1;
-                    break;
-                }
-                case "rotated180" :
-                {
-                    $scope.rotateIndex = 2;
-                    break;
-                }
-                case "rotated270" :
-                {
-                    $scope.rotateIndex = 3;
-                    break;
-                }
-                case "rotated0" :
-                {
-                    $scope.rotateIndex = 4;
-                    break;
-                }
-            }
-
-            $scope.rotateLeft = function () {
-                $scope.rotateIndex--;
-                if ($scope.rotateIndex == 0) {
-                    $scope.rotateIndex = 4;
-                }
-            };
-
-            $scope.rotateRight = function () {
-                $scope.rotateIndex++;
-                if ($scope.rotateIndex == 5) {
-                    $scope.rotateIndex = 1;
-                }
-            };
-
-            $scope.rotate180 = function () {
-                $scope.rotateIndex += 2;
-                if ($scope.rotateIndex > 4) {
-                    $scope.rotateIndex -= 4;
-                }
-            };
 
             $scope.saveOnExit = function () {
                 $scope.$broadcast('show-errors-check-validity');
@@ -235,7 +189,11 @@ angular
                         parentScope.TestForm.typeWater = $scope.newValues.counterManufacturer.typeWater;
                         parentScope.TestForm.standardSize = $scope.newValues.counterManufacturer.standardSize;
                         parentScope.TestForm.symbol = $scope.newValues.counterManufacturer.symbol;
-                        parentScope.TestForm.counterTypeId = $scope.newValues.counterManufacturer.id;
+                        if (parentScope.TestForm.counterTypeId != $scope.newValues.counterManufacturer.id) {
+                            parentScope.TestForm.counterTypeId = $scope.newValues.counterManufacturer.id;
+                            parentScope.selectedReason.selected = undefined;
+                            parentScope.isReasonsUnsuitabilityShown();
+                        }
                     } else {
                         if ($scope.photoType == 'begin') {
                             parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;
@@ -245,28 +203,11 @@ angular
                             $scope.updateValues($scope.photoIndex);
                         }
                         $scope.isChanged = false;
-                    }
-
-                    switch ($scope.rotateIndex) {
-                        case 1:
-                        {
-                            document.getElementById(photoId).className = "rotated90";
-                            break;
-                        }
-                        case 2:
-                        {
-                            document.getElementById(photoId).className = "rotated180";
-                            break;
-                        }
-                        case 3:
-                        {
-                            document.getElementById(photoId).className = "rotated270";
-                            break;
-                        }
-                        case 4:
-                        {
-                            document.getElementById(photoId).className = "rotated0";
-                            break;
+                        if (parentScope.showReasons) {
+                            parentScope.showReasons = parentScope.isTestRaw();
+                        } else {
+                            parentScope.selectedReason.selected = undefined;
+                            parentScope.isReasonsUnsuitabilityShown();
                         }
                     }
                     $modalInstance.close("saved");

@@ -588,6 +588,14 @@ form[name='CalibrationTestForm'] input {
     padding-left: 30px;
 }
 
+form[name='CalibrationTestForm'] .success-result {
+    background-color: #9EFF84;
+}
+
+form[name='CalibrationTestForm'] .failed-result {
+    background-color: #FF7878;
+}
+
 form[name='CalibrationTestForm'] table {
 /*    width: 400px;*/
     overflow: scroll;

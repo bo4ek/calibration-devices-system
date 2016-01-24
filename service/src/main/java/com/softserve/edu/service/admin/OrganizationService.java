@@ -44,6 +44,8 @@ public interface OrganizationService {
 
     List<Organization> findAllByLocalityId(Long localityId);
 
+    List<String> findAllOrganizationCodes();
+
     List<Organization> findAllByLocalityIdAndTypeId(Long localityId, OrganizationType typeId);
 
     Set<OrganizationType> findOrganizationTypesById(Long id);

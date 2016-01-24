@@ -10,7 +10,10 @@ angular
             $scope.testId = $location.search().param;
             $scope.hasProtocol = $location.search().loadProtocol || false;
             $scope.isVerification = $location.search().ver || false;
+            $scope.showReasons = false;
+            $scope.rotateIndex = 0;
 
+            $scope.reasonsUnsuitability = [];
             $scope.fileLoaded = false;
 
             $scope.TestDataFormData = [
@@ -254,18 +257,42 @@ angular
 
             $scope.parseBbiFile = function (data) {
                 $scope.fileLoaded = true;
-                //data.counterNumber = Number(data.counterNumber );
                 $scope.TestForm = data;
-                for (var i = 0; i < $scope.statusData.length; i++) {
-                    if ($scope.statusData[i].id === data.status) {
-                        $scope.setStatus($scope.statusData[i]);
-                    }
-                }
                 var date = $scope.TestForm.testDate;
                 $scope.TestForm.testDate = moment(date).utcOffset(0).format("DD.MM.YYYY HH:mm");
                 $scope.TestForm.testPhoto = "data:image/png;base64," + $scope.TestForm.testPhoto;
                 $scope.TestDataFormData = data.listTestData;
+                $scope.rotateIndex = data.rotateIndex;
+                $scope.selectedReason.selected = data.reasonUnsuitabilityName;
+                $scope.isReasonsUnsuitabilityShown();
             };
+
+            /**
+             * Get all reasons unsuitability for counter with {counterTypeId} type if
+             * at least one of test has result 'RAW'
+             */
+            $scope.isReasonsUnsuitabilityShown = function () {
+                if ($scope.isTestRaw()) {
+                    calibrationTestServiceCalibrator.getReasonsUnsuitability($scope.TestForm.counterTypeId).success(function (reasons) {
+                        $scope.reasonsUnsuitability = reasons;
+                        $scope.showReasons = true;
+                    });
+                } else {
+                    $scope.showReasons = false;
+                }
+            };
+
+            $scope.isTestRaw = function () {
+                if ($scope.hasProtocol && $scope.isVerification && $scope.TestDataFormData) {
+                    for (var i = 0; i < $scope.TestDataFormData.length; i++) {
+                        if ($scope.TestDataFormData[i].testResult == 'RAW') {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            };
+
 
             $scope.showEditMainPhotoModal = function (id) {
                 console.log($scope.TestForm.signed);
@@ -309,34 +336,7 @@ angular
                     });
             }
 
-            $scope.selectedStatus = {
-                label: null
-            }
-            $scope.statusData = [
-                {id: 'TEST_OK', label: null},
-                {id: 'TEST_NOK', label: null}
-            ];
-
-            $scope.setStatus = function (status) {
-                $scope.selectedStatus = {
-                    label: status.label,
-                    id: status.id
-                };
-            };
-
-            $scope.setTypeDataLanguage = function () {
-                var lang = $translate.use();
-                if (lang === 'ukr') {
-                    $scope.statusData[0].label = 'придатний';
-                    $scope.statusData[1].label = 'не придатний';
-                } else if (lang === 'eng') {
-                    $scope.statusData[0].label = 'Tested OK';
-                    $scope.statusData[1].label = 'Tested NOK';
-                }
-            };
-
-
-            $scope.setTypeDataLanguage();
+            $scope.selectedReason = {};
 
             //TODO check situation when there not Protocol
             if ($scope.hasProtocol) {
@@ -355,27 +355,47 @@ angular
                     latitude: $scope.TestForm.latitude,
                     longitude: $scope.TestForm.longitude,
                     testResult: $scope.TestForm.testResult,
-                    status: $scope.getStatus($scope.selectedStatus),
+                    status: $scope.getStatus(),
                     listTestData: $scope.TestForm.listTestData,
                     counterProductionYear: $scope.TestForm.counterProductionYear,
-                    counterTypeId: $scope.TestForm.counterTypeId
+                    counterTypeId: $scope.TestForm.counterTypeId,
+                    reasonUnsuitabilityId: $scope.getReasonId(),
+                    volumeInDevice: $scope.volumeInDevice,
+                    rotateIndex: $scope.rotateIndex
                 }
-            };
+            }
 
-            $scope.getStatus = function (statusNow) {
-                var statusSend;
-                if (statusNow.id == undefined) {
-                    statusSend = $scope.TestForm.status;
+            /**
+             * Get id of reason unsuitability by it name
+             * @returns {id} of reason unsuitability
+             */
+            $scope.getReasonId = function () {
+                if (!$scope.showReasons || !$scope.selectedReason) {
+                    return null;
                 } else {
-                    statusSend = $scope.selectedStatus.id;
+                    for (var i = 0; i < $scope.reasonsUnsuitability.length; i++) {
+                        if ($scope.reasonsUnsuitability[i].name == $scope.selectedReason.selected) {
+                            return $scope.reasonsUnsuitability[i].id;
+                        }
+                    }
                 }
-                return statusSend;
             };
 
+            /**
+             * Get status of verification
+             * @returns {'TEST_NOT'} if test was failed, {'TEST_OT'} if test was success
+             */
+            $scope.getStatus = function () {
+                if ($scope.TestForm.testResult == 'FAILED') {
+                    return 'TEST_NOK';
+                } else {
+                    return 'TEST_OK';
+                }
+            };
 
             $scope.closeForm = function () {
                 window.history.back();
-            }
+            };
 
             $scope.signCalibrationTest = function () {
                 retranslater();
@@ -393,14 +413,7 @@ angular
                                 })
                         }
                     })
-            }
-
-            /**
-             * update test from the form in database.
-             */
-            /*$scope.generalForms={testForm:$scope.TestForm, smallForm: $scope.TestDataFormData};
-             $log.debug($scope.generalForms);
-             .updateCalibrationTest($scope.TestForm, $scope.testId)*/
+            };
 
             $scope.updateCalibrationTest = function () {
                 retranslater();
@@ -414,6 +427,52 @@ angular
                             toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_EDITED'));
                         }
                     });
+            };
+
+            /**
+             * Return is positive or negative consumption status result
+             * @param consumptionStatus
+             * @returns {boolean} true - if test result is positive, false - in other case
+             */
+            $scope.consumptionStatusResult = function(consumptionStatus) {
+                if(consumptionStatus == 'IN_THE_AREA') {
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+
+            /**
+             * Return is positive or negative common test result
+             * @param testResult
+             * @returns {boolean} true - if test result is positive, false - in other case
+             */
+            $scope.commonTestResult = function(testResult) {
+                if (testResult == 'SUCCESS') {
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
+            $scope.rotateLeft = function () {
+                $scope.rotateIndex-= 90;
+                if ($scope.rotateIndex == -90) {
+                    $scope.rotateIndex = 270;
+                }
+            };
+
+            $scope.rotateRight = function () {
+                $scope.rotateIndex+= 90;
+                if ($scope.rotateIndex == 360) {
+                    $scope.rotateIndex = 0;
+                }
+            };
+
+            $scope.rotate180 = function () {
+                $scope.rotateIndex += 180;
+                if ($scope.rotateIndex >= 360) {
+                    $scope.rotateIndex -= 360;
+                }
+            };
         }]);
