@@ -744,6 +744,13 @@
     "INPUT_PERSON_NAME" : "Input name of contact person",
     "INPUT_PHONE_NUMBER" : "Input phone number",
     "INPUT_EMAIL" : "Input email of organization",
-    "INPUT_METHOD_OF_VERIFICATION" : "Input method of verification"
+    "INPUT_METHOD_OF_VERIFICATION" : "Input method of verification",
+    "INSTALL_PRIVATE_KEY": "Installation of private key",
+    "SELECT_CA": "Select CA",
+    "SELECT_PKEY": "Select the file with the private key (usually called Key-6.dat) and specify password protection",
+    "PRIVATE_KEY": "Private key:",
+    "SELECT": "SELECT",
+    "PRIVATE_KEY_PASSWORD": "Password",
+    "READ_KEY_SIGN_DOC": "READ&SIGN"
 
 }
