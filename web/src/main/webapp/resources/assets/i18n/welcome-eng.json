@@ -543,7 +543,7 @@
     "MEASURING_DEVICES_DIRECTORY": "Calibration module",
     "ADD_INSTALLATION": "Add calibration module",
     "EDIT_INSTALLATION": "Edit calibration module",
-    "SPHERE_OF_APPLICATION": "Sphere of aplication",
+    "SPHERE_OF_APPLICATION": "Sphere of application",
     "INSTALLATION_CODE": "Installation code",
     "INSTALL_CODE": "Installation code",
     "CERTIFICATE_NUMBER": "Certificate number",
@@ -738,5 +738,12 @@
     "Test3": "Test3",
     "NO_TYPE":"No type",
     "CHOOSE_AT_LEAST_ONE_VERIFICATION" : "Choose at least one verification",
-    "SUCCESSFUL_ADDED_TEST" : "You have successfully added a new test"
+    "SUCCESSFUL_ADDED_TEST" : "You have successfully added a new test",
+    "INPUT_SYMBOL" : "Input symbol",
+    "INPUT_MANUFACTURER_NUMBER" : "Input manufacturer number",
+    "INPUT_PERSON_NAME" : "Input name of contact person",
+    "INPUT_PHONE_NUMBER" : "Input phone number",
+    "INPUT_EMAIL" : "Input email of organization",
+    "INPUT_METHOD_OF_VERIFICATION" : "Input method of verification"
+
 }
