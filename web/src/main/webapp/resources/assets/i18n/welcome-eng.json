@@ -735,5 +735,8 @@
     "COUNTER_PURPOSE": "Counter purpose",
     "Test1": "Test1",
     "Test2": "Test2",
-    "Test3": "Test3"
+    "Test3": "Test3",
+    "NO_TYPE":"No type",
+    "CHOOSE_AT_LEAST_ONE_VERIFICATION" : "Choose at least one verification",
+    "SUCCESSFUL_ADDED_TEST" : "You have successfully added a new test"
 }
