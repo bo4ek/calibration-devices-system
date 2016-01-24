@@ -141,9 +141,11 @@
 
     <div class="row">
         <div class="form-group col-md-12" style="width: 260px; height: 260px">
-            <img ng-show="fileLoaded" class="rotated0" ng-click="showEditMainPhotoModal('testMainPhoto')" id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}" width="100%" height="100%">
+            <img ng-show="fileLoaded" class="rotated0" ng-click="showEditMainPhotoModal('testMainPhoto')"
+                 ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+            'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
+                 id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}" width="100%" height="100%">
         </div>
-
     </div>
     <div class="row">
         <div class="form-group">
@@ -185,6 +187,19 @@
         <div class="form-group col-sm-4">
             <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-danger " ng-click="closeForm()"
                     >{{'CLOSE' | translate}}
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-8" style="text-align:center">
+            <button ng-click="rotateLeft()" class="btn btn-info" type="button">
+                {{'ROTATE_LEFT' | translate }}
+            </button>
+            <button ng-click="rotate180()" class="btn btn-info" type="button">
+                {{'ROTATE_180' | translate }}
+            </button>
+            <button ng-click="rotateRight()" class="btn btn-info" type="button">
+                {{'ROTATE_RIGHT' | translate }}
             </button>
         </div>
     </div>
@@ -337,6 +352,8 @@
                 <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
                     <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0"
                          ng-click="showEditMainPhotoModal( 'beginPhoto' + $index )" style="width: 200px; height: 200px;"
+                         ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+            'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                          data-ng-src="data:image/png;base64,{{testData.beginPhoto}}" width="100%" height="100%">
                 </td>
             </tr>
@@ -344,6 +361,8 @@
                 <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
                     <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0"
                          ng-click="showEditMainPhotoModal( 'endPhoto' + $index )" style="width: 200px; height: 200px;"
+                         ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+            'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                          data-ng-src="data:image/png;base64,{{testData.endPhoto}}" width="100%" height="100%">
                 </td>
             </tr>

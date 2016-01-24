@@ -421,6 +421,7 @@ public class CalibrationTestController {
               unsuitabilityReason   = unsuitabilityReasonRepository.findOne(cTestFileDataDTO.getReasonUnsuitabilityId());
             }
             calibTest.setUnsuitabilityReason(unsuitabilityReason);
+            calibTest.setRotateIndex(cTestFileDataDTO.getRotateIndex());
             calibTest.setTestResult(cTestFileDataDTO.getTestResult());
             calibTest.setCapacity(cTestFileDataDTO.getAccumulatedVolume());
             Set<CalibrationTestData> setOfTestDate = testService.getLatestTests(calibTest.getCalibrationTestDataList());

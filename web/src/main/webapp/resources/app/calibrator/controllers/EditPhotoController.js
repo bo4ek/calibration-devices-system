@@ -175,52 +175,9 @@ angular
                     ? parentScope.TestDataFormData[$scope.photoIndex].initialValue
                     : parentScope.TestDataFormData[$scope.photoIndex].endValue;
             }
+            $scope.rotateIndex = parentScope.rotateIndex;
 
             $scope.photo = document.getElementById(photoId).src;
-
-            switch (document.getElementById(photoId).className) {
-                case "rotated90" :
-                {
-                    $scope.rotateIndex = 1;
-                    break;
-                }
-                case "rotated180" :
-                {
-                    $scope.rotateIndex = 2;
-                    break;
-                }
-                case "rotated270" :
-                {
-                    $scope.rotateIndex = 3;
-                    break;
-                }
-                case "rotated0" :
-                {
-                    $scope.rotateIndex = 4;
-                    break;
-                }
-            }
-
-            $scope.rotateLeft = function () {
-                $scope.rotateIndex--;
-                if ($scope.rotateIndex == 0) {
-                    $scope.rotateIndex = 4;
-                }
-            };
-
-            $scope.rotateRight = function () {
-                $scope.rotateIndex++;
-                if ($scope.rotateIndex == 5) {
-                    $scope.rotateIndex = 1;
-                }
-            };
-
-            $scope.rotate180 = function () {
-                $scope.rotateIndex += 2;
-                if ($scope.rotateIndex > 4) {
-                    $scope.rotateIndex -= 4;
-                }
-            };
 
             $scope.saveOnExit = function () {
                 $scope.$broadcast('show-errors-check-validity');
@@ -251,28 +208,6 @@ angular
                         } else {
                             parentScope.selectedReason.selected = undefined;
                             parentScope.isReasonsUnsuitabilityShown();
-                        }
-                    }
-                    switch ($scope.rotateIndex) {
-                        case 1:
-                        {
-                            document.getElementById(photoId).className = "rotated90";
-                            break;
-                        }
-                        case 2:
-                        {
-                            document.getElementById(photoId).className = "rotated180";
-                            break;
-                        }
-                        case 3:
-                        {
-                            document.getElementById(photoId).className = "rotated270";
-                            break;
-                        }
-                        case 4:
-                        {
-                            document.getElementById(photoId).className = "rotated0";
-                            break;
                         }
                     }
                     $modalInstance.close("saved");

@@ -11,6 +11,7 @@ angular
             $scope.hasProtocol = $location.search().loadProtocol || false;
             $scope.isVerification = $location.search().ver || false;
             $scope.showReasons = false;
+            $scope.rotateIndex = 0;
 
             $scope.reasonsUnsuitability = [];
             $scope.fileLoaded = false;
@@ -263,6 +264,7 @@ angular
                 $scope.TestForm.testDate = moment(date).utcOffset(0).format("DD.MM.YYYY HH:mm");
                 $scope.TestForm.testPhoto = "data:image/png;base64," + $scope.TestForm.testPhoto;
                 $scope.TestDataFormData = data.listTestData;
+                $scope.rotateIndex = data.rotateIndex;
                 $scope.selectedReason.selected = data.reasonUnsuitabilityName;
                 $scope.isReasonsUnsuitabilityShown();
             };
@@ -360,7 +362,8 @@ angular
                     counterProductionYear: $scope.TestForm.counterProductionYear,
                     counterTypeId: $scope.TestForm.counterTypeId,
                     reasonUnsuitabilityId: $scope.getReasonId(),
-                    volumeInDevice: $scope.volumeInDevice
+                    volumeInDevice: $scope.volumeInDevice,
+                    rotateIndex: $scope.rotateIndex
                 }
             }
 
@@ -453,4 +456,25 @@ angular
                     return false;
                 }
             }
+
+            $scope.rotateLeft = function () {
+                $scope.rotateIndex-= 90;
+                if ($scope.rotateIndex == -90) {
+                    $scope.rotateIndex = 270;
+                }
+            };
+
+            $scope.rotateRight = function () {
+                $scope.rotateIndex+= 90;
+                if ($scope.rotateIndex == 360) {
+                    $scope.rotateIndex = 0;
+                }
+            };
+
+            $scope.rotate180 = function () {
+                $scope.rotateIndex += 180;
+                if ($scope.rotateIndex >= 360) {
+                    $scope.rotateIndex -= 360;
+                }
+            };
         }]);

@@ -44,6 +44,9 @@ public class CalibrationTest {
     @Column(columnDefinition = "boolean default false")
     private boolean signed;
 
+    @Column(columnDefinition = "int default 0")
+    private Integer rotateIndex;
+
     @Lob
     @Column(length = 100000)
     private byte[] signedDocument;

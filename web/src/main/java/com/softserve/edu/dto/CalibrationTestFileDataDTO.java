@@ -60,6 +60,8 @@ public class CalibrationTestFileDataDTO {
 
     private String reasonUnsuitabilityName;
 
+    private Integer rotateIndex;
+
     public CalibrationTestFileDataDTO() {
     }
 
@@ -81,6 +83,7 @@ public class CalibrationTestFileDataDTO {
         this.signed = calibrationTest.isSigned();
         this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
         this.reasonUnsuitabilityName = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getName();
+        this.rotateIndex = calibrationTest.getRotateIndex();
         int testNumber = 1;
         List<CalibrationTestIMG> calibrationTestIMGList;
         CalibrationTestIMG calibrationTestIMG;
@@ -317,5 +320,13 @@ public class CalibrationTestFileDataDTO {
 
     public void setReasonUnsuitabilityName(String reasonUnsuitabilityName) {
         this.reasonUnsuitabilityName = reasonUnsuitabilityName;
+    }
+
+    public Integer getRotateIndex() {
+        return rotateIndex;
+    }
+
+    public void setRotateIndex(Integer rotateIndex) {
+        this.rotateIndex = rotateIndex;
     }
 }
