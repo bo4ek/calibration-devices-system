@@ -157,13 +157,13 @@ angular
                     "tspAddressPort": ""
                 },
                 {
-                    "issuerCNs":				["Тестовий ЦСК АТ \"ІІТ\""],
-                    "address": 					"ca.iit.com.ua",
-                    "ocspAccessPointAddress":	"ca.iit.com.ua/services/ocsp/",
-                    "ocspAccessPointPort":		"80",
-                    "cmpAddress":				"ca.iit.com.ua",
-                    "tspAddress":				"ca.iit.com.ua",
-                    "tspAddressPort":			"80"
+                    "issuerCNs": ["Тестовий ЦСК АТ \"ІІТ\""],
+                    "address": "ca.iit.com.ua",
+                    "ocspAccessPointAddress": "ca.iit.com.ua/services/ocsp/",
+                    "ocspAccessPointPort": "80",
+                    "cmpAddress": "ca.iit.com.ua",
+                    "tspAddress": "ca.iit.com.ua",
+                    "tspAddressPort": "80"
                 }
             ];
 
@@ -182,20 +182,18 @@ angular
 
 
             $scope.loadServers = function () {
-                var out = "<select>";
+                var select = document.getElementById("CAsServersSelect");
                 for (var i = 0; i < $scope.servers.length; i++) {
-                    out += '<option>' + $scope.servers[i].issuerCNs[0] + '</option>';
+                    var option = document.createElement("option");
+                    option.text = $scope.servers[i].issuerCNs[0];
+                    select.add(option);
                 }
-                out += "</select";
-                document.getElementById("CAsServersSelect").innerHTML = out;
             };
 
             $scope.installPKeyModalLoad = function () {
                 $scope.loadServers();
                 document.getElementById('PKeyFileInput').addEventListener('change',
                     $scope.selectPrivateKeyFile, false);
-                document.getElementById('FileToSign').addEventListener('change',
-                    $scope.chooseFileToSign, false);
             };
 
 

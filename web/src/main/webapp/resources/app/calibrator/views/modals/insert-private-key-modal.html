@@ -10,9 +10,9 @@
                 <label class="control-label">{{'SELECT_CA' | translate }}</label>
             </div>
             <div class="form-group col-md-6">
-                <div id="CAsServersSelect" class="form-control">
+                <select id="CAsServersSelect" class="form-control">
 
-                </div>
+                </select>
             </div>
         </div>
         <div class="row">
@@ -24,7 +24,6 @@
                 {{'PRIVATE_KEY' | translate }}
                 <input id="PKeyFileName" type="text"
                        readonly
-                       ng-model="privateKey"
                        onclick="document.getElementById('PKeyFileInput').click();"
                        class="form-control"/>
 
@@ -57,4 +56,4 @@
 <script type="text/javascript" src="resources/eusign/euscpt.js"></script>
 <script type="text/javascript" src="resources/eusign/euscpm.js"></script>
 <script async type="text/javascript" src="resources/eusign/euscp.js"></script>
-<script type="text/javascript" src="resources/eusign/signutils.js"></script>
+
