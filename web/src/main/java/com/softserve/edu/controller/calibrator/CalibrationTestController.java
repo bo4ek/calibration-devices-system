@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/calibrator/calibrationTests/")
@@ -181,18 +182,6 @@ public class CalibrationTestController {
             logger.error("failed to get list of CounterTyp", e);
         }
         return listOfCounterType;
-    }
-
-
-    @RequestMapping(value = "getAllUnsuitabilityReasons", method = RequestMethod.GET)
-    public List<UnsuitabilityReasonDTO> getAllUnsuitabilityReasons() {
-        List unsuitabilityReasons = null;
-        try {
-            unsuitabilityReasons = UnsuitabilityReasonDTOTransformer.toDTOFromList(unsuitabilityReasonRepository.findAll());
-        } catch (Exception e) {
-            logger.error("failed to get list of Reasons", e);
-        }
-        return unsuitabilityReasons;
     }
 
     /**

@@ -198,6 +198,7 @@ angular
                                 symbol: dataOfCounter.symbol,
                                 realiseYear: dataOfCounter.realiseYear,
                                 numberCounter: dataOfCounter.numberCounter,
+                                counterId : dataOfCounter.counterId,
                                 statusTestFirst: dataCompletedTest.statusTestFirst,
                                 statusTestSecond: dataCompletedTest.statusTestSecond,
                                 statusTestThird: dataCompletedTest.statusTestThird,
@@ -404,8 +405,8 @@ angular
             /**
              * get data of unsuitabilityReasons for drop-down
              */
-            function getAllUnsuitabilityReasons() {
-                calibrationTestServiceCalibrator.getAllUnsuitabilityReasons()
+            function getAllUnsuitabilityReasons(counterId) {
+                calibrationTestServiceCalibrator.getAllUnsuitabilityReasons(counterId)
                     .then(function (reasons) {
                         $scope.unsuitabilityReasons = reasons.data;
                     })
@@ -429,7 +430,7 @@ angular
             $scope.changeStatus = function (verification) {
                 if (verification.statusTestFirst == 'RAW' || verification.statusTestSecond == 'RAW' || verification.statusTestThird == 'RAW') {
                     verification.statusCommon = 'FAILED';
-                    getAllUnsuitabilityReasons();
+                    getAllUnsuitabilityReasons(verification.counterId);
                 } else if (verification.statusTestFirst == 'FAILED' || verification.statusTestSecond == 'FAILED' || verification.statusTestThird == 'FAILED') {
                     verification.statusCommon = 'FAILED';
                     verification.unsuitabilityReason = null;

@@ -149,11 +149,13 @@ angular
                     })
             },
 
-            getAllUnsuitabilityReasons: function () {
-                return $http.get('calibrator/calibrationTests/getAllUnsuitabilityReasons')
-                    .then(function (result) {
-                        return result;
-                    })
+            getAllUnsuitabilityReasons: function (counterId) {
+                var url = 'getAllUnsuitabilityReasons/' + counterId;
+                return $http.get(url).success(function (data) {
+                    return data;
+                }).error(function (err) {
+                    return err;
+                });
             }
 
         };
