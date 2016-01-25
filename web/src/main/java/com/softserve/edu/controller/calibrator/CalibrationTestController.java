@@ -282,9 +282,13 @@ public class CalibrationTestController {
             calibrationTestManualService.editTestManual(cTestManualDTO.getPathToScanDoc(), cTestManualDTO.getDateOfTest(), cTestManualDTO.getNumberOfTest()
                     , cTestManualDTO.getModuleId(), cTestManual);
             CalibrationTestDataManualDTO cTestDataManualDTO = cTestManualDTO.getListOfCalibrationTestDataManual().get(0);
+            UnsuitabilityReason unsuitabilityReason = null;
+            if (cTestDataManualDTO.getUnsuitabilityReason() != null) {
+                unsuitabilityReason = unsuitabilityReasonRepository.findOne(cTestDataManualDTO.getUnsuitabilityReason().getId());
+            }
             calibrationTestDataManualService.editTestDataManual(cTestDataManualDTO.getStatusTestFirst()
                     , cTestDataManualDTO.getStatusTestSecond(), cTestDataManualDTO.getStatusTestThird()
-                    , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit);
+                    , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit, unsuitabilityReason);
         } catch (Exception e) {
             logger.error("failed to edit calibration test manual" + e.getMessage());
             logger.error(e);
