@@ -12,7 +12,8 @@ public class BBIOutcomeDTO {
         INVALID_COUNTER_SIZE_AND_SYMBOL,
         BBI_FILE_IS_ALREADY_IN_DATABASE,
         WRONG_IMAGE_IN_BBI,
-        NAME_OF_BBI_FILE_DOES_NOT_MATCH
+        NAME_OF_BBI_FILE_DOES_NOT_MATCH,
+        WRONG_MODULE_ID
     }
 
     private String verificationID;

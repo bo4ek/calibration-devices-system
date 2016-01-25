@@ -7,7 +7,6 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.BbiProtocol;
 import com.softserve.edu.entity.verification.Verification;
-import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.repository.*;
 import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.storage.FileOperations;
@@ -20,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.FileAlreadyExistsException;
-import java.time.LocalTime;
 import java.io.*;
 import java.util.*;
 import java.util.Date;
@@ -135,45 +132,6 @@ public class CalibratorServiceImpl implements CalibratorService {
         verificationRepository.save(verification);
     }
 
-//    /**
-//     * Save additional info for the verification.
-//     * Parse parameter time from string to LocalTime,
-//     * if time = null, then assigns null for the values
-//     * time from and time to. Time can be null because
-//     * this field in not required.
-//     *
-//     *
-//     * @param entrance
-//     * @param doorCode
-//     * @param floor
-//     * @param dateOfVerif
-//     * @param time
-//     * @param serviceability
-//     * @param noWaterToDate
-//     * @param notes
-//     * @param verificationId
-//     */
-//    @Override
-//    public void saveInfo(int entrance, int doorCode, int floor, Date dateOfVerif, String time,
-//                         boolean serviceability,Date noWaterToDate, String notes, String verificationId) {
-//        Verification verification = verificationRepository.findOne(verificationId);
-//        verification.setAddInfoExists(true);
-//        LocalTime timeFrom;
-//        LocalTime timeTo;
-//        if (time == null){
-//            timeFrom = null;
-//            timeTo = null;
-//        } else {
-//            String timeFromString = time.substring(0, 5);
-//            String timeToString = time.substring(6, 11);
-//            timeFrom = LocalTime.parse(timeFromString);
-//            timeTo = LocalTime.parse(timeToString);
-//        }
-//        additionalInfoRepository.save(new AdditionalInfo(entrance, doorCode, floor, dateOfVerif, timeFrom, timeTo, serviceability,
-//                noWaterToDate, notes, verification));
-//        verificationRepository.save(verification);
-//    }
-
     /**
      * Check if additional info is already added
      * for the verification
@@ -186,17 +144,6 @@ public class CalibratorServiceImpl implements CalibratorService {
         Verification verification = verificationRepository.findOne(verificationId);
         return verification.isAddInfoExists();
     }
-
-//    /**
-//     * This method return additional info
-//     *
-//     * @param verificationId
-//     * @return AdditionalInfo
-//     */
-//    @Override
-//    public AdditionalInfo findAdditionalInfoByVerifId(String verificationId) {
-//        return additionalInfoRepository.findAdditionalInfoByVerificationId(verificationId);
-//    }
 
     @Override
     public Set<String> getTypesById(Long id) {

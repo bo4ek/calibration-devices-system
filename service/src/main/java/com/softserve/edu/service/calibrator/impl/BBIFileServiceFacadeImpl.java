@@ -3,6 +3,7 @@ package com.softserve.edu.service.calibrator.impl;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
@@ -11,6 +12,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.calibrator.BBIFileServiceFacade;
@@ -21,6 +23,7 @@ import com.softserve.edu.service.catalogue.DistrictService;
 import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.catalogue.StreetService;
+import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import com.softserve.edu.service.verification.VerificationService;
@@ -61,6 +64,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Autowired
     private CalibrationTestService calibrationTestService;
+
+    @Autowired
+    private CalibrationModuleRepository calibrationModuleRepository;
 
     @Autowired
     private VerificationService verificationService;
@@ -109,19 +115,19 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException, NegativeArraySizeException {
+            throws IOException, DecoderException, NegativeArraySizeException{
         DeviceTestData deviceTestData;
         try (InputStream inputStream = FileUtils.openInputStream(BBIfile)) {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);
             calibrationTestService.createNewTest(deviceTestData, verificationID);
         } catch (DecoderException e) {
-            logger.error("error " + e);
+            logger.error("error ", e);
         }
         return null;
     }
 
     public DeviceTestData parseAndSaveBBIFile(MultipartFile BBIfile, String verificationID, String originalFileName)
-            throws IOException, NoSuchElementException, DecoderException, NegativeArraySizeException {
+            throws IOException, NoSuchElementException, DecoderException, NegativeArraySizeException{
         try {
             return parseAndSaveBBIFile(BBIfile.getInputStream(), verificationID, originalFileName);
         } catch (Exception e) {
@@ -194,7 +200,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 if (correspondingVerification == null) {
                     try {
                         deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                        correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
+
+                        CalibrationModule moduleId = calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber());
+                        if (moduleId == null) {
+                            throw new InvalidModuleIdException();
+                        }
+                            correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
                                 calibratorEmployee, deviceTestData);
 
                         saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
@@ -207,6 +218,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     } catch (NullPointerException e) {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
                         logger.error("Wrong image in BBI file ", e);
+                    } catch (InvalidModuleIdException e){
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_MODULE_ID;
+                        logger.error("Wrong module id in bbi file", e);
                     } catch (Exception e) {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                         logger.error("BBI is not valid ", e);
