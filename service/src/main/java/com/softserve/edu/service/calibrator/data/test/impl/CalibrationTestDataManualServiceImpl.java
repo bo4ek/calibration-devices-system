@@ -1,6 +1,7 @@
 package com.softserve.edu.service.calibrator.data.test.impl;
 
 import com.softserve.edu.entity.device.Counter;
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.verification.Verification.CalibrationTestResult;
 import com.softserve.edu.entity.verification.Verification;
@@ -49,13 +50,13 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
 
     @Override
     @Transactional
-    public void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, Long counterId, CalibrationTestManual calibrationTestManual, String verificationId) {
+    public void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, Long counterId, CalibrationTestManual calibrationTestManual, String verificationId, UnsuitabilityReason unsuitabilityReason) {
         Verification verification = verificationRepository.findOne(verificationId);
         Counter counter = counterRepository.findOne(counterId);
         CalibrationTestDataManual calibrationTestDataManual = new CalibrationTestDataManual(CalibrationTestResult.valueOf(statusTestFirst)
                 , CalibrationTestResult.valueOf(statusTestSecond), CalibrationTestResult.valueOf(statusTestThird)
                 , CalibrationTestResult.valueOf(statusCommon)
-                , counter, calibrationTestManual, verification);
+                , counter, calibrationTestManual, verification, unsuitabilityReason);
         calibrationTestDataManualRepository.save(calibrationTestDataManual);
         verification.setIsManual(true);
         verification.setStatus(Status.TEST_COMPLETED);

@@ -2,11 +2,13 @@ package com.softserve.edu.controller.calibrator;
 
 import com.softserve.edu.controller.calibrator.util.CalibrationModuleDTOTransformer;
 import com.softserve.edu.controller.calibrator.util.CounterTypeDTOTransformer;
+import com.softserve.edu.controller.calibrator.util.UnsuitabilityReasonDTOTransformer;
 import com.softserve.edu.documents.parameter.FileFormat;
 import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.dto.*;
 import com.softserve.edu.dto.admin.CalibrationModuleDTO;
 import com.softserve.edu.dto.admin.CounterTypeDTO;
+import com.softserve.edu.dto.admin.UnsuitabilityReasonDTO;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.enumeration.verification.Status;
@@ -182,6 +184,17 @@ public class CalibrationTestController {
     }
 
 
+    @RequestMapping(value = "getAllUnsuitabilityReasons", method = RequestMethod.GET)
+    public List<UnsuitabilityReasonDTO> getAllUnsuitabilityReasons() {
+        List unsuitabilityReasons = null;
+        try {
+            unsuitabilityReasons = UnsuitabilityReasonDTOTransformer.toDTOFromList(unsuitabilityReasonRepository.findAll());
+        } catch (Exception e) {
+            logger.error("failed to get list of Reasons", e);
+        }
+        return unsuitabilityReasons;
+    }
+
     /**
      * get all calibration module for handmade protocol
      *
@@ -208,13 +221,18 @@ public class CalibrationTestController {
     public ResponseEntity createTestManual(@RequestBody CalibrationTestManualDTO calibrationTestManualDTO) {
         ResponseEntity<String> responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
-            CalibrationTestManual calibrationTestManual = calibrationTestManualService.createNewTestManual(calibrationTestManualDTO.getPathToScanDoc(), calibrationTestManualDTO.getNumberOfTest(),
-                    calibrationTestManualDTO.getModuleId(), calibrationTestManualDTO.getDateOfTest());
+            CalibrationTestManual calibrationTestManual = calibrationTestManualService.createNewTestManual(calibrationTestManualDTO.getPathToScanDoc()
+                    , calibrationTestManualDTO.getNumberOfTest(), calibrationTestManualDTO.getModuleId()
+                    , calibrationTestManualDTO.getDateOfTest());
+            UnsuitabilityReason unsuitabilityReason = null;
             for (CalibrationTestDataManualDTO calibrationTDMDTO : calibrationTestManualDTO.getListOfCalibrationTestDataManual()) {
+                if (calibrationTDMDTO.getUnsuitabilityReason() != null) {
+                    unsuitabilityReason = unsuitabilityReasonRepository.findOne(calibrationTDMDTO.getUnsuitabilityReason().getId());
+                }
                 calibrationTestDataManualService.createNewTestDataManual(calibrationTDMDTO.getStatusTestFirst()
                         , calibrationTDMDTO.getStatusTestSecond(), calibrationTDMDTO.getStatusTestThird()
                         , calibrationTDMDTO.getStatusCommon(), calibrationTDMDTO.getCounterId()
-                        , calibrationTestManual, calibrationTDMDTO.getVerificationId());
+                        , calibrationTestManual, calibrationTDMDTO.getVerificationId(), unsuitabilityReason);
             }
         } catch (Exception e) {
             logger.error(e);
@@ -236,6 +254,11 @@ public class CalibrationTestController {
         try {
             CalibrationTestDataManual cTestDataManual = calibrationTestDataManualService.findByVerificationId(verificationId);
             CalibrationTestManual cTestManual = cTestDataManual.getCalibrationTestManual();
+            UnsuitabilityReasonDTO unsuitabilityReasonDTO = null;
+            if (cTestDataManual.getUnsuitabilityReason() != null) {
+                unsuitabilityReasonDTO = new UnsuitabilityReasonDTO(cTestDataManual.getUnsuitabilityReason().getId()
+                        , cTestDataManual.getUnsuitabilityReason().getName());
+            }
             CalibrationTestDataManualDTO cTestDataManualDTO = new CalibrationTestDataManualDTO(
                     cTestDataManual.getStatusTestFirst().toString()
                     , cTestDataManual.getStatusTestSecond().toString()
@@ -244,7 +267,8 @@ public class CalibrationTestController {
                     cTestManual.getCalibrationModule().getSerialNumber()
                     , cTestManual.getNumberOfTest()
                     , cTestManual.getDateTest()
-                    , cTestManual.getGenerateNumberTest(), cTestManual.getPathToScan(), cTestManual.getId()));
+                    , cTestManual.getGenerateNumberTest(), cTestManual.getPathToScan(), cTestManual.getId())
+                    , unsuitabilityReasonDTO);
             responseEntity = new ResponseEntity(cTestDataManualDTO, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("failed to get manual protocol" + e);

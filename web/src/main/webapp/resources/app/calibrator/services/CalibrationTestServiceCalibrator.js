@@ -147,6 +147,13 @@ angular
                     .then(function (result) {
                         return result;
                     })
+            },
+
+            getAllUnsuitabilityReasons: function () {
+                return $http.get('calibrator/calibrationTests/getAllUnsuitabilityReasons')
+                    .then(function (result) {
+                        return result;
+                    })
             }
 
         };

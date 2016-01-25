@@ -136,7 +136,6 @@
                             </div>
                         </div>
 
-
                         <div class="row">
                             <div class="test-panel-title">
                                 <label for="numberProtocol" class="control-label">{{'NUMBER_OF_PROTOCOL_MANUAL' | translate}}</label>
@@ -289,6 +288,21 @@
                                     </td>
 
                                     <td class="col-md-2" title="'TEST_RESULT' | translate">{{verification.statusCommon | translate}}
+                                    </td>
+
+                                    <td title="'UNSUITABILITY_REASON' | translate">
+                                        <ui-select class="col-md-15" ng-model="verification.unsuitabilityReason" theme="select2"
+                                                   search-enabled="true"
+                                                   name="reason" id="reason">
+                                            <ui-select-match
+                                                    placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                                    allow-clear="false">
+                                                {{$select.selected.name | translate}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="reason in unsuitabilityReasons">
+                                                <span ng-bind-html="reason.name | translate"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
                                     </td>
 
                                 </tr>

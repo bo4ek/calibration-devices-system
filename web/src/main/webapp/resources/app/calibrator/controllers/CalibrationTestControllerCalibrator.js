@@ -153,6 +153,7 @@ angular
             $scope.selectedData.testFirst = [];
             $scope.selectedData.testSecond = [];
             $scope.selectedData.testThird = [];
+            $scope.unsuitabilityReasons = [];
             $scope.verification = null;
             $scope.selectedData.numberProtocol=null;
             $scope.isUploadScanDoc = false;
@@ -201,7 +202,8 @@ angular
                                 statusTestSecond: dataCompletedTest.statusTestSecond,
                                 statusTestThird: dataCompletedTest.statusTestThird,
                                 statusCommon: dataCompletedTest.statusCommon,
-                                status: ['SUCCESS', 'FAILED']
+                                status: ['SUCCESS', 'FAILED', 'RAW'],
+                                unsuitabilityReason : dataCompletedTest.unsuitabilityReason
                             };
                             $scope.setDataUseManufacturerNumber(findcalibrationModuleBySerialNumber(dataCompletedTest.calibrationTestManualDTO.serialNumber));
                             $scope.selectedData.numberProtocolManual = dataCompletedTest.calibrationTestManualDTO.numberOfTest;
@@ -260,8 +262,9 @@ angular
                     statusTestSecond: 'SUCCESS',
                     statusTestThird: 'SUCCESS',
                     statusCommon: 'SUCCESS',
-                    status: ['SUCCESS', 'FAILED'],
-                    counterId: value.counterId
+                    status: ['SUCCESS', 'FAILED', 'RAW'],
+                    counterId: value.counterId,
+                    unsuitabilityReason : null
                 };
                 return testManual
             }
@@ -398,6 +401,16 @@ angular
                 }
             };
 
+            /**
+             * get data of unsuitabilityReasons for drop-down
+             */
+            function getAllUnsuitabilityReasons() {
+                calibrationTestServiceCalibrator.getAllUnsuitabilityReasons()
+                    .then(function (reasons) {
+                        $scope.unsuitabilityReasons = reasons.data;
+                    })
+            }
+
             $scope.clearAllArrays = function () {
                 $scope.symbols = [];
                 $scope.moduleTypes = [];
@@ -409,14 +422,22 @@ angular
                 $scope.manufacturerNumbers = [];
             };
 
+
             /**
              * one of tests is changing status then change status common of test
              */
             $scope.changeStatus = function (verification) {
-                if (verification.statusTestFirst == 'FAILED' || verification.statusTestSecond == 'FAILED' || verification.statusTestThird == 'FAILED') {
+                if (verification.statusTestFirst == 'RAW' || verification.statusTestSecond == 'RAW' || verification.statusTestThird == 'RAW') {
                     verification.statusCommon = 'FAILED';
+                    getAllUnsuitabilityReasons();
+                } else if (verification.statusTestFirst == 'FAILED' || verification.statusTestSecond == 'FAILED' || verification.statusTestThird == 'FAILED') {
+                    verification.statusCommon = 'FAILED';
+                    verification.unsuitabilityReason = null;
+                    $scope.unsuitabilityReasons = [];
                 } else if (verification.statusTestFirst == 'SUCCESS' || verification.statusTestSecond == 'SUCCESS' || verification.statusTestThird == 'SUCCESS') {
                     verification.statusCommon = 'SUCCESS';
+                    verification.unsuitabilityReason = null;
+                    $scope.unsuitabilityReasons = [];
                 }
             };
 
