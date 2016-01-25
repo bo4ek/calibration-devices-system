@@ -30,7 +30,7 @@
                     <span class="pull-right">к-сть відібраних заявок : {{dataOfManualTests.length}}</span>
                 </div>
                 <div class="panel-body">
-                    <form name="clientForm" class="form-group" novalidate>
+                    <form name="handheldProtocolForm" class="form-group" novalidate>
                     <div class="row test-panel-fild-content" >
 
                         <div class="row">
@@ -52,7 +52,7 @@
                                         <span ng-bind-html="symbol.condDesignation"></span>
                                     </ui-select-choices>
                                 </ui-select>
-                                <p class="help-block" ng-if="clientForm.condDesignation.$error.required">
+                                <p class="help-block" ng-if="handheldProtocolForm.condDesignation.$error.required">
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                                     {{'REQUIRED' | translate}}
                                 </p>
@@ -74,7 +74,7 @@
                                         <span ng-bind-html="module.moduleType | translate"></span>
                                     </ui-select-choices>
                                 </ui-select>
-                                <p class="help-block" ng-if="clientForm.moduleType.$error.required">
+                                <p class="help-block" ng-if="handheldProtocolForm.moduleType.$error.required">
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                                     {{'REQUIRED' | translate}}
                                 </p>
@@ -129,7 +129,7 @@
                                         <span ng-bind-html="numbers.serialNumber"></span>
                                     </ui-select-choices>
                                 </ui-select>
-                                <p class="help-block" ng-if="clientForm.manufacturerNumber.$error.required">
+                                <p class="help-block" ng-if="handheldProtocolForm.manufacturerNumber.$error.required">
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                                     {{'REQUIRED' | translate}}
                                 </p>
@@ -148,7 +148,7 @@
                                        class="form-control"
                                        required>
 
-                                <p class="help-block" ng-if="clientForm.numberProtocolManual.$error.required">
+                                <p class="help-block" ng-if="handheldProtocolForm.numberProtocolManual.$error.required">
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                                     {{'REQUIRED' | translate}}
                                 </p>

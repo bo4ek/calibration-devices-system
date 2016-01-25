@@ -87,7 +87,7 @@ angular
              */
             $scope.createAndUpdateTest = function () {
                 $scope.$broadcast('show-errors-check-validity');
-                if($scope.clientForm.$valid) {
+                if($scope.handheldProtocolForm.$valid) {
                     retranslater();
                     if (!$scope.selectedData.numberProtocol) {
                         calibrationTestServiceCalibrator.createTestManual(testManualForSend)

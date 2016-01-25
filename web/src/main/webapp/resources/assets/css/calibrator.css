@@ -664,3 +664,7 @@ form[name='CalibrationTestForm'] #testColumnHead {
 form[name='CalibrationTestForm'] tr > td {
     min-height: 30px;
 }
+
+form[name='handheldProtocolForm'] #reason {
+    width: 100%;
+}
