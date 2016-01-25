@@ -6,7 +6,6 @@ import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.calibrator.ProtocolDTO;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.enumeration.verification.Status;
-import com.softserve.edu.dto.NewVerificationsFilterSearch;
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
@@ -91,15 +90,15 @@ public class DigitalVerificationProtocolsCalibratorController {
      * Get verificators that has agreement with this calibrator
      *
      * @param user
-     * @return
+     * @return Set of organizations with all available data
      */
     @RequestMapping(value = "verificators", method = RequestMethod.GET)
     public Set<OrganizationDTO> getVerificators(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
 
-       Organization userOrganization = organizationService.getOrganizationById(user.getOrganizationId());
-       return organizationService.findByIdAndTypeAndActiveAgreementDeviceType(user.getOrganizationId(),
-               OrganizationType.STATE_VERIFICATOR, userOrganization.getDeviceTypes().iterator().next()).stream()
-               .map(organization -> new OrganizationDTO(organization.getId(), organization.getName()))
-               .collect(Collectors.toSet());
+        Organization userOrganization = organizationService.getOrganizationById(user.getOrganizationId());
+        return organizationService.findByIdAndTypeAndActiveAgreementDeviceType(user.getOrganizationId(),
+                OrganizationType.STATE_VERIFICATOR, userOrganization.getDeviceTypes().iterator().next()).stream()
+                .map(organization -> new OrganizationDTO(organization.getId(), organization.getName()))
+                .collect(Collectors.toSet());
     }
 }

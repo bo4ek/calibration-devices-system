@@ -109,11 +109,11 @@
                            name="filter-organizationType">
                     <ui-select-match placeholder="{{'USER_ROLE_SELECT_PLACEHOLDER' | translate}}"
                                      allow-clear="true">
-                        {{$select.selected.label}}
+                        {{$select.selected.id | translate}}
                     </ui-select-match>
                     <ui-select-choices
                             repeat="organizationType in organizationTypeData">
-                        <span ng-bind-html="organizationType.label"></span>
+                        <span>{{organizationType.id | translate}}</span>
                     </ui-select-choices>
                 </ui-select>
             </script>

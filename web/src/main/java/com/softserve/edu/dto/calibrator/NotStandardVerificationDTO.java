@@ -1,6 +1,5 @@
 package com.softserve.edu.dto.calibrator;
 
-
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.verification.Verification;

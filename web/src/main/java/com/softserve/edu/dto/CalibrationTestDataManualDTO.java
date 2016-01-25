@@ -1,5 +1,7 @@
 package com.softserve.edu.dto;
 
+import com.softserve.edu.dto.admin.UnsuitabilityReasonDTO;
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,17 +19,19 @@ public class CalibrationTestDataManualDTO {
     private String statusCommon;
     private String verificationId;
     private Long counterId;
+    private UnsuitabilityReasonDTO unsuitabilityReason;
     private CalibrationTestManualDTO calibrationTestManualDTO;
 
     public CalibrationTestDataManualDTO() {
     }
 
-    public CalibrationTestDataManualDTO(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, CalibrationTestManualDTO calibrationTestManualDTO) {
+    public CalibrationTestDataManualDTO(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, CalibrationTestManualDTO calibrationTestManualDTO, UnsuitabilityReasonDTO unsuitabilityReason) {
         this.statusTestFirst = statusTestFirst;
         this.statusTestSecond = statusTestSecond;
         this.statusTestThird = statusTestThird;
         this.statusCommon = statusCommon;
         this.calibrationTestManualDTO = calibrationTestManualDTO;
+        this.unsuitabilityReason = unsuitabilityReason;
     }
 
     public CalibrationTestDataManualDTO(String numberCounter, String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon,Long counterId, CalibrationTestManualDTO calibrationTestManualDTO) {

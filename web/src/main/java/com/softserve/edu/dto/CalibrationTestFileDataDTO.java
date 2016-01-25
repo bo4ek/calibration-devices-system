@@ -1,6 +1,5 @@
 package com.softserve.edu.dto;
 
-import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
@@ -47,7 +46,7 @@ public class CalibrationTestFileDataDTO {
 
     private String typeWater;
 
-    private Long conterId;
+    private Long counterId;
 
     private String standardSize;
 
@@ -57,66 +56,13 @@ public class CalibrationTestFileDataDTO {
 
     private boolean signed;
 
+    private Long reasonUnsuitabilityId;
+
+    private String reasonUnsuitabilityName;
+
+    private Integer rotateIndex;
+
     public CalibrationTestFileDataDTO() {
-    }
-
-    public CalibrationTestFileDataDTO(String fileName, Date data, String capacity, long installmentNumber,
-                                      double latitude, double longitude, String testPhoto) {
-        this.fileName = fileName;
-        this.testDate = data;
-        this.capacity = capacity;
-        this.installmentNumber = installmentNumber;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.testPhoto = testPhoto;
-    }
-
-    public CalibrationTestFileDataDTO(DeviceTestData testData) {
-        this.fileName = testData.getFileName();
-        this.counterNumber = testData.getCurrentCounterNumber();
-        this.testDate = new Date(testData.getUnixTime());
-        this.capacity = testData.getInitialCapacity();
-        //this.accumulatedVolume = ; // don't have this value.
-        this.counterProductionYear = testData.getCounterProductionYear();
-        this.installmentNumber = testData.getInstallmentNumber();
-        this.latitude = testData.getLatitude();
-        this.longitude = testData.getLongitude();
-        this.testPhoto = testData.getTestPhoto();
-
-        this.listTestData = new ArrayList<>();
-
-        for (int i = 1; i <= 6; ++i) {
-            CalibrationTestDataDTO testDataDTO = new CalibrationTestDataDTO();
-            int testNumber = testData.getTestNumber(i);
-            if (testNumber == 0) {
-                testDataDTO.setDataAvailable(false);
-                continue;
-            } else {
-                testDataDTO.setDataAvailable(true);
-            }
-            String testNumberStr = "Test " + testNumber / 10;
-            Integer testRepeat = testNumber % 10;
-            testNumberStr += ((testRepeat != 0) ? " Repeat " + testRepeat : "");
-            testDataDTO.setTestNumber(testNumberStr);
-            testDataDTO.setGivenConsumption(convertImpulsesPerSecToCubicMetersPerHour(
-                    testData.getTestSpecifiedConsumption(i),
-                    testData.getImpulsePricePerLitre()));
-            testDataDTO.setAcceptableError(testData.getTestAllowableError(i));
-            testDataDTO.setInitialValue(testData.getTestInitialCounterValue(i));
-            testDataDTO.setEndValue(testData.getTestTerminalCounterValue(i));
-            testDataDTO.setVolumeInDevice(round(testDataDTO.getEndValue() - testDataDTO.getInitialValue(), 2));
-            testDataDTO.setTestTime(round(testData.getTestDuration(i), 1));
-            testDataDTO.setVolumeOfStandard(testData.getTestSpecifiedImpulsesAmount(i) * 1.0);
-            testDataDTO.setActualConsumption(convertImpulsesPerSecToCubicMetersPerHour(
-                    testData.getTestCorrectedCurrentConsumption(i),
-                    testData.getImpulsePricePerLitre()));
-            testDataDTO.setCalculationError(countCalculationError(testDataDTO.getVolumeInDevice(),
-                    testDataDTO.getVolumeOfStandard()));
-            testDataDTO.setBeginPhoto(testData.getBeginPhoto(i));
-            testDataDTO.setEndPhoto(testData.getEndPhoto(i));
-
-            this.listTestData.add(testDataDTO);
-        }
     }
 
     public CalibrationTestFileDataDTO(CalibrationTest calibrationTest, CalibrationTestService testService, Verification verification) {
@@ -135,11 +81,14 @@ public class CalibrationTestFileDataDTO {
         this.listTestData = new ArrayList();
         this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
         this.signed = calibrationTest.isSigned();
+        this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
+        this.reasonUnsuitabilityName = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getName();
+        this.rotateIndex = calibrationTest.getRotateIndex();
         int testNumber = 1;
         List<CalibrationTestIMG> calibrationTestIMGList;
         CalibrationTestIMG calibrationTestIMG;
         this.status = calibrationTest.getVerification().getStatus().toString();
-        this.conterId = counter.getId();
+        this.counterId = counter.getId();
         this.standardSize = counter.getCounterType().getStandardSize();
         this.symbol = counter.getCounterType().getSymbol();
         this.counterTypeId = counter.getCounterType().getId();
@@ -181,12 +130,12 @@ public class CalibrationTestFileDataDTO {
         this.counterTypeId = counterTypeId;
     }
 
-    public Long getConterId() {
-        return conterId;
+    public Long getCounterId() {
+        return counterId;
     }
 
-    public void setConterId(Long conterId) {
-        this.conterId = conterId;
+    public void setCounterId(Long counterId) {
+        this.counterId = counterId;
     }
 
     public String getStandardSize() {
@@ -355,5 +304,29 @@ public class CalibrationTestFileDataDTO {
 
     public void setSigned(boolean signed) {
         this.signed = signed;
+    }
+
+    public Long getReasonUnsuitabilityId() {
+        return reasonUnsuitabilityId;
+    }
+
+    public void setReasonUnsuitabilityId(Long reasonUnsuitabilityId) {
+        this.reasonUnsuitabilityId = reasonUnsuitabilityId;
+    }
+
+    public String getReasonUnsuitabilityName() {
+        return reasonUnsuitabilityName;
+    }
+
+    public void setReasonUnsuitabilityName(String reasonUnsuitabilityName) {
+        this.reasonUnsuitabilityName = reasonUnsuitabilityName;
+    }
+
+    public Integer getRotateIndex() {
+        return rotateIndex;
+    }
+
+    public void setRotateIndex(Integer rotateIndex) {
+        this.rotateIndex = rotateIndex;
     }
 }

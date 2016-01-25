@@ -311,6 +311,7 @@
         'calibrator/controllers/VerificationPlanningTaskController',
         'calibrator/controllers/CounterStatusControllerCalibrator',
         'calibrator/controllers/GraphicEmployeeCalibratorMainPanel',
+        'calibrator/controllers/InstallPrivateKeyController',
         'calibrator/services/VerificationPlanningTaskService',
         'calibrator/services/CalibrationTestServiceCalibrator',
         'calibrator/services/AddressServiceCalibrator',

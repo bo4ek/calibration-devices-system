@@ -161,6 +161,28 @@ public class Verification {
         this.sealPresence = sealPresence;
     }
 
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId) {
+
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.clientData = clientData;
+        this.provider = provider;
+        this.device = device;
+        this.status = status;
+        this.readStatus = readStatus;
+        this.calibrator = calibrator;
+        this.info = info;
+        this.counterStatus = dismantled;
+        this.counter = counter;
+        if (this.comment == null) {
+            this.comment = "";
+        }
+        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
+        this.sealPresence = sealPresence;
+    }
+
     public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
                         Device device, Status status, ReadStatus readStatus, Organization calibrator,
                         String comment, String verificationId) {

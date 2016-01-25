@@ -2,7 +2,6 @@ package com.softserve.edu.dto;
 
 import java.util.List;
 
-
 public class PageDTO<T> {
 
     private Long totalItems;
@@ -30,6 +29,5 @@ public class PageDTO<T> {
     public List<T> getContent() {return content;}
 
     public void setContent(List<T> content) {this.content = content;}
-
 
 }

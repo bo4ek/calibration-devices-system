@@ -10,7 +10,7 @@
     <title>Виконавець послуг</title>
     <link href="resources/assets/bower_components/ng-table/ng-table.css" rel="stylesheet">
     <link href="resources/assets/bower_components/angular-loading-bar/build/loading-bar.css" rel="stylesheet">
-    <link href="resources/assets/bower_components/bootstrap/dist/css/style.css" rel="stylesheet">
+
     <link href="resources/assets/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="resources/assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -29,8 +29,6 @@
     <link href="resources/assets/css/provider.css" rel="stylesheet">
     <link href="resources/assets/css/globalSearch.css" rel="stylesheet">
     <link href="resources/assets/css/calibrator.css" rel="stylesheet">
-    <%--<link href="resources/assets/css/sb-admin-2.css" rel="stylesheet">--%>
-    <%--<link href="resources/assets/css/timeline.css" rel="stylesheet">--%>
 
 
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
@@ -38,7 +36,6 @@
           rel="stylesheet">
     <link rel="stylesheet"
           href="resources/assets/winmarkltd-BootstrapFormHelpers-0d89ab4/dist/css/bootstrap-formhelpers.min.css">
-    <%--<link rel="stylesheet" href="resources/assets/css/loader.css">--%>
 
     <style>
         [ng\:cloak]

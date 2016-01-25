@@ -1,9 +1,9 @@
 angular
     .module('employeeModule')
-
     .controller('EditPhotoController', ['$scope', '$rootScope', '$route', '$log', '$modalInstance',
         '$timeout', 'photoId', 'CalibrationTestServiceCalibrator', 'parentScope', '$translate', 'DataReceivingServiceCalibrator',
-        function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, calibrationTestServiceCalibrator, parentScope, $translate, dataReceivingService) {
+        function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, calibrationTestServiceCalibrator,
+                  parentScope, $translate, dataReceivingService) {
 
             /**
              * Closes modal window on browser's back/forward button click.
@@ -15,7 +15,6 @@ angular
             $scope.cancel = function () {
                 $modalInstance.close("cancel");
             };
-
 
             $scope.photoId = photoId;
             $scope.parentScope = parentScope;
@@ -43,30 +42,31 @@ angular
                 var test = parentScope.TestDataFormData[index];
                 if (test.endValue == 0 || test.initialValue > test.endValue || test.initialValue == 0) {
                     test.testResult = 'RAW';
-                    parentScope.TestForm.testResult = 'RAW';
-                    test.calculationError = null;
+                    parentScope.TestForm.testResult = 'FAILED';
+                    test.calculationError = 0;
+                    test.volumeInDevice = 0;
                 } else if (test.initialValue == test.endValue) {
                     test.testResult = 'FAILED';
                     parentScope.TestForm.testResult = 'FAILED';
-                    test.calculationError = null;
+                    test.calculationError = 0;
+                    test.volumeInDevice = 0;
                 } else if (test.acceptableError >= Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))) {
                     test.testResult = 'SUCCESS';
                     parentScope.TestForm.testResult = 'SUCCESS';
                     test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
+                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 } else {
                     test.testResult = 'FAILED';
                     parentScope.TestForm.testResult = 'FAILED';
-                    test.calculationError = null;
+                    test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
+                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 }
                 parentScope.TestDataFormData[index] = test;
-
             };
-
 
             $scope.calcError = function (initialValue, endValue, volumeOfStandard) {
-                return parseFloat(((endValue - initialValue - volumeOfStandard) / (volumeOfStandard ) * 100).toFixed(1));
+                return parseFloat(((endValue - initialValue - volumeOfStandard) / (volumeOfStandard * 100)).toFixed(1));
             };
-
 
             $scope.selectedTypeWater = {
                 type: null
@@ -102,8 +102,7 @@ angular
                 calibrationTestServiceCalibrator.getCountersTypes()
                     .then(function (result) {
                         $scope.countersTypesAll = result.data;
-                        var currentCounterType = findCounterTypeById(parentScope.TestForm.counterTypeId, $scope.countersTypesAll);
-                        $scope.newValues.counterManufacturer = currentCounterType;
+                        $scope.newValues.counterManufacturer = findCounterTypeById(parentScope.TestForm.counterTypeId, $scope.countersTypesAll);
                     })
             }
 
@@ -111,21 +110,21 @@ angular
              * get all standardSizes from counter_type table and set current from bbi
              */
             function getAllStandardSizes() {
-                    dataReceivingService.findAllStandardSize()
-                        .success(function(standardSize) {
-                            $scope.standardSizes = standardSize;
-                            $scope.newValues.counterStandardSize = parentScope.TestForm.standardSize;
-                        })
-                }
+                dataReceivingService.findAllStandardSize()
+                    .success(function (standardSize) {
+                        $scope.standardSizes = standardSize;
+                        $scope.newValues.counterStandardSize = parentScope.TestForm.standardSize;
+                    })
+            }
 
             /**
              * get all symbols from counter_type by standardSize and deviceType
              * @param standardSize - from counter_type table
              * @param deviceType - from counter_type table
              */
-            $scope.getAllSymbolsByStandardSizeAndDeviceType = function(standardSize, deviceType) {
+            $scope.getAllSymbolsByStandardSizeAndDeviceType = function (standardSize, deviceType) {
                 dataReceivingService.findAllSymbolsByStandardSizeAndDeviceType(standardSize, deviceType)
-                    .success(function(symbols) {
+                    .success(function (symbols) {
                         $scope.symbols = symbols;
                         $scope.eraseCurrentSymbolAndManufacturer();
                     });
@@ -137,7 +136,7 @@ angular
              * @param deviceType
              * @param symbol
              */
-            $scope.getAllManufacturerByStandardSizeAndDeviceTypeAndSymbol = function(standardSize, deviceType, symbol) {
+            $scope.getAllManufacturerByStandardSizeAndDeviceTypeAndSymbol = function (standardSize, deviceType, symbol) {
                 calibrationTestServiceCalibrator.getAllCounterTypesByStandardSizeAndDeviceTypeAndSymbol(standardSize, deviceType, symbol)
                     .then(function (result) {
                         $scope.manufacturers = result.data;
@@ -160,131 +159,73 @@ angular
                 $scope.newValues.counterManufacturer = undefined;
             };
 
-                if (photoId == "testMainPhoto") {
-                    $scope.newValues.counterNumber = parentScope.TestForm.counterNumber;
-                    $scope.newValues.counterYear = parentScope.TestForm.counterProductionYear;
-                    $scope.newValues.accumulatedVolume = parentScope.TestForm.accumulatedVolume;
-                    $scope.newValues.counterSymbol = parentScope.TestForm.symbol;
-                    $scope.setStatusTypeWater(parentScope.TestForm.typeWater);
-                    getCurrentCounterManufacturer();
-                    getAllStandardSizes();
-                } else {
-                    var idSplit = photoId.split("Photo");
-                    $scope.photoType = idSplit[0];
-                    $scope.photoIndex = parseInt(idSplit[1]);
-                    $scope.newValues.counterValue = $scope.photoType == 'begin'
-                        ? parentScope.TestDataFormData[$scope.photoIndex].initialValue
-                        : parentScope.TestDataFormData[$scope.photoIndex].endValue;
-                }
+            if (photoId == "testMainPhoto") {
+                $scope.newValues.counterNumber = parentScope.TestForm.counterNumber;
+                $scope.newValues.counterYear = parentScope.TestForm.counterProductionYear;
+                $scope.newValues.accumulatedVolume = parentScope.TestForm.accumulatedVolume;
+                $scope.newValues.counterSymbol = parentScope.TestForm.symbol;
+                $scope.setStatusTypeWater(parentScope.TestForm.typeWater);
+                getCurrentCounterManufacturer();
+                getAllStandardSizes();
+            } else {
+                var idSplit = photoId.split("Photo");
+                $scope.photoType = idSplit[0];
+                $scope.photoIndex = parseInt(idSplit[1]);
+                $scope.newValues.counterValue = $scope.photoType == 'begin'
+                    ? parentScope.TestDataFormData[$scope.photoIndex].initialValue
+                    : parentScope.TestDataFormData[$scope.photoIndex].endValue;
+            }
+            $scope.rotateIndex = parentScope.rotateIndex;
 
-                $scope.photo = document.getElementById(photoId).src;
+            $scope.photo = document.getElementById(photoId).src;
 
-                $scope.rotateIndex;
-
-                switch (document.getElementById(photoId).className) {
-                    case "rotated90" :
-                    {
-                        $scope.rotateIndex = 1;
-                        break;
-                    }
-                    case "rotated180" :
-                    {
-                        $scope.rotateIndex = 2;
-                        break;
-                    }
-                    case "rotated270" :
-                    {
-                        $scope.rotateIndex = 3;
-                        break;
-                    }
-                    case "rotated0" :
-                    {
-                        $scope.rotateIndex = 4;
-                        break;
-                    }
-                }
-
-                $scope.rotateLeft = function () {
-                    $scope.rotateIndex--;
-                    if ($scope.rotateIndex == 0) {
-                        $scope.rotateIndex = 4;
-                    }
-                };
-
-                $scope.rotateRight = function () {
-                    $scope.rotateIndex++;
-                    if ($scope.rotateIndex == 5) {
-                        $scope.rotateIndex = 1;
-                    }
-                };
-
-                $scope.rotate180 = function () {
-                    $scope.rotateIndex += 2;
-                    if ($scope.rotateIndex > 4) {
-                        $scope.rotateIndex -= 4;
-                    }
-                };
-
-                $scope.saveOnExit = function () {
-                    $scope.$broadcast('show-errors-check-validity');
-                    if($scope.clientForm.$valid) {
-                        if (photoId == "testMainPhoto") {
-                            parentScope.TestForm.counterNumber = $scope.newValues.counterNumber;
-                            parentScope.TestForm.accumulatedVolume = $scope.newValues.accumulatedVolume;
-                            parentScope.TestForm.counterProductionYear = $scope.newValues.counterYear;
-                            parentScope.TestForm.typeWater = $scope.newValues.counterManufacturer.typeWater;
-                            parentScope.TestForm.standardSize = $scope.newValues.counterManufacturer.standardSize;
-                            parentScope.TestForm.symbol = $scope.newValues.counterManufacturer.symbol;
+            $scope.saveOnExit = function () {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.clientForm.$valid) {
+                    if (photoId == "testMainPhoto") {
+                        parentScope.TestForm.counterNumber = $scope.newValues.counterNumber;
+                        parentScope.TestForm.accumulatedVolume = $scope.newValues.accumulatedVolume;
+                        parentScope.TestForm.counterProductionYear = $scope.newValues.counterYear;
+                        parentScope.TestForm.typeWater = $scope.newValues.counterManufacturer.typeWater;
+                        parentScope.TestForm.standardSize = $scope.newValues.counterManufacturer.standardSize;
+                        parentScope.TestForm.symbol = $scope.newValues.counterManufacturer.symbol;
+                        if (parentScope.TestForm.counterTypeId != $scope.newValues.counterManufacturer.id) {
                             parentScope.TestForm.counterTypeId = $scope.newValues.counterManufacturer.id;
+                            parentScope.selectedReason.selected = undefined;
+                            parentScope.isReasonsUnsuitabilityShown();
+                        }
+                    } else {
+                        if ($scope.photoType == 'begin') {
+                            parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;
+                            $scope.updateValues($scope.photoIndex);
                         } else {
-                            if ($scope.photoType == 'begin') {
-                                parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;
-                                $scope.updateValues($scope.photoIndex);
-                            } else {
-                                parentScope.TestDataFormData[$scope.photoIndex].endValue = $scope.newValues.counterValue;
-                                $scope.updateValues($scope.photoIndex);
-                            }
-                            $scope.isChanged = false;
+                            parentScope.TestDataFormData[$scope.photoIndex].endValue = $scope.newValues.counterValue;
+                            $scope.updateValues($scope.photoIndex);
                         }
-
-                        switch ($scope.rotateIndex) {
-                            case 1:
-                            {
-                                document.getElementById(photoId).className = "rotated90";
-                                break;
-                            }
-                            case 2:
-                            {
-                                document.getElementById(photoId).className = "rotated180";
-                                break;
-                            }
-                            case 3:
-                            {
-                                document.getElementById(photoId).className = "rotated270";
-                                break;
-                            }
-                            case 4:
-                            {
-                                document.getElementById(photoId).className = "rotated0";
-                                break;
-                            }
+                        $scope.isChanged = false;
+                        if (parentScope.showReasons) {
+                            parentScope.showReasons = parentScope.isTestRaw();
+                        } else {
+                            parentScope.selectedReason.selected = undefined;
+                            parentScope.isReasonsUnsuitabilityShown();
                         }
-                        $modalInstance.close("saved");
                     }
-                };
+                    $modalInstance.close("saved");
+                }
+            };
 
             $scope.checkAll = function (caseForValidation) {
                 switch (caseForValidation) {
                     case ('accumulatedVolume'):
                         var accumulatedVolume = $scope.newValues.accumulatedVolume;
                         var matches = /^[0-9]*$/.test(accumulatedVolume);
-                        if(matches){
+                        if (matches) {
                             if (/^\d{1,10}$/.test(accumulatedVolume)) {
                                 validator('accumulatedVolume', false);
                             } else {
                                 validator('accumulatedVolume', true);
                             }
-                        }else{
+                        } else {
                             validator('accumulatedVolume', true);
                         }
 
@@ -316,12 +257,6 @@ angular
                         break;
                 }
             }
-
-
-
-
-
-            }
-            ])
-            ;
+        }
+    ]);
 

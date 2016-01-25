@@ -50,7 +50,7 @@
 
     <div class="row">
         <div class="form-group col-md-5">
-            <label class="control-label">{{'ORGANIZATION_SERVICE_TYPE_ADMIN' | translate}}</label>
+            <label class="control-label">{{'COUNTER_PURPOSE' | translate}}</label>
         </div>
         <div class="form-group col-md-7">
             <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
@@ -120,7 +120,9 @@
         </div>
         <div class="form-group col-md-7">
             <input type="text" ng-model="TestForm.consumptionStatus | translate" ng-disabled="fileLoaded"
-                   name="consumptionStatus" class="form-control " required>
+                   name="consumptionStatus"
+                   ng-class="{'success-result': consumptionStatusResult(TestForm.consumptionStatus), 'failed-result': !consumptionStatusResult(TestForm.consumptionStatus)}"
+                   class="form-control " required>
         </div>
     </div>
 
@@ -131,30 +133,35 @@
         </div>
         <div class="form-group col-md-7">
             <input type="text" ng-model="TestForm.testResult | translate" ng-disabled="fileLoaded"
-                   name="testResult" class="form-control " required>
+                   name="testResult"
+                   ng-class="{'success-result': commonTestResult(TestForm.testResult), 'failed-result': !commonTestResult(TestForm.testResult)}"
+                   class="form-control " required>
         </div>
     </div>
 
     <div class="row">
         <div class="form-group col-md-12" style="width: 260px; height: 260px">
-            <img ng-show="fileLoaded" class="rotated0" ng-click="showEditMainPhotoModal('testMainPhoto')" id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}" width="100%" height="100%">
+            <img ng-show="fileLoaded" class="rotated0" ng-click="showEditMainPhotoModal('testMainPhoto')"
+                 ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+            'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
+                 id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}" width="100%" height="100%">
         </div>
-
     </div>
-
     <div class="row">
         <div class="form-group">
-            <ui-select style="width:100%" ng-if="hasProtocol && isVerification"  ng-model="selectedStatus.label" ng-disabled="TestForm.signed" theme="select2"
-                       search-enabled="false"
-                       on-select="setStatus($item)"
-                    >
-                <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}" >
-                    {{$select.selected.label}}
+            <ui-select style="width:100%" ng-if="showReasons" search-enabled="false"  ng-model="selectedReason.selected" ng-disabled="TestForm.signed || !reasonsUnsuitability.length" theme="select2">
+                <ui-select-match allow-clear="true" placeholder="{{'REASON_SELECT_PLACEHOLDER' | translate}}" >
+                    {{$select.selected.name}}
                 </ui-select-match>
-                <ui-select-choices  repeat="status.label as status in statusData">
-                    <span ng-bind-html="status.label"></span>
+                <ui-select-choices  repeat="reason.name as reason in reasonsUnsuitability">
+                    <span ng-bind-html="reason.name"></span>
                 </ui-select-choices>
             </ui-select>
+            <span ng-if="!reasonsUnsuitability.length && showReasons" style="color: #b27e77">
+               <i class="fa fa-info-circle">
+                   <ins>{{'REASON_UNSUITABILITY_NOT_FOUND' | translate }}</ins>
+               </i>
+            </span>
         </div>
     </div>
     <div class="row">
@@ -167,9 +174,9 @@
         <div class="form-group col-sm-4">
             <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" ng-show="isVerification" type="submit"
                     class="btn btn-warning btn-md"
-                    ng-click="signCalibrationTest()">
+                    ng-click="showInstallPrivateKeyModal()">
                 {{'SIGN_PROTOCOL' | translate}}
-            </button>
+            </button><!--ng-click="signCalibrationTest()"-->
         </div>
             <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"ng-show="!fileLoaded"
                     ng-click="fileName = uploadBbiFile(testId)">
@@ -180,6 +187,19 @@
         <div class="form-group col-sm-4">
             <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-danger " ng-click="closeForm()"
                     >{{'CLOSE' | translate}}
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-8" style="text-align:center">
+            <button ng-click="rotateLeft()" class="btn btn-info" type="button">
+                {{'ROTATE_LEFT' | translate }}
+            </button>
+            <button ng-click="rotate180()" class="btn btn-info" type="button">
+                {{'ROTATE_180' | translate }}
+            </button>
+            <button ng-click="rotateRight()" class="btn btn-info" type="button">
+                {{'ROTATE_RIGHT' | translate }}
             </button>
         </div>
     </div>
@@ -195,7 +215,7 @@
                     <label class="control-label"></label>
                 </td>
                 <td id="testColumnHead" ng-repeat="testData in TestDataFormData">
-                    {{testData.testNumber}}
+                    {{testData.testNumber | translate}}
                 </td>
             </tr>
             </thead>
@@ -287,8 +307,9 @@
                         | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.consumptionStatus" ng-disabled="fileLoaded"
-                           class="form-control " required>
+                    <input type="text" ng-model="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
+                           ng-class="{'success-result': consumptionStatusResult(testData.consumptionStatus), 'failed-result': !consumptionStatusResult(testData.consumptionStatus)}"
+                           class="form-control" required>
                 </td>
             </tr>
             <tr>
@@ -306,10 +327,10 @@
                     <label class="control-label">{{'TEST_RESULT' | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.testResult" ng-disabled="fileLoaded"
+                    <input type="text" ng-model="testData.testResult | translate" ng-disabled="fileLoaded"
+                           ng-class="{'success-result': commonTestResult(testData.testResult), 'failed-result': !commonTestResult(testData.testResult)}"
                            class="form-control " required>
                 </td>
-            </tr>
             </tr>
             </tbody>
         </table>
@@ -321,7 +342,7 @@
             <tr>
                 <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable">
                     <label class="control-image-label">
-                        {{ testData.testNumber }}
+                        {{ testData.testNumber | translate}}
                     </label>
                 </td>
             </tr>
@@ -331,6 +352,8 @@
                 <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
                     <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0"
                          ng-click="showEditMainPhotoModal( 'beginPhoto' + $index )" style="width: 200px; height: 200px;"
+                         ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+            'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                          data-ng-src="data:image/png;base64,{{testData.beginPhoto}}" width="100%" height="100%">
                 </td>
             </tr>
@@ -338,6 +361,8 @@
                 <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
                     <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0"
                          ng-click="showEditMainPhotoModal( 'endPhoto' + $index )" style="width: 200px; height: 200px;"
+                         ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+            'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                          data-ng-src="data:image/png;base64,{{testData.endPhoto}}" width="100%" height="100%">
                 </td>
             </tr>

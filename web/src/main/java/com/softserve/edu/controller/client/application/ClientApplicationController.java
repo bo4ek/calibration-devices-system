@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public class ClientApplicationController {
 
-    Logger logger = Logger.getLogger(ClientApplicationController.class);
+    private Logger logger = Logger.getLogger(ClientApplicationController.class);
 
     @Autowired
     private UserService userService;
@@ -63,8 +63,9 @@ public class ClientApplicationController {
      * @param verificationDTO DTO Object, that contains all necessary data to create new Verification
      * @return list of Verification's ids, size of which depends on quantity of the one type devices that were selected
      */
+    @ResponseBody
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public @ResponseBody List<String> saveApplication(@RequestBody ClientStageVerificationDTO verificationDTO) {
+    public List<String> saveApplication(@RequestBody ClientStageVerificationDTO verificationDTO) {
         List<String> verificationIds = new ArrayList<>();
         ClientData clientData = new ClientData(verificationDTO.getFirstName(),
                 verificationDTO.getLastName(),

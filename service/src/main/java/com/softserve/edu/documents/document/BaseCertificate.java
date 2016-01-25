@@ -7,7 +7,6 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
-import com.softserve.edu.service.admin.OrganizationService;
 import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
@@ -31,9 +30,6 @@ public abstract class BaseCertificate implements Document {
      */
     protected CalibrationTest calibrationTest;
 
-
-    protected OrganizationService organizationService;
-
     /**
      * Constructor
      *
@@ -54,6 +50,16 @@ public abstract class BaseCertificate implements Document {
             return verification.getStateVerificator().getName();
         } catch (Exception e) {
             logger.error("Vereficator's name has not been specified ", e);
+            return Constants.NOT_SPECIFIED;
+        }
+    }
+
+    @Placeholder(name = "VERIFICATOR_SUBORDINATION")
+    public String getStateVerificatorSubordination() {
+        try {
+            return verification.getStateVerificator().getAdditionInfoOrganization().getSubordination();
+        } catch (Exception e) {
+            logger.error("Vereficator's subordination has not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }

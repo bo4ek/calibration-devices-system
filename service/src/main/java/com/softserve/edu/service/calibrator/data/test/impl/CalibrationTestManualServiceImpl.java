@@ -71,7 +71,7 @@ public class CalibrationTestManualServiceImpl implements CalibrationTestManualSe
 
     @Override
     @Transactional
-    public CalibrationTestManual createNewTestManual(String pathToScan, Integer numberOfTest, Long moduleId, Date dateTest) {
+    public CalibrationTestManual createNewTestManual(String pathToScan, String numberOfTest, Long moduleId, Date dateTest) {
         CalibrationModule calibrationModule = calibrationModuleRepository.findOne(moduleId);
         CalibrationTestManual calibrationTestManual = new CalibrationTestManual(pathToScan, numberOfTest
                 , generateNumber(dateTest, calibrationModule.getModuleNumber(), numberOfTest), dateTest, calibrationModule);
@@ -110,7 +110,7 @@ public class CalibrationTestManualServiceImpl implements CalibrationTestManualSe
 
     @Override
     @Transactional
-    public void editTestManual(String pathToScanDoc, Date dateOfTest, Integer numberOfTest, Long moduleId, CalibrationTestManual calibrationTestManual) {
+    public void editTestManual(String pathToScanDoc, Date dateOfTest, String numberOfTest, Long moduleId, CalibrationTestManual calibrationTestManual) {
         CalibrationModule calibrationModule = calibrationModuleRepository.findOne(moduleId);
         calibrationTestManual.setPathToScan(pathToScanDoc);
         calibrationTestManual.setDateTest(dateOfTest);
@@ -162,14 +162,14 @@ public class CalibrationTestManualServiceImpl implements CalibrationTestManualSe
     }
 
 
-    private Long generateNumber(Date dateOfTest, String moduleNumber, Integer numberOfTest) {
+    private String generateNumber(Date dateOfTest, String moduleNumber, String numberOfTest) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateOfTest);
         int year = cal.get(Calendar.YEAR);
         int month = (cal.get(Calendar.MONTH)) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
         StringBuffer number = new StringBuffer(moduleNumber).append(day).append(month).append(year).append(numberOfTest);
-        return Long.valueOf(number.toString());
+        return number.toString();
     }
 
     private void setPathToScan(Long id, String pathToScan) {

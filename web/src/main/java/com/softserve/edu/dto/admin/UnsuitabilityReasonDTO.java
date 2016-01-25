@@ -19,4 +19,9 @@ public class UnsuitabilityReasonDTO {
         this.deviceId = deviceId;
         this.deviceName = deviceName;
     }
+
+    public UnsuitabilityReasonDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

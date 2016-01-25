@@ -1,5 +1,6 @@
 package com.softserve.edu.service.calibrator.data.test;
 
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestDataManual;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestManual;
 
@@ -16,7 +17,7 @@ public interface CalibrationTestDataManualService {
 
     CalibrationTestDataManual findByVerificationId(String verifId);
 
-    void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, Long counterId, CalibrationTestManual calibrationTestManual, String verificationId);
+    void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, Long counterId, CalibrationTestManual calibrationTestManual, String verificationId, UnsuitabilityReason unsuitabilityReason);
 
     void editTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, CalibrationTestDataManual cTestDataManual, String verificationId, Boolean verificationEdit);
 

@@ -337,8 +337,9 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(message);
+
             for (File file : files) {
-                mimeMessageHelper.addAttachment(file.getName(), file);
+                mimeMessageHelper.addAttachment(file.getName().substring(0, file.getName().indexOf('_')) + file.getName().substring(file.getName().indexOf('.')), file);
             }
             mailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (Exception ex) {

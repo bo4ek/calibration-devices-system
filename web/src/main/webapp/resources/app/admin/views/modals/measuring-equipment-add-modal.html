@@ -44,14 +44,20 @@
                     </label>
 
                     <div class="col-md-8">
-                        <input type="text" ng-model="addCalibrationModuleFormData.organizationCode"
-                               id="organizationCode"
-                               name="organizationCode"
-                               class="form-control" popover="Введіть код суб'єкта установки"
-                               popover-trigger="focus" popover-placement="top"
-                               required>
-						 	<span class="form-control-feedback glyphicon
-						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
+                        <ui-select class="form-control" type="text" theme="select2"
+                                   ng-model="selectedValues.selectedOrganizationCode"
+                                   name="organizationCode" id="organizationCode" required>
+                            <ui-select-match placeholder="{{'SELECT_EDRPOU' | translate}}" allow-clear="true">
+                                {{$select.selected}}
+
+                                <span class="form-control-feedback glyphicon
+						 	    form-horizontal glyphicon glyphicon-ok-sign"></span>
+
+                            </ui-select-match>
+                            <ui-select-choices repeat="organizationCode in organizationCodes | filter: $select.search">
+                                <span ng-bind-html="organizationCode"></span>
+                            </ui-select-choices>
+                        </ui-select>
 
                         <p class="help-block" ng-if="addCalibrationModuleForm.organizationCode.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -73,7 +79,7 @@
                     <div class="col-md-8">
                         <input type="text" ng-model="addCalibrationModuleFormData.condDesignation" id="condDesignation"
                                name="condDesignation"
-                               class="form-control" popover="Введіть код"
+                               class="form-control" popover="{{'INPUT_SYMBOL' | translate}}"
                                popover-trigger="focus" popover-placement="top"
                                required>
 						 	<span class="form-control-feedback glyphicon
@@ -99,7 +105,7 @@
                     <div class="col-md-8">
                         <input type="text" ng-model="addCalibrationModuleFormData.serialNumber" id="serialNumber"
                                name="serialNumber"
-                               class="form-control" popover="Введіть серійний номер"
+                               class="form-control" popover="{{'INPUT_MANUFACTURER_NUMBER' | translate}}"
                                popover-trigger="focus" popover-placement="top"
                                required>
 						 	<span class="form-control-feedback glyphicon
@@ -126,7 +132,7 @@
                         <input type="text" ng-model="addCalibrationModuleFormData.employeeFullName"
                                id="employeeFullName"
                                name="employeeFullName"
-                               class="form-control" popover="Введіть ПІБ контактної особи"
+                               class="form-control" popover="{{'INPUT_PERSON_NAME' | translate}}"
                                popover-trigger="focus" popover-placement="top"
                                required>
 						 	<span class="form-control-feedback glyphicon
@@ -156,7 +162,7 @@
                                    name="telephone"
                                    class="form-control col-md-8 " ng-model="addCalibrationModuleFormData.telephone"
                                    placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX"
-                                   popover="Введіть номер телефону"
+                                   popover="{{'INPUT_PHONE_NUMBER' | translate}}"
                                    popover-trigger="focus" popover-placement="top"
                                    required>
                         </div>
@@ -250,7 +256,7 @@
                     <div class="col-md-8">
                         <input id="email" name="email" type="email" class="form-control"
                                ng-model="addCalibrationModuleFormData.email" ng-pattern="EMAIL_REGEX"
-                               popover="Введіть email адресу організації"
+                               popover="{{'INPUT_EMAIL' | translate}}"
                                popover-trigger="focus" popover-placement="top"
                                placeholder="example@gmail.com" required>
 							<span class="form-control-feedback glyphicon
@@ -276,7 +282,7 @@
                     <div class="col-md-8">
                         <input type="text" ng-model="addCalibrationModuleFormData.calibrationType" id="calibrationType"
                                name="calibrationType"
-                               class="form-control" popover="Введіть методику повірки"
+                               class="form-control" popover="{{'INPUT_METHOD_OF_VERIFICATION' | translate}}"
                                popover-trigger="focus" popover-placement="top"
                                required>
 						 	<span class="form-control-feedback glyphicon

@@ -7,7 +7,7 @@ angular
                 return getData('verifications/archive/' + verificationId);
             },
             getNewVerifications: function (currentPage, itemsPerPage, params, sortCriteria, sortOrder) {
-                return sendDataToUrl('calibrator/verifications/new/'+ currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, params);
+                return sendDataToUrl('calibrator/verifications/new/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, params);
             },
             getNewVerificationsForMainPanel: function (currentPage, itemsPerPage, search) {
                 return getDataWithParams('calibrator/verifications/new/mainpanel/' + currentPage + '/' + itemsPerPage, search);
@@ -34,10 +34,10 @@ angular
             sendEditedVerification: function (verificationId, form) {
                 return updateData("edit/" + verificationId, form);
             },
-            getCalibratorsCorrespondingProvider: function (url) {
+            getCalibratorsCorrespondingProvider: function () {
                 return getData("applications/calibrators");
             },
-            getLocalitiesCorrespondingProvider: function (url) {
+            getLocalitiesCorrespondingProvider: function () {
                 return getData("applications/localities");
             },
             getStreetsCorrespondingLocality: function (selectedLocality) {
@@ -46,7 +46,7 @@ angular
             getBuildingsCorrespondingStreet: function (selectedBuilding) {
                 return getData("applications/buildings/" + selectedBuilding.id);
             },
-            getCountOfNewVerifications: function (url) {
+            getCountOfNewVerifications: function () {
                 return getData('verifications/new/count/calibrator');
             },
             markVerificationAsRead: function (data) {
@@ -55,9 +55,6 @@ angular
             cancelUploadFile: function (idVerification) {
                 return getData('verifications/find/uploadFile?idVerification=' + idVerification);
             },
-            getCalibrators: function (url) {
-                return getData('verifications/new/calibratorEmployees');
-            },
             sendEmployeeCalibrator: function (data) {
                 $log.debug("from service " + data);
                 return updateData('assign/calibratorEmployee', data);
@@ -65,14 +62,13 @@ angular
             cleanCalibratorEmployeeField: function (data) {
                 return employeeUpdateData('remove/calibratorEmployee', data);
             },
-
             getNewVerificationEarliestDate: function () {
                 return getData('verifications/new/earliest_date/calibrator');
             },
             getArchivalVerificationEarliestDate: function () {
                 return getData('verifications/archive/earliest_date/calibrator');
             },
-            getIfEmployeeCalibrator: function (url) {
+            getIfEmployeeCalibrator: function () {
                 return getData('verifications/calibrator/role');
             },
             checkIfAdditionalInfoExists: function (verifId) {
@@ -81,17 +77,17 @@ angular
             getVerificationById: function (code) {
                 return getData('applications/verification/' + code);
             },
-            saveAdditionalInfo: function(data) {
-                $log.debug("from service " +  data)
+            saveAdditionalInfo: function (data) {
+                $log.debug("from service " + data);
                 return updateData('saveInfo', data);
             },
-            editCounterInfo: function(data) {
+            editCounterInfo: function (data) {
                 return updateData('editCounterInfo', data);
             },
-            editClientInfo: function(data) {
+            editClientInfo: function (data) {
                 return updateData('editClientInfo', data);
             },
-            getCountOfNewNotStandardVerifications : function(data) {
+            getCountOfNewNotStandardVerifications: function (data) {
                 return getData('not-standard-verifications/new/count');
             }
         };
@@ -156,6 +152,7 @@ angular
                     return err;
                 });
         }
+
         function sendDataToUrl(url, data) {
             return $http.post(url, data)
                 .success(function (responseData) {
@@ -165,6 +162,7 @@ angular
                     return err;
                 });
         }
+
         function sendDataProtocol(url, data) {
             return $http.put('calibrator/verifications/' + url, data)
                 .success(function (responseData) {

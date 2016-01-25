@@ -1,5 +1,6 @@
 package com.softserve.edu.entity.verification.calibration;
 
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.verification.Verification;
 import lombok.*;
 
@@ -43,9 +44,16 @@ public class CalibrationTest {
     @Column(columnDefinition = "boolean default false")
     private boolean signed;
 
+    @Column(columnDefinition = "int default 0")
+    private Integer rotateIndex;
+
     @Lob
     @Column(length = 100000)
     private byte[] signedDocument;
+
+    @ManyToOne
+    @JoinColumn(name = "unsuitabilityReasonId")
+    private UnsuitabilityReason unsuitabilityReason;
 
     @Embedded
     @AttributeOverrides({

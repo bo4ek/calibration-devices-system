@@ -1,9 +1,9 @@
 angular
     .module('employeeModule')
     .controller('NewVerificationsControllerVerificator', ['$scope', '$log', '$modal', '$location', 'CalibrationTestServiceCalibrator', 'VerificationServiceVerificator',
-        '$rootScope', 'ngTableParams', '$filter', '$timeout', '$translate', 'CalibrationTestServiceCalibrator',
+        '$rootScope', 'ngTableParams', '$filter', '$timeout', '$translate',
         function ($scope, $log, $modal, $location, calibrationTestServiceCalibrator,  verificationServiceVerificator, $rootScope, ngTableParams, $filter, $timeout,
-                  $translate , calibrationTestServiceCalibrator) {
+                  $translate ) {
 
             $scope.resultsCount = 0;
 
