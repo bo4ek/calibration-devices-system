@@ -200,8 +200,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 if (correspondingVerification == null) {
                     try {
                         deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-
-                        CalibrationModule moduleId = calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber());
+                        String serialNumber = String.valueOf(deviceTestData.getInstallmentNumber());
+                        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(serialNumber);
                         if (moduleId == null) {
                             throw new InvalidModuleIdException();
                         }
@@ -220,7 +220,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                         logger.error("Wrong image in BBI file ", e);
                     } catch (InvalidModuleIdException e){
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_MODULE_ID;
-                        logger.error("Wrong module id in bbi file", e);
+                        logger.error("Wrong module serial number in bbi file", e);
                     } catch (Exception e) {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                         logger.error("BBI is not valid ", e);

@@ -571,7 +571,7 @@
     "BBI_FILE_IS_ALREADY_IN_DATABASE": "BBI file is already in database",
     "NAME_OF_BBI_FILE_DOES_NOT_MATCH": "Name of bbi file does not match with name in BluetoothDB file",
     "WRONG_IMAGE_IN_BBI": "Wrong image in BBI file",
-    "WRONG_MODULE_ID": "Wrong module Id in BBI file",
+    "WRONG_MODULE_ID": "Wrong module serial in BBI file",
     "INVALID_VERIFICATION_CODE": "Invalid verification code",
     "PLEASE_DESCRIBE_REASON_OF_PROTOCOL_REJECTION": "Please explain why verification is being rejected",
     "REASON_OF_PROTOCOL_REJECTION": "Please provide the detailed reason why this protocol needs to be rejected",
