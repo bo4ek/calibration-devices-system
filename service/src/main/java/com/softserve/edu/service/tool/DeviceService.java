@@ -22,7 +22,7 @@ public interface DeviceService {
 
     List<Device> getAllByDeviceName(String device);
 
-    List<Device> getAllByDeviceType(String deviceType);
+    Device getByDeviceTypeAndDefaultDevice(String deviceType, Boolean defaultDevice);
 
     void addDeviceCategory(String deviceType, String deviceName);
 

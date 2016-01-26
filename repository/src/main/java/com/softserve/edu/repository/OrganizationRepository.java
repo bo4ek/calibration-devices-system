@@ -20,6 +20,9 @@ public interface OrganizationRepository extends CrudRepository<Organization, Lon
 
     Set<Organization> findAll(); //TODO: delete
 
+    @Query("SELECT a.codeEDRPOU FROM Organization o join o.additionInfoOrganization a")
+    List<String> findAllCodeEDRPOU();
+
     /**
      * Find organization types by organization id
      *

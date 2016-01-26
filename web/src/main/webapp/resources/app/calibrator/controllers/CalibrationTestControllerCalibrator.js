@@ -87,7 +87,7 @@ angular
              */
             $scope.createAndUpdateTest = function () {
                 $scope.$broadcast('show-errors-check-validity');
-                if($scope.clientForm.$valid) {
+                if($scope.handheldProtocolForm.$valid) {
                     retranslater();
                     if (!$scope.selectedData.numberProtocol) {
                         calibrationTestServiceCalibrator.createTestManual(testManualForSend)
@@ -162,6 +162,7 @@ angular
             $scope.pathToScanDoc = null;
             $scope.IsScanDoc = false;
             $scope.selectedData.numberProtocolManual=null;
+            $scope.isProccessed = true;
 
             /**
              *  receive data of all calibration modules
@@ -198,6 +199,7 @@ angular
                                 symbol: dataOfCounter.symbol,
                                 realiseYear: dataOfCounter.realiseYear,
                                 numberCounter: dataOfCounter.numberCounter,
+                                counterId : dataOfCounter.counterId,
                                 statusTestFirst: dataCompletedTest.statusTestFirst,
                                 statusTestSecond: dataCompletedTest.statusTestSecond,
                                 statusTestThird: dataCompletedTest.statusTestThird,
@@ -220,9 +222,20 @@ angular
                             $scope.selectedData.standardSize = $scope.dataOfManualTests[0].standardSize;
                             $scope.pathToScanDoc = dataCompletedTest.calibrationTestManualDTO.pathToScanDoc;
                             $scope.checkIsScanDoc();
+                            $scope.receiveTestsAndSetIsProcessed();
                         });
 
             }
+
+            $scope.receiveTestsAndSetIsProcessed = function () {
+                if ($scope.dataOfManualTests[0].statusTestFirst == 'RAW' || $scope.dataOfManualTests[0].statusTestSecond == 'RAW' || $scope.dataOfManualTests[0].statusTestThird == 'RAW') {
+                    $scope.isProccessed = false;
+                } else if ($scope.dataOfManualTests[0].statusTestFirst == 'FAILED' || $scope.dataOfManualTests[0].statusTestSecond == 'FAILED' || $scope.dataOfManualTests[0].statusTestThird == 'FAILED') {
+                    $scope.isProccessed = true;
+                } else if ($scope.dataOfManualTests[0].statusTestFirst == 'SUCCESS' || $scope.dataOfManualTests[0].statusTestSecond == 'SUCCESS' || $scope.dataOfManualTests[0].statusTestThird == 'SUCCESS') {
+                    $scope.isProccessed = true;
+                }
+            };
 
             function findcalibrationModuleBySerialNumber(snumber) {
                 var calibrationModel;
@@ -404,8 +417,8 @@ angular
             /**
              * get data of unsuitabilityReasons for drop-down
              */
-            function getAllUnsuitabilityReasons() {
-                calibrationTestServiceCalibrator.getAllUnsuitabilityReasons()
+            function getAllUnsuitabilityReasons(counterId) {
+                calibrationTestServiceCalibrator.getAllUnsuitabilityReasons(counterId)
                     .then(function (reasons) {
                         $scope.unsuitabilityReasons = reasons.data;
                     })
@@ -429,15 +442,18 @@ angular
             $scope.changeStatus = function (verification) {
                 if (verification.statusTestFirst == 'RAW' || verification.statusTestSecond == 'RAW' || verification.statusTestThird == 'RAW') {
                     verification.statusCommon = 'FAILED';
-                    getAllUnsuitabilityReasons();
+                    getAllUnsuitabilityReasons(verification.counterId);
+                    $scope.isProccessed = false;
                 } else if (verification.statusTestFirst == 'FAILED' || verification.statusTestSecond == 'FAILED' || verification.statusTestThird == 'FAILED') {
                     verification.statusCommon = 'FAILED';
                     verification.unsuitabilityReason = null;
                     $scope.unsuitabilityReasons = [];
+                    $scope.isProccessed = true;
                 } else if (verification.statusTestFirst == 'SUCCESS' || verification.statusTestSecond == 'SUCCESS' || verification.statusTestThird == 'SUCCESS') {
                     verification.statusCommon = 'SUCCESS';
                     verification.unsuitabilityReason = null;
                     $scope.unsuitabilityReasons = [];
+                    $scope.isProccessed = true;
                 }
             };
 

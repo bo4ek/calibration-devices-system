@@ -163,12 +163,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     public List<String> findAllOrganizationCodes() {
-        Set<Organization> set = organizationRepository.findAll();
-        List<String> list = new ArrayList<>();
-        for (Organization org : set) {
-            list.add(org.getAdditionInfoOrganization().getCodeEDRPOU());
-        }
-        return list;
+        return organizationRepository.findAllCodeEDRPOU();
     }
 
     /**

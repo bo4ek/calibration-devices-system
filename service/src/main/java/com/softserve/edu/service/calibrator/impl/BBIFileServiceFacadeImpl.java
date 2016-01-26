@@ -432,8 +432,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     deviceType = "THERMAL";
                     break;
             }
-            List<Device> devices = deviceService.getAllByDeviceType(deviceType);
-            deviceId = devices.get(0).getId();
+            deviceId = deviceService. getByDeviceTypeAndDefaultDevice(deviceType, true).getId();
             String deviceName = deviceService.getById(deviceId).getDeviceName();
             counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
             counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);

@@ -35,6 +35,8 @@ public class Device {
 
     private String number;
 
+    private Boolean defaultDevice;
+
     @OneToMany(mappedBy = "device")
     @JsonBackReference
     private Set<Verification> verifications;

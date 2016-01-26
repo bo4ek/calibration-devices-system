@@ -1,13 +1,12 @@
 package com.softserve.edu.repository;
 
-import java.util.List;
-
+import com.softserve.edu.entity.device.Device;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.softserve.edu.entity.device.Device;
+import java.util.List;
 
 @Repository
 public interface DeviceRepository extends CrudRepository<Device, Long> {
@@ -18,7 +17,7 @@ public interface DeviceRepository extends CrudRepository<Device, Long> {
 
 	public List<Device> findByDeviceName(String deviceName );
 
-    public List<Device> findByDeviceType(Device.DeviceType deviceType);
+    public Device findByDeviceTypeAndDefaultDevice(Device.DeviceType deviceType, Boolean defaultDevice);
 
 
 }

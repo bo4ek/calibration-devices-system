@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/calibrator/calibrationTests/")
@@ -183,18 +184,6 @@ public class CalibrationTestController {
         return listOfCounterType;
     }
 
-
-    @RequestMapping(value = "getAllUnsuitabilityReasons", method = RequestMethod.GET)
-    public List<UnsuitabilityReasonDTO> getAllUnsuitabilityReasons() {
-        List unsuitabilityReasons = null;
-        try {
-            unsuitabilityReasons = UnsuitabilityReasonDTOTransformer.toDTOFromList(unsuitabilityReasonRepository.findAll());
-        } catch (Exception e) {
-            logger.error("failed to get list of Reasons", e);
-        }
-        return unsuitabilityReasons;
-    }
-
     /**
      * get all calibration module for handmade protocol
      *
@@ -293,9 +282,13 @@ public class CalibrationTestController {
             calibrationTestManualService.editTestManual(cTestManualDTO.getPathToScanDoc(), cTestManualDTO.getDateOfTest(), cTestManualDTO.getNumberOfTest()
                     , cTestManualDTO.getModuleId(), cTestManual);
             CalibrationTestDataManualDTO cTestDataManualDTO = cTestManualDTO.getListOfCalibrationTestDataManual().get(0);
+            UnsuitabilityReason unsuitabilityReason = null;
+            if (cTestDataManualDTO.getUnsuitabilityReason() != null) {
+                unsuitabilityReason = unsuitabilityReasonRepository.findOne(cTestDataManualDTO.getUnsuitabilityReason().getId());
+            }
             calibrationTestDataManualService.editTestDataManual(cTestDataManualDTO.getStatusTestFirst()
                     , cTestDataManualDTO.getStatusTestSecond(), cTestDataManualDTO.getStatusTestThird()
-                    , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit);
+                    , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit, unsuitabilityReason);
         } catch (Exception e) {
             logger.error("failed to edit calibration test manual" + e.getMessage());
             logger.error(e);
