@@ -201,8 +201,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     try {
                         deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
                         String serialNumber = String.valueOf(deviceTestData.getInstallmentNumber());
-                        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(serialNumber);
-                        if (moduleId == null) {
+                        CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(String.valueOf(deviceTestData.getInstallmentNumber()));
+                        if (calibrationModule.equals(null)) {
                             throw new InvalidModuleIdException();
                         }
                             correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
@@ -210,6 +210,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
                         saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                         Verification verification = verificationService.findById(correspondingVerification);
+                        verification.setCalibrationModule(calibrationModule);
                         verification.setStatus(Status.CREATED_BY_CALIBRATOR);
                         verificationService.saveVerification(verification);
                     } catch (FileAlreadyExistsException e) {
@@ -239,6 +240,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     } catch (NegativeArraySizeException e) {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
                         logger.error("Wrong image in BBI file ", e);
+                    } catch (InvalidModuleIdException e){
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_MODULE_ID;
+                        logger.error("Wrong module serial number in bbi file", e);
                     } catch (Exception e) {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
                         logger.error("Invalid verification code ", e);
