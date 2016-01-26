@@ -293,7 +293,7 @@
                                     <td title="'UNSUITABILITY_REASON' | translate">
                                         <ui-select class="col-md-15" ng-model="verification.unsuitabilityReason" theme="select2"
                                                    search-enabled="true"
-                                                   name="reason" id="reason" ng-disabled="isProccessed">
+                                                   name="reason" id="reason" ng-if="isNotProccessed" ng-required="{{isNotProccessed}}">
                                             <ui-select-match
                                                     allow-clear="false">
                                                 {{$select.selected.name | translate}}
