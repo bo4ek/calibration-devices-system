@@ -13,7 +13,7 @@
             <label class="control-label">{{'APPLICATION_NUMBER' | translate }}</label>
         </div>
         <div class="form-group col-md-7" show-errors>
-            <input type="text" ng-model="TestForm.verificationId"  ng-minlength="3" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.verificationId"  ng-minlength="3" ng-disabled="fileLoaded"
                    id="applicationNumber" name="applicationNumber" class="form-control " align="right" required>
         </div>
     </div>
@@ -22,15 +22,15 @@
             <label class="control-label">{{'DATE_TIME' | translate }}</label>
         </div>
         <div class="form-group col-md-3" id="testDate"  show-errors>
-            <input type="text" ng-model="TestForm.testDate" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.testDate" ng-disabled="fileLoaded"
                    name="testDate" class="form-control " required>
         </div>
         <div class="form-group col-md-2" id="testTime" show-errors>
-            <input type="text" ng-model="TestForm.testTime" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.testTime" ng-disabled="fileLoaded"
                    name="testTime" class="form-control " required>
         </div>
         <div class="form-group col-md-2" id="testPN" show-errors>
-            <input type="text" ng-model="TestForm.testPN" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.testPN" ng-disabled="fileLoaded"
                    name="testPN" class="form-control " required>
         </div>
     </div>
@@ -40,7 +40,7 @@
                 translate }}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="settingNumber" ng-disabled="fileLoaded"
+            <input type="text" ng-value="settingNumber" ng-disabled="fileLoaded"
                    name="settingNumber" class="form-control " required>
         </div>
     </div>
@@ -49,7 +49,7 @@
             <label class="control-label">{{'COUNTER_NUMBER' | translate }}</label>
         </div>
         <div class="form-group col-md-7" show-errors>
-            <input type="text" ng-model="TestForm.counterNumber" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.counterNumber" ng-disabled="fileLoaded"
                    name="counterNumber" class="form-control " required>
         </div>
     </div>
@@ -58,11 +58,11 @@
             <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
         </div>
         <div class="form-group symbol col-md-3">
-            <input type="text" ng-model="TestForm.standardSize | translate" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.standardSize | translate" ng-disabled="fileLoaded"
                    name="typewater" class="form-control " required>
         </div>
         <div class="form-group standartsize col-md-4">
-            <input type="text" ng-model="TestForm.symbol | translate" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.symbol | translate" ng-disabled="fileLoaded"
                    name="typewater" class="form-control " required>
         </div>
     </div>
@@ -71,7 +71,7 @@
             <label class="control-label">{{'COUNTER_PURPOSE' | translate}}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.typeWater | translate" ng-disabled="fileLoaded"
                    name="typewater" class="form-control " required>
         </div>
     </div>
@@ -80,7 +80,7 @@
             <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.typeWater | translate" ng-disabled="fileLoaded"
                    name="typewater" class="form-control " required>
         </div>
     </div>
@@ -89,7 +89,7 @@
             <label class="control-label">{{'YEAR_OF_COUNTER_PRODUCTION' | translate }}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.counterProductionYear" class="form-control " ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.counterProductionYear" class="form-control " ng-disabled="fileLoaded"
                    required>
         </div>
     </div>
@@ -98,7 +98,7 @@
             <label class="control-label">{{'ACCUMULATED_VOLUME' | translate}}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.accumulatedVolume" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.accumulatedVolume" ng-disabled="fileLoaded"
                    name="accumulatedVolume" class="form-control " required>
         </div>
     </div>
@@ -107,7 +107,7 @@
             <label class="control-label">{{'LATITUDE' | translate }}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.latitude" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.latitude" ng-disabled="fileLoaded"
                    name="latitude" class="form-control " required>
         </div>
     </div>
@@ -116,7 +116,7 @@
             <label class="control-label">{{'LONGITUDE' | translate }}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.longitude" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.longitude" ng-disabled="fileLoaded"
                    name="longitude" class="form-control " required>
         </div>
     </div>
@@ -126,7 +126,7 @@
                 translate }}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.consumptionStatus | translate" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.consumptionStatus | translate" ng-disabled="fileLoaded"
                    name="consumptionStatus"
                    ng-class="{'success-result': consumptionStatusResult(TestForm.consumptionStatus), 'failed-result': !consumptionStatusResult(TestForm.consumptionStatus)}"
                    class="form-control " required>
@@ -138,7 +138,7 @@
                 translate }}</label>
         </div>
         <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.testResult | translate" ng-disabled="fileLoaded"
+            <input type="text" ng-value="TestForm.testResult | translate" ng-disabled="fileLoaded"
                    name="testResult"
                    ng-class="{'success-result': commonTestResult(TestForm.testResult), 'failed-result': !commonTestResult(TestForm.testResult)}"
                    class="form-control " required>
@@ -233,7 +233,7 @@
                         translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.givenConsumption" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.givenConsumption" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -243,7 +243,7 @@
                         translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.acceptableError" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.acceptableError" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -253,7 +253,7 @@
                         | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.volumeOfStandard" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.volumeOfStandard" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -263,7 +263,7 @@
                         translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.initialValue" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.initialValue" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -273,7 +273,7 @@
                         translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.endValue" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.endValue" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -283,7 +283,7 @@
                         translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.volumeInDevice" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.volumeInDevice" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -293,7 +293,7 @@
                         translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.testTime" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.testTime" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -303,7 +303,7 @@
                         | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.actualConsumption" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.actualConsumption" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -313,7 +313,7 @@
                         | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="text" ng-model="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
+                    <input type="text" ng-value="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
                            ng-class="{'success-result': consumptionStatusResult(testData.consumptionStatus), 'failed-result': !consumptionStatusResult(testData.consumptionStatus)}"
                            class="form-control" required>
                 </td>
@@ -324,7 +324,7 @@
                         translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-model="testData.calculationError" ng-disabled="fileLoaded"
+                    <input type="number" ng-value="testData.calculationError" ng-disabled="fileLoaded"
                            class="form-control " required>
                 </td>
             </tr>
@@ -333,7 +333,7 @@
                     <label class="control-label">{{'TEST_RESULT' | translate }}</label>
                 </td>
                 <td ng-repeat="testData in TestDataFormData">
-                    <input type="text" ng-model="testData.testResult | translate" ng-disabled="fileLoaded"
+                    <input type="text" ng-value="testData.testResult | translate" ng-disabled="fileLoaded"
                            ng-class="{'success-result': commonTestResult(testData.testResult), 'failed-result': !commonTestResult(testData.testResult)}"
                            class="form-control " required>
                 </td>

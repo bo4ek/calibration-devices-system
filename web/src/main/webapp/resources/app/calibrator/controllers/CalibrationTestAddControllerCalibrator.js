@@ -302,7 +302,6 @@ angular
 
 
             $scope.showEditMainPhotoModal = function (id) {
-                console.log($scope.TestForm.signed);
                 if (!$scope.TestForm.signed) {
                     var modalInstance = $modal.open({
                         animation: true,
