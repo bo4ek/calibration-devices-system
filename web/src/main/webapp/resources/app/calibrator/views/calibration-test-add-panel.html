@@ -10,14 +10,40 @@
     </div>
     <div class="row">
         <div class="form-group col-md-5">
-            <label class="control-label">{{'FILE_NAME' | translate }}</label>
+            <label class="control-label">{{'APPLICATION_NUMBER' | translate }}</label>
         </div>
         <div class="form-group col-md-7" show-errors>
-            <input type="text" ng-model="TestForm.fileName"  ng-minlength="3" ng-disabled="fileLoaded"
-                   id="fileName" name="fileName" class="form-control " align="right" required>
+            <input type="text" ng-model="TestForm.verificationId"  ng-minlength="3" ng-disabled="fileLoaded"
+                   id="applicationNumber" name="applicationNumber" class="form-control " align="right" required>
         </div>
     </div>
-
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'DATE_TIME' | translate }}</label>
+        </div>
+        <div class="form-group col-md-3" id="testDate"  show-errors>
+            <input type="text" ng-model="TestForm.testDate" ng-disabled="fileLoaded"
+                   name="testDate" class="form-control " required>
+        </div>
+        <div class="form-group col-md-2" id="testTime" show-errors>
+            <input type="text" ng-model="TestForm.testTime" ng-disabled="fileLoaded"
+                   name="testTime" class="form-control " required>
+        </div>
+        <div class="form-group col-md-2" id="testPN" show-errors>
+            <input type="text" ng-model="TestForm.testPN" ng-disabled="fileLoaded"
+                   name="testPN" class="form-control " required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'SETTING_NUMBER' |
+                translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="settingNumber" ng-disabled="fileLoaded"
+                   name="settingNumber" class="form-control " required>
+        </div>
+    </div>
     <div class="row">
         <div class="form-group col-md-5">
             <label class="control-label">{{'COUNTER_NUMBER' | translate }}</label>
@@ -27,37 +53,6 @@
                    name="counterNumber" class="form-control " required>
         </div>
     </div>
-
-    <div class="row">
-        <div class="form-group col-md-5">
-            <label class="control-label">{{'YEAR_OF_COUNTER_PRODUCTION' | translate }}</label>
-        </div>
-        <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.counterProductionYear" class="form-control " ng-disabled="fileLoaded"
-                   required>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="form-group col-md-5">
-            <label class="control-label">{{'DATE_TIME' | translate }}</label>
-        </div>
-        <div class="form-group col-md-7" show-errors>
-            <input type="text" ng-model="TestForm.testDate" ng-disabled="fileLoaded"
-                   name="dateTime" class="form-control " required>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="form-group col-md-5">
-            <label class="control-label">{{'COUNTER_PURPOSE' | translate}}</label>
-        </div>
-        <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
-                   name="typewater" class="form-control " required>
-        </div>
-    </div>
-
     <div class="row">
         <div class="form-group col-md-5">
             <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
@@ -71,7 +66,33 @@
                    name="typewater" class="form-control " required>
         </div>
     </div>
-
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'COUNTER_PURPOSE' | translate}}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
+                   name="typewater" class="form-control " required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'COUNTER_TYPE' | translate}}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.typeWater | translate" ng-disabled="fileLoaded"
+                   name="typewater" class="form-control " required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <label class="control-label">{{'YEAR_OF_COUNTER_PRODUCTION' | translate }}</label>
+        </div>
+        <div class="form-group col-md-7">
+            <input type="text" ng-model="TestForm.counterProductionYear" class="form-control " ng-disabled="fileLoaded"
+                   required>
+        </div>
+    </div>
     <div class="row">
         <div class="form-group col-md-5">
             <label class="control-label">{{'ACCUMULATED_VOLUME' | translate}}</label>
@@ -81,18 +102,6 @@
                    name="accumulatedVolume" class="form-control " required>
         </div>
     </div>
-
-    <div class="row">
-        <div class="form-group col-md-5">
-            <label class="control-label">{{'SETTING_NUMBER' |
-                translate }}</label>
-        </div>
-        <div class="form-group col-md-7">
-            <input type="text" ng-model="TestForm.installmentNumber" ng-disabled="fileLoaded"
-                   name="settingNumber" class="form-control " required>
-        </div>
-    </div>
-
     <div class="row">
         <div class="form-group col-md-5">
             <label class="control-label">{{'LATITUDE' | translate }}</label>
@@ -102,7 +111,6 @@
                    name="latitude" class="form-control " required>
         </div>
     </div>
-
     <div class="row">
         <div class="form-group col-md-5">
             <label class="control-label">{{'LONGITUDE' | translate }}</label>
@@ -112,7 +120,6 @@
                    name="longitude" class="form-control " required>
         </div>
     </div>
-
     <div class="row">
         <div class="form-group col-md-5">
             <label class="control-label">{{'CONSUMPTION_LOL_STATUS' |
@@ -125,7 +132,6 @@
                    class="form-control " required>
         </div>
     </div>
-
     <div class="row">
         <div class="form-group col-md-5">
             <label class="control-label">{{'TEST_RESULT' |
@@ -140,11 +146,11 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-12" style="width: 260px; height: 260px">
-            <img ng-show="fileLoaded" class="rotated0" ng-click="showEditMainPhotoModal('testMainPhoto')"
+        <div class="form-group col-md-12" ng-class="{ 'vertical-image-main-photo': rotateIndex == 90 || rotateIndex == 270}">
+            <img ng-show="fileLoaded" class="rotated0 image-td" ng-click="showEditMainPhotoModal('testMainPhoto')"
                  ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
-                 id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}" width="100%" height="100%">
+                 id="testMainPhoto" data-ng-src="{{TestForm.testPhoto}}">
         </div>
     </div>
     <div class="row">
@@ -165,26 +171,26 @@
         </div>
     </div>
     <div class="row">
-        <div class="form-group col-sm-4">
-            <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-success btn-md" ng-disabled="TestForm.signed"
+        <div class="form-group">
+            <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-success btn-md"
+                    ng-disabled="TestForm.signed"
                     ng-click="updateCalibrationTest()"
                     >{{'EDIT_CHANGES' | translate}}
             </button>
-        </div>
-        <div class="form-group col-sm-4">
-            <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" ng-show="isVerification" type="submit"
+            <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)"
+                    ng-show="isVerification" type="submit"
                     class="btn btn-warning btn-md"
-                    ng-click="showInstallPrivateKeyModal()">
+                    ng-click="signCalibrationTest()">
                 {{'SIGN_PROTOCOL' | translate}}
-            </button><!--ng-click="signCalibrationTest()"-->
-        </div>
-            <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"ng-show="!fileLoaded"
+            </button>
+            <!--ng-click="signCalibrationTest()"-->
+            <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"
+                    ng-show="!fileLoaded"
                     ng-click="fileName = uploadBbiFile(testId)">
                 <img src="resources/assets/button-icons/upload.png"
                      ng-click="fileName = uploadBbiFile(testId)">
                 </img> {{ 'UPLOAD_BBI_FILE' | translate }}
             </button>
-        <div class="form-group col-sm-4">
             <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-danger " ng-click="closeForm()"
                     >{{'CLOSE' | translate}}
             </button>
@@ -332,38 +338,26 @@
                            class="form-control " required>
                 </td>
             </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="scroll-wrapper" ng-show="TestDataFormData[0].dataAvailable" style="padding-top: 50px">
-        <table class="table table-bordered">
-            <thead>
             <tr>
-                <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable">
-                    <label class="control-image-label">
-                        {{ testData.testNumber | translate}}
-                    </label>
-                </td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
-                    <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0"
-                         ng-click="showEditMainPhotoModal( 'beginPhoto' + $index )" style="width: 200px; height: 200px;"
+                <td></td>
+                <td ng-repeat="testData in TestDataFormData"
+                    ng-show="testData.dataAvailable" class="photo-cell">
+                    <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0 image-td"
+                         ng-click="showEditMainPhotoModal( 'beginPhoto' + $index )"
                          ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
-                         data-ng-src="data:image/png;base64,{{testData.beginPhoto}}" width="100%" height="100%">
+                         data-ng-src="data:image/png;base64,{{testData.beginPhoto}}">
                 </td>
             </tr>
             <tr>
-                <td ng-repeat="testData in TestDataFormData" ng-show="testData.dataAvailable" class="image-td">
-                    <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0"
-                         ng-click="showEditMainPhotoModal( 'endPhoto' + $index )" style="width: 200px; height: 200px;"
+                <td></td>
+                <td ng-repeat="testData in TestDataFormData"
+                    ng-show="testData.dataAvailable" class="photo-cell">
+                    <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0 image-td"
+                         ng-click="showEditMainPhotoModal( 'endPhoto' + $index )"
                          ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
-                         data-ng-src="data:image/png;base64,{{testData.endPhoto}}" width="100%" height="100%">
+                         data-ng-src="data:image/png;base64,{{testData.endPhoto}}">
                 </td>
             </tr>
             </tbody>

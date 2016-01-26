@@ -259,13 +259,20 @@ angular
                 $scope.fileLoaded = true;
                 $scope.TestForm = data;
                 var date = $scope.TestForm.testDate;
-                $scope.TestForm.testDate = moment(date).utcOffset(0).format("DD.MM.YYYY HH:mm");
+                $scope.TestForm.testDate = moment(date).utcOffset(0).format("DD.MM.YY");
+                $scope.TestForm.testTime = moment(date).utcOffset(0).format("HH:mm");
+                $scope.TestForm.testPN = $scope.getPNFromBBIName(data.fileName);
                 $scope.TestForm.testPhoto = "data:image/png;base64," + $scope.TestForm.testPhoto;
                 $scope.TestDataFormData = data.listTestData;
                 $scope.rotateIndex = data.rotateIndex;
+                $scope.settingNumber = data.serialNumber + "  " + data.condDesignation;
                 $scope.selectedReason.selected = data.reasonUnsuitabilityName;
                 $scope.isReasonsUnsuitabilityShown();
             };
+
+            $scope.getPNFromBBIName = function (fileName) {
+                return fileName.substring(6, fileName.length - ".bbi".length);
+            }
 
             /**
              * Get all reasons unsuitability for counter with {counterTypeId} type if

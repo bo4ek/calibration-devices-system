@@ -753,6 +753,7 @@
     "SELECT": "SELECT",
     "PRIVATE_KEY_PASSWORD": "Password",
     "READ_KEY_SIGN_DOC": "READ&SIGN",
-    "NUMBER_OF_VERIFICATION": "Number of verification"
+    "NUMBER_OF_VERIFICATION": "Number of verification",
+    "APPLICATION_NUMBER": "Application number"
 
 }
