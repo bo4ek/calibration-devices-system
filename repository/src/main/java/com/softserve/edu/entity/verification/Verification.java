@@ -237,7 +237,7 @@ public class Verification {
     public enum CalibrationTestResult {
         SUCCESS,
         FAILED,
-        RAW
+        NOT_PROCESSED
     }
 
     public enum ConsumptionStatus {

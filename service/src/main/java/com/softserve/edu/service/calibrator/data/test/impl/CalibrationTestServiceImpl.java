@@ -82,7 +82,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
                 if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
                     calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
                 }
-                if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.RAW)) {
+                if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.NOT_PROCESSED)) {
                     calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
                 }
                 if (сalibrationTestData.getConsumptionStatus().equals(Verification.ConsumptionStatus.NOT_IN_THE_AREA)) {

@@ -269,7 +269,7 @@ angular
 
             /**
              * Get all reasons unsuitability for counter with {counterTypeId} type if
-             * at least one of test has result 'RAW'
+             * at least one of test has result 'NOT_PROCESSED'
              */
             $scope.isReasonsUnsuitabilityShown = function () {
                 if ($scope.isTestRaw()) {
@@ -285,7 +285,7 @@ angular
             $scope.isTestRaw = function () {
                 if ($scope.hasProtocol && $scope.isVerification && $scope.TestDataFormData) {
                     for (var i = 0; i < $scope.TestDataFormData.length; i++) {
-                        if ($scope.TestDataFormData[i].testResult == 'RAW') {
+                        if ($scope.TestDataFormData[i].testResult == 'NOT_PROCESSED') {
                             return true;
                         }
                     }

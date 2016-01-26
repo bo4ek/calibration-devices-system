@@ -617,7 +617,7 @@
     "TASK_FOR_STATION_CREATED": "Task for calibration module was successfully created",
     "NO_MODULES_AVAILABLE": "No modules available",
     "PRINT_DOCUMENT": "Print document",
-    "RAW": "Raw",
+    "NOT_PROCESSED": "Not processed",
     "Device_Water": "Cold water",
     "Device_Termal": "Hot water",
     "SELECT_VERIFICATION_PROTOCOL": "Please select verification protocol",
@@ -643,6 +643,7 @@
     "TASK_VERIFICATIONS": "Task verifications",
     "NUMBER_OF_VERIFICATIONS_IN_TASK": "Number of verifications in the task",
     "NUMBER_OF_PROTOCOL": "Number of protocol",
+    "NUMBER_OF_PROTOCOL_MANUAL": "Number of manual protocol",
     "HAND_PROTOCOL": "Enter data of manual protocol",
     "STATUS_SELECT_PLACEHOLDER_COUNTERS_NAME": "Select counter",
     "GLOBAL_SEARCH": "Global search",
@@ -665,7 +666,7 @@
     "SELECT_VALUE": "Please, select value",
     "DELETE_REASON_CONFIRM": "Are you sure you want to remove the reason of unsuitability?",
     "CHOOSE_AT_LEAST_ONE_PROTOCOL": "Choose at least one protocol",
-    "NUMBER_OF_VERIFICATION": "Verifications",
+    "COUNT_OF_VERIFICATION": "Verifications",
     "REQUIRED_NUMBER": "This field should contain numbers from 1 to 9999",
     "REQUIRED_NUMBER_LETTER": "This field should contain numbers from 1 to 9999 with or without letter in the end",
     "CHOOSE_CALIBRATION_TASK": "Choose at least one task for sending",
@@ -751,6 +752,7 @@
     "PRIVATE_KEY": "Private key:",
     "SELECT": "SELECT",
     "PRIVATE_KEY_PASSWORD": "Password",
-    "READ_KEY_SIGN_DOC": "READ&SIGN"
+    "READ_KEY_SIGN_DOC": "READ&SIGN",
+    "NUMBER_OF_VERIFICATION": "Number of verification"
 
 }

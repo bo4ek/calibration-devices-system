@@ -162,7 +162,7 @@ angular
             $scope.pathToScanDoc = null;
             $scope.IsScanDoc = false;
             $scope.selectedData.numberProtocolManual=null;
-            $scope.isNotProccessed = false;
+            $scope.isNotProcessed = false;
 
             /**
              *  receive data of all calibration modules
@@ -204,7 +204,7 @@ angular
                                 statusTestSecond: dataCompletedTest.statusTestSecond,
                                 statusTestThird: dataCompletedTest.statusTestThird,
                                 statusCommon: dataCompletedTest.statusCommon,
-                                status: ['SUCCESS', 'FAILED', 'RAW'],
+                                status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
                                 unsuitabilityReason : dataCompletedTest.unsuitabilityReason
                             };
                             $scope.setDataUseManufacturerNumber(findcalibrationModuleBySerialNumber(dataCompletedTest.calibrationTestManualDTO.serialNumber));
@@ -228,12 +228,12 @@ angular
             }
 
             $scope.receiveTestsAndSetIsNotProcessed = function () {
-                if ($scope.dataOfManualTests[0].statusTestFirst == 'RAW' || $scope.dataOfManualTests[0].statusTestSecond == 'RAW' || $scope.dataOfManualTests[0].statusTestThird == 'RAW') {
-                    $scope.isNotProccessed = true;
+                if ($scope.dataOfManualTests[0].statusTestFirst == 'NOT_PROCESSED' || $scope.dataOfManualTests[0].statusTestSecond == 'NOT_PROCESSED' || $scope.dataOfManualTests[0].statusTestThird == 'NOT_PROCESSED') {
+                    $scope.isNotProcessed = true;
                 } else if ($scope.dataOfManualTests[0].statusTestFirst == 'FAILED' || $scope.dataOfManualTests[0].statusTestSecond == 'FAILED' || $scope.dataOfManualTests[0].statusTestThird == 'FAILED') {
-                    $scope.isNotProccessed = false;
+                    $scope.isNotProcessed = false;
                 } else if ($scope.dataOfManualTests[0].statusTestFirst == 'SUCCESS' || $scope.dataOfManualTests[0].statusTestSecond == 'SUCCESS' || $scope.dataOfManualTests[0].statusTestThird == 'SUCCESS') {
-                    $scope.isNotProccessed = false;
+                    $scope.isNotProcessed = false;
                 }
             };
 
@@ -275,9 +275,10 @@ angular
                     statusTestSecond: 'SUCCESS',
                     statusTestThird: 'SUCCESS',
                     statusCommon: 'SUCCESS',
-                    status: ['SUCCESS', 'FAILED', 'RAW'],
+                    status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
                     counterId: value.counterId,
                     unsuitabilityReason : null
+
                 };
                 return testManual
             }
@@ -440,20 +441,20 @@ angular
              * one of tests is changing status then change status common of test
              */
             $scope.changeStatus = function (verification) {
-                if (verification.statusTestFirst == 'RAW' || verification.statusTestSecond == 'RAW' || verification.statusTestThird == 'RAW') {
+                if (verification.statusTestFirst == 'NOT_PROCESSED' || verification.statusTestSecond == 'NOT_PROCESSED' || verification.statusTestThird == 'NOT_PROCESSED') {
                     verification.statusCommon = 'FAILED';
                     getAllUnsuitabilityReasons(verification.counterId);
-                    $scope.isNotProccessed = true;
+                    $scope.isNotProcessed = true;
                 } else if (verification.statusTestFirst == 'FAILED' || verification.statusTestSecond == 'FAILED' || verification.statusTestThird == 'FAILED') {
                     verification.statusCommon = 'FAILED';
                     verification.unsuitabilityReason = null;
                     $scope.unsuitabilityReasons = [];
-                    $scope.isNotProccessed = false;
+                    $scope.isNotProcessed = false;
                 } else if (verification.statusTestFirst == 'SUCCESS' || verification.statusTestSecond == 'SUCCESS' || verification.statusTestThird == 'SUCCESS') {
                     verification.statusCommon = 'SUCCESS';
                     verification.unsuitabilityReason = null;
                     $scope.unsuitabilityReasons = [];
-                    $scope.isNotProccessed = false;
+                    $scope.isNotProcessed = false;
                 }
             };
 

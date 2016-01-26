@@ -41,7 +41,7 @@ angular
             $scope.updateValues = function (index) {
                 var test = parentScope.TestDataFormData[index];
                 if (test.endValue == 0 || test.initialValue > test.endValue || test.initialValue == 0) {
-                    test.testResult = 'RAW';
+                    test.testResult = 'NOT_PROCESSED';
                     parentScope.TestForm.testResult = 'FAILED';
                     test.calculationError = 0;
                     test.volumeInDevice = 0;
