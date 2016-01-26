@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/admin/organization/")
 public class OrganizationController {
 
-    private final Logger logger = Logger
-            .getLogger(OrganizationController.class);
+    private final Logger logger = Logger.getLogger(OrganizationController.class);
+
     @Autowired
     private OrganizationService organizationService;
 
@@ -63,8 +63,7 @@ public class OrganizationController {
      * status {@literal CONFLICT}
      */
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public ResponseEntity addOrganization(
-            @RequestBody OrganizationDTO organizationDTO,
+    public ResponseEntity addOrganization(@RequestBody OrganizationDTO organizationDTO,
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         HttpStatus httpStatus = HttpStatus.CREATED;
         Address address = new Address(
@@ -84,7 +83,7 @@ public class OrganizationController {
         AdditionInfoOrganization additionInfoOrganization = new AdditionInfoOrganization(
                 organizationDTO.getCodeEDRPOU(),
                 organizationDTO.getSubordination(),
-                organizationDTO.getCertificateNumrAuthoriz(),
+                organizationDTO.getCertificateNumberAuthorization(),
                 organizationDTO.getCertificateDate());
         try {
             String adminName = user.getUsername();
@@ -125,8 +124,11 @@ public class OrganizationController {
      * @return PageDTO that contains required data about current organizations depends on received filter, sort ,pagination and items per page
      */
     @RequestMapping(value = "{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
-    public PageDTO<OrganizationPageItem> pageOrganizationsWithSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage,
-                 @PathVariable String sortCriteria, @PathVariable String sortOrder, NewOrganizationFilterSearch searchData) {
+    public PageDTO<OrganizationPageItem> pageOrganizationsWithSearch(@PathVariable Integer pageNumber,
+                                                                     @PathVariable Integer itemsPerPage,
+                                                                     @PathVariable String sortCriteria,
+                                                                     @PathVariable String sortOrder,
+                                                                     NewOrganizationFilterSearch searchData) {
         ListToPageTransformer<Organization> queryResult = organizationService.getOrganizationsBySearchAndPagination(
                 pageNumber,
                 itemsPerPage,
@@ -147,8 +149,7 @@ public class OrganizationController {
 
     /**
      * Responds a page according to input data.
-     * <p>
-     * <p>
+     *
      * Note that this uses method {@code pageOrganizationsWithSearch}, whereas
      * search values is {@literal null}
      *
@@ -196,7 +197,7 @@ public class OrganizationController {
                 (organization.getAdditionInfoOrganization() != null)
                         ? organization.getAdditionInfoOrganization().getSubordination() : null,
                 (organization.getAdditionInfoOrganization() != null)
-                        ? organization.getAdditionInfoOrganization().getCertificateNumrAuthoriz() : null,
+                        ? organization.getAdditionInfoOrganization().getCertificateNumberAuthorization() : null,
                 (organization.getAdditionInfoOrganization() != null)
                         ? organization.getAdditionInfoOrganization().getCertificateDate() : null,
                 (organization.getAddressRegistered() != null)
@@ -220,12 +221,11 @@ public class OrganizationController {
      * @return a response body with http status {@literal OK} if organization
      * successfully edited or else http status {@literal CONFLICT}
      */
-    @RequestMapping(value = "edit/{organizationId}", method = RequestMethod.POST)
-    public ResponseEntity editOrganization(
-            @RequestBody OrganizationEditDTO organization,
-            @PathVariable Long organizationId,
-            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user)
+    @RequestMapping(value = "edit/{organizationId}", method = RequestMethod.PUT)
+    public ResponseEntity editOrganization(@RequestBody OrganizationDTO organization, @PathVariable Long organizationId,
+                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user)
             throws UnsupportedEncodingException, MessagingException {
+
         HttpStatus httpStatus = HttpStatus.OK;
 
         Address address = new Address(
@@ -247,7 +247,7 @@ public class OrganizationController {
         AdditionInfoOrganization additionInfoOrganization = new AdditionInfoOrganization(
                 organization.getCodeEDRPOU(),
                 organization.getSubordination(),
-                organization.getCertificateNumrAuthoriz(),
+                organization.getCertificateNumberAuthorization(),
                 organization.getCertificateDate());
         try {
             String adminName = user.getUsername();
@@ -271,16 +271,14 @@ public class OrganizationController {
                     organization.getMiddleName(),
                     adminName,
                     organization.getServiceAreas());
+
         } catch (UnsupportedEncodingException | MessagingException e) {
             logger.error("Got exeption while editing organization ", e);
             httpStatus = HttpStatus.CONFLICT;
         }
 
-        Organization org = organizationService
-                .getOrganizationById(organizationId);
-
+        Organization org = organizationService.getOrganizationById(organizationId);
         User admin = userService.findOne(organization.getUsername());
-
         organizationService.sendOrganizationChanges(org, admin);
 
         return new ResponseEntity(httpStatus);
@@ -314,13 +312,8 @@ public class OrganizationController {
             organizationAdminDTO = new OrganizationAdminDTO(user.getFirstName(), user.getMiddleName(), user.getLastName(),
                     user.getUsername());
         } catch (Exception e) {
-            logger.info("========================");
-            logger.info("no one admin in organization");
-            logger.info("========================");
-            // Attempt to fix (critical issue) (sonar: for Either log or rethrow this exception.)
-            logger.info(e);
+            logger.error("There is no admin in organization ", e);
         }
-
         return organizationAdminDTO;
     }
 
@@ -377,4 +370,3 @@ public class OrganizationController {
                 .collect(Collectors.toList());
     }
 }
-

@@ -2,7 +2,6 @@ package com.softserve.edu.documents.document;
 
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.documents.document.meta.Placeholder;
-import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
 import org.apache.log4j.Logger;
@@ -50,8 +49,7 @@ public class UnfitnessCertificate extends BaseCertificate {
                     .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.MINIMAL_FLAW;
             } else {
-                //DB need to be changed due to new reasons of unsuitability
-                return Constants.NOT_SPECIFIED;
+                return calibrationTest.getUnsuitabilityReason().getName();
             }
         } catch (Exception e) {
             logger.error("Data about one of the calibration tests is corrupted ", e);

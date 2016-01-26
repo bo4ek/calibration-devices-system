@@ -16,14 +16,13 @@ public class AdditionInfoOrganization {
 
     private String codeEDRPOU;
     private String subordination;
-    private String certificateNumrAuthoriz;
+    private String certificateNumberAuthorization;
     private Date certificateDate;
 
-    public AdditionInfoOrganization(String codeEDRPOU, String subordination, String certificateNumrAuthoriz, Long certificateDate) {
+    public AdditionInfoOrganization(String codeEDRPOU, String subordination, String certificateNumberAuthorization, Long certificateDate) {
         this.codeEDRPOU = codeEDRPOU;
         this.subordination = subordination;
-        this.certificateNumrAuthoriz = certificateNumrAuthoriz;
+        this.certificateNumberAuthorization = certificateNumberAuthorization;
         this.certificateDate = (certificateDate != null) ? new Date(certificateDate) : null;
     }
-
 }

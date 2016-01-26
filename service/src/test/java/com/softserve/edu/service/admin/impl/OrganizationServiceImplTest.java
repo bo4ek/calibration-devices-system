@@ -119,7 +119,9 @@ public class OrganizationServiceImplTest {
         final Integer maxProcessTime = 456;
         final Address address = new Address("Lviv", "Leva", "123", "123", "123", "123");
         final Address addressRegistered = new Address("Lviv", "Leva", "123", "123", "123", "123");
-        final Long[] localityIdList = {1L};
+        final List<Long> localityIdList = new ArrayList<>();
+        localityIdList.add(1L);
+       /* final Long[] localityIdList = {1L};*/
         final String username = "eric123";
         final AdditionInfoOrganization additionInfoOrganization = new AdditionInfoOrganization("123", "123", "123", 1288323623006L);
         String firstName = "firstName";

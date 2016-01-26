@@ -94,7 +94,7 @@ angular
 
             $scope.initDatePicker();
 
-            $scope.clearDate = function() {
+            $scope.clearDate = function () {
                 $scope.organizationFormData.certificateDate = null;
             };
 
@@ -125,8 +125,8 @@ angular
              * Closes modal window on browser's back/forward button click.
              */
             /*$rootScope.$on('$locationChangeStart', function () {
-                $modalInstance.close();
-            });*/
+             $modalInstance.close();
+             });*/
 
             /**
              * Reset organization form
@@ -141,7 +141,7 @@ angular
                 })
             };
 
-            $scope.$on('reset-form', function(event, args){
+            $scope.$on('reset-form', function (event, args) {
                 $scope.resetOrganizationForm();
             });
 
@@ -161,7 +161,7 @@ angular
 
                 $scope.organizationFormData.codeEDRPOU = undefined;
                 $scope.organizationFormData.subordination = undefined;
-                $scope.organizationFormData.certificateNumrAuthoriz = undefined;
+                $scope.organizationFormData.certificateNumberAuthorization = undefined;
                 $scope.organizationFormData.certificateDate = undefined;
 
                 $scope.organizationFormData.regionRegistered = undefined;
@@ -194,11 +194,9 @@ angular
                 })
             };
 
-            $scope.$on('close-modal', function(event, args) {
+            $scope.$on('close-modal', function (event, args) {
                 $modalInstance.dismiss();
             });
-
-
 
 
             /**
@@ -212,11 +210,11 @@ angular
                 userService.isUsernameAvailable(username).then(
                     function (data) {
                         $scope.isUsernameAvailable = data;
-                        if(!data) {
+                        if (!data) {
                             $scope.organizationForm.username.$valid = data;
                             $scope.organizationForm.username.$invalid = !data;
                         }
-            })
+                    })
             };
 
 
@@ -226,7 +224,7 @@ angular
              */
             $scope.isValidAcordion = true;
             function checkValidAcardion() {
-                if($scope.selectedServiceAreaLocalities.length === 0) {
+                if ($scope.selectedServiceAreaLocalities.length === 0) {
                     $scope.isValidAcordion = false;
                     $scope.organizationForm.serviceAreaRegion.$invalid = true;
                     $scope.organizationForm.serviceAreaRegion.$valid = false;
@@ -459,20 +457,18 @@ angular
                 $scope.organizationFormData.district = $scope.organizationFormData.district.designation;
                 $scope.organizationFormData.locality = $scope.organizationFormData.locality.designation;
                 $scope.organizationFormData.street = $scope.organizationFormData.street.designation;
-                $scope.organizationFormData.building = $scope.organizationFormData.building;
-                $scope.organizationFormData.flat = $scope.organizationFormData.flat;
                 $scope.organizationFormData.serviceAreas = $scope.selectedServiceAreaLocalities;
 
-                if($scope.organizationFormData.regionRegistered) {
+                if ($scope.organizationFormData.regionRegistered) {
                     $scope.organizationFormData.regionRegistered = $scope.organizationFormData.regionRegistered.designation;
                 }
-                if($scope.organizationFormData.districtRegistered) {
+                if ($scope.organizationFormData.districtRegistered) {
                     $scope.organizationFormData.districtRegistered = $scope.organizationFormData.districtRegistered.designation;
                 }
-                if($scope.organizationFormData.localityRegistered) {
+                if ($scope.organizationFormData.localityRegistered) {
                     $scope.organizationFormData.localityRegistered = $scope.organizationFormData.localityRegistered.designation;
                 }
-                if($scope.organizationFormData.streetRegistered) {
+                if ($scope.organizationFormData.streetRegistered) {
                     $scope.organizationFormData.streetRegistered = $scope.organizationFormData.streetRegistered.designation;
                 }
             }
@@ -495,12 +491,12 @@ angular
              */
             $scope.onOrganizationFormSubmit = function () {
                 if ($scope.organizationFormData.counters === undefined) {
-                    $scope.organizationForm.counters.$error = {"required":true};
+                    $scope.organizationForm.counters.$error = {"required": true};
                     $scope.organizationForm.counters.$valid = false;
                     $scope.organizationForm.counters.$invalid = true;
                 }
                 if ($scope.organizationFormData.types === undefined) {
-                    $scope.organizationForm.types.$error = {"required":true};
+                    $scope.organizationForm.types.$error = {"required": true};
                     $scope.organizationForm.types.$valid = false;
                     $scope.organizationForm.types.$invalid = true;
                 }
@@ -523,7 +519,7 @@ angular
                 organizationService.saveOrganization($scope.organizationFormData)
                     .then(function (data) {
                         if (data == 201) {
-                     //       $scope.resetOrganizationForm();
+                            //       $scope.resetOrganizationForm();
                             $rootScope.onTableHandling();
                         }
                         $modalInstance.close();

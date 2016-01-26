@@ -20,8 +20,8 @@ public interface OrganizationService {
 
     void addOrganizationWithAdmin(String name, String email, String phone, List<String> types, List<String> counters, Integer employeesCapacity,
                                   Integer maxProcessTime, String firstName, String lastName, String middleName,
-                                  String username, Address address, Address addressRegistered,AdditionInfoOrganization additionInfoOrganization,
-                                  String adminName, Long[] localityIdList)  throws UnsupportedEncodingException, MessagingException;
+                                  String username, Address address, Address addressRegistered, AdditionInfoOrganization additionInfoOrganization,
+                                  String adminName, List<Long> localityIdList) throws UnsupportedEncodingException, MessagingException;
 
     ListToPageTransformer<Organization> getOrganizationsBySearchAndPagination(int pageNumber, int itemsPerPage, String name,
                                                                               String email, String number, String type, String region,
@@ -34,7 +34,7 @@ public interface OrganizationService {
                           Integer employeesCapacity, Integer maxProcessTime, Address address, Address addressRegistered,
                           AdditionInfoOrganization additionInfoOrganization, String password, String username,
                           String firstName, String lastName, String middleName, String adminName, List<Long> serviceAreas)
-            throws UnsupportedEncodingException, MessagingException ;
+            throws UnsupportedEncodingException, MessagingException;
 
     Integer getOrganizationEmployeesCapacity(Long organizationId);
 
@@ -50,19 +50,20 @@ public interface OrganizationService {
 
     Set<OrganizationType> findOrganizationTypesById(Long id);
 
-    List<Organization> findByLocalityIdAndTypeAndDevice( Long localityId, OrganizationType orgType, Device.DeviceType deviceType );
+    List<Organization> findByLocalityIdAndTypeAndDevice(Long localityId, OrganizationType orgType, Device.DeviceType deviceType);
 
-    Set<Device.DeviceType> findDeviceTypesByOrganizationId( Long organizationId);
+    Set<Device.DeviceType> findDeviceTypesByOrganizationId(Long organizationId);
 
     /**
      * Find all organizations by organization types and device types
+     *
      * @param organizationType type of organization
-     * @param deviceType type of device
+     * @param deviceType       type of device
      * @return list of organization
      */
-    List<Organization> findByOrganizationTypeAndDeviceType( OrganizationType organizationType, Device.DeviceType deviceType);
+    List<Organization> findByOrganizationTypeAndDeviceType(OrganizationType organizationType, Device.DeviceType deviceType);
 
-    Set<Organization> findByIdAndTypeAndActiveAgreementDeviceType( Long customerId, OrganizationType organizationType, Device.DeviceType deviceType);
+    Set<Organization> findByIdAndTypeAndActiveAgreementDeviceType(Long customerId, OrganizationType organizationType, Device.DeviceType deviceType);
 
     Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceType(Long executorId, OrganizationType organizationType, String deviceType);
 }

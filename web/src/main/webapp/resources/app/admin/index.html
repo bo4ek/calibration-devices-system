@@ -5,10 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin page</title>
-
-
     <link href="resources/assets/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="resources/assets/bower_components/bootstrap/dist/css/style.css" rel="stylesheet">
     <link href="resources/assets/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="resources/assets/bower_components/ng-table/ng-table.css" rel="stylesheet">
     <link rel="stylesheet" href="resources/assets/bower_components/chosen/chosen.min.css">
@@ -21,8 +18,6 @@
     <link rel="stylesheet" type="text/css" href="resources/assets/bower_components/semantic/dist/semantic.min.css">
     <link href="resources/assets/bower_components/angularjs-toaster/toaster.min.css" rel="stylesheet">
     <link href="resources/assets/bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
-
-
 </head>
 
 <body id="adminModule" class="wrapper">
@@ -98,7 +93,6 @@
         </ul>
     </nav>
 
-
     <div class="row ng-cloak">
         <div id="sidebar-wrapper" ng-class="{'sidebar-toggle-close' : common.menuState}">
             <div class="ui visible sticky visible very wide sidebar" role="navigation">
@@ -107,9 +101,6 @@
                             class="fa fa-home fa-fw"></i> <span translate="MAIN_PANEL"> </span> </a></li>
                     <li ui-sref-active="active"><a ui-sref="organizations"><i
                             class="fa fa-bank fa-fw"></i> <span translate="ORGANIZATIONS"></span></a></li>
-                    <!--<li ui-sref-active="active"><a ui-sref="address"><i-->
-                    <!--class="icons fa fa-location-arrow fa-fw"></i>{{-->
-                    <!--'GUIDE_ADDRESSES' | translate }}</a></li>-->
                     <li ui-sref-active="active"><a ui-sref="agreements"><i
                             class="fa fa-briefcase fa-fw"></i> <span translate="AGREEMENTS"></span></a></li>
                     <li ui-sref-active="active"><a ui-sref="device-category"><i
@@ -118,7 +109,7 @@
                     <li ui-sref-active="active"><a ui-sref="counters-type"><i
                             class="fa fa-server fa-fw"></i> <span translate="TYPES_OF_COUNTERS"></span></a>
                     </li>
-                    <li ng-show = "$root.isSuperAdmin" ui-sref-active="active"><a ui-sref="unsuitability-reasons"><i
+                    <li ng-show="$root.isSuperAdmin" ui-sref-active="active"><a ui-sref="unsuitability-reasons"><i
                             class="fa fa-desktop"></i> <span translate="UNSUITABILITY_DIRECTORY"><!--Довідник причин непридатності --></span>
                     </a>
                     </li>
@@ -126,15 +117,14 @@
                             class="fa fa-users"></i> <span translate="EMPLOYEE"></span></a></li>
                     <li ui-sref-active="active"><a ui-sref="measuring-equipment-admin"><i
                             class="fa fa-desktop"></i> <span translate="MEASURING_DEVICES_DIRECTORY"><!--Довідник установок--></span>
-                        </a>
+                    </a>
                     </li>
 
-                    <li ng-show = "$root.isSuperAdmin" ui-sref-active="active"><a ui-sref="sys-admins"><i
+                    <li ng-show="$root.isSuperAdmin" ui-sref-active="active"><a ui-sref="sys-admins"><i
                             class="fa fa-user-secret"></i> <span translate="SYS_ADMINS"></span></a></li>
 
 
-
-                    </ul>
+                </ul>
 
             </div>
         </div>
@@ -164,7 +154,7 @@
 
 <script type="text/javascript">
 
-    $("#menubutton").click(function() {
+    $("#menubutton").click(function () {
         $("#sidebar-wrapper").find("a span").toggle();
 
     });

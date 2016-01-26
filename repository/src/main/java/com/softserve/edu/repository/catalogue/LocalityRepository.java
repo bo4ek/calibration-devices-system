@@ -1,6 +1,8 @@
 package com.softserve.edu.repository.catalogue;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,7 +17,16 @@ public interface LocalityRepository extends CrudRepository<Locality, Long> {
     List<Locality> findDistinctByDistrictId(Long id);
 
     /**
+     * Finds all Localities by iDs, that are serviced by the organization
+     *
+     * @param ids List of Localities' ids
+     * @return
+     */
+    List<Locality> findByIdIn(Collection<Long> ids);
+
+    /**
      * Find all mail indexes by locality designation and district id
+     *
      * @param designation
      * @param districtId
      * @return

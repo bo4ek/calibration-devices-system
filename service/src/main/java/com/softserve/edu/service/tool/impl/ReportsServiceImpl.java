@@ -27,7 +27,6 @@ import org.apache.log4j.Logger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
 /**
  * Service for reports generation.
  */
@@ -118,23 +117,22 @@ public class ReportsServiceImpl implements ReportsService {
         List<Organization> calibratorsList = new ArrayList<>();
         calibratorsList.addAll(calibrators);
 
-
         List<String> calibratorsNames = new ArrayList<>();
         List<String> allVerifications = new ArrayList<>();
         List<String> successVerifications = new ArrayList<>();
-        List<String> unsuccessVerifications = new ArrayList<>();
+        List<String> unsuccessfulVerifications = new ArrayList<>();
 
         for (Organization calibrator : calibratorsList) {
             calibratorsNames.add(calibrator.getName());
             allVerifications.add(verificationRepository.countByCalibratorId(calibrator.getId()).toString());
             successVerifications.add(verificationRepository.countByCalibratorIdAndStatus(calibrator.getId(), Status.TEST_OK).toString());
-            unsuccessVerifications.add(verificationRepository.countByCalibratorIdAndStatus(calibrator.getId(), Status.TEST_NOK).toString());
+            unsuccessfulVerifications.add(verificationRepository.countByCalibratorIdAndStatus(calibrator.getId(), Status.TEST_NOK).toString());
         }
 
         data.add(new TableExportColumn(Constants.CALIBRATOR_ORGANIZATION_NAME, calibratorsNames));
         data.add(new TableExportColumn(Constants.COUNT_ALL_VERIFICATIONS, allVerifications));
         data.add(new TableExportColumn(Constants.COUNT_OK_VERIFICATIONS, successVerifications));
-        data.add(new TableExportColumn(Constants.COUNT_NOK_VERIFICATIONS, unsuccessVerifications));
+        data.add(new TableExportColumn(Constants.COUNT_NOK_VERIFICATIONS, unsuccessfulVerifications));
 
         return data;
     }
@@ -142,7 +140,7 @@ public class ReportsServiceImpl implements ReportsService {
     /**
      * Prepares data for report "Звіт 3".
      *
-     * @param providerId
+     * @param providerId id of the provider
      * @return Data to use with XlsTableExporter
      */
     public List<TableExportColumn> getDataForProviderVerificationResultReport(Long providerId) {
@@ -239,14 +237,14 @@ public class ReportsServiceImpl implements ReportsService {
 
             try {
                 SimpleDateFormat docDate = new SimpleDateFormat("dd-MM-yyyy");
-                documentDate.add(docDate.format(verification.getStateVerificator().getCertificateGrantedDate()));
+                documentDate.add(docDate.format(verification.getStateVerificator().getAdditionInfoOrganization().getCertificateDate()));
             } catch (Exception ex) {
                 documentDate.add(" ");
                 logger.error(ex);
             }
 
             try {
-                documentNumber.add(verification.getStateVerificator().getCertificateNumber());
+                documentNumber.add(verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization());
             } catch (Exception ex) {
                 documentDate.add(" ");
                 logger.error(ex);

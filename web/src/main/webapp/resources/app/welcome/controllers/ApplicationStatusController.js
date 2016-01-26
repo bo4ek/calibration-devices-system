@@ -178,8 +178,8 @@ var resolveStatus = function(status) {
 	case 'REJECTED':
 		return 'REJECTED_TRASLATION';
 	case 'TEST_COMPLETED':
-		return 'TEST_COMPLETED_TRASLATION';
+		return 'TEST_COMPLETED_TRANSLATION';
 	case 'TEST_NOK':
-		return 'TEST_NOK_TRASLATION';
+		return 'TEST_NOK_TRANSLATION';
 	}
 };

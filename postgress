@@ -168,7 +168,7 @@ VALUES(10,'4',5);
 
 -- ------------------------------- ORGANIZATION ---------------------------- --
 INSERT INTO "ORGANIZATION"
-(organization_type,id,name,email,phone,certificateGrantedDate,certificateNumber,region,district,locality,street,building,flat)
+(organization_type,id,name,email,phone,certificateDate,certificateNumberAuthorization,region,district,locality,street,building,flat)
 
 VALUES
 

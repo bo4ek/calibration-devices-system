@@ -10,9 +10,7 @@ import com.softserve.edu.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -50,18 +48,6 @@ public class Organization {
     @Embedded
     private AdditionInfoOrganization additionInfoOrganization;
 
-    /**
-     * Identification number of the certificate that allows this UserCalibrator
-     * to perform verifications.
-     */
-    private String certificateNumber;
-
-    /**
-     * Identification number of the certificate that allows this calibrator to
-     * perform verifications.
-     */
-    private Date certificateGrantedDate;
-
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private Set<OrganizationEditHistory> organizationEditHistorySet = new HashSet<>();
 
@@ -96,7 +82,7 @@ public class Organization {
     @ManyToMany
     @JoinTable(name = "ORGANIZATION_LOCALITY", joinColumns = @JoinColumn(name = "organizationId"),
             inverseJoinColumns = @JoinColumn(name = "localityId"))
-    private Set<Locality> localities = new HashSet<>();
+    private List<Locality> localities;
 
     public void addOrganizationChangeHistory(OrganizationEditHistory organizationEditHistory) {
         this.organizationEditHistorySet.add(organizationEditHistory);
@@ -106,6 +92,7 @@ public class Organization {
         this.name = name;
         this.email = email;
         this.phone = phone;
+        localities = new ArrayList<>();
     }
 
     public Organization(String name, String email, String phone, Integer employeesCapacity, Integer maxProcessTime, Address address) {
@@ -148,14 +135,6 @@ public class Organization {
 
     public void removeDeviceType() {
         deviceTypes.clear();
-    }
-
-    public void addHistory(OrganizationEditHistory history) {
-        this.organizationEditHistorySet.add(history);
-    }
-
-    public void addLocality(Locality locality) {
-        localities.add(locality);
     }
 
     @Override

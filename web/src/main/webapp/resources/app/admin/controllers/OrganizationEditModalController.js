@@ -74,7 +74,7 @@ angular
                     label: $filter('translate')('THERMAL')
                 }
             ];
-            
+
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
@@ -189,7 +189,7 @@ angular
             }
 
             $scope.setTypeDataLanguage();
-           // setTimeout(setCurrentTypeDataLanguage(), 3000);
+            // setTimeout(setCurrentTypeDataLanguage(), 3000);
 
             console.log($scope.defaultData.organizationTypes);
             console.log($scope.defaultData.deviceType);
@@ -229,7 +229,7 @@ angular
 
             $scope.initDatePicker();
 
-            $scope.clearDate = function() {
+            $scope.clearDate = function () {
                 $rootScope.organization.certificateDate = null;
             };
 
@@ -762,7 +762,7 @@ angular
              * @param date
              * @returns {number}
              */
-            $scope.convertDateToLong = function(date) {
+            $scope.convertDateToLong = function (date) {
                 return (new Date(date)).getTime();
             };
 
@@ -781,7 +781,7 @@ angular
 
                     codeEDRPOU: $rootScope.organization.codeEDRPOU,
                     subordination: $rootScope.organization.subordination,
-                    certificateNumrAuthoriz: $rootScope.organization.certificateNumrAuthoriz,
+                    certificateNumberAuthorization: $rootScope.organization.certificateNumberAuthorization,
                     certificateDate: ($scope.convertDateToLong($rootScope.organization.certificateDate) !== 0) ?
                         $scope.convertDateToLong($rootScope.organization.certificateDate.endDate) : null,
 
@@ -796,7 +796,7 @@ angular
                     localityRegistered: $scope.selectedValues.districtRegistered.designation,
                     districtRegistered: $scope.selectedValues.localityRegistered.designation,
                     streetRegistered: $scope.selectedValues.streetRegistered.designation || $scope.selectedValues.streetRegistered,
-                    buildingRegistered: $scope.selectedValues.buildingRegistered.designation ||$scope.selectedValues.buildingRegistered,
+                    buildingRegistered: $scope.selectedValues.buildingRegistered.designation || $scope.selectedValues.buildingRegistered,
                     flatRegistered: $rootScope.organization.flatRegistered,
 
                     username: $scope.adminsUserName,
@@ -835,7 +835,7 @@ angular
                 })
             };
 
-            $scope.$on('close-modal', function(event, args) {
+            $scope.$on('close-modal', function (event, args) {
                 $modalInstance.dismiss();
             });
 

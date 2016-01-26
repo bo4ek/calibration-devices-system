@@ -84,9 +84,9 @@ public abstract class BaseCertificate implements Document {
      * @return the calibrator company's certificate identification number.
      */
     @Placeholder(name = "VERIFICATOR_ACC_CERT_NAME")
-    public String getCalibratorCompanyAccreditationCertificateNumber() {
+    public String getVerificatorCompanyAccreditationCertificateNumberAuthorization() {
         try {
-            return verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumrAuthoriz();
+            return verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization();
         } catch (Exception e) {
             logger.error("Vereficator's certificate number has not been specified ", e);
             return Constants.NOT_SPECIFIED;
@@ -97,10 +97,10 @@ public abstract class BaseCertificate implements Document {
      * @return the date when the verificator company received the certificate, that allows it to provide verifications
      */
     @Placeholder(name = "VERIFICATOR_ACC_CERT_DATE_GRANTED")
-    public String getCalibratorCompanyAccreditationCertificateGrantedDate() {
+    public String getVerificatorCompanyAccreditationCertificateDate() {
         try {
             return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
-                    .format(verification.getStateVerificator().getCertificateGrantedDate());
+                    .format(verification.getStateVerificator().getAdditionInfoOrganization().getCertificateDate());
         } catch (Exception e) {
             logger.error("Vereficator's certificate granted date has not been specified ", e);
             return Constants.NOT_SPECIFIED;
@@ -108,6 +108,7 @@ public abstract class BaseCertificate implements Document {
     }
 
     //TODO
+
     /**
      * @return Returns the identification number of the team, that was making verification
      */
