@@ -402,10 +402,27 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             throws Exception {
 
         Verification verification = verificationService.findById(verificationId);
+        Long deviceId;
+        deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+        Device device = deviceService.getById(deviceId);
+        verification.setDevice(device);
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);
         verificationService.saveVerification(verification);
 
+    }
+
+    private Long getDeviceIdByDeviceTypeId(int deviceTypeId) {
+        String deviceType = null;
+        switch (deviceTypeId) {
+            case 1:
+                deviceType = "WATER";
+                break;
+            case 2:
+                deviceType = "THERMAL";
+                break;
+        }
+        return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, true).getId();
     }
 
     private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) {
@@ -425,18 +442,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
          * and NullPointerException will be generated
          */
         if (counterType == null) {
-            int deviceTypeId = deviceTestData.getDeviceTypeId(); //deviceTypeId comes from bbi file (1 - WATER; 2 - THERMAL)
-            String deviceType = null;
             Long deviceId;
-            switch (deviceTypeId) {
-                case 1:
-                    deviceType = "WATER";
-                    break;
-                case 2:
-                    deviceType = "THERMAL";
-                    break;
-            }
-            deviceId = deviceService. getByDeviceTypeAndDefaultDevice(deviceType, true).getId();
+            deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
             String deviceName = deviceService.getById(deviceId).getDeviceName();
             counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
             counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);

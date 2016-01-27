@@ -753,6 +753,8 @@
     "PRIVATE_KEY_PASSWORD": "Password",
     "READ_KEY_SIGN_DOC": "READ&SIGN",
     "NUMBER_OF_VERIFICATION": "Number of verification",
-    "APPLICATION_NUMBER": "Application number"
+    "APPLICATION_NUMBER": "Application number",
+    "SERVICE_TYPE": "Service type",
+    "DATE_TIME_PN": "Protocol date, time, s/f"
 
 }
