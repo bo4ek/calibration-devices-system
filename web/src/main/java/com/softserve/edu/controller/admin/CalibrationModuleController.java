@@ -2,8 +2,10 @@ package com.softserve.edu.controller.admin;
 
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.dto.admin.CalibrationModuleDTO;
+import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
+import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.admin.OrganizationService;
@@ -92,7 +94,7 @@ public class CalibrationModuleController {
      * @return List of organizationCodes
      */
     @RequestMapping(value = "organizationCode", method = RequestMethod.GET)
-    public List<String> getAllOrganizationCodes() {
+    public List<Object> getAllOrganizationCodes() {
         return organizationService.findAllOrganizationCodes();
 }
 

@@ -59,8 +59,8 @@ angular
                     }
                 }
 
-                measuringEquipmentServiceAdmin.findAllOrganizationCodes().then(function (respCodes) {
-                    $scope.organizationCodes = respCodes.data;
+                measuringEquipmentServiceAdmin.findAllOrganizationCodesAndNames().then(function (respCodes) {
+                    $scope.organizationCodes = getNamesAndCodes(respCodes.data);
                     var index = arrayObjectIndexOf($scope.organizationCodes, calibrationModule.organizationCode);
                     $scope.selectedValues.selectedOrganizationCode = $scope.organizationCodes[index];
                 });
@@ -85,10 +85,9 @@ angular
                 $scope.headerTranslate = 'EDIT_INSTALLATION';
                 $scope.applyButtonText = 'EDIT';
             } else {
-
-                measuringEquipmentServiceAdmin.findAllOrganizationCodes()
+                measuringEquipmentServiceAdmin.findAllOrganizationCodesAndNames()
                     .success(function (organizationCodes) {
-                        $scope.organizationCodes = organizationCodes;
+                        $scope.organizationCodes = getNamesAndCodes(organizationCodes);
                         $scope.selectedValues.selectedOrganizationCode = undefined; //for ui-selects
                     }
                 );
@@ -107,10 +106,20 @@ angular
                 $scope.applyButtonText = 'ADD';
             }
 
+            function getNamesAndCodes(organizationCodes) {
+                var array = [];
+                for (var i = 0; i < organizationCodes.length; i++) {
+                    var organizationCodesAndNames = {};
+                    organizationCodesAndNames.code = organizationCodes[i][0];
+                    organizationCodesAndNames.name = organizationCodes[i][1];
+                    array[i] = organizationCodesAndNames;
+                }
+                return array;
+            }
 
             function arrayObjectIndexOf(myArray, searchTerm) {
                 for (var i = 0, len = myArray.length; i < len; i++) {
-                    if (myArray[i] === searchTerm) {
+                    if (myArray[i].code == searchTerm) {
                         return i;
                     }
                 }
@@ -137,6 +146,7 @@ angular
                 $scope.addCalibrationModuleForm.$setPristine();
                 $scope.addCalibrationModuleForm.$setUntouched();
                 $scope.addCalibrationModuleFormData = {};
+                $scope.selectedValues.selectedOrganizationCode = undefined;
             };
 
             /**
@@ -175,7 +185,7 @@ angular
              */
             function saveCalibrationModule() {
                 $scope.addCalibrationModuleFormData.workDate = $scope.addCalibrationModuleFormData.workDate.endDate;
-                $scope.addCalibrationModuleFormData.organizationCode = $scope.selectedValues.selectedOrganizationCode;
+                $scope.addCalibrationModuleFormData.organizationCode = $scope.selectedValues.selectedOrganizationCode.code;
                 if (calibrationModule === undefined) {
                     measuringEquipmentServiceAdmin.saveCalibrationModule($scope.addCalibrationModuleFormData)
                         .then(function (result) {

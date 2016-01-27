@@ -161,7 +161,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return list of codeEDRPOU
      */
     @Override
-    public List<String> findAllOrganizationCodes() {
+    public List<Object> findAllOrganizationCodes() {
         return organizationRepository.findAllCodeEDRPOU();
     }
 

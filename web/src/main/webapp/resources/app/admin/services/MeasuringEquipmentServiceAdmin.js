@@ -5,7 +5,7 @@ angular
             getPage: function (pageNumber, itemsPerPage, search, sortCriteria, sortOrder) {
                 return getDataWithParams(pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
             },
-            findAllOrganizationCodes: function() {
+            findAllOrganizationCodesAndNames: function() {
               return getData('organizationCode');
             },
             saveCalibrationModule: function (formData) {

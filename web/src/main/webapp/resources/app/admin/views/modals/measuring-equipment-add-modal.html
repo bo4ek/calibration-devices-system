@@ -48,14 +48,14 @@
                                    ng-model="selectedValues.selectedOrganizationCode"
                                    name="organizationCode" id="organizationCode" required>
                             <ui-select-match placeholder="{{'SELECT_EDRPOU' | translate}}" allow-clear="true">
-                                {{$select.selected}}
+                                {{$select.selected.code}} ({{$select.selected.name}})
 
                                 <span class="form-control-feedback glyphicon
 						 	    form-horizontal glyphicon glyphicon-ok-sign" style="margin-right:20px"></span>
 
                             </ui-select-match>
                             <ui-select-choices repeat="organizationCode in organizationCodes | filter: $select.search">
-                                <span ng-bind-html="organizationCode"></span>
+                                <span>{{organizationCode.code}} ({{organizationCode.name}})</span>
                             </ui-select-choices>
                         </ui-select>
 
