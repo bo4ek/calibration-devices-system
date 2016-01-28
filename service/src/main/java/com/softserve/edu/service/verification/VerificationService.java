@@ -96,6 +96,8 @@ public interface VerificationService {
 
     void updateVerificationData(String id, ClientData clientData, Organization provider);
 
+    boolean updateVerificationQueue(List<Verification> verifications, Long calibratorId);
+
     CalibrationTest createCalibrationTest(String verificationId, CalibrationTest data);
 
     CalibrationTest findByCalibrationTestId(Long id);

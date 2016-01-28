@@ -671,6 +671,18 @@ form[name='CalibrationTestForm'] tr > td {
     min-height: 30px;
 }
 
+.verification-list-modal .modal-dialog  {
+    width: 100%;
+}
+
+.verification-list-modal .modal-dialog .form-control {
+    width: 100%;
+    text-align: center;
+}
+
+
+}
+
 form[name='handheldProtocolForm'] #reason {
     width: 100%;
 }

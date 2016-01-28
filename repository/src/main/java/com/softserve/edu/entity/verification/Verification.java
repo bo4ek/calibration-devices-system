@@ -1,20 +1,18 @@
 package com.softserve.edu.entity.verification;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
+import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
-import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import lombok.*;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -28,7 +26,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "VERIFICATION")
-public class Verification {
+public class Verification implements Comparable {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
@@ -125,7 +123,14 @@ public class Verification {
     @JoinColumn(name = "counterId")
     private Counter counter;
 
+    private int queue;
+
     private Integer processTimeExceeding;
+
+    public Verification(String verficationId , int queue){
+        this.id = verficationId;
+        this.queue = queue;
+    }
 
     public Verification(
             Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
@@ -140,8 +145,6 @@ public class Verification {
                         Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
                         Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId) {
 
-        /*this.id = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(initialDate)).toString()
-                + device.getDeviceType().getId() + verificationId;*/
         this.id = verificationId;
         this.initialDate = initialDate;
         this.expirationDate = expirationDate;
@@ -187,8 +190,6 @@ public class Verification {
                         Device device, Status status, ReadStatus readStatus, Organization calibrator,
                         String comment, String verificationId) {
 
-        /*this.id = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(initialDate)).toString()
-                + device.getDeviceType().getId() + verificationId;*/
         this.id = verificationId;
         this.initialDate = initialDate;
         this.expirationDate = expirationDate;
@@ -204,8 +205,6 @@ public class Verification {
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,
                         User calibratorEmployee, Counter counter, String verificationId) {
 
-        /*this.id = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(initialDate)).toString()
-                + counter.getCounterType().getDevice().getDeviceType().getId() + verificationId;*/
         this.id = verificationId;
         this.initialDate = initialDate;
         this.expirationDate = null;
@@ -221,12 +220,20 @@ public class Verification {
         this.counterStatus = false;
     }
 
+
+
     public void deleteCalibrationTest(CalibrationTest calibrationTest) {
         calibrationTests.remove(calibrationTest);
     }
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        int compareage=((Verification)o).getQueue();
+        return this.queue-compareage;
     }
 
     public enum ReadStatus {
@@ -243,15 +250,5 @@ public class Verification {
     public enum ConsumptionStatus {
         IN_THE_AREA,
         NOT_IN_THE_AREA
-    }
-
-    @Override
-    public String toString() {
-        return "Verification{" +
-                "id='" + id + '\'' +
-                ", status=" + status +
-                ", readStatus=" + readStatus +
-                ", taskStatus=" + taskStatus +
-                '}';
     }
 }

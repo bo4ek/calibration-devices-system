@@ -8,6 +8,7 @@ import com.softserve.edu.dto.application.ApplicationFieldDTO;
 import com.softserve.edu.dto.provider.OrganizationStageVerificationDTO;
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.catalogue.District;
+import com.softserve.edu.entity.catalogue.Locality;
 import com.softserve.edu.entity.catalogue.Region;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
@@ -222,6 +223,7 @@ public class CalibratorApplicationController {
     @RequestMapping(value = "region", method = RequestMethod.GET)
     public List<Region> getRegionCorrespondingProvider(
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        List<Locality> list = localityService.findLocalitiesByOrganizationId(employeeUser.getOrganizationId());
         LocalityDTO localityDTO = localityService.findLocalitiesByOrganizationId(employeeUser.getOrganizationId()).stream()
                 .map(locality -> new LocalityDTO(locality.getId(), locality.getDesignation(), locality.getDistrict().getId()))
                 .collect(Collectors.toList()).get(0);

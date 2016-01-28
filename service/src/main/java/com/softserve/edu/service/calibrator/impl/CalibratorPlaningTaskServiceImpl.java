@@ -393,7 +393,8 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      */
     public void sendTaskToStation(Long id) throws Exception {
         CalibrationTask calibrationTask = taskRepository.findOne(id);
-        Verification[] verifications = verificationRepository.findByTask_Id(id);
+        Verification[] verifications =  verificationRepository.findByTask_Id(id);
+        Arrays.sort(verifications);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DAY_MONTH_YEAR);
 

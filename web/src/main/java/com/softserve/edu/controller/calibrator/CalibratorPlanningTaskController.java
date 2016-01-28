@@ -34,13 +34,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/task")
@@ -118,11 +115,13 @@ public class CalibratorPlanningTaskController {
         for (Verification verification : queryResult) {
             ClientData clientData = verification.getClientData();
             Address address = clientData.getClientAddress();
+            if (verification.getQueue() == 0 && verification.getInfo() != null && verification.getInfo().getTimeFrom() != null) verification.setQueue(setQueueByTime(verification)+ queryResult.getSize());
             content.add(new VerificationPlanningTaskDTO(verification.getSentToCalibratorDate(), verification.getId(),
                     verification.getProvider().getName(), address.getDistrict(), address.getStreet(),
                     address.getBuilding(), address.getFlat(), clientData.getFullName(),
-                    clientData.getPhone(), verification.getInfo()));
+                    clientData.getPhone(), verification.getInfo(), verification.getQueue()));
         }
+        Collections.sort(content);
         return new PageDTO<>(queryResult.getTotalElements(), content);
     }
 
@@ -346,5 +345,46 @@ public class CalibratorPlanningTaskController {
         } else {
             return null;
         }
+    }
+
+    /**
+     * This method changes verification queue in database
+     *
+     * @param verificationNewQueue verification with parametes id and queue
+     * @param employeeUser
+     * @return ResponseEntity
+     */
+    @RequestMapping(value = "/saveQueue", method = RequestMethod.PUT)
+    public ResponseEntity changeVerificationQueue(@RequestBody List<VerificationPlanningTaskDTO> verificationNewQueue,
+                                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        List<Verification> verifications = new ArrayList<>();
+
+
+        for (VerificationPlanningTaskDTO verificationDTO : verificationNewQueue){
+            verifications.add(new Verification(verificationDTO.getVerficationId(),verificationDTO.getQueue()+1));
+        }
+        try {
+            if(!verificationService.updateVerificationQueue(verifications, employeeUser.getOrganizationId())){
+                httpStatus = HttpStatus.FORBIDDEN;
+            }
+        } catch (Exception e) {
+            logger.error("Exception of update queue by verification id");
+            logger.trace(e);
+            httpStatus = HttpStatus.CONFLICT;
+        }
+        return new ResponseEntity(httpStatus);
+    }
+
+    /*
+    * This method automatically set deafault queue for verification
+    * depends on timeFrom
+    * time is int interpretation of hours from timeFrom
+    * */
+
+    private int setQueueByTime (Verification verification){
+            int time = Integer.valueOf(verification.getInfo().getTimeFrom().toString().substring(0,verification.getInfo().getTimeFrom().toString().indexOf(':')));
+            return time;
     }
 }
