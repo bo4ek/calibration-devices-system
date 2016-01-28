@@ -200,9 +200,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 if (correspondingVerification == null) {
                     try {
                         deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                        String serialNumber = String.valueOf(deviceTestData.getInstallmentNumber());
-                        CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(String.valueOf(deviceTestData.getInstallmentNumber()));
-                        if (calibrationModule.equals(null)) {
+                        CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+                        if (calibrationModule == null) {
                             throw new InvalidModuleIdException();
                         }
                             correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
@@ -415,6 +414,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private Long getDeviceIdByDeviceTypeId(int deviceTypeId) {
         String deviceType = null;
         switch (deviceTypeId) {
+            case 0:
+                deviceType = "WATER";
+                break;
             case 1:
                 deviceType = "WATER";
                 break;

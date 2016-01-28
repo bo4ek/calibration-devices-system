@@ -93,7 +93,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         testRepository.save(calibrationTest);
         verification.setStatus(Status.TEST_COMPLETED);
 
-        CalibrationModule moduleId = calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber());
+        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
         verification.setCalibrationModule(moduleId);
         verificationRepository.save(verification);
         return calibrationTest.getId();
