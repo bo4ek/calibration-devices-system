@@ -371,7 +371,6 @@ public class CalibratorPlanningTaskController {
             }
         } catch (Exception e) {
             logger.error("Exception of update queue by verification id");
-            logger.trace(e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);

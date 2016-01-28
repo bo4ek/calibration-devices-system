@@ -22,9 +22,14 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Page<Verification> findByCalibratorId(Long calibratorId, Pageable pageable);
 
-    Page<Verification> findByTask_Id(Long taskID, Pageable pageable);
+    Page<Verification> findByTaskId(Long taskID, Pageable pageable);
 
-    Verification[] findByTask_Id(Long taskID);
+    Verification[] findByTaskId(Long taskID);
+
+    /*select * from Verification  where Verification.taskId = 9 ORDER BY `queue` ASC*/
+
+    /*@Query("SELECT u FROM Verification u where u.taskId = :id ORDER BY u.queue ASC")*/
+    Verification[] findByTaskIdOrderByQueueAsc(Long id);
 
     Page<Verification> findByProviderIdAndStatusOrderByInitialDateDesc(Long providerId, Status status, Pageable pageable);
 

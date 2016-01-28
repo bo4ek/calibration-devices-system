@@ -702,12 +702,12 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional
     public Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable) {
-        return verificationRepository.findByTask_Id(taskID, pageable);
+        return verificationRepository.findByTaskId(taskID, pageable);
     }
 
     @Transactional
     public Verification[] getVerificationsByTaskID(Long taskID) {
-        return verificationRepository.findByTask_Id(taskID);
+        return verificationRepository.findByTaskId(taskID);
     }
 
     @Override
