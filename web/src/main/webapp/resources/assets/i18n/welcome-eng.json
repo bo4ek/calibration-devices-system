@@ -755,9 +755,8 @@
     "NUMBER_OF_VERIFICATION": "Number of verification",
     "APPLICATION_NUMBER": "Application number",
     "SERVICE_TYPE": "Service type",
-    "DATE_TIME_PN": "Protocol date, time, s/f"
-
-}    "READ_KEY_SIGN_DOC": "READ&SIGN",
+    "DATE_TIME_PN": "Protocol date, time, s/f",
+    "READ_KEY_SIGN_DOC": "READ&SIGN",
     "SUCCESSFUL_ADDED_TEST" : "You have successfully added a new test",
     "QUEUE" : "Queue",
     "REFRESH" : "Refresh",
