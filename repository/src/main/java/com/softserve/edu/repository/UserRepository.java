@@ -48,6 +48,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, String>
 
 
     List<User> findAll(Specification<User> userSpecification);
+
 }
 
 

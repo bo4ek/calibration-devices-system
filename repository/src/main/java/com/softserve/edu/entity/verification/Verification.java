@@ -133,35 +133,12 @@ public class Verification implements Comparable {
     }
 
     public Verification(
-            Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
+            Date initialDate, ClientData clientData, Organization provider,
             Device device, Status status, ReadStatus readStatus, AdditionalInfo info, boolean dismantled, Counter counter,
             String comment, boolean sealPresence, String verificationId
     ) {
-        this(initialDate, expirationDate, clientData, provider, device, status, readStatus, null, info, dismantled, counter,
+        this(initialDate, clientData, provider, device, status, readStatus, null, info, dismantled, counter,
                 comment, sealPresence, verificationId);
-    }
-
-    public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
-                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
-                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId) {
-
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.expirationDate = expirationDate;
-        this.clientData = clientData;
-        this.provider = provider;
-        this.device = device;
-        this.status = status;
-        this.readStatus = readStatus;
-        this.calibrator = calibrator;
-        this.info = info;
-        this.counterStatus = dismantled;
-        this.counter = counter;
-        if (this.comment == null) {
-            this.comment = "";
-        }
-        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
-        this.sealPresence = sealPresence;
     }
 
     public Verification(Date initialDate, ClientData clientData, Organization provider,
@@ -184,6 +161,55 @@ public class Verification implements Comparable {
         }
         this.comment = (comment != null) ? this.comment + comment : this.comment + "";
         this.sealPresence = sealPresence;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus, User calibratorEmployee) {
+
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.clientData = clientData;
+        this.provider = provider;
+        this.device = device;
+        this.status = status;
+        this.readStatus = readStatus;
+        this.calibrator = calibrator;
+        this.info = info;
+        this.counterStatus = dismantled;
+        this.counter = counter;
+        if (this.comment == null) {
+            this.comment = "";
+        }
+        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
+        this.sealPresence = sealPresence;
+        this.sentToCalibratorDate = sentToCalibratorDate;
+        this.taskStatus = taskStatus;
+        this.calibratorEmployee = calibratorEmployee;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus) {
+
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.clientData = clientData;
+        this.provider = provider;
+        this.device = device;
+        this.status = status;
+        this.readStatus = readStatus;
+        this.calibrator = calibrator;
+        this.info = info;
+        this.counterStatus = dismantled;
+        this.counter = counter;
+        if (this.comment == null) {
+            this.comment = "";
+        }
+        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
+        this.sealPresence = sealPresence;
+        this.sentToCalibratorDate = sentToCalibratorDate;
+        this.taskStatus = taskStatus;
     }
 
     public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,

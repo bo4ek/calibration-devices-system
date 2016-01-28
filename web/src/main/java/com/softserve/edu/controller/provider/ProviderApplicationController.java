@@ -129,9 +129,9 @@ public class ProviderApplicationController {
 
             Device device = deviceService.getById(verificationDTO.getDeviceId());
             String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
-            Verification verification = new Verification(new Date(), new Date(), clientData, provider, device, Status.IN_PROGRESS,
+            Verification verification = new Verification(new Date(), clientData, provider, device, Status.IN_PROGRESS,
                     Verification.ReadStatus.UNREAD, calibrator, info, verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
-                    verificationDTO.getSealPresence(), verificationId);
+                    verificationDTO.getSealPresence(), verificationId, new Date(), Status.PLANNING_TASK);
 
             verificationService.saveVerification(verification);
             String name = clientData.getFirstName() + " " + clientData.getLastName();
@@ -194,7 +194,7 @@ public class ProviderApplicationController {
             Organization provider = providerService.findById(employeeUser.getOrganizationId());
             Device device = (verificationDTO.getDeviceId() != null) ? deviceService.getById(verificationDTO.getDeviceId()) : null;
             String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
-            Verification verification = new Verification(new Date(), new Date(), clientData, provider, device, Status.SENT,
+            Verification verification = new Verification(new Date(), clientData, provider, device, Status.SENT,
                     Verification.ReadStatus.UNREAD, info, verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
                     verificationDTO.getSealPresence(), verificationId);
             verificationService.saveVerification(verification);
