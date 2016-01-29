@@ -132,6 +132,16 @@ public class Verification implements Comparable {
         this.queue = queue;
     }
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean signed;
+
+    @Lob
+    @Column(length = 100000)
+    private byte[] signedDocument;
+
+    @Column(columnDefinition = "int default 0")
+    private Integer calibrationInterval;
+
     public Verification(
             Date initialDate, ClientData clientData, Organization provider,
             Device device, Status status, ReadStatus readStatus, AdditionalInfo info, boolean dismantled, Counter counter,

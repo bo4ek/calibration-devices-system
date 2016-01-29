@@ -484,13 +484,13 @@ public class CalibrationTestController {
 
             verification.setExpirationDate(validityOfCertificate.getTime());
             verification.setSignProtocolDate(new Date());
-            calibrationTest.setCalibrationInterval(calibrationInterval);
-            calibrationTest.setSigned(true);
+            verification.setCalibrationInterval(calibrationInterval);
+            verification.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
             byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
             file.getContent().getInputStream().read(documentByteArray);
-            calibrationTest.setSignedDocument(documentByteArray);
+            verification.setSignedDocument(documentByteArray);
             testRepository.save(calibrationTest);
             verificationService.saveVerification(verification);
         } catch (Exception e) {
