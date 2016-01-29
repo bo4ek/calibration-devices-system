@@ -421,9 +421,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private Long getDeviceIdByDeviceTypeId(int deviceTypeId) throws InvalidDeviceTypeIdException{
         String deviceType = null;
         switch (deviceTypeId) {
-            case 1:
-                deviceType = "WATER";
-                break;
             case 2:
                 deviceType = "THERMAL";
                 break;
