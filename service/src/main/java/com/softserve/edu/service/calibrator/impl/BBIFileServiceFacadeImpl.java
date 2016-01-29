@@ -23,6 +23,7 @@ import com.softserve.edu.service.catalogue.DistrictService;
 import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.catalogue.StreetService;
+import com.softserve.edu.service.exceptions.InvalidDeviceTypeIdException;
 import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
@@ -216,11 +217,14 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
                         logger.error("BBI file is already in database ", e);
                     } catch (NullPointerException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
                         logger.error("Wrong image in BBI file ", e);
-                    } catch (InvalidModuleIdException e){
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_MODULE_ID;
-                        logger.error("Wrong module serial number in bbi file", e);
+                    } catch (InvalidModuleIdException e) {
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
+                        logger.error("Wrong module serial number in BBI file", e);
+                    }catch (InvalidDeviceTypeIdException e){
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
+                        logger.error("Wrong device type id in BBI file", e);
                     } catch (Exception e) {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                         logger.error("BBI is not valid ", e);
@@ -237,11 +241,14 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                         logger.error("BBI is not valid ", e);
                     } catch (NegativeArraySizeException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
                         logger.error("Wrong image in BBI file ", e);
                     } catch (InvalidModuleIdException e){
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_MODULE_ID;
-                        logger.error("Wrong module serial number in bbi file", e);
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
+                        logger.error("Wrong module serial number in BBI file", e);
+                    }catch (InvalidDeviceTypeIdException e){
+                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
+                        logger.error("Wrong device type id in BBI file", e);
                     } catch (Exception e) {
                         reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
                         logger.error("Invalid verification code ", e);
@@ -348,7 +355,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData)
-            throws ParseException {
+            throws ParseException, InvalidDeviceTypeIdException {
 
         String cityName = null;
         String regionName = null;
@@ -411,23 +418,28 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     }
 
-    private Long getDeviceIdByDeviceTypeId(int deviceTypeId) {
+    private Long getDeviceIdByDeviceTypeId(int deviceTypeId) throws InvalidDeviceTypeIdException{
         String deviceType = null;
         switch (deviceTypeId) {
-            case 0:
-                deviceType = "WATER";
-                break;
             case 1:
                 deviceType = "WATER";
                 break;
             case 2:
                 deviceType = "THERMAL";
                 break;
+            default:
+                deviceType = "WATER";
+                break;
         }
+
+        //Will be implemented in future (reject *.bbi if there's no such deviceTypeId)
+//        if (deviceType == null){
+//            throw new InvalidDeviceTypeIdException();
+//        }
         return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, true).getId();
     }
 
-    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) {
+    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) throws InvalidDeviceTypeIdException{
         String sizeAndSymbol = verificationData.get(Constants.COUNTER_SIZE_AND_SYMBOL);
         String[] parts = sizeAndSymbol.split(" ");
         String standardSize = parts[0] + " " + parts[1];
