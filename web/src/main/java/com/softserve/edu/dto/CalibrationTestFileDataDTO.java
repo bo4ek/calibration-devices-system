@@ -92,7 +92,7 @@ public class CalibrationTestFileDataDTO {
         this.listTestData = new ArrayList();
         this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
         this.serviceType = verification.getDevice().getDeviceType().name();
-        this.signed = calibrationTest.isSigned();
+        this.signed = verification.isSigned();
         this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
         this.reasonUnsuitabilityName = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getName();
         this.rotateIndex = calibrationTest.getRotateIndex();
