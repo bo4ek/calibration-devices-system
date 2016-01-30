@@ -38,7 +38,7 @@ public class UnfitnessCertificate extends BaseCertificate {
     @Placeholder(name = "REASON_UNSUITABLE")
     public String getReasonUnusable() {
         String reasons = Constants.MEASURING_ERROR_MESSAGE;
-        if (verification.getIsManual()) {
+        if (verification.isManual()) {
             if (verification.getCalibrationTestDataManualId().getStatusTestFirst()
                     .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.RATED_FLAW;

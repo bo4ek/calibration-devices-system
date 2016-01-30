@@ -114,8 +114,8 @@ public class Verification implements Comparable {
     @JoinColumn(name = "infoId")
     private AdditionalInfo info;
 
-    @Column(columnDefinition = "bit(1) default 0")
-    private Boolean isManual;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isManual;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "counterId")

@@ -53,7 +53,7 @@ public class VerificationPageDTOTransformer {
             if(verification.getProvider()!=null){verificationPageDTO.setNameProvider(verification.getProvider().getName());}
             if(verification.getCalibrator()!=null){verificationPageDTO.setNameCalibrator(verification.getCalibrator().getName());}
             Set<CounterType> set =(verification.getDevice() != null) ? verification.getDevice().getCounterTypeSet() : null;
-            verificationPageDTO.setIsManual(verification.getIsManual());
+            verificationPageDTO.setIsManual(verification.isManual());
             if(verification.getCounter()!=null && verification.getCounter().getCounterType() != null){
                 verificationPageDTO.setSymbol(verification.getCounter().getCounterType().getSymbol());
                 verificationPageDTO.setStandardSize(verification.getCounter().getCounterType().getStandardSize());

@@ -51,7 +51,7 @@ public class VerificationPageDTO {
     private Boolean dismantled;
     private String numberCounter;
     private Long counterId;
-    private Boolean isManual;
+    private boolean isManual;
 
     public VerificationPageDTO() {
     }
@@ -291,11 +291,11 @@ public class VerificationPageDTO {
         }
     }
 
-    public Boolean getIsManual() {
+    public boolean getIsManual() {
         return isManual;
     }
 
-    public void setIsManual(Boolean isManual) {
+    public void setIsManual(boolean isManual) {
         this.isManual = isManual;
     }
 

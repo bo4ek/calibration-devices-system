@@ -277,7 +277,7 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
         try {
-            if(verification.getIsManual()) {
+            if(verification.isManual()) {
                 return verification.getCalibrationTestDataManualId().getCalibrationTestManual().getCalibrationModule().getCalibrationType();
             }
             else {
