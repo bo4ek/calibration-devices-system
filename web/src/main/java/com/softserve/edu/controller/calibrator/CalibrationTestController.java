@@ -2,7 +2,6 @@ package com.softserve.edu.controller.calibrator;
 
 import com.softserve.edu.controller.calibrator.util.CalibrationModuleDTOTransformer;
 import com.softserve.edu.controller.calibrator.util.CounterTypeDTOTransformer;
-import com.softserve.edu.controller.calibrator.util.UnsuitabilityReasonDTOTransformer;
 import com.softserve.edu.documents.parameter.FileFormat;
 import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.dto.*;
@@ -241,6 +240,7 @@ public class CalibrationTestController {
     public ResponseEntity<CalibrationTestDataManualDTO> getTestManual(@PathVariable String verificationId) {
         ResponseEntity<CalibrationTestDataManualDTO> responseEntity;
         try {
+            Verification verification = verificationService.findById(verificationId);
             CalibrationTestDataManual cTestDataManual = calibrationTestDataManualService.findByVerificationId(verificationId);
             CalibrationTestManual cTestManual = cTestDataManual.getCalibrationTestManual();
             UnsuitabilityReasonDTO unsuitabilityReasonDTO = null;
@@ -257,7 +257,7 @@ public class CalibrationTestController {
                     , cTestManual.getNumberOfTest()
                     , cTestManual.getDateTest()
                     , cTestManual.getGenerateNumberTest(), cTestManual.getPathToScan(), cTestManual.getId())
-                    , unsuitabilityReasonDTO);
+                    , unsuitabilityReasonDTO, verification.isSigned());
             responseEntity = new ResponseEntity(cTestDataManualDTO, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("failed to get manual protocol" + e);
@@ -470,28 +470,29 @@ public class CalibrationTestController {
             Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
 
-            Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
-                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                    getDeviceType(verification), getYearIntroduction(verification));
+            if (verification.getStatus() == Status.TEST_OK) {
+                Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
+                        getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                        getDeviceType(verification), getYearIntroduction(verification));
 
-            Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
-                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                    getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
+                Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
+                        getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                        getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
 
-            Calendar validityOfCertificate = Calendar.getInstance();
-            validityOfCertificate.setTime(new Date());
-            validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
+                Calendar validityOfCertificate = Calendar.getInstance();
+                validityOfCertificate.setTime(new Date());
+                validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
 
-            verification.setExpirationDate(validityOfCertificate.getTime());
+                verification.setExpirationDate(validityOfCertificate.getTime());
+                verification.setCalibrationInterval(calibrationInterval);
+            }
             verification.setSignProtocolDate(new Date());
-            verification.setCalibrationInterval(calibrationInterval);
             verification.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
             byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
             file.getContent().getInputStream().read(documentByteArray);
             verification.setSignedDocument(documentByteArray);
-            testRepository.save(calibrationTest);
             verificationService.saveVerification(verification);
         } catch (Exception e) {
             logger.error("Cannot sing protocol", e);

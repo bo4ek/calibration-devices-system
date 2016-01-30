@@ -7,9 +7,7 @@ import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
-import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
-import com.softserve.edu.entity.verification.calibration.CalibrationTask;
-import com.softserve.edu.entity.verification.calibration.CalibrationTest;
+import com.softserve.edu.entity.verification.calibration.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -126,6 +124,10 @@ public class Verification implements Comparable {
     private int queue;
 
     private Integer processTimeExceeding;
+
+    @ManyToOne
+    @JoinColumn(name = "calibrationTestManualId")
+    private CalibrationTestDataManual calibrationTestDataManualId;
 
     public Verification(String verficationId , int queue){
         this.id = verficationId;
@@ -255,8 +257,6 @@ public class Verification implements Comparable {
         this.readStatus = ReadStatus.UNREAD;
         this.counterStatus = false;
     }
-
-
 
     public void deleteCalibrationTest(CalibrationTest calibrationTest) {
         calibrationTests.remove(calibrationTest);
