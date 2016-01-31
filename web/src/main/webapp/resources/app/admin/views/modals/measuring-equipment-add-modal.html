@@ -4,7 +4,7 @@
 
 <div class="modal-body modal-padding">
     <form name="addCalibrationModuleForm" id="addCalibrationModuleForm" role="form"
-          ng-submit="onAddCalibrationModuleFormSubmit()"
+          ng-submit="onAddCalibrationModuleFormSubmit($event)"
           class="form-group" novalidate>
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -48,14 +48,14 @@
                                    ng-model="selectedValues.selectedOrganizationCode"
                                    name="organizationCode" id="organizationCode" required>
                             <ui-select-match placeholder="{{'SELECT_EDRPOU' | translate}}" allow-clear="true">
-                                {{$select.selected}}
+                                {{$select.selected.code}} ({{$select.selected.name}})
 
                                 <span class="form-control-feedback glyphicon
 						 	    form-horizontal glyphicon glyphicon-ok-sign" style="margin-right:20px"></span>
 
                             </ui-select-match>
                             <ui-select-choices repeat="organizationCode in organizationCodes | filter: $select.search">
-                                <span ng-bind-html="organizationCode"></span>
+                                <span>{{organizationCode.code}} ({{organizationCode.name}})</span>
                             </ui-select-choices>
                         </ui-select>
 
@@ -104,7 +104,7 @@
 
                     <div class="col-md-8">
                         <input type="text" ng-model="addCalibrationModuleFormData.serialNumber" id="serialNumber"
-                               name="serialNumber"
+                               name="serialNumber" ng-blur="checkForDuplicates()" ng-change="hideDuplicateError()"
                                class="form-control" popover="{{'INPUT_MANUFACTURER_NUMBER' | translate}}"
                                popover-trigger="focus" popover-placement="top"
                                required>
@@ -114,6 +114,11 @@
                         <p class="help-block" ng-if="addCalibrationModuleForm.serialNumber.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
+                        </p>
+
+                        <p class="help-block" ng-if="addCalibrationModuleForm.serialNumber.$error.duplicate">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'DUPLICATE_SERIAL_NUMBER' | translate}}
                         </p>
 
                         <p class="help-block" ng-if="addCalibrationModuleForm.serialNumber.$error.pattern">

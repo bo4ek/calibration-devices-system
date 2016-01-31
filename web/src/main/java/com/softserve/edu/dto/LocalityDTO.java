@@ -1,5 +1,8 @@
 package com.softserve.edu.dto;
 
+import lombok.ToString;
+
+@ToString
 public class LocalityDTO {
 
     private Long id;

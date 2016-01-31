@@ -27,6 +27,7 @@ angular
              * Closes the modal window
              */
             $rootScope.closeModal = function () {
+
                 $modalInstance.close();
             };
 
@@ -43,6 +44,53 @@ angular
                 });
             };
 
+            $scope.inputQueue = function(verification,input,allverification) {
+
+                allverification.forEach(function (item, i, allverification) {
+                    item.queue = i;
+                });
+
+                var current = verification.queue;
+
+                if (input < current) {
+                    allverification.forEach(function (item, i, allverification) {
+                        if (item.queue >= input && item.queue < current) {
+                            item.queue++;
+                        }
+                    });
+                } else if (input > current){
+                    allverification.forEach(function (item, i, allverification) {
+                        if (item.queue > current && item.queue <=input) {
+                            item.queue--;
+                        }
+                    });
+                }
+
+                verification.queue = input;
+            };
+
+            $scope.VerificationPlanningTaskDTO = [];
+
+            $scope.sendNewQueue = function (){
+                $scope.verifications.forEach(function (item,i) {
+                    $scope.VerificationPlanningTaskDTO[i] = {"verficationId" : item.verficationId , "queue"  : item.queue};
+                });
+
+                CalibrationTaskServiceCalibrator.sendVerificationWithQueue($scope.VerificationPlanningTaskDTO).then(function(result) {
+                    if (result.status == 200) {
+                        $scope.tableParams.reload();
+                        toaster.pop('success', $filter('translate')('INFORMATION'),
+                            $filter('translate')('SUCCESSFUL_EDITED'));
+                    } else if (result.status == 403) {
+                        toaster.pop('error', $filter('translate')('INFORMATION'),
+                            $filter('translate')('ERROR_ACCESS'));
+                    } else {
+                        toaster.pop('error', $filter('translate')('INFORMATION'),
+                            $filter('translate')('ERROR_UPDATE_QUEUE'));
+                }});
+            }
+
+
             $scope.removeVerificationFromTask = function(verificationId) {
                 CalibrationTaskServiceCalibrator.removeVerificationFromTask(verificationId).then(function(result) {
                         if (result.status == 200) {
@@ -58,7 +106,7 @@ angular
 
             $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 5,
+                    count: 100,
                     sorting: {
                         'clientData.clientAddress.street': 'asc'
                     }
@@ -73,6 +121,7 @@ angular
                             .success(function (result) {
                                 $scope.resultsCount = result.totalItems;
                                 $defer.resolve(result.content);
+                                $scope.verifications = result.content;
                                 params.total(result.totalItems);
                             }, function (result) {
                                 $log.debug('error fetching data:', result);

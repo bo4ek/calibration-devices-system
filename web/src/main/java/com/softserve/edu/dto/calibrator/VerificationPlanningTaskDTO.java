@@ -1,6 +1,5 @@
 package com.softserve.edu.dto.calibrator;
 
-import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class VerificationPlanningTaskDTO {
+public class VerificationPlanningTaskDTO implements Comparable {
 
     private Date sentToCalibrator;
     private String verficationId;
@@ -34,6 +33,7 @@ public class VerificationPlanningTaskDTO {
     private Boolean serviceability;
     private Date noWaterToDate;
     private boolean sealPresence;
+    private int queue;
 
     public VerificationPlanningTaskDTO(){}
 
@@ -63,6 +63,36 @@ public class VerificationPlanningTaskDTO {
             }
             this.notes = additionalInfo.getNotes();
         }
+    }
+
+
+    public VerificationPlanningTaskDTO(Date sentDate, String verificationId, String providerName, String district,
+                                       String street, String building, String flat, String clientFullName,
+                                       String telephone, AdditionalInfo additionalInfo, int queue) {
+        this.sentToCalibrator = sentDate;
+        this.verficationId = verificationId;
+        this.providerName = providerName;
+        this.district = district;
+        this.street = street;
+        this.building = building;
+        this.flat = flat;
+        this.clientFullName = clientFullName;
+        this.telephone = telephone;
+        if (additionalInfo != null) {
+            if (additionalInfo.getEntrance() > 0) {
+                this.entrance = Integer.toString(additionalInfo.getEntrance());
+            }
+            if (additionalInfo.getFloor() > 0) {
+                this.floor = Integer.toString(additionalInfo.getFloor());
+            }
+            if ((additionalInfo.getTimeFrom() != null) && (additionalInfo.getTimeTo() != null)) {
+                this.time = additionalInfo.getTimeFrom().toString() + " - " + additionalInfo.getTimeTo().toString();
+            } else {
+                this.time = null;
+            }
+            this.notes = additionalInfo.getNotes();
+        }
+        this.queue = queue;
     }
 
     public VerificationPlanningTaskDTO(Date sentDate, String verificationID, String providerName, String fullName,
@@ -102,6 +132,17 @@ public class VerificationPlanningTaskDTO {
             this.phone = telephone;
         }
 
+    }
+
+    public VerificationPlanningTaskDTO( String verficationId,int queue) {
+        this.verficationId = verficationId;
+        this.queue = queue;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        int compareage=((VerificationPlanningTaskDTO)o).getQueue();
+        return this.queue-compareage;
     }
 
 }

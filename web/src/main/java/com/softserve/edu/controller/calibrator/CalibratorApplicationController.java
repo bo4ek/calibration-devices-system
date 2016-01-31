@@ -8,15 +8,18 @@ import com.softserve.edu.dto.application.ApplicationFieldDTO;
 import com.softserve.edu.dto.provider.OrganizationStageVerificationDTO;
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.catalogue.District;
+import com.softserve.edu.entity.catalogue.Locality;
 import com.softserve.edu.entity.catalogue.Region;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
+import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
+import com.softserve.edu.repository.UserRepository;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.calibrator.CalibratorService;
@@ -26,6 +29,7 @@ import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +72,9 @@ public class CalibratorApplicationController {
 
     @Autowired
     private OrganizationService organizationService;
+
+    @Autowired
+    private UserService userService;
 
     private final Logger logger = Logger.getLogger(CalibratorApplicationController.class);
 
@@ -118,6 +125,7 @@ public class CalibratorApplicationController {
                    verificationDTO.getTimeTo()
            );
 
+           User calibratorEmployee = userService.findOne(employeeUser.getUsername());
            Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
            Organization provider = providerService.findById(verificationDTO.getProviderId());
 
@@ -125,7 +133,7 @@ public class CalibratorApplicationController {
            String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
            Verification verification = new Verification(new Date(), clientData, provider, device,
                    Status.IN_PROGRESS, Verification.ReadStatus.UNREAD, calibrator, info, verificationDTO.getDismantled(),
-                   counter, verificationDTO.getComment(), verificationDTO.getSealPresence(), verificationId);
+                   counter, verificationDTO.getComment(), verificationDTO.getSealPresence(), verificationId, new Date(), Status.PLANNING_TASK, calibratorEmployee);
 
            verificationService.saveVerification(verification);
            // випадку ексепшину присвоювати айдішці null
@@ -222,6 +230,7 @@ public class CalibratorApplicationController {
     @RequestMapping(value = "region", method = RequestMethod.GET)
     public List<Region> getRegionCorrespondingProvider(
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        List<Locality> list = localityService.findLocalitiesByOrganizationId(employeeUser.getOrganizationId());
         LocalityDTO localityDTO = localityService.findLocalitiesByOrganizationId(employeeUser.getOrganizationId()).stream()
                 .map(locality -> new LocalityDTO(locality.getId(), locality.getDesignation(), locality.getDistrict().getId()))
                 .collect(Collectors.toList()).get(0);

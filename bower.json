@@ -23,6 +23,7 @@
     "angular-translate-storage-local": "2.8.0",
     "angular-ui-router": "0.2.14",
     "angularjs-toaster": "~0.4.15",
+    "angular-dragdrop" : "v1.0.13",
     "bootstrap": "3.3.4",
     "chosen": "1.4.2",
     "font-awesome": "4.3.0",

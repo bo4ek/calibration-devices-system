@@ -542,6 +542,23 @@ public class VerificationServiceImpl implements VerificationService {
         verificationRepository.save(verificationToEdit);
     }
 
+    @Override
+    @Transactional
+    public boolean updateVerificationQueue(List<Verification> verifications, Long calibratorId) {
+
+        for (Verification verificationNew : verifications){
+           Verification verification = verificationRepository.findOne(verificationNew.getId());
+           if ( verification.getCalibrator().getId() != calibratorId){
+               logger.warn("Access denied");
+               return false;
+           }
+       }
+        for (Verification verificationNew : verifications){
+         verificationRepository.updateVerificationQueueById(verificationNew.getQueue(),verificationNew.getId());
+        }
+        return true;
+    }
+
     /**
      * Returns calibration test assigned to verification
      *
@@ -685,12 +702,12 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional
     public Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable) {
-        return verificationRepository.findByTask_Id(taskID, pageable);
+        return verificationRepository.findByTaskId(taskID, pageable);
     }
 
     @Transactional
     public Verification[] getVerificationsByTaskID(Long taskID) {
-        return verificationRepository.findByTask_Id(taskID);
+        return verificationRepository.findByTaskId(taskID);
     }
 
     @Override

@@ -277,7 +277,12 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
         try {
-            return verification.getCalibrationModule().getCalibrationType();
+            if(verification.isManual()) {
+                return verification.getCalibrationTestDataManualId().getCalibrationTestManual().getCalibrationModule().getCalibrationType();
+            }
+            else {
+                return verification.getCalibrationModule().getCalibrationType();
+            }
         } catch (Exception e) {
             logger.error("Calibration type for this module had not been specified ", e);
             return Constants.NOT_SPECIFIED;

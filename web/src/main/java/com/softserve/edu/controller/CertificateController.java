@@ -24,8 +24,8 @@ public class CertificateController {
     public Boolean isCertificateSigned(@PathVariable
                                        String verificationId) {
         Verification verification = verificationService.findById(verificationId);
-        if(verification.getCalibrationTests().size() > 0) {
-            return verification.getCalibrationTests().iterator().next().isSigned();
+        if(verification != null) {
+            return verification.isSigned();
         }
         return false;
     }

@@ -38,22 +38,37 @@ public class UnfitnessCertificate extends BaseCertificate {
     @Placeholder(name = "REASON_UNSUITABLE")
     public String getReasonUnusable() {
         String reasons = Constants.MEASURING_ERROR_MESSAGE;
-        try {
-            if (calibrationTest.getCalibrationTestDataList().get(0).getTestResult()
+        if (verification.isManual()) {
+            if (verification.getCalibrationTestDataManualId().getStatusTestFirst()
                     .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.RATED_FLAW;
-            } else if (calibrationTest.getCalibrationTestDataList().get(1).getTestResult()
+            } else if (verification.getCalibrationTestDataManualId().getStatusTestSecond()
                     .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.TRANSIENT_FLAW;
-            } else if (calibrationTest.getCalibrationTestDataList().get(2).getTestResult()
+            } else if (verification.getCalibrationTestDataManualId().getStatusTestThird()
                     .equals(Verification.CalibrationTestResult.FAILED)) {
                 return reasons + Constants.MINIMAL_FLAW;
             } else {
-                return calibrationTest.getUnsuitabilityReason().getName();
+                return verification.getCalibrationTestDataManualId().getUnsuitabilityReason().getName();
             }
-        } catch (Exception e) {
-            logger.error("Data about one of the calibration tests is corrupted ", e);
-            return Constants.NOT_SPECIFIED;
+        } else {
+            try {
+                if (calibrationTest.getCalibrationTestDataList().get(0).getTestResult()
+                        .equals(Verification.CalibrationTestResult.FAILED)) {
+                    return reasons + Constants.RATED_FLAW;
+                } else if (calibrationTest.getCalibrationTestDataList().get(1).getTestResult()
+                        .equals(Verification.CalibrationTestResult.FAILED)) {
+                    return reasons + Constants.TRANSIENT_FLAW;
+                } else if (calibrationTest.getCalibrationTestDataList().get(2).getTestResult()
+                        .equals(Verification.CalibrationTestResult.FAILED)) {
+                    return reasons + Constants.MINIMAL_FLAW;
+                } else {
+                    return calibrationTest.getUnsuitabilityReason().getName();
+                }
+            } catch (Exception e) {
+                logger.error("Data about one of the calibration tests is corrupted ", e);
+                return Constants.NOT_SPECIFIED;
+            }
         }
     }
 }

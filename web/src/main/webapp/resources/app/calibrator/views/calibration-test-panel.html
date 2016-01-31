@@ -311,12 +311,17 @@
                                 </tbody>
                             </table>
                             <!--ng-disabled="isManualProtocol"-->
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-success btn-md"
+                            <div class="col-md-3">
+                                <button ng-disabled="selectedData.isSignedDocument" type="button" class="btn btn-success btn-md"
                                         ng-click="createAndUpdateTest()"
                                         >{{'SAVE' | translate}}
                                 </button>
-                                <span> </span>
+                                <button id="signButton" ng-disabled="selectedData.isSignedDocument"
+                                        ng-show="isVerification" type="submit"
+                                        class="btn btn-warning btn-md"
+                                        ng-click="signCalibrationManualTest()"
+                                        >{{'SIGN_PROTOCOL' | translate}}
+                                </button>
                                 <button type="button" class="btn btn-danger "
                                         ng-click="closeTestManual()"
                                         >{{'CLOSE' | translate}}

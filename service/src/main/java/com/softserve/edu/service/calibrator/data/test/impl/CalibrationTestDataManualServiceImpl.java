@@ -58,7 +58,8 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
                 , CalibrationTestResult.valueOf(statusCommon)
                 , counter, calibrationTestManual, verification, unsuitabilityReason);
         calibrationTestDataManualRepository.save(calibrationTestDataManual);
-        verification.setIsManual(true);
+        verification.setManual(true);
+        verification.setCalibrationTestDataManualId(calibrationTestDataManual);
         verification.setStatus(Status.TEST_COMPLETED);
         verificationRepository.save(verification);
     }

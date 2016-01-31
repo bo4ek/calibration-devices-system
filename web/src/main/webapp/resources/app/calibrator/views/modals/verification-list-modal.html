@@ -1,9 +1,13 @@
+<head>
+    <link href="resources\assets\css\calibrator.css" rel="stylesheet">
+</head>
+
 <div class="modal-header">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-2">
             <h3 class="modal-title">{{ 'TASK_VERIFICATIONS' | translate }}</h3>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-10">
             <button type="button" class="btn btn-danger pull-right"
                     ng-click="closeModal()">
                 <span class="glyphicon glyphicon-remove"></span>
@@ -31,10 +35,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                                <table show-filter="false" ng-table="tableParams" template-pagination="custom/pager"
-                                       class="table table-bordered table-hover users_table">
+                                <table show-filter="false" ng-table="tableParams"
+                                       class="table table-bordered table-hover users_table" >
                                     <tbody>
-                                    <tr ng-repeat="verification in $data">
+                                    <tr ng-repeat="verification in $data | orderBy: 'queue' as filtered_result track by  $index">
                                         <td data-title="'INITIAL_DATE' | translate">
                                             {{ verification.sentToCalibrator }}
                                         </td>
@@ -71,6 +75,10 @@
                                         <td data-title="'NOTES' | translate">
                                             {{ verification.notes }}
                                         </td>
+                                        <td data-title="'QUEUE' | translate">
+                                                <input class="form-control" type="number"ng-model="$index"  min="0" max="99"
+                                                       ng-blur="inputQueue(verification,$index,$data)">
+                                        </td>
                                         <td data-title="'ACTIONS' | translate" class="text-center">
                                             <div class="btn-group-vertical">
                                                 <button type="button" class="btn btn-warning"
@@ -86,31 +94,10 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                <button type="button" class="btn btn-success pull-right"
+                                        ng-click="sendNewQueue()"> {{ 'SAVE' | translate }}
+                                </button>
                             </div>
-                            <script type="text/ng-template" id="custom/pager">
-                                <div>
-                                    <ul class="pager ng-cloak">
-                                        <li ng-repeat="page in pages"
-                                            ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
-                                            ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
-                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;
-                                                {{'PREVIOUS' | translate}}</a>
-                                            <a ng-switch-when="next" ng-click="params.page(page.number)"
-                                               href="">{{'NEXT' | translate}} &raquo;</a>
-                                        </li>
-                                        <li>
-                                            <div class="btn-group">
-                                                <button type="button" ng-class="{'active':params.count() == 5}"
-                                                        ng-click="params.count(5)" class="btn btn-default">5
-                                                </button>
-                                                <button type="button" ng-class="{'active':params.count() == 10}"
-                                                        ng-click="params.count(10)" class="btn btn-default">10
-                                                </button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </script>
                         </div>
                     </div>
                 </div>

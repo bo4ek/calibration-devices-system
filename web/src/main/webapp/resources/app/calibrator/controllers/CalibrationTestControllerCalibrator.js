@@ -13,6 +13,7 @@ angular
             $scope.IdsOfVerifications = calibrationTestServiceCalibrator.dataOfVerifications().getIdsOfVerifications();
 
             $scope.testId = $location.search().param;
+            $scope.isVerification = $location.search().ver || false;
 
             $scope.isSavedScanDoc = false;
 
@@ -211,6 +212,7 @@ angular
                             $scope.selectedData.numberProtocolManual = dataCompletedTest.calibrationTestManualDTO.numberOfTest;
                             $scope.selectedData.numberProtocol = dataCompletedTest.calibrationTestManualDTO.generateNumber;
                             $scope.selectedData.dateOfManualTest = new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest);
+                            $scope.selectedData.isSignedDocument = dataCompletedTest.signed;
                             $scope.idOfManualTest = dataCompletedTest.calibrationTestManualDTO.id;
                             $scope.myDatePicker.pickerDate = {
                                 startDate: (new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest)),
@@ -456,6 +458,24 @@ angular
                     $scope.unsuitabilityReasons = [];
                     $scope.isNotProcessed = false;
                 }
+            };
+
+            $scope.signCalibrationManualTest = function () {
+                retranslater();
+                calibrationTestServiceCalibrator
+                    .editTestManual(testManualForSend, $scope.testId ,$scope.isVerificationEdit)
+                    .then(function (status) {
+                        if (status == 200) {
+                            calibrationTestServiceCalibrator
+                                .signTestProtocol($scope.testId)
+                                .then(function (status) {
+                                    if (status == 200) {
+                                    $scope.selectedData.isSignedDocument = true;
+                                    toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
+                                }
+                                })
+                        }
+                    })
             };
 
 

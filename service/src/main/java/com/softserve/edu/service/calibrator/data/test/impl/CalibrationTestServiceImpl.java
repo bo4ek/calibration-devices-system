@@ -1,22 +1,23 @@
 package com.softserve.edu.service.calibrator.data.test.impl;
 
+import com.softserve.edu.common.Constants;
+import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.enumeration.verification.Status;
-import com.softserve.edu.repository.CalibrationModuleRepository;
-import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
-import com.softserve.edu.service.tool.MailService;
-import org.apache.commons.codec.binary.Base64;
-import com.softserve.edu.device.test.data.DeviceTestData;
+import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
-import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.repository.CalibrationTestDataRepository;
 import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.VerificationRepository;
+import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.exceptions.NotAvailableException;
+import com.softserve.edu.service.tool.MailService;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +30,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
-
-import com.softserve.edu.common.Constants;
 
 @Service
 public class CalibrationTestServiceImpl implements CalibrationTestService {
@@ -93,7 +92,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         testRepository.save(calibrationTest);
         verification.setStatus(Status.TEST_COMPLETED);
 
-        CalibrationModule moduleId = calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber());
+        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
         verification.setCalibrationModule(moduleId);
         verificationRepository.save(verification);
         return calibrationTest.getId();
@@ -257,6 +256,4 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
             verificationRepository.save(verification);
         }
     }
-
-
 }

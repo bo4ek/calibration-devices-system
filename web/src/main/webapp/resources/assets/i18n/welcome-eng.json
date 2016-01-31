@@ -65,7 +65,7 @@
     "COUNTER_NAME_INFO": "This field can contain only their own counter name, so the name must begin with a letter.If proper name consists of two words or more they should contain between spaces.",
     "COUNTER_COUNT_INFO": "This field can contain only whole numbers",
     "MIDDLE_NAME_INFO": "This field can contain only proper name, so the name should begin with a capital letter.",
-    "DOUBLE_NAME_ERROR": "This field can contain only alphabetic characters, apostrophes and dashes.",
+    "DOUBLE_NAME_ERROR": "This field can start from Upper letter and contain only alphabetic characters, apostrophes and dashes.",
     "FLAT_INFO": "If you live in a private house type 0.",
     "PROFILE": "Profile",
     "SETTINGS": "Settings",
@@ -568,8 +568,9 @@
     "BBI_IS_NOT_VALID": "bbi is not valid",
     "BBI_FILE_IS_ALREADY_IN_DATABASE": "BBI file is already in database",
     "NAME_OF_BBI_FILE_DOES_NOT_MATCH": "Name of bbi file does not match with name in BluetoothDB file",
-    "WRONG_IMAGE_IN_BBI": "Wrong image in BBI file",
-    "WRONG_MODULE_ID": "Wrong module serial in BBI file",
+    "INVALID_IMAGE_IN_BBI": "Wrong image in BBI file",
+    "INVALID_MODULE_ID": "Wrong module serial in BBI file",
+    "INVALID_DEVICE_TYPE_ID" : "Wrong device type id in BBI file",
     "INVALID_VERIFICATION_CODE": "Invalid verification code",
     "PLEASE_DESCRIBE_REASON_OF_PROTOCOL_REJECTION": "Please explain why verification is being rejected",
     "REASON_OF_PROTOCOL_REJECTION": "Please provide the detailed reason why this protocol needs to be rejected",
@@ -753,6 +754,13 @@
     "PRIVATE_KEY_PASSWORD": "Password",
     "READ_KEY_SIGN_DOC": "READ&SIGN",
     "NUMBER_OF_VERIFICATION": "Number of verification",
-    "APPLICATION_NUMBER": "Application number"
-
+    "APPLICATION_NUMBER": "Application number",
+    "SERVICE_TYPE": "Service type",
+    "DATE_TIME_PN": "Protocol date, time, s/f",
+    "READ_KEY_SIGN_DOC": "READ&SIGN",
+    "SUCCESSFUL_ADDED_TEST" : "You have successfully added a new test",
+    "QUEUE" : "Queue",
+    "REFRESH" : "Refresh",
+    "ERROR_ACCESS" : "Access denied",
+    "ERROR_UPDATE_QUEUE" : "Error editing verifications queue"
 }

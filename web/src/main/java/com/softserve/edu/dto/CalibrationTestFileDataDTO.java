@@ -68,6 +68,8 @@ public class CalibrationTestFileDataDTO {
 
     private String serialNumber;
 
+    private String serviceType;
+
     public CalibrationTestFileDataDTO() {
     }
 
@@ -89,7 +91,8 @@ public class CalibrationTestFileDataDTO {
         this.testResult = calibrationTest.getTestResult();
         this.listTestData = new ArrayList();
         this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
-        this.signed = calibrationTest.isSigned();
+        this.serviceType = verification.getDevice().getDeviceType().name();
+        this.signed = verification.isSigned();
         this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
         this.reasonUnsuitabilityName = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getName();
         this.rotateIndex = calibrationTest.getRotateIndex();
@@ -361,5 +364,13 @@ public class CalibrationTestFileDataDTO {
 
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 }

@@ -1,12 +1,13 @@
 package com.softserve.edu.repository;
 
 import com.softserve.edu.entity.device.Device;
-import com.softserve.edu.entity.organization.Organization;
-import com.softserve.edu.entity.verification.Verification;
-import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.organization.Organization;
+import com.softserve.edu.entity.user.User;
+import com.softserve.edu.entity.verification.Verification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -21,9 +22,14 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Page<Verification> findByCalibratorId(Long calibratorId, Pageable pageable);
 
-    Page<Verification> findByTask_Id(Long taskID, Pageable pageable);
+    Page<Verification> findByTaskId(Long taskID, Pageable pageable);
 
-    Verification[] findByTask_Id(Long taskID);
+    Verification[] findByTaskId(Long taskID);
+
+    /*select * from Verification  where Verification.taskId = 9 ORDER BY `queue` ASC*/
+
+    /*@Query("SELECT u FROM Verification u where u.taskId = :id ORDER BY u.queue ASC")*/
+    Verification[] findByTaskIdOrderByQueueAsc(Long id);
 
     Page<Verification> findByProviderIdAndStatusOrderByInitialDateDesc(Long providerId, Status status, Pageable pageable);
 
@@ -171,6 +177,10 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
             "d.deviceType= :deviceType AND u.initialDate = :initialDate")
     long getCountOfAllVerificationsCreatedWithDeviceTypeToday(@Param("initialDate") Date initialDate,
                                                               @Param("deviceType") Device.DeviceType deviceType);
+
+    @Modifying
+    @Query("UPDATE Verification u SET u.queue = :queue WHERE u.id = :id ")
+    void updateVerificationQueueById (@Param("queue") int queue , @Param("id") String id);
 }
 
 

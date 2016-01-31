@@ -17,6 +17,12 @@ angular
             },
             changeTaskDate: function (taskID, dateOfTask) {
                 return sendData('changeTaskDate/' + taskID, dateOfTask);
+            },
+
+            sendVerificationWithQueue: function (newLightVerification) {
+                return $http.put('task/saveQueue', newLightVerification).then(function (result) {
+                    return result;
+                })
             }
         };
 

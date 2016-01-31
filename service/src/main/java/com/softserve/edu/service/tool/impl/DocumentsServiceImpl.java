@@ -171,9 +171,7 @@ public class DocumentsServiceImpl implements DocumentService {
     @Override
     public FileObject getSignedDocument(String verificationCode, FileFormat fileFormat, DocumentType documentType) throws IOException {
         Verification verification = verificationRepository.findOne(verificationCode);
-        Set<CalibrationTest> calibrationTests = verification.getCalibrationTests();
-        CalibrationTest calibrationTest = calibrationTests.iterator().next();
-        byte[] file = calibrationTest.getSignedDocument();
+        byte[] file = verification.getSignedDocument();
         FileParameters fileParameters = new FileParameters(documentType,
                 fileFormat);
         fileParameters.setFileSystem(FileSystem.RAM);

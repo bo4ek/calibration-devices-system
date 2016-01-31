@@ -124,7 +124,7 @@ public class NotStandardVerificationCalibratorController {
                     verification.getClientData().getMiddleName(),
                     verification.getCounter(),
                     verification.getCalibrationTests(),
-                    verification.getRejectedMessage()));
+                    verification.getRejectedMessage(), verification.getComment()));
         }
         return resultList;
     }
