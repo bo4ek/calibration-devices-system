@@ -35,6 +35,7 @@ angular
             $scope.addCalibrationModuleFormData.email = '';
             $scope.addCalibrationModuleFormData.calibrationType = '';
 
+            $scope.oldSerialNumber = '';
             $scope.headerTranslate = 'ADD_INSTALLATION';
             $scope.applyButtonText = 'ADD';
 
@@ -50,8 +51,8 @@ angular
                 {id: 'INSTALLATION_PORT', label: $filter('translate')('INSTALLATION_PORT')}
             ];
 
-            if (calibrationModule !== undefined) {
-                $scope.addCalibrationModuleFormData.deviceType = new Array();
+            if (calibrationModule) {
+                $scope.addCalibrationModuleFormData.deviceType = [];
                 for (var i in calibrationModule.deviceType) {
                     $scope.addCalibrationModuleFormData.deviceType[i] = {
                         id: calibrationModule.deviceType[i],
@@ -73,6 +74,7 @@ angular
                 $scope.addCalibrationModuleFormData.organizationCode = calibrationModule.organizationCode;
                 $scope.addCalibrationModuleFormData.condDesignation = calibrationModule.condDesignation;
                 $scope.addCalibrationModuleFormData.serialNumber = calibrationModule.serialNumber;
+                $scope.oldSerialNumber = calibrationModule.serialNumber;
                 $scope.addCalibrationModuleFormData.employeeFullName = calibrationModule.employeeFullName;
                 $scope.addCalibrationModuleFormData.telephone = calibrationModule.telephone;
                 $scope.addCalibrationModuleFormData.workDate = calibrationModule.workDate;
@@ -93,14 +95,6 @@ angular
                 );
 
                 $scope.addCalibrationModuleFormData.deviceType = undefined;
-                $scope.addCalibrationModuleFormData.condDesignation = '';
-                $scope.addCalibrationModuleFormData.serialNumber = '';
-                $scope.addCalibrationModuleFormData.employeeFullName = '';
-                $scope.addCalibrationModuleFormData.telephone = '';
-                $scope.addCalibrationModuleFormData.workDate = '';
-                $scope.addCalibrationModuleFormData.moduleType = undefined;
-                $scope.addCalibrationModuleFormData.email = '';
-                $scope.addCalibrationModuleFormData.calibrationType = '';
 
                 $scope.headerTranslate = 'ADD_INSTALLATION';
                 $scope.applyButtonText = 'ADD';
@@ -163,14 +157,33 @@ angular
             /**
              * Validates calibration module form before saving
              */
-            $scope.onAddCalibrationModuleFormSubmit = function () {
+            $scope.onAddCalibrationModuleFormSubmit = function (event) {
                 if ($scope.addCalibrationModuleFormData.deviceType === undefined) {
                     $scope.addCalibrationModuleForm.deviceType.$error = {"required": true};
                     $scope.addCalibrationModuleForm.deviceType.$valid = false;
                     $scope.addCalibrationModuleForm.deviceType.$invalid = true;
                 }
-
                 $scope.$broadcast('show-errors-check-validity');
+
+                event.preventDefault();
+                if ($scope.addCalibrationModuleFormData.serialNumber && $scope.addCalibrationModuleFormData.serialNumber !== $scope.oldSerialNumber) {
+                    var response = measuringEquipmentServiceAdmin.isSerialNumberDuplicate($scope.addCalibrationModuleFormData.serialNumber);
+                    response.then(function (isDuplicate) {
+                            $scope.addCalibrationModuleForm.serialNumber.$setValidity("duplicate", !isDuplicate.data);
+                            $scope.$broadcast('show-errors-check-validity');
+                            $scope.saveIfValid();
+                        }
+                    )
+                } else {
+                    $scope.addCalibrationModuleForm.serialNumber.$setValidity("duplicate", true);
+                    $scope.saveIfValid();
+                }
+            };
+
+            /**
+             * Save calibration module data and close modal window if all data are valid
+             */
+            $scope.saveIfValid = function() {
                 if ($scope.addCalibrationModuleForm.$valid) {
                     for (var i in $scope.addCalibrationModuleFormData.deviceType) {
                         $scope.addCalibrationModuleFormData.deviceType[i] = $scope.addCalibrationModuleFormData.deviceType[i].id;
@@ -249,6 +262,31 @@ angular
                 calibrationModule.workDate = null;
             };
 
+            $scope.isSerialNumberDuplicate = function() {
+                return measuringEquipmentServiceAdmin.isSerialNumberDuplicate($scope.addCalibrationModuleFormData.serialNumber);
+            };
+
+            /**
+             * Check is calibration module with the same serial number
+             */
+            $scope.checkForDuplicates = function () {
+                if ($scope.addCalibrationModuleFormData.serialNumber && $scope.addCalibrationModuleFormData.serialNumber !== $scope.oldSerialNumber) {
+                    $scope.isSerialNumberDuplicate().then(function (isDuplicate) {
+                            $scope.addCalibrationModuleForm.serialNumber.$setValidity("duplicate", !isDuplicate.data);
+                        }
+                    )
+                }
+            };
+
+            /**
+             * Hide error when user changing value
+             */
+            $scope.hideDuplicateError = function() {
+                if($scope.addCalibrationModuleForm.serialNumber.$error.duplicate) {
+                    $scope.addCalibrationModuleForm.serialNumber.$setValidity("duplicate", true);
+                    $scope.$broadcast('show-errors-check-validity');
+                }
+            };
 
             $scope.CATEGORY_DEVICE_CODE = /^[\u0430-\u044f\u0456\u0457\u0454a-z\d]{13}$/;
             $scope.PHONE_REGEX = /^[1-9]\d{8}$/;

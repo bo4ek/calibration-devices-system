@@ -11,6 +11,9 @@ angular
             saveCalibrationModule: function (formData) {
                 return sendData('add', formData);
             },
+            isSerialNumberDuplicate: function(serialNumber){
+                return getData("isDuplicate/" + serialNumber);
+            },
             getCalibrationModuleById: function (id) {
                 return getData("get/" + id);
             },

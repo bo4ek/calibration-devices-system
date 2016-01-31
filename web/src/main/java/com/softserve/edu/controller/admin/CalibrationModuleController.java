@@ -2,11 +2,10 @@ package com.softserve.edu.controller.admin;
 
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.dto.admin.CalibrationModuleDTO;
-import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
-import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
+import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
@@ -40,6 +39,9 @@ public class CalibrationModuleController {
 
     @Autowired
     private CalibrationModuleService calibrationModuleService;
+
+    @Autowired
+    private CalibrationModuleRepository calibrationModuleRepository;
 
     @Autowired
     private OrganizationService organizationService;
@@ -239,6 +241,18 @@ public class CalibrationModuleController {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Check is calibration module with serial number {@code serialNumber} already exists
+     *
+     * @param serialNumber serial number of calibration module
+     * @return {@literal true} if calibration module with serial number {@code serialNumber} already exists,
+     * {@literal false} in other case
+     */
+    @RequestMapping(value = "isDuplicate/{serialNumber}", method = RequestMethod.GET)
+    public Boolean isDuplicateSerialNumber(@PathVariable String serialNumber) {
+        return calibrationModuleRepository.findBySerialNumber(serialNumber) != null;
     }
 
     /*

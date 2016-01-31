@@ -4,7 +4,7 @@
 
 <div class="modal-body modal-padding">
     <form name="addCalibrationModuleForm" id="addCalibrationModuleForm" role="form"
-          ng-submit="onAddCalibrationModuleFormSubmit()"
+          ng-submit="onAddCalibrationModuleFormSubmit($event)"
           class="form-group" novalidate>
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -104,7 +104,7 @@
 
                     <div class="col-md-8">
                         <input type="text" ng-model="addCalibrationModuleFormData.serialNumber" id="serialNumber"
-                               name="serialNumber"
+                               name="serialNumber" ng-blur="checkForDuplicates()" ng-change="hideDuplicateError()"
                                class="form-control" popover="{{'INPUT_MANUFACTURER_NUMBER' | translate}}"
                                popover-trigger="focus" popover-placement="top"
                                required>
@@ -114,6 +114,11 @@
                         <p class="help-block" ng-if="addCalibrationModuleForm.serialNumber.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
+                        </p>
+
+                        <p class="help-block" ng-if="addCalibrationModuleForm.serialNumber.$error.duplicate">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'DUPLICATE_SERIAL_NUMBER' | translate}}
                         </p>
 
                         <p class="help-block" ng-if="addCalibrationModuleForm.serialNumber.$error.pattern">
