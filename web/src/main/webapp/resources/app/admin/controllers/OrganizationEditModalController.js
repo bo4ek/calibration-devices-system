@@ -676,6 +676,21 @@ angular
                 if (typeof $rootScope.organization.building == 'object') {
                     $rootScope.organization.building = $rootScope.organization.building.designation;
                 }
+                if ($scope.selectedValues.regionRegistered) {
+                    $scope.selectedValues.regionRegistered = $scope.selectedValues.regionRegistered.designation;
+                }
+                if ($scope.selectedValues.districtRegistered) {
+                    $scope.selectedValues.districtRegistered = $scope.selectedValues.districtRegistered.designation;
+                }
+                if ($scope.selectedValues.localityRegistered) {
+                    $scope.selectedValues.localityRegistered = $scope.selectedValues.localityRegistered.designation;
+                }
+                if ($scope.selectedValues.streetRegistered) {
+                    $scope.selectedValues.streetRegistered = $scope.selectedValues.streetRegistered.designation;
+                }
+                if ($scope.selectedValues.buildingRegistered) {
+                    $scope.selectedValues.buildingRegistered = $scope.selectedValues.buildingRegistered.designation;
+                }
             }
 
             function objectTypesToStringTypes() {
@@ -792,11 +807,11 @@ angular
                     building: $rootScope.organization.building,
                     flat: $rootScope.organization.flat,
 
-                    regionRegistered: $scope.selectedValues.regionRegistered.designation,
-                    localityRegistered: $scope.selectedValues.districtRegistered.designation,
-                    districtRegistered: $scope.selectedValues.localityRegistered.designation,
-                    streetRegistered: $scope.selectedValues.streetRegistered.designation || $scope.selectedValues.streetRegistered,
-                    buildingRegistered: $scope.selectedValues.buildingRegistered.designation || $scope.selectedValues.buildingRegistered,
+                    regionRegistered: $scope.selectedValues.regionRegistered,
+                    localityRegistered: $scope.selectedValues.districtRegistered,
+                    districtRegistered: $scope.selectedValues.localityRegistered,
+                    streetRegistered: $scope.selectedValues.streetRegistered,
+                    buildingRegistered: $scope.selectedValues.buildingRegistered,
                     flatRegistered: $rootScope.organization.flatRegistered,
 
                     username: $scope.adminsUserName,
@@ -811,8 +826,7 @@ angular
 
             function saveOrganization(organizationForm) {
                 organizationService.editOrganization(
-                    organizationForm,
-                    $rootScope.organizationId).then(
+                    organizationForm, $rootScope.organizationId).then(
                     function (data) {
                         if (data == 200) {
                             console.log(data);

@@ -26,6 +26,7 @@ import com.softserve.edu.service.utils.OrganizationAdminDTO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -106,7 +107,7 @@ public class OrganizationController {
                     organizationDTO.getServiceAreas()
             );
         } catch (UnsupportedEncodingException | MessagingException e) {
-            logger.error("Got exeption while add organization ", e);
+            logger.error("Got exception while adding organization ", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -221,8 +222,8 @@ public class OrganizationController {
      * @return a response body with http status {@literal OK} if organization
      * successfully edited or else http status {@literal CONFLICT}
      */
-    @RequestMapping(value = "edit/{organizationId}", method = RequestMethod.PUT)
-    public ResponseEntity editOrganization(@RequestBody OrganizationDTO organization, @PathVariable Long organizationId,
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.PUT)
+    public ResponseEntity editOrganization(@RequestBody OrganizationDTO organization, @PathVariable Long id,
                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user)
             throws UnsupportedEncodingException, MessagingException {
 
@@ -253,7 +254,7 @@ public class OrganizationController {
             String adminName = user.getUsername();
 
             organizationService.editOrganization(
-                    organizationId,
+                    id,
                     organization.getName(),
                     organization.getPhone(),
                     organization.getEmail(),
@@ -273,11 +274,11 @@ public class OrganizationController {
                     organization.getServiceAreas());
 
         } catch (UnsupportedEncodingException | MessagingException e) {
-            logger.error("Got exeption while editing organization ", e);
+            logger.error("Got exception while editing organization ", e);
             httpStatus = HttpStatus.CONFLICT;
         }
 
-        Organization org = organizationService.getOrganizationById(organizationId);
+        Organization org = organizationService.getOrganizationById(id);
         User admin = userService.findOne(organization.getUsername());
         organizationService.sendOrganizationChanges(org, admin);
 
