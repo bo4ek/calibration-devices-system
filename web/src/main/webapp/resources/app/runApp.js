@@ -134,6 +134,7 @@ require.config({
 require(['employeeModule'], function () {
     angular.bootstrap(document.getElementById('employeeModule'), ['employeeModule']);
 });
+
 //require(['globalSearchModule'], function () {
 //    angular.bootstrap(document.getElementById('globalSearchModule'), ['globalSearchModule']);
 //});

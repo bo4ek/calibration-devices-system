@@ -323,29 +323,31 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             while (rs.next()) {
                 verificationMap = new LinkedHashMap<>();
                 verificationMap.put(Constants.VERIFICATION_ID, rs.getString("Id_pc"));
-                verificationMap.put(Constants.PROVIDER, rs.getString("Customer"));
-                verificationMap.put(Constants.DATE, rs.getString("Date"));
-                verificationMap.put(Constants.COUNTER_NUMBER, rs.getString("CounterNumber"));
-                verificationMap.put(Constants.COUNTER_SIZE_AND_SYMBOL, rs.getString("Type"));
-                verificationMap.put(Constants.YEAR, rs.getString("Year"));
-                verificationMap.put(Constants.STAMP, rs.getString("Account"));
                 verificationMap.put(Constants.LAST_NAME, rs.getString("Surname"));
                 verificationMap.put(Constants.FIRST_NAME, rs.getString("Name"));
                 verificationMap.put(Constants.MIDDLE_NAME, rs.getString("Middlename"));
-                verificationMap.put(Constants.PHONE_NUMBER, rs.getString("TelNumber"));
-                verificationMap.put(Constants.REGION, rs.getString("District"));
                 verificationMap.put(Constants.CITY, rs.getString("City"));
+                verificationMap.put(Constants.REGION, rs.getString("District"));
                 verificationMap.put(Constants.STREET, rs.getString("Street"));
                 verificationMap.put(Constants.BUILDING, rs.getString("Building"));
                 verificationMap.put(Constants.FLAT, rs.getString("Apartment"));
+                verificationMap.put(Constants.STAMP, rs.getString("Account"));
+                verificationMap.put(Constants.COUNTER_NUMBER, rs.getString("CounterNumber"));
+                verificationMap.put(Constants.COUNTER_SIZE_AND_SYMBOL, rs.getString("Type"));
+                verificationMap.put(Constants.YEAR, rs.getString("Year"));
+                verificationMap.put(Constants.PHONE_NUMBER, rs.getString("TelNumber"));
+                verificationMap.put(Constants.PROVIDER, rs.getString("Customer"));
+                verificationMap.put(Constants.DATE, rs.getString("Date"));
 
                 try {
                     verificationMap.put(Constants.CITY_ID, rs.getString("CityID"));
                     verificationMap.put(Constants.DISTRICT_ID, rs.getString("DistrictID"));
                     verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
                     verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
+
+                    verificationMap.put(Constants.NOTE, rs.getString("Note"));
                 } catch (SQLException e) {
-                    logger.error("User was trying to upload old archive format" + e);
+                    logger.error("User was trying to upload old archive format ", e);
                 }
 
                 bbiFilesToVerification.put(rs.getString("FileNumber"), verificationMap);
@@ -398,7 +400,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 counter.getCounterType().getDevice().getDeviceType());
         Verification verification = new Verification(date, clientData,
                 Status.CREATED_BY_CALIBRATOR, calibrator, calibratorEmployee,
-                counter, verId);
+                counter, verId, verificationData.get(Constants.NOTE));
         String verificationId = verification.getId();
         verificationService.saveVerification(verification);
         return verificationId;

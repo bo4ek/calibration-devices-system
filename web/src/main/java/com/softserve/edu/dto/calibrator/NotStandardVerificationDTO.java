@@ -37,10 +37,11 @@ public class NotStandardVerificationDTO {
     private String stamp;
     private String testResult;
     private String rejectMessage;
+    private String comment;
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address,
                                       String firstName, String lastName, String middleName,
-                                      Counter counter, Set<CalibrationTest> tests, String rejectMessage) {
+                                      Counter counter, Set<CalibrationTest> tests, String rejectMessage, String comment) {
         this.id = id;
         this.initialDate = initialDate;
         this.fullName = lastName + " " + firstName + " " + middleName;
@@ -54,6 +55,7 @@ public class NotStandardVerificationDTO {
         this.realiseYear = counter.getReleaseYear();
         this.stamp = counter.getStamp();
         this.rejectMessage = rejectMessage;
+        this.comment = comment;
         // In case of Not Standard Verifications one verification has only one test
         this.fileName = tests.iterator().next().getName();
         this.testResult = tests.iterator().next().getTestResult().toString();

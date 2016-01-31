@@ -59,6 +59,7 @@ public interface Constants {
     String FLOOR = "Поверх";
     String STREET = "Вулиця";
     String STREET_ID = "Id вулиці";
+    String NOTE = "Коментар";
 
     // endregion
 

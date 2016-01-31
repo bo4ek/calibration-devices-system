@@ -241,7 +241,7 @@ public class Verification implements Comparable {
     }
 
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,
-                        User calibratorEmployee, Counter counter, String verificationId) {
+                        User calibratorEmployee, Counter counter, String verificationId, String comment) {
 
         this.id = verificationId;
         this.initialDate = initialDate;
@@ -256,6 +256,7 @@ public class Verification implements Comparable {
         this.device = counter.getCounterType().getDevice();
         this.readStatus = ReadStatus.UNREAD;
         this.counterStatus = false;
+        this.comment = comment;
     }
 
     public void deleteCalibrationTest(CalibrationTest calibrationTest) {

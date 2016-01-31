@@ -48,7 +48,8 @@ public class VerificationPageDTOTransformer {
                             null,
                             verification.getClientData().getClientAddress().getAddress(),
                             verification.getClientData().getClientAddress().getBuilding(),
-                            verification.getClientData().getClientAddress().getFlat()
+                            verification.getClientData().getClientAddress().getFlat(),
+                            verification.getComment()
             );
             if(verification.getProvider()!=null){verificationPageDTO.setNameProvider(verification.getProvider().getName());}
             if(verification.getCalibrator()!=null){verificationPageDTO.setNameCalibrator(verification.getCalibrator().getName());}
