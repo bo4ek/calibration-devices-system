@@ -1,13 +1,15 @@
 angular
     .module('employeeModule')
     .controller('AddEmployeeController', ['$rootScope', '$scope', '$modalInstance','$modal',
-        '$timeout', '$log', '$state', '$http', 'UserService', 'AddressServiceProvider', 'toaster', '$filter',
-
+        '$timeout', '$log', '$state', '$http', 'UserService', 'VerificatorSubdivisionService', 'AddressServiceProvider', 'toaster', '$filter',
         function ($rootScope, $scope, $modalInstance,$modal, $timeout, $log, $state, $http,
-                  userService, addressServiceProvider, toaster, $filter) {
+                  userService, verificatorSubdivisionService, addressServiceProvider, toaster, $filter) {
+
             var organizationTypeProvider = false;
             var organizationTypeCalibrator = false;
             var organizationTypeVerificator = false;
+            $scope.selectedValues = {};
+            $scope.selectedValues.subdivision = undefined;
             var employeeData = {};
 
             /**
@@ -38,8 +40,10 @@ angular
                             organizationTypeProvider = true;
                         if (role[0] === 'CALIBRATOR_ADMIN')
                             organizationTypeCalibrator = true;
-                        if (role[0] === 'STATE_VERIFICATOR_ADMIN')
+                        if (role[0] === 'STATE_VERIFICATOR_ADMIN') {
                             organizationTypeVerificator = true;
+                            $scope.showListOfSubdivisions = true;
+                        }
                     }
                     if (thereIsAdmin > 1) {
                         $scope.showListOfOrganization = true;
@@ -49,7 +53,7 @@ angular
                                 $scope.showListOfOrganizationChosenOne = true;
                             if ((role[0] === 'STATE_VERIFICATOR_ADMIN' && role[1] === 'CALIBRATOR_ADMIN') ||
                                 (role[0] === 'CALIBRATOR_ADMIN' && role[1] === 'STATE_VERIFICATOR_ADMIN'))
-                                $scope.showListOfOrganizationChouenTwo = true;
+                                $scope.showListOfOrganizationChosenTwo = true;
                         }
                     }
                 });
@@ -68,11 +72,11 @@ angular
                     if (resaultEmployee[i] === 'calibrator') {
                         organizationTypeCalibrator = true;
                     }
-                    if (resaultEmployee[i] === 'verificatot') {
+                    if (resaultEmployee[i] === 'verificator') {
                         organizationTypeVerificator = true
                     }
                 }
-            }
+            };
 
             $scope.regions = null;
             $scope.districts = [];
@@ -105,6 +109,7 @@ angular
                 }
                 $scope.usernameValidation = null;
                 $scope.employeeFormData = null;
+                $scope.selectedValues.subdivision = undefined;
             };
 
             $scope.submitResetEmployeeForm();
@@ -176,7 +181,7 @@ angular
                         }
                         break;
                 }
-            }
+            };
 
             /**
              * Checks whereas given username is available to use
@@ -261,6 +266,15 @@ angular
             };
 
             /**
+            * Finds all subdivisions
+            */
+            verificatorSubdivisionService.getAllSubdivisions()
+                .then(function (subdivisions) {
+                    $scope.subdivisions = subdivisions;
+                    $scope.selectedValues.subdivision = undefined;
+                });
+
+            /**
              * Finds all regions
              */
             function initFormData() {
@@ -271,7 +285,6 @@ angular
                         });
                 }
             }
-
 
             /**
              * Finds districts in a given region.
@@ -292,8 +305,8 @@ angular
              *            to identify district
              */
             $scope.onDistrictSelected = function (districtId) {
-                addressServiceProvider.findLocalitiesByDistrictId(
-                    districtId).then(function (data) {
+                addressServiceProvider.findLocalitiesByDistrictId(districtId)
+                    .then(function (data) {
                         $scope.localities = data.data;
                     });
             };
@@ -323,6 +336,7 @@ angular
              */
             function retranslater() {
                 employeeData = {
+                    subdivision: $scope.selectedValues.subdivision,
                     firstName: $scope.employeeFormData.firstName,
                     lastName: $scope.employeeFormData.lastName,
                     middleName: $scope.employeeFormData.middleName,
@@ -332,9 +346,8 @@ angular
                     email: $scope.employeeFormData.email,
                     username: $scope.employeeFormData.username,
                     password: $scope.employeeFormData.password,
-                    userRoles: [],
-                }
-
+                    userRoles: []
+                };
 
                 if (organizationTypeProvider === true) {
                     employeeData.userRoles.push('PROVIDER_EMPLOYEE');
@@ -358,7 +371,7 @@ angular
                 } else {
                     return true;
                 }
-            }
+            };
 
             $scope.onEmployeeFormSubmit = function () {
                 $scope.$broadcast('show-errors-check-validity');
@@ -377,8 +390,8 @@ angular
              * Update new employee in database.
              */
             function saveEmployee() {
-                userService.saveUser(
-                    employeeData).then(
+                userService.saveUser(employeeData)
+                    .then(
                     function (data) {
                         if (data.status == 201) {
                             $rootScope.$broadcast('new-employee-added');
@@ -421,5 +434,4 @@ angular
                 $modalInstance.close();
             });
 
-            //   $log.info(employeeFormData);
         }]);

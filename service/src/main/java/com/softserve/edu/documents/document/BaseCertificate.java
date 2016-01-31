@@ -107,19 +107,17 @@ public abstract class BaseCertificate implements Document {
         }
     }
 
-    //TODO
-
     /**
      * @return Returns the identification number of the team, that was making verification
      */
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
-        String verificationId = verification.getId();
         try {
-            String subdivisionId = "0000";
+            String verificationId = verification.getId();
+            String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
             return String.format("%s-%s-Д", subdivisionId, verificationId);
         } catch (Exception e) {
-            logger.error("Team for this verification has not been specified ", e);
+            logger.error("Subdivision for this verification has not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }
@@ -277,10 +275,9 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
         try {
-            if(verification.isManual()) {
+            if (verification.isManual()) {
                 return verification.getCalibrationTestDataManualId().getCalibrationTestManual().getCalibrationModule().getCalibrationType();
-            }
-            else {
+            } else {
                 return verification.getCalibrationModule().getCalibrationType();
             }
         } catch (Exception e) {

@@ -1,7 +1,12 @@
 package com.softserve.edu.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+@Setter
+@Getter
 public class PageDTO<T> {
 
     private Long totalItems;
@@ -17,17 +22,4 @@ public class PageDTO<T> {
     public PageDTO(List<T> content) {
         this.content = content;
     }
-
-    public Long getTotalItems() {
-        return totalItems;
-    }
-
-    public void setTotalItems(Long totalItems) {
-        this.totalItems = totalItems;
-    }
-
-    public List<T> getContent() {return content;}
-
-    public void setContent(List<T> content) {this.content = content;}
-
 }

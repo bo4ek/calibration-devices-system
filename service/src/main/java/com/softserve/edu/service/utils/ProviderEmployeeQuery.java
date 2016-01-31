@@ -33,7 +33,7 @@ public class ProviderEmployeeQuery {
         if (fieldToSort.length() > 0) {
             if (fieldToSort.substring(0, 1).equals("-")) {
                 if (fieldToSort.substring(1, fieldToSort.length()).equals("userRoles")) {
-                    //todo fix or delete ordering by user roles
+                    //todo fix or deleteSubdivision ordering by user roles
                     //criteriaQuery.orderBy(cb.desc(joinRole.get(fieldToSort.substring(1, fieldToSort.length()))));
                     //criteriaQuery.orderBy(cb.desc(root.get(fieldToSort.substring(1, fieldToSort.length()))));
                     //criteriaQuery.orderBy(cb.desc(root.<Set<UserRole>>get(fieldToSort.substring(1, fieldToSort.length()))));

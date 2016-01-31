@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface StateVerificatorService {
+
     void saveStateVerificator(Organization stateVerificator);
 
     Organization findById(Long id);
@@ -17,8 +18,7 @@ public interface StateVerificatorService {
 
     void assignVerificatorEmployee(String idVerification, User employeeCalibrator);
 
-    public List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization);
+    List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization);
 
-    public Date convertToDate(String date);
+    Date convertToDate(String date);
 }
-

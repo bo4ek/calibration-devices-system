@@ -15,6 +15,7 @@ import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
+import com.softserve.edu.service.state.verificator.StateVerificatorSubdivisionService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationProviderEmployeeService;
@@ -49,6 +50,9 @@ public class EmployeeController {
     @Autowired
     private VerificationProviderEmployeeService verificationProviderEmployeeService;
 
+    @Autowired
+    private StateVerificatorSubdivisionService subdivisionService;
+
 
     @RequestMapping(value = "organizationCapacity", method = RequestMethod.GET)
     public Integer getOrganizationCapacity(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
@@ -56,7 +60,7 @@ public class EmployeeController {
         return organizationsService.getOrganizationEmployeesCapacity(organizationId);
     }
 
-    User temporalUser;
+    private User temporalUser;
 
     /**
      * Spatial security service
@@ -176,6 +180,7 @@ public class EmployeeController {
             newUser.addRole(userRole);
         }
         newUser.setOrganization(organizationsService.getOrganizationById(user.getOrganizationId()));
+        newUser.setVerificatorSubdivision(subdivisionService.findById(employee.getSubdivision()));
         providerEmployeeService.addEmployee(newUser);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

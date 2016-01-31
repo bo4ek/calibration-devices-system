@@ -101,8 +101,8 @@
                     })
                     .state("verification-team", {
                         url: 'verificator/verificationTeam/',
-                        templateUrl: 'resources/app/verificator/views/verification-team.html',
-                        controller: 'VerificationTeamController'
+                        templateUrl: 'resources/app/verificator/views/verificator-subdivision.html',
+                        controller: 'VerificatorSubdivisionController'
                     })
                     .state("employee-show-calibrator", {
                         url: '/calibrator/employee-show',
@@ -343,11 +343,12 @@
         'verificator/controllers/VerificatorEmployeeControllerVerificator',
         'verificator/controllers/PieVerificatorEmployee',
         'verificator/controllers/UsersControllerVerificator',
-        'verificator/controllers/VerificationTeamAddModalController',
-        'verificator/controllers/VerificationTeamEditModalController',
-        'verificator/controllers/VerificationTeamController',
+        'verificator/controllers/VerificatorSubdivisionAddModalController',
+        'verificator/controllers/VerificatorSubdivisionEditModalController',
+        'verificator/controllers/VerificatorSubdivisionController',
 
         'verificator/services/AddressServiceVerificator',
+        'verificator/services/VerificatorSubdivisionService',
         'verificator/services/UserServiceVerificator',
         'verificator/services/VerificationServiceVerificator',
         'provider/filters/unique',

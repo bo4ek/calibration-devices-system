@@ -676,6 +676,7 @@ angular
                 if (typeof $rootScope.organization.building == 'object') {
                     $rootScope.organization.building = $rootScope.organization.building.designation;
                 }
+
                 if ($scope.selectedValues.regionRegistered) {
                     $scope.selectedValues.regionRegistered = $scope.selectedValues.regionRegistered.designation;
                 }

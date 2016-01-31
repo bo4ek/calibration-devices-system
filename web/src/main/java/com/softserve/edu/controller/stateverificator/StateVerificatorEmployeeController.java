@@ -44,16 +44,6 @@ public class StateVerificatorEmployeeController {
 
 	@Autowired
 	private VerificationService verificationService;
-	
-	  /**
-     * Spatial security service
-     * Find the role of the login user
-     * @return role
-     */
-//    @RequestMapping(value = "verificator", method = RequestMethod.GET)
-//    public String verification(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
-//    	return stateVerificatorEmployeeService.findByUserame(user.getUsername()).getRole();
-//    }
 
 	/**
 	 * Check whereas {@code username} is available, i.e. it is possible to

@@ -1,6 +1,5 @@
 package com.softserve.edu.dto.calibrator;
 
-
 import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
@@ -26,6 +25,7 @@ public class CalibrationDisassemblyTeamDTO {
 
     /**
      * Create DTO object using basic entity
+     *
      * @param disassemblyTeam entity object
      */
     public CalibrationDisassemblyTeamDTO(DisassemblyTeam disassemblyTeam) {

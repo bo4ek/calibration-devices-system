@@ -60,7 +60,6 @@ public class DisassemblyTeam {
         this.leaderEmail = leaderEmail;
     }
 
-
     public DisassemblyTeam(String id, String name, Date effectiveTo, Set<Device.DeviceType> specialization, String leaderFullName,
                            String leaderPhone, String leaderEmail, Organization organization) {
         this.id = id;
@@ -72,7 +71,6 @@ public class DisassemblyTeam {
         this.leaderEmail = leaderEmail;
         this.organization = organization;
     }
-
 
     @Override
     public String toString() {

@@ -40,7 +40,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/calibrator/calibrationTests/")
@@ -138,7 +137,6 @@ public class CalibrationTestController {
         testService.deleteTest(calibrationTestId);
     }
 
-
     /**
      * Finds all calibration-tests data form database
      *
@@ -154,7 +152,6 @@ public class CalibrationTestController {
             throw new com.softserve.edu.exceptions.NotFoundException(exception);
         }
     }
-
 
     /**
      * get all counters types for test
@@ -228,7 +225,6 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-
 
     /**
      * get protocol manual
@@ -315,7 +311,6 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
-
     /**
      * uploads a scanDoc from chosen directory
      *
@@ -342,7 +337,6 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-
 
     /**
      * get  scanDoc
@@ -375,7 +369,6 @@ public class CalibrationTestController {
         }
     }
 
-
     /**
      * delete a scanDoc
      *
@@ -394,7 +387,6 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-
 
     /**
      * get protocol
@@ -434,8 +426,8 @@ public class CalibrationTestController {
             counter.setCounterType(counterTypeService.findById(cTestFileDataDTO.getCounterTypeId()));
             counterRepository.save(counter);
             UnsuitabilityReason unsuitabilityReason = null;
-            if(cTestFileDataDTO.getReasonUnsuitabilityId() != null) {
-              unsuitabilityReason   = unsuitabilityReasonRepository.findOne(cTestFileDataDTO.getReasonUnsuitabilityId());
+            if (cTestFileDataDTO.getReasonUnsuitabilityId() != null) {
+                unsuitabilityReason = unsuitabilityReasonRepository.findOne(cTestFileDataDTO.getReasonUnsuitabilityId());
             }
             calibTest.setUnsuitabilityReason(unsuitabilityReason);
             calibTest.setRotateIndex(cTestFileDataDTO.getRotateIndex());
@@ -490,7 +482,7 @@ public class CalibrationTestController {
             verification.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
-            byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
+            byte[] documentByteArray = new byte[(int) file.getContent().getSize()];
             file.getContent().getInputStream().read(documentByteArray);
             verification.setSignedDocument(documentByteArray);
             verificationService.saveVerification(verification);
@@ -520,6 +512,4 @@ public class CalibrationTestController {
     private Integer getYearIntroduction(Verification verification) {
         return Integer.parseInt(verification.getCounter().getReleaseYear());
     }
-
 }
-

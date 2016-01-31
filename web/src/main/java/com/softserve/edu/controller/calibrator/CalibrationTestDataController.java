@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import com.softserve.edu.dto.CalibrationTestDataDTO;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
 
-
-
 @Controller
 @RequestMapping("/calibrator/calibrationTestData/")
 public class CalibrationTestDataController {
