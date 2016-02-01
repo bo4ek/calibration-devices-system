@@ -38,6 +38,9 @@ public interface Constants {
     String YEAR = "Рік випуску лічильника";
     String STAMP = "Номер пломби";
     String DEFAULT_DB_TABLE_NAME = "Subscribers";
+    String WATER_DEVICE_MAIL = "лічильника холодної води";
+    String THERMAL_DEVICE_MAIL = "лічильника гарячої води";
+
 
     //reasons o counter unusability
     String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";

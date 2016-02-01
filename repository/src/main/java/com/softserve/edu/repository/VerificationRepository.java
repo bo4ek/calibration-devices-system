@@ -26,9 +26,6 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Verification[] findByTaskId(Long taskID);
 
-    /*select * from Verification  where Verification.taskId = 9 ORDER BY `queue` ASC*/
-
-    /*@Query("SELECT u FROM Verification u where u.taskId = :id ORDER BY u.queue ASC")*/
     Verification[] findByTaskIdOrderByQueueAsc(Long id);
 
     Page<Verification> findByProviderIdAndStatusOrderByInitialDateDesc(Long providerId, Status status, Pageable pageable);
