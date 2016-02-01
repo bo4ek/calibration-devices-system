@@ -760,7 +760,7 @@
     "QUEUE" : "Queue",
     "REFRESH" : "Refresh",
     "ERROR_ACCESS" : "Access denied",
-    "ERROR_UPDATE_QUEUE" : "Error editing verifications queue"
+    "ERROR_UPDATE_QUEUE" : "Error editing verifications queue",
     "SUBDIVISION": "Subdivision",
     "SELECT_SUBDIVISION": "Select subdivision",
     "DUPLICATE_SUBDIVISION": "Subdivision with such number already exists",
