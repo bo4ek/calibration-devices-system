@@ -126,7 +126,7 @@
                     })
                     .state("calibrator-task-team", {
                         url: '/calibrator/task/',
-                        templateUrl: 'resources/app/calibrator/views/modals/eddTaskForTeamModal.html',
+                        templateUrl: 'resources/app/calibrator/views/modals/addTaskForTeamModal.html',
                         controller: 'TaskForTeamModalControllerCalibrator'
                     })
                     .state("calibrator-counter-status", {
