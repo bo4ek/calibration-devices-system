@@ -16,6 +16,8 @@ angular
                 $modalInstance.close("cancel");
             };
 
+            $scope.ACCURACY_OF_CALCULATION = 2;
+
             $scope.photoId = photoId;
             $scope.parentScope = parentScope;
 
@@ -53,7 +55,7 @@ angular
                     test.testResult = 'FAILED';
                     parentScope.TestForm.testResult = 'FAILED';
                 }
-                test.calculationError = Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard));
+                test.calculationError = (Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))).toFixed($scope.ACCURACY_OF_CALCULATION);
                 test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 parentScope.TestDataFormData[index] = test;
             };
