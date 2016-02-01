@@ -52,6 +52,10 @@ public class Verification implements Comparable {
     private Organization provider;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "providerFromBBI")
+    private Organization providerFromBBI;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "providerEmployeeUsername")
     private User providerEmployee;
 
@@ -237,6 +241,26 @@ public class Verification implements Comparable {
         this.status = status;
         this.readStatus = readStatus;
         this.calibrator = calibrator;
+        this.comment = comment;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
+                        User calibratorEmployee, Counter counter, String verificationId, String comment) {
+
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.expirationDate = null;
+        this.signProtocolDate = null;
+        this.sentToCalibratorDate = initialDate;
+        this.clientData = clientData;
+        this.status = status;
+        this.calibrator = calibrator;
+        this.providerFromBBI = providerFromBBI;
+        this.calibratorEmployee = calibratorEmployee;
+        this.counter = counter;
+        this.device = counter.getCounterType().getDevice();
+        this.readStatus = ReadStatus.UNREAD;
+        this.counterStatus = false;
         this.comment = comment;
     }
 

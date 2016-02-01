@@ -780,5 +780,6 @@
     "SUCCESSFUL_EDIT_SUBDIVISION": "Subdivision was successfully changed",
     "ERROR_EDIT_SUBDIVISION": "Error has occurred while editing the subdivision",
     "SUCCESSFUL_ADD_SUBDIVISION": "Subdivision was successfully added",
-    "ERROR_ADD_SUBDIVISION":"Error has occurred while adding the subdivision"
+    "ERROR_ADD_SUBDIVISION":"Error has occurred while adding the subdivision",
+    "PROVIDER_FROM_BBI" : "Provider from BBI protocol"
 }

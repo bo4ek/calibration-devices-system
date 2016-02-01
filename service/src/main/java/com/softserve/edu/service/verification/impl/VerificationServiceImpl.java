@@ -897,11 +897,15 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional(readOnly = true)
     public List<Verification> findPageOfVerificationsByCalibratorEmployeeAndStatus(User calibratorEmployee,
                                                                                    int pageNumber, int itemsPerPage,
-                                                                                   Status status) {
+                                                                                   Status status, String sortCriteria, String sortOrder) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> cq = cb.createQuery(Verification.class);
         Root<Verification> verifications = cq.from(Verification.class);
-
+        if((sortCriteria != null)&&(sortOrder != null)) {
+            cq.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(verifications, cb, sortOrder));
+        } else {
+            cq.orderBy(cb.desc(verifications.get("providerFromBBI")));
+        }
         cq.where(cb.and(cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee),
                 cb.equal(verifications.get("status"), status)));
 

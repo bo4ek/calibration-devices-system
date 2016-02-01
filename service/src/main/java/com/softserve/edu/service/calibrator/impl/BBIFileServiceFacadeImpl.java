@@ -398,8 +398,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
         String verId = verificationService.getNewVerificationDailyIdByDeviceType(date,
                 counter.getCounterType().getDevice().getDeviceType());
+        Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
         Verification verification = new Verification(date, clientData,
-                Status.CREATED_BY_CALIBRATOR, calibrator, calibratorEmployee,
+                Status.CREATED_BY_CALIBRATOR, calibrator, providerFromBBI, calibratorEmployee,
                 counter, verId, verificationData.get(Constants.NOTE));
         String verificationId = verification.getId();
         verificationService.saveVerification(verification);

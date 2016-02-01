@@ -2,6 +2,7 @@ package com.softserve.edu.dto.calibrator;
 
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.device.Counter;
+import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class NotStandardVerificationDTO {
     private Boolean dismantled;
     private String numberCounter;
     private Long counterId;
+    private String providerFromBBI;
     private String fileName;
     private String stamp;
     private String testResult;
@@ -41,7 +43,7 @@ public class NotStandardVerificationDTO {
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address,
                                       String firstName, String lastName, String middleName,
-                                      Counter counter, Set<CalibrationTest> tests, String rejectMessage, String comment) {
+                                      Counter counter, Set<CalibrationTest> tests, Organization providerFromBBI, String rejectMessage, String comment) {
         this.id = id;
         this.initialDate = initialDate;
         this.fullName = lastName + " " + firstName + " " + middleName;
@@ -56,6 +58,7 @@ public class NotStandardVerificationDTO {
         this.stamp = counter.getStamp();
         this.rejectMessage = rejectMessage;
         this.comment = comment;
+        this.providerFromBBI = providerFromBBI.getName();
         // In case of Not Standard Verifications one verification has only one test
         this.fileName = tests.iterator().next().getName();
         this.testResult = tests.iterator().next().getTestResult().toString();

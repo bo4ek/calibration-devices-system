@@ -50,15 +50,15 @@ public class NotStandardVerificationCalibratorController {
      * @param employeeUser
      * @return Page of NotStandardVerificationDTO - data for table with protocols
      */
-    @RequestMapping(value = "{pageNumber}/{itemsPerPage}", method = RequestMethod.GET)
+    @RequestMapping(value = "{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<NotStandardVerificationDTO> getPageOfVerificationsCreatedByCalibrator(
-            @PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage,
-            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+            @PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
+            @PathVariable String sortOrder, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
         Status status = Status.CREATED_BY_CALIBRATOR;
         List<Verification> verifications = verificationService.findPageOfVerificationsByCalibratorEmployeeAndStatus(
-                calibratorEmployee, pageNumber, itemsPerPage, status);
+                calibratorEmployee, pageNumber, itemsPerPage, status, sortCriteria, sortOrder);
         Long count = verificationService.countByCalibratorEmployeeUsernameAndStatus(calibratorEmployee, status);
         List<NotStandardVerificationDTO> content = toDTOFromList(verifications);
 
@@ -124,7 +124,9 @@ public class NotStandardVerificationCalibratorController {
                     verification.getClientData().getMiddleName(),
                     verification.getCounter(),
                     verification.getCalibrationTests(),
-                    verification.getRejectedMessage(), verification.getComment()));
+                    verification.getProviderFromBBI(),
+                    verification.getRejectedMessage(),
+                    verification.getComment()));
         }
         return resultList;
     }
