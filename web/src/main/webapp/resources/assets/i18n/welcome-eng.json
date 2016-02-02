@@ -266,7 +266,7 @@
     "EDIT_EMPLOYEE": "Edit info about employee",
     "FILL_IN_INFORMATION_ABOUT_EMPLOYEE": "Fill in information about employee",
     "FILL_IN_INFORMATION_ABOUT_SYS_ADMIN": "Fill in information about sysadmin",
-    "EMPLOYEE_TYPE": "Chose type of employee",
+    "EMPLOYEE_TYPE": "Choose type of employee",
     "ALLOWED_LETTERS": "Lowercase latin letters, numbers and hyphen allowed.",
     "INCORRECT_VALUE_FIRST_NAME_ADD_EMPLOYEE": "Incorrect value input example:  Volodymyr",
     "INCORRECT_VALUE_LAST_NAME_ADD_EMPLOYEE": "Incorrect value input example:  Petrenko",
