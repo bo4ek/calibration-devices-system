@@ -488,7 +488,7 @@ public class CalibrationTestController {
             verificationService.saveVerification(verification);
         } catch (Exception e) {
             logger.error("Cannot sing protocol", e);
-            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity(e, HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
