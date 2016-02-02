@@ -463,7 +463,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 taskDate.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
             } catch (IllegalArgumentException e) {
                 taskDate.add(empty);
-                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId());
+                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId(), e);
             }
 
             provider.add(verification.getProvider() !=null && verification.getProvider().getName() != null ? verification.getProvider().getName() : empty);
@@ -597,7 +597,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 datetime.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
             } catch (IllegalArgumentException e) {
                 datetime.add(empty);
-                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId());
+                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId(), e);
             }
 
             counterNumber.add(verification.getCounter() != null && verification.getCounter().getNumberCounter() != null ? verification.getCounter().getNumberCounter() : "-" );

@@ -11,12 +11,6 @@
         <div class="modal-body form-group has-feedback">
 
 
-            <!--select name="calibrator" class="form-control" chosen options="calibrator.name"
-                    ng-model="formData.calibrator"
-                    ng-options="calibrator as calibrator.name for calibrator in calibrators | filter: $viewValue"
-                    typeahead-editable="false" required>
-            </select -->
-
             <ui-select ng-model="formData.calibrator" theme="select2" search-enabled="false"
                        name="filter-status">
                 <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}" allow-clear="true">
@@ -32,11 +26,11 @@
 
         <div class="modal-footer form-group">
             <button class="btn btn-success pull-left" type="submit">
-                Підтвердити
+                {{'ACCEPT' | translate}}
             </button>
 
             <button class="btn btn-danger pull-right" type="button" ng-click="cancel()">
-                Відмінити
+                {{'CANCEL' | translate}}
             </button>
         </div>
     </form>
