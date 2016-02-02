@@ -199,68 +199,50 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
-                    try {
-                        deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                        CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
-                        if (calibrationModule == null) {
-                            throw new InvalidModuleIdException();
-                        }
-                            correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
-                                calibratorEmployee, deviceTestData);
+                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                    CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+                    if (calibrationModule == null) {
+                        throw new InvalidModuleIdException();
+                    }
+                    correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
+                            calibratorEmployee, deviceTestData);
 
-                        saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-                        Verification verification = verificationService.findById(correspondingVerification);
-                        verification.setCalibrationModule(calibrationModule);
-                        verification.setStatus(Status.CREATED_BY_CALIBRATOR);
-                        verificationService.saveVerification(verification);
-                    } catch (FileAlreadyExistsException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                        logger.error("BBI file is already in database ", e);
-                    } catch (NullPointerException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
-                        logger.error("Wrong image in BBI file ", e);
-                    } catch (InvalidModuleIdException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
-                        logger.error("Wrong module serial number in BBI file", e);
-                    }catch (InvalidDeviceTypeIdException e){
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
-                        logger.error("Wrong device type id in BBI file", e);
-                    } catch (Exception e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                        logger.error("BBI is not valid ", e);
-                    }
+                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
+                    Verification verification = verificationService.findById(correspondingVerification);
+                    verification.setCalibrationModule(calibrationModule);
+                    verification.setStatus(Status.CREATED_BY_CALIBRATOR);
+                    verificationService.saveVerification(verification);
                 } else {
-                    try {
-                        deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                        updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
-                        saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-                    } catch (FileAlreadyExistsException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                        logger.error("BBI file is already in database ", e);
-                    } catch (IOException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                        logger.error("BBI is not valid ", e);
-                    } catch (NegativeArraySizeException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
-                        logger.error("Wrong image in BBI file ", e);
-                    } catch (InvalidModuleIdException e){
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
-                        logger.error("Wrong module serial number in BBI file", e);
-                    }catch (InvalidDeviceTypeIdException e){
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
-                        logger.error("Wrong device type id in BBI file", e);
-                    } catch (Exception e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
-                        logger.error("Invalid verification code ", e);
-                    }
+                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                    updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
+                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 }
             } catch (FileNotFoundException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
-                logger.error("File is not found", e);
+                logger.error("File is not found");
+            } catch (FileAlreadyExistsException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
+                logger.error("BBI file is already in database");
+            } catch (IOException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
+                logger.error("BBI is not valid");
+            } catch (NegativeArraySizeException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
+                logger.error("Wrong image in BBI file");
+            } catch (InvalidModuleIdException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
+                logger.error("Wrong module serial number in BBI file");
+            } catch (InvalidDeviceTypeIdException e){
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
+                logger.error("Wrong device type id in BBI file");
+            } catch (Exception e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
+                logger.error("Invalid verification code");
             } finally {
                 if (inStream != null) {
-                    inStream.close();
                     bufferedInputStream.close();
+                    inStream.close();
+
                 }
             }
             if (reasonOfRejection == null) {
