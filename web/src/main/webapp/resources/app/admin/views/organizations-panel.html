@@ -56,18 +56,18 @@
                             filter="{ 'phone_number': 'text' }">+380{{ organization.phone }}
                         </td>
                         <td data-title="'EDIT' | translate" class="control_buttons">
-                            <center>
-                                <i class="glyphicon glyphicon-edit verification_protocol_user_icon"
-                                   ng-click="openEditOrganizationModal(organization.id)">
-                                </i>
-                            </center>
+                            <i class="glyphicon glyphicon-edit verification_protocol_user_icon"
+                               popover="{{'EDIT_ORGANIZATION' | translate}}"
+                               popover-trigger="mouseenter"
+                               ng-click="openEditOrganizationModal(organization.id)">
+                            </i>
                         </td>
                         <td data-title="'ORGANIZATION_CHANGES_HISTORY' | translate" class="control_buttons">
-                            <center>
-                                <i class="glyphicon glyphicon-remove-sign cancel_icon"
-                                   ng-click="openOrganizationEditHistoryModal(organization.id)">
-                                </i>
-                            </center>
+                            <i class="glyphicon glyphicon-remove-sign cancel_icon"
+                               popover="{{'SHOW_CHANGE_HISTORY' | translate}}"
+                               popover-trigger="mouseenter"
+                               ng-click="openOrganizationEditHistoryModal(organization.id)">
+                            </i>
                         </td>
                     </tr>
                     </tbody>

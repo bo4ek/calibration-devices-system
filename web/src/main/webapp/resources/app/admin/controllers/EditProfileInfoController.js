@@ -1,7 +1,7 @@
 angular
     .module('adminModule')
-    .controller('EditProfileInfoController', ['$rootScope', '$scope', '$modalInstance', '$log', '$modal', '$timeout', '$state', '$http', 'ProfileService', 'user',
-
+    .controller('EditProfileInfoController', ['$rootScope', '$scope', '$modalInstance', '$log', '$modal', '$timeout',
+        '$state', '$http', 'ProfileService', 'user',
         function ($rootScope, $scope, $modalInstance, $log, $modal, $timeout, $state, $http, profileService, user) {
             var organizationTypeProvider = false;
             var organizationTypeCalibrator = false;
@@ -24,7 +24,7 @@ angular
             $scope.changePassword = function () {
                 $scope.user.password = 'generate';
                 $scope.generationMessage = true;
-            }
+            };
 
             /**
              * Refactor data
@@ -41,15 +41,15 @@ angular
                     password: $scope.user.password,
 
                     userRoles: [],
-                    isAvaliable: true
+                    isAvailable: true
                 };
             }
 
-                $scope.onEmployeeFormSubmit = function () {
+            $scope.onEmployeeFormSubmit = function () {
 
                 $scope.$broadcast('show-errors-check-validity');
-                if ($scope.checkboxModel == false){
-                	$scope.user.secondPhone = null;
+                if ($scope.checkboxModel == false) {
+                    $scope.user.secondPhone = null;
                 }
                 retranslater();
                 updateEmployee();
@@ -83,7 +83,7 @@ angular
                             alert('Error');
                         }
                     });
-            };
+            }
 
             $scope.closeWindow = function () {
                 $modalInstance.close();

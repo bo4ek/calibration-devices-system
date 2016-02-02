@@ -145,26 +145,20 @@ angular
 
             $scope.onTableHandling();
 
-            $scope.openEditEmployeeModal = function(username) {
-            	userService.getUser(username)
-                .success(function(data){
-                	$rootScope.checkboxModel = false;
-                    $rootScope.user = data;
-                    $rootScope.$broadcast("info_about_editUser", {
-                        roles : $rootScope.user.userRoles,
-                        isAvaliable: $rootScope.user.isAvaliable
-                    });
-                    if (data.secondPhone != null) {
-                    	$rootScope.checkboxModel = true;
-                    }
-                });
-                var addEmployeeModal = $modal
-                    .open({
-                        animation : true,
-                        size: 'lg',
-                        controller : 'EditEmployeeController',
-                        templateUrl : 'resources/app/provider/views/employee/employee-edit-modal.html',
-
+            $scope.openEditEmployeeModal = function (username) {
+                userService.getUser(username)
+                    .then(function (data) {
+                        $modal.open({
+                            animation: true,
+                            size: 'lg',
+                            controller: 'EditEmployeeController',
+                            templateUrl: 'resources/app/provider/views/employee/employee-edit-modal.html',
+                            resolve: {
+                                user: function() {
+                                    return data.data;
+                                }
+                            }
+                        });
                     });
             };
 

@@ -1,51 +1,41 @@
 angular
     .module('employeeModule')
     .controller('EditEmployeeController', ['$rootScope', '$scope', '$modalInstance', '$log', '$modal',
-        '$timeout', '$state', '$http', 'UserService', 'toaster', '$filter',
+        '$timeout', '$state', '$http', 'UserService', 'VerificatorSubdivisionService','toaster', '$filter', 'user',
+        function ($rootScope, $scope, $modalInstance, $log, $modal, $timeout, $state, $http, userService, verificatorSubdivisionService, toaster, $filter, user) {
 
-        function ($rootScope, $scope, $modalInstance, $log, $modal, $timeout, $state, $http, userService, toaster, $filter) {
+            $scope.user = user;
+            if(user.secondPhone) {
+                $scope.checkboxModel = true;
+            }
+            $scope.showRestore = user.isAvailable != true;
+            $scope.selectedEmployee = [];
+            $scope.selectedValues = {};
+            $scope.selectedValues.subdivision = user.subdivision;
+
             var organizationTypeProvider = false;
             var organizationTypeCalibrator = false;
             var organizationTypeVerificator = false;
             var employeeData = {};
 
-            /**
-             * Closes modal window on browser's back/forward button click.
-             */
-            $rootScope.$on('$locationChangeStart', function () {
-                $modalInstance.close();
-            });
-
-            $scope.$on('info_about_editUser', function (event, args) {
-
-                for (var i = 0; i < args.roles.length; i++) {
-                    if (args.roles[i] === 'PROVIDER_EMPLOYEE') {
-                        $scope.selectedEmployee.push('PROVIDER_EMPLOYEE');
-                        organizationTypeProvider = true;
-                    }
-                    if (args.roles[i] === 'CALIBRATOR_EMPLOYEE') {
-                        $scope.selectedEmployee.push('CALIBRATOR_EMPLOYEE');
-                        organizationTypeCalibrator = true;
-                    }
-                    if (args.roles[i] === 'STATE_VERIFICATOR_EMPLOYEE') {
-                        $scope.selectedEmployee.push('STATE_VERIFICATOR_EMPLOYEE');
-                        organizationTypeVerificator = true;
-                    }
+            for (var i = 0; i < user.userRoles.length; i++) {
+                if (user.userRoles[i] === 'PROVIDER_EMPLOYEE') {
+                    $scope.selectedEmployee.push('PROVIDER_EMPLOYEE');
+                    organizationTypeProvider = true;
                 }
-
-
-                if (args.isAvaliable == true) {
-                    $scope.showRestore = false;
-                } else {
-                    $scope.showRestore = true;
+                if (user.userRoles[i] === 'CALIBRATOR_EMPLOYEE') {
+                    $scope.selectedEmployee.push('CALIBRATOR_EMPLOYEE');
+                    organizationTypeCalibrator = true;
                 }
-
-
-            });
+                if (user.userRoles[i] === 'STATE_VERIFICATOR_EMPLOYEE') {
+                    $scope.selectedEmployee.push('STATE_VERIFICATOR_EMPLOYEE');
+                    organizationTypeVerificator = true;
+                    $scope.showListOfSubdivisions = true;
+                }
+            }
 
             userService.isAdmin()
                 .success(function (response) {
-                    var includeCheckBox = false;
                     var thereIsAdmin = 0;
                     var roles = response + '';
                     var role = roles.split(',');
@@ -87,27 +77,29 @@ angular
                 organizationTypeProvider = false;
                 organizationTypeCalibrator = false;
                 organizationTypeVerificator = false;
-                employee = selectedEmployee + '';
-                var resaultEmployee = employee.split(',');
-                for (var i = 0; i < resaultEmployee.length; i++) {
-                    if (resaultEmployee[i] === 'PROVIDER_EMPLOYEE') {
+                var employee = selectedEmployee + '';
+                var resultEmployee = employee.split(',');
+                for (var i = 0; i < resultEmployee.length; i++) {
+                    if (resultEmployee[i] === 'PROVIDER_EMPLOYEE') {
                         organizationTypeProvider = true;
                     }
-                    if (resaultEmployee[i] === 'CALIBRATOR_EMPLOYEE') {
+                    if (resultEmployee[i] === 'CALIBRATOR_EMPLOYEE') {
                         organizationTypeCalibrator = true;
                     }
-                    if (resaultEmployee[i] === 'STATE_VERIFICATOR_EMPLOYEE') {
+                    if (resultEmployee[i] === 'STATE_VERIFICATOR_EMPLOYEE') {
                         organizationTypeVerificator = true
                     }
                 }
             };
 
-            $scope.regions = null;
-            $scope.districts = [];
-            $scope.localities = [];
-            $scope.streets = [];
-            $scope.buildings = [];
-            $scope.employeeFormData = {};
+            /**
+             * Finds all subdivisions
+             */
+            verificatorSubdivisionService.getAllSubdivisions()
+                .then(function (subdivisions) {
+                    $scope.subdivisions = subdivisions;
+                });
+
             $scope.selectedEmployee = [];
 
             /**
@@ -118,44 +110,12 @@ angular
                 $scope.generationMessage = true;
             };
 
-
-            /**
-             * Check passwords for equivalent
-             */
-
-            $scope.checkPasswords = function () {
-                var first = $scope.employeeFormData.password;
-                var second = $scope.employeeFormData.rePassword;
-                $log.info(first);
-                $log.info(second);
-                var isValid = false;
-                if (first != second) {
-                    isValid = true;
-                }
-                $scope.passwordValidation = {
-                    isValid: isValid,
-                    css: isValid ? 'has-error' : 'has-success'
-                }
-            };
-
-
-            function arrayObjectIndexOf(myArray, searchTerm, property) {
-                for (var i = 0, len = myArray.length; i < len; i++) {
-                    if (myArray[i][property] === searchTerm) return i;
-                }
-                var elem = {
-                    id: length,
-                    designation: searchTerm
-                };
-                myArray.push(elem);
-                return (myArray.length - 1);
-            }
-
             /**
              * Refactor data
              */
             function retranslater() {
                 employeeData = {
+                    subdivision: $scope.selectedValues.subdivision,
                     firstName: $scope.user.firstName,
                     lastName: $scope.user.lastName,
                     middleName: $scope.user.middleName,
@@ -164,12 +124,9 @@ angular
                     email: $scope.user.email,
                     username: $scope.user.username,
                     password: $scope.user.password,
-
                     userRoles: [],
-                    isAvaliable: true
-
+                    isAvailable: true
                 };
-
 
                 if (organizationTypeProvider === true) {
                     employeeData.userRoles.push('PROVIDER_EMPLOYEE');
@@ -180,8 +137,6 @@ angular
                 if (organizationTypeVerificator === true) {
                     employeeData.userRoles.push('STATE_VERIFICATOR_EMPLOYEE');
                 }
-
-
             }
 
             /*
@@ -191,36 +146,28 @@ angular
                 if (action === 'fire') {
                     updateEmployee();
                     $scope.showRestore = true;
-                    employeeData.isAvaliable = false;
-
+                    employeeData.isAvailable = false;
                 } else {
                     $scope.showRestore = false;
-                }
-
-
+            }
             };
 
-
             $scope.onEmployeeFormSubmit = function () {
-
                 $scope.$broadcast('show-errors-check-validity');
-                if ($scope.checkboxModel == false){
-                	$scope.user.secondPhone = null;
+                if ($scope.checkboxModel == false) {
+                    $scope.user.secondPhone = null;
                 }
                 retranslater();
                 updateEmployee();
                 $scope.incorrectValue = true;
-
-
             };
 
             /**
              * Update new employee in database.
              */
             function updateEmployee() {
-                userService.updateUser(
-                    employeeData).then(
-                    function (data) {
+                userService.updateUser(employeeData)
+                    .then(function (data) {
                         if (data.status == 201) {
                             $rootScope.$broadcast('new-employee-added');
                             $scope.closeModal();
@@ -233,20 +180,22 @@ angular
                     });
             }
 
-            $scope.closeWindow = function () {
+            /**
+             * Closes modal window on browser's back/forward button click.
+             */
+            $rootScope.$on('$locationChangeStart', function () {
                 $modalInstance.close();
-            };
+            });
 
             /* Closes the modal window
              */
             $rootScope.closeModal = function () {
                 $modalInstance.close();
             };
+
             $scope.FIRST_LAST_NAME_REGEX = /^([A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}\u002d{1}[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}|[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20})$/;
             $scope.MIDDLE_NAME_REGEX = /^[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}$/;
-            $scope.PNOHE_REGEX_MY = /^[1-9]\d{8}$/;
             $scope.PHONE_REGEX = /^[1-9]\d{8}$/;
             $scope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
-//   $log.info(employeeFormData);
 
         }]);

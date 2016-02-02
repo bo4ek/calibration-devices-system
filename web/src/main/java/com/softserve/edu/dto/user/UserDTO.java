@@ -4,10 +4,12 @@ import java.util.Set;
 
 import com.softserve.edu.entity.Address;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserDTO {
 
     private String subdivision;
@@ -19,13 +21,9 @@ public class UserDTO {
     private String email;
     private String phone;
     private String secondPhone;
-    private Boolean isAvaliable;
-
+    private Boolean isAvailable;
     private Address address;
-
     private Set<String> userRoles ;
-
-    public UserDTO(){}
 
     @Override
     public String toString() {
@@ -37,7 +35,7 @@ public class UserDTO {
                 ", middleName='" + middleName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
-                ", isAvaliable=" + isAvaliable +
+                ", isAvailable=" + isAvailable +
                 ", address=" + address +
                 ", userRoles=" + userRoles +
                 '}';

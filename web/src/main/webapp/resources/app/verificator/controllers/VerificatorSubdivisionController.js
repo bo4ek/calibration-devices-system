@@ -25,8 +25,7 @@ angular
              * Opens modal window for adding new subdivision
              */
             $scope.openAddSubdivisionModal = function () {
-                var addTeamModal = $modal
-                    .open({
+                $modal.open({
                         animation: true,
                         controller: 'VerificatorSubdivisionAddModalController',
                         templateUrl: 'resources/app/verificator/views/modals/verificator-subdivision-add-modal.html'
@@ -37,11 +36,9 @@ angular
              * Opens modal window for editing subdivision
              */
             $scope.openEditSubdivisionModal = function (subdivisionId) {
-                $scope.subdivisionId = subdivisionId;
-                verificatorSubdivisionService.getSubdivisionWithId($scope.subdivisionId)
+                verificatorSubdivisionService.getSubdivisionWithId(subdivisionId)
                     .then(function (data) {
-                        var subdivisionModal = $modal
-                            .open({
+                        $modal.open({
                                 animation: true,
                                 controller: 'VerificatorSubdivisionEditModalController',
                                 templateUrl: 'resources/app/verificator/views/modals/verificator-subdivision-edit-modal.html',

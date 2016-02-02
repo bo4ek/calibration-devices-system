@@ -78,16 +78,9 @@ angular
                 }
             };
 
-            $scope.regions = null;
-            $scope.districts = [];
-            $scope.localities = [];
-            $scope.streets = [];
-            $scope.buildings = [];
-
             /**
              * Resets employee form
              */
-
             $rootScope.resetEmployeeForm = function() {
                 $modal.open({
                     animation : true,
@@ -113,14 +106,6 @@ angular
             };
 
             $scope.submitResetEmployeeForm();
-
-            /**
-             * Calls resetOrganizationForm after the view loaded
-             */
-
-            /**
-             * Validates
-             */
 
             $scope.checkFirstName = function (caseForValidation) {
                 switch (caseForValidation) {
@@ -249,7 +234,6 @@ angular
             /**
              * Check passwords for equivalent
              */
-
             $scope.checkPasswords = function () {
                 var first = $scope.employeeFormData.password;
                 var second = $scope.employeeFormData.rePassword;
@@ -274,73 +258,13 @@ angular
                     $scope.selectedValues.subdivision = undefined;
                 });
 
-            /**
-             * Finds all regions
-             */
-            function initFormData() {
-                if (!$scope.regions) {
-                    addressServiceProvider.findAllRegions().then(
-                        function (data) {
-                            $scope.regions = data.data;
-                        });
-                }
-            }
-
-            /**
-             * Finds districts in a given region.
-             * @param regionId
-             *            to identify region
-             */
-            $scope.onRegionSelected = function (regionId) {
-                addressServiceProvider
-                    .findDistrictsByRegionId(regionId)
-                    .then(function (data) {
-                        $scope.districts = data.data;
-                    });
-            };
-
-            /**
-             * Finds localities in a given district.
-             * @param districtId
-             *            to identify district
-             */
-            $scope.onDistrictSelected = function (districtId) {
-                addressServiceProvider.findLocalitiesByDistrictId(districtId)
-                    .then(function (data) {
-                        $scope.localities = data.data;
-                    });
-            };
-
-            /**
-             * There are no DB records for this methods.
-             * Finds streets in a given locality.
-             * @param localityId
-             *            to identify locality
-             */
-            $scope.onLocalitySelected = function (localityId) {
-                addressServiceProvider.findStreetsByLocalityId(
-                    localityId).then(function (data) {
-                        $scope.streets = data.data;
-                    });
-            };
-
-            /**
-             * Finds buildings in a given street.
-             *
-             * @param streetId
-             *            to identify street
-             */
-
-            /**
-             * Refactor data
-             */
             function retranslater() {
                 employeeData = {
                     subdivision: $scope.selectedValues.subdivision,
                     firstName: $scope.employeeFormData.firstName,
                     lastName: $scope.employeeFormData.lastName,
                     middleName: $scope.employeeFormData.middleName,
-                    isAvaliable : true,
+                    isAvailable : true,
                     phone: $scope.employeeFormData.phone,
                     secondPhone: $scope.employeeFormData.secondPhone,
                     email: $scope.employeeFormData.email,
@@ -408,9 +332,7 @@ angular
             /**
              * Receives all regex for input fields
              *
-             *
              */
-
             $scope.FIRST_LAST_NAME_REGEX = /^([A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}\u002d{1}[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}|[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20})$/;
             $scope.MIDDLE_NAME_REGEX = /^[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}$/;
             $scope.PNOHE_REGEX_MY = /^[1-9]\d{8}$/;

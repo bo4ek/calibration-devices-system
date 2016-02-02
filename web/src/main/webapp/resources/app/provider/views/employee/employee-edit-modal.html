@@ -48,12 +48,33 @@
             <div class="panel-heading">{{'GENERAL_INFORMATION' | translate }}</div>
             <div class="panel-body">
                 <div class="row">
+
+                    <div class="form-group col-md-4" ng-show="showListOfSubdivisions">
+                        <label class="control-label">{{'SUBDIVISION' | translate}}*</label>
+                    </div>
+                    <div class="form-group col-md-8" show-errors ng-show="showListOfSubdivisions">
+                        <ui-select class="form-control" type="text" theme="select2"
+                                   ng-model="selectedValues.subdivision"
+                                   name="subdivision" id="subdivision" required>
+                            <ui-select-match placeholder="{{'SELECT_SUBDIVISION' | translate}}">
+                                {{$select.selected}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="subdivision in subdivisions | filter: $select.search">
+                                <span ng-bind-html="subdivision"></span>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <p class="help-block" ng-if="employeeForm.subdivision.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+                    </div>
+
                     <div class="form-group col-md-4">
                         <label class="control-label">{{'LAST_NAME' |translate }}*</label>
                     </div>
                     <div class="form-group col-md-8" show-errors>
                         <input type="text" ng-model="user.lastName"
-
                                popover="{{'ALPHABETIC_INFO' | translate}}"
                                popover-trigger="focus" popover-placement="right"
                                ng-pattern="FIRST_LAST_NAME_REGEX"
@@ -108,12 +129,14 @@
                                popover="{{'MIDDLE_NAME_INFO' | translate}}"
                                popover-trigger="focus" popover-placement="right"
                                id="middleName" name="middleName" class="form-control" required>
+
                         <div ng-show="employeeForm.$submitted || (employeeForm.middleName.$touched && !employeeForm.middleName.$pristine)||
                          (employeeForm.middleName.$dirty)">
                             <p class="validation-message" ng-if="employeeForm.middleName.$error.required">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {{'REQUIRED' | translate}}
                             </p>
+
                             <p class="validation-message" ng-if="employeeForm.middleName.$error.pattern">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {{'INCORRECT_VALUE_MIDDLE_NAME_ADD_EMPLOYEE' | translate }}
@@ -128,10 +151,10 @@
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon-code">+380</span>
                             <input
-                                type="text" ng-model="user.phone"
-                                ng-pattern="PHONE_REGEX" placeholder="XXXXXXXXX"
-                                id="phone" name="phone" class="form-control">
-                                <span class="input-group-addon">{{'SECOND_PHONE' |translate}}</span>
+                                    type="text" ng-model="user.phone"
+                                    ng-pattern="PHONE_REGEX" placeholder="XXXXXXXXX"
+                                    id="phone" name="phone" class="form-control">
+                            <span class="input-group-addon">{{'SECOND_PHONE' |translate}}</span>
 								<span class="input-group-addon">
 								 	<input type="checkbox" ng-model="checkboxModel">
 								</span>
@@ -144,7 +167,7 @@
                             </p>
                         </div>
                     </div>
-                    
+
                     <div class="form-group" ng-show="checkboxModel">
                         <div class="col-md-4 form-group">
                             <label for="phoneNumberSecond">
@@ -240,7 +263,9 @@
                 <a class="btn btn-danger" ng-click="fireEmployee('fire')">{{'FIRE' | translate }}</a>
             </div>
             <div class="form-group col-md-2">
-                <button type="button" class="btn btn-danger pull-right" ng-click="closeModal()">{{'CLOSE' | translate}}</button>
+                <button type="button" class="btn btn-danger pull-right" ng-click="closeModal()">{{'CLOSE' |
+                    translate}}
+                </button>
             </div>
 
         </div>

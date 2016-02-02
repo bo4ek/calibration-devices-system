@@ -8,6 +8,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.state.verificator.StateVerificatorSubdivisionService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.user.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,9 @@ public class StateVerificatorSubdivisionController {
 
     @Autowired
     private StateVerificatorSubdivisionService subdivisionService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Adds new verificator's subdivision to the database
@@ -91,6 +95,8 @@ public class StateVerificatorSubdivisionController {
      */
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteSubdivision(@PathVariable String id) {
+
+
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             subdivisionService.deleteSubdivision(id);

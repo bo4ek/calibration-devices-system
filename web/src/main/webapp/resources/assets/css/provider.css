@@ -790,6 +790,7 @@ button:focus {
 
 .verification_protocol_user_icon{
     color: #47906f;
+    cursor: pointer;
 }
 
 .protocol_edit_user_icon {
