@@ -392,10 +392,14 @@ angular
              * @returns {'TEST_NOT'} if test was failed, {'TEST_OT'} if test was success
              */
             $scope.getStatus = function () {
-                if ($scope.TestForm.testResult == 'FAILED') {
-                    return 'TEST_NOK';
+                if($scope.isVerification) {
+                    if ($scope.TestForm.testResult == 'FAILED') {
+                        return 'TEST_NOK';
+                    } else {
+                        return 'TEST_OK';
+                    }
                 } else {
-                    return 'TEST_OK';
+                    return 'TEST_COMPLETED';
                 }
             };
 

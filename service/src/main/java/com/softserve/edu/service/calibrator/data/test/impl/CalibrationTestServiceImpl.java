@@ -247,13 +247,17 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Transactional
     public void updateTest(String verificationId, String status) {
         Verification verification = verificationRepository.findOne(verificationId);
-        Status statusRecived = Status.valueOf(status.toUpperCase());
-        if (statusRecived.equals(Status.TEST_OK) || statusRecived.equals(Status.TEST_NOK)) {
-            String statusToSend = statusRecived.equals(Status.TEST_OK) ? Constants.TEST_OK : Constants.TEST_NOK;
-            verification.setStatus(statusRecived);
+        Status statusReceived = Status.valueOf(status.toUpperCase());
+        if (statusReceived.equals(Status.TEST_OK) || statusReceived.equals(Status.TEST_NOK)) {
+            String statusToSend = statusReceived.equals(Status.TEST_OK) ? Constants.TEST_OK : Constants.TEST_NOK;
+            verification.setStatus(statusReceived);
             mailService.sendPassedTestMail(verification.getClientData().getEmail(), verificationId, statusToSend);
-            mailService.sendPassedTestMail(verification.getProviderEmployee().getEmail(), verificationId, statusToSend);
+            if(verification.getProviderEmployee() != null) {
+                mailService.sendPassedTestMail(verification.getProviderEmployee().getEmail(), verificationId, statusToSend);
+            }
             verificationRepository.save(verification);
+        } else {
+            verification.setStatus(Status.TEST_COMPLETED);
         }
     }
 }
