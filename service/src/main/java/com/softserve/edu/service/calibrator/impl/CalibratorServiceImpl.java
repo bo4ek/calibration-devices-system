@@ -101,8 +101,8 @@ public class CalibratorServiceImpl implements CalibratorService {
     public List<EmployeeDTO> getAllCalibratorEmployee(List<String> role, User employee) {
         List<EmployeeDTO> calibratorListEmployee = new ArrayList<>();
         if (role.contains(UserRole.CALIBRATOR_ADMIN.name())) {
-            List<User> allAvailableUsersList = userRepository.findAllAvailableUsersByRoleAndOrganizationId(UserRole.CALIBRATOR_EMPLOYEE,
-                    employee.getOrganization().getId())
+            List<User> allAvailableUsersList = userRepository.findAllAvailableUsersByEmployeeAndAdminRoleAndOrganizationId(UserRole.CALIBRATOR_EMPLOYEE,
+                    UserRole.CALIBRATOR_ADMIN, employee.getOrganization().getId())
                     .stream()
                     .collect(Collectors.toList());
             calibratorListEmployee = EmployeeDTO.giveListOfEmployeeDTOs(allAvailableUsersList);
