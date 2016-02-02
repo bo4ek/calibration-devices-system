@@ -61,10 +61,6 @@
                                             filter="{ 'username': 'text' }">{{
                                             user.username }}
                                         </td>
-                                        <!--<td data-title="'ROLE' |translate" sortable="'role'"
-                                            filter="{ 'role': 'text' }">{{ user.role | translate
-                                            }}
-                                        </td>-->
                                         <td data-title="'FIRST_NAME'|translate" sortable="'firstName'"
                                             filter="{ 'firstName': 'text' }">{{
                                             user.firstName }}
@@ -87,9 +83,12 @@
                                                 {{user.stateVerificatorTasks}}</a>
                                             <span ng-if="!user.stateVerificatorTasks"> {{ user.stateVerificatorTasks}}</span>
                                         </td>
-                                        <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
+                                        <td data-title="'ACTIONS' | translate" style="width: 12%"
+                                            class="control_buttons">
                                             <i class="glyphicon glyphicon-edit verification_protocol_user_icon"
-                                                    ng-click="openEditEmployeeModal(user.username)">
+                                               popover="{{'EDIT_EMPLOYEE' | translate}}"
+                                               popover-trigger="mouseenter"
+                                               ng-click="openEditEmployeeModal(user.username)">
                                             </i>
                                         </td>
                                     </tr>
