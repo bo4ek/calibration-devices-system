@@ -607,6 +607,12 @@ form[name='CalibrationTestForm'] .scroll-wrapper {
     border-right: 1px solid #ddd;
 }
 
+form[name='handheldProtocolForm'] .scroll-wrapper {
+    overflow-x: scroll;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
 form[name='CalibrationTestForm'] .control-label {
    /* width: 90px;*/
 }
@@ -682,6 +688,18 @@ form[name='CalibrationTestForm'] tr > td {
 
 
 form[name='handheldProtocolForm'] #reason {
+    width: 100%;
+}
+
+form[name='handheldProtocolForm'] #type {
+    width: 100%;
+}
+
+form[name='handheldProtocolForm'] #manufacturer {
+    width: 100%;
+}
+
+form[name='handheldProtocolForm'] #counterSymbol {
     width: 100%;
 }
 

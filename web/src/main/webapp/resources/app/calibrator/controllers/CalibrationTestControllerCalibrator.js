@@ -1,8 +1,8 @@
 angular
     .module('employeeModule')
     .controller('CalibrationTestControllerCalibrator', ['$rootScope', '$scope', '$modal', '$http', '$log',
-        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout','ngTableParams', '$translate','VerificationServiceCalibrator', '$sce', '$filter', 'toaster',
-        function ($rootScope, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload, $timeout, ngTableParams, $translate, verificationServiceCalibrator, $sce, $filter, toaster) {
+        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout','ngTableParams', '$translate','VerificationServiceCalibrator', '$sce', '$filter', 'toaster', 'DataReceivingServiceCalibrator',
+        function ($rootScope, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload, $timeout, ngTableParams, $translate, verificationServiceCalibrator, $sce, $filter, toaster, dataReceivingService) {
 
             $scope.resultsCount = 0;
 
@@ -78,9 +78,22 @@ angular
                     listOfCalibrationTestDataManual: $scope.dataOfManualTests,
                     dateOfTest: $scope.convertDateToLong($scope.selectedData.dateOfManualTest),
                     pathToScanDoc: $scope.pathToScanDoc,
-                    moduleId: $scope.selectedData.manufacturerNumber.moduleId
+                    moduleId: $scope.selectedData.manufacturerNumber.moduleId,
+                    counterTypeId : $scope.counter.manufacturer.id
                 }
             }
+
+            /**
+             * get all standardSizes from counter_type table and set current from bbi
+             */
+            function getAllStandardSizes() {
+                dataReceivingService.findAllStandardSize()
+                    .success(function (standardSize) {
+                        $scope.standardSizes = standardSize;
+                    })
+            }
+
+            getAllStandardSizes();
 
 
             /**
@@ -145,16 +158,24 @@ angular
             };
 
 
+            $scope.counter = {};
+            $scope.counter.standardSize = null;
+            $scope.counter.symbol = null;
+            $scope.counter.manufacturer = null;
+            $scope.counter.typeWater = null;
+            $scope.manufacturerNames = [];
             $scope.testManual = {};
-            $scope.symbols = [];
+            $scope.installationNames = [];
             $scope.moduleTypes = [];
             $scope.manufacturerNumbers = [];
             $scope.dataOfManualTests = [];
             $scope.selectedData.standardSize = null;
+            $scope.manufacturer = null;
             $scope.selectedData.testFirst = [];
             $scope.selectedData.testSecond = [];
             $scope.selectedData.testThird = [];
             $scope.unsuitabilityReasons = [];
+            $scope.symbols = [];
             $scope.verification = null;
             $scope.selectedData.numberProtocol=null;
             $scope.isUploadScanDoc = false;
@@ -164,6 +185,7 @@ angular
             $scope.IsScanDoc = false;
             $scope.selectedData.numberProtocolManual=null;
             $scope.isNotProcessed = false;
+            $scope.counterTypeId = null;
 
             /**
              *  receive data of all calibration modules
@@ -196,9 +218,6 @@ angular
                             var dataOfCounter = map.get($scope.testId);
                             var testManual = {
                                 verificationId: $scope.testId,
-                                standardSize: dataOfCounter.standardSize,
-                                symbol: dataOfCounter.symbol,
-                                realiseYear: dataOfCounter.realiseYear,
                                 numberCounter: dataOfCounter.numberCounter,
                                 counterId : dataOfCounter.counterId,
                                 statusTestFirst: dataCompletedTest.statusTestFirst,
@@ -206,8 +225,11 @@ angular
                                 statusTestThird: dataCompletedTest.statusTestThird,
                                 statusCommon: dataCompletedTest.statusCommon,
                                 status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
-                                unsuitabilityReason : dataCompletedTest.unsuitabilityReason
+                                typeWater : ['WATER', 'THERMAL'],
+                                unsuitabilityReason : dataCompletedTest.unsuitabilityReason,
+                                realiseYear : dataOfCounter.realiseYear
                             };
+                            getCurrentmanufacturer(dataCompletedTest.calibrationTestManualDTO.counterTypeId);
                             $scope.setDataUseManufacturerNumber(findcalibrationModuleBySerialNumber(dataCompletedTest.calibrationTestManualDTO.serialNumber));
                             $scope.selectedData.numberProtocolManual = dataCompletedTest.calibrationTestManualDTO.numberOfTest;
                             $scope.selectedData.numberProtocol = dataCompletedTest.calibrationTestManualDTO.generateNumber;
@@ -263,14 +285,29 @@ angular
                 }, map);
             }
 
+
+
             /**
              * entity of manual test
              */
             function creatorTestManual(value, key) {
+                calibrationTestServiceCalibrator.getCounterTypeId(value.counterId)
+                    .then(function (result) {
+                        if (result.status == 200)
+                         {
+                         $scope.counterTypeId = result.data;
+                         getCurrentmanufacturer($scope.counterTypeId);
+                         }
+                         else {
+                         $scope.counter.manufacturer = undefined;
+                         $scope.counter.standardSize = undefined;
+                         $scope.counter.typeWater = undefined;
+                         $scope.counter.symbol = undefined;
+                         }
+                    });
+
                 var testManual = {
                     verificationId: key,
-                    standardSize: value.standardSize,
-                    symbol: value.symbol,
                     realiseYear: value.realiseYear,
                     numberCounter: value.numberCounter,
                     statusTestFirst: 'SUCCESS',
@@ -278,13 +315,12 @@ angular
                     statusTestThird: 'SUCCESS',
                     statusCommon: 'SUCCESS',
                     status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
+                    typeWater : ['WATER', 'THERMAL'],
                     counterId: value.counterId,
                     unsuitabilityReason : null
-
                 };
                 return testManual
             }
-
 
             /**
              * receive directory of all  manufacturer numbers
@@ -308,7 +344,7 @@ angular
                     maoOfCondDesignation.set(symbol.condDesignation, symbol);
                 }
                 maoOfCondDesignation.forEach(function (value, key) {
-                    $scope.symbols.push(value);
+                    $scope.installationNames.push(value);
                 }, maoOfCondDesignation)
             };
 
@@ -370,7 +406,7 @@ angular
                 if (currentClibrationModel != undefined) {
                     $scope.clearManufacturerNumbers();
                     $scope.setFirstManufacturerNumber = false;
-                    $scope.symbols = [];
+                    $scope.installationNames = [];
                     var map = new Map();
                     var model = null;
                     for (var i = 0; i < $scope.calibrationModelDATA.length; i++) {
@@ -385,7 +421,7 @@ angular
                         }
                     }
                     map.forEach(function (value, key) {
-                        $scope.symbols.push(value);
+                        $scope.installationNames.push(value);
                     }, map)
                 } else if (currentClibrationModel == undefined && $scope.selectedData.condDesignation != null) {
                     $scope.clearAllArrays();
@@ -427,8 +463,70 @@ angular
                     })
             }
 
+
+            $scope.getAllSymbolsByStandardSizeAndDeviceType = function (standardSize, deviceType) {
+                dataReceivingService.findAllSymbolsByStandardSizeAndDeviceType(standardSize, deviceType)
+                    .success(function (symbols) {
+                        $scope.symbols = symbols;
+                        $scope.counter.symbol = undefined;
+                        $scope.counter.manufacturer = undefined;
+                    });
+            };
+
+            /**
+             * find counterType by id in list of countersTypes
+             */
+            function findCounterTypeById(id, list) {
+                var counterType = null;
+                for (var i = 0; i < list.length; i++) {
+                    counterType = list[i];
+                    if (counterType.id == id) {
+                        break;
+                    }
+                }
+                return counterType;
+            }
+
+            /**
+             * get all counterType and set current manufacturer name
+             */
+            function getCurrentmanufacturer(counterTypeId) {
+                calibrationTestServiceCalibrator.getCountersTypes()
+                    .then(function (result) {
+                        $scope.countersTypesAll = result.data;
+                        $scope.counter.manufacturer = findCounterTypeById(counterTypeId, $scope.countersTypesAll);
+                        $scope.counter.standardSize = $scope.counter.manufacturer.standardSize;
+                        $scope.counter.typeWater = $scope.counter.manufacturer.typeWater;
+                        $scope.counter.symbol = $scope.counter.manufacturer.symbol;
+                    })
+            }
+
+            /**
+             * get all manufacturer from counter_type by standardSize,deviceType and symbol
+             * @param standardSize
+             * @param deviceType
+             * @param symbol
+             */
+            $scope.getAllManufacturerByStandardSizeAndDeviceTypeAndSymbol = function (standardSize, deviceType, symbol) {
+                calibrationTestServiceCalibrator.getAllCounterTypesByStandardSizeAndDeviceTypeAndSymbol(standardSize, deviceType, symbol)
+                    .then(function (result) {
+                        $scope.manufacturerNames = result.data;
+                        $scope.counter.manufacturer = undefined;
+                    })
+            };
+
+            /**
+             * erase current counterType and manufacturer
+             */
+            $scope.eraseCurrentSymbolAndManufacturer = function () {
+                $scope.counter.typeWater = undefined;
+                $scope.counter.symbol = undefined;
+                $scope.counter.manufacturer = undefined;
+            };
+
+
             $scope.clearAllArrays = function () {
-                $scope.symbols = [];
+                $scope.installationNames = [];
                 $scope.moduleTypes = [];
                 $scope.manufacturerNumbers = [];
             };

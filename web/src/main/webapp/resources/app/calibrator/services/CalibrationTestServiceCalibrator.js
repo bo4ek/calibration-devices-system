@@ -26,6 +26,14 @@ angular
                     });
             },
 
+            getCounterTypeId: function (counterId) {
+                var url = 'calibrator/calibrationTests/getCounterTypeId/' + counterId;
+                return $http.get(url)
+                    .then(function (result) {
+                        return result;
+                    });
+            },
+
             getPage: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder, id) {
                 return getDataWithParams('calibrator/verifications/calibration-test/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
             },
@@ -111,7 +119,7 @@ angular
                 })
             },
             editTestManual: function (dataTest, testId , verificationEdit) {
-                return $http.post('calibrator/calibrationTests/editTestManual/' + testId + '/' + verificationEdit, dataTest)
+                return $http.put('calibrator/calibrationTests/editTestManual/' + testId + '/' + verificationEdit, dataTest)
                     .then(function (result) {
                         return result.status;
                     })
@@ -144,6 +152,13 @@ angular
 
             getAllCounterTypesByStandardSizeAndDeviceTypeAndSymbol: function (standardSize, deviceType, symbol) {
                 return $http.get('calibrator/calibrationTests/getCountersTypes/' + standardSize + '/' + deviceType + '/' + symbol)
+                    .then(function (result) {
+                        return result;
+                    })
+            },
+
+            getCountersTypesByCounterType: function (counterId) {
+                return $http.get('calibrator/calibrationTests/getCountersTypesByCounterId/' + counterId)
                     .then(function (result) {
                         return result;
                     })
