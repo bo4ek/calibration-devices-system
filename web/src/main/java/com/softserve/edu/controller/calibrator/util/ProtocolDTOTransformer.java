@@ -21,7 +21,8 @@ public class ProtocolDTOTransformer {
                     verification.getClientData().getClientAddress().getAddress(),
                     verification.getProvider().getName(),
                     verification.getCalibrator().getName(),
-                    verification.getStatus().toString()
+                    verification.getStatus().toString(),
+                    verification.getComment()
             ));
         }
         return resultList;

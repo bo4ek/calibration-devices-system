@@ -25,12 +25,14 @@ public class ProtocolDTO {
 
     private String status;
 
+    private String comment;
+
     public ProtocolDTO() {
 
     }
 
     public ProtocolDTO(String verificationId, String sentToCalibratorDate, String firstName, String lastName, String middleName, String address,
-                       String nameProvider, String nameCalibrator, String status ) {
+                       String nameProvider, String nameCalibrator, String status, String comment) {
         this.verificationId = verificationId;
         this.sentToCalibratorDate = sentToCalibratorDate;
         this.fullName = "" + lastName + " " + firstName + " " + middleName;
@@ -38,6 +40,7 @@ public class ProtocolDTO {
         this.nameProvider = nameProvider;
         this.nameCalibrator = nameCalibrator;
         this.status = status;
+        this.comment = comment;
     }
 
 }
