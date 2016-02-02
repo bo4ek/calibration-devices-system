@@ -55,10 +55,12 @@ public class VerificationPageDTOTransformer {
             if(verification.getCalibrator()!=null){verificationPageDTO.setNameCalibrator(verification.getCalibrator().getName());}
             Set<CounterType> set =(verification.getDevice() != null) ? verification.getDevice().getCounterTypeSet() : null;
             verificationPageDTO.setIsManual(verification.isManual());
-            if(verification.getCounter()!=null && verification.getCounter().getCounterType() != null){
+            if (verification.getCounter() != null && verification.getCounter().getCounterType() != null) {
                 verificationPageDTO.setSymbol(verification.getCounter().getCounterType().getSymbol());
                 verificationPageDTO.setStandardSize(verification.getCounter().getCounterType().getStandardSize());
-                if(verification.getCounter().getReleaseYear()!= null){verificationPageDTO.setRealiseYear(Integer.valueOf(verification.getCounter().getReleaseYear()));}
+                if (verification.getCounter().getReleaseYear() != null) {
+                    verificationPageDTO.setRealiseYear(Integer.valueOf(verification.getCounter().getReleaseYear()));
+                }
                 verificationPageDTO.setDismantled(verification.isCounterStatus());
                 verificationPageDTO.setNumberCounter(verification.getCounter().getNumberCounter());
                 verificationPageDTO.setCounterId(verification.getCounter().getId());

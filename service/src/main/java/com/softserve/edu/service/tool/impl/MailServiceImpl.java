@@ -200,7 +200,11 @@ public class MailServiceImpl implements MailService {
                 }
                 Map<String, Object> templateVariables = new HashMap<>();
                 templateVariables.put("verificationId", verificationId);
-                templateVariables.put("deviceType", deviceType);
+                if (deviceType.equals("WATER")) {
+                    templateVariables.put("deviceType", Constants.WATER_DEVICE_MAIL);
+                } else {
+                    templateVariables.put("deviceType", Constants.THERMAL_DEVICE_MAIL);
+                }
                 String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/accepted.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
                 message.setSubject("Important notification");

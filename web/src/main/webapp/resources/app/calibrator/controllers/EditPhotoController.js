@@ -141,7 +141,7 @@ angular
             };
 
             /**
-             * set  typeWater and counterType
+             * set  typeWater
              */
             $scope.changeTypeWater = function (typeWater) {
                 $scope.setStatusTypeWater(typeWater.type);

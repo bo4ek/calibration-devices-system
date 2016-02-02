@@ -43,7 +43,7 @@ public interface Constants {
 
 
     //reasons o counter unusability
-    String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
+    String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за";
     String RATED_FLAW = "номінальною витратою";
     String TRANSIENT_FLAW = "перехідною витратою";
     String MINIMAL_FLAW = "мінімальною витратою";
