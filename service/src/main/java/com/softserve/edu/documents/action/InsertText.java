@@ -1,5 +1,6 @@
 package com.softserve.edu.documents.action;
 
+import com.softserve.edu.common.Constants;
 import com.softserve.edu.documents.document.Document;
 import com.softserve.edu.documents.document.meta.MetaDataReader;
 import com.softserve.edu.documents.parameter.FileParameters;
@@ -116,6 +117,7 @@ public enum InsertText implements Operation {
                 columnValue = columnsNamesValues.get(substring).toString();
             } catch (Exception e) {
                 logger.error(substring + " for document has not been specified ", e);
+                columnValue = Constants.NOT_SPECIFIED;
             }
             if (columnValue == null) {
                 continue;

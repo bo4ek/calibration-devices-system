@@ -115,7 +115,7 @@ public abstract class BaseCertificate implements Document {
         try {
             String verificationId = verification.getId();
             String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
-            return String.format("%s-%s-Д", subdivisionId, verificationId);
+            return String.format("%s-%s", subdivisionId, verificationId);
         } catch (Exception e) {
             logger.error("Subdivision for this verification has not been specified ", e);
             return Constants.NOT_SPECIFIED;
