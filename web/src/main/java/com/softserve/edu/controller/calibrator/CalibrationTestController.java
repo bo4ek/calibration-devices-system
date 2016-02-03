@@ -30,11 +30,14 @@ import com.softserve.edu.service.verification.VerificationService;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
@@ -446,9 +449,8 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
-    @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.PUT)
-    public ResponseEntity signTestProtocol(@PathVariable String verificationId) {
-        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
+    @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.GET)
+    public void signTestProtocol(@PathVariable String verificationId, HttpServletResponse httpResponse) {
         try {
             Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
@@ -468,21 +470,41 @@ public class CalibrationTestController {
             verification.setExpirationDate(validityOfCertificate.getTime());
             verification.setSignProtocolDate(new Date());
             calibrationTest.setCalibrationInterval(calibrationInterval);
-            calibrationTest.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
+
+            httpResponse.setContentType("application/pdf");
+            httpResponse.setHeader("Content-Disposition", "attachment; " +
+                    "filename=\"" + file.getName().getBaseName() + ".pdf"  + "\"");
+
+            ServletOutputStream outputStream = httpResponse.getOutputStream();
             byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
             file.getContent().getInputStream().read(documentByteArray);
-            calibrationTest.setSignedDocument(documentByteArray);
+
+            outputStream.write(documentByteArray);
+            outputStream.close();
             testRepository.save(calibrationTest);
             verificationService.saveVerification(verification);
         } catch (Exception e) {
+            logger.error("Cannot sing protocol", e);
+        }
+
+    }
+
+    @RequestMapping(value = "signEDSTest/{verificationId}", method = RequestMethod.POST)
+    public ResponseEntity signEDSTestProtocol(@RequestParam(value="file") MultipartFile file, @PathVariable String verificationId){
+        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
+        try {
+            CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
+            calibrationTest.setSignedDocument(file.getBytes());
+            calibrationTest.setSigned(true);
+            testRepository.save(calibrationTest);
+        }catch (Exception e) {
             logger.error("Cannot sing protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
-
     private String getStandardSize(Verification verification) {
         return verification.getCounter().getCounterType().getStandardSize();
     }

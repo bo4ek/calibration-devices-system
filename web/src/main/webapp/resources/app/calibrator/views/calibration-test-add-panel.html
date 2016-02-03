@@ -174,7 +174,7 @@
         <div class="form-group col-sm-4">
             <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)" ng-show="isVerification" type="submit"
                     class="btn btn-warning btn-md"
-                    ng-click="showInstallPrivateKeyModal()">
+                    ng-click="signCalibrationTest()">
                 {{'SIGN_PROTOCOL' | translate}}
             </button><!--ng-click="signCalibrationTest()"-->
         </div>

@@ -38,13 +38,6 @@ angular
                     });
             },
 
-            signTestProtocol: function (testId) {
-                return $http.put("calibrator/calibrationTests/signTest/" + testId)
-                    .then(function (result) {
-                        return result.status;
-                    });
-            },
-
             deleteCalibrationTest: function (calibrationTestId) {
                 var url = 'calibrator/calibrationTests/delete/' + calibrationTestId;
                 return $http.post(url)
@@ -78,6 +71,29 @@ angular
                 var url = 'calibrator/calibrationTests/edit/' + testId;
                 return $http.post(url, formData)
                     .then(function (result) {
+                        return result.status;
+                    });
+            },
+
+            signTestProtocol: function (testId) {
+                return $http.get("calibrator/calibrationTests/signTest/" + testId, {responseType: 'arraybuffer'})
+                    .then(function (response) {
+                        var file = new Blob([response], {type: 'application/pdf'});
+                        console.log(file);
+                        return file;
+                    });
+            },
+
+            signEDSTestProtocol: function (file, testId) {
+                var formData=new FormData();
+                formData.append("file",file);
+                var url = 'calibrator/calibrationTests/signEDSTest/' + testId;
+                return $http.post(url, formData, {
+                    transformRequest: function(data, headersGetterFunction) {
+                        return data;
+                    },
+                    headers: { 'Content-Type': undefined }
+                }).then(function (result) {
                         return result.status;
                     });
             },

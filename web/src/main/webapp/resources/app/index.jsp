@@ -332,6 +332,9 @@
 </script>
 
 <script src="resources/assets/js/loader-employee.js"></script>
-
+<script type="text/javascript" src="resources/eusign/euutils.js"></script>
+<script type="text/javascript" src="resources/eusign/euscpt.js"></script>
+<script type="text/javascript" src="resources/eusign/euscpm.js"></script>
+<script async type="text/javascript" src="resources/eusign/euscp.js"></script>
 
 </body>
