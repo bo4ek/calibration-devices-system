@@ -64,8 +64,9 @@ public class User {
     @JsonBackReference
     private Set<SavedFilter> savedFilters = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subdivisionId", nullable = true)
+    @ManyToOne
+    @JoinColumn(name = "subdivisionId")
+    @JsonManagedReference
     private VerificatorSubdivision verificatorSubdivision;
 
     public User(AddEmployeeBuilder builder) {

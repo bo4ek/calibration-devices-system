@@ -74,11 +74,6 @@
                         templateUrl: 'resources/app/calibrator/views/new-verifications.html',
                         controller: 'NewVerificationsControllerCalibrator'
                     })
-                    //.state("calibration-test-calibrator", {
-                    //    url: '/calibrator/verifications/calibration-test',
-                    //    templateUrl: 'resources/app/calibrator/views/calibration-test-add-modal.html',
-                    //    controller: 'CalibrationTestAddModalControllerCalibrator'
-                    //})
                     .state("calibration-test", {
                         url: '/calibrator/verifications/calibration-test/',
                         templateUrl: 'resources/app/calibrator/views/calibration-test-panel.html',
@@ -99,8 +94,8 @@
                         templateUrl: 'resources/app/calibrator/views/disassembly-team.html',
                         controller: 'DisassemblyTeamControllerCalibrator'
                     })
-                    .state("verification-team", {
-                        url: 'verificator/verificationTeam/',
+                    .state("verificator-subdivision", {
+                        url: 'verificator/verificator-subdivision/',
                         templateUrl: 'resources/app/verificator/views/verificator-subdivision.html',
                         controller: 'VerificatorSubdivisionController'
                     })

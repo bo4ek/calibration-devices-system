@@ -5,6 +5,7 @@ import com.softserve.edu.dto.verificator.VerificatorSubdivisionDTO;
 import com.softserve.edu.dto.verificator.VerificatorSubdivisionPageItem;
 import com.softserve.edu.entity.catalogue.Team.VerificatorSubdivision;
 import com.softserve.edu.entity.organization.Organization;
+import com.softserve.edu.entity.user.User;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.state.verificator.StateVerificatorSubdivisionService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
@@ -91,12 +92,10 @@ public class StateVerificatorSubdivisionController {
      * Deletes verificator's subdivision from database
      *
      * @param id
-     * @return
+     * @return OK or CONFLICT status
      */
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteSubdivision(@PathVariable String id) {
-
-
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             subdivisionService.deleteSubdivision(id);

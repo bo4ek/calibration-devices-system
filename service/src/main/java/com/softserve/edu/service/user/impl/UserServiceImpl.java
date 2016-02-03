@@ -153,4 +153,16 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         }
     }
+
+    /**
+     * Set User's subdivision null
+     *
+     * @param subdivisionId id of subdivision
+     * @return list of Users
+     */
+    @Transactional
+    @Override
+    public List<User> findBySubdivisionId(String subdivisionId) {
+        return userRepository.findByVerificatorSubdivision(subdivisionId);
+    }
 }
