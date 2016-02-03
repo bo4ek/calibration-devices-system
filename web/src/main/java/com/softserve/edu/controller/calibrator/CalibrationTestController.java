@@ -516,7 +516,7 @@ public class CalibrationTestController {
                 verification.setCalibrationInterval(calibrationInterval);
             }
             verification.setSignProtocolDate(new Date());
-            calibrationTest.setCalibrationInterval(calibrationInterval);
+            verification.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
 
@@ -542,10 +542,10 @@ public class CalibrationTestController {
     public ResponseEntity signEDSTestProtocol(@RequestParam(value="file") MultipartFile file, @PathVariable String verificationId){
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
-            CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
-            calibrationTest.setSignedDocument(file.getBytes());
-            calibrationTest.setSigned(true);
-            testRepository.save(calibrationTest);
+            Verification verification = verificationService.findById(verificationId);
+            verification.setSignedDocument(file.getBytes());
+            verification.setSigned(true);
+            verificationService.saveVerification(verification);
         }catch (Exception e) {
             logger.error("Cannot sing protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
