@@ -784,5 +784,9 @@
     "ERROR_EDIT_SUBDIVISION": "Error has occurred while editing the subdivision",
     "SUCCESSFUL_ADD_SUBDIVISION": "Subdivision was successfully added",
     "ERROR_ADD_SUBDIVISION":"Error has occurred while adding the subdivision",
-    "PROVIDER_FROM_BBI" : "Provider from BBI protocol"
+    "PROVIDER_FROM_BBI" : "Provider from BBI protocol",
+    "EDIT_PROTOCOL": "Edit protocol",
+    "RESPONSIBLE_PERSON_CHOOSE": "Choose responsible person",
+    "RESPONSIBLE_PERSON_CANCEL": "Cancel responsible person",
+    "CANCEL_TEST": "Cancel test"
 }
