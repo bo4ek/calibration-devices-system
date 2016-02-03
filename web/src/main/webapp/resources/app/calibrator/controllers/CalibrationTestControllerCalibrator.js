@@ -169,7 +169,6 @@ angular
             $scope.moduleTypes = [];
             $scope.manufacturerNumbers = [];
             $scope.dataOfManualTests = [];
-            $scope.selectedData.standardSize = null;
             $scope.manufacturer = null;
             $scope.selectedData.testFirst = [];
             $scope.selectedData.testSecond = [];
@@ -202,7 +201,6 @@ angular
                         $scope.receiveAllOriginalModuleType($scope.calibrationModelDATA);
                         $scope.receiveAllManufacturerNumbers($scope.calibrationModelDATA);
                         receiveAllVerificationForManualTest($scope.IdsOfVerifications);
-                        $scope.selectedData.standardSize = $scope.dataOfManualTests[0].standardSize;
                     });
             }
 
@@ -219,7 +217,6 @@ angular
                             var testManual = {
                                 verificationId: $scope.testId,
                                 numberCounter: dataOfCounter.numberCounter,
-                                counterId : dataOfCounter.counterId,
                                 statusTestFirst: dataCompletedTest.statusTestFirst,
                                 statusTestSecond: dataCompletedTest.statusTestSecond,
                                 statusTestThird: dataCompletedTest.statusTestThird,
@@ -243,7 +240,6 @@ angular
 
                             $scope.selectedData.timeFrom = $scope.selectedData.dateOfManualTest;
                             $scope.dataOfManualTests.push(testManual);
-                            $scope.selectedData.standardSize = $scope.dataOfManualTests[0].standardSize;
                             $scope.pathToScanDoc = dataCompletedTest.calibrationTestManualDTO.pathToScanDoc;
                             $scope.checkIsScanDoc();
                             $scope.receiveTestsAndSetIsNotProcessed();
@@ -316,7 +312,6 @@ angular
                     statusCommon: 'SUCCESS',
                     status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
                     typeWater : ['WATER', 'THERMAL'],
-                    counterId: value.counterId,
                     unsuitabilityReason : null
                 };
                 return testManual
