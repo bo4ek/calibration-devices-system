@@ -161,6 +161,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     List<Verification> findByTaskStatusAndCalibratorId(Status status, Long id);
 
+    List<Verification> findByIdIn( List<String> id);
+
     Page<Verification> findByTaskStatusAndCalibratorId(Status status, Long id, Pageable pageable);
 
     Page<Verification> findByCalibratorEmployeeUsernameAndTaskStatus(String userName, Status status, Pageable pageable);
