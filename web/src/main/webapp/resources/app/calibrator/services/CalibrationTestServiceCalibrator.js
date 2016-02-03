@@ -86,7 +86,7 @@ angular
             signTestProtocol: function (testId) {
                 return $http.get("calibrator/calibrationTests/signTest/" + testId, {responseType: 'arraybuffer'})
                     .then(function (response) {
-                        var file = new Blob([response], {type: 'application/pdf'});
+                        var file = new Blob([response], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
                         console.log(file);
                         return file;
                     });

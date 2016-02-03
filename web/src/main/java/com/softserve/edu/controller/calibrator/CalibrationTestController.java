@@ -520,9 +520,9 @@ public class CalibrationTestController {
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
 
-            httpResponse.setContentType("application/pdf");
+            httpResponse.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
             httpResponse.setHeader("Content-Disposition", "attachment; " +
-                    "filename=\"" + file.getName().getBaseName() + ".pdf"  + "\"");
+                    "filename=\"" + file.getName().getBaseName() + ".docx"  + "\"");
 
             ServletOutputStream outputStream = httpResponse.getOutputStream();
             byte[] documentByteArray = new byte[(int)file.getContent().getSize()];

@@ -133,15 +133,14 @@ angular
 
                         try {
                             $scope.signedFileArray = parentScope.euSign.SignDataInternal(isAddCert, data, false);
-                            $scope.signedFileBlob = new Blob([$scope.signedFileArray], {type: 'multipart/form-data' });
+                            $scope.signedFileBlob = new Blob([$scope.signedFileArray], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
                             $scope.signedFileBlob.lastModifiedDate;
-                            $scope.signedFileBlob.name = $scope.fileToSign.name + ".p7s";
-
-//                            alert("Файл успішно підписано");
+                            $scope.signedFileBlob.name = parentScope.testId + ".p7s";
                             $scope.signedFile = true;
                             $scope.info = "Файл успішно підписано";
                             $scope.disableOk = false;
                             $scope.disableRead = true;
+                            setStatus('');
                         } catch (e) {
                             alert(e);
                         }

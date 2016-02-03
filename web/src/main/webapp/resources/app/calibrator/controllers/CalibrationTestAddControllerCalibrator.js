@@ -755,10 +755,6 @@ angular
                             calibrationTestServiceCalibrator
                                 .signTestProtocol($scope.testId)
                                 .then(function (file) {
-//                                    if (status == 200) {
-//                                        $scope.TestForm.signed = true;
-//                                        toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
-//                                    }
                                     $scope.fileToSign = file;
                                     var modalInstance = $modal.open({
                                         animation: true,
