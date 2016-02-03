@@ -5,9 +5,11 @@
 
 <div class="modal-body">
     <form name="clientForm" class="form-group" id="editMainPhotoForm" novalidate>
-        <div class="form-group col-md-6" style="width: 430px; height: 430px">
-            <img id="mainPhoto" src='{{photo}}' width="100%" height="100%" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
-            'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}">
+        <div id="box" class="form-group col-md-6">
+            <div class=" image">
+                <img id="mainPhoto" src='{{photo}}' width="100%" height="100%" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+                'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}">
+            </div>
         </div>
 
         <div class="form-group col-md-6" ng-if="photoId == 'testMainPhoto'">

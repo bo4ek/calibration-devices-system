@@ -3,6 +3,7 @@ package com.softserve.edu.service.calibrator.impl;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
@@ -11,6 +12,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.calibrator.BBIFileServiceFacade;
@@ -21,6 +23,8 @@ import com.softserve.edu.service.catalogue.DistrictService;
 import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.catalogue.StreetService;
+import com.softserve.edu.service.exceptions.InvalidDeviceTypeIdException;
+import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import com.softserve.edu.service.verification.VerificationService;
@@ -61,6 +65,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Autowired
     private CalibrationTestService calibrationTestService;
+
+    @Autowired
+    private CalibrationModuleRepository calibrationModuleRepository;
 
     @Autowired
     private VerificationService verificationService;
@@ -109,19 +116,19 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException, NegativeArraySizeException {
+            throws IOException, DecoderException, NegativeArraySizeException{
         DeviceTestData deviceTestData;
         try (InputStream inputStream = FileUtils.openInputStream(BBIfile)) {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);
             calibrationTestService.createNewTest(deviceTestData, verificationID);
         } catch (DecoderException e) {
-            logger.error("error " + e);
+            logger.error("error ", e);
         }
         return null;
     }
 
     public DeviceTestData parseAndSaveBBIFile(MultipartFile BBIfile, String verificationID, String originalFileName)
-            throws IOException, NoSuchElementException, DecoderException, NegativeArraySizeException {
+            throws IOException, NoSuchElementException, DecoderException, NegativeArraySizeException{
         try {
             return parseAndSaveBBIFile(BBIfile.getInputStream(), verificationID, originalFileName);
         } catch (Exception e) {
@@ -192,51 +199,50 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
-                    try {
-                        deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                        correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
-                                calibratorEmployee, deviceTestData);
+                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                    CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+                    if (calibrationModule == null) {
+                        throw new InvalidModuleIdException();
+                    }
+                    correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
+                            calibratorEmployee, deviceTestData);
 
-                        saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-                        Verification verification = verificationService.findById(correspondingVerification);
-                        verification.setStatus(Status.CREATED_BY_CALIBRATOR);
-                        verificationService.saveVerification(verification);
-                    } catch (FileAlreadyExistsException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                        logger.error("BBI file is already in database ", e);
-                    } catch (NullPointerException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
-                        logger.error("Wrong image in BBI file ", e);
-                    } catch (Exception e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                        logger.error("BBI is not valid ", e);
-                    }
+                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
+                    Verification verification = verificationService.findById(correspondingVerification);
+                    verification.setCalibrationModule(calibrationModule);
+                    verification.setStatus(Status.CREATED_BY_CALIBRATOR);
+                    verificationService.saveVerification(verification);
                 } else {
-                    try {
-                        deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                        updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
-                        saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-                    } catch (FileAlreadyExistsException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
-                        logger.error("BBI file is already in database ", e);
-                    } catch (IOException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
-                        logger.error("BBI is not valid ", e);
-                    } catch (NegativeArraySizeException e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.WRONG_IMAGE_IN_BBI;
-                        logger.error("Wrong image in BBI file ", e);
-                    } catch (Exception e) {
-                        reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
-                        logger.error("Invalid verification code ", e);
-                    }
+                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                    updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
+                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 }
             } catch (FileNotFoundException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
-                logger.error("File is not found", e);
+                logger.error("File is not found");
+            } catch (FileAlreadyExistsException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
+                logger.error("BBI file is already in database");
+            } catch (IOException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
+                logger.error("BBI is not valid");
+            } catch (NegativeArraySizeException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
+                logger.error("Wrong image in BBI file");
+            } catch (InvalidModuleIdException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
+                logger.error("Wrong module serial number in BBI file");
+            } catch (InvalidDeviceTypeIdException e){
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
+                logger.error("Wrong device type id in BBI file");
+            } catch (Exception e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
+                logger.error("Invalid verification code");
             } finally {
                 if (inStream != null) {
-                    inStream.close();
                     bufferedInputStream.close();
+                    inStream.close();
+
                 }
             }
             if (reasonOfRejection == null) {
@@ -299,29 +305,31 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             while (rs.next()) {
                 verificationMap = new LinkedHashMap<>();
                 verificationMap.put(Constants.VERIFICATION_ID, rs.getString("Id_pc"));
-                verificationMap.put(Constants.PROVIDER, rs.getString("Customer"));
-                verificationMap.put(Constants.DATE, rs.getString("Date"));
-                verificationMap.put(Constants.COUNTER_NUMBER, rs.getString("CounterNumber"));
-                verificationMap.put(Constants.COUNTER_SIZE_AND_SYMBOL, rs.getString("Type"));
-                verificationMap.put(Constants.YEAR, rs.getString("Year"));
-                verificationMap.put(Constants.STAMP, rs.getString("Account"));
                 verificationMap.put(Constants.LAST_NAME, rs.getString("Surname"));
                 verificationMap.put(Constants.FIRST_NAME, rs.getString("Name"));
                 verificationMap.put(Constants.MIDDLE_NAME, rs.getString("Middlename"));
-                verificationMap.put(Constants.PHONE_NUMBER, rs.getString("TelNumber"));
-                verificationMap.put(Constants.REGION, rs.getString("District"));
                 verificationMap.put(Constants.CITY, rs.getString("City"));
+                verificationMap.put(Constants.REGION, rs.getString("District"));
                 verificationMap.put(Constants.STREET, rs.getString("Street"));
                 verificationMap.put(Constants.BUILDING, rs.getString("Building"));
                 verificationMap.put(Constants.FLAT, rs.getString("Apartment"));
+                verificationMap.put(Constants.STAMP, rs.getString("Account"));
+                verificationMap.put(Constants.COUNTER_NUMBER, rs.getString("CounterNumber"));
+                verificationMap.put(Constants.COUNTER_SIZE_AND_SYMBOL, rs.getString("Type"));
+                verificationMap.put(Constants.YEAR, rs.getString("Year"));
+                verificationMap.put(Constants.PHONE_NUMBER, rs.getString("TelNumber"));
+                verificationMap.put(Constants.PROVIDER, rs.getString("Customer"));
+                verificationMap.put(Constants.DATE, rs.getString("Date"));
 
                 try {
                     verificationMap.put(Constants.CITY_ID, rs.getString("CityID"));
                     verificationMap.put(Constants.DISTRICT_ID, rs.getString("DistrictID"));
                     verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
                     verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
+
+                    verificationMap.put(Constants.NOTE, rs.getString("Note"));
                 } catch (SQLException e) {
-                    logger.error("User was trying to upload old archive format" + e);
+                    logger.error("User was trying to upload old archive format ", e);
                 }
 
                 bbiFilesToVerification.put(rs.getString("FileNumber"), verificationMap);
@@ -331,7 +339,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData)
-            throws ParseException {
+            throws ParseException, InvalidDeviceTypeIdException {
 
         String cityName = null;
         String regionName = null;
@@ -372,9 +380,10 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
         String verId = verificationService.getNewVerificationDailyIdByDeviceType(date,
                 counter.getCounterType().getDevice().getDeviceType());
+        Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
         Verification verification = new Verification(date, clientData,
-                Status.CREATED_BY_CALIBRATOR, calibrator, calibratorEmployee,
-                counter, verId);
+                Status.CREATED_BY_CALIBRATOR, calibrator, providerFromBBI, calibratorEmployee,
+                counter, verId, verificationData.get(Constants.NOTE));
         String verificationId = verification.getId();
         verificationService.saveVerification(verification);
         return verificationId;
@@ -384,13 +393,35 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             throws Exception {
 
         Verification verification = verificationService.findById(verificationId);
+        Long deviceId;
+        deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+        Device device = deviceService.getById(deviceId);
+        verification.setDevice(device);
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);
         verificationService.saveVerification(verification);
 
     }
 
-    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) {
+    private Long getDeviceIdByDeviceTypeId(int deviceTypeId) throws InvalidDeviceTypeIdException{
+        String deviceType = null;
+        switch (deviceTypeId) {
+            case 2:
+                deviceType = "THERMAL";
+                break;
+            default:
+                deviceType = "WATER";
+                break;
+        }
+
+        //Will be implemented in future (reject *.bbi if there's no such deviceTypeId)
+//        if (deviceType == null){
+//            throw new InvalidDeviceTypeIdException();
+//        }
+        return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, true).getId();
+    }
+
+    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) throws InvalidDeviceTypeIdException{
         String sizeAndSymbol = verificationData.get(Constants.COUNTER_SIZE_AND_SYMBOL);
         String[] parts = sizeAndSymbol.split(" ");
         String standardSize = parts[0] + " " + parts[1];
@@ -407,19 +438,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
          * and NullPointerException will be generated
          */
         if (counterType == null) {
-            int deviceTypeId = deviceTestData.getDeviceTypeId(); //deviceTypeId comes from bbi file (1 - WATER; 2 - THERMAL)
-            String deviceType = null;
             Long deviceId;
-            switch (deviceTypeId) {
-                case 1:
-                    deviceType = "WATER";
-                    break;
-                case 2:
-                    deviceType = "THERMAL";
-                    break;
-            }
-            List<Device> devices = deviceService.getAllByDeviceType(deviceType);
-            deviceId = devices.get(0).getId();
+            deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
             String deviceName = deviceService.getById(deviceId).getDeviceName();
             counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
             counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);

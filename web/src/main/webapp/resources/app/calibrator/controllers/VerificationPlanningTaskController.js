@@ -98,7 +98,7 @@ angular
                             toLabel: $filter('translate')('TO_LABEL'),
                             applyLabel: $filter('translate')('APPLY_LABEL'),
                             cancelLabel: $filter('translate')('CANCEL_LABEL'),
-                            customRangeLabel: $filter('translate')('CUSTOM_RANGE_LABEL'),
+                            customRangeLabel: $filter('translate')('CUSTOM_RANGE_LABEL')
                         },
                         ranges: {},
                         eventHandlers: {}
@@ -197,7 +197,7 @@ angular
 
                 $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 10,
+                    count: 10
                 }, {
                     total: 0,
                     filterDelay: 1500,

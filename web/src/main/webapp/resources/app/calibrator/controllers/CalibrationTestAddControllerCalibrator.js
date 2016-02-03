@@ -598,17 +598,24 @@ angular
                 $scope.fileLoaded = true;
                 $scope.TestForm = data;
                 var date = $scope.TestForm.testDate;
-                $scope.TestForm.testDate = moment(date).utcOffset(0).format("DD.MM.YYYY HH:mm");
+                $scope.TestForm.testDate = moment(date).utcOffset(0).format("DD.MM.YY");
+                $scope.TestForm.testTime = moment(date).utcOffset(0).format("HH:mm");
+                $scope.TestForm.testPN = $scope.getPNFromBBIName(data.fileName);
                 $scope.TestForm.testPhoto = "data:image/png;base64," + $scope.TestForm.testPhoto;
                 $scope.TestDataFormData = data.listTestData;
                 $scope.rotateIndex = data.rotateIndex;
+                $scope.settingNumber = data.serialNumber + "  " + data.condDesignation;
                 $scope.selectedReason.selected = data.reasonUnsuitabilityName;
                 $scope.isReasonsUnsuitabilityShown();
             };
 
+            $scope.getPNFromBBIName = function (fileName) {
+                return fileName.substring(6, fileName.length - ".bbi".length);
+            }
+
             /**
              * Get all reasons unsuitability for counter with {counterTypeId} type if
-             * at least one of test has result 'RAW'
+             * at least one of test has result 'NOT_PROCESSED'
              */
             $scope.isReasonsUnsuitabilityShown = function () {
                 if ($scope.isTestRaw()) {
@@ -624,7 +631,7 @@ angular
             $scope.isTestRaw = function () {
                 if ($scope.hasProtocol && $scope.isVerification && $scope.TestDataFormData) {
                     for (var i = 0; i < $scope.TestDataFormData.length; i++) {
-                        if ($scope.TestDataFormData[i].testResult == 'RAW') {
+                        if ($scope.TestDataFormData[i].testResult == 'NOT_PROCESSED') {
                             return true;
                         }
                     }
@@ -634,7 +641,6 @@ angular
 
 
             $scope.showEditMainPhotoModal = function (id) {
-                console.log($scope.TestForm.signed);
                 if (!$scope.TestForm.signed) {
                     var modalInstance = $modal.open({
                         animation: true,
@@ -725,10 +731,14 @@ angular
              * @returns {'TEST_NOT'} if test was failed, {'TEST_OT'} if test was success
              */
             $scope.getStatus = function () {
-                if ($scope.TestForm.testResult == 'FAILED') {
-                    return 'TEST_NOK';
+                if($scope.isVerification) {
+                    if ($scope.TestForm.testResult == 'FAILED') {
+                        return 'TEST_NOK';
+                    } else {
+                        return 'TEST_OK';
+                    }
                 } else {
-                    return 'TEST_OK';
+                    return 'TEST_COMPLETED';
                 }
             };
 

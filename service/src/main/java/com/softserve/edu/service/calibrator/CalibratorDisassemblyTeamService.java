@@ -1,6 +1,5 @@
 package com.softserve.edu.service.calibrator;
 
-
 import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
@@ -13,11 +12,7 @@ import java.util.Set;
 
 public interface CalibratorDisassemblyTeamService {
 
-    List<DisassemblyTeam> getAll();
-
     List<DisassemblyTeam> getByOrganization(Organization organization);
-
-    Page<DisassemblyTeam> getByOrganization(Organization organization, int pageNumber, int itemsPerPage);
 
     Page<DisassemblyTeam> findByOrganizationAndSearchAndPagination(int pageNumber, int itemsPerPage,
                                                                    Organization organization, String search);
@@ -31,8 +26,7 @@ public interface CalibratorDisassemblyTeamService {
 
     void delete(String teamId);
 
-
     boolean isTeamExist(String teamUsername);
 
-    List<DisassemblyTeam> findAllAvaliableTeams (Date workDate, String applicationFiled, String userId);
+    List<DisassemblyTeam> findAllAvaliableTeams(Date workDate, String applicationFiled, String userId);
 }

@@ -393,7 +393,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      */
     public void sendTaskToStation(Long id) throws Exception {
         CalibrationTask calibrationTask = taskRepository.findOne(id);
-        Verification[] verifications = verificationRepository.findByTask_Id(id);
+        Verification[] verifications = verificationRepository.findByTaskIdOrderByQueueAsc(id);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DAY_MONTH_YEAR);
 
@@ -463,16 +463,16 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 taskDate.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
             } catch (IllegalArgumentException e) {
                 taskDate.add(empty);
-                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId());
+                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:" + calibrationTask.getId(), e);
             }
 
-            provider.add(verification.getProvider() !=null && verification.getProvider().getName() != null ? verification.getProvider().getName() : empty);
+            provider.add(verification.getProvider() != null && verification.getProvider().getName() != null ? verification.getProvider().getName() : empty);
 
-            if (verification.getClientData() != null){
+            if (verification.getClientData() != null) {
                 fullName.add(verification.getClientData().getFullName() != null ? verification.getClientData().getFullName() : empty);
                 telephone.add(verification.getClientData().getPhone() != null ? verification.getClientData().getPhone() : empty);
 
-                if (verification.getClientData().getClientAddress() != null){
+                if (verification.getClientData().getClientAddress() != null) {
                     district.add(verification.getClientData().getClientAddress().getDistrict() != null ? verification.getClientData().getClientAddress().getDistrict() : empty);
                     address.add(verification.getClientData().getClientAddress().getAddress() != null ? verification.getClientData().getClientAddress().getAddress() : empty);
                     building.add(verification.getClientData().getClientAddress().getBuilding() != null ? verification.getClientData().getClientAddress().getBuilding() : empty);
@@ -558,7 +558,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
             id.add(verification.getId() != null ? verification.getId() : empty);
 
-            if (verification.getClientData() != null){
+            if (verification.getClientData() != null) {
                 surname.add(verification.getClientData().getLastName() != null ? verification.getClientData().getLastName() : empty);
                 name.add(verification.getClientData().getFirstName() != null ? verification.getClientData().getFirstName() : empty);
                 middlename.add(verification.getClientData().getMiddleName() != null ? verification.getClientData().getMiddleName() : empty);
@@ -567,7 +567,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 if (verification.getClientData().getClientAddress() != null) {
                     city.add(verification.getClientData().getClientAddress().getLocality() != null ? verification.getClientData().getClientAddress().getLocality() : empty);
                     district.add(verification.getClientData().getClientAddress().getDistrict() != null ? verification.getClientData().getClientAddress().getDistrict() : empty);
-                    sector.add(verification.getClientData().getClientAddress().getRegion() !=null ? verification.getClientData().getClientAddress().getRegion() : empty);
+                    sector.add(verification.getClientData().getClientAddress().getRegion() != null ? verification.getClientData().getClientAddress().getRegion() : empty);
                     street.add(verification.getClientData().getClientAddress().getStreet() != null ? verification.getClientData().getClientAddress().getStreet() : empty);
                     building.add(verification.getClientData().getClientAddress().getBuilding() != null ? verification.getClientData().getClientAddress().getBuilding() : empty);
                     flat.add(verification.getClientData().getClientAddress().getFlat() != null ? verification.getClientData().getClientAddress().getFlat() : empty);
@@ -597,10 +597,10 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 datetime.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
             } catch (IllegalArgumentException e) {
                 datetime.add(empty);
-                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:"+calibrationTask.getId());
+                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:" + calibrationTask.getId(), e);
             }
 
-            counterNumber.add(verification.getCounter() != null && verification.getCounter().getNumberCounter() != null ? verification.getCounter().getNumberCounter() : "-" );
+            counterNumber.add(verification.getCounter() != null && verification.getCounter().getNumberCounter() != null ? verification.getCounter().getNumberCounter() : "-");
             comments.add(verification.getComment() != null ? verification.getComment() : empty);
             customer.add(verification.getCalibratorEmployee() != null && verification.getCalibratorEmployee().getUsername() != null ? verification.getCalibratorEmployee().getUsername() : empty);
         }

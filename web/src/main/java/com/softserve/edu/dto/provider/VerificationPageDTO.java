@@ -51,7 +51,8 @@ public class VerificationPageDTO {
     private Boolean dismantled;
     private String numberCounter;
     private Long counterId;
-    private Boolean isManual;
+    private boolean isManual;
+    private String comment;
 
     public VerificationPageDTO() {
     }
@@ -61,7 +62,7 @@ public class VerificationPageDTO {
                                User calibratorEmployee, User stateVerificatorEmployee, String name, String fullName,
                                String district, String locality, String phone, boolean isUpload,
                                Integer processTimeExceeding, CalibrationTest calibrationTest, Device device,
-                               String documentType, String documentDate) {
+                               String documentType, String documentDate, String comment) {
         this.id = id;
         this.initialDate = initialDate;
         this.surname = surname;
@@ -129,6 +130,7 @@ public class VerificationPageDTO {
         if (documentDate != null) {
             this.documentDate = documentDate;
         }
+        this.comment = comment;
     }
 
     public VerificationPageDTO(String id, Date initialDate, String surname, String street, String region,
@@ -218,7 +220,7 @@ public class VerificationPageDTO {
                                boolean isUpload, Integer processTimeExceeding,
                                CalibrationTest calibrationTest,
                                Device device,
-                               String documentType, String documentDate, String address, String building, String flat) {
+                               String documentType, String documentDate, String address, String building, String flat, String comment) {
         this.id = id;
         this.initialDate = initialDate;
         this.surname = surname;
@@ -289,13 +291,14 @@ public class VerificationPageDTO {
         if (documentDate != null) {
             this.documentDate = documentDate;
         }
+        this.comment = comment;
     }
 
-    public Boolean getIsManual() {
+    public boolean getIsManual() {
         return isManual;
     }
 
-    public void setIsManual(Boolean isManual) {
+    public void setIsManual(boolean isManual) {
         this.isManual = isManual;
     }
 
@@ -438,6 +441,8 @@ public class VerificationPageDTO {
     public Integer getProcessTimeExceeding() {
         return processTimeExceeding;
     }
+
+    public String getComment(){ return comment; }
 
     public void setProcessTimeExceeding(Integer processTimeExceeding) {
         this.processTimeExceeding = processTimeExceeding;

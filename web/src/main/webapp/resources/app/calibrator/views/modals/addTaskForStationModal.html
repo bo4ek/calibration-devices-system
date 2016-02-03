@@ -90,12 +90,12 @@
             <div class="row">
                 <div class="form-group col-md-10">
                     <button type="submit" class="btn btn-success">{{'SAVE' | translate}}</button>
-                    <a class="btn btn-warning" ng-click="resetTaskForm()">{{'RESET' | translate}}</a>
+                    <button type="reset" class="btn btn-warning" ng-click="resetTaskForm()">{{'RESET' | translate}}</button>
                 </div>
                 <div class="form-group col-md-2">
-                    <a class="btn btn-danger pull-right" ng-click="closeModal()">
+                    <button class="btn btn-danger pull-right" ng-click="closeModal()">
                         {{'CLOSE'| translate}}
-                    </a>
+                    </button>
                 </div>
             </div>
         </form>

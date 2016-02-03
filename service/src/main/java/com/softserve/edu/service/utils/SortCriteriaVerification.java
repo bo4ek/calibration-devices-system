@@ -209,6 +209,15 @@ public enum SortCriteriaVerification {
 			}
 		}
 	},
+    PROVIDERFROMBBI(){
+        public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+            if (sortOrder.equalsIgnoreCase("asc")) {
+                return (cb.asc(root.get("providerFromBBI").get("name")));
+            } else {
+                return (cb.desc(root.get("providerFromBBI").get("name")));
+            }
+        }
+    },
 	NAMECALIBRATOR(){
 		public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
 			if (sortOrder.equalsIgnoreCase("asc")) {

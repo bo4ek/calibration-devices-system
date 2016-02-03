@@ -448,7 +448,8 @@ angular
                     realiseYear: verification.realiseYear,
                     numberCounter: verification.numberCounter,
                     counterId: verification.counterId,
-                    status:verification.status
+                    status:verification.status,
+                    measurementDeviceType : verification.measurementDeviceType
                 };
                 $scope.dataToManualTest.set(verification.id, manualTest);
             };

@@ -308,6 +308,7 @@
                 <!--Street-->
                 <div class="form-group" show-errors>
                     <label for="street" class="col-md-2 control-label">{{'STREET' | translate}}</label>
+
                     <div class="col-md-8">
                         <!--Street type-->
                         <div class="pull-left col-xs-3" id="typeStreet">
@@ -347,7 +348,8 @@
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
                         </p>
-                        <p class="help-block street-required" ng-if="clientForm.street.$error.required">
+
+                        <p class="help-block street-required" ng-if="clientForm.street.$error.required || clientForm.street.$invalid" >
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
                         </p>
@@ -574,25 +576,25 @@
                     </div>
                 </div>
                 <!--Buttons-->
-                <div class="form-group ">
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-success  pull-right text-uppercase">
+                <div class="form-group">
+                    <div class="col-md-2 pull-left">
+                        <button type="submit" class="btn btn-success pull-right text-uppercase">
                             {{'SEND_BTN' | translate}}
                         </button>
                     </div>
-                    <div class="col-md-2">
-                        <button type="reset" class="btn btn-warning text-uppercase"
-                                ng-click="resetApplicationForm()">
+                    <div class="col-md-2 pull-left">
+                        <button type="reset" class="btn btn-warning text-uppercase" ng-click="resetApplicationForm()">
                             {{'CLEAR_FORM'|translate}}
                         </button>
                     </div>
 
                     <div class="form-group col-md-8">
-                        <button type = "button" class="btn btn-danger pull-right text-uppercase" ng-click="closeAlert()">
+                        <button type="button" class="btn btn-danger pull-right text-uppercase" ng-click="closeAlert()">
                             {{'CLOSE'|translate}}
                         </button>
                     </div>
                 </div>
+
             </form>
         </div>
         <div class="progress col-md-8 col-md-offset-2" ng-show="appProgress"
@@ -611,10 +613,11 @@
                  style="text-align: center">
 
                 <br>
+
                 <div class="text-center" ng-show="!appProgress">
                     {{'APP_SENT' | translate}}
                     <a href="#/application-status/{{code}}">
-                    <b>{{code}} </b> </a>><br>
+                        <b>{{code}} </b> </a>><br>
                     {{'APP_SENT_INFO' | translate}}
                 </div>
                 <br>

@@ -20,7 +20,7 @@ angular
         function sendData(url, data) {
             return $http.post('application/' + url, data)
                 .success(function (responseData) {
-                    return responseData.data;
+                    return responseData;
                 })
                 .error(function (err) {
                     return err;

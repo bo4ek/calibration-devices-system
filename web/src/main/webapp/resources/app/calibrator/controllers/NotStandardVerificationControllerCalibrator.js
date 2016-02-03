@@ -18,13 +18,16 @@ angular
                 page: 1,
                 count: 10,
                 sorting: {
-                    id: 'desc'
+                    providerFromBBI: 'desc'
                 }
             }, {
                 total: 0,
                 getData: function ($defer, params) {
 
-                    verificationService.getPage(params.page(), params.count())
+                    var sortCriteria = Object.keys(params.sorting())[0];
+                    var sortOrder = params.sorting()[sortCriteria];
+
+                    verificationService.getPage(params.page(), params.count(), sortCriteria, sortOrder)
                         .success(function (result) {
                             $scope.resultsCount = result.totalItems;
                             $defer.resolve(result.content);

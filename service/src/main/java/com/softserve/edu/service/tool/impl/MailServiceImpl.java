@@ -1,5 +1,6 @@
 package com.softserve.edu.service.tool.impl;
 
+import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.repository.OrganizationRepository;
@@ -80,7 +81,11 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put("domain", domain);
                 templateVariables.put("applicationId", clientCode);
                 templateVariables.put("providerName", providerName);
-                templateVariables.put("deviceType", deviceType);
+                if (deviceType.equals("WATER")) {
+                    templateVariables.put("deviceType", Constants.WATER_DEVICE_MAIL);
+                } else {
+                    templateVariables.put("deviceType", Constants.THERMAL_DEVICE_MAIL);
+                }
                 templateVariables.put("date", date);
                 String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailTemplate.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
@@ -161,7 +166,11 @@ public class MailServiceImpl implements MailService {
                 Map<String, Object> templateVariables = new HashMap<>();
                 templateVariables.put("name", userName);
                 templateVariables.put("verificationId", verificationId);
-                templateVariables.put("deviceType", deviceType);
+                if (deviceType.equals("WATER")) {
+                    templateVariables.put("deviceType", Constants.WATER_DEVICE_MAIL);
+                } else {
+                    templateVariables.put("deviceType", Constants.THERMAL_DEVICE_MAIL);
+                }
                 templateVariables.put("message", msg);
                 String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/rejectVerification.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
@@ -191,7 +200,11 @@ public class MailServiceImpl implements MailService {
                 }
                 Map<String, Object> templateVariables = new HashMap<>();
                 templateVariables.put("verificationId", verificationId);
-                templateVariables.put("deviceType", deviceType);
+                if (deviceType.equals("WATER")) {
+                    templateVariables.put("deviceType", Constants.WATER_DEVICE_MAIL);
+                } else {
+                    templateVariables.put("deviceType", Constants.THERMAL_DEVICE_MAIL);
+                }
                 String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/accepted.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
                 message.setSubject("Important notification");

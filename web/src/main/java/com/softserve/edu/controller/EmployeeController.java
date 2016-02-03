@@ -1,20 +1,20 @@
 package com.softserve.edu.controller;
 
-
 import com.softserve.edu.dto.user.UserDTO;
 import com.softserve.edu.controller.provider.util.VerificationPageDTOTransformer;
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.dto.admin.UsersPageItem;
 import com.softserve.edu.dto.provider.VerificationPageDTO;
 import com.softserve.edu.dto.user.UserInfoDTO;
+import com.softserve.edu.entity.catalogue.Team.VerificatorSubdivision;
 import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.util.AddEmployeeBuilder;
-import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
+import com.softserve.edu.service.state.verificator.StateVerificatorSubdivisionService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationProviderEmployeeService;
@@ -26,7 +26,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +48,9 @@ public class EmployeeController {
     @Autowired
     private VerificationProviderEmployeeService verificationProviderEmployeeService;
 
+    @Autowired
+    private StateVerificatorSubdivisionService subdivisionService;
+
 
     @RequestMapping(value = "organizationCapacity", method = RequestMethod.GET)
     public Integer getOrganizationCapacity(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
@@ -56,7 +58,7 @@ public class EmployeeController {
         return organizationsService.getOrganizationEmployeesCapacity(organizationId);
     }
 
-    User temporalUser;
+    private User temporalUser;
 
     /**
      * Spatial security service
@@ -93,8 +95,13 @@ public class EmployeeController {
      */
     @RequestMapping(value = "getUser/{username}", method = RequestMethod.GET)
     public UserDTO userEmployeeEdit(@PathVariable String username) {
+
         temporalUser = providerEmployeeService.oneProviderEmployee(username);
         UserDTO userFromDataBase = new UserDTO();
+        VerificatorSubdivision subdivision = temporalUser.getVerificatorSubdivision();
+        if (subdivision != null) {
+            userFromDataBase.setSubdivision(subdivision.getId());
+        }
         userFromDataBase.setFirstName(temporalUser.getFirstName());
         userFromDataBase.setLastName(temporalUser.getLastName());
         userFromDataBase.setMiddleName(temporalUser.getMiddleName());
@@ -103,7 +110,7 @@ public class EmployeeController {
         userFromDataBase.setEmail(temporalUser.getEmail());
         userFromDataBase.setAddress(temporalUser.getAddress());
         userFromDataBase.setUsername(temporalUser.getUsername());
-        userFromDataBase.setIsAvaliable(temporalUser.getIsAvailable());
+        userFromDataBase.setIsAvailable(temporalUser.getIsAvailable());
         userFromDataBase.setUserRoles(new HashSet<>(usersService.getRoles(username)));
         return userFromDataBase;
     }
@@ -114,19 +121,20 @@ public class EmployeeController {
      * @param providerEmployee
      * @return status
      */
-
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public ResponseEntity<HttpStatus> updateEmployee(
             @RequestBody UserDTO providerEmployee) {
 
         User newUser = providerEmployeeService.oneProviderEmployee(temporalUser.getUsername());
-
-        if (providerEmployee.getIsAvaliable().equals(false)) {
-            newUser.setIsAvailable(providerEmployee.getIsAvaliable());
+        if (!providerEmployee.getIsAvailable()) {
+            newUser.setIsAvailable(providerEmployee.getIsAvailable());
             providerEmployeeService.updateEmployee(newUser);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             newUser.setIsAvailable(true);
+        }
+        if (providerEmployee.getSubdivision() != null) {
+            newUser.setVerificatorSubdivision(subdivisionService.findById(providerEmployee.getSubdivision()));
         }
         newUser.setFirstName(providerEmployee.getFirstName());
         newUser.setLastName(providerEmployee.getLastName());
@@ -139,26 +147,29 @@ public class EmployeeController {
         if (password != null && password.equals("generate")) {
             newUser.setPassword("generate");
         }
-        //else newUser.setPassword(newUser.getPassword());
-
         if (!providerEmployee.getUserRoles().isEmpty()) {
             newUser.removeAllRoles();
-
             for (String role : providerEmployee.getUserRoles()) {
                 UserRole userRole = UserRole.valueOf(role);
                 newUser.addRole(userRole);
             }
         }
-
-
         providerEmployeeService.updateEmployee(newUser);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    /**
+     * Adds new user to the database
+     *
+     * @param employee UserDTO formed from JSON
+     * @param user
+     * @return http response
+     */
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseEntity<HttpStatus> addEmployee(
             @RequestBody UserDTO employee,
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+
         User newUser = new AddEmployeeBuilder().username(employee.getUsername())
                 .password(employee.getPassword())
                 .firstName(employee.getFirstName())
@@ -168,7 +179,7 @@ public class EmployeeController {
                 .secondPhone(employee.getSecondPhone())
                 .email(employee.getEmail())
                 .address(employee.getAddress())
-                .setIsAvailable(employee.getIsAvaliable())
+                .setIsAvailable(employee.getIsAvailable())
                 .build();
 
         for (String role : employee.getUserRoles()) {
@@ -176,6 +187,9 @@ public class EmployeeController {
             newUser.addRole(userRole);
         }
         newUser.setOrganization(organizationsService.getOrganizationById(user.getOrganizationId()));
+        if (employee.getSubdivision() != null) {
+            newUser.setVerificatorSubdivision(subdivisionService.findById(employee.getSubdivision()));
+        }
         providerEmployeeService.addEmployee(newUser);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -215,10 +229,6 @@ public class EmployeeController {
                     .distinct()
                     .collect(Collectors.toList());
 
-            /*boolean isProviderAdmin = userRoles.contains(UserRole.PROVIDER_ADMIN.name());
-            boolean isCalibratorAdmin = userRoles.contains(UserRole.CALIBRATOR_ADMIN.name());
-            boolean isStateVerificatorAdmin = userRoles.contains(UserRole.STATE_VERIFICATOR_ADMIN.name());*/
-
             resultList.add(new UsersPageItem(
                             providerEmployee.getUsername(),
                             userRoles,
@@ -234,7 +244,6 @@ public class EmployeeController {
                             providerEmployee.getIsAvailable()
                     )
             );
-
         }
         return resultList;
     }
@@ -259,30 +268,26 @@ public class EmployeeController {
     private List<UserInfoDTO> getUsersByOrganizationId(
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
             @PathVariable int pageNumber,
-            @PathVariable int itemsPerPage
-    ) {
+            @PathVariable int itemsPerPage) {
+
         return usersService.findByOrganizationId(userDetails.getOrganizationId(), pageNumber, itemsPerPage)
-                .stream()
-                .filter(user -> user
-                                .getUserRoles()
-                                .stream()
-                                .filter(userRole -> userRole.name().matches("\\w+_ADMIN"))
-                                .count() == 0
-                )
+                .stream().filter(user -> user
+                        .getUserRoles()
+                        .stream()
+                        .filter(userRole -> userRole.name().matches("\\w+_ADMIN"))
+                        .count() == 0)
                 .map(user -> new UserInfoDTO(
-                                user.getUsername(),
-                                user.getUserRoles()
-                                        .stream()
-                                        .map(UserRole::name)
-                                        .collect(Collectors.toList()),
-                                user.getFirstName(),
-                                user.getLastName(),
-                                user.getPhone(),
-                                user.getSecondPhone(),
-                                usersService.countVerifications(user),
-                                user.getIsAvailable()
-                        )
-                )
+                        user.getUsername(),
+                        user.getUserRoles()
+                                .stream()
+                                .map(UserRole::name)
+                                .collect(Collectors.toList()),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getPhone(),
+                        user.getSecondPhone(),
+                        usersService.countVerifications(user),
+                        user.getIsAvailable()))
                 .sorted((first, second) -> first.getLastName().compareTo(second.getLastName()))
                 .collect(Collectors.toList());
     }

@@ -1,20 +1,16 @@
 package com.softserve.edu.entity.verification;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
+import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
-import com.softserve.edu.entity.enumeration.verification.Status;
-import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
-import com.softserve.edu.entity.verification.calibration.CalibrationTask;
-import com.softserve.edu.entity.verification.calibration.CalibrationTest;
+import com.softserve.edu.entity.verification.calibration.*;
 import lombok.*;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -28,7 +24,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "VERIFICATION")
-public class Verification {
+public class Verification implements Comparable {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
@@ -54,6 +50,10 @@ public class Verification {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "providerId")
     private Organization provider;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "providerFromBBI")
+    private Organization providerFromBBI;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "providerEmployeeUsername")
@@ -118,47 +118,45 @@ public class Verification {
     @JoinColumn(name = "infoId")
     private AdditionalInfo info;
 
-    @Column(columnDefinition = "bit(1) default 0")
-    private Boolean isManual;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isManual;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "counterId")
     private Counter counter;
 
+    @Column
+    private int queue;
+
+    @Column
     private Integer processTimeExceeding;
 
+    @ManyToOne
+    @JoinColumn(name = "calibrationTestManualId")
+    private CalibrationTestDataManual calibrationTestDataManualId;
+
+    public Verification(String verficationId , int queue){
+        this.id = verficationId;
+        this.queue = queue;
+    }
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean signed;
+
+    @Lob
+    @Column(length = 100000)
+    private byte[] signedDocument;
+
+    @Column(columnDefinition = "int default 0")
+    private Integer calibrationInterval;
+
     public Verification(
-            Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
+            Date initialDate, ClientData clientData, Organization provider,
             Device device, Status status, ReadStatus readStatus, AdditionalInfo info, boolean dismantled, Counter counter,
             String comment, boolean sealPresence, String verificationId
     ) {
-        this(initialDate, expirationDate, clientData, provider, device, status, readStatus, null, info, dismantled, counter,
+        this(initialDate, clientData, provider, device, status, readStatus, null, info, dismantled, counter,
                 comment, sealPresence, verificationId);
-    }
-
-    public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
-                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
-                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId) {
-
-        /*this.id = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(initialDate)).toString()
-                + device.getDeviceType().getId() + verificationId;*/
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.expirationDate = expirationDate;
-        this.clientData = clientData;
-        this.provider = provider;
-        this.device = device;
-        this.status = status;
-        this.readStatus = readStatus;
-        this.calibrator = calibrator;
-        this.info = info;
-        this.counterStatus = dismantled;
-        this.counter = counter;
-        if (this.comment == null) {
-            this.comment = "";
-        }
-        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
-        this.sealPresence = sealPresence;
     }
 
     public Verification(Date initialDate, ClientData clientData, Organization provider,
@@ -183,12 +181,59 @@ public class Verification {
         this.sealPresence = sealPresence;
     }
 
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus, User calibratorEmployee) {
+
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.clientData = clientData;
+        this.provider = provider;
+        this.device = device;
+        this.status = status;
+        this.readStatus = readStatus;
+        this.calibrator = calibrator;
+        this.info = info;
+        this.counterStatus = dismantled;
+        this.counter = counter;
+        if (this.comment == null) {
+            this.comment = "";
+        }
+        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
+        this.sealPresence = sealPresence;
+        this.sentToCalibratorDate = sentToCalibratorDate;
+        this.taskStatus = taskStatus;
+        this.calibratorEmployee = calibratorEmployee;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus) {
+
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.clientData = clientData;
+        this.provider = provider;
+        this.device = device;
+        this.status = status;
+        this.readStatus = readStatus;
+        this.calibrator = calibrator;
+        this.info = info;
+        this.counterStatus = dismantled;
+        this.counter = counter;
+        if (this.comment == null) {
+            this.comment = "";
+        }
+        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
+        this.sealPresence = sealPresence;
+        this.sentToCalibratorDate = sentToCalibratorDate;
+        this.taskStatus = taskStatus;
+    }
+
     public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
                         Device device, Status status, ReadStatus readStatus, Organization calibrator,
                         String comment, String verificationId) {
 
-        /*this.id = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(initialDate)).toString()
-                + device.getDeviceType().getId() + verificationId;*/
         this.id = verificationId;
         this.initialDate = initialDate;
         this.expirationDate = expirationDate;
@@ -201,11 +246,29 @@ public class Verification {
         this.comment = comment;
     }
 
-    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,
-                        User calibratorEmployee, Counter counter, String verificationId) {
+    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
+                        User calibratorEmployee, Counter counter, String verificationId, String comment) {
 
-        /*this.id = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(initialDate)).toString()
-                + counter.getCounterType().getDevice().getDeviceType().getId() + verificationId;*/
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.expirationDate = null;
+        this.signProtocolDate = null;
+        this.sentToCalibratorDate = initialDate;
+        this.clientData = clientData;
+        this.status = status;
+        this.calibrator = calibrator;
+        this.providerFromBBI = providerFromBBI;
+        this.calibratorEmployee = calibratorEmployee;
+        this.counter = counter;
+        this.device = counter.getCounterType().getDevice();
+        this.readStatus = ReadStatus.UNREAD;
+        this.counterStatus = false;
+        this.comment = comment;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,
+                        User calibratorEmployee, Counter counter, String verificationId, String comment) {
+
         this.id = verificationId;
         this.initialDate = initialDate;
         this.expirationDate = null;
@@ -219,6 +282,7 @@ public class Verification {
         this.device = counter.getCounterType().getDevice();
         this.readStatus = ReadStatus.UNREAD;
         this.counterStatus = false;
+        this.comment = comment;
     }
 
     public void deleteCalibrationTest(CalibrationTest calibrationTest) {
@@ -229,6 +293,12 @@ public class Verification {
         this.comment = comment;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        int compareage=((Verification)o).getQueue();
+        return this.queue-compareage;
+    }
+
     public enum ReadStatus {
         READ,
         UNREAD
@@ -237,21 +307,11 @@ public class Verification {
     public enum CalibrationTestResult {
         SUCCESS,
         FAILED,
-        RAW
+        NOT_PROCESSED
     }
 
     public enum ConsumptionStatus {
         IN_THE_AREA,
         NOT_IN_THE_AREA
-    }
-
-    @Override
-    public String toString() {
-        return "Verification{" +
-                "id='" + id + '\'' +
-                ", status=" + status +
-                ", readStatus=" + readStatus +
-                ", taskStatus=" + taskStatus +
-                '}';
     }
 }

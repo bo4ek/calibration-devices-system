@@ -56,15 +56,11 @@
                                        class="table table-bordered table-hover table-responsive users_table">
 
                                     <tbody>
-                                    <tr ng-repeat="user in $data" ng-class="{incorrect : !user.isAvaliable}">
+                                    <tr ng-repeat="user in $data" ng-class="{incorrect : !user.isAvailable}">
                                         <td data-title="'USERNAME'|translate " sortable="'username'"
                                             filter="{ 'username': 'text' }">{{
                                             user.username }}
                                         </td>
-                                        <!--<td data-title="'ROLE' |translate" sortable="'role'"
-                                            filter="{ 'role': 'text' }">{{ user.role | translate
-                                            }}
-                                        </td>-->
                                         <td data-title="'FIRST_NAME'|translate" sortable="'firstName'"
                                             filter="{ 'firstName': 'text' }">{{
                                             user.firstName }}
@@ -87,9 +83,12 @@
                                                 {{user.stateVerificatorTasks}}</a>
                                             <span ng-if="!user.stateVerificatorTasks"> {{ user.stateVerificatorTasks}}</span>
                                         </td>
-                                        <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
+                                        <td data-title="'ACTIONS' | translate" style="width: 12%"
+                                            class="control_buttons">
                                             <i class="glyphicon glyphicon-edit verification_protocol_user_icon"
-                                                    ng-click="openEditEmployeeModal(user.username)">
+                                               popover="{{'EDIT_EMPLOYEE' | translate}}"
+                                               popover-trigger="mouseenter"
+                                               ng-click="openEditEmployeeModal(user.username)">
                                             </i>
                                         </td>
                                     </tr>

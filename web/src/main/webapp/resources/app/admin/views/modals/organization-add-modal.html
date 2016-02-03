@@ -246,13 +246,14 @@
                             </div>
                         </div>
                         <div class="form-group row" show-errors>
-                            <label class="control-label col-md-4" for="certificateNumrAuthoriz">
+                            <label class="control-label col-md-4" for="certificateNumberAuthorization">
                                 {{'CERTIFICATE_NUMBER' | translate}}
                             </label>
 
                             <div class="col-md-8">
-                                <input id="certificateNumrAuthoriz" name="certificateNumrAuthoriz" class="form-control"
-                                       type="text" ng-model="organizationFormData.certificateNumrAuthoriz">
+                                <input id="certificateNumberAuthorization" name="certificateNumberAuthorization"
+                                       class="form-control"
+                                       type="text" ng-model="organizationFormData.certificateNumberAuthorization">
                         <span class="form-control-feedback glyphicon
 						 	form-horizontal glyphicon glyphicon-ok-sign"></span>
                             </div>
@@ -817,7 +818,7 @@
             </button>
             <button type="button" class="btn btn-warning col-md-2 col-sm-12 col-xs-12 col-lg-2"
                     ng-click="resetApplicationForm()">
-                   {{'CLEAR_FORM' | translate }}
+                {{'CLEAR_FORM' | translate }}
             </button>
 
             <input type="button" class="btn btn-danger col-md-2 col-sm-12 col-xs-12 col-lg-2 pull-right"

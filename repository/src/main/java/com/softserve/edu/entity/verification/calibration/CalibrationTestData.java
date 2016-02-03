@@ -69,7 +69,7 @@ public class CalibrationTestData {
         this.lowerConsumptionLimit = lowerConsumptionLimit;
         this.upperConsumptionLimit = upperConsumptionLimit;
         if (this.getEndValue() == 0 || this.getInitialValue() > this.getEndValue()) {
-            this.testResult = Verification.CalibrationTestResult.RAW;
+            this.testResult = Verification.CalibrationTestResult.NOT_PROCESSED;
         } else {
             if (this.getCalculationError() <= Math.abs(this.getAcceptableError())) {
                 this.testResult = Verification.CalibrationTestResult.SUCCESS;

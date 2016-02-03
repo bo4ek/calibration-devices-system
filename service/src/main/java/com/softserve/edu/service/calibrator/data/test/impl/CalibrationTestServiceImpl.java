@@ -1,22 +1,23 @@
 package com.softserve.edu.service.calibrator.data.test.impl;
 
+import com.softserve.edu.common.Constants;
+import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.enumeration.verification.Status;
-import com.softserve.edu.repository.CalibrationModuleRepository;
-import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
-import com.softserve.edu.service.tool.MailService;
-import org.apache.commons.codec.binary.Base64;
-import com.softserve.edu.device.test.data.DeviceTestData;
+import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
-import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.repository.CalibrationTestDataRepository;
 import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.VerificationRepository;
+import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.exceptions.NotAvailableException;
+import com.softserve.edu.service.tool.MailService;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +30,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
-
-import com.softserve.edu.common.Constants;
 
 @Service
 public class CalibrationTestServiceImpl implements CalibrationTestService {
@@ -82,7 +81,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
                 if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
                     calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
                 }
-                if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.RAW)) {
+                if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.NOT_PROCESSED)) {
                     calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
                 }
                 if (сalibrationTestData.getConsumptionStatus().equals(Verification.ConsumptionStatus.NOT_IN_THE_AREA)) {
@@ -93,17 +92,8 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         testRepository.save(calibrationTest);
         verification.setStatus(Status.TEST_COMPLETED);
 
-        /**
-         * number of calibration module, which was used to test this device. If not such, take one from DB
-         * WARNING! Temporal solution for further discuss
-         */
-        CalibrationModule moduleId = calibrationModuleRepository.findOne((long) deviceTestData.getInstallmentNumber());
-        if (moduleId == null) {
-            verification.setCalibrationModule(calibrationModuleRepository.findOne(1L));
-        } else {
-            verification.setCalibrationModule(moduleId);
-        }
-
+        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+        verification.setCalibrationModule(moduleId);
         verificationRepository.save(verification);
         return calibrationTest.getId();
     }
@@ -257,15 +247,17 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Transactional
     public void updateTest(String verificationId, String status) {
         Verification verification = verificationRepository.findOne(verificationId);
-        Status statusRecived = Status.valueOf(status.toUpperCase());
-        if (statusRecived.equals(Status.TEST_OK) || statusRecived.equals(Status.TEST_NOK)) {
-            String statusToSend = statusRecived.equals(Status.TEST_OK) ? Constants.TEST_OK : Constants.TEST_NOK;
-            verification.setStatus(statusRecived);
+        Status statusReceived = Status.valueOf(status.toUpperCase());
+        if (statusReceived.equals(Status.TEST_OK) || statusReceived.equals(Status.TEST_NOK)) {
+            String statusToSend = statusReceived.equals(Status.TEST_OK) ? Constants.TEST_OK : Constants.TEST_NOK;
+            verification.setStatus(statusReceived);
             mailService.sendPassedTestMail(verification.getClientData().getEmail(), verificationId, statusToSend);
-            mailService.sendPassedTestMail(verification.getProviderEmployee().getEmail(), verificationId, statusToSend);
+            if(verification.getProviderEmployee() != null) {
+                mailService.sendPassedTestMail(verification.getProviderEmployee().getEmail(), verificationId, statusToSend);
+            }
             verificationRepository.save(verification);
+        } else {
+            verification.setStatus(Status.TEST_COMPLETED);
         }
     }
-
-
 }

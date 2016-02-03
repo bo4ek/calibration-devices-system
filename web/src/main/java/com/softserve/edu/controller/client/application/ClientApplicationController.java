@@ -226,10 +226,6 @@ public class ClientApplicationController {
         return Arrays.stream(Device.DeviceType.values())
                 .map(Device.DeviceType::toString)
                 .collect(Collectors.toList());
-
-//        return Stream.of(Device.DeviceType.values())
-//                .map(Device.DeviceType::name)
-//                .collect(Collectors.toList());
     }
 
     /**

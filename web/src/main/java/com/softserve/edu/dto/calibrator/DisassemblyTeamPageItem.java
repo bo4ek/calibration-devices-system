@@ -1,6 +1,5 @@
 package com.softserve.edu.dto.calibrator;
 
-import com.softserve.edu.entity.device.Device;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +7,6 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 
 @Getter
 @Setter
@@ -24,8 +21,8 @@ public class DisassemblyTeamPageItem {
     private String leaderPhone;
     private String leaderEmail;
 
-    public DisassemblyTeamPageItem(String id, String name, Date effectiveTo, List<String> specialization, String leaderFullName,
-                                   String leaderPhone, String leaderEmail) {
+    public DisassemblyTeamPageItem(String id, String name, Date effectiveTo, List<String> specialization,
+                                   String leaderFullName, String leaderPhone, String leaderEmail) {
         this.id = id;
         this.name = name;
         this.effectiveTo = effectiveTo;
@@ -34,5 +31,4 @@ public class DisassemblyTeamPageItem {
         this.leaderPhone = leaderPhone;
         this.leaderEmail = leaderEmail;
     }
-
 }

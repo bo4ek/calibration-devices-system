@@ -1,6 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{'FILL_IN_INFORMATION_ABOUT_EMPLOYEE'
-        | translate}}</h3>
+    <h3 class="modal-title">{{'FILL_IN_INFORMATION_ABOUT_EMPLOYEE' | translate}}</h3>
 </div>
 
 <div class="modal-body">
@@ -38,7 +37,7 @@
                             ng-change="choose(selectedEmployee)"
                             required>
                         <option value='calibrator'> Calibrator</option>
-                        <option value='verificatot'> Verificator</option>
+                        <option value='verificator'> Verificator</option>
                     </select>
                 </div>
             </div>
@@ -48,6 +47,27 @@
             <div class="panel-heading">{{'GENERAL_INFORMATION' | translate }}</div>
             <div class="panel-body">
                 <div class="row">
+
+                    <div class="form-group col-md-4" ng-show="showListOfSubdivisions">
+                        <label class="control-label">{{'SUBDIVISION' | translate}}*</label>
+                    </div>
+                    <div class="form-group col-md-8" show-errors ng-show="showListOfSubdivisions">
+                        <ui-select class="form-control" type="text" theme="select2"
+                                   ng-model="selectedValues.subdivision"
+                                   name="subdivision" id="subdivision" required>
+                            <ui-select-match placeholder="{{'SELECT_SUBDIVISION' | translate}}">
+                                {{$select.selected}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="subdivision in subdivisions | filter: $select.search">
+                                <span ng-bind-html="subdivision"></span>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <p class="help-block" ng-if="employeeForm.subdivision.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+                    </div>
 
                     <div class="form-group col-md-4">
                         <label class="control-label">{{'LAST_NAME' |translate }}*</label>
@@ -131,11 +151,10 @@
                     <div class="form-group col-md-8 " ng-class="phoneNumberValidation.css" show-errors>
                         <div class="input-group">
                             <div class="input-group-addon" id="basic-addon-code">+380</div>
-                            <input
-                                type="text" ng-model="employeeFormData.phone"
-                                ng-pattern="PHONE_REGEX" placeholder="XXXXXXXXX"
-                                id="phone" name="phone" class="form-control">
-                                <span class="input-group-addon">{{'SECOND_PHONE' |translate}}</span>
+                            <input type="text" ng-model="employeeFormData.phone"
+                                   ng-pattern="PHONE_REGEX" placeholder="XXXXXXXXX"
+                                   id="phone" name="phone" class="form-control">
+                            <span class="input-group-addon">{{'SECOND_PHONE' |translate}}</span>
 								<span class="input-group-addon">
 								 	<input type="checkbox" ng-model="checkboxModel">
 								</span>
@@ -148,7 +167,7 @@
                             </p>
                         </div>
                     </div>
-                    
+
                     <div class="form-group" ng-show="checkboxModel">
                         <div class="col-md-4 form-group">
                             <label for="phoneNumberSecond">
@@ -225,6 +244,7 @@
                             <p class="validation-message" ng-if="!usernameValidation.isValid">
                                 {{usernameValidation.message }}
                             </p>
+
                             <p class="validation-message" ng-if="employeeForm.username.$error.required">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {{'REQUIRED' | translate}}
@@ -260,6 +280,7 @@
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {{'REQUIRED' | translate}}
                             </p>
+
                             <p class="validation-message" ng-if="passwordValidation.isValid">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {{'PASSWORDS_DID_NOT_MATCH' | translate}}
@@ -270,16 +291,14 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-md-10">
-                <button type="submit" class="btn btn-success"
-                        >{{'ADD' | translate}}
+            <div class="form-group col-md-12">
+                <button type="submit" class="btn btn-success">
+                    {{'ADD' | translate}}
                 </button>
                 <button type="reset" class="btn btn-warning" ng-click="resetEmployeeForm()">
                     {{'CLEAR_FORM' | translate }}
                 </button>
-            </div>
-            <div class="form-group col-md-2">
-                <button type = "button" class="btn btn-danger pull-right"
+                <button type="button" class="btn btn-danger pull-right"
                         ng-click="closeModal()">{{'CLOSE' | translate}}
                 </button>
             </div>

@@ -26,6 +26,14 @@ angular
                     });
             },
 
+            getCounterTypeId: function (verificationId) {
+                var url = 'calibrator/calibrationTests/getCounterTypeId/' + verificationId;
+                return $http.get(url)
+                    .then(function (result) {
+                        return result;
+                    });
+            },
+
             getPage: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder, id) {
                 return getDataWithParams('calibrator/verifications/calibration-test/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
             },
@@ -127,7 +135,7 @@ angular
                 })
             },
             editTestManual: function (dataTest, testId , verificationEdit) {
-                return $http.post('calibrator/calibrationTests/editTestManual/' + testId + '/' + verificationEdit, dataTest)
+                return $http.put('calibrator/calibrationTests/editTestManual/' + testId + '/' + verificationEdit, dataTest)
                     .then(function (result) {
                         return result.status;
                     })
@@ -163,6 +171,22 @@ angular
                     .then(function (result) {
                         return result;
                     })
+            },
+
+            getCountersTypesByCounterType: function (counterId) {
+                return $http.get('calibrator/calibrationTests/getCountersTypesByCounterId/' + counterId)
+                    .then(function (result) {
+                        return result;
+                    })
+            },
+
+            getAllUnsuitabilityReasons: function (counterId) {
+                var url = 'getAllUnsuitabilityReasons/' + counterId;
+                return $http.get(url).success(function (data) {
+                    return data;
+                }).error(function (err) {
+                    return err;
+                });
             }
 
         };

@@ -34,13 +34,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/task")
@@ -76,9 +73,9 @@ public class CalibratorPlanningTaskController {
      */
     @RequestMapping(value = "/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<CalibrationTaskDTO> getSortedAndFilteredPageOfCalibrationTasks(@PathVariable Integer pageNumber,
-                        @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
-                        @PathVariable String sortOrder, @RequestParam Map<String, String> filterParams,
-                        @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                  @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
+                                                                                  @PathVariable String sortOrder, @RequestParam Map<String, String> filterParams,
+                                                                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         Sort sort = new Sort(Sort.Direction.valueOf(sortOrder.toUpperCase()), sortCriteria);
         Pageable pageable = new PageRequest(pageNumber - 1, itemsPerPage, sort);
         // fetching data from database, receiving a sorted and filtered page of calibration tasks
@@ -101,14 +98,14 @@ public class CalibratorPlanningTaskController {
      * @param itemsPerPage count of items on page
      * @param sortCriteria sorting criteria
      * @param sortOrder    order of sorting
-     * @param taskID id of calibration task, verification of which are fetched
+     * @param taskID       id of calibration task, verification of which are fetched
      * @return sorted and filtered page of verifications
      */
     @RequestMapping(value = "/verifications/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}/{taskID}",
-                                                                        method = RequestMethod.GET)
+            method = RequestMethod.GET)
     public PageDTO<VerificationPlanningTaskDTO> getVerificationsOfCurrentTask(@PathVariable Integer pageNumber,
-                              @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
-                              @PathVariable String sortOrder, @PathVariable Long taskID) {
+                                                                              @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
+                                                                              @PathVariable String sortOrder, @PathVariable Long taskID) {
         Sort sort = new Sort(Sort.Direction.valueOf(sortOrder.toUpperCase()), sortCriteria);
         Pageable pageable = new PageRequest(pageNumber - 1, itemsPerPage, sort);
         // fetching data from database, receiving a sorted page of task verifications
@@ -118,18 +115,22 @@ public class CalibratorPlanningTaskController {
         for (Verification verification : queryResult) {
             ClientData clientData = verification.getClientData();
             Address address = clientData.getClientAddress();
+            if (verification.getQueue() == 0 && verification.getInfo() != null && verification.getInfo().getTimeFrom() != null) {
+                verification.setQueue(setQueueByTime(verification) + queryResult.getSize());
+            }
             content.add(new VerificationPlanningTaskDTO(verification.getSentToCalibratorDate(), verification.getId(),
                     verification.getProvider().getName(), address.getDistrict(), address.getStreet(),
                     address.getBuilding(), address.getFlat(), clientData.getFullName(),
-                    clientData.getPhone(), verification.getInfo()));
+                    clientData.getPhone(), verification.getInfo(), verification.getQueue()));
         }
+        Collections.sort(content);
         return new PageDTO<>(queryResult.getTotalElements(), content);
     }
 
     /**
      * This method changes the date of calibration task
      *
-     * @param taskID ID of the calibration task the date of which is to be changed
+     * @param taskID     ID of the calibration task the date of which is to be changed
      * @param dateOfTask new task date
      * @return ResponseEntity
      */
@@ -176,8 +177,8 @@ public class CalibratorPlanningTaskController {
      * @return ResponseEntity
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public ResponseEntity saveTaskForStation (@RequestBody CalibrationTaskDTO taskDTO,
-                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+    public ResponseEntity saveTaskForStation(@RequestBody CalibrationTaskDTO taskDTO,
+                                             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         HttpHeaders responseHeaders = new HttpHeaders();
         try {
@@ -220,8 +221,8 @@ public class CalibratorPlanningTaskController {
      * @return ResponseEntity
      */
     @RequestMapping(value = "/team/save", method = RequestMethod.POST)
-    public ResponseEntity saveTaskForTeam (@RequestBody CalibrationTaskDTO taskDTO,
-                                               @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+    public ResponseEntity saveTaskForTeam(@RequestBody CalibrationTaskDTO taskDTO,
+                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             taskService.addNewTaskForTeam(taskDTO.getDateOfTask(), taskDTO.getModuleNumber(), taskDTO.getVerificationsId(), employeeUser.getUsername());
@@ -272,8 +273,8 @@ public class CalibratorPlanningTaskController {
 
     @RequestMapping(value = "findAllModules/{moduleType}/{workDate}/{applicationField}", method = RequestMethod.GET)
     public List<String> findAvailableModules(@PathVariable CalibrationModule.ModuleType moduleType,
-                             @PathVariable Date workDate, @PathVariable Device.DeviceType applicationField,
-                             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                             @PathVariable Date workDate, @PathVariable Device.DeviceType applicationField,
+                                             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         return moduleService.findAllSerialNumbers(moduleType, workDate,
                 applicationField, employeeUser.getUsername());
     }
@@ -291,7 +292,7 @@ public class CalibratorPlanningTaskController {
      */
     @RequestMapping(value = "findAllTeams/{workDate}/{applicationFiled}", method = RequestMethod.GET)
     public List<TeamDTO> findAvailableTeams(@PathVariable Date workDate, @PathVariable String applicationFiled,
-                                                    @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser){
+                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         List<DisassemblyTeam> teams = teamService.findAllAvaliableTeams(workDate, applicationFiled, employeeUser.getUsername());
         List<TeamDTO> teamDTOs = new ArrayList<>();
         for (DisassemblyTeam team : teams) {
@@ -309,7 +310,7 @@ public class CalibratorPlanningTaskController {
      * @return SymbolsAndSizesDTO
      */
     @RequestMapping(value = "findSymbolsAndSizes/{verificationId}", method = RequestMethod.GET)
-    public SymbolsAndSizesDTO findSymbolsAndSizes(@PathVariable String verificationId){
+    public SymbolsAndSizesDTO findSymbolsAndSizes(@PathVariable String verificationId) {
         List<CounterType> counterTypes = new ArrayList<>();
         List<String> sizes = new ArrayList<>();
         List<String> symbols = new ArrayList<>();
@@ -346,5 +347,45 @@ public class CalibratorPlanningTaskController {
         } else {
             return null;
         }
+    }
+
+    /**
+     * This method changes verification queue in database
+     *
+     * @param verificationNewQueue verification with parametes id and queue
+     * @param employeeUser
+     * @return ResponseEntity
+     */
+    @RequestMapping(value = "/saveQueue", method = RequestMethod.PUT)
+    public ResponseEntity changeVerificationQueue(@RequestBody List<VerificationPlanningTaskDTO> verificationNewQueue,
+                                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        List<Verification> verifications = new ArrayList<>();
+
+
+        for (VerificationPlanningTaskDTO verificationDTO : verificationNewQueue) {
+            verifications.add(new Verification(verificationDTO.getVerficationId(), verificationDTO.getQueue() + 1));
+        }
+        try {
+            if (!verificationService.updateVerificationQueue(verifications, employeeUser.getOrganizationId())) {
+                httpStatus = HttpStatus.FORBIDDEN;
+            }
+        } catch (Exception e) {
+            logger.error("Exception of update queue by verification id");
+            httpStatus = HttpStatus.CONFLICT;
+        }
+        return new ResponseEntity(httpStatus);
+    }
+
+    /*
+    * This method automatically set deafault queue for verification
+    * depends on timeFrom
+    * time is int interpretation of hours from timeFrom
+    * */
+
+    private int setQueueByTime(Verification verification) {
+        int time = Integer.valueOf(verification.getInfo().getTimeFrom().toString().substring(0, verification.getInfo().getTimeFrom().toString().indexOf(':')));
+        return time;
     }
 }

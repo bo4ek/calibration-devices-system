@@ -7,7 +7,9 @@ import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.dto.*;
 import com.softserve.edu.dto.admin.CalibrationModuleDTO;
 import com.softserve.edu.dto.admin.CounterTypeDTO;
+import com.softserve.edu.dto.admin.UnsuitabilityReasonDTO;
 import com.softserve.edu.entity.device.Counter;
+import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.verification.Verification;
@@ -139,7 +141,6 @@ public class CalibrationTestController {
         testService.deleteTest(calibrationTestId);
     }
 
-
     /**
      * Finds all calibration-tests data form database
      *
@@ -156,12 +157,23 @@ public class CalibrationTestController {
         }
     }
 
-
+    @RequestMapping(value = "getCounterTypeId/{verificationId}", method = RequestMethod.GET)
+    public ResponseEntity<Long> getCounterTypeId(@PathVariable String verificationId) {
+        ResponseEntity<Long> responseEntity;
+        try {
+            responseEntity = new ResponseEntity(verificationService.findById(verificationId).getCounter().getCounterType().getId(), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("failed to get counterTypeId", e);
+            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return responseEntity;
+    }
     /**
      * get all counters types for test
      *
      * @param
      */
+
     @RequestMapping(value = "getCountersTypes", method = RequestMethod.GET)
     public List<CounterTypeDTO> getCountersTypes() {
         List listOfCounterType = null;
@@ -171,6 +183,25 @@ public class CalibrationTestController {
             logger.error("failed to get list of CounterTyp", e);
         }
         return listOfCounterType;
+    }
+
+    /**
+     * get all counters types for test by counterId
+     *
+     * @param
+     */
+    @RequestMapping(value = "getCountersTypesByCounterId/{counterId}", method = RequestMethod.GET)
+    public ResponseEntity<CounterTypeDTO> getCountersTypesByCounterId(@PathVariable Long counterId) {
+        ResponseEntity<CounterTypeDTO> responseEntity;
+        try {
+            CounterType counterType = counterRepository.findOne(counterId).getCounterType();
+            CounterTypeDTO counterTypeDTO = new CounterTypeDTO(counterType.getId(), counterType.getManufacturer());
+            responseEntity = new ResponseEntity(counterTypeDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("failed to get countersTypes", e);
+            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return responseEntity;
     }
 
     @RequestMapping(value = "getCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
@@ -183,7 +214,6 @@ public class CalibrationTestController {
         }
         return listOfCounterType;
     }
-
 
     /**
      * get all calibration module for handmade protocol
@@ -211,13 +241,19 @@ public class CalibrationTestController {
     public ResponseEntity createTestManual(@RequestBody CalibrationTestManualDTO calibrationTestManualDTO) {
         ResponseEntity<String> responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
-            CalibrationTestManual calibrationTestManual = calibrationTestManualService.createNewTestManual(calibrationTestManualDTO.getPathToScanDoc(), calibrationTestManualDTO.getNumberOfTest(),
-                    calibrationTestManualDTO.getModuleId(), calibrationTestManualDTO.getDateOfTest());
+            CalibrationTestManual calibrationTestManual = calibrationTestManualService.createNewTestManual(calibrationTestManualDTO.getPathToScanDoc()
+                    , calibrationTestManualDTO.getNumberOfTest(), calibrationTestManualDTO.getModuleId()
+                    , calibrationTestManualDTO.getDateOfTest());
+            UnsuitabilityReason unsuitabilityReason = null;
             for (CalibrationTestDataManualDTO calibrationTDMDTO : calibrationTestManualDTO.getListOfCalibrationTestDataManual()) {
+                if (calibrationTDMDTO.getUnsuitabilityReason() != null) {
+                    unsuitabilityReason = unsuitabilityReasonRepository.findOne(calibrationTDMDTO.getUnsuitabilityReason().getId());
+                }
                 calibrationTestDataManualService.createNewTestDataManual(calibrationTDMDTO.getStatusTestFirst()
                         , calibrationTDMDTO.getStatusTestSecond(), calibrationTDMDTO.getStatusTestThird()
-                        , calibrationTDMDTO.getStatusCommon(), calibrationTDMDTO.getCounterId()
-                        , calibrationTestManual, calibrationTDMDTO.getVerificationId());
+                        , calibrationTDMDTO.getStatusCommon()
+                        , calibrationTestManual, calibrationTDMDTO.getVerificationId(), unsuitabilityReason
+                        , calibrationTDMDTO.getRealiseYear(), calibrationTDMDTO.getNumberCounter(), calibrationTestManualDTO.getCounterTypeId());
             }
         } catch (Exception e) {
             logger.error(e);
@@ -225,7 +261,6 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-
 
     /**
      * get protocol manual
@@ -237,8 +272,14 @@ public class CalibrationTestController {
     public ResponseEntity<CalibrationTestDataManualDTO> getTestManual(@PathVariable String verificationId) {
         ResponseEntity<CalibrationTestDataManualDTO> responseEntity;
         try {
+            Verification verification = verificationService.findById(verificationId);
             CalibrationTestDataManual cTestDataManual = calibrationTestDataManualService.findByVerificationId(verificationId);
             CalibrationTestManual cTestManual = cTestDataManual.getCalibrationTestManual();
+            UnsuitabilityReasonDTO unsuitabilityReasonDTO = null;
+            if (cTestDataManual.getUnsuitabilityReason() != null) {
+                unsuitabilityReasonDTO = new UnsuitabilityReasonDTO(cTestDataManual.getUnsuitabilityReason().getId()
+                        , cTestDataManual.getUnsuitabilityReason().getName());
+            }
             CalibrationTestDataManualDTO cTestDataManualDTO = new CalibrationTestDataManualDTO(
                     cTestDataManual.getStatusTestFirst().toString()
                     , cTestDataManual.getStatusTestSecond().toString()
@@ -247,7 +288,10 @@ public class CalibrationTestController {
                     cTestManual.getCalibrationModule().getSerialNumber()
                     , cTestManual.getNumberOfTest()
                     , cTestManual.getDateTest()
-                    , cTestManual.getGenerateNumberTest(), cTestManual.getPathToScan(), cTestManual.getId()));
+                    , cTestManual.getGenerateNumberTest(), cTestManual.getPathToScan(), cTestManual.getId(), cTestDataManual.getCounter().getCounterType().getId())
+                    , unsuitabilityReasonDTO, verification.isSigned()
+                    , Integer.parseInt(verification.getCounter().getReleaseYear())
+                    , verification.getCounter().getNumberCounter());
             responseEntity = new ResponseEntity(cTestDataManualDTO, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("failed to get manual protocol" + e);
@@ -263,7 +307,7 @@ public class CalibrationTestController {
      * @param verificationId id parameter of verification
      * @return httpStatus 200 OK if everything went well
      */
-    @RequestMapping(value = "editTestManual/{verificationId}/{verificationEdit}", method = RequestMethod.POST)
+    @RequestMapping(value = "editTestManual/{verificationId}/{verificationEdit}", method = RequestMethod.PUT)
     public ResponseEntity editTestManual(@PathVariable String verificationId, @PathVariable boolean verificationEdit, @RequestBody CalibrationTestManualDTO cTestManualDTO) {
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
@@ -272,12 +316,16 @@ public class CalibrationTestController {
             calibrationTestManualService.editTestManual(cTestManualDTO.getPathToScanDoc(), cTestManualDTO.getDateOfTest(), cTestManualDTO.getNumberOfTest()
                     , cTestManualDTO.getModuleId(), cTestManual);
             CalibrationTestDataManualDTO cTestDataManualDTO = cTestManualDTO.getListOfCalibrationTestDataManual().get(0);
+            UnsuitabilityReason unsuitabilityReason = null;
+            if (cTestDataManualDTO.getUnsuitabilityReason() != null) {
+                unsuitabilityReason = unsuitabilityReasonRepository.findOne(cTestDataManualDTO.getUnsuitabilityReason().getId());
+            }
             calibrationTestDataManualService.editTestDataManual(cTestDataManualDTO.getStatusTestFirst()
                     , cTestDataManualDTO.getStatusTestSecond(), cTestDataManualDTO.getStatusTestThird()
-                    , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit);
+                    , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit, unsuitabilityReason
+                    , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(), cTestManualDTO.getCounterTypeId());
         } catch (Exception e) {
-            logger.error("failed to edit calibration test manual" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to edit calibration test manual", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -300,7 +348,6 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-
 
     /**
      * uploads a scanDoc from chosen directory
@@ -328,7 +375,6 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-
 
     /**
      * get  scanDoc
@@ -361,7 +407,6 @@ public class CalibrationTestController {
         }
     }
 
-
     /**
      * delete a scanDoc
      *
@@ -380,7 +425,6 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-
 
     /**
      * get protocol
@@ -420,8 +464,8 @@ public class CalibrationTestController {
             counter.setCounterType(counterTypeService.findById(cTestFileDataDTO.getCounterTypeId()));
             counterRepository.save(counter);
             UnsuitabilityReason unsuitabilityReason = null;
-            if(cTestFileDataDTO.getReasonUnsuitabilityId() != null) {
-              unsuitabilityReason   = unsuitabilityReasonRepository.findOne(cTestFileDataDTO.getReasonUnsuitabilityId());
+            if (cTestFileDataDTO.getReasonUnsuitabilityId() != null) {
+                unsuitabilityReason = unsuitabilityReasonRepository.findOne(cTestFileDataDTO.getReasonUnsuitabilityId());
             }
             calibTest.setUnsuitabilityReason(unsuitabilityReason);
             calibTest.setRotateIndex(cTestFileDataDTO.getRotateIndex());
@@ -455,19 +499,22 @@ public class CalibrationTestController {
             Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
 
-            Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
-                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                    getDeviceType(verification), getYearIntroduction(verification));
+            if (verification.getStatus() == Status.TEST_OK) {
+                Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
+                        getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                        getDeviceType(verification), getYearIntroduction(verification));
 
-            Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
-                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                    getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
+                Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
+                        getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                        getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
 
-            Calendar validityOfCertificate = Calendar.getInstance();
-            validityOfCertificate.setTime(new Date());
-            validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
+                Calendar validityOfCertificate = Calendar.getInstance();
+                validityOfCertificate.setTime(new Date());
+                validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
 
-            verification.setExpirationDate(validityOfCertificate.getTime());
+                verification.setExpirationDate(validityOfCertificate.getTime());
+                verification.setCalibrationInterval(calibrationInterval);
+            }
             verification.setSignProtocolDate(new Date());
             calibrationTest.setCalibrationInterval(calibrationInterval);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
@@ -524,6 +571,4 @@ public class CalibrationTestController {
     private Integer getYearIntroduction(Verification verification) {
         return Integer.parseInt(verification.getCounter().getReleaseYear());
     }
-
 }
-

@@ -62,6 +62,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
             return;
         }
         verification.setProviderEmployee(providerEmployee);
+        verification.setProviderFromBBI(verification.getProvider());
         if (providerEmployee==null) {
             verification.setStatus(Status.SENT_TO_PROVIDER);
         } else {

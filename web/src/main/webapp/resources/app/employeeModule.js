@@ -101,8 +101,8 @@
                     })
                     .state("verification-team", {
                         url: 'verificator/verificationTeam/',
-                        templateUrl: 'resources/app/verificator/views/verification-team.html',
-                        controller: 'VerificationTeamController'
+                        templateUrl: 'resources/app/verificator/views/verificator-subdivision.html',
+                        controller: 'VerificatorSubdivisionController'
                     })
                     .state("employee-show-calibrator", {
                         url: '/calibrator/employee-show',
@@ -126,7 +126,7 @@
                     })
                     .state("calibrator-task-team", {
                         url: '/calibrator/task/',
-                        templateUrl: 'resources/app/calibrator/views/modals/eddTaskForTeamModal.html',
+                        templateUrl: 'resources/app/calibrator/views/modals/addTaskForTeamModal.html',
                         controller: 'TaskForTeamModalControllerCalibrator'
                     })
                     .state("calibrator-counter-status", {
@@ -343,11 +343,12 @@
         'verificator/controllers/VerificatorEmployeeControllerVerificator',
         'verificator/controllers/PieVerificatorEmployee',
         'verificator/controllers/UsersControllerVerificator',
-        'verificator/controllers/VerificationTeamAddModalController',
-        'verificator/controllers/VerificationTeamEditModalController',
-        'verificator/controllers/VerificationTeamController',
+        'verificator/controllers/VerificatorSubdivisionAddModalController',
+        'verificator/controllers/VerificatorSubdivisionEditModalController',
+        'verificator/controllers/VerificatorSubdivisionController',
 
         'verificator/services/AddressServiceVerificator',
+        'verificator/services/VerificatorSubdivisionService',
         'verificator/services/UserServiceVerificator',
         'verificator/services/VerificationServiceVerificator',
         'provider/filters/unique',

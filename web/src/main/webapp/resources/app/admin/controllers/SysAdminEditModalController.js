@@ -162,7 +162,7 @@ angular
                     //$scope.preventDefault();
                     $scope.password = 'generate';
                     $scope.generationMessage = true;
-                }
+                };
 
 
                 function addressFormToSysAdminForm() {
@@ -230,7 +230,7 @@ angular
                             }
                             else (console.log(data));
                         })
-                };
+                }
 
                 $scope.popNotification = function (title, text) {
                     toaster.pop('success', title, text);

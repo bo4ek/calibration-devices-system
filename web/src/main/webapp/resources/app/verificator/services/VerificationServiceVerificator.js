@@ -71,7 +71,7 @@ angular
             },
             getIfEmployeeStateVerificator: function(url) {
                 return getData('verifications/verificator/role');
-            },
+            }
 
         };
        
@@ -96,16 +96,6 @@ angular
                 .error(function (err) {
                     return err;
                 });
-        }
-        
-        function getDataWithParams(url, params) {
-            return $http.get(url, {
-                params : params
-            }).success(function (data) {
-                return data;
-            }).error(function (err) {
-                return err;
-            });
         }
 
         function employeeUpdateData(url, data) {

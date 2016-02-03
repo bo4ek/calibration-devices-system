@@ -1,6 +1,5 @@
 package com.softserve.edu.dto.calibrator;
 
-import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class VerificationPlanningTaskDTO {
+public class VerificationPlanningTaskDTO implements Comparable {
 
     private Date sentToCalibrator;
     private String verficationId;
@@ -34,8 +33,10 @@ public class VerificationPlanningTaskDTO {
     private Boolean serviceability;
     private Date noWaterToDate;
     private boolean sealPresence;
+    private int queue;
 
-    public VerificationPlanningTaskDTO(){}
+    public VerificationPlanningTaskDTO() {
+    }
 
     public VerificationPlanningTaskDTO(Date sentDate, String verificationId, String providerName, String district,
                                        String street, String building, String flat, String clientFullName,
@@ -65,10 +66,40 @@ public class VerificationPlanningTaskDTO {
         }
     }
 
+
+    public VerificationPlanningTaskDTO(Date sentDate, String verificationId, String providerName, String district,
+                                       String street, String building, String flat, String clientFullName,
+                                       String telephone, AdditionalInfo additionalInfo, int queue) {
+        this.sentToCalibrator = sentDate;
+        this.verficationId = verificationId;
+        this.providerName = providerName;
+        this.district = district;
+        this.street = street;
+        this.building = building;
+        this.flat = flat;
+        this.clientFullName = clientFullName;
+        this.telephone = telephone;
+        if (additionalInfo != null) {
+            if (additionalInfo.getEntrance() > 0) {
+                this.entrance = Integer.toString(additionalInfo.getEntrance());
+            }
+            if (additionalInfo.getFloor() > 0) {
+                this.floor = Integer.toString(additionalInfo.getFloor());
+            }
+            if ((additionalInfo.getTimeFrom() != null) && (additionalInfo.getTimeTo() != null)) {
+                this.time = additionalInfo.getTimeFrom().toString() + " - " + additionalInfo.getTimeTo().toString();
+            } else {
+                this.time = null;
+            }
+            this.notes = additionalInfo.getNotes();
+        }
+        this.queue = queue;
+    }
+
     public VerificationPlanningTaskDTO(Date sentDate, String verificationID, String providerName, String fullName,
                                        String district, String street, String building, String flat, String telephone,
                                        String secondphone, Date dateOfVerif, LocalTime timeFrom, LocalTime timeTo,
-                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence){
+                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence) {
         this.sentToCalibrator = sentDate;
         this.verficationId = verificationID;
         this.providerName = providerName;
@@ -97,11 +128,22 @@ public class VerificationPlanningTaskDTO {
         }
 
         if ((secondphone != null) && !secondphone.isEmpty()) {
-            this.phone = telephone+", "+secondphone;
+            this.phone = telephone + ", " + secondphone;
         } else {
             this.phone = telephone;
         }
 
+    }
+
+    public VerificationPlanningTaskDTO(String verficationId, int queue) {
+        this.verficationId = verficationId;
+        this.queue = queue;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        int compare = ((VerificationPlanningTaskDTO) o).getQueue();
+        return this.queue - compare;
     }
 
 }

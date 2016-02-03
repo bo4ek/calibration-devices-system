@@ -1,8 +1,9 @@
 angular
     .module('welcomeModule')
-    .controller('ApplicationSendingController', ['$scope', '$q', '$state', '$http', '$log'
-        , '$stateParams', '$window', '$rootScope', '$location', '$modal', '$filter', 'DataReceivingService', 'DataSendingService', 'toaster',
-        function ($scope, $q, $state, $http, $log, $stateParams, $window, $rootScope, $location, $modal, $filter, dataReceivingService, dataSendingService, toaster) {
+    .controller('ApplicationSendingController', ['$scope', '$state', '$http', '$log', '$stateParams', '$window',
+        '$rootScope', '$location', '$modal', '$filter', 'DataReceivingService', 'DataSendingService', 'toaster',
+        function ($scope, $state, $http, $log, $stateParams, $window, $rootScope, $location, $modal, $filter,
+                  dataReceivingService, dataSendingService, toaster) {
             $scope.isShownForm = true;
             $scope.blockSearchFunctions = false;
             $scope.isSecondDevice = false;
@@ -42,8 +43,8 @@ angular
              *
              */
             $scope.STREET_REGEX = /^[a-z\u0430-\u044f\u0456\u0457]{1,20}\s([A-Z\u0410-\u042f\u0407\u0406][a-z\u0430-\u044f\u0456\u0457\u0454]{1,20}\u002d[A-Z\u0410-\u042f\u0407\u0406\u0454][a-z\u0430-\u044f\u0456\u0457\u0454]{1,20}|[A-Z\u0410-\u042f\u0407\u0406\u0454][a-z\u0430-\u044f\u0456\u0457\u0454]{1,20})$/;
-            $scope.FIRST_LAST_NAME_REGEX = /^([A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}\u002d[A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}|[A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20})$/;
-            $scope.MIDDLE_NAME_REGEX = /^[A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}$/;
+            $scope.FIRST_LAST_NAME_REGEX = /^([A-Z\u0410-\u042f\u0407\u0406\u0404][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}\u002d[A-Z\u0410-\u042f\u0407\u0406\u0404][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}|[A-Z\u0410-\u042f\u0407\u0406\u0404][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20})$/;
+            $scope.MIDDLE_NAME_REGEX = /^[A-Z\u0410-\u042f\u0407\u0406\u0404][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}$/;
             $scope.FLAT_REGEX = /^([1-9][0-9]{0,3}|0)$/;
             $scope.BUILDING_REGEX = /^[1-9][0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457])?$/;
             $scope.PHONE_REGEX = /^[1-9]\d{8}$/;
@@ -321,15 +322,19 @@ angular
                 /**
                  * Check second device selection group
                  */
-                if (($scope.selectedValues.secondDeviceCount !== undefined)) {
+                if ($scope.selectedValues.secondDeviceCount !== undefined) {
                     $scope.clientForm.secondDeviceCount.$invalid = false;
                 }
 
                 /**
                  * Check street selection group
                  */
-                if (($scope.selectedValues.selectedStreetType !== undefined)) {
+                if ($scope.selectedValues.selectedStreetType !== undefined) {
                     $scope.clientForm.streetType.$invalid = false;
+                }
+
+                if ($scope.selectedValues.selectedStreet !== undefined) {
+                    $scope.clientForm.street.$invalid = false;
                 }
             };
 
@@ -364,29 +369,24 @@ angular
                     $scope.formData.comment = $scope.firstDeviceComment;
                     $scope.formData.quantity = $scope.selectedValues.firstDeviceCount;
 
-                    $scope.firstAplicationCodes.push(dataSendingService.sendApplication($scope.formData));
-
-                    $q.all($scope.firstAplicationCodes).then(function (valuesOfFirst) {
-
-                        $scope.codes = valuesOfFirst[0].data;
-
-                        if ($scope.selectedValues.secondDeviceCount > 0) {
-                            $scope.formData.quantity = $scope.selectedValues.secondDeviceCount;
-                            $scope.formData.deviceId = $scope.selectedValues.secondSelectedDevice.id;
-                            $scope.formData.providerId = $scope.selectedValues.secondSelectedProvider.id;
-                            $scope.formData.comment = $scope.secondDeviceComment;
-                            $scope.secondAplicationCodes.push(dataSendingService.sendApplication($scope.formData));
-
-                            $q.all($scope.secondAplicationCodes).then(function (valuesOfSecond) {
-                                if (valuesOfSecond.length > 0) {
-                                    Array.prototype.push.apply($scope.codes, valuesOfSecond[0].data);
-                                }
+                    dataSendingService.sendApplication($scope.formData)
+                        .then(function (data) {
+                            $scope.codes = data.data;
+                            if ($scope.selectedValues.secondDeviceCount > 0) {
+                                $scope.formData.quantity = $scope.selectedValues.secondDeviceCount;
+                                $scope.formData.deviceId = $scope.selectedValues.secondSelectedDevice.id;
+                                $scope.formData.providerId = $scope.selectedValues.secondSelectedProvider.id;
+                                $scope.formData.comment = $scope.secondDeviceComment;
+                                dataSendingService.sendApplication($scope.formData)
+                                    .then(function (data) {
+                                        Array.prototype.push.apply($scope.codes, data.data);
+                                        $scope.appProgress = false;
+                                    });
+                            } else {
                                 $scope.appProgress = false;
-                            });
-                        } else {
-                            $scope.appProgress = false;
-                        }
-                    });
+                            }
+                        });
+
                     $log.debug(" $scope.codes.length =", $scope.codes.length);
                 }
             };

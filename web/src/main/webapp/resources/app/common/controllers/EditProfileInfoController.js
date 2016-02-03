@@ -41,7 +41,7 @@ angular
                     password: $scope.user.password,
 
                     userRoles: [],
-                    isAvaliable: true
+                    isAvailable: true
                 };
             }
 

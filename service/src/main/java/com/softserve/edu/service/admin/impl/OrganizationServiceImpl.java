@@ -56,7 +56,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional
-    public Set<Organization> findAll() {return organizationRepository.findAll();}
+    public Set<Organization> findAll() {
+        return organizationRepository.findAll();
+    }
 
     @Override
     @Transactional
@@ -64,7 +66,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                                          Integer employeesCapacity, Integer maxProcessTime, String firstName, String lastName,
                                          String middleName, String username, Address address, Address addressRegistered,
                                          AdditionInfoOrganization additionInfoOrganization, String adminName,
-                                         Long[] localityIdList) throws UnsupportedEncodingException, MessagingException {
+                                         List<Long> serviceAreas) throws UnsupportedEncodingException, MessagingException {
 
         Organization organization = new Organization(name, email, phone, employeesCapacity, maxProcessTime, address,
                 addressRegistered, additionInfoOrganization);
@@ -85,11 +87,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organization.addDeviceType(deviceType);
         }
 
-        for (Long localityId : localityIdList) {
-            // TODO You'd move the 'localityService.findById()' out of the loop and refactor it to something like  'localityService.findByIds'
-            Locality locality = localityService.findById(localityId);
-            organization.addLocality(locality);
-        }
+        organization.setLocalities(localityService.findByLocalityIdIn(serviceAreas));
 
         String stringOrganizationTypes = String.join(",", types);
 
@@ -148,8 +146,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     /**
      * Fetch required organization by id
      *
-     * @param id
-     * @return organization finded by {@param id}
+     * @param id id of the organization
+     * @return Organization from database
      */
     @Override
     @Transactional(readOnly = true)
@@ -159,16 +157,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * Fetch all codeEDRPOU of organizations
+     *
      * @return list of codeEDRPOU
      */
     @Override
-    public List<String> findAllOrganizationCodes() {
-        Set<Organization> set = organizationRepository.findAll();
-        List<String> list = new ArrayList<>();
-        for (Organization org : set) {
-            list.add(org.getAdditionInfoOrganization().getCodeEDRPOU());
-        }
-        return list;
+    public List<Object> findAllOrganizationCodes() {
+        return organizationRepository.findAllCodeEDRPOU();
     }
 
     /**
@@ -200,7 +194,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                                  Integer maxProcessTime, Address address, Address addressRegistered,
                                  AdditionInfoOrganization additionInfoOrganization, String password, String username,
                                  String firstName, String lastName, String middleName, String adminName, List<Long> serviceAreas)
-            throws UnsupportedEncodingException, MessagingException  {
+            throws UnsupportedEncodingException, MessagingException {
 
         Organization organization = organizationRepository.findOne(organizationId);
 
@@ -216,24 +210,14 @@ public class OrganizationServiceImpl implements OrganizationService {
         organization.setAdditionInfoOrganization(additionInfoOrganization);
 
         organization.removeOrganizationTypes();
-        types.
-                stream()
-                .map(OrganizationType::valueOf)
-                .forEach(organization::addOrganizationType);
+        types.stream().map(OrganizationType::valueOf).forEach(organization::addOrganizationType);
 
         organization.removeDeviceType();
-        counters.
-                stream()
-                .map(Device.DeviceType::valueOf)
-                .forEach(organization::addDeviceType);
+        counters.stream().map(Device.DeviceType::valueOf).forEach(organization::addDeviceType);
 
         organization.removeServiceAreas();
-        //organizationRepository.save(organization);
-        //serviceAreas.stream().map(localityService::findById).forEach(organization::addLocality);
-        for (Long localityId : serviceAreas) {
-            Locality locality = localityService.findById(localityId);
-            organization.addLocality(locality);
-        }
+
+        organization.setLocalities(localityService.findByLocalityIdIn(serviceAreas));
 
         User employeeAdmin = userRepository.findOne(username);
         employeeAdmin.setFirstName(firstName);
@@ -319,8 +303,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * Find all organizations by organization types and device types
+     *
      * @param organizationType type of organization
-     * @param deviceType type of device
+     * @param deviceType       type of device
      * @return list of organization
      */
     @Override

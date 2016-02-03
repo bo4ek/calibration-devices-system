@@ -2,7 +2,6 @@ package com.softserve.edu.service.calibrator.data.test;
 
 
 import com.softserve.edu.device.test.data.DeviceTestData;
-import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
@@ -11,7 +10,6 @@ import com.softserve.edu.service.utils.CalibrationTestList;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 

@@ -8,14 +8,15 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">{{'VERIFICATION_TEAMS' | translate}}</h1>
+            <h1 class="page-header">{{'SUBDIVISIONS' | translate}}</h1>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-12">
             <button type="submit" class="btn btn-primary"
-                    ng-click="openAddDisassemblyTeamModal()">{{'ADD_VERIFICATION_TEAM' | translate}}</button>
+                    ng-click="openAddSubdivisionModal()">{{'ADD_SUBDIVISION' | translate}}
+            </button>
         </div>
     </div>
     <p></p>
@@ -23,13 +24,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">{{'VERIFICATION_TEAMS' | translate}}</div>
+                <div class="panel-heading">{{'SUBDIVISIONS' | translate}}</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-6">
-                            <label>{{'FIND_BY_TEAM_NAME' | translate}}
+                            <label>{{'FIND_BY_NUMBER' | translate}}
                                 <input type="text" ng-model="searchData" ng-change="onTableHandling()"
-                                ng-model-options="{debounce: 600}"
+                                       ng-model-options="{debounce: 600}"
                                        class="form-control input-sm">
                             </label>
                         </div>
@@ -41,28 +42,34 @@
                                    id="devicesTable">
                                 <thead>
                                 <tr>
-                                    <th>{{'ID'| translate}}</th>
-                                    <th>{{'VERIFICATION_TEAM_NAME' | translate}}</th>
-                                    <th>{{ 'VERIFICATION_TEAM_LEADER' | translate }}</th>
+                                    <th>{{'SUBDIVISION_NUMBER'| translate}}</th>
+                                    <th>{{'SUBDIVISION_NAME' | translate}}</th>
+                                    <th>{{'SUBDIVISION_LEADER_FULL_NAME' | translate}}</th>
+                                    <th>{{'EMAIL' | translate}}</th>
+                                    <th>{{'PHONE_NUMBER' | translate}}</th>
                                     <th class="text-center">{{ 'ACTIONS' | translate }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="disassemblyTeam in pageContent">
-                                    <td>{{ disassemblyTeam.id }}</td>
-                                    <td>{{ disassemblyTeam.name }}</td>
-                                    <td>{{ disassemblyTeam.leaderFullName }}</td>
+                                <tr ng-repeat="subdivision in pageContent">
+                                    <td>{{ subdivision.subdivisionId }}</td>
+                                    <td>{{ subdivision.subdivisionName }}</td>
+                                    <td>{{ subdivision.subdivisionLeader }}</td>
+                                    <td>{{ subdivision.subdivisionLeaderEmail }}</td>
+                                    <td>{{ subdivision.subdivisionLeaderPhone }}</td>
                                     <div class="col-sm-offset-6">
 
                                     </div>
-                                    <td class="text-center control_buttons" style="width: 10%">
-                                        <i class="fa fa-edit protocol_edit_user_icon"
-                                             popover="{{'EDIT_VERIFICATION_TEAM' | translate}}" popover-trigger="mouseenter"
-                                             ng-click="openEditDisassemblyTeamModal(disassemblyTeam.id)">
+                                    <td class="control_buttons" style="width: 10%">
+                                        <i class="glyphicon glyphicon-edit verification_protocol_user_icon"
+                                           popover="{{'EDIT_SUBDIVISION' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           ng-click="openEditSubdivisionModal(subdivision.subdivisionId)">
                                         </i>
-                                        <i class="fa fa-user-times remove_attached_user_icon"
-                                             popover="{{'DELETE_VERIFICATION_TEAM' | translate}}" popover-trigger="mouseenter"
-                                             ng-click="deleteDisassemblyTeam(disassemblyTeam.id)">
+                                        <i class="glyphicon glyphicon-remove-sign cancel_icon"
+                                           popover="{{'DELETE_SUBDIVISION' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           ng-click="deleteSubdivision(subdivision.subdivisionId)">
                                         </i>
                                     </td>
                                 </tr>
@@ -71,9 +78,8 @@
                         </div>
                     </div>
                     <label>{{'DISPLAY_ON' | translate}} <select ng-model="itemsPerPage"
-                                                                ng-change="onTableHandling()" class="form-control input-sm">
-                        <option value="1">1</option>
-                        <option value="3">3</option>
+                                                                ng-change="onTableHandling()"
+                                                                class="form-control input-sm">
                         <option value="5" selected>5</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
@@ -81,6 +87,7 @@
                         <option value="100">100</option>
                     </select>
                     </label>
+
                     <div class="row">
                         <div class="col-sm-12">
                             <pagination total-items="totalItems" ng-model="currentPage"
@@ -93,7 +100,5 @@
         </div>
     </div>
 </div>
-<!-- /#page-wrapper -->
 </body>
-
 </html>

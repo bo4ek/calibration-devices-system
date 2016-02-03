@@ -542,6 +542,29 @@ public class VerificationServiceImpl implements VerificationService {
         verificationRepository.save(verificationToEdit);
     }
 
+    @Override
+    @Transactional
+    public boolean updateVerificationQueue(List<Verification> verifications, Long calibratorId) {
+
+        List<String> listId = new ArrayList<>();
+        for (Verification verificationNew : verifications) {
+            listId.add(verificationNew.getId());
+        }
+
+        List<Verification> verificationList = verificationRepository.findByIdIn(listId);
+        for (Verification verification : verificationList) {
+            if (verification.getCalibrator().getId() != calibratorId) {
+                logger.warn("Access denied");
+                return false;
+            }
+        }
+
+        for (Verification verificationNew : verifications) {
+            verificationRepository.updateVerificationQueueById(verificationNew.getQueue(), verificationNew.getId());
+        }
+        return true;
+    }
+
     /**
      * Returns calibration test assigned to verification
      *
@@ -685,12 +708,12 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional
     public Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable) {
-        return verificationRepository.findByTask_Id(taskID, pageable);
+        return verificationRepository.findByTaskId(taskID, pageable);
     }
 
     @Transactional
     public Verification[] getVerificationsByTaskID(Long taskID) {
-        return verificationRepository.findByTask_Id(taskID);
+        return verificationRepository.findByTaskId(taskID);
     }
 
     @Override
@@ -880,11 +903,15 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional(readOnly = true)
     public List<Verification> findPageOfVerificationsByCalibratorEmployeeAndStatus(User calibratorEmployee,
                                                                                    int pageNumber, int itemsPerPage,
-                                                                                   Status status) {
+                                                                                   Status status, String sortCriteria, String sortOrder) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> cq = cb.createQuery(Verification.class);
         Root<Verification> verifications = cq.from(Verification.class);
-
+        if ((sortCriteria != null) && (sortOrder != null)) {
+            cq.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(verifications, cb, sortOrder));
+        } else {
+            cq.orderBy(cb.desc(verifications.get("providerFromBBI")));
+        }
         cq.where(cb.and(cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee),
                 cb.equal(verifications.get("status"), status)));
 

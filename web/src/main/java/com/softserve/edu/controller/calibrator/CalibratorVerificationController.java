@@ -467,7 +467,7 @@ public class CalibratorVerificationController {
     }
 
     /**
-     * Current method search for file name witch user decided to delete
+     * Current method search for file name witch user decided to deleteSubdivision
      *
      * @param idVerification
      * @return name of file and corresponding verification ID

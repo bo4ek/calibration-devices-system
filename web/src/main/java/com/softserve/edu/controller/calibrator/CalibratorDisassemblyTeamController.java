@@ -1,6 +1,5 @@
 package com.softserve.edu.controller.calibrator;
 
-
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.dto.calibrator.CalibrationDisassemblyTeamDTO;
 import com.softserve.edu.dto.calibrator.DisassemblyTeamPageItem;
@@ -28,12 +27,8 @@ public class CalibratorDisassemblyTeamController {
 
     private final Logger logger = Logger.getLogger(CalibratorDisassemblyTeamController.class);
 
-
     @Autowired
     private CalibratorDisassemblyTeamService teamService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private OrganizationService organizationService;
@@ -126,10 +121,10 @@ public class CalibratorDisassemblyTeamController {
             DisassemblyTeam createdDisassemblyTeam = disassemblyTeamDTO.saveTeam(currentOrganization);
             teamService.add(createdDisassemblyTeam);
         } catch (DuplicateRecordException e) {
-            logger.error("GOT EXCEPTION ", e);
+            logger.error("Team with this id already exists", e);
             return new ResponseEntity<>(e, HttpStatus.CONFLICT);
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION " + e);
+            logger.error("GOT EXCEPTION ", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -154,8 +149,7 @@ public class CalibratorDisassemblyTeamController {
                     disassemblyTeamDTO.getLeaderFullName(), disassemblyTeamDTO.getLeaderPhone(),
                     disassemblyTeamDTO.getLeaderEmail());
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION " + e.getMessage());
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error("Exception while editing the team" + e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -173,8 +167,7 @@ public class CalibratorDisassemblyTeamController {
         try {
             teamService.delete(disassemblyTeamId);
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION " + e.getMessage());
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error("Exception while deleting the team", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);

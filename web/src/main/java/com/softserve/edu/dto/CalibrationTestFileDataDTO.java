@@ -16,6 +16,8 @@ public class CalibrationTestFileDataDTO {
 
     private String fileName;
 
+    private String verificationId;
+
     private String counterNumber;
 
     private Date testDate;
@@ -62,17 +64,26 @@ public class CalibrationTestFileDataDTO {
 
     private Integer rotateIndex;
 
+    private String condDesignation;
+
+    private String serialNumber;
+
+    private String serviceType;
+
     public CalibrationTestFileDataDTO() {
     }
 
     public CalibrationTestFileDataDTO(CalibrationTest calibrationTest, CalibrationTestService testService, Verification verification) {
         this.fileName = calibrationTest.getName();
+        this.verificationId = verification.getId();
         Counter counter = verification.getCounter();
         this.counterNumber = counter.getNumberCounter();
         this.testDate = calibrationTest.getDateTest();
         this.accumulatedVolume = calibrationTest.getCapacity();
         this.counterProductionYear = Integer.valueOf(counter.getReleaseYear());
         this.installmentNumber = verification.getCalibrationModule().getModuleId();
+        this.serialNumber = verification.getCalibrationModule().getSerialNumber();
+        this.condDesignation = verification.getCalibrationModule().getCondDesignation();
         this.latitude = calibrationTest.getLatitude();
         this.longitude = calibrationTest.getLongitude();
         this.testPhoto = testService.getPhotoAsString(calibrationTest.getPhotoPath(), calibrationTest);
@@ -80,7 +91,8 @@ public class CalibrationTestFileDataDTO {
         this.testResult = calibrationTest.getTestResult();
         this.listTestData = new ArrayList();
         this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
-        this.signed = calibrationTest.isSigned();
+        this.serviceType = verification.getDevice().getDeviceType().name();
+        this.signed = verification.isSigned();
         this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
         this.reasonUnsuitabilityName = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getName();
         this.rotateIndex = calibrationTest.getRotateIndex();
@@ -120,6 +132,14 @@ public class CalibrationTestFileDataDTO {
             listTestData.add(testDataDTO);
             testNumber++;
         }
+    }
+
+    public String getVerificationId() {
+        return verificationId;
+    }
+
+    public void setVerificationId(String verificationId) {
+        this.verificationId = verificationId;
     }
 
     public Long getCounterTypeId() {
@@ -328,5 +348,29 @@ public class CalibrationTestFileDataDTO {
 
     public void setRotateIndex(Integer rotateIndex) {
         this.rotateIndex = rotateIndex;
+    }
+
+    public String getCondDesignation() {
+        return condDesignation;
+    }
+
+    public void setCondDesignation(String condDesignation) {
+        this.condDesignation = condDesignation;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 }

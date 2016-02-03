@@ -2,6 +2,7 @@ package com.softserve.edu.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.softserve.edu.entity.catalogue.Team.VerificatorSubdivision;
 import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.util.AddEmployeeBuilder;
 import com.softserve.edu.entity.Address;
@@ -13,6 +14,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -58,10 +60,13 @@ public class User {
     @JsonBackReference
     private Set<CalibrationTask> tasks = new HashSet<>();
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonBackReference
-    private Set<SavedFilter> savedFilters=new HashSet<>();
+    private Set<SavedFilter> savedFilters = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subdivisionId", nullable = true)
+    private VerificatorSubdivision verificatorSubdivision;
 
     public User(AddEmployeeBuilder builder) {
         username = builder.username;
@@ -138,7 +143,7 @@ public class User {
         this.userRoles.add(role);
     }
 
-    public void removeAllRoles(){
+    public void removeAllRoles() {
         userRoles.clear();
     }
 
@@ -147,12 +152,4 @@ public class User {
         return "User{" +
                 "username='" + username + '\'' + '}';
     }
-
-    /* public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    } */
 }

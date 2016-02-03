@@ -48,9 +48,9 @@ public class CounterTypeDTO {
         this.deviceId = deviceId;
     }
 
-    public CounterTypeDTO(Long id, String name){
+    public CounterTypeDTO(Long id, String manufacturer){
         this.id = id;
-        this.name = name;
+        this.manufacturer = manufacturer;
     }
 
     public CounterTypeDTO(Long id, String symbol, String standardSize,String typeWater, String manufacturer) {

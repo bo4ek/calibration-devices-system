@@ -38,22 +38,8 @@ public class CalibrationDisassemblyTeamServiceImpl implements CalibratorDisassem
 
     @Override
     @Transactional
-    public List<DisassemblyTeam> getAll() {
-        return (List<DisassemblyTeam>) teamRepository.findAll();
-    }
-
-
-    @Override
-    @Transactional
     public List<DisassemblyTeam> getByOrganization(Organization organization) {
             return teamRepository.findByOrganization(organization);
-    }
-
-    @Override
-    @Transactional
-    public Page<DisassemblyTeam> getByOrganization(Organization organization, int pageNumber, int itemsPerPage) {
-        PageRequest pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);
-        return teamRepository.findByOrganization(organization, pageRequest);
     }
 
     @Override

@@ -1,6 +1,6 @@
-angular.module('adminModule')
-    .factory('OrganizationService', ['$http', '$log', function ($http, $log) {
-
+angular
+    .module('adminModule')
+    .factory('OrganizationService', ['$http', function ($http) {
         return {
             getPage: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
                 return getDataWithParams(currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
@@ -9,7 +9,6 @@ angular.module('adminModule')
                 return $http.post("/admin/organization/add", formData)
                     .then(function (result) {
                         return result.status;
-
                     });
             },
             getOrganizationWithId: function (id) {
@@ -18,22 +17,18 @@ angular.module('adminModule')
                     return result.data;
                 });
             },
-
             editOrganization: function (formData, id) {
-                var url = 'admin/organization/edit/' + id;
-                return $http.post(url, formData)
+                return $http.put('/admin/organization/edit/' + id, formData)
                     .then(function (result) {
                         return result.status;
                     });
             },
-
             getOrganizationAdmin: function (id) {
                 var url = 'admin/organization/getOrganizationAdmin/' + id;
                 return $http.get(url).then(function (result) {
                     return result.data;
                 });
             },
-
             getHistoryOrganizationWithId: function (id) {
                 var url = 'admin/organization/edit/history/' + id;
                 return $http.get(url).then(function (result) {
@@ -51,6 +46,7 @@ angular.module('adminModule')
             }
 
         };
+
         function getDataWithParams(url, params) {
             return $http.get('admin/organization/' + url, {
                 params: params

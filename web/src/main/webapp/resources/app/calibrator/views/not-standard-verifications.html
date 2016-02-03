@@ -77,9 +77,11 @@
                                             <td data-title="'TEST_RESULT' | translate">
                                                 {{ verification.testResult | translate}}
                                             </td>
-
+                                            <td data-title="'PROVIDER_FROM_BBI' | translate" sortable="'providerFromBBI'">
+                                                {{ verification.providerFromBBI | translate}}
+                                            </td>
                                             <td data-title="'NOTE' | translate">
-                                                {{ verification.rejectMessage | translate}}
+                                                {{ verification.comment}}
                                             </td>
                                             <td data-title="'ACTIONS' | translate"
                                                 class="control_buttons">

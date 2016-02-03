@@ -16,6 +16,8 @@ angular
                 $modalInstance.close("cancel");
             };
 
+            $scope.ACCURACY_OF_CALCULATION = 2;
+
             $scope.photoId = photoId;
             $scope.parentScope = parentScope;
 
@@ -41,31 +43,25 @@ angular
             $scope.updateValues = function (index) {
                 var test = parentScope.TestDataFormData[index];
                 if (test.endValue == 0 || test.initialValue > test.endValue || test.initialValue == 0) {
-                    test.testResult = 'RAW';
+                    test.testResult = 'NOT_PROCESSED';
                     parentScope.TestForm.testResult = 'FAILED';
-                    test.calculationError = 0;
-                    test.volumeInDevice = 0;
                 } else if (test.initialValue == test.endValue) {
                     test.testResult = 'FAILED';
                     parentScope.TestForm.testResult = 'FAILED';
-                    test.calculationError = 0;
-                    test.volumeInDevice = 0;
                 } else if (test.acceptableError >= Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))) {
                     test.testResult = 'SUCCESS';
                     parentScope.TestForm.testResult = 'SUCCESS';
-                    test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
-                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 } else {
                     test.testResult = 'FAILED';
                     parentScope.TestForm.testResult = 'FAILED';
-                    test.calculationError = $scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard);
-                    test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 }
+                test.calculationError = (Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))).toFixed($scope.ACCURACY_OF_CALCULATION);
+                test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 parentScope.TestDataFormData[index] = test;
             };
 
             $scope.calcError = function (initialValue, endValue, volumeOfStandard) {
-                return parseFloat(((endValue - initialValue - volumeOfStandard) / (volumeOfStandard * 100)).toFixed(1));
+                return parseFloat(((endValue - initialValue - volumeOfStandard) * 100 / (volumeOfStandard)));
             };
 
             $scope.selectedTypeWater = {
@@ -145,7 +141,7 @@ angular
             };
 
             /**
-             * set  typeWater and counterType
+             * set  typeWater
              */
             $scope.changeTypeWater = function (typeWater) {
                 $scope.setStatusTypeWater(typeWater.type);

@@ -1,10 +1,7 @@
 package com.softserve.edu.controller;
 
 import com.softserve.edu.dto.admin.UnsuitabilityReasonDTO;
-import com.softserve.edu.entity.device.CounterType;
-import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.service.admin.CounterTypeService;
-import com.softserve.edu.service.admin.UnsuitabilityReasonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

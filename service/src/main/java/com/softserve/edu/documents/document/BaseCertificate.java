@@ -84,9 +84,9 @@ public abstract class BaseCertificate implements Document {
      * @return the calibrator company's certificate identification number.
      */
     @Placeholder(name = "VERIFICATOR_ACC_CERT_NAME")
-    public String getCalibratorCompanyAccreditationCertificateNumber() {
+    public String getVerificatorCompanyAccreditationCertificateNumberAuthorization() {
         try {
-            return verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumrAuthoriz();
+            return verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization();
         } catch (Exception e) {
             logger.error("Vereficator's certificate number has not been specified ", e);
             return Constants.NOT_SPECIFIED;
@@ -97,28 +97,27 @@ public abstract class BaseCertificate implements Document {
      * @return the date when the verificator company received the certificate, that allows it to provide verifications
      */
     @Placeholder(name = "VERIFICATOR_ACC_CERT_DATE_GRANTED")
-    public String getCalibratorCompanyAccreditationCertificateGrantedDate() {
+    public String getVerificatorCompanyAccreditationCertificateDate() {
         try {
             return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
-                    .format(verification.getStateVerificator().getCertificateGrantedDate());
+                    .format(verification.getStateVerificator().getAdditionInfoOrganization().getCertificateDate());
         } catch (Exception e) {
             logger.error("Vereficator's certificate granted date has not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }
 
-    //TODO
     /**
      * @return Returns the identification number of the team, that was making verification
      */
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
-        String verificationId = verification.getId();
         try {
-            String subdivisionId = "0000";
-            return String.format("%s-%s-Д", subdivisionId, verificationId);
+            String verificationId = verification.getId();
+            String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
+            return String.format("%s-%s", subdivisionId, verificationId);
         } catch (Exception e) {
-            logger.error("Team for this verification has not been specified ", e);
+            logger.error("Subdivision for this verification has not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }
@@ -276,7 +275,11 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
         try {
-            return verification.getCalibrationModule().getCalibrationType();
+            if (verification.isManual()) {
+                return verification.getCalibrationTestDataManualId().getCalibrationTestManual().getCalibrationModule().getCalibrationType();
+            } else {
+                return verification.getCalibrationModule().getCalibrationType();
+            }
         } catch (Exception e) {
             logger.error("Calibration type for this module had not been specified ", e);
             return Constants.NOT_SPECIFIED;

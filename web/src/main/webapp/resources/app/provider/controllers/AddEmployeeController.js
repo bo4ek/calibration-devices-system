@@ -1,13 +1,15 @@
 angular
     .module('employeeModule')
     .controller('AddEmployeeController', ['$rootScope', '$scope', '$modalInstance','$modal',
-        '$timeout', '$log', '$state', '$http', 'UserService', 'AddressServiceProvider', 'toaster', '$filter',
-
+        '$timeout', '$log', '$state', '$http', 'UserService', 'VerificatorSubdivisionService', 'AddressServiceProvider', 'toaster', '$filter',
         function ($rootScope, $scope, $modalInstance,$modal, $timeout, $log, $state, $http,
-                  userService, addressServiceProvider, toaster, $filter) {
+                  userService, verificatorSubdivisionService, addressServiceProvider, toaster, $filter) {
+
             var organizationTypeProvider = false;
             var organizationTypeCalibrator = false;
             var organizationTypeVerificator = false;
+            $scope.selectedValues = {};
+            $scope.selectedValues.subdivision = undefined;
             var employeeData = {};
 
             /**
@@ -38,8 +40,10 @@ angular
                             organizationTypeProvider = true;
                         if (role[0] === 'CALIBRATOR_ADMIN')
                             organizationTypeCalibrator = true;
-                        if (role[0] === 'STATE_VERIFICATOR_ADMIN')
+                        if (role[0] === 'STATE_VERIFICATOR_ADMIN') {
                             organizationTypeVerificator = true;
+                            $scope.showListOfSubdivisions = true;
+                        }
                     }
                     if (thereIsAdmin > 1) {
                         $scope.showListOfOrganization = true;
@@ -49,7 +53,7 @@ angular
                                 $scope.showListOfOrganizationChosenOne = true;
                             if ((role[0] === 'STATE_VERIFICATOR_ADMIN' && role[1] === 'CALIBRATOR_ADMIN') ||
                                 (role[0] === 'CALIBRATOR_ADMIN' && role[1] === 'STATE_VERIFICATOR_ADMIN'))
-                                $scope.showListOfOrganizationChouenTwo = true;
+                                $scope.showListOfOrganizationChosenTwo = true;
                         }
                     }
                 });
@@ -68,22 +72,15 @@ angular
                     if (resaultEmployee[i] === 'calibrator') {
                         organizationTypeCalibrator = true;
                     }
-                    if (resaultEmployee[i] === 'verificatot') {
+                    if (resaultEmployee[i] === 'verificator') {
                         organizationTypeVerificator = true
                     }
                 }
-            }
-
-            $scope.regions = null;
-            $scope.districts = [];
-            $scope.localities = [];
-            $scope.streets = [];
-            $scope.buildings = [];
+            };
 
             /**
              * Resets employee form
              */
-
             $rootScope.resetEmployeeForm = function() {
                 $modal.open({
                     animation : true,
@@ -105,17 +102,10 @@ angular
                 }
                 $scope.usernameValidation = null;
                 $scope.employeeFormData = null;
+                $scope.selectedValues.subdivision = undefined;
             };
 
             $scope.submitResetEmployeeForm();
-
-            /**
-             * Calls resetOrganizationForm after the view loaded
-             */
-
-            /**
-             * Validates
-             */
 
             $scope.checkFirstName = function (caseForValidation) {
                 switch (caseForValidation) {
@@ -176,7 +166,7 @@ angular
                         }
                         break;
                 }
-            }
+            };
 
             /**
              * Checks whereas given username is available to use
@@ -244,7 +234,6 @@ angular
             /**
              * Check passwords for equivalent
              */
-
             $scope.checkPasswords = function () {
                 var first = $scope.employeeFormData.password;
                 var second = $scope.employeeFormData.rePassword;
@@ -261,80 +250,28 @@ angular
             };
 
             /**
-             * Finds all regions
-             */
-            function initFormData() {
-                if (!$scope.regions) {
-                    addressServiceProvider.findAllRegions().then(
-                        function (data) {
-                            $scope.regions = data.data;
-                        });
-                }
-            }
+            * Finds all subdivisions
+            */
+            verificatorSubdivisionService.getAllSubdivisions()
+                .then(function (subdivisions) {
+                    $scope.subdivisions = subdivisions;
+                    $scope.selectedValues.subdivision = undefined;
+                });
 
-
-            /**
-             * Finds districts in a given region.
-             * @param regionId
-             *            to identify region
-             */
-            $scope.onRegionSelected = function (regionId) {
-                addressServiceProvider
-                    .findDistrictsByRegionId(regionId)
-                    .then(function (data) {
-                        $scope.districts = data.data;
-                    });
-            };
-
-            /**
-             * Finds localities in a given district.
-             * @param districtId
-             *            to identify district
-             */
-            $scope.onDistrictSelected = function (districtId) {
-                addressServiceProvider.findLocalitiesByDistrictId(
-                    districtId).then(function (data) {
-                        $scope.localities = data.data;
-                    });
-            };
-
-            /**
-             * There are no DB records for this methods.
-             * Finds streets in a given locality.
-             * @param localityId
-             *            to identify locality
-             */
-            $scope.onLocalitySelected = function (localityId) {
-                addressServiceProvider.findStreetsByLocalityId(
-                    localityId).then(function (data) {
-                        $scope.streets = data.data;
-                    });
-            };
-
-            /**
-             * Finds buildings in a given street.
-             *
-             * @param streetId
-             *            to identify street
-             */
-
-            /**
-             * Refactor data
-             */
             function retranslater() {
                 employeeData = {
+                    subdivision: $scope.selectedValues.subdivision,
                     firstName: $scope.employeeFormData.firstName,
                     lastName: $scope.employeeFormData.lastName,
                     middleName: $scope.employeeFormData.middleName,
-                    isAvaliable : true,
+                    isAvailable : true,
                     phone: $scope.employeeFormData.phone,
                     secondPhone: $scope.employeeFormData.secondPhone,
                     email: $scope.employeeFormData.email,
                     username: $scope.employeeFormData.username,
                     password: $scope.employeeFormData.password,
-                    userRoles: [],
-                }
-
+                    userRoles: []
+                };
 
                 if (organizationTypeProvider === true) {
                     employeeData.userRoles.push('PROVIDER_EMPLOYEE');
@@ -358,7 +295,7 @@ angular
                 } else {
                     return true;
                 }
-            }
+            };
 
             $scope.onEmployeeFormSubmit = function () {
                 $scope.$broadcast('show-errors-check-validity');
@@ -377,8 +314,8 @@ angular
              * Update new employee in database.
              */
             function saveEmployee() {
-                userService.saveUser(
-                    employeeData).then(
+                userService.saveUser(employeeData)
+                    .then(
                     function (data) {
                         if (data.status == 201) {
                             $rootScope.$broadcast('new-employee-added');
@@ -395,14 +332,12 @@ angular
             /**
              * Receives all regex for input fields
              *
-             *
              */
-
             $scope.FIRST_LAST_NAME_REGEX = /^([A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}\u002d{1}[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}|[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20})$/;
             $scope.MIDDLE_NAME_REGEX = /^[A-Z\u0410-\u042f\u0407\u0406\u0404']{1}[a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}$/;
             $scope.PNOHE_REGEX_MY = /^[1-9]\d{8}$/;
             $scope.PHONE_REGEX = /^[1-9]\d{8}$/;
-            $scope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+            $scope.EMAIL_REGEX = /^[-a-z0-9~$%^&*_=+}{\'?]+(\.[-a-z0-9~$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
             $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
 
 
@@ -421,5 +356,4 @@ angular
                 $modalInstance.close();
             });
 
-            //   $log.info(employeeFormData);
         }]);

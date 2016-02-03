@@ -4,6 +4,7 @@ import com.softserve.edu.entity.device.Counter;
 
 import javax.persistence.*;
 
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.verification.Verification;
 import lombok.*;
 import com.softserve.edu.entity.verification.Verification.CalibrationTestResult;
@@ -50,7 +51,11 @@ public class CalibrationTestDataManual {
     @JoinColumn(name = "verificationId")
     private Verification verification;
 
-    public CalibrationTestDataManual(CalibrationTestResult statusTestFirst, CalibrationTestResult statusTestSecond, CalibrationTestResult statusTestThird, CalibrationTestResult statusCommon, Counter counter, CalibrationTestManual calibrationTestManual, Verification verification) {
+    @ManyToOne
+    @JoinColumn(name = "unsuitabilityReasonId")
+    private UnsuitabilityReason unsuitabilityReason;
+
+    public CalibrationTestDataManual(CalibrationTestResult statusTestFirst, CalibrationTestResult statusTestSecond, CalibrationTestResult statusTestThird, CalibrationTestResult statusCommon, Counter counter, CalibrationTestManual calibrationTestManual, Verification verification, UnsuitabilityReason unsuitabilityReason) {
         this.statusTestFirst = statusTestFirst;
         this.statusTestSecond = statusTestSecond;
         this.statusTestThird = statusTestThird;
@@ -58,8 +63,7 @@ public class CalibrationTestDataManual {
         this.counter = counter;
         this.calibrationTestManual = calibrationTestManual;
         this.verification = verification;
+        this.unsuitabilityReason = unsuitabilityReason;
     }
-
-
 }
 

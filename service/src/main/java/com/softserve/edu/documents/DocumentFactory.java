@@ -22,8 +22,6 @@ public class DocumentFactory {
                                  CalibrationTest calibrationTest) {
         Assert.notNull(verification, Verification.class.getSimpleName()
                 + " can't be null");
-        Assert.notNull(calibrationTest, CalibrationTest.class.getSimpleName()
-                + " can't be null");
         Assert.notNull(documentType, CalibrationTest.class.getSimpleName()
                 + " can't be null");
 

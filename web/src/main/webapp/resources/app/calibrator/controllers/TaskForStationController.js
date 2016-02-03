@@ -230,18 +230,19 @@ angular
             };
 
             $scope.openVerificationListModal = function(calibrationTaskID) {
-                var verificationsModal = $modal
+                var verificationsModal;
+                verificationsModal = $modal
                     .open({
                         animation: true,
                         controller: 'VerificationListModalController',
                         templateUrl: '/resources/app/calibrator/views/modals/verification-list-modal.html',
-                        size: 'lg',
+                        windowClass: 'verification-list-modal',
                         resolve: {
                             taskID: function () {
                                 return calibrationTaskID;
                             }
                         }
-                });
+                    });
                 verificationsModal.result.then(function() {
                     $rootScope.onTableHandling();
                 }, function() {

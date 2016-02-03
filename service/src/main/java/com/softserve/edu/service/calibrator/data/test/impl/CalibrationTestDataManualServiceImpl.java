@@ -1,12 +1,15 @@
 package com.softserve.edu.service.calibrator.data.test.impl;
 
 import com.softserve.edu.entity.device.Counter;
+import com.softserve.edu.entity.device.CounterType;
+import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.verification.Verification.CalibrationTestResult;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestDataManual;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestManual;
 import com.softserve.edu.repository.CalibrationTestDataManualRepository;
+import com.softserve.edu.repository.CounterTypeRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.repository.CounterRepository;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataManualService;
@@ -31,6 +34,9 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
     @Autowired
     private CounterRepository counterRepository;
 
+    @Autowired
+    private CounterTypeRepository counterTypeRepository;
+
     @Override
     public CalibrationTestDataManual findTestDataManual(Long id) {
         return null;
@@ -49,15 +55,24 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
 
     @Override
     @Transactional
-    public void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, Long counterId, CalibrationTestManual calibrationTestManual, String verificationId) {
+    public void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird
+            , String statusCommon, CalibrationTestManual calibrationTestManual, String verificationId
+            , UnsuitabilityReason unsuitabilityReason, int realiseYear, String numberCounter, Long counterTypeId) {
         Verification verification = verificationRepository.findOne(verificationId);
-        Counter counter = counterRepository.findOne(counterId);
+        CounterType counterType = counterTypeRepository.findOne(counterTypeId);
+
+        Counter counter = verification.getCounter();
+        counter.setReleaseYear(Integer.valueOf(realiseYear).toString());
+        counter.setNumberCounter(numberCounter);
+        counter.setCounterType(counterType);
+        counterRepository.save(counter);
         CalibrationTestDataManual calibrationTestDataManual = new CalibrationTestDataManual(CalibrationTestResult.valueOf(statusTestFirst)
                 , CalibrationTestResult.valueOf(statusTestSecond), CalibrationTestResult.valueOf(statusTestThird)
                 , CalibrationTestResult.valueOf(statusCommon)
-                , counter, calibrationTestManual, verification);
+                , counter, calibrationTestManual, verification, unsuitabilityReason);
         calibrationTestDataManualRepository.save(calibrationTestDataManual);
-        verification.setIsManual(true);
+        verification.setManual(true);
+        verification.setCalibrationTestDataManualId(calibrationTestDataManual);
         verification.setStatus(Status.TEST_COMPLETED);
         verificationRepository.save(verification);
     }
@@ -65,12 +80,22 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
 
     @Override
     @Transactional
-    public void editTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, CalibrationTestDataManual cTestDataManual, String verificationId, Boolean verificationEdit) {
+    public void editTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon
+            , CalibrationTestDataManual cTestDataManual, String verificationId, Boolean verificationEdit, UnsuitabilityReason unsuitabilityReason
+            , int realiseYear, String numberCounter, Long counterTypeId) {
+        CounterType counterType = counterTypeRepository.findOne(counterTypeId);
+        Counter counter = verificationRepository.findOne(verificationId).getCounter();
+        counter.setReleaseYear(Integer.valueOf(realiseYear).toString());
+        counter.setNumberCounter(numberCounter);
+        counter.setCounterType(counterType);
+        counterRepository.save(counter);
+
         cTestDataManual.setStatusTestFirst(CalibrationTestResult.valueOf(statusTestFirst));
         cTestDataManual.setStatusTestSecond(CalibrationTestResult.valueOf(statusTestSecond));
         cTestDataManual.setStatusTestThird(CalibrationTestResult.valueOf(statusTestThird));
         CalibrationTestResult commonTestResult = CalibrationTestResult.valueOf(statusCommon);
         cTestDataManual.setStatusCommon(commonTestResult);
+        cTestDataManual.setUnsuitabilityReason(unsuitabilityReason);
         if (verificationEdit) {
             Verification verification = verificationRepository.findOne(verificationId);
             if (commonTestResult.equals(CalibrationTestResult.SUCCESS)) {
@@ -80,6 +105,7 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
                 verification.setStatus(Status.TEST_NOK);
                 verificationRepository.save(verification);
             }
+
         }
         calibrationTestDataManualRepository.save(cTestDataManual);
     }
