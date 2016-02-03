@@ -8,6 +8,14 @@ public interface Constants {
     int SCALE_2 = 2;
     int SCALE_3 = 3;
     int TEST_COUNT = 6;
+    int ALLOCATED_IMAGE_SIZE = 16380;
+    int SKIP_TO_TESTS = 104;
+    int EMPTY_BYTES_BETWEEN_TESTS = 180;
+    int GO_TO_IMAGES = 2452;
+    int START_OFFSET_IN_ARRAY = 0;
+
+
+    String UTF8_ENCODING = "UTF-8";
     String MAIN_PHOTO = "mainPhoto";
     String BEGIN_PHOTO = "beginPhoto";
     String END_PHOTO = "endPhoto";
@@ -62,11 +70,9 @@ public interface Constants {
     String FLOOR = "Поверх";
     String STREET = "Вулиця";
     String STREET_ID = "Id вулиці";
-    String NOTE = "Коментар";
+    String COMMENT = "Примітка";
 
     // endregion
-
-    String COMMENT = "Примітка";
 
     // region Personal info
 

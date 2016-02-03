@@ -2,6 +2,7 @@ package com.softserve.edu.service.calibrator;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.user.User;
+import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -29,7 +30,7 @@ public interface BBIFileServiceFacade {
      * @return Data from the parsed BBI file
      **/
     DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName) throws IOException,
-            DecoderException, ParseException;
+            DecoderException, ParseException, InvalidImageInBbiException;
 
     /**
      * Parses the bbi file and saves it in the system
@@ -40,7 +41,7 @@ public interface BBIFileServiceFacade {
      * @return Data from the parsed BBI file
      **/
     DeviceTestData parseAndSaveBBIFile(MultipartFile BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException, ParseException;
+            throws IOException, DecoderException, ParseException, InvalidImageInBbiException;
 
     /**
      * Parses the bbi file and saves it in the system
@@ -51,7 +52,7 @@ public interface BBIFileServiceFacade {
      * @return Data from the parsed BBI file
      **/
     DeviceTestData parseAndSaveBBIFile(InputStream inputStream, String verificationID, String originalFileName)
-            throws IOException, DecoderException, ParseException;
+            throws IOException, DecoderException, ParseException, InvalidImageInBbiException;
 
     /**
      * Parses the bbi files from the archive and saves them in the system
@@ -63,7 +64,7 @@ public interface BBIFileServiceFacade {
      **/
     List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(MultipartFile archiveFile, String originalFileName,
                                                       User calibratorEmployee) throws IOException, ZipException,
-            SQLException, ClassNotFoundException, ParseException;
+            SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException;
 
     /**
      * Parses the bbi files from the archive and saves them in the system
@@ -74,7 +75,7 @@ public interface BBIFileServiceFacade {
      * @throws IOException If the archive doesn't contain DBF file
      **/
     List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(File archive, String originalFileName, User calibratorEmployee)
-            throws IOException, ZipException, SQLException, ClassNotFoundException, ParseException;
+            throws IOException, ZipException, SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException;
 
     /**
      * Parses the bbi files from the archive and saves them in the system
@@ -86,5 +87,5 @@ public interface BBIFileServiceFacade {
      **/
     List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(InputStream archiveStream, String originalFileName,
                                                       User calibratorEmployee) throws IOException, ZipException,
-            SQLException, ClassNotFoundException, ParseException;
+            SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException;
 }

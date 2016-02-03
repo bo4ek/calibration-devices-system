@@ -720,7 +720,6 @@
     "INCORRECT_VALUE_VERIFICATION_TEAM_NUMBER": "Incorrect verification team ID",
     "INCORRECT_VALUE_VERIFICATION_TEAM_NAME": "Incorrect verification team name",
     "INCORRECT_VALUE_VERIFICATION_TEAM_LEADER": "Incorrect verification team leader",
-    "NOTE": "Note",
     "VERIFICATION_SUCCESSFULLY_EDITED": "Verification was successfully edited",
     "ERROR_WHILE_EDITING_VERIFICATION": "Error while editing verification",
     "ACCUMULATEDVOLUME_REGEX": "Only number",

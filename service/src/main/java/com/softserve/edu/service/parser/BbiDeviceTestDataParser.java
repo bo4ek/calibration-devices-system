@@ -3,10 +3,13 @@ package com.softserve.edu.service.parser;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.device.test.data.BbiDeviceTestData;
 import com.softserve.edu.device.test.data.DeviceTestData;
+import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import sun.reflect.annotation.ExceptionProxy;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -21,8 +24,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private final Logger logger = Logger.getLogger(BbiDeviceTestDataParser.class);
 
     @Override
-    public DeviceTestData parse(InputStream deviceTestDataStream) throws IOException, DecoderException, NullPointerException {
-        final int EMPTY_BYTES_BETWEEN_TESTS = 180;
+    public DeviceTestData parse(InputStream deviceTestDataStream) throws IOException, DecoderException, InvalidImageInBbiException {
         resultMap = new HashMap<>();
         reader = new BufferedInputStream(deviceTestDataStream);
         long count;
@@ -59,15 +61,15 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("counterType2", readConsecutiveBytesAsUTF8(16)); //0x800080+0x10
         resultMap.put("fileOpened", readLongValueReversed(4)); //0x800090+0x04
         resultMap.put("deviceTypeId", readLongValueReversed(4)); // 0x800094+0x04 DeviceType WATER(1), THERMAL(2), ELECTRICAL(3), GASEOUS(4)
-        count = reader.skip(104); //0x800100 now
+        count = reader.skip(Constants.SKIP_TO_TESTS); //0x800100 now
         for (int i = 1; i <= Constants.TEST_COUNT; ++i) {
             readTest(i);
             if (i != Constants.TEST_COUNT) {
-                count = reader.skip(EMPTY_BYTES_BETWEEN_TESTS);
+                count = reader.skip(Constants.EMPTY_BYTES_BETWEEN_TESTS);
             }
         }
         resultMap.put("fullInstallmentNumber", readConsecutiveBytesAsUTF8(32)); //0x0x80064c+32
-        count = reader.skip(2452); //go to images
+        count = reader.skip(Constants.GO_TO_IMAGES); //go to images
 
         resultMap.put("testPhoto", readImageBase64());
         for (int i = 0; i < 12; ++i) {
@@ -87,9 +89,9 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
      */
     private String readConsecutiveBytesReversed(int bytesAmount) throws IOException {
         byte[] byteArray = new byte[bytesAmount];
-        reader.read(byteArray, 0, bytesAmount);
+        reader.read(byteArray, Constants.START_OFFSET_IN_ARRAY, bytesAmount);
         ArrayUtils.reverse(byteArray);
-        return new String(byteArray, "UTF-8");
+        return new String(byteArray, Constants.UTF8_ENCODING);
     }
 
     /**
@@ -102,8 +104,8 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
      */
     private String readConsecutiveBytesAsUTF8(int bytesAmount) throws IOException {
         byte[] byteArray = new byte[bytesAmount];
-        reader.read(byteArray, 0, bytesAmount);
-        return new String(byteArray, "UTF-8");
+        reader.read(byteArray, Constants.START_OFFSET_IN_ARRAY, bytesAmount);
+        return new String(byteArray, Constants.UTF8_ENCODING);
     }
 
     /**
@@ -169,29 +171,22 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
      * @return Image written in base64 string.
      * @throws IOException
      */
-    public String readImageBase64() throws IOException, DecoderException, NegativeArraySizeException {
-        final int ALLOCATED_IMAGE_SIZE = 16380;
-
+    public String readImageBase64() throws IOException, DecoderException,InvalidImageInBbiException {
         String encodedHexB64;
 
-        int imageSize = (int) readLongValue(4);
-        if (imageSize < 1 || imageSize > ALLOCATED_IMAGE_SIZE) {
-            imageSize = 0;
+        try {
+            int imageSize = (int) readLongValue(4);
             byte[] decodedHex = new byte[imageSize];
-            reader.read(decodedHex, 0, imageSize);
+            reader.read(decodedHex, Constants.START_OFFSET_IN_ARRAY, imageSize);
             encodedHexB64 = Base64.encodeBase64String(decodedHex);
 
             // skips all empty bytes till the next image beginning.
-            long count = reader.skip(ALLOCATED_IMAGE_SIZE - imageSize);
+            long count = reader.skip(Constants.ALLOCATED_IMAGE_SIZE - imageSize);
             return encodedHexB64;
-        } else {
-            byte[] decodedHex = new byte[imageSize];
-            reader.read(decodedHex, 0, imageSize);
-            encodedHexB64 = Base64.encodeBase64String(decodedHex);
-
-            // skips all empty bytes till the next image beginning.
-            long count = reader.skip(ALLOCATED_IMAGE_SIZE - imageSize);
-            return encodedHexB64;
+        }catch (NegativeArraySizeException e){
+            throw new InvalidImageInBbiException();
+        }catch (Exception e){
+            throw new InvalidImageInBbiException();
         }
     }
 }

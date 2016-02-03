@@ -1,6 +1,7 @@
 package com.softserve.edu.service.calibrator;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
+import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
 import org.apache.commons.codec.DecoderException;
 
 import java.io.File;
@@ -16,5 +17,5 @@ public interface BbiFileService {
 
     String findBBIByFileName(String fileName);
 
-    DeviceTestData parseBbiFile(InputStream fileStream, String fileName) throws IOException, DecoderException;
+    DeviceTestData parseBbiFile(InputStream fileStream, String fileName) throws IOException, DecoderException, InvalidImageInBbiException;
 }

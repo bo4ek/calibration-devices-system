@@ -24,6 +24,7 @@ import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.catalogue.StreetService;
 import com.softserve.edu.service.exceptions.InvalidDeviceTypeIdException;
+import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
 import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
@@ -94,7 +95,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private RegionService regionService;
 
     @Transactional
-    public DeviceTestData parseBBIFile(File BBIFile, String originalFileName) throws IOException, DecoderException, NegativeArraySizeException {
+    public DeviceTestData parseBBIFile(File BBIFile, String originalFileName) throws IOException, DecoderException, InvalidImageInBbiException {
         String bbiName = bbiFileService.findBBIByFileName(originalFileName);
         if (bbiName != null) {
             throw new FileAlreadyExistsException(originalFileName);
@@ -116,7 +117,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException, NegativeArraySizeException{
+            throws IOException, DecoderException, InvalidImageInBbiException{
         DeviceTestData deviceTestData;
         try (InputStream inputStream = FileUtils.openInputStream(BBIfile)) {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);
@@ -128,7 +129,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     public DeviceTestData parseAndSaveBBIFile(MultipartFile BBIfile, String verificationID, String originalFileName)
-            throws IOException, NoSuchElementException, DecoderException, NegativeArraySizeException{
+            throws IOException, NoSuchElementException, DecoderException{
         try {
             return parseAndSaveBBIFile(BBIfile.getInputStream(), verificationID, originalFileName);
         } catch (Exception e) {
@@ -139,7 +140,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Transactional
     public DeviceTestData parseAndSaveBBIFile(InputStream inputStream, String verificationID, String originalFileName)
-            throws IOException, DecoderException, NegativeArraySizeException {
+            throws IOException, DecoderException, InvalidImageInBbiException {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         bufferedInputStream.mark(inputStream.available());
         DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
@@ -150,7 +151,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(File archive, String originalFileName,
                                                              User calibratorEmployee)
-            throws IOException, ZipException, SQLException, ClassNotFoundException, ParseException {
+            throws IOException, ZipException, SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
         try (InputStream inputStream = FileUtils.openInputStream(archive)) {
             return parseAndSaveArchiveOfBBIfiles(inputStream, originalFileName, calibratorEmployee);
         }
@@ -159,14 +160,14 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(MultipartFile archiveFile, String originalFileName,
                                                              User calibratorEmployee) throws IOException, ZipException,
-            SQLException, ClassNotFoundException, ParseException {
+            SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
         return parseAndSaveArchiveOfBBIfiles(archiveFile.getInputStream(), originalFileName, calibratorEmployee);
     }
 
     @Transactional
     public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(InputStream archiveStream, String originalFileName,
                                                              User calibratorEmployee) throws IOException,
-            ZipException, SQLException, ClassNotFoundException, ParseException {
+            ZipException, SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
         File directoryWithUnpackedFiles = unpackArchive(archiveStream, originalFileName);
         Map<String, Map<String, String>> bbiFileNamesToVerificationMap = getVerificationMapFromUnpackedFiles(
                 directoryWithUnpackedFiles);
@@ -185,7 +186,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
      */
     private List<BBIOutcomeDTO> processListOfBBIFiles(Map<String, Map<String, String>> verificationMapFromUnpackedFiles,
                                                       List<File> listOfBBIfiles, User calibratorEmployee) throws
-            ParseException, IOException {
+            ParseException, IOException,InvalidImageInBbiException {
         List<BBIOutcomeDTO> resultsOfBBIProcessing = new ArrayList<>();
 
         for (File bbiFile : listOfBBIfiles) {
@@ -226,7 +227,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (IOException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
                 logger.error("BBI is not valid");
-            } catch (NegativeArraySizeException e) {
+            } catch (InvalidImageInBbiException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
                 logger.error("Wrong image in BBI file");
             } catch (InvalidModuleIdException e) {
@@ -301,38 +302,38 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + dbFile)) {
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Results");
-            while (rs.next()) {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Results");
+            while (resultSet.next()) {
                 verificationMap = new LinkedHashMap<>();
-                verificationMap.put(Constants.VERIFICATION_ID, rs.getString("Id_pc"));
-                verificationMap.put(Constants.LAST_NAME, rs.getString("Surname"));
-                verificationMap.put(Constants.FIRST_NAME, rs.getString("Name"));
-                verificationMap.put(Constants.MIDDLE_NAME, rs.getString("Middlename"));
-                verificationMap.put(Constants.CITY, rs.getString("City"));
-                verificationMap.put(Constants.REGION, rs.getString("District"));
-                verificationMap.put(Constants.STREET, rs.getString("Street"));
-                verificationMap.put(Constants.BUILDING, rs.getString("Building"));
-                verificationMap.put(Constants.FLAT, rs.getString("Apartment"));
-                verificationMap.put(Constants.STAMP, rs.getString("Account"));
-                verificationMap.put(Constants.COUNTER_NUMBER, rs.getString("CounterNumber"));
-                verificationMap.put(Constants.COUNTER_SIZE_AND_SYMBOL, rs.getString("Type"));
-                verificationMap.put(Constants.YEAR, rs.getString("Year"));
-                verificationMap.put(Constants.PHONE_NUMBER, rs.getString("TelNumber"));
-                verificationMap.put(Constants.PROVIDER, rs.getString("Customer"));
-                verificationMap.put(Constants.DATE, rs.getString("Date"));
+                verificationMap.put(Constants.VERIFICATION_ID, resultSet.getString("Id_pc"));
+                verificationMap.put(Constants.LAST_NAME, resultSet.getString("Surname"));
+                verificationMap.put(Constants.FIRST_NAME, resultSet.getString("Name"));
+                verificationMap.put(Constants.MIDDLE_NAME, resultSet.getString("Middlename"));
+                verificationMap.put(Constants.CITY, resultSet.getString("City"));
+                verificationMap.put(Constants.REGION, resultSet.getString("District"));
+                verificationMap.put(Constants.STREET, resultSet.getString("Street"));
+                verificationMap.put(Constants.BUILDING, resultSet.getString("Building"));
+                verificationMap.put(Constants.FLAT, resultSet.getString("Apartment"));
+                verificationMap.put(Constants.STAMP, resultSet.getString("Account"));
+                verificationMap.put(Constants.COUNTER_NUMBER, resultSet.getString("CounterNumber"));
+                verificationMap.put(Constants.COUNTER_SIZE_AND_SYMBOL, resultSet.getString("Type"));
+                verificationMap.put(Constants.YEAR, resultSet.getString("Year"));
+                verificationMap.put(Constants.PHONE_NUMBER, resultSet.getString("TelNumber"));
+                verificationMap.put(Constants.PROVIDER, resultSet.getString("Customer"));
+                verificationMap.put(Constants.DATE, resultSet.getString("Date"));
 
                 try {
-                    verificationMap.put(Constants.CITY_ID, rs.getString("CityID"));
-                    verificationMap.put(Constants.DISTRICT_ID, rs.getString("DistrictID"));
-                    verificationMap.put(Constants.STREET_ID, rs.getString("StreetID"));
-                    verificationMap.put(Constants.CUSTOMER_ID, rs.getString("CustomerID"));
+                    verificationMap.put(Constants.CITY_ID, resultSet.getString("CityID"));
+                    verificationMap.put(Constants.DISTRICT_ID, resultSet.getString("DistrictID"));
+                    verificationMap.put(Constants.STREET_ID, resultSet.getString("StreetID"));
+                    verificationMap.put(Constants.CUSTOMER_ID, resultSet.getString("CustomerID"));
 
-                    verificationMap.put(Constants.NOTE, rs.getString("Note"));
+                    verificationMap.put(Constants.COMMENT, resultSet.getString("Note"));
                 } catch (SQLException e) {
-                    logger.error("User was trying to upload old archive format ", e);
+                    logger.warn("User was trying to upload old archive format ", e);
                 }
 
-                bbiFilesToVerification.put(rs.getString("FileNumber"), verificationMap);
+                bbiFilesToVerification.put(resultSet.getString("FileNumber"), verificationMap);
             }
         }
         return bbiFilesToVerification;
@@ -383,7 +384,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
         Verification verification = new Verification(date, clientData,
                 Status.CREATED_BY_CALIBRATOR, calibrator, providerFromBBI, calibratorEmployee,
-                counter, verId, verificationData.get(Constants.NOTE));
+                counter, verId, verificationData.get(Constants.COMMENT));
         String verificationId = verification.getId();
         verificationService.saveVerification(verification);
         return verificationId;
