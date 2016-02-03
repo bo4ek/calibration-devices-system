@@ -125,8 +125,10 @@ public class Verification implements Comparable {
     @JoinColumn(name = "counterId")
     private Counter counter;
 
+    @Column
     private int queue;
 
+    @Column
     private Integer processTimeExceeding;
 
     @ManyToOne

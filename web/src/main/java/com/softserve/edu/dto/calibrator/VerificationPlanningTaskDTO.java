@@ -35,7 +35,8 @@ public class VerificationPlanningTaskDTO implements Comparable {
     private boolean sealPresence;
     private int queue;
 
-    public VerificationPlanningTaskDTO(){}
+    public VerificationPlanningTaskDTO() {
+    }
 
     public VerificationPlanningTaskDTO(Date sentDate, String verificationId, String providerName, String district,
                                        String street, String building, String flat, String clientFullName,
@@ -98,7 +99,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
     public VerificationPlanningTaskDTO(Date sentDate, String verificationID, String providerName, String fullName,
                                        String district, String street, String building, String flat, String telephone,
                                        String secondphone, Date dateOfVerif, LocalTime timeFrom, LocalTime timeTo,
-                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence){
+                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence) {
         this.sentToCalibrator = sentDate;
         this.verficationId = verificationID;
         this.providerName = providerName;
@@ -127,22 +128,22 @@ public class VerificationPlanningTaskDTO implements Comparable {
         }
 
         if ((secondphone != null) && !secondphone.isEmpty()) {
-            this.phone = telephone+", "+secondphone;
+            this.phone = telephone + ", " + secondphone;
         } else {
             this.phone = telephone;
         }
 
     }
 
-    public VerificationPlanningTaskDTO( String verficationId,int queue) {
+    public VerificationPlanningTaskDTO(String verficationId, int queue) {
         this.verficationId = verficationId;
         this.queue = queue;
     }
 
     @Override
     public int compareTo(Object o) {
-        int compareage=((VerificationPlanningTaskDTO)o).getQueue();
-        return this.queue-compareage;
+        int compare = ((VerificationPlanningTaskDTO) o).getQueue();
+        return this.queue - compare;
     }
 
 }
