@@ -60,10 +60,11 @@ angular
                     }
                 }
 
-                measuringEquipmentServiceAdmin.findAllOrganizationCodesAndNames().then(function (respCodes) {
-                    $scope.organizationCodes = getNamesAndCodes(respCodes.data);
-                    var index = arrayObjectIndexOf($scope.organizationCodes, calibrationModule.organizationCode);
-                    $scope.selectedValues.selectedOrganizationCode = $scope.organizationCodes[index];
+                measuringEquipmentServiceAdmin.findAllOrganizationCodesAndNames()
+                    .success(function (respCodes) {
+                        $scope.organizationCodes = getNamesAndCodes(respCodes);
+                        var index = getIndexOfSelectedValue($scope.organizationCodes, calibrationModule.organizationCode);
+                        $scope.selectedValues.selectedOrganizationCode = $scope.organizationCodes[index];
                 });
 
                 $scope.addCalibrationModuleFormData.moduleType = {
@@ -71,7 +72,6 @@ angular
                     label: $filter('translate')(calibrationModule.moduleType)
                 };
                 $scope.addCalibrationModuleFormData.moduleId = calibrationModule.moduleId;
-                $scope.addCalibrationModuleFormData.organizationCode = calibrationModule.organizationCode;
                 $scope.addCalibrationModuleFormData.condDesignation = calibrationModule.condDesignation;
                 $scope.addCalibrationModuleFormData.serialNumber = calibrationModule.serialNumber;
                 $scope.oldSerialNumber = calibrationModule.serialNumber;
@@ -103,23 +103,22 @@ angular
             function getNamesAndCodes(organizationCodes) {
                 var array = [];
                 for (var i = 0; i < organizationCodes.length; i++) {
-                    var organizationCodesAndNames = {};
-                    organizationCodesAndNames.code = organizationCodes[i][0];
-                    organizationCodesAndNames.name = organizationCodes[i][1];
-                    array[i] = organizationCodesAndNames;
+                    array.push(organizationCodesAndNames = {
+                        code : organizationCodes[i][0],
+                        name : organizationCodes[i][1]
+                    });
                 }
                 return array;
             }
 
-            function arrayObjectIndexOf(myArray, searchTerm) {
+            function getIndexOfSelectedValue(myArray, searchTerm) {
                 for (var i = 0, len = myArray.length; i < len; i++) {
                     if (myArray[i].code == searchTerm) {
                         return i;
                     }
                 }
                 var elem = {
-                    id: length,
-                    orgCode: searchTerm
+                    organizationCode: searchTerm
                 };
                 myArray.push(elem);
                 return (myArray.length - 1);
@@ -210,7 +209,6 @@ angular
                 } else {
                     measuringEquipmentServiceAdmin.editCalibrationModule($scope.addCalibrationModuleFormData, calibrationModule.moduleId)
                         .then(function (result) {
-                            console.log("else");
                             if (result == 200) {
                                 $scope.closeModal(true);
                                 $scope.resetCalibrationModuleForm();
