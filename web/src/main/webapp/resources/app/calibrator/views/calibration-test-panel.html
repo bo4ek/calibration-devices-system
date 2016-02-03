@@ -296,6 +296,7 @@
                                         <ui-select class="col-md-12" ng-model="counter.manufacturer" type="text" theme="select2"
                                                    name="manufacturer"
                                                    id="manufacturer"
+                                                   on-select = "getAllUnsuitabilityReasons(counter.manufacturer.id)"
                                                required>
                                             <ui-select-match
                                                     placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"

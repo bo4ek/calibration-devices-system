@@ -26,8 +26,8 @@ angular
                     });
             },
 
-            getCounterTypeId: function (counterId) {
-                var url = 'calibrator/calibrationTests/getCounterTypeId/' + counterId;
+            getCounterTypeId: function (verificationId) {
+                var url = 'calibrator/calibrationTests/getCounterTypeId/' + verificationId;
                 return $http.get(url)
                     .then(function (result) {
                         return result;

@@ -56,12 +56,12 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
     @Override
     @Transactional
     public void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird
-            , String statusCommon, Long counterId, CalibrationTestManual calibrationTestManual, String verificationId
+            , String statusCommon, CalibrationTestManual calibrationTestManual, String verificationId
             , UnsuitabilityReason unsuitabilityReason, int realiseYear, String numberCounter, Long counterTypeId) {
         Verification verification = verificationRepository.findOne(verificationId);
         CounterType counterType = counterTypeRepository.findOne(counterTypeId);
 
-        Counter counter = counterRepository.findOne(counterId);
+        Counter counter = verification.getCounter();
         counter.setReleaseYear(Integer.valueOf(realiseYear).toString());
         counter.setNumberCounter(numberCounter);
         counter.setCounterType(counterType);
@@ -82,10 +82,9 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
     @Transactional
     public void editTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon
             , CalibrationTestDataManual cTestDataManual, String verificationId, Boolean verificationEdit, UnsuitabilityReason unsuitabilityReason
-            , int realiseYear, String numberCounter, Long counterTypeId, Long counterId) {
+            , int realiseYear, String numberCounter, Long counterTypeId) {
         CounterType counterType = counterTypeRepository.findOne(counterTypeId);
-
-        Counter counter = counterRepository.findOne(counterId);
+        Counter counter = verificationRepository.findOne(verificationId).getCounter();
         counter.setReleaseYear(Integer.valueOf(realiseYear).toString());
         counter.setNumberCounter(numberCounter);
         counter.setCounterType(counterType);
@@ -106,6 +105,7 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
                 verification.setStatus(Status.TEST_NOK);
                 verificationRepository.save(verification);
             }
+
         }
         calibrationTestDataManualRepository.save(cTestDataManual);
     }

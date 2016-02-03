@@ -154,13 +154,13 @@ public class CalibrationTestController {
         }
     }
 
-    @RequestMapping(value = "getCounterTypeId/{counterId}", method = RequestMethod.GET)
-    public ResponseEntity<Long> getCounterTypeId(@PathVariable Long counterId) {
+    @RequestMapping(value = "getCounterTypeId/{verificationId}", method = RequestMethod.GET)
+    public ResponseEntity<Long> getCounterTypeId(@PathVariable String verificationId) {
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = new ResponseEntity(counterRepository.findOne(counterId).getCounterType().getId(), HttpStatus.OK);
+            responseEntity = new ResponseEntity(verificationService.findById(verificationId).getCounter().getCounterType().getId(), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("failed to get counterType", e);
+            logger.error("failed to get counterTypeId", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -248,7 +248,7 @@ public class CalibrationTestController {
                 }
                 calibrationTestDataManualService.createNewTestDataManual(calibrationTDMDTO.getStatusTestFirst()
                         , calibrationTDMDTO.getStatusTestSecond(), calibrationTDMDTO.getStatusTestThird()
-                        , calibrationTDMDTO.getStatusCommon(), calibrationTDMDTO.getCounterId()
+                        , calibrationTDMDTO.getStatusCommon()
                         , calibrationTestManual, calibrationTDMDTO.getVerificationId(), unsuitabilityReason
                         , calibrationTDMDTO.getRealiseYear(), calibrationTDMDTO.getNumberCounter(), calibrationTestManualDTO.getCounterTypeId());
             }
@@ -320,7 +320,7 @@ public class CalibrationTestController {
             calibrationTestDataManualService.editTestDataManual(cTestDataManualDTO.getStatusTestFirst()
                     , cTestDataManualDTO.getStatusTestSecond(), cTestDataManualDTO.getStatusTestThird()
                     , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit, unsuitabilityReason
-                    , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(), cTestManualDTO.getCounterTypeId(), cTestDataManualDTO.getCounterId());
+                    , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(), cTestManualDTO.getCounterTypeId());
         } catch (Exception e) {
             logger.error("failed to edit calibration test manual", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);

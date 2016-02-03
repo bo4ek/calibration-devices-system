@@ -17,11 +17,11 @@ public interface CalibrationTestDataManualService {
 
     CalibrationTestDataManual findByVerificationId(String verifId);
 
-    void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, Long counterId, CalibrationTestManual calibrationTestManual
+    void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, CalibrationTestManual calibrationTestManual
             , String verificationId, UnsuitabilityReason unsuitabilityReason, int realiseYear, String numberCounter, Long counterTypeId);
 
     void editTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, CalibrationTestDataManual cTestDataManual, String verificationId
-            , Boolean verificationEdit, UnsuitabilityReason unsuitabilityReason, int realiseYear, String numberCounter, Long counterTypeId, Long counterId);
+            , Boolean verificationEdit, UnsuitabilityReason unsuitabilityReason, int realiseYear, String numberCounter, Long counterTypeId);
 
 
 }
