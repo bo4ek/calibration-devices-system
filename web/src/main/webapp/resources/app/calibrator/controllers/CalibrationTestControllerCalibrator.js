@@ -101,7 +101,8 @@ angular
              */
             $scope.createAndUpdateTest = function () {
                 $scope.$broadcast('show-errors-check-validity');
-                if($scope.handheldProtocolForm.$valid) {
+                $scope.checkIsEmptyDataOfCounter();
+                if($scope.handheldProtocolForm.$valid || !$scope.isEmptyField) {
                     retranslater();
                     if (!$scope.selectedData.numberProtocol) {
                         calibrationTestServiceCalibrator.createTestManual(testManualForSend)
@@ -124,6 +125,9 @@ angular
                                 }
                             })
                     }
+                }
+                else {
+                    toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('FILL_IN_INFORMATION_ABOUT_COUNTER'));
                 }
             };
 
@@ -184,6 +188,7 @@ angular
             $scope.IsScanDoc = false;
             $scope.selectedData.numberProtocolManual=null;
             $scope.isNotProcessed = false;
+            $scope.isEmptyField= false;
             $scope.counterTypeId = null;
 
             /**
@@ -226,7 +231,7 @@ angular
                                 unsuitabilityReason : dataCompletedTest.unsuitabilityReason,
                                 realiseYear : dataOfCounter.realiseYear
                             };
-                            getCurrentmanufacturer(dataCompletedTest.calibrationTestManualDTO.counterTypeId);
+                            getCurrentManufacturer(dataCompletedTest.calibrationTestManualDTO.counterTypeId);
                             $scope.setDataUseManufacturerNumber(findcalibrationModuleBySerialNumber(dataCompletedTest.calibrationTestManualDTO.serialNumber));
                             $scope.selectedData.numberProtocolManual = dataCompletedTest.calibrationTestManualDTO.numberOfTest;
                             $scope.selectedData.numberProtocol = dataCompletedTest.calibrationTestManualDTO.generateNumber;
@@ -292,7 +297,7 @@ angular
                         if (result.status == 200)
                          {
                          $scope.counterTypeId = result.data;
-                         getCurrentmanufacturer($scope.counterTypeId);
+                         getCurrentManufacturer($scope.counterTypeId);
                          }
                          else {
                          $scope.counter.manufacturer = undefined;
@@ -326,6 +331,13 @@ angular
                     model = data[i];
                     $scope.manufacturerNumbers.push(model);
                 }
+            };
+
+            $scope.checkIsEmptyDataOfCounter = function () {
+                if (!$scope.counter.standardSize || !$scope.counter.symbol || !$scope.counter.manufacturer || !$scope.counter.typeWater) {
+                    $scope.isEmptyField = true;
+                }
+
             };
 
             /**
@@ -486,7 +498,7 @@ angular
             /**
              * get all counterType and set current manufacturer name
              */
-            function getCurrentmanufacturer(counterTypeId) {
+            function getCurrentManufacturer(counterTypeId) {
                 calibrationTestServiceCalibrator.getCountersTypes()
                     .then(function (result) {
                         $scope.countersTypesAll = result.data;
