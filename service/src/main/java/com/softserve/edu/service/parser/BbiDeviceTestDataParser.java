@@ -4,13 +4,10 @@ import com.softserve.edu.common.Constants;
 import com.softserve.edu.device.test.data.BbiDeviceTestData;
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
-import sun.reflect.annotation.ExceptionProxy;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;

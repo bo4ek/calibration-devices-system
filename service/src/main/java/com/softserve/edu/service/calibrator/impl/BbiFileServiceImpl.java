@@ -2,7 +2,6 @@ package com.softserve.edu.service.calibrator.impl;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.repository.UploadBbiRepository;
-import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
 import com.softserve.edu.service.parser.DeviceTestDataParser;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
