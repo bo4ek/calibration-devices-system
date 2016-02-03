@@ -19,7 +19,6 @@ public class CalibrationTestDataManualDTO {
     private String statusTestThird;
     private String statusCommon;
     private String verificationId;
-    private Long counterId;
     private int realiseYear;
     private boolean signed;
     private UnsuitabilityReasonDTO unsuitabilityReason;
@@ -42,13 +41,12 @@ public class CalibrationTestDataManualDTO {
         this.numberCounter = numberCounter;
     }
 
-    public CalibrationTestDataManualDTO(String numberCounter, String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon,Long counterId, CalibrationTestManualDTO calibrationTestManualDTO) {
+    public CalibrationTestDataManualDTO(String numberCounter, String statusTestFirst, String statusTestSecond, String statusTestThird, String statusCommon, CalibrationTestManualDTO calibrationTestManualDTO) {
         this.numberCounter = numberCounter;
         this.statusTestFirst = statusTestFirst;
         this.statusTestSecond = statusTestSecond;
         this.statusTestThird = statusTestThird;
         this.statusCommon = statusCommon;
-        this.counterId = counterId;
         this.calibrationTestManualDTO = calibrationTestManualDTO;
     }
 

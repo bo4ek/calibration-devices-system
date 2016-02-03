@@ -291,7 +291,7 @@ angular
              * entity of manual test
              */
             function creatorTestManual(value, key) {
-                calibrationTestServiceCalibrator.getCounterTypeId(value.counterId)
+                calibrationTestServiceCalibrator.getCounterTypeId(key)
                     .then(function (result) {
                         if (result.status == 200)
                          {
@@ -456,12 +456,12 @@ angular
             /**
              * get data of unsuitabilityReasons for drop-down
              */
-            function getAllUnsuitabilityReasons(counterId) {
-                calibrationTestServiceCalibrator.getAllUnsuitabilityReasons(counterId)
-                    .then(function (reasons) {
-                        $scope.unsuitabilityReasons = reasons.data;
-                    })
-            }
+            $scope.getAllUnsuitabilityReasons = function (counterTypeId) {
+                calibrationTestServiceCalibrator.getReasonsUnsuitability(counterTypeId)
+                    .success(function (reasons) {
+                        $scope.unsuitabilityReasons = reasons;
+                    });
+            };
 
 
             $scope.getAllSymbolsByStandardSizeAndDeviceType = function (standardSize, deviceType) {
@@ -470,6 +470,7 @@ angular
                         $scope.symbols = symbols;
                         $scope.counter.symbol = undefined;
                         $scope.counter.manufacturer = undefined;
+                        $scope.unsuitabilityReasons = undefined;
                     });
             };
 
@@ -512,6 +513,7 @@ angular
                     .then(function (result) {
                         $scope.manufacturerNames = result.data;
                         $scope.counter.manufacturer = undefined;
+                        $scope.unsuitabilityReasons = undefined;
                     })
             };
 
@@ -522,6 +524,7 @@ angular
                 $scope.counter.typeWater = undefined;
                 $scope.counter.symbol = undefined;
                 $scope.counter.manufacturer = undefined;
+                $scope.unsuitabilityReasons = undefined;
             };
 
 
@@ -543,7 +546,6 @@ angular
             $scope.changeStatus = function (verification) {
                 if (verification.statusTestFirst == 'NOT_PROCESSED' || verification.statusTestSecond == 'NOT_PROCESSED' || verification.statusTestThird == 'NOT_PROCESSED') {
                     verification.statusCommon = 'FAILED';
-                    getAllUnsuitabilityReasons(verification.counterId);
                     $scope.isNotProcessed = true;
                 } else if (verification.statusTestFirst == 'FAILED' || verification.statusTestSecond == 'FAILED' || verification.statusTestThird == 'FAILED') {
                     verification.statusCommon = 'FAILED';
