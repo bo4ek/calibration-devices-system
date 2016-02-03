@@ -39,8 +39,19 @@ angular
              * Closes the modal window
              */
             $scope.closeModal = function () {
-                $modalInstance.close()
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/common/views/modals/close-alert.html',
+                    controller: 'VerificationCloseAlertController',
+                    size: 'md'
+                })
             };
+
+            $scope.$on('close-form', function () {
+                $modalInstance.dismiss();
+            });
+
+
 
             //TODO fix regex
             $scope.TEAM_USERNAME_REGEX = /[a-z0-9_-]{3,16}/;

@@ -77,6 +77,7 @@
 
 <script type="text/javascript" data-main="resources/app/verificator/runApp"
         src="resources/assets/bower_components/requirejs/require.js"></script>
+
 </body>
 
 </html>

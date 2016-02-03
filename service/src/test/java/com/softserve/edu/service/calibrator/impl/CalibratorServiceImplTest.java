@@ -6,6 +6,7 @@ import com.softserve.edu.entity.user.User;
 import com.softserve.edu.repository.OrganizationRepository;
 import com.softserve.edu.repository.UserRepository;
 import com.softserve.edu.service.utils.EmployeeDTO;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,7 +77,7 @@ public class CalibratorServiceImplTest {
         when(organization.getId()).thenReturn(11L);
         setOfUser.add(user);
         user.setOrganization(organization);
-        when(userRepository.findAllAvailableUsersByRoleAndOrganizationId(UserRole.CALIBRATOR_EMPLOYEE, 11L))
+        when(userRepository.findAllAvailableUsersByEmployeeAndAdminRoleAndOrganizationId(UserRole.CALIBRATOR_EMPLOYEE, UserRole.CALIBRATOR_ADMIN, 11L))
                 .thenReturn(setOfUser);
         calibratorService.setUserRepository(userRepository);
         List<EmployeeDTO> list = calibratorService.getAllCalibratorEmployee(listOfRole, user);

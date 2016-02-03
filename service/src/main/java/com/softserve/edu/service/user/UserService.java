@@ -23,4 +23,6 @@ public interface UserService {
     void updateUser(User user);
 
     void createSuperAdminIfNotExists(User user);
+
+    List<User> findBySubdivisionId(String id);
 }

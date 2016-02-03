@@ -34,5 +34,5 @@ public interface UsersService {
                            String role, String firstName, String lastName, String organization,
                            String telephone,  String sortCriteria, String sortOrder);
 
-    public ListToPageTransformer<User> findAllSysAdmins();
+    ListToPageTransformer<User> findAllSysAdmins();
 }

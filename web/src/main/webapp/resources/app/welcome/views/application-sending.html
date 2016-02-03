@@ -349,7 +349,7 @@
                             {{'REQUIRED' | translate}}
                         </p>
 
-                        <p class="help-block street-required" ng-if="clientForm.street.$error.required">
+                        <p class="help-block street-required" ng-if="clientForm.street.$error.required || clientForm.street.$invalid" >
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
                         </p>

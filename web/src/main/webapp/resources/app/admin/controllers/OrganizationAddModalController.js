@@ -511,7 +511,6 @@ angular
                 organizationService.saveOrganization($scope.organizationFormData)
                     .then(function (data) {
                         if (data == 201) {
-                            //       $scope.resetOrganizationForm();
                             $rootScope.onTableHandling();
                         }
                         $modalInstance.close();

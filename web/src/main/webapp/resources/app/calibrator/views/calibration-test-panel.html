@@ -147,6 +147,10 @@
                                        name="numberProtocolManual"
                                        class="form-control"
                                        required>
+                                <p class="help-block" ng-if="handheldProtocolForm.numberProtocolManual.$error.required">
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    {{'REQUIRED' | translate}}
+                                </p>
                             </div>
 
                             <div class="test-panel-title">
@@ -296,6 +300,7 @@
                                         <ui-select class="col-md-12" ng-model="counter.manufacturer" type="text" theme="select2"
                                                    name="manufacturer"
                                                    id="manufacturer"
+                                                   on-select = "getAllUnsuitabilityReasons(counter.manufacturer.id)"
                                                required>
                                             <ui-select-match
                                                     placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
@@ -388,15 +393,6 @@
                                 </tbody>
                             </table>
                         </div>
-                            <p id="emptyError" ng-if="handheldProtocolForm.numberCounter.$error.required
-                            || handheldProtocolForm.type.$error.required
-                            || handheldProtocolForm.symbol.$error.required
-                            || handheldProtocolForm.realiseYear.$error.required
-                            || handheldProtocolForm.manufacturer.$error.required
-                            || handheldProtocolForm.manufacturer.$error.required" class="help-block">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'FILL_IN_INFORMATION_ABOUT_COUNTER' | translate}}
-                            </p>
                             <!--ng-disabled="isManualProtocol"-->
                             <div class="col-md-3">
                                 <button ng-disabled="selectedData.isSignedDocument" type="button" class="btn btn-success btn-md"

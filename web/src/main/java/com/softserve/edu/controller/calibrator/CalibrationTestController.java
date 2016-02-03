@@ -32,11 +32,14 @@ import com.softserve.edu.service.verification.VerificationService;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
@@ -154,13 +157,13 @@ public class CalibrationTestController {
         }
     }
 
-    @RequestMapping(value = "getCounterTypeId/{counterId}", method = RequestMethod.GET)
-    public ResponseEntity<Long> getCounterTypeId(@PathVariable Long counterId) {
+    @RequestMapping(value = "getCounterTypeId/{verificationId}", method = RequestMethod.GET)
+    public ResponseEntity<Long> getCounterTypeId(@PathVariable String verificationId) {
         ResponseEntity<Long> responseEntity;
         try {
-            responseEntity = new ResponseEntity(counterRepository.findOne(counterId).getCounterType().getId(), HttpStatus.OK);
+            responseEntity = new ResponseEntity(verificationService.findById(verificationId).getCounter().getCounterType().getId(), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("failed to get counterType", e);
+            logger.error("failed to get counterTypeId", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -248,7 +251,7 @@ public class CalibrationTestController {
                 }
                 calibrationTestDataManualService.createNewTestDataManual(calibrationTDMDTO.getStatusTestFirst()
                         , calibrationTDMDTO.getStatusTestSecond(), calibrationTDMDTO.getStatusTestThird()
-                        , calibrationTDMDTO.getStatusCommon(), calibrationTDMDTO.getCounterId()
+                        , calibrationTDMDTO.getStatusCommon()
                         , calibrationTestManual, calibrationTDMDTO.getVerificationId(), unsuitabilityReason
                         , calibrationTDMDTO.getRealiseYear(), calibrationTDMDTO.getNumberCounter(), calibrationTestManualDTO.getCounterTypeId());
             }
@@ -320,7 +323,7 @@ public class CalibrationTestController {
             calibrationTestDataManualService.editTestDataManual(cTestDataManualDTO.getStatusTestFirst()
                     , cTestDataManualDTO.getStatusTestSecond(), cTestDataManualDTO.getStatusTestThird()
                     , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit, unsuitabilityReason
-                    , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(), cTestManualDTO.getCounterTypeId(), cTestDataManualDTO.getCounterId());
+                    , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(), cTestManualDTO.getCounterTypeId());
         } catch (Exception e) {
             logger.error("failed to edit calibration test manual", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -490,9 +493,8 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
-    @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.PUT)
-    public ResponseEntity signTestProtocol(@PathVariable String verificationId) {
-        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
+    @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.GET)
+    public void signTestProtocol(@PathVariable String verificationId, HttpServletResponse httpResponse) {
         try {
             Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
@@ -517,17 +519,39 @@ public class CalibrationTestController {
             verification.setSigned(true);
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
-            byte[] documentByteArray = new byte[(int) file.getContent().getSize()];
+
+            httpResponse.setContentType("application/pdf");
+            httpResponse.setHeader("Content-Disposition", "attachment; " +
+                    "filename=\"" + file.getName().getBaseName() + ".pdf"  + "\"");
+
+            ServletOutputStream outputStream = httpResponse.getOutputStream();
+            byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
             file.getContent().getInputStream().read(documentByteArray);
-            verification.setSignedDocument(documentByteArray);
+
+            outputStream.write(documentByteArray);
+            outputStream.close();
+            testRepository.save(calibrationTest);
             verificationService.saveVerification(verification);
         } catch (Exception e) {
             logger.error("Cannot sing protocol", e);
-            responseEntity = new ResponseEntity(e, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @RequestMapping(value = "signEDSTest/{verificationId}", method = RequestMethod.POST)
+    public ResponseEntity signEDSTestProtocol(@RequestParam(value="file") MultipartFile file, @PathVariable String verificationId){
+        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
+        try {
+            Verification verification = verificationService.findById(verificationId);
+            verification.setSignedDocument(file.getBytes());
+            verification.setSigned(true);
+            verificationService.saveVerification(verification);
+        }catch (Exception e) {
+            logger.error("Cannot sing protocol", e);
+            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
-
     private String getStandardSize(Verification verification) {
         return verification.getCounter().getCounterType().getStandardSize();
     }

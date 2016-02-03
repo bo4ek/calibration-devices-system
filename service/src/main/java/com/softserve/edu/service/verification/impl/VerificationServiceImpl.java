@@ -546,15 +546,21 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public boolean updateVerificationQueue(List<Verification> verifications, Long calibratorId) {
 
-        for (Verification verificationNew : verifications){
-           Verification verification = verificationRepository.findOne(verificationNew.getId());
-           if ( verification.getCalibrator().getId() != calibratorId){
-               logger.warn("Access denied");
-               return false;
-           }
-       }
-        for (Verification verificationNew : verifications){
-         verificationRepository.updateVerificationQueueById(verificationNew.getQueue(),verificationNew.getId());
+        List<String> listId = new ArrayList<>();
+        for (Verification verificationNew : verifications) {
+            listId.add(verificationNew.getId());
+        }
+
+        List<Verification> verificationList = verificationRepository.findByIdIn(listId);
+        for (Verification verification : verificationList) {
+            if (verification.getCalibrator().getId() != calibratorId) {
+                logger.warn("Access denied");
+                return false;
+            }
+        }
+
+        for (Verification verificationNew : verifications) {
+            verificationRepository.updateVerificationQueueById(verificationNew.getQueue(), verificationNew.getId());
         }
         return true;
     }
@@ -901,7 +907,7 @@ public class VerificationServiceImpl implements VerificationService {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> cq = cb.createQuery(Verification.class);
         Root<Verification> verifications = cq.from(Verification.class);
-        if((sortCriteria != null)&&(sortOrder != null)) {
+        if ((sortCriteria != null) && (sortOrder != null)) {
             cq.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(verifications, cb, sortOrder));
         } else {
             cq.orderBy(cb.desc(verifications.get("providerFromBBI")));

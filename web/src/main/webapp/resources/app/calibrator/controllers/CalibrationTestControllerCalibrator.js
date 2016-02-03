@@ -101,7 +101,8 @@ angular
              */
             $scope.createAndUpdateTest = function () {
                 $scope.$broadcast('show-errors-check-validity');
-                if($scope.handheldProtocolForm.$valid) {
+                $scope.checkIsEmptyDataOfCounter();
+                if($scope.handheldProtocolForm.$valid || !$scope.isEmptyField) {
                     retranslater();
                     if (!$scope.selectedData.numberProtocol) {
                         calibrationTestServiceCalibrator.createTestManual(testManualForSend)
@@ -124,6 +125,9 @@ angular
                                 }
                             })
                     }
+                }
+                else {
+                    toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('FILL_IN_INFORMATION_ABOUT_COUNTER'));
                 }
             };
 
@@ -169,7 +173,6 @@ angular
             $scope.moduleTypes = [];
             $scope.manufacturerNumbers = [];
             $scope.dataOfManualTests = [];
-            $scope.selectedData.standardSize = null;
             $scope.manufacturer = null;
             $scope.selectedData.testFirst = [];
             $scope.selectedData.testSecond = [];
@@ -185,6 +188,7 @@ angular
             $scope.IsScanDoc = false;
             $scope.selectedData.numberProtocolManual=null;
             $scope.isNotProcessed = false;
+            $scope.isEmptyField= false;
             $scope.counterTypeId = null;
 
             /**
@@ -202,7 +206,6 @@ angular
                         $scope.receiveAllOriginalModuleType($scope.calibrationModelDATA);
                         $scope.receiveAllManufacturerNumbers($scope.calibrationModelDATA);
                         receiveAllVerificationForManualTest($scope.IdsOfVerifications);
-                        $scope.selectedData.standardSize = $scope.dataOfManualTests[0].standardSize;
                     });
             }
 
@@ -219,7 +222,6 @@ angular
                             var testManual = {
                                 verificationId: $scope.testId,
                                 numberCounter: dataOfCounter.numberCounter,
-                                counterId : dataOfCounter.counterId,
                                 statusTestFirst: dataCompletedTest.statusTestFirst,
                                 statusTestSecond: dataCompletedTest.statusTestSecond,
                                 statusTestThird: dataCompletedTest.statusTestThird,
@@ -229,7 +231,7 @@ angular
                                 unsuitabilityReason : dataCompletedTest.unsuitabilityReason,
                                 realiseYear : dataOfCounter.realiseYear
                             };
-                            getCurrentmanufacturer(dataCompletedTest.calibrationTestManualDTO.counterTypeId);
+                            getCurrentManufacturer(dataCompletedTest.calibrationTestManualDTO.counterTypeId);
                             $scope.setDataUseManufacturerNumber(findcalibrationModuleBySerialNumber(dataCompletedTest.calibrationTestManualDTO.serialNumber));
                             $scope.selectedData.numberProtocolManual = dataCompletedTest.calibrationTestManualDTO.numberOfTest;
                             $scope.selectedData.numberProtocol = dataCompletedTest.calibrationTestManualDTO.generateNumber;
@@ -243,7 +245,6 @@ angular
 
                             $scope.selectedData.timeFrom = $scope.selectedData.dateOfManualTest;
                             $scope.dataOfManualTests.push(testManual);
-                            $scope.selectedData.standardSize = $scope.dataOfManualTests[0].standardSize;
                             $scope.pathToScanDoc = dataCompletedTest.calibrationTestManualDTO.pathToScanDoc;
                             $scope.checkIsScanDoc();
                             $scope.receiveTestsAndSetIsNotProcessed();
@@ -291,12 +292,12 @@ angular
              * entity of manual test
              */
             function creatorTestManual(value, key) {
-                calibrationTestServiceCalibrator.getCounterTypeId(value.counterId)
+                calibrationTestServiceCalibrator.getCounterTypeId(key)
                     .then(function (result) {
                         if (result.status == 200)
                          {
                          $scope.counterTypeId = result.data;
-                         getCurrentmanufacturer($scope.counterTypeId);
+                         getCurrentManufacturer($scope.counterTypeId);
                          }
                          else {
                          $scope.counter.manufacturer = undefined;
@@ -316,7 +317,6 @@ angular
                     statusCommon: 'SUCCESS',
                     status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
                     typeWater : ['WATER', 'THERMAL'],
-                    counterId: value.counterId,
                     unsuitabilityReason : null
                 };
                 return testManual
@@ -331,6 +331,13 @@ angular
                     model = data[i];
                     $scope.manufacturerNumbers.push(model);
                 }
+            };
+
+            $scope.checkIsEmptyDataOfCounter = function () {
+                if (!$scope.counter.standardSize || !$scope.counter.symbol || !$scope.counter.manufacturer || !$scope.counter.typeWater) {
+                    $scope.isEmptyField = true;
+                }
+
             };
 
             /**
@@ -456,12 +463,12 @@ angular
             /**
              * get data of unsuitabilityReasons for drop-down
              */
-            function getAllUnsuitabilityReasons(counterId) {
-                calibrationTestServiceCalibrator.getAllUnsuitabilityReasons(counterId)
-                    .then(function (reasons) {
-                        $scope.unsuitabilityReasons = reasons.data;
-                    })
-            }
+            $scope.getAllUnsuitabilityReasons = function (counterTypeId) {
+                calibrationTestServiceCalibrator.getReasonsUnsuitability(counterTypeId)
+                    .success(function (reasons) {
+                        $scope.unsuitabilityReasons = reasons;
+                    });
+            };
 
 
             $scope.getAllSymbolsByStandardSizeAndDeviceType = function (standardSize, deviceType) {
@@ -470,6 +477,7 @@ angular
                         $scope.symbols = symbols;
                         $scope.counter.symbol = undefined;
                         $scope.counter.manufacturer = undefined;
+                        $scope.unsuitabilityReasons = undefined;
                     });
             };
 
@@ -490,7 +498,7 @@ angular
             /**
              * get all counterType and set current manufacturer name
              */
-            function getCurrentmanufacturer(counterTypeId) {
+            function getCurrentManufacturer(counterTypeId) {
                 calibrationTestServiceCalibrator.getCountersTypes()
                     .then(function (result) {
                         $scope.countersTypesAll = result.data;
@@ -512,6 +520,7 @@ angular
                     .then(function (result) {
                         $scope.manufacturerNames = result.data;
                         $scope.counter.manufacturer = undefined;
+                        $scope.unsuitabilityReasons = undefined;
                     })
             };
 
@@ -522,6 +531,7 @@ angular
                 $scope.counter.typeWater = undefined;
                 $scope.counter.symbol = undefined;
                 $scope.counter.manufacturer = undefined;
+                $scope.unsuitabilityReasons = undefined;
             };
 
 
@@ -543,7 +553,6 @@ angular
             $scope.changeStatus = function (verification) {
                 if (verification.statusTestFirst == 'NOT_PROCESSED' || verification.statusTestSecond == 'NOT_PROCESSED' || verification.statusTestThird == 'NOT_PROCESSED') {
                     verification.statusCommon = 'FAILED';
-                    getAllUnsuitabilityReasons(verification.counterId);
                     $scope.isNotProcessed = true;
                 } else if (verification.statusTestFirst == 'FAILED' || verification.statusTestSecond == 'FAILED' || verification.statusTestThird == 'FAILED') {
                     verification.statusCommon = 'FAILED';

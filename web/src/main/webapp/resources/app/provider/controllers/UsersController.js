@@ -1,9 +1,8 @@
 angular
     .module('employeeModule')
-    .controller('UsersController', ['$scope', 'UserService', 'EmployeeService', '$modal', '$log', 'ngTableParams', '$timeout', '$filter', '$rootScope',
-        function ($scope, userService, employeeService, $modal, $log, ngTableParams, $timeout, $filter, $rootScope) {
+    .controller('UsersController', ['$scope', 'UserService', 'EmployeeService', '$modal', '$log', 'ngTableParams',
+        function ($scope, userService, employeeService, $modal, $log, ngTableParams) {
             $scope.totalEmployee = 0;
-            $scope.cantAddEmployee;
 
             $scope.tableParams = new ngTableParams({
                 page: 1,
@@ -18,7 +17,6 @@ angular
                         .success(function (result) {
                             $scope.totalEmployee = result.totalItems;
                             $defer.resolve(result.content);
-                            //$scope.totalEmployee = result.length;
                             params.total(result.totalItems);
                             $scope.cantAddNewEmployee();
                         }, function (result) {
@@ -26,7 +24,6 @@ angular
                         });
                 }
             });
-
 
             $scope.isFilter = function () {
                 var obj = $scope.tableParams.filter();
@@ -39,14 +36,12 @@ angular
             };
 
             $scope.showCapacity = function (username) {
-
                 $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/provider/views/employee/capacity-providerEmployee.html',
                     controller: 'CapacityEmployeeControllerProvider',
                     size: 'lg',
                     resolve: {
-
                         capacity: function () {
                             return userService.getCapacityOfWork(username)
                                 .success(function (verifications) {
@@ -56,7 +51,6 @@ angular
                     }
                 });
             };
-
 
             $scope.onTableHandling = function () {
                 userService.isAdmin()
@@ -105,7 +99,7 @@ angular
                             controller: 'EditEmployeeController',
                             templateUrl: 'resources/app/provider/views/employee/employee-edit-modal.html',
                             resolve: {
-                                user: function() {
+                                user: function () {
                                     return data.data;
                                 }
                             }
@@ -113,24 +107,16 @@ angular
                     });
             };
 
-
             $scope.cantAddNewEmployee = function () {
                 userService.getOrganizationEmployeeCapacity().success(
                     function (data) {
                         $scope.organizationEmployeesCapacity = data;
-                        if ($scope.totalEmployee < $scope.organizationEmployeesCapacity) {
-                            $scope.cantAddEmployee = false;
-                        } else {
-                            $scope.cantAddEmployee = true;
-                        }
+                        $scope.cantAddEmployee = $scope.totalEmployee >= $scope.organizationEmployeesCapacity;
                     });
             };
-
 
             $scope.$on('new-employee-added', function () {
                 $scope.tableParams.reload();
             });
-
-
-        }]);
-
+        }
+    ]);

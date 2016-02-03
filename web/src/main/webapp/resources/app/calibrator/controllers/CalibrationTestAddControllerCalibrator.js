@@ -24,151 +24,6 @@ angular
                 {},
                 {}
             ];
-            $scope.servers = [
-                {
-                    "issuerCNs": ["Акредитований центр сертифікації ключів ІДД ДФС",
-                        "Акредитований центр сертифікації ключів ІДД Міндоходів",
-                        "Акредитований центр сертифікації ключів ІДД ДПС"],
-                    "address": "acskidd.gov.ua",
-                    "ocspAccessPointAddress": "acskidd.gov.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "acskidd.gov.ua",
-                    "tspAddress": "acskidd.gov.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["АЦСК органів юстиції України",
-                        "АЦСК Держінформ'юсту"],
-                    "address": "ca.informjust.ua",
-                    "ocspAccessPointAddress": "ca.informjust.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "ca.informjust.ua",
-                    "tspAddress": "ca.informjust.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["ЦСК Укрзалізниці"],
-                    "address": "csk.uz.gov.ua",
-                    "ocspAccessPointAddress": "csk.uz.gov.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "csk.uz.gov.ua",
-                    "tspAddress": "csk.uz.gov.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["Регіональний ЦСК Дніпропетровської області"],
-                    "address": "ca.dp.gov.ua",
-                    "ocspAccessPointAddress": "ca.dp.gov.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "ca.dp.gov.ua",
-                    "tspAddress": "ca.dp.gov.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["ЦСК \"MASTERKEY\" ТОВ \"АРТ-МАСТЕР\"",
-                        "ТОВ \"Арт-мастер\""],
-                    "address": "masterkey.ua",
-                    "ocspAccessPointAddress": "masterkey.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "masterkey.ua",
-                    "tspAddress": "masterkey.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["АЦСК ТОВ \"КС\""],
-                    "address": "ca.ksystems.com.ua",
-                    "ocspAccessPointAddress": "ca.ksystems.com.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "ca.ksystems.com.ua",
-                    "tspAddress": "ca.ksystems.com.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["АЦСК ДП \"УСС\""],
-                    "address": "csk.uss.gov.ua",
-                    "ocspAccessPointAddress": "csk.uss.gov.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "csk.uss.gov.ua",
-                    "tspAddress": "csk.uss.gov.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["АЦСК Публічного акціонерного товариства \"УкрСиббанк\""],
-                    "address": "csk.ukrsibbank.com",
-                    "ocspAccessPointAddress": "csk.ukrsibbank.com/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "csk.ukrsibbank.com",
-                    "tspAddress": "csk.ukrsibbank.com",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["АЦСК ПАТ КБ «ПРИВАТБАНК»",
-                        "АЦСК «ПРИВАТБАНК»"],
-                    "address": "acsk.privatbank.ua",
-                    "ocspAccessPointAddress": "acsk.privatbank.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "acsk.privatbank.ua",
-                    "tspAddress": "acsk.privatbank.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["Акредитований центр сертифікації ключів Збройних Сил"],
-                    "address": "ca.mil.gov.ua",
-                    "ocspAccessPointAddress": "ca.mil.gov.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "ca.mil.gov.ua",
-                    "tspAddress": "ca.mil.gov.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["АЦСК ТОВ \"Центр сертифікації ключів \"Україна\"",
-                        "ТОВ \"Центр сертифікації ключів \"Україна\""],
-                    "address": "uakey.com.ua",
-                    "ocspAccessPointAddress": "uakey.com.ua",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "uakey.com.ua",
-                    "tspAddress": "uakey.com.ua",
-                    "tspAddressPort": "80"
-                },
-                {
-                    "issuerCNs": ["ТОВ \"Український сертифікаційний центр\""],
-                    "address": "ocsp.ukrcc.com",
-                    "ocspAccessPointAddress": "ocsp.ukrcc.com",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "",
-                    "tspAddress": "",
-                    "tspAddressPort": ""
-                },
-                {
-                    "issuerCNs": ["АЦСК Державної казначейської служби України",
-                        "ЦСК Державної казначейської служби України"],
-                    "address": "",
-                    "ocspAccessPointAddress": "",
-                    "ocspAccessPointPort": "",
-                    "cmpAddress": "",
-                    "tspAddress": "",
-                    "tspAddressPort": "",
-                    "certsInKey": true
-                },
-                {
-                    "issuerCNs": ["АЦСК 'eSign' ТОВ 'Алтерсайн'"],
-                    "address": "ca.altersign.com.ua",
-                    "ocspAccessPointAddress": "ca.altersign.com.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "",
-                    "tspAddress": "",
-                    "tspAddressPort": ""
-                },
-                {
-                    "issuerCNs": ["Тестовий ЦСК АТ \"ІІТ\""],
-                    "address": "ca.iit.com.ua",
-                    "ocspAccessPointAddress": "ca.iit.com.ua/services/ocsp/",
-                    "ocspAccessPointPort": "80",
-                    "cmpAddress": "ca.iit.com.ua",
-                    "tspAddress": "ca.iit.com.ua",
-                    "tspAddressPort": "80"
-                }
-            ];
 
             $scope.setPointerEvents = function (element, enable) {
                 element.style.pointerEvents = enable ? "auto" : "none";
@@ -182,19 +37,503 @@ angular
                     : '';
                 document.getElementById('PKeyPassword').value = '';
             };
+            $scope.euSign = new EUSignCP();
+            $scope.utils = new Utils($scope.euSign);
+            $scope.privateKeyCerts = null;
+            $scope.CAsServers = null;
+            $scope.CAServer = {
+                "issuerCNs": null,
+                "address": null,
+                "ocspAccessPointAddress": null,
+                "ocspAccessPointPort": null,
+                "cmpAddress": null,
+                "tspAddress": null,
+                "tspAddressPort": null
+            };
+            $scope.offline = false;
+            $scope.useCMP = false;
+            $scope.loadPKCertsFromFile = false;
+            $scope.PrivateKeyNameSessionStorageName = "PrivateKeyName";
+            $scope.PrivateKeySessionStorageName = "PrivateKey";
+            $scope.PrivateKeyPasswordSessionStorageName = "PrivateKeyPassword";
+            $scope.CertsLocalStorageName = "Certificates";
+            $scope.CRLsLocalStorageName = "CRLs";
+            $scope.CACertificatesSessionStorageName = "CACertificates";
+            $scope.CAServerIndexSessionStorageName = "CAServerIndex";
+            $scope.PrivateKeyCertificatesChainSessionStorageName = "PrivateKeyCertificatesChain";
+            $scope.PrivateKeyCertificatesSessionStorageName = "PrivateKeyCertificates";
+            $scope.URL_XML_HTTP_PROXY_SERVICE = "http://localhost:8080/Data/java/ProxyHandler.php";
+            $scope.URL_GET_CERTIFICATES = "http://localhost:8080/Data/CACertificates.p7b?version=1.0.4";
+            $scope.URL_CAS = "http://localhost:8080/Data/CAs.json?version=1.0.4";
+            $scope.initialize = function () {
+                var _onSuccess = function () {
+                    try {
+                        $scope.euSign.Initialize();
+                        $scope.euSign.SetJavaStringCompliant(true);
+                        $scope.euSign.SetCharset("UTF-16LE");
 
+                        if ($scope.euSign.DoesNeedSetSettings()) {
+                            $scope.setDefaultSettings();
 
-            $scope.loadServers = function () {
-                var select = document.getElementById("CAsServersSelect");
-                for (var i = 0; i < $scope.servers.length; i++) {
-                    var option = document.createElement("option");
-                    option.text = $scope.servers[i].issuerCNs[0];
-                    select.add(option);
+                            if ($scope.utils.IsStorageSupported()) {
+                                $scope.loadCertsAndCRLsFromLocalStorage();
+                            } else {
+                                alert("Локальне сховище не підтримується");
+                            }
+                        }
+                        $scope.loadCertsFromServer();
+                        $scope.setCASettings(0);
+
+                        if ($scope.utils.IsSessionStorageSupported()) {
+                            var _readPrivateKeyAsStoredFile = function () {
+                                $scope.readPrivateKeyAsStoredFile();
+                            };
+                            setTimeout(_readPrivateKeyAsStoredFile, 10);
+                        }
+                    } catch (e) {
+                        alert(e);
+                    }
+                };
+
+                var _onError = function () {
+                    alert('Виникла помилка ' +
+                        'при завантаженні криптографічної бібліотеки');
+                };
+
+                $scope.loadCAsSettings(_onSuccess, _onError);
+            };
+            $scope.setDefaultSettings = function () {
+                try {
+                    $scope.euSign.SetXMLHTTPProxyService($scope.URL_XML_HTTP_PROXY_SERVICE);
+
+                    var settings = $scope.euSign.CreateFileStoreSettings();
+                    settings.SetPath("/certificates");
+                    settings.SetSaveLoadedCerts(true);
+                    $scope.euSign.SetFileStoreSettings(settings);
+
+                    settings = $scope.euSign.CreateProxySettings();
+                    $scope.euSign.SetProxySettings(settings);
+
+                    settings = $scope.euSign.CreateTSPSettings();
+                    $scope.euSign.SetTSPSettings(settings);
+
+                    settings = $scope.euSign.CreateOCSPSettings();
+                    $scope.euSign.SetOCSPSettings(settings);
+
+                    settings = $scope.euSign.CreateCMPSettings();
+                    $scope.euSign.SetCMPSettings(settings);
+
+                    settings = $scope.euSign.CreateLDAPSettings();
+                    $scope.euSign.SetLDAPSettings(settings);
+
+                    settings = $scope.euSign.CreateOCSPAccessInfoModeSettings();
+                    settings.SetEnabled(true);
+                    $scope.euSign.SetOCSPAccessInfoModeSettings(settings);
+
+                    var CAs = $scope.CAsServers;
+                    settings = $scope.euSign.CreateOCSPAccessInfoSettings();
+                    for (var i = 0; i < CAs.length; i++) {
+                        settings.SetAddress(CAs[i].ocspAccessPointAddress);
+                        settings.SetPort(CAs[i].ocspAccessPointPort);
+
+                        for (var j = 0; j < CAs[i].issuerCNs.length; j++) {
+                            settings.SetIssuerCN(CAs[i].issuerCNs[j]);
+                            $scope.euSign.SetOCSPAccessInfoSettings(settings);
+                        }
+                    }
+                } catch (e) {
+                    alert("Виникла помилка при встановленні налашувань: " + e);
+                }
+
+            };
+            $scope.loadFilesFromLocalStorage = function (localStorageFolder, loadFunc) {
+
+                if (!$scope.utils.IsStorageSupported())
+                    $scope.euSign.RaiseError(EU_ERROR_NOT_SUPPORTED);
+
+                if ($scope.utils.IsFolderExists(localStorageFolder)) {
+                    var files = $scope.utils.GetFiles(localStorageFolder);
+                    for (var i = 0; i < files.length; i++) {
+                        var file = $scope.utils.ReadFile(
+                            localStorageFolder, files[i]);
+                        loadFunc(files[i], file);
+                    }
+                    return files;
+                }
+                else {
+                    $scope.utils.CreateFolder(localStorageFolder);
+                    return null;
                 }
             };
 
+            $scope.setItemsToList = function (listId, items) {
+                var output = [];
+                for (var i = 0, item; item = items[i]; i++) {
+                    output.push('<li><strong>', item, '</strong></li>');
+                }
+
+                document.getElementById(listId).innerHTML =
+                    '<ul>' + output.join('') + '</ul>';
+
+            };
+
+            $scope.loadCertsAndCRLsFromLocalStorage = function () {
+
+                try {
+                    var files = $scope.loadFilesFromLocalStorage(
+                        $scope.CertsLocalStorageName,
+                        function (fileName, fileData) {
+                            if (fileName.indexOf(".cer") >= 0)
+                                $scope.euSign.SaveCertificate(fileData);
+                            else if (fileName.indexOf(".p7b") >= 0)
+                                $scope.euSign.SaveCertificates(fileData);
+                        });
+                    if (files != null && files.length > 0)
+                        $scope.setItemsToList('SelectedCertsList', files);
+
+                } catch (e) {
+                    alert("Виникла помилка при завантаженні сертифікатів " +
+                        "з локального сховища");
+
+                }
+
+                try {
+                    var files = $scope.loadFilesFromLocalStorage(
+                        $scope.CRLsLocalStorageName,
+                        function (fileName, fileData) {
+                            if (fileName.indexOf(".crl") >= 0) {
+                                try {
+                                    $scope.euSign.SaveCRL(true, fileData);
+                                } catch (e) {
+                                    $scope.euSign.SaveCRL(false, fileData);
+                                }
+                            }
+                        });
+                    if (files != null && files.length > 0)
+                        $scope.setItemsToList('SelectedCRLsList', files);
+
+                } catch (e) {
+                    alert("Виникла помилка при завантаженні СВС з локального сховища");
+                }
+
+            };
+
+            $scope.loadCertsFromServer = function () {
+                var certificates = $scope.utils.GetSessionStorageItem(
+                    $scope.CACertificatesSessionStorageName, true, false);
+                if (certificates != null) {
+                    try {
+                        $scope.euSign.SaveCertificates(certificates);
+                        return;
+                    } catch (e) {
+                        alert("Виникла помилка при імпорті " +
+                            "завантажених з сервера сертифікатів " +
+                            "до файлового сховища");
+                    }
+                }
+
+                var _onSuccess = function (certificates) {
+                    try {
+                        $scope.euSign.SaveCertificates(certificates);
+                        $scope.utils.SetSessionStorageItem(
+                            $scope.CACertificatesSessionStorageName,
+                            certificates, false);
+                    } catch (e) {
+                        alert("Виникла помилка при імпорті " +
+                            "завантажених з сервера сертифікатів " +
+                            "до файлового сховища");
+                    }
+                };
+
+                var _onFail = function (errorCode) {
+                    console.log("Виникла помилка при завантаженні сертифікатів з сервера. " +
+                        "(HTTP статус " + errorCode + ")");
+                };
+
+                $scope.utils.GetDataFromServerAsync($scope.URL_GET_CERTIFICATES, _onSuccess, _onFail, true);
+
+            };
+
+            $scope.setCASettings = function (caIndex) {
+
+                try {
+                    var caServer = (caIndex < $scope.CAsServers.length) ?
+                        $scope.CAsServers[caIndex] : null;
+                    var offline = ((caServer == null) ||
+                        (caServer.address == "")) ?
+                        true : false;
+                    var useCMP = (!offline && (caServer.cmpAddress != ""));
+                    var loadPKCertsFromFile = (caServer == null) ||
+                        (!useCMP && !caServer.certsInKey);
+
+                    $scope.CAServer = caServer;
+                    $scope.offline = offline;
+                    $scope.useCMP = useCMP;
+                    $scope.loadPKCertsFromFile = loadPKCertsFromFile;
+
+
+                    var settings;
+                    settings = $scope.euSign.CreateTSPSettings();
+                    if (!offline) {
+                        settings.SetGetStamps(true);
+                        if (caServer.tspAddress != "") {
+                            settings.SetAddress(caServer.tspAddress);
+                            settings.SetPort(caServer.tspAddressPort);
+                        } else {
+                            settings.SetAddress('acskidd.gov.ua');
+                            settings.SetPort('80');
+                        }
+                    }
+                    $scope.euSign.SetTSPSettings(settings);
+
+                    settings = $scope.euSign.CreateOCSPSettings();
+                    if (!offline) {
+                        settings.SetUseOCSP(true);
+                        settings.SetBeforeStore(true);
+                        settings.SetAddress(caServer.ocspAccessPointAddress);
+                        settings.SetPort(caServer.ocspAccessPointPort);
+                    }
+                    $scope.euSign.SetOCSPSettings(settings);
+
+                    settings = $scope.euSign.CreateCMPSettings();
+                    settings.SetUseCMP(useCMP);
+                    if (useCMP) {
+                        settings.SetAddress(caServer.cmpAddress);
+                        settings.SetPort("80");
+                    }
+                    $scope.euSign.SetCMPSettings(settings);
+
+                    settings = $scope.euSign.CreateLDAPSettings();
+                    $scope.euSign.SetLDAPSettings(settings);
+                } catch (e) {
+                    alert("Виникла помилка при встановленні налашувань: " + e);
+                }
+
+            };
+
+            $scope.readPrivateKeyAsStoredFile = function () {
+
+                var keyName = $scope.utils.GetSessionStorageItem(
+                    $scope.PrivateKeyNameSessionStorageName, false, false);
+                var key = $scope.utils.GetSessionStorageItem(
+                    $scope.PrivateKeySessionStorageName, true, false);
+                var password = $scope.utils.GetSessionStorageItem(
+                    $scope.PrivateKeyPasswordSessionStorageName, false, true);
+                if (keyName == null || key == null || password == null)
+                    return;
+
+                $scope.loadCAServer();
+
+
+                $scope.setPointerEvents(document.getElementById('PKeyReadButton'), true);
+                document.getElementById('PKeyFileName').value = keyName;
+                document.getElementById('PKeyPassword').value = password;
+                var _readPK = function () {
+                    $scope.readPrivateKey(keyName, key, password, null, true);
+                };
+                setTimeout(_readPK, 10);
+
+                return;
+
+            };
+            $scope.loadCAServer = function () {
+
+                var index = $scope.utils.GetSessionStorageItem(
+                    $scope.CAServerIndexSessionStorageName, false, false);
+                if (index != null) {
+                    document.getElementById("CAsServersSelect").selectedIndex =
+                        parseInt(index);
+                    $scope.setCASettings(parseInt(index));
+                }
+            };
+            $scope.loadCAsSettings = function (onSuccess, onError) {
+
+                var _onSuccess = function (casResponse) {
+                    try {
+                        var servers = JSON.parse(casResponse.replace(/\\'/g, "'"));
+                        var select = document.getElementById("CAsServersSelect");
+                        for (var i = 0; i < servers.length; i++) {
+                            var option = document.createElement("option");
+                            option.text = servers[i].issuerCNs[0];
+                            select.add(option);
+                        }
+
+                        var option = document.createElement("option");
+                        option.text = "інший";
+                        select.add(option);
+
+                        select.onchange = function () {
+                            $scope.setCASettings(select.selectedIndex);
+                        };
+
+                        $scope.CAsServers = servers;
+
+                        onSuccess();
+                    } catch (e) {
+                        onError();
+                    }
+                }
+                $scope.euSign.LoadDataFromServer($scope.URL_CAS, _onSuccess, onError, false);
+            };
+
+
+            $scope.showOwnerInfo = function () {
+
+                try {
+                    var ownerInfo = $scope.euSign.GetPrivateKeyOwnerInfo();
+
+                    console.log("Власник: " + ownerInfo.GetSubjCN() + "\n" +
+                        "ЦСК: " + ownerInfo.GetIssuerCN() + "\n" +
+                        "Серійний номер: " + ownerInfo.GetSerial());
+                } catch (e) {
+                    alert(e);
+                }
+            };
+
+            $scope.removeStoredPrivateKey = function () {
+
+                $scope.utils.RemoveSessionStorageItem(
+                    $scope.PrivateKeyNameSessionStorageName);
+                $scope.utils.RemoveSessionStorageItem(
+                    $scope.PrivateKeySessionStorageName);
+                $scope.utils.RemoveSessionStorageItem(
+                    $scope.PrivateKeyPasswordSessionStorageName);
+                $scope.utils.RemoveSessionStorageItem(
+                    $scope.PrivateKeyCertificatesChainSessionStorageName);
+                $scope.utils.RemoveSessionStorageItem(
+                    $scope.PrivateKeyCertificatesSessionStorageName);
+
+                $scope.removeCAServer();
+            };
+
+            $scope.removeCAServer = function () {
+
+                $scope.utils.RemoveSessionStorageItem(
+                    $scope.CAServerIndexSessionStorageName);
+            };
+
+            $scope.storePrivateKey = function (keyName, key, password, certificates) {
+
+                if (!$scope.utils.SetSessionStorageItem(
+                    $scope.PrivateKeyNameSessionStorageName, keyName, false) || !$scope.utils.SetSessionStorageItem(
+                    $scope.PrivateKeySessionStorageName, key, false) || !$scope.utils.SetSessionStorageItem(
+                    $scope.PrivateKeyPasswordSessionStorageName, password, true) || !$scope.storeCAServer()) {
+                    return false;
+                }
+
+                if (Array.isArray(certificates)) {
+                    if (!$scope.utils.SetSessionStorageItems(
+                        $scope.PrivateKeyCertificatesSessionStorageName,
+                        certificates, false)) {
+                        return false;
+                    }
+                } else {
+                    if (!$scope.utils.SetSessionStorageItem(
+                        $scope.PrivateKeyCertificatesChainSessionStorageName,
+                        certificates, false)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            };
+
+            $scope.storeCAServer = function () {
+                var index = document.getElementById("CAsServersSelect").selectedIndex;
+                return $scope.utils.SetSessionStorageItem(
+                    $scope.CAServerIndexSessionStorageName, index.toString(), false);
+            };
+
+            $scope.privateKeyReaded = function (isReaded) {
+                var enabled = '';
+                var disabled = 'disabled';
+
+                if (!isReaded) {
+                    enabled = 'disabled';
+                    disabled = '';
+                }
+
+                document.getElementById('CAsServersSelect').disabled = disabled;
+
+                document.getElementById('PKeyFileName').disabled = disabled;
+                document.getElementById('PKeyReadButton').title =
+                    isReaded ? 'Readed' : 'Read';
+                document.getElementById('PKeyReadButton').innerHTML =
+                    isReaded ? 'Зчитано' : 'Зчитати';
+
+
+                document.getElementById('PKeyPassword').disabled = disabled;
+                if (!isReaded) {
+                    document.getElementById('PKeyPassword').value = '';
+                    document.getElementById('PKeyPassword').disabled = 'disabled';
+                    document.getElementById('PKeyFileName').value = '';
+                    document.getElementById('PKeyFileInput').value = null;
+                    $scope.setPointerEvents(document.getElementById('PKeyReadButton'), false);
+                }
+            };
+
+            $scope.getPrivateKeyCertificates = function (key, password, fromCache, onSuccess, onError) {
+
+                var certificates;
+
+                if ($scope.CAServer != null &&
+                    $scope.CAServer.certsInKey) {
+                    onSuccess([]);
+                    return;
+                }
+
+                if (fromCache) {
+                    if ($scope.useCMP) {
+                        certificates = $scope.utils.GetSessionStorageItem(
+                            $scope.PrivateKeyCertificatesChainSessionStorageName, true, false);
+                    } else if ($scope.loadPKCertsFromFile) {
+                        certificates = $scope.utils.GetSessionStorageItems(
+                            $scope.PrivateKeyCertificatesSessionStorageName, true, false)
+                    }
+
+                    onSuccess(certificates);
+                } else if ($scope.useCMP) {
+                    $scope.getPrivateKeyCertificatesByCMP(
+                        key, password, onSuccess, onError);
+                } else if ($scope.loadPKCertsFromFile) {
+                    var _onSuccess = function (files) {
+                        var certificates = [];
+                        for (var i = 0; i < files.length; i++) {
+                            certificates.push(files[i].data);
+                        }
+
+                        onSuccess(certificates);
+                    };
+
+                    $scope.euSign.ReadFiles(
+                        $scope.privateKeyCerts,
+                        _onSuccess, onError);
+                }
+            };
+
+            $scope.getPrivateKeyCertificatesByCMP = function (key, password, onSuccess, onError) {
+
+                try {
+                    var cmpAddress = $scope.getCAServer().cmpAddress + ":80";
+                    var keyInfo = $scope.euSign.GetKeyInfoBinary(key, password);
+                    onSuccess($scope.euSign.GetCertificatesByKeyInfo(keyInfo, [cmpAddress]));
+                } catch (e) {
+                    onError(e);
+                }
+            };
+
+            $scope.getCAServer = function () {
+
+                var index = document.getElementById("CAsServersSelect").selectedIndex;
+
+                if (index < $scope.CAsServers.length)
+                    return $scope.CAsServers[index];
+
+                return null;
+            };
+
             $scope.installPKeyModalLoad = function () {
-                $scope.loadServers();
+                $scope.initialize();
                 document.getElementById('PKeyFileInput').addEventListener('change',
                     $scope.selectPrivateKeyFile, false);
             };
@@ -415,11 +754,39 @@ angular
                         if (status == 200) {
                             calibrationTestServiceCalibrator
                                 .signTestProtocol($scope.testId)
-                                .then(function (status) {
-                                    if (status == 200) {
-                                        $scope.TestForm.signed = true;
-                                        toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
-                                    }
+                                .then(function (file) {
+//                                    if (status == 200) {
+//                                        $scope.TestForm.signed = true;
+//                                        toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
+//                                    }
+                                    $scope.fileToSign = file;
+                                    var modalInstance = $modal.open({
+                                        animation: true,
+                                        backdrop: 'static',
+                                        templateUrl: 'resources/app/calibrator/views/modals/insert-private-key-modal.html',
+                                        controller: 'InstallPrivateKeyController',
+                                        size: 'lg',
+                                        resolve: {
+                                            parentScope: function () {
+                                                return $scope;
+                                            },
+                                            aFile: function () {
+                                                return $scope.fileToSign;
+                                            }
+                                        }
+                                    });
+                                    modalInstance.opened.then($timeout(function () {
+                                        $scope.installPKeyModalLoad();
+                                    }, 1000));
+                                    modalInstance.result.then(function (signedFile) {
+                                            $scope.signedFile = signedFile;
+                                            calibrationTestServiceCalibrator.signEDSTestProtocol($scope.signedFile, $scope.testId)
+                                                .then(function () {
+                                                    $scope.TestForm.signed = true;
+                                                    toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
+                                                });
+                                        }
+                                    );
                                 })
                         }
                     })
@@ -444,8 +811,8 @@ angular
              * @param consumptionStatus
              * @returns {boolean} true - if test result is positive, false - in other case
              */
-            $scope.consumptionStatusResult = function(consumptionStatus) {
-                if(consumptionStatus == 'IN_THE_AREA') {
+            $scope.consumptionStatusResult = function (consumptionStatus) {
+                if (consumptionStatus == 'IN_THE_AREA') {
                     return true;
                 } else {
                     return false;
@@ -457,7 +824,7 @@ angular
              * @param testResult
              * @returns {boolean} true - if test result is positive, false - in other case
              */
-            $scope.commonTestResult = function(testResult) {
+            $scope.commonTestResult = function (testResult) {
                 if (testResult == 'SUCCESS') {
                     return true;
                 } else {
@@ -466,14 +833,14 @@ angular
             }
 
             $scope.rotateLeft = function () {
-                $scope.rotateIndex-= 90;
+                $scope.rotateIndex -= 90;
                 if ($scope.rotateIndex == -90) {
                     $scope.rotateIndex = 270;
                 }
             };
 
             $scope.rotateRight = function () {
-                $scope.rotateIndex+= 90;
+                $scope.rotateIndex += 90;
                 if ($scope.rotateIndex == 360) {
                     $scope.rotateIndex = 0;
                 }
