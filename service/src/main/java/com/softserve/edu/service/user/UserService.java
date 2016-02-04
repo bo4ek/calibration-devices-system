@@ -25,4 +25,6 @@ public interface UserService {
     void createSuperAdminIfNotExists(User user);
 
     List<User> findBySubdivisionId(String id);
+
+    int setSubdivisionIdNull(String id);
 }

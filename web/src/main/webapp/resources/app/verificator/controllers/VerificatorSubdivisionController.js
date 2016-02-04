@@ -58,6 +58,9 @@ angular
                 verificatorSubdivisionService.deleteSubdivision(id)
                     .then(function (status) {
                         if (status == 200) {
+                            $timeout(function () {
+                                $rootScope.onTableHandling();
+                            }, 700);
                             toaster.pop('success', $filter('translate')('INFORMATION'),
                                 $filter('translate')('SUCCESSFUL_DELETE_SUBDIVISION'));
                         } else {
@@ -65,9 +68,6 @@ angular
                                 $filter('translate')('ERROR_DELETE_SUBDIVISION'));
                         }
                     });
-                $timeout(function () {
-                    $rootScope.onTableHandling();
-                }, 700);
             }
         }
     ]);
