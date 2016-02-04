@@ -26,6 +26,7 @@ import com.softserve.edu.service.catalogue.StreetService;
 import com.softserve.edu.service.exceptions.InvalidDeviceTypeIdException;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
 import com.softserve.edu.service.exceptions.InvalidModuleIdException;
+import com.softserve.edu.service.exceptions.MismatchBbiFilesNamesException;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import com.softserve.edu.service.verification.VerificationService;
@@ -196,7 +197,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             DeviceTestData deviceTestData;
             try {
                 if (correspondingVerificationMap == null) {
-                    throw new FileNotFoundException();
+                    throw new MismatchBbiFilesNamesException();
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
@@ -218,7 +219,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 }
-            } catch (FileNotFoundException e) {
+            } catch (MismatchBbiFilesNamesException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
                 logger.error("File is not found");
             } catch (FileAlreadyExistsException e) {
