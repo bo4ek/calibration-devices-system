@@ -19,7 +19,7 @@ angular
                 return getData('verifications/new/' + verificationId);
             },
             getCalibrators: function (url) {
-                return getEmployeeData('/new/calibratorEmployees');
+                return getEmployeeData('new/calibratorEmployees');
             },
             //todo need to find verificators by agreements(���������)
             getVerificators: function (url) {

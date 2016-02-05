@@ -716,7 +716,7 @@
     "EDIT_VERIFICATION_TEAM": "Edit verification team",
     "DELETE_VERIFICATION_TEAM": "Delete verification team",
     "FILL_IN_INFORMATION_ABOUT_VERIFICATION_TEAM": "Fill in verification about verification team",
-    "VERIFICATION_TEAM_NUMBER": "*Verification team ID",
+    "VERIFICATION_TEAM_NUMBER": "Verification team ID",
     "INCORRECT_VALUE_VERIFICATION_TEAM_NUMBER": "Incorrect verification team ID",
     "INCORRECT_VALUE_VERIFICATION_TEAM_NAME": "Incorrect verification team name",
     "INCORRECT_VALUE_VERIFICATION_TEAM_LEADER": "Incorrect verification team leader",

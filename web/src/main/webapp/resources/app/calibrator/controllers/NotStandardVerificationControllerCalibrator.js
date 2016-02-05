@@ -64,7 +64,7 @@ angular
                 checkForEmpty();
             };
 
-            $scope.openDetails = function (verifId, verifDate, verifReadStatus) {
+            $scope.openDetails = function (verificationId, verificationReadStatus) {
                 $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/calibrator/views/modals/new-verification-details.html',
@@ -72,11 +72,9 @@ angular
                     size: 'lg',
                     resolve: {
                         response: function () {
-                            return verificationServiceCalibrator.getNewVerificationDetails(verifId)
+                            return verificationServiceCalibrator.getNewVerificationDetails(verificationId)
                                 .success(function (verification) {
-                                    verification.id = verifId;
-                                    verification.initialDate = verifDate;
-                                    if (verifReadStatus == 'UNREAD') {
+                                    if (verificationReadStatus == 'UNREAD') {
                                         $scope.markAsRead(verifId);
                                     }
                                     return verification;
