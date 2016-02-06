@@ -576,6 +576,7 @@
     "INVALID_MODULE_ID": "Wrong module serial in BBI file",
     "INVALID_DEVICE_TYPE_ID" : "Wrong device type id in BBI file",
     "INVALID_VERIFICATION_CODE": "Invalid verification code",
+    "UNKNOWN_REASON_OF_REJECTION" : "Unknown reason of rejection",
     "PLEASE_DESCRIBE_REASON_OF_PROTOCOL_REJECTION": "Please explain why verification is being rejected",
     "REASON_OF_PROTOCOL_REJECTION": "Please provide the detailed reason why this protocol needs to be rejected",
     "ENTER_STREET": "Please enter the street of the organization",

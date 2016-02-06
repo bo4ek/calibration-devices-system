@@ -23,10 +23,7 @@ import com.softserve.edu.service.catalogue.DistrictService;
 import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.catalogue.StreetService;
-import com.softserve.edu.service.exceptions.InvalidDeviceTypeIdException;
-import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
-import com.softserve.edu.service.exceptions.InvalidModuleIdException;
-import com.softserve.edu.service.exceptions.MismatchBbiFilesNamesException;
+import com.softserve.edu.service.exceptions.*;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import com.softserve.edu.service.verification.VerificationService;
@@ -237,9 +234,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (InvalidDeviceTypeIdException e){
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
                 logger.error("Wrong device type id in BBI file");
-            } catch (Exception e) {
+            } catch (InvalidVerificationCodeException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
                 logger.error("Invalid verification code");
+            } catch (Exception e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
+                logger.error("Unknown reason of rejection");
             } finally {
                 if (inStream != null) {
                     bufferedInputStream.close();
@@ -395,6 +395,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             throws Exception {
 
         Verification verification = verificationService.findById(verificationId);
+        if (verification == null) {
+            throw new InvalidVerificationCodeException();
+        }
         Long deviceId;
         deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
         Device device = deviceService.getById(deviceId);
