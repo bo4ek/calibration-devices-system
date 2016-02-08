@@ -239,7 +239,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 logger.error("Wrong device type id in BBI file");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
-                logger.error("Invalid verification code");
+                logger.error("Invalid verification code", e);
             } finally {
                 if (inStream != null) {
                     bufferedInputStream.close();

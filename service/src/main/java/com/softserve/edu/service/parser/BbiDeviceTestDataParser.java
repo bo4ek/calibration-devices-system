@@ -26,38 +26,38 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         reader = new BufferedInputStream(deviceTestDataStream);
         long count;
 
-        resultMap.put("day", readLongValueReversed(1)); //0x800000
-        resultMap.put("month", readLongValueReversed(1)); //0x800001
-        resultMap.put("year", readLongValueReversed(2)); //0x800002 + 0x02
-        resultMap.put("hour", readLongValueReversed(1)); //0x800004
-        resultMap.put("minute", readLongValueReversed(1)); //0x800005
-        resultMap.put("second", readLongValueReversed(1)); //0x800006
-        resultMap.put("dayOfWeek", readLongValueReversed(1)); //0x800007
-        resultMap.put("unixTime", readLongValueReversed(4) * 1000); //0x800008 + 0x04
-        resultMap.put("regStart", readConsecutiveBytesReversed(4)); //0x80000c + 0x04
-        count = reader.skip(4); //0x800010 + 0x04
-        resultMap.put("temperature", readLongValueReversed(4)); //0x800014 + 0x04
-        resultMap.put("batteryCharge", readLongValueReversed(4)); //0x800018 + 0x04
-        resultMap.put("bbiWritten", readLongValueReversed(4)); //0x80001c + 0x04
-        resultMap.put("bbiAvailableToWrite", readLongValueReversed(4)); //0x800020 + 0x04
-        resultMap.put("fileName", readLongValueReversed(4)); //0x800024 + 0x04
-        count = reader.skip(12); //0x800028 + 0x0c
-        resultMap.put("integrationTime", readLongValueReversed(4)); //0x800034 + 0x04
-        resultMap.put("testCounter", readLongValueReversed(4)); //0x800038 + 0x04
-        resultMap.put("confirmationRegister", readLongValueReversed(4)); //0x80003c + 0x04
-        resultMap.put("regControl", readConsecutiveBytesReversed(4)); //0x800040 + 0x04
-        resultMap.put("installmentNumber", readLongValueReversed(4)); //0x800044 + 0x04
-        resultMap.put("currentCounterNumber", readConsecutiveBytesAsUTF8(12));
-        resultMap.put("latitude", readLongValueReversed(4) / 100000.0);  //0x800054+0x04
-        resultMap.put("longitude", readLongValueReversed(4) / 100000.0); //0x800058+0x04
-        resultMap.put("impulsePricePerLitre", readLongValueReversed(4)); //0x80005c+0x04
-        resultMap.put("initialCapacity", readConsecutiveBytesAsUTF8(8)); //0x800060+0x08
-        resultMap.put("counterType1", readConsecutiveBytesAsUTF8(16)); //0x800068+0x10
-        resultMap.put("testimony", readLongValueReversed(4)); //0x800078+0x04
-        resultMap.put("counterProductionYear", readLongValueReversed(4)); //0x80007c+0x04
-        resultMap.put("counterType2", readConsecutiveBytesAsUTF8(16)); //0x800080+0x10
-        resultMap.put("fileOpened", readLongValueReversed(4)); //0x800090+0x04
-        resultMap.put("deviceTypeId", readLongValueReversed(4)); // 0x800094+0x04 DeviceType WATER(1), THERMAL(2), ELECTRICAL(3), GASEOUS(4)
+        resultMap.put("day", readLongValueReversed(Constants.ONE_BYTE)); //0x800000
+        resultMap.put("month", readLongValueReversed(Constants.ONE_BYTE)); //0x800001
+        resultMap.put("year", readLongValueReversed(Constants.TWO_BYTES)); //0x800002 + 0x02
+        resultMap.put("hour", readLongValueReversed(Constants.ONE_BYTE)); //0x800004
+        resultMap.put("minute", readLongValueReversed(Constants.ONE_BYTE)); //0x800005
+        resultMap.put("second", readLongValueReversed(Constants.ONE_BYTE)); //0x800006
+        resultMap.put("dayOfWeek", readLongValueReversed(Constants.ONE_BYTE)); //0x800007
+        resultMap.put("unixTime", readLongValueReversed(Constants.FOUR_BYTES) * 1000); //0x800008 + 0x04
+        resultMap.put("regStart", readConsecutiveBytesReversed(Constants.FOUR_BYTES)); //0x80000c + 0x04
+        count = reader.skip(Constants.FOUR_BYTES); //0x800010 + 0x04
+        resultMap.put("temperature", readLongValueReversed(Constants.FOUR_BYTES)); //0x800014 + 0x04
+        resultMap.put("batteryCharge", readLongValueReversed(Constants.FOUR_BYTES)); //0x800018 + 0x04
+        resultMap.put("bbiWritten", readLongValueReversed(Constants.FOUR_BYTES)); //0x80001c + 0x04
+        resultMap.put("bbiAvailableToWrite", readLongValueReversed(Constants.FOUR_BYTES)); //0x800020 + 0x04
+        resultMap.put("fileName", readLongValueReversed(Constants.FOUR_BYTES)); //0x800024 + 0x04
+        count = reader.skip(Constants.TWELVE_BYTES); //0x800028 + 0x0c
+        resultMap.put("integrationTime", readLongValueReversed(Constants.FOUR_BYTES)); //0x800034 + 0x04
+        resultMap.put("testCounter", readLongValueReversed(Constants.FOUR_BYTES)); //0x800038 + 0x04
+        resultMap.put("confirmationRegister", readLongValueReversed(Constants.FOUR_BYTES)); //0x80003c + 0x04
+        resultMap.put("regControl", readConsecutiveBytesReversed(Constants.FOUR_BYTES)); //0x800040 + 0x04
+        resultMap.put("installmentNumber", readLongValueReversed(Constants.FOUR_BYTES)); //0x800044 + 0x04
+        resultMap.put("currentCounterNumber", readConsecutiveBytesAsUTF8(Constants.TWELVE_BYTES));
+        resultMap.put("latitude", readLongValueReversed(Constants.FOUR_BYTES) / 100000.0);  //0x800054+0x04
+        resultMap.put("longitude", readLongValueReversed(Constants.FOUR_BYTES) / 100000.0); //0x800058+0x04
+        resultMap.put("impulsePricePerLitre", readLongValueReversed(Constants.FOUR_BYTES)); //0x80005c+0x04
+        resultMap.put("initialCapacity", readConsecutiveBytesAsUTF8(Constants.EIGHT_BYTES)); //0x800060+0x08
+        resultMap.put("counterType1", readConsecutiveBytesAsUTF8(Constants.SIXTEEN_BYTES)); //0x800068+0x10
+        resultMap.put("testimony", readLongValueReversed(Constants.FOUR_BYTES)); //0x800078+0x04
+        resultMap.put("counterProductionYear", readLongValueReversed(Constants.FOUR_BYTES)); //0x80007c+0x04
+        resultMap.put("counterType2", readConsecutiveBytesAsUTF8(Constants.SIXTEEN_BYTES)); //0x800080+0x10
+        resultMap.put("fileOpened", readLongValueReversed(Constants.FOUR_BYTES)); //0x800090+0x04
+        resultMap.put("deviceTypeId", readLongValueReversed(Constants.FOUR_BYTES)); // 0x800094+0x04 DeviceType WATER(1), THERMAL(2), ELECTRICAL(3), GASEOUS(4)
         count = reader.skip(Constants.SKIP_TO_TESTS); //0x800100 now
         for (int i = 1; i <= Constants.TEST_COUNT; ++i) {
             readTest(i);
@@ -65,8 +65,8 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
                 count = reader.skip(Constants.EMPTY_BYTES_BETWEEN_TESTS);
             }
         }
-        resultMap.put("fullInstallmentNumber", readConsecutiveBytesAsUTF8(32)); //0x0x80064c+32
-        count = reader.skip(Constants.GO_TO_IMAGES); //go to images
+        resultMap.put("fullInstallmentNumber", readConsecutiveBytesAsUTF8(Constants.THIRTY_TWO_BYTES)); //0x0x80064c+32
+        count = reader.skip(Constants.SKIP_TO_IMAGES); //go to images
 
         resultMap.put("testPhoto", readImageBase64());
         for (int i = 0; i < 12; ++i) {
@@ -139,25 +139,25 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     }
 
     private void readTest(int testIndex) throws IOException {
-        resultMap.put("test" + testIndex + "specifiedConsumption", readLongValueReversed(4)); //0x800100+0x04
-        resultMap.put("test" + testIndex + "lowerConsumptionLimit", readLongValueReversed(4)); //0x800104+0x04
-        resultMap.put("test" + testIndex + "upperConsumptionLimit", readLongValueReversed(4)); //0x800108+0x04
-        resultMap.put("test" + testIndex + "allowableError", readLongValueReversed(4) / 10); //0x80010с+0x04
-        resultMap.put("test" + testIndex + "specifiedImpulsesAmount", readLongValueReversed(4) / 10000.0); //0x800110+0x04
-        resultMap.put("test" + testIndex + "correctedCumulativeImpulsesValue", readLongValueReversed(4) / 1000.0); //0x800114+0x04
-        resultMap.put("test" + testIndex + "correctedCurrentConsumption", readLongValueReversed(4) / 1000.0); //0x800118+0x04
-        resultMap.put("test" + testIndex + "cumulativeImpulsesValueWithoutCorrection", readLongValueReversed(4) / 1000.0); //0x80011с+0x04
-        resultMap.put("test" + testIndex + "currentConsumptionWithoutCorrection", readLongValueReversed(4) / 1000.0); //0x800120+0x04
-        resultMap.put("test" + testIndex + "estimatedError", readLongValueReversed(4)); //0x800124+0x04
-        resultMap.put("test" + testIndex + "initialCounterValue", readLongValueReversed(4) / 10000.0); //0x800128+0x04
-        resultMap.put("test" + testIndex + "terminalCounterValue", readLongValueReversed(4) / 10000.0); //0x80012с+0x04
-        resultMap.put("test" + testIndex + "unixTestBeginTime", readLongValueReversed(4)); //0x800130+0x04
-        resultMap.put("test" + testIndex + "unixTestEndTime", readLongValueReversed(4)); //0x800134+0x04
-        resultMap.put("test" + testIndex + "testDuration", readLongValueReversed(4) / 1000.0); //0x800138+0x04
-        resultMap.put("test" + testIndex + "correctionFactor", readLongValueReversed(4)); //0x80013с+0x04
-        resultMap.put("test" + testIndex + "minConsumptionLimit", readLongValueReversed(4)); //0x800140+0x04
-        resultMap.put("test" + testIndex + "maxConsumptionLimit", readLongValueReversed(4)); //0x800144+0x04
-        resultMap.put("test" + testIndex + "testNumber", readLongValueReversed(4)); //0x800148+0x04
+        resultMap.put("test" + testIndex + "specifiedConsumption", readLongValueReversed(Constants.FOUR_BYTES)); //0x800100+0x04
+        resultMap.put("test" + testIndex + "lowerConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800104+0x04
+        resultMap.put("test" + testIndex + "upperConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800108+0x04
+        resultMap.put("test" + testIndex + "allowableError", readLongValueReversed(Constants.FOUR_BYTES) / 10); //0x80010с+0x04
+        resultMap.put("test" + testIndex + "specifiedImpulsesAmount", readLongValueReversed(Constants.FOUR_BYTES) / 10000.0); //0x800110+0x04
+        resultMap.put("test" + testIndex + "correctedCumulativeImpulsesValue", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800114+0x04
+        resultMap.put("test" + testIndex + "correctedCurrentConsumption", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800118+0x04
+        resultMap.put("test" + testIndex + "cumulativeImpulsesValueWithoutCorrection", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x80011с+0x04
+        resultMap.put("test" + testIndex + "currentConsumptionWithoutCorrection", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800120+0x04
+        resultMap.put("test" + testIndex + "estimatedError", readLongValueReversed(Constants.FOUR_BYTES)); //0x800124+0x04
+        resultMap.put("test" + testIndex + "initialCounterValue", readLongValueReversed(Constants.FOUR_BYTES) / 10000.0); //0x800128+0x04
+        resultMap.put("test" + testIndex + "terminalCounterValue", readLongValueReversed(Constants.FOUR_BYTES) / 10000.0); //0x80012с+0x04
+        resultMap.put("test" + testIndex + "unixTestBeginTime", readLongValueReversed(Constants.FOUR_BYTES)); //0x800130+0x04
+        resultMap.put("test" + testIndex + "unixTestEndTime", readLongValueReversed(Constants.FOUR_BYTES)); //0x800134+0x04
+        resultMap.put("test" + testIndex + "testDuration", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800138+0x04
+        resultMap.put("test" + testIndex + "correctionFactor", readLongValueReversed(Constants.FOUR_BYTES)); //0x80013с+0x04
+        resultMap.put("test" + testIndex + "minConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800140+0x04
+        resultMap.put("test" + testIndex + "maxConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800144+0x04
+        resultMap.put("test" + testIndex + "testNumber", readLongValueReversed(Constants.FOUR_BYTES)); //0x800148+0x04
     }
 
     /**
@@ -172,7 +172,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         String encodedHexB64;
 
         try {
-            int imageSize = (int) readLongValue(4);
+            int imageSize = (int) readLongValue(Constants.FOUR_BYTES);
             byte[] decodedHex = new byte[imageSize];
             reader.read(decodedHex, Constants.START_OFFSET_IN_ARRAY, imageSize);
             encodedHexB64 = Base64.encodeBase64String(decodedHex);
@@ -180,8 +180,6 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
             // skips all empty bytes till the next image beginning.
             long count = reader.skip(Constants.ALLOCATED_IMAGE_SIZE - imageSize);
             return encodedHexB64;
-        }catch (NegativeArraySizeException e){
-            throw new InvalidImageInBbiException();
         }catch (Exception e){
             throw new InvalidImageInBbiException();
         }

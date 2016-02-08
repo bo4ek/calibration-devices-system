@@ -11,8 +11,17 @@ public interface Constants {
     int ALLOCATED_IMAGE_SIZE = 16380;
     int SKIP_TO_TESTS = 104;
     int EMPTY_BYTES_BETWEEN_TESTS = 180;
-    int GO_TO_IMAGES = 2452;
+    int SKIP_TO_IMAGES = 2452;
     int START_OFFSET_IN_ARRAY = 0;
+
+    int ONE_BYTE = 1;
+    int TWO_BYTES = 2;
+    int FOUR_BYTES = 4;
+    int EIGHT_BYTES = 8;
+    int TWELVE_BYTES = 12;
+    int SIXTEEN_BYTES = 16;
+    int THIRTY_TWO_BYTES = 32;
+    int THOUSAND = 1000;
 
 
     String UTF8_ENCODING = "UTF-8";
