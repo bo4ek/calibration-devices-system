@@ -314,6 +314,7 @@
         'calibrator/controllers/InstallPrivateKeyController',
         'calibrator/services/VerificationPlanningTaskService',
         'calibrator/services/CalibrationTestServiceCalibrator',
+        'calibrator/services/InitializeLibForDigitalSignService',
         'calibrator/services/AddressServiceCalibrator',
         'calibrator/services/UserServiceCalibrator',
         'calibrator/services/VerificationServiceCalibrator',

@@ -115,7 +115,9 @@ public class StateVerificatorSubdivisionController {
      */
     @RequestMapping(value = "available/{id}", method = RequestMethod.GET)
     public Boolean isIdAvailable(@PathVariable String id) {
+
         return id != null && !subdivisionService.isIdAvailable(id);
+
     }
 
     /**

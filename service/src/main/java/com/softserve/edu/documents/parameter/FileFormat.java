@@ -7,5 +7,6 @@ public enum FileFormat {
     DOCX,
     PDF,
     HTML,
-    XLS
+    XLS,
+    P7S
 }

@@ -86,7 +86,8 @@ angular
             signTestProtocol: function (testId) {
                 return $http.get("calibrator/calibrationTests/signTest/" + testId, {responseType: 'arraybuffer'})
                     .then(function (response) {
-                        var file = new Blob([response], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+                        var file = new Blob([response.data], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+                        var fileURL = URL.createObjectURL(file);
                         console.log(file);
                         return file;
                     });
@@ -94,13 +95,11 @@ angular
 
             signEDSTestProtocol: function (file, testId) {
                 var formData=new FormData();
-                formData.append("file",file);
+                formData.append('file',file);
                 var url = 'calibrator/calibrationTests/signEDSTest/' + testId;
                 return $http.post(url, formData, {
-                    transformRequest: function(data, headersGetterFunction) {
-                        return data;
-                    },
-                    headers: { 'Content-Type': undefined }
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined}
                 }).then(function (result) {
                         return result.status;
                     });

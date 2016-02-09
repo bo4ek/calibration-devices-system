@@ -146,16 +146,20 @@ public class DocumentsController {
         ServletOutputStream outputStream = response.getOutputStream();
 
         int bufferSize = 10240;  // 10Kb
-        byte[] buffer = new byte[bufferSize];
+        byte[] buffer = new byte[(int)file.getContent().getSize()];
 
         try (InputStream inputStream = file.getContent().getInputStream()) {
-            int length = inputStream.read(buffer);
-            int offset = 0;
-
-            do {
-                outputStream.write(buffer, offset, length);
-                length = inputStream.read(buffer);
-            } while (length > 0);
+//            int length = inputStream.read(buffer);
+//            int offset = 0;
+//
+//            do {
+//                outputStream.write(buffer, offset, length);
+//                length = inputStream.read(buffer);
+//            } while (length > 0);
+            inputStream.read(buffer);
+            outputStream.write(buffer);
+            outputStream.flush();
+            outputStream.close();
         }
     }
 
@@ -177,6 +181,9 @@ public class DocumentsController {
                 break;
             case XLS:
                 response.setContentType("application/vnd.ms-excel");
+                break;
+            case P7S:
+                response.setContentType("application/pkcs7-signature");
                 break;
             default:
                 throw new IllegalArgumentException(fileFormat.name() +

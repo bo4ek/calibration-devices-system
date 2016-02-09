@@ -494,7 +494,8 @@ public class CalibrationTestController {
     }
 
     @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.GET)
-    public void signTestProtocol(@PathVariable String verificationId, HttpServletResponse httpResponse) {
+    public void signTestProtocol(@PathVariable String verificationId, HttpServletResponse   response) {
+        OutputStream os;
         try {
             Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
@@ -516,34 +517,38 @@ public class CalibrationTestController {
                 verification.setCalibrationInterval(calibrationInterval);
             }
             verification.setSignProtocolDate(new Date());
-            verification.setSigned(true);
+
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
 
-            httpResponse.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-            httpResponse.setHeader("Content-Disposition", "attachment; " +
-                    "filename=\"" + file.getName().getBaseName() + ".docx"  + "\"");
-
-            ServletOutputStream outputStream = httpResponse.getOutputStream();
             byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
             file.getContent().getInputStream().read(documentByteArray);
 
-            outputStream.write(documentByteArray);
-            outputStream.close();
+            response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            response.setHeader("Content-Length", String.valueOf(documentByteArray.length));
+            response.setHeader("Content-Disposition", "inline; filename=" + file.getName().getBaseName() + ".docx");
+
+            os = response.getOutputStream();
+            os.write(documentByteArray);
+
             testRepository.save(calibrationTest);
             verificationService.saveVerification(verification);
+
         } catch (Exception e) {
             logger.error("Cannot sing protocol", e);
+
         }
 
     }
 
     @RequestMapping(value = "signEDSTest/{verificationId}", method = RequestMethod.POST)
-    public ResponseEntity signEDSTestProtocol(@RequestParam(value="file") MultipartFile file, @PathVariable String verificationId){
+    public ResponseEntity signEDSTestProtocol(@RequestBody MultipartFile file, @PathVariable String verificationId){
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
+            byte[] bytes = file.getBytes();
+
             Verification verification = verificationService.findById(verificationId);
-            verification.setSignedDocument(file.getBytes());
+            verification.setSignedDocument(bytes);
             verification.setSigned(true);
             verificationService.saveVerification(verification);
         }catch (Exception e) {
