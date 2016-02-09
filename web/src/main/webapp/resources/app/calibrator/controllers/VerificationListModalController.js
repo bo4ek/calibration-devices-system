@@ -73,7 +73,7 @@ angular
 
             $scope.sendNewQueue = function (){
                 $scope.verifications.forEach(function (item,i) {
-                    $scope.VerificationPlanningTaskDTO[i] = {"verficationId" : item.verficationId , "queue"  : item.queue};
+                    $scope.VerificationPlanningTaskDTO[i] = {"verificationId" : item.verificationId , "queue"  : item.queue};
                 });
 
                 CalibrationTaskServiceCalibrator.sendVerificationWithQueue($scope.VerificationPlanningTaskDTO).then(function(result) {

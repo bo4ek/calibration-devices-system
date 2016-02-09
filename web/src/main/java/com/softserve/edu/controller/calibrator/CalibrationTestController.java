@@ -115,15 +115,14 @@ public class CalibrationTestController {
      * @return a response body with http status {@literal OK} if calibration-test
      * successfully edited or else http status {@literal CONFLICT}
      */
-    @RequestMapping(value = "edit/{calibrationTestId}", method = RequestMethod.POST)
+    @RequestMapping(value = "edit/{calibrationTestId}", method = RequestMethod.PUT)
     public ResponseEntity editCalibrationTest(@PathVariable Long calibrationTestId, @RequestBody CalibrationTestDTO testDTO) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             testService.editTest(calibrationTestId, testDTO.getName(), testDTO.getCapacity(),
                     testDTO.getSettingNumber(), testDTO.getLatitude(), testDTO.getLongitude(), testDTO.getConsumptionStatus(), testDTO.getTestResult());
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION " + e.getMessage());
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error("GOT EXCEPTION", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity<>(httpStatus);
@@ -157,6 +156,11 @@ public class CalibrationTestController {
         }
     }
 
+    /**
+     * Finds counterTypeId from counter_type by verificationId
+     * @param verificationId id from verification table
+     * @return counterTypeId from counter_type table
+     */
     @RequestMapping(value = "getCounterTypeId/{verificationId}", method = RequestMethod.GET)
     public ResponseEntity<Long> getCounterTypeId(@PathVariable String verificationId) {
         ResponseEntity<Long> responseEntity;
@@ -168,27 +172,26 @@ public class CalibrationTestController {
         }
         return responseEntity;
     }
-    /**
-     * get all counters types for test
-     *
-     * @param
-     */
 
+    /**
+     * Find all countersTypes from counter_type table
+     * @return list of countersTypes
+     */
     @RequestMapping(value = "getCountersTypes", method = RequestMethod.GET)
     public List<CounterTypeDTO> getCountersTypes() {
         List listOfCounterType = null;
         try {
             listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findAll());
         } catch (Exception e) {
-            logger.error("failed to get list of CounterTyp", e);
+            logger.error("failed to get list of CounterType", e);
         }
         return listOfCounterType;
     }
 
     /**
-     * get all counters types for test by counterId
-     *
-     * @param
+     * Get all countersTypes from counter_type table by counterId
+     * @param counterId id from counter table
+     * @return httpStatus - OK or BAD_REQUEST
      */
     @RequestMapping(value = "getCountersTypesByCounterId/{counterId}", method = RequestMethod.GET)
     public ResponseEntity<CounterTypeDTO> getCountersTypesByCounterId(@PathVariable Long counterId) {
@@ -198,19 +201,26 @@ public class CalibrationTestController {
             CounterTypeDTO counterTypeDTO = new CounterTypeDTO(counterType.getId(), counterType.getManufacturer());
             responseEntity = new ResponseEntity(counterTypeDTO, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("failed to get countersTypes", e);
+            logger.error("failed to get countersTypes by counterId", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
 
+    /**
+     * Get all CountersTypes from counterType table by standardSize, deviceType, symbol
+     * @param standardSize field of counterType table
+     * @param deviceType   field of device table
+     * @param symbol       field of counterType table
+     * @return list of counterTypeDTO
+     */
     @RequestMapping(value = "getCountersTypes/{standardSize}/{deviceType}/{symbol}", method = RequestMethod.GET)
     public List<CounterTypeDTO> getCountersTypesByStandardSizeAndDeviceTypeAndSymbol(@PathVariable String standardSize, @PathVariable String deviceType, @PathVariable String symbol) {
         List listOfCounterType = null;
         try {
             listOfCounterType = CounterTypeDTOTransformer.toDtofromListLight(counterTypeRepository.findByStandardSizeAndDeviceTypeAndSymbol(standardSize, deviceType, symbol));
         } catch (Exception e) {
-            logger.error("failed to get list of CounterTyp", e);
+            logger.error("failed to get list of CounterType", e);
         }
         return listOfCounterType;
     }
@@ -226,8 +236,7 @@ public class CalibrationTestController {
         try {
             list = CalibrationModuleDTOTransformer.toDtofromList(calibrationModuleService.findAllActing());
         } catch (Exception e) {
-            logger.error("failed to get list of calibrationModule" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get list of calibrationModule", e);
         }
         return list;
     }
@@ -256,7 +265,7 @@ public class CalibrationTestController {
                         , calibrationTDMDTO.getRealiseYear(), calibrationTDMDTO.getNumberCounter(), calibrationTestManualDTO.getCounterTypeId());
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("failed to create manual protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -294,7 +303,7 @@ public class CalibrationTestController {
                     , verification.getCounter().getNumberCounter());
             responseEntity = new ResponseEntity(cTestDataManualDTO, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("failed to get manual protocol" + e);
+            logger.error("failed to get manual protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -325,7 +334,7 @@ public class CalibrationTestController {
                     , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit, unsuitabilityReason
                     , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(), cTestManualDTO.getCounterTypeId());
         } catch (Exception e) {
-            logger.error("failed to edit calibration test manual", e);
+            logger.error("failed to edit manual protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -342,8 +351,7 @@ public class CalibrationTestController {
         try {
             calibrationTestManualService.deleteTestManual(verificationId);
         } catch (Exception e) {
-            logger.error("can't delete test manual" + e.getMessage());
-            logger.error(e);
+            logger.error("can't delete test manual", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -369,8 +377,7 @@ public class CalibrationTestController {
                 responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            logger.error("failed to uploadScanDoc " + e.getMessage());
-            logger.error(e);
+            logger.error("failed to uploadScanDoc", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -393,15 +400,13 @@ public class CalibrationTestController {
             out = response.getOutputStream();
             out.write(doc);
         } catch (IOException e) {
-            logger.error("failed to get pdf blob" + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get pdf blob", e);
         } finally {
             if (out != null) {
                 try {
                     out.close();
                 } catch (IOException e) {
-                    logger.error("can't close outputStream" + e.getMessage());
-                    logger.error(e);
+                    logger.error("can't close outputStream", e);
                 }
             }
         }
@@ -419,8 +424,7 @@ public class CalibrationTestController {
         try {
             calibrationTestManualService.deleteScanDoc(pathToScanDoc, id);
         } catch (Exception e) {
-            logger.error("Failed to delete ScanDoc " + e.getMessage());
-            logger.error(e);
+            logger.error("Failed to delete ScanDoc", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -440,8 +444,7 @@ public class CalibrationTestController {
             Verification verification = verificationService.findById(verificationId);
             responseEntity = new ResponseEntity((new CalibrationTestFileDataDTO(calibrationTest, testService, verification)), HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("failed to get protocol " + e.getMessage());
-            logger.error(e);
+            logger.error("failed to get protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -453,7 +456,7 @@ public class CalibrationTestController {
      * @param verificationId id parameter of verification
      * @return httpStatus 200 OK if everything went well
      */
-    @RequestMapping(value = "editTest/{verificationId}", method = RequestMethod.POST)
+    @RequestMapping(value = "editTest/{verificationId}", method = RequestMethod.PUT)
     public ResponseEntity editTestProtocol(@RequestBody CalibrationTestFileDataDTO cTestFileDataDTO, @PathVariable String verificationId) {
         ResponseEntity<String> responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
@@ -487,7 +490,7 @@ public class CalibrationTestController {
             testRepository.save(calibTest);
             testService.updateTest(verificationId, cTestFileDataDTO.getStatus());
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Cannot edit protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;

@@ -40,7 +40,7 @@ angular
 
 
             editTestProtocol: function (data,testId) {
-                return $http.post("calibrator/calibrationTests/editTest/" + testId, data)
+                return $http.put("calibrator/calibrationTests/editTest/" + testId, data)
                     .then(function (result) {
                         return result.status;
                     });
@@ -77,7 +77,7 @@ angular
             },
             editCalibrationTest: function (formData, testId) {
                 var url = 'calibrator/calibrationTests/edit/' + testId;
-                return $http.post(url, formData)
+                return $http.put(url, formData)
                     .then(function (result) {
                         return result.status;
                     });

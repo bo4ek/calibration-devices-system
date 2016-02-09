@@ -165,4 +165,10 @@ public class UserServiceImpl implements UserService {
     public List<User> findBySubdivisionId(String subdivisionId) {
         return userRepository.findByVerificatorSubdivision(subdivisionId);
     }
+
+    @Transactional
+    @Override
+    public int setSubdivisionIdNull(String id) {
+        return userRepository.setSubdivisionIdNull(id);
+    }
 }

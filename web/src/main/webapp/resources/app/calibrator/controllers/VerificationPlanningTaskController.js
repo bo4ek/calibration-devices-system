@@ -1,9 +1,9 @@
 angular
     .module('employeeModule')
     .controller('VerificationPlanningTaskController', ['$scope', '$log',
-        '$modal', 'VerificationPlanningTaskService',
+        '$modal', 'VerificationPlanningTaskService', 'VerificationServiceCalibrator',
         '$rootScope', 'ngTableParams', '$timeout', '$filter', '$window', '$location', '$translate', 'toaster',
-        function ($scope, $log, $modal, verificationPlanningTaskService, $rootScope, ngTableParams,
+        function ($scope, $log, $modal, verificationPlanningTaskService, verificationServiceCalibrator, $rootScope, ngTableParams,
                   $timeout, $filter, $window, $location, $translate, toaster) {
 
             $scope.resultsCount = 0;
@@ -330,6 +330,27 @@ angular
                 });
                 $scope.$modalInstance.result.then(function () {
                     $scope.tableParams.reload();
+                });
+            };
+
+            $scope.openDetails = function (verificationId) {
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/calibrator/views/modals/new-verification-details.html',
+                    controller: 'DetailsModalControllerCalibrator',
+                    size: 'lg',
+                    resolve: {
+                        response: function () {
+                            return verificationServiceCalibrator.getNewVerificationDetails(verificationId)
+                                .then(function (verification) {
+                                    return verification;
+                                });
+                        }
+                    }
+                });
+                modalInstance.result.then(function () {
+                    $scope.tableParams.reload();
+
                 });
             };
 

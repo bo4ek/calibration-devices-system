@@ -262,6 +262,13 @@
                         <input type="password" ng-model="employeeFormData.password" style="display: none">
                         <input type="password" ng-model="employeeFormData.password" ng-change="checkPasswords()"
                                name="password" class="form-control" required>
+                        <div ng-show="employeeForm.$submitted || (employeeForm.rePassword.$touched  && !employeeForm.rePassword.$pristine)
+                        || (employeeForm.rePassword.$dirty)">
+                            <p class="validation-message" ng-if="employeeForm.rePassword.$error.required">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                {{'REQUIRED' | translate}}
+                            </p>
+                        </div>
                     </div>
 
                 </div>

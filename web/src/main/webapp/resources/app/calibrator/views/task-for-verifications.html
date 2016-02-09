@@ -35,7 +35,7 @@
 
                                 <tbody>
                                 <tr ng-repeat="verification in $data" >
-                                    <td data-title="''"><input type="checkbox" ng-click="resolveVerificationId(verification.verficationId)"/>
+                                    <td data-title="''"><input type="checkbox" ng-click="resolveVerificationId(verification.verificationId)"/>
                                     </td>
                                     <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'date'"
                                         filter="{ 'date': 'daterange' }">{{ verification.sentToCalibrator | date :
@@ -78,7 +78,14 @@
                                     <td data-title="'TELEPHONE' | translate" sortable="'telephone'"
                                         filter="{ 'telephone': 'text' }">{{ verification.phone }}
                                     </td>
-
+                                    <td data-title="'ACTIONS' | translate"
+                                        class="control_buttons">
+                                        <i class="fa fa-info-circle info_icon"
+                                           popover="{{'DETAIL_INFO' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           ng-click="openDetails(verification.verificationId)">
+                                        </i>
+                                    </td>
                                 </tr>
                                 </tbody>
 
@@ -91,9 +98,9 @@
                                             ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
                                             ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
                                             <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;
-                                                {{'PREVIOUS_PAGE'|translate}}</a>
+                                                {{'PREVIOUS'|translate}}</a>
                                             <a ng-switch-when="next" ng-click="params.page(page.number)"
-                                               href="">{{'NEXT_PAGE'|translate}} &raquo;</a>
+                                               href="">{{'NEXT'|translate}} &raquo;</a>
                                         </li>
                                         <li>
                                             <div class="btn-group">

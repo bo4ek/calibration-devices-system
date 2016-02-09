@@ -673,6 +673,11 @@ form[name='CalibrationTestForm'] #testColumnHead {
     height: 320px;
 }
 
+.vertical-image-modal-photo {
+    height: 430px !important;
+    width: 322px !important;
+}
+
 form[name='CalibrationTestForm'] tr > td {
     min-height: 30px;
 }
@@ -718,23 +723,18 @@ form[name='CalibrationTestForm'] #testPN {
 #box {
     text-align: center;
     margin: auto;
-    width: 430px;
-    height: 430px;
     overflow: hidden;
     position: relative;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .image img {
-    display:block;
     width: 430px;
-    height: 430px;
+    height: 322px;
 }
 .image img {
-    transform:scale(1);
-    -ms-transform:scale(1);
-    -moz-transform:scale(1);
-    -webkit-transform:scale(1);
-    -o-transform:scale(1);
+
     -webkit-transition: all 1s ease;
     -moz-transition: all 1s ease;
     -o-transition: all 1s ease;
@@ -744,8 +744,34 @@ form[name='CalibrationTestForm'] #testPN {
 #box:hover .image img {
     cursor: pointer;
     transform:scale(1.5);
-    -ms-transform:scale(1.5);
-    -moz-transform:scale(1.5);
-    -webkit-transform:scale(1.5);
-    -o-transform:scale(1.5);
+}
+
+#box:hover .image img.rotated90 {
+    -ms-transform:scale(1.5) rotate(90deg);
+    -moz-transform:scale(1.5) rotate(90deg);
+    -webkit-transform:scale(1.5) rotate(90deg);
+    -o-transform:scale(1.5) rotate(90deg);
+}
+
+#box:hover .image img.rotated180 {
+    -ms-transform:scale(1.5) rotate(180deg);
+    -moz-transform:scale(1.5) rotate(180deg);
+    -webkit-transform:scale(1.5) rotate(180deg);
+    -o-transform:scale(1.5) rotate(180deg);
+}
+
+#box:hover .image img.rotated270 {
+    -ms-transform:scale(1.5) rotate(270deg);
+    -moz-transform:scale(1.5) rotate(270deg);
+    -webkit-transform:scale(1.5) rotate(270deg);
+    -o-transform:scale(1.5) rotate(270deg);
+}
+
+
+#missing-document-fields-modal {
+    background-color: #FF7878;
+}
+
+#missing-errors-title {
+    font-size: 16px;
 }

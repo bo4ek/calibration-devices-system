@@ -151,11 +151,16 @@ angular
             });
         }]);
 
-angular.module('adminModule').run(function (paginationConfig) {
-    paginationConfig.firstText = 'Перша';
-    paginationConfig.previousText = 'Попередня';
-    paginationConfig.nextText = 'Наступна';
-    paginationConfig.lastText = 'Остання';
+angular.module('adminModule').run(function (paginationConfig, $filter) {
+    paginationConfig.firstText = $filter('translate')('FIRST_PAGE');
+    paginationConfig.previousText = $filter('translate')('PREVIOUS');
+    paginationConfig.nextText = $filter('translate')('NEXT');
+    paginationConfig.lastText = $filter('translate')('LAST_PAGE');
+});
+
+angular.module('adminModule').run(function ($rootScope){
+    $rootScope.FIRST_LAST_NAME_REGEX = /^([A-Z][\u0027]{0,1}[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][\u0027]{0,1}[a-z]{1,20}\u002d[A-Z][\u0027]{0,1}[a-z]{1,20}|[A-Z][\u0027]{0,1}[a-z]{1,20}\u002d[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}\u002d[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}\u002d[A-Z][\u0027]{0,1}[a-z]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}\u002d\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
+    $rootScope.PHONE_REGEX = /^[1-9]\d{8}$/;
 });
 
 define(['controllers/TopNavBarController', 'controllers/MainPanelController',

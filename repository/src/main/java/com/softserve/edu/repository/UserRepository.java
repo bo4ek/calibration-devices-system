@@ -59,4 +59,8 @@ public interface UserRepository extends PagingAndSortingRepository<User, String>
     List<User> findAll(Specification<User> userSpecification);
 
     List<User> findByVerificatorSubdivision(@Param("subdivisionId")String subdivisionId);
+
+    @Modifying
+    @Query("UPDATE User u SET u.verificatorSubdivision = null WHERE u.verificatorSubdivision.id = :subdivisionId")
+    int setSubdivisionIdNull(@Param("subdivisionId")String id);
 }

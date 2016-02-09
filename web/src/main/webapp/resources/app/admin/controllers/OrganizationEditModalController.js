@@ -281,7 +281,7 @@ angular
                     case ('firstName') :
                         var firstName = $rootScope.organization.firstName;
                         if (firstName == null) {
-                        } else if ($scope.FIRST_LAST_NAME_REGEX.test(firstName)) {
+                        } else if ($rootscope.FIRST_LAST_NAME_REGEX.test(firstName)) {
                             validator('firstName', false);
                         } else {
                             validator('firstName', true);
@@ -310,7 +310,7 @@ angular
                     case ('phone') :
                         var phone = $rootScope.organization.phone;
                         if (phone == null) {
-                        } else if ($scope.PHONE_REGEX.test(phone)) {
+                        } else if ($rootScope.PHONE_REGEX.test(phone)) {
                             validator('phone', false);
                         } else {
                             validator('phone', true);
@@ -855,7 +855,6 @@ angular
             });
 
             $scope.ORGANIZATION_NAME_REGEX = /^(?=.{5,50}$).*/;
-            $scope.PHONE_REGEX = /^[1-9]\d{8}$/;
             $scope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
             $scope.FIRST_LAST_NAME_REGEX = /^([A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}\u002d[A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}|[A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20})$/;
             $scope.MIDDLE_NAME_REGEX = /^[A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457\u0454']{1,20}$/;
