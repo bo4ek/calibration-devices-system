@@ -365,7 +365,7 @@ public class CalibratorPlanningTaskController {
 
 
         for (VerificationPlanningTaskDTO verificationDTO : verificationNewQueue) {
-            verifications.add(new Verification(verificationDTO.getVerficationId(), verificationDTO.getQueue() + 1));
+            verifications.add(new Verification(verificationDTO.getVerificationId(), verificationDTO.getQueue() + 1));
         }
         try {
             if (!verificationService.updateVerificationQueue(verifications, employeeUser.getOrganizationId())) {
