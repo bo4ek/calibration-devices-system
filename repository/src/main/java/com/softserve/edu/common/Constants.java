@@ -21,7 +21,7 @@ public interface Constants {
     int TWELVE_BYTES = 12;
     int SIXTEEN_BYTES = 16;
     int THIRTY_TWO_BYTES = 32;
-    int THOUSAND = 1000;
+    double THOUSAND = 1000.0;
 
 
     String UTF8_ENCODING = "UTF-8";
