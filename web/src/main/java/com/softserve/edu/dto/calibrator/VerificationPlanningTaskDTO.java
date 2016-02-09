@@ -12,7 +12,7 @@ import java.util.Date;
 public class VerificationPlanningTaskDTO implements Comparable {
 
     private Date sentToCalibrator;
-    private String verficationId;
+    private String verificationId;
     private String providerName;
     private String clientFullName;
     private String district;
@@ -42,7 +42,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
                                        String street, String building, String flat, String clientFullName,
                                        String telephone, AdditionalInfo additionalInfo) {
         this.sentToCalibrator = sentDate;
-        this.verficationId = verificationId;
+        this.verificationId = verificationId;
         this.providerName = providerName;
         this.district = district;
         this.street = street;
@@ -71,7 +71,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
                                        String street, String building, String flat, String clientFullName,
                                        String telephone, AdditionalInfo additionalInfo, int queue) {
         this.sentToCalibrator = sentDate;
-        this.verficationId = verificationId;
+        this.verificationId = verificationId;
         this.providerName = providerName;
         this.district = district;
         this.street = street;
@@ -101,7 +101,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
                                        String secondphone, Date dateOfVerif, LocalTime timeFrom, LocalTime timeTo,
                                        Boolean serviceability, Date noWaterToDate, boolean sealPresence) {
         this.sentToCalibrator = sentDate;
-        this.verficationId = verificationID;
+        this.verificationId = verificationID;
         this.providerName = providerName;
         this.clientFullName = fullName;
         this.district = district;
@@ -135,8 +135,8 @@ public class VerificationPlanningTaskDTO implements Comparable {
 
     }
 
-    public VerificationPlanningTaskDTO(String verficationId, int queue) {
-        this.verficationId = verficationId;
+    public VerificationPlanningTaskDTO(String verificationId, int queue) {
+        this.verificationId = verificationId;
         this.queue = queue;
     }
 
