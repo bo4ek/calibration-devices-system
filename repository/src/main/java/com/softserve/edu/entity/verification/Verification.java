@@ -135,11 +135,6 @@ public class Verification implements Comparable {
     @JoinColumn(name = "calibrationTestManualId")
     private CalibrationTestDataManual calibrationTestDataManualId;
 
-    public Verification(String verficationId , int queue){
-        this.id = verficationId;
-        this.queue = queue;
-    }
-
     @Column(columnDefinition = "boolean default false")
     private boolean signed;
 
@@ -149,6 +144,12 @@ public class Verification implements Comparable {
 
     @Column(columnDefinition = "int default 0")
     private Integer calibrationInterval;
+
+
+    public Verification(String verificationId, int queue) {
+        this.id = verificationId;
+        this.queue = queue;
+    }
 
     public Verification(
             Date initialDate, ClientData clientData, Organization provider,
@@ -295,8 +296,8 @@ public class Verification implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        int compareage=((Verification)o).getQueue();
-        return this.queue-compareage;
+        int compareage = ((Verification) o).getQueue();
+        return this.queue - compareage;
     }
 
     public enum ReadStatus {

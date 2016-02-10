@@ -108,7 +108,7 @@ angular
                     page: 1,
                     count: 100,
                     sorting: {
-                        'clientData.clientAddress.street': 'asc'
+                        'queue': 'asc'
                     }
                 },
                 {
