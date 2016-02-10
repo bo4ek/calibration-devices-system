@@ -15,5 +15,7 @@ Tип : $name .<br>
 Вулиця : $street .<br>
 Будинок : $building .<br>
 Квартира : $flat .<br>
+Адміністратоор : $username . <br>
+Пароль : $password . <br>
 </body>
 </html>

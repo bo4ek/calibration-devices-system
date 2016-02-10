@@ -335,7 +335,7 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put("username", admin.getUsername());
                 templateVariables.put("password", admin.getPassword());
 
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationChanges", "UTF-8", templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationChanges.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
                 message.setSubject("Important notification");
             }

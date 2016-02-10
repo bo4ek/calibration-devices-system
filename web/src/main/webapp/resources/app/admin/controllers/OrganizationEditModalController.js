@@ -253,6 +253,11 @@ angular
             );
 
 
+            $scope.changePassword = function (){
+
+            }
+
+
             $scope.checkIfUsernameIsAvailable = function () {
                 var username = $scope.adminsUserName;
                 userService.isUsernameAvailable(username).then(
