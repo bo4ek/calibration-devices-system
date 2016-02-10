@@ -43,7 +43,6 @@
                                     <tr ng-repeat="moduleTask in $data"
                                         ng-class="{ 'info': moduleTask.status === 'SENT_TO_TEST_DEVICE' }">
                                         <td data-title="''"><input type="checkbox"
-                                                ng-show="moduleTask.status === 'TEST_PLACE_DETERMINED'"
                                                 ng-click="resolveTaskID(moduleTask.taskID)"/>
                                         </td>
                                         <td data-title="'DATE_OF_TASK' | translate" sortable="'dateOfTask'"
