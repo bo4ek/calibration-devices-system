@@ -1,7 +1,6 @@
 package com.softserve.edu.service.admin.impl;
 
 import com.softserve.edu.entity.Address;
-import com.softserve.edu.entity.catalogue.Locality;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.organization.AdditionInfoOrganization;
@@ -29,7 +28,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -228,7 +229,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         if (employeeAdmin.getPassword().equals("generate")) {
             String newPassword = RandomStringUtils.randomAlphanumeric(5);
-            mail.sendOrganizationPasswordMail(organization.getEmail(), organization.getName(), employeeAdmin.getFirstName(), newPassword);
+            mail.sendOrganizationNewPasswordMail(organization.getEmail(), organization.getName(), employeeAdmin.getUsername(), newPassword);
             String passwordEncoded = new BCryptPasswordEncoder().encode(newPassword);
             employeeAdmin.setPassword(passwordEncoded);
         }

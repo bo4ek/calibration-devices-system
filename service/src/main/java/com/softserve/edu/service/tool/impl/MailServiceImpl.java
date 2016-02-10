@@ -26,7 +26,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.ui.velocity.VelocityEngineUtils.mergeTemplateIntoString;
 
@@ -147,6 +149,26 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put("username", username);
                 templateVariables.put("password", password);
                 String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationAdminMail.vm", "UTF-8", templateVariables);
+                message.setText(body, true);
+                message.setSubject("Important notification");
+            }
+        };
+        mailSender.send(preparator);
+    }
+
+    @Async
+    public void sendOrganizationNewPasswordMail(String organizationMail, String organizationName, String username, String password) {
+
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+            public void prepare(MimeMessage mimeMessage) throws UnsupportedEncodingException, MessagingException {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                message.setTo(organizationMail);
+                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                Map<String, Object> templateVariables = new HashMap<>();
+                templateVariables.put("name", organizationName);
+                templateVariables.put("username", username);
+                templateVariables.put("password", password);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationAdminPasswordChange.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
                 message.setSubject("Important notification");
             }
@@ -333,7 +355,6 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put("middleName", admin.getMiddleName());
                 templateVariables.put("lastName", admin.getLastName());
                 templateVariables.put("username", admin.getUsername());
-                templateVariables.put("password", admin.getPassword());
 
                 String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationChanges.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
