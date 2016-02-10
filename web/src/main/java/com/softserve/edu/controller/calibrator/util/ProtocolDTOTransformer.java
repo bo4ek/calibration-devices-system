@@ -12,6 +12,7 @@ public class ProtocolDTOTransformer {
         List<ProtocolDTO> resultList = new ArrayList<>();
 
         for(Verification verification : verifications) {
+
             resultList.add(new ProtocolDTO(
                     verification.getId(),
                     verification.getSentToCalibratorDate().toString(),
@@ -22,7 +23,13 @@ public class ProtocolDTOTransformer {
                     verification.getProvider().getName(),
                     verification.getCalibrator().getName(),
                     verification.getStatus().toString(),
-                    verification.getComment()
+                    verification.getComment(),
+                    verification.isManual(),
+                    verification.isManual() ? verification.getCalibrationTestDataManualId()
+                            .getCalibrationTestManual().getCalibrationModule().getModuleNumber() : verification.getCalibrationModule().getModuleNumber(),
+                    Integer.parseInt(verification.getCounter().getReleaseYear()),
+                    verification.getCounter().getNumberCounter(),
+                    verification.getInitialDate(), verification.getReadStatus()
             ));
         }
         return resultList;

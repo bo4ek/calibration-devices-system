@@ -1,10 +1,10 @@
 angular
     .module('employeeModule')
     .controller('DigitalVerificationProtocolsControllerCalibrator', ['$scope', '$log', '$modal',
-        'DigitalVerificationProtocolsServiceCalibrator', '$rootScope', 'ngTableParams','$filter', 'toaster',
+        'DigitalVerificationProtocolsServiceCalibrator', 'CalibrationTestServiceCalibrator', 'VerificationServiceCalibrator', '$rootScope', 'ngTableParams','$filter', 'toaster', '$location',
 
-        function ($scope, $log, $modal, digitalVerificationProtocolsServiceCalibrator, $rootScope, ngTableParams,
-                  $filter, toaster) {
+        function ($scope, $log, $modal, digitalVerificationProtocolsServiceCalibrator, calibrationTestServiceCalibrator, verificationServiceCalibrator, $rootScope, ngTableParams,
+                  $filter, toaster, $location) {
             $scope.totalItems = 0;
             $scope.currentPage = 1;
             $scope.itemsPerPage = 5;
@@ -35,6 +35,7 @@ angular
             $scope.checkedItems = [];
             $scope.allIsEmpty = true;
             $scope.idsOfCalibrators = null;
+            $scope.dataToManualTest = new Map();
 
 
             /**
@@ -109,4 +110,46 @@ angular
             var checkForEmpty = function () {
                 $scope.allIsEmpty = $scope.idsOfVerifications.length === 0;
             };
+
+            $scope.openTest = function (verification) {
+                if(!verification.manual) {
+                    $location.path('/calibrator/verifications/calibration-test-add/').search({
+                        'param': verification.id,
+                        'loadProtocol': 1
+                    });
+                }else{
+                    $scope.createManualTest(verification);
+                    calibrationTestServiceCalibrator.dataOfVerifications().setIdsOfVerifications($scope.dataToManualTest);
+                    $location.path('/calibrator/verifications/calibration-test/').search({
+                        param: verification.id
+                    });
+                }
+            };
+
+            $scope.createManualTest = function (verification) {
+                var manualTest = {
+                    realiseYear: verification.realiseYear,
+                    numberCounter: verification.numberCounter,
+                    status:verification.status
+                };
+                $scope.dataToManualTest.set(verification.id, manualTest);
+            };
+
+            $scope.openDetails = function (verificationId) {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/calibrator/views/modals/new-verification-details.html',
+                    controller: 'DetailsModalControllerCalibrator',
+                    size: 'lg',
+                    resolve: {
+                        response: function () {
+                            return verificationServiceCalibrator.getNewVerificationDetails(verificationId)
+                                .success(function (verification) {
+                                    return verification;
+                                });
+                        }
+                    }
+                });
+            };
+
         }]);

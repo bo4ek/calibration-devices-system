@@ -48,6 +48,19 @@
                                     </td>
                                     <td data-title="'COMMENT' | translate">{{ verification.comment}}
                                     </td>
+                                    <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
+                                        <i class="fa fa-info-circle info_icon"
+                                           popover="{{'DETAIL_INFO' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           ng-click="openDetails(verification.id)">
+                                        </i>
+                                        <i class="fa fa-edit protocol_edit_user_icon"
+                                           ng-show="verification.status=='TEST_COMPLETED'"
+                                           popover="{{'EDIT_PROTOCOL' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           ng-click="openTest(verification)">
+                                        </i>
+                                    </td>
                                 </tr>
                                 </tbody>
 
