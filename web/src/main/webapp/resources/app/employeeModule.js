@@ -159,6 +159,11 @@
                         templateUrl: 'resources/app/calibrator/views/not-standard-verifications.html',
                         controller: 'NotStandardVerificationControllerCalibrator'
                     })
+                    .state("verifications-for-provider", {
+                        url: 'calibrator/verifications-for-provider',
+                        templateUrl: 'resources/app/calibrator/views/verifications-for-provider.html',
+                        controller: 'NotStandardVerificationControllerCalibrator'
+                    })
                     .state("not-standard-verifications-provider", {
                         url: 'provider/not-standard-verifications',
                         templateUrl: 'resources/app/provider/views/not-standard-verifications.html',
@@ -327,6 +332,7 @@
         'calibrator/controllers/NotStandardVerificationControllerCalibrator',
         'calibrator/services/NotStandardVerificationCalibratorService',
         'calibrator/controllers/NotStandardVerificationSendingControllerCalibrator',
+        'calibrator/controllers/VerificationsForProviderNotificationController',
 
         'verificator/controllers/TopNavBarControllerVerificator',
         'verificator/controllers/MainPanelControllerVerificator',

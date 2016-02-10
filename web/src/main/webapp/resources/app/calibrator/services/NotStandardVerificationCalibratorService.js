@@ -3,9 +3,9 @@ angular
     .factory('NotStandardVerificationCalibratorService', ['$http',
         function ($http) {
             return {
-                getPage: function (currentPage, itemsPerPage, sortCriteria, sortOrder) {
+                getPage: function (status, currentPage, itemsPerPage, sortCriteria, sortOrder) {
 
-                    return getDataWithParams('/calibrator/not-standard-verifications/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder);
+                    return getDataWithParams('/calibrator/not-standard-verifications/' + status + '/' +currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder);
                 },
                 sendVerification: function (verification) {
                     var url = '/calibrator/not-standard-verifications/send';

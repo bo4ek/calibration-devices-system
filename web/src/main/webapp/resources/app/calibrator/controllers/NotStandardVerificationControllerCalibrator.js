@@ -10,24 +10,34 @@ angular
         'ngTableParams',
         '$filter',
         'toaster',
+        '$location',
 
-        function ($rootScope, $scope, $log, $modal, verificationService, verificationServiceCalibrator, ngTableParams, $filter, toaster) {
+        function ($rootScope, $scope, $log, $modal, verificationService, verificationServiceCalibrator, ngTableParams, $filter, toaster, $location) {
             $scope.totalItems = 0;
             $scope.pageContent = [];
             $scope.tableParams = new ngTableParams({
                 page: 1,
                 count: 10,
                 sorting: {
-                    providerFromBBI: 'desc'
+                    providerFromBBI: 'desc',
+                    nameProvider: 'desc'
                 }
             }, {
                 total: 0,
                 getData: function ($defer, params) {
+                    var status;
+                    var sortCriteria;
+                    if ($location.absUrl().indexOf("verifications-for-provider") != -1) {
+                        status = "CREATED_FOR_PROVIDER";
+                        sortCriteria = Object.keys(params.sorting())[1];
+                    } else {
+                        status = "CREATED_BY_CALIBRATOR";
+                        sortCriteria = Object.keys(params.sorting())[0];
+                    }
 
-                    var sortCriteria = Object.keys(params.sorting())[0];
                     var sortOrder = params.sorting()[sortCriteria];
 
-                    verificationService.getPage(params.page(), params.count(), sortCriteria, sortOrder)
+                    verificationService.getPage(status, params.page(), params.count(), sortCriteria, sortOrder)
                         .success(function (result) {
                             $scope.resultsCount = result.totalItems;
                             $defer.resolve(result.content);

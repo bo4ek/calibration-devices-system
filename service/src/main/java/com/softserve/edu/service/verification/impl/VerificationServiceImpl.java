@@ -894,6 +894,12 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
+    public Long findCountOfNewVerificationsForProviderByCalibratorId(Long calibratorId) {
+        return verificationRepository.countByCalibratorIdAndStatusAndReadStatus(
+                calibratorId, Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD);
+    }
+
+    @Override
     public Long findCountOfNotStandardNewVerificationsByProviderId(Long providerId) {
         return verificationRepository.countByProviderIdAndStatusAndReadStatus(providerId,
                 Status.SENT_TO_PROVIDER, Verification.ReadStatus.UNREAD);
@@ -910,7 +916,7 @@ public class VerificationServiceImpl implements VerificationService {
         if ((sortCriteria != null) && (sortOrder != null)) {
             cq.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(verifications, cb, sortOrder));
         } else {
-            cq.orderBy(cb.desc(verifications.get("providerFromBBI")));
+            cq.orderBy(cb.desc(verifications.get("initialDate")));
         }
         cq.where(cb.and(cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee),
                 cb.equal(verifications.get("status"), status)));
@@ -958,8 +964,12 @@ public class VerificationServiceImpl implements VerificationService {
 
         Verification verification = verificationRepository.findOne(verificationId);
         verification.setRejectedMessage(rejectMessage);
-        verification.setStatus(Status.CREATED_BY_CALIBRATOR);
-        verification.setProvider(null);
+        if (verification.getProviderFromBBI() != null) {
+            verification.setStatus(Status.CREATED_BY_CALIBRATOR);
+            verification.setProvider(null);
+        } else {
+            verification.setStatus(Status.CREATED_FOR_PROVIDER);
+        }
         verificationRepository.save(verification);
 
     }

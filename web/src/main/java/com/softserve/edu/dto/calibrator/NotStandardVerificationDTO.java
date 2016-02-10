@@ -35,6 +35,7 @@ public class NotStandardVerificationDTO {
     private String numberCounter;
     private Long counterId;
     private String providerFromBBI;
+    private String nameProvider;
     private String fileName;
     private String stamp;
     private String testResult;
@@ -72,6 +73,22 @@ public class NotStandardVerificationDTO {
         this.street = address.getStreet();
         this.district = address.getDistrict();
         this.locality = address.getLocality();
+
+    }
+
+    public NotStandardVerificationDTO(String id, Date initialDate, Address address,
+                                      String firstName, String lastName, String middleName,
+                                      Organization provider, String rejectMessage) {
+        this.id = id;
+        this.initialDate = initialDate;
+        this.fullName = lastName + " " + firstName + " " + middleName;
+        this.street = address.getStreet();
+        this.district = address.getDistrict();
+        this.locality = address.getLocality();
+        this.building = address.getBuilding();
+        this.flat = address.getFlat();
+        this.rejectMessage = rejectMessage;
+        this.nameProvider = provider.getName();
 
     }
 }

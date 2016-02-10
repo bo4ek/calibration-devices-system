@@ -50,17 +50,17 @@ public class NotStandardVerificationCalibratorController {
      * @param employeeUser
      * @return Page of NotStandardVerificationDTO - data for table with protocols
      */
-    @RequestMapping(value = "{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
-    public PageDTO<NotStandardVerificationDTO> getPageOfVerificationsCreatedByCalibrator(
-            @PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
-            @PathVariable String sortOrder, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+    @RequestMapping(value = "{verificationStatus}/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    public PageDTO<NotStandardVerificationDTO> getPageOfVerificationsCreatedByCalibrator(@PathVariable String verificationStatus,
+                                                                                         @PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
+                                                                                         @PathVariable String sortOrder, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
-        Status status = Status.CREATED_BY_CALIBRATOR;
+        Status status = Status.valueOf(verificationStatus);
         List<Verification> verifications = verificationService.findPageOfVerificationsByCalibratorEmployeeAndStatus(
                 calibratorEmployee, pageNumber, itemsPerPage, status, sortCriteria, sortOrder);
         Long count = verificationService.countByCalibratorEmployeeUsernameAndStatus(calibratorEmployee, status);
-        List<NotStandardVerificationDTO> content = toDTOFromList(verifications);
+        List<NotStandardVerificationDTO> content = toDTOFromList(verifications, status);
 
         return new PageDTO<>(count, content);
     }
@@ -108,25 +108,51 @@ public class NotStandardVerificationCalibratorController {
     public Long getCountOfNewVerificationsByCalibratorId(
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
 
-            return verificationService.findCountOfNewNotStandardVerificationsByCalibratorId(user.getOrganizationId());
+        return verificationService.findCountOfNewNotStandardVerificationsByCalibratorId(user.getOrganizationId());
     }
 
-    private  List<NotStandardVerificationDTO> toDTOFromList(List<Verification> verifications) {
+    /**
+     * Finds count of verifications for provider
+     * assigned to this organization
+     * @param user
+     * @return Long
+     */
+    @RequestMapping(value = "new/count/verificationsForProvider", method = RequestMethod.GET)
+    public Long findCountOfNewVerificationsForProviderByCalibratorId(
+            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        return verificationService.findCountOfNewVerificationsForProviderByCalibratorId(user.getOrganizationId());
+    }
+
+    private List<NotStandardVerificationDTO> toDTOFromList(List<Verification> verifications, Status status) {
 
         List<NotStandardVerificationDTO> resultList = new ArrayList<>();
-        for(Verification verification : verifications) {
-            resultList.add(new NotStandardVerificationDTO(
-                    verification.getId(),
-                    verification.getInitialDate(),
-                    verification.getClientData().getClientAddress(),
-                    verification.getClientData().getFirstName(),
-                    verification.getClientData().getLastName(),
-                    verification.getClientData().getMiddleName(),
-                    verification.getCounter(),
-                    verification.getCalibrationTests(),
-                    verification.getProviderFromBBI(),
-                    verification.getRejectedMessage(),
-                    verification.getComment()));
+        if (status.name().equalsIgnoreCase("CREATED_FOR_PROVIDER")) {
+            for (Verification verification : verifications) {
+                resultList.add(new NotStandardVerificationDTO(
+                        verification.getId(),
+                        verification.getInitialDate(),
+                        verification.getClientData().getClientAddress(),
+                        verification.getClientData().getFirstName(),
+                        verification.getClientData().getLastName(),
+                        verification.getClientData().getMiddleName(),
+                        verification.getProvider(),
+                        verification.getRejectedMessage()));
+            }
+        } else {
+            for (Verification verification : verifications) {
+                resultList.add(new NotStandardVerificationDTO(
+                        verification.getId(),
+                        verification.getInitialDate(),
+                        verification.getClientData().getClientAddress(),
+                        verification.getClientData().getFirstName(),
+                        verification.getClientData().getLastName(),
+                        verification.getClientData().getMiddleName(),
+                        verification.getCounter(),
+                        verification.getCalibrationTests(),
+                        verification.getProviderFromBBI(),
+                        verification.getRejectedMessage(),
+                        verification.getComment()));
+            }
         }
         return resultList;
     }

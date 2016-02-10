@@ -26,13 +26,14 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     MailService mailService;
 
     /**
      * Assigns provider employee to the verification
      * and asynchronously sends mail to customer
+     *
      * @param verificationId
      * @param providerEmployee
      */
@@ -44,7 +45,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
             return;
         }
         verification.setProviderEmployee(providerEmployee);
-        if (providerEmployee==null) {
+        if (providerEmployee == null) {
             verification.setStatus(Status.SENT);
         } else {
             verification.setStatus(Status.ACCEPTED);
@@ -54,6 +55,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
         verification.setExpirationDate(null);
         verificationRepository.save(verification);
     }
+
     @Transactional
     public void assignProviderEmployeeForNotStandardVerification(String verificationId, User providerEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
@@ -62,14 +64,16 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
             return;
         }
         verification.setProviderEmployee(providerEmployee);
-        verification.setProviderFromBBI(verification.getProvider());
-        if (providerEmployee==null) {
+        if (providerEmployee == null) {
             verification.setStatus(Status.SENT_TO_PROVIDER);
         } else {
-            verification.setStatus(Status.TEST_COMPLETED);
-
+            if (verification.getProviderFromBBI() == null) {
+                verification.setStatus(Status.IN_PROGRESS);
+            } else {
+                verification.setStatus(Status.TEST_COMPLETED);
+            }
         }
-
+        verification.setProviderFromBBI(verification.getProvider());
         verification.setExpirationDate(null);
         verificationRepository.save(verification);
     }
@@ -84,6 +88,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     /**
      * Current method return list of verifications by current Provider user
+     *
      * @param username
      * @return list of Verification
      */
@@ -94,6 +99,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     /**
      * Current method return list of verifications by current Calibrator user
+     *
      * @param username
      * @return list of Verification
      */
@@ -104,6 +110,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     /**
      * Current method return list of verifications by current Calibrator user
+     *
      * @param username
      * @return list of Verification
      */
@@ -114,6 +121,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     /**
      * This method count of work in current time
+     *
      * @param username
      * @return number of work for user
      */
@@ -124,6 +132,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     /**
      * This method count of work in current time
+     *
      * @param username
      * @return number of work for user
      */
@@ -134,6 +143,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     /**
      * This method count of work in current time
+     *
      * @param username
      * @return number of work for user
      */
@@ -144,6 +154,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
 
     /**
      * This method search user by username
+     *
      * @param username
      * @return user
      */

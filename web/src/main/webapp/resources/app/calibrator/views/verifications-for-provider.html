@@ -1,0 +1,153 @@
+<div id="page-wrapper">
+
+    <div class="row header_row">
+        <div class="col-md-12">
+            <h1 class="page-header">{{ 'VERIFICATIONS_FOR_PROVIDER' | translate }}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="row">
+            <div class="col-md-12">
+                <br/>
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <span>{{'RECENT_DATA' | translate }}</span>
+                        <span class="pull-right">{{'VERIFS_FOUND' | translate }}: {{resultsCount}}</span>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table show-filter="false" ng-table="tableParams" template-pagination="custom/pager"
+                                           class="table table-bordered table-hover users_table">
+                                        <tbody>
+                                        <tr ng-repeat="verification in $data">
+                                            <td data-title="''">
+                                                <input type="checkbox"
+                                                       ng-click="resolveVerificationId(verification.id)"/>
+                                            </td>
+                                            <td data-title="'INITIAL_DATE' | translate" class="datecolumn">
+                                                {{ verification.initialDate | date :'dd-MM-yyyy'}}
+                                                <div ng-show="verification.processTimeExceeding>0">
+                                                    <b>
+                                                        {{'TIME_EXCEEDED' | translate}}
+                                                        {{verification.processTimeExceeding}}
+                                                        {{'DAYS' | translate}}
+                                                    </b>
+                                                </div>
+                                            </td>
+                                            <td data-title="'VERIFICATION_ID' | translate">
+                                                {{ verification.id }}
+                                            </td>
+                                            <td data-title="'CLIENT_FULL_NAME' | translate">
+                                                {{ verification.fullName }}
+                                            </td>
+                                            <td data-title="'DISTRICT' | translate">
+                                                {{ verification.district}}
+                                            </td>
+                                            <td data-title="'LOCALITY' | translate">
+                                                {{ verification.locality}}
+                                            </td>
+                                            <td data-title="'CLIENT_STREET' | translate">
+                                                {{ verification.street }}
+                                            </td>
+                                            <td data-title="'BUILDING,FLAT' | translate">
+                                                {{ verification.building }},
+                                                {{ verification.flat }}
+                                            </td>
+                                            <td data-title="'PROVIDER_NAME' | translate"
+                                                sortable="'nameProvider'">
+                                                {{ verification.nameProvider}}
+                                            </td>
+                                            <td data-title="'COMMENT' | translate">
+                                                {{ verification.rejectMessage }}
+                                            </td>
+                                            <td data-title="'ACTIONS' | translate"
+                                                class="control_buttons">
+                                                <i class="fa fa-info-circle info_icon"
+                                                   popover="{{'DETAIL_INFO' | translate}}"
+                                                   popover-trigger="mouseenter"
+                                                   ng-click="openDetails(verification.id, verification.initialDate, verification.readStatus)">
+                                                </i>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <script type="text/ng-template" id="custom/pager">
+                                    <div>
+                                        <ul class="pager ng-cloak">
+                                            <li ng-repeat="page in pages"
+                                                ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                                ng-show="page.type == 'prev' || page.type == 'next'"
+                                                ng-switch="page.type">
+                                                <a ng-switch-when="prev" ng-click="params.page(page.number)"
+                                                   href="">&laquo;
+                                                    Previous</a>
+                                                <a ng-switch-when="next" ng-click="params.page(page.number)"
+                                                   href="">Next &raquo;</a>
+                                            </li>
+                                            <li>
+                                                <div class="btn-group">
+                                                    <button type="button" ng-class="{'active':params.count() == 5}"
+                                                            ng-click="params.count(5)" class="btn btn-default">5
+                                                    </button>
+                                                    <button type="button" ng-class="{'active':params.count() == 10}"
+                                                            ng-click="params.count(10)" class="btn btn-default">10
+                                                    </button>
+                                                    <button type="button" ng-class="{'active':params.count() == 25}"
+                                                            ng-click="params.count(25)" class="btn btn-default">25
+                                                    </button>
+                                                    <button type="button" ng-class="{'active':params.count() == 50}"
+                                                            ng-click="params.count(50)" class="btn btn-default">50
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </script>
+                                <script type="text/ng-template" id="ng-table/filters/daterange.html">
+
+                                    <div class="input-group right-inner-addon" style="width: 100%">
+                                        <i id="calendar_icon" class="glyphicon glyphicon-calendar"
+                                           ng-click="showPicker($event)"></i>
+                                        <input date-range-picker="opts" class="form-control date-picker" type="text"
+                                               ng-model="myDatePicker.pickerDate" ng-change="doSearch()" options="opts"
+                                               id="datepickerfield" readonly/>
+
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default myGroupBtn"
+                                                    ng-show="!isDateDefault()" ng-click="clearDate()">
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </script>
+
+                                <p id="emptyError" ng-if="allIsEmpty && isClicked" class="help-block">
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    {{'SELECT_ONE_VERIFICATION' | translate}}
+                                </p>
+
+                                <div class="pull-left">
+                                    <button ng-model="button" type="button" class="btn btn-primary"
+                                            ng-click="openSendingModal()"><span class="glyphicon glyphicon-send"></span>
+                                        {{'SEND' | translate}}
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

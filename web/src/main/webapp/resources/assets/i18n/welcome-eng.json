@@ -790,6 +790,6 @@
     "RESPONSIBLE_PERSON_CHOOSE": "Choose responsible person",
     "RESPONSIBLE_PERSON_CANCEL": "Cancel responsible person",
     "CANCEL_TEST": "Cancel test",
-    "DUPLICATE_SERIAL_NUMBER": "Duplicate serial number"
-
- }
+    "DUPLICATE_SERIAL_NUMBER": "Duplicate serial number",
+    "VERIFICATIONS_FOR_PROVIDER" : "Verification for provider"
+}
