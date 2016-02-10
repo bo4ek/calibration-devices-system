@@ -22,7 +22,7 @@ angular.module('employeeModule')
         /**
          * Receives all regex for input fields
          */
-        $scope.MIDDLE_NAME_REGEX = /^[A-Z\u0410-\u042f\u0407\u0406\u0404'][a-z\u0430-\u044f\u0456\u0457']{1,20}$/;
+
         $scope.FLAT_REGEX = /^([1-9][0-9]{0,3}|0)$/;
         $scope.BUILDING_REGEX = /^[1-9][0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457])?$/;
         $scope.PHONE_REGEX_SECOND = /^[1-9]\d{8}$/;
