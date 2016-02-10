@@ -121,7 +121,7 @@ public class CalibratorPlanningTaskController {
             content.add(new VerificationPlanningTaskDTO(verification.getSentToCalibratorDate(), verification.getId(),
                     verification.getProvider().getName(), address.getDistrict(), address.getStreet(),
                     address.getBuilding(), address.getFlat(), clientData.getFullName(),
-                    clientData.getPhone(), verification.getInfo(), verification.getQueue()));
+                    clientData.getPhone(), verification.getInfo(), verification.getQueue(), verification.getStatus().toString()));
         }
         Collections.sort(content);
         return new PageDTO<>(queryResult.getTotalElements(), content);
@@ -362,7 +362,6 @@ public class CalibratorPlanningTaskController {
 
         HttpStatus httpStatus = HttpStatus.OK;
         List<Verification> verifications = new ArrayList<>();
-
 
         for (VerificationPlanningTaskDTO verificationDTO : verificationNewQueue) {
             verifications.add(new Verification(verificationDTO.getVerificationId(), verificationDTO.getQueue() + 1));
