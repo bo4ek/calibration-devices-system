@@ -3,6 +3,8 @@ package com.softserve.edu.service.calibrator.impl;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTest;
+import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.calibrator.CalibratorDigitalProtocolsService;
 
@@ -16,6 +18,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +29,9 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
 
     @Autowired
     private VerificationRepository verificationRepository;
+
+    @Autowired
+    CalibrationTestRepository calibrationTestRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -60,5 +66,23 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
         typedQuery.setMaxResults(itemsPerPage);
 
         return typedQuery.getResultList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> findNumbersOfProtocolsFromBbi(List<Verification> verifications) {
+        List<String> numbersOfProtocols = new ArrayList<>();
+        String numberOfProtocol = null;
+        for (Verification verification : verifications) {
+            if (!verification.isManual()) {
+                if (calibrationTestRepository.findByVerificationId(verification.getId()) != null) {
+                    numberOfProtocol = calibrationTestRepository.findByVerificationId(verification.getId()).getName();
+                    numbersOfProtocols.add(numberOfProtocol.substring(6, numberOfProtocol.indexOf('.')));
+                }
+            }
+            else {
+                numbersOfProtocols.add(numberOfProtocol);
+            }
+        }
+        return numbersOfProtocols;
     }
 }

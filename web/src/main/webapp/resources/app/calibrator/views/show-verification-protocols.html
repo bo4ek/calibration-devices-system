@@ -26,25 +26,25 @@
                                 <tbody>
                                 <tr ng-repeat="verification in $data">
                                     <td data-title="''"><input type="checkbox" ng-model="checked"
-                                                               ng-click="resolveVerificationId(verification.verificationId)"
+                                                               ng-click="resolveVerificationId(verification.id)"
                                     />
                                     </td>
-                                    <td data-title="'INITIAL_DATE' | translate" class="datecolumn">
-                                        {{ verification.sentToCalibratorDate | date :'dd-MM-yyyy'}}
+                                    <td data-title="'PROTOCOL_DATE' | translate" class="datecolumn">
+                                        {{ verification.initialDate | date :'dd-MM-yyyy'}}
                                         <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
-                                            translate}} {{verification.sentToCalibratorDate}} {{'DAYS' |
+                                            translate}} {{verification.initialDate}} {{'DAYS' |
                                             translate}}</b>
                                         </div>
                                     </td>
-                                    <td data-title="'CLIENT_FULL_NAME' | translate">{{ verification.fullName }}
+                                    <td data-title="'SETTING_NUMBER' | translate">{{ verification.serialNumber }}
                                     </td>
-                                    <td data-title="'CLIENT_ADDRESS' | translate">{{ verification.address }}
+                                    <td data-title="'NUMBER_OF_PROTOCOL' | translate">{{ verification.numberOfProtocol }}
                                     </td>
-                                    <td data-title="'PROVIDER_NAME' | translate">{{ verification.nameProvider }}
-                                    </td>
-                                    <td data-title="'CALIBRATOR_NAME' | translate">{{ verification.nameCalibrator }}
+                                    <td data-title="'NUMBER_OF_VERIFICATION' | translate">{{ verification.id }}
                                     </td>
                                     <td data-title="'STATUS' | translate">{{ verification.status | translate }}
+                                    </td>
+                                    <td data-title="'NUMBER_OF_COUNTER' | translate">{{ verification.numberOfCounter | translate }}
                                     </td>
                                     <td data-title="'COMMENT' | translate">{{ verification.comment}}
                                     </td>

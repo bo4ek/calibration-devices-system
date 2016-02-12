@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 
 /**
  * Created by Misha on 12/13/2015.
@@ -74,6 +76,7 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
         verification.setManual(true);
         verification.setCalibrationTestDataManualId(calibrationTestDataManual);
         verification.setStatus(Status.TEST_COMPLETED);
+        verification.setInitialDate(new Date());
         verificationRepository.save(verification);
     }
 
@@ -98,6 +101,7 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
         cTestDataManual.setUnsuitabilityReason(unsuitabilityReason);
         if (verificationEdit) {
             Verification verification = verificationRepository.findOne(verificationId);
+            verification.setInitialDate(new Date());
             if (commonTestResult.equals(CalibrationTestResult.SUCCESS)) {
                 verification.setStatus(Status.TEST_OK);
                 verificationRepository.save(verification);

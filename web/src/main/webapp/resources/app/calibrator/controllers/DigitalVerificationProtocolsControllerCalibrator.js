@@ -129,7 +129,7 @@ angular
             $scope.createManualTest = function (verification) {
                 var manualTest = {
                     realiseYear: verification.realiseYear,
-                    numberCounter: verification.numberCounter,
+                    numberCounter: verification.numberOfCounter,
                     status:verification.status
                 };
                 $scope.dataToManualTest.set(verification.id, manualTest);

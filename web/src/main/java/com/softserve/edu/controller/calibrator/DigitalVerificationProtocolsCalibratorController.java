@@ -10,9 +10,11 @@ import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.calibrator.CalibratorDigitalProtocolsService;
 import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
+import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.state.verificator.StateVerificatorService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.verification.VerificationService;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,6 +49,9 @@ public class DigitalVerificationProtocolsCalibratorController {
     @Autowired
     StateVerificatorService stateVerificatorService;
 
+    @Autowired
+    CalibrationTestService calibrationTestService;
+
     /**
      * This method calls service whiche returns the list of verifications. The controller transform them with the help of
      * ProtocolDTOTransformer to list of protocolsDTO. It's done to sent to the client only the necessary data.
@@ -65,8 +71,9 @@ public class DigitalVerificationProtocolsCalibratorController {
         Status status = Status.TEST_COMPLETED;
         List<Verification> verifications = protocolsService.findPageOfVerificationsByCalibratorIdAndStatus(
                 calibratorEmployee, pageNumber, itemsPerPage, status);
+        List<String> numbersOfProtocolsFromBbi = protocolsService.findNumbersOfProtocolsFromBbi(verifications);
         Long count = protocolsService.countByCalibratorEmployee_usernameAndStatus(calibratorEmployee, status);
-        List<ProtocolDTO> content = ProtocolDTOTransformer.toDtofromList(verifications);
+        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(verifications, numbersOfProtocolsFromBbi);
 
         return new PageDTO<>(count, content);
 

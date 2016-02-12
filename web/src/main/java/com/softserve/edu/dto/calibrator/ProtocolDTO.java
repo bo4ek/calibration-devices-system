@@ -15,9 +15,6 @@ import java.util.Date;
 public class ProtocolDTO {
 
     private String id;
-    private String sentToCalibratorDate;
-    private String fullName;
-    private String address;
     private String nameProvider;
     private String nameCalibrator;
     private String status;
@@ -25,22 +22,20 @@ public class ProtocolDTO {
     private boolean isManual;
     private String moduleNumber;
     private int realiseYear;
-    private String numberCounter;
-    private Date initialDate;
+    private String numberOfCounter;
+    private String initialDate;
     private Verification.ReadStatus readStatus;
+    private String serialNumber;
+    private String numberOfProtocol;
 
 
     public ProtocolDTO() {
 
     }
 
-    public ProtocolDTO(String id, String sentToCalibratorDate, String firstName, String lastName, String middleName, String address,
-                       String nameProvider, String nameCalibrator, String status, String comment, boolean isManual, String moduleNumber,
-                       int realiseYear, String numberCounter, Date initialDate, Verification.ReadStatus readStatus) {
+    public ProtocolDTO(String id, String nameProvider, String nameCalibrator, String status, String comment, boolean isManual, String moduleNumber,
+                       int realiseYear, String numberOfCounter, String initialDate, Verification.ReadStatus readStatus, String serialNumber, String numberOfProtocol) {
         this.id = id;
-        this.sentToCalibratorDate = sentToCalibratorDate;
-        this.fullName = "" + lastName + " " + firstName + " " + middleName;
-        this.address = address;
         this.nameProvider = nameProvider;
         this.nameCalibrator = nameCalibrator;
         this.status = status;
@@ -48,9 +43,11 @@ public class ProtocolDTO {
         this.isManual = isManual;
         this.moduleNumber = moduleNumber;
         this.realiseYear = realiseYear;
-        this.numberCounter = numberCounter;
+        this.numberOfCounter = numberOfCounter;
         this.initialDate = initialDate;
         this.readStatus = readStatus;
+        this.serialNumber = serialNumber;
+        this.numberOfProtocol = numberOfProtocol;
     }
 
 }

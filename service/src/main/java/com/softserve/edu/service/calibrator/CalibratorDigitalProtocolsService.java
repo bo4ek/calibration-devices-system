@@ -18,4 +18,6 @@ public interface CalibratorDigitalProtocolsService {
             User calibratorEmployee, int pageNumber, int itemsPerPage, Status status);
 
     Long countByCalibratorEmployee_usernameAndStatus (User calibratorEmployee, Status status);
+
+    List<String> findNumbersOfProtocolsFromBbi(List<Verification> verifications);
 }
