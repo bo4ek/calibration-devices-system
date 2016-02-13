@@ -24,11 +24,8 @@ angular
              */
             $scope.createManualTest = function (verification) {
                 var manualTest = {
-                    standardSize: verification.standardSize,
-                    symbol: verification.symbol,
                     realiseYear: verification.realiseYear,
-                    numberCounter: verification.numberCounter,
-                    counterId: verification.counterId,
+                    numberCounter: verification.numberOfCounter,
                     status:verification.status
                 };
                 $scope.dataToManualTest.set(verification.id, manualTest);
@@ -36,7 +33,7 @@ angular
 
 
             $scope.openAddTest = function (verification) {
-                if (!verification.isManual) {
+                if (!verification.manual) {
                     $location.path('/calibrator/verifications/calibration-test-add/').search({
                         'param': verification.id,
                         'loadProtocol': 1,

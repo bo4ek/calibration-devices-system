@@ -42,7 +42,9 @@
                                                                    ng-show="verification.providerEmployee && (verification.status == 'SENT_TO_VERIFICATOR')"
                                                                    ng-click="resolveVerificationId(verification.id)"/>
                                         </td>
-                                        <td data-title="'INITIAL_DATE' | translate" class="col-md-2" sortable="'date'"
+                                        <td data-title="'INITIAL_DATE' | translate">{{ verification.sentToVerificatorDate }}
+                                        </td>
+                                        <td data-title="'PROTOCOL_DATE' | translate" class="col-md-2" sortable="'date'"
                                             filter="{ 'date': 'date' }">{{ verification.initialDate }}
                                             <div ng-show="verification.processTimeExceeding>0">
                                                 <b>
@@ -51,28 +53,17 @@
                                                 </b>
                                             </div>
                                         </td>
-
-                                        <td data-title="'CLIENT_FULL_NAME' | translate" sortable="'client_full_name'"
-                                            filter="{ 'client_full_name': 'text' }">{{ verification.fullName }}
+                                        <td data-title="'SETTING_NUMBER' | translate">{{ verification.serialNumber }}
                                         </td>
-
-                                        <td data-title="'CLIENT_ADDRESS' | translate" sortable="'address'"
-                                            filter="{ 'address': 'text' }">{{ verification.address }}
-                                        </td>
-                                        <td data-title="'PROVIDER_NAME' | translate" sortable="'nameProvider'"
-                                            filter="{ 'nameProvider': 'text' }">{{ verification.nameProvider }}
+                                        <td data-title="'NUMBER_OF_PROTOCOL' | translate">{{ verification.numberOfProtocol }}
                                         </td>
                                         <td data-title="'CALIBRATOR_NAME' | translate" sortable="'nameCalibrator'"
                                             filter="{ 'nameCalibrator': 'text' }">{{ verification.nameCalibrator }}
                                         </td>
-                                        <td data-title="'STATUS' | translate" sortable="'status'"
-                                            filter="{ 'status': 'status' }">{{ verification.status | translate }}
+                                        <td data-title="'NUMBER_OF_VERIFICATION' | translate">{{ verification.id }}
                                         </td>
-
-                                        <td data-title="'COMMENT' | translate" sortable="'comment'"
-                                            filter="{ 'comment': 'text' }">{{ verification.comment | translate }}
+                                        <td data-title="'NUMBER_OF_COUNTER' | translate">{{ verification.numberOfCounter | translate }}
                                         </td>
-
                                         <td data-title="'ACTIONS' | translate" style="width: 7%">
 
                                             <div style="text-align: center;" class="control_buttons">

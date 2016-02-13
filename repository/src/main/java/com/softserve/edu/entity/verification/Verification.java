@@ -90,6 +90,9 @@ public class Verification implements Comparable {
     @Temporal(TemporalType.DATE)
     private Date sentToCalibratorDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date sentToVerificatorDate;
+
     private String rejectedMessage;
     private String comment;
 

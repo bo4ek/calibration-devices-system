@@ -1,7 +1,9 @@
 package com.softserve.edu.controller.stateverificator;
 
+import com.softserve.edu.controller.calibrator.util.ProtocolDTOTransformer;
 import com.softserve.edu.controller.provider.util.VerificationPageDTOTransformer;
 import com.softserve.edu.dto.*;
+import com.softserve.edu.dto.calibrator.ProtocolDTO;
 import com.softserve.edu.dto.provider.VerificationDTO;
 import com.softserve.edu.dto.provider.VerificationPageDTO;
 import com.softserve.edu.dto.provider.VerificationProviderEmployeeDTO;
@@ -14,6 +16,7 @@ import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.service.admin.OrganizationService;
+import com.softserve.edu.service.calibrator.CalibratorDigitalProtocolsService;
 import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.provider.ProviderService;
@@ -62,6 +65,9 @@ public class StateVerificatorController {
     @Autowired
     StateVerificatorEmployeeService employeeService;
 
+    @Autowired
+    private CalibratorDigitalProtocolsService protocolsService;
+
     private Logger logger = Logger.getLogger(StateVerificatorController.class);
 
     /**
@@ -72,10 +78,11 @@ public class StateVerificatorController {
      * @return a page of new verifications assign on state-verificator with their total amount
      */
     @RequestMapping(value = "new/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
-    public PageDTO<VerificationPageDTO> getPageOfAllSentVerificationsByStateVerificatorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
+    public PageDTO<ProtocolDTO> getPageOfAllSentVerificationsByStateVerificatorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
     		NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
         User verificatorEmployee = stateVerificatorEmployeeService.oneProviderEmployee(employeeUser.getUsername());
+        Set<UserRole> userRoles = verificatorEmployee.getUserRoles();
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfVerificationsByVerificatorIdAndCriteriaSearch(
                 employeeUser.getOrganizationId(), pageNumber, itemsPerPage,
                 searchData.getDate(),
@@ -95,8 +102,9 @@ public class StateVerificatorController {
                 sortCriteria,
                 sortOrder,
 	verificatorEmployee);
-        List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
-        return new PageDTO<VerificationPageDTO>(queryResult.getTotalItems(), content);
+        List<String> numbersOfProtocolsFromBbi = protocolsService.findNumbersOfProtocolsFromBbi(queryResult.getContent());
+        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(queryResult.getContent(), numbersOfProtocolsFromBbi, userRoles);
+        return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
     /**

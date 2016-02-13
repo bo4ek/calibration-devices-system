@@ -5,6 +5,7 @@ import com.softserve.edu.dto.VerificationUpdateDTO;
 import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.calibrator.ProtocolDTO;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
+import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.entity.organization.Organization;
@@ -67,13 +68,13 @@ public class DigitalVerificationProtocolsCalibratorController {
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
-
+        Set<UserRole> userRoles = calibratorEmployee.getUserRoles();
         Status status = Status.TEST_COMPLETED;
         List<Verification> verifications = protocolsService.findPageOfVerificationsByCalibratorIdAndStatus(
                 calibratorEmployee, pageNumber, itemsPerPage, status);
         List<String> numbersOfProtocolsFromBbi = protocolsService.findNumbersOfProtocolsFromBbi(verifications);
         Long count = protocolsService.countByCalibratorEmployee_usernameAndStatus(calibratorEmployee, status);
-        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(verifications, numbersOfProtocolsFromBbi);
+        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(verifications, numbersOfProtocolsFromBbi, userRoles);
 
         return new PageDTO<>(count, content);
 

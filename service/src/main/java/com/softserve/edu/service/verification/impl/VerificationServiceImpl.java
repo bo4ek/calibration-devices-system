@@ -500,6 +500,7 @@ public class VerificationServiceImpl implements VerificationService {
             verification.setSentToCalibratorDate(new Date());
         } else if (status.equals(Status.SENT_TO_VERIFICATOR)) {
             verification.setStateVerificator(oraganization);
+            verification.setSentToVerificatorDate(new Date());
         } else if ((status.equals(Status.TEST_OK)) || (status.equals(Status.TEST_NOK))) {
             verification.setProvider(oraganization);
         } else if (status.equals((Status.SENT_TO_PROVIDER))) {

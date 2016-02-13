@@ -71,16 +71,15 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
     @Transactional(readOnly = true)
     public List<String> findNumbersOfProtocolsFromBbi(List<Verification> verifications) {
         List<String> numbersOfProtocols = new ArrayList<>();
-        String numberOfProtocol = null;
         for (Verification verification : verifications) {
             if (!verification.isManual()) {
                 if (calibrationTestRepository.findByVerificationId(verification.getId()) != null) {
-                    numberOfProtocol = calibrationTestRepository.findByVerificationId(verification.getId()).getName();
+                    String numberOfProtocol = calibrationTestRepository.findByVerificationId(verification.getId()).getName();
                     numbersOfProtocols.add(numberOfProtocol.substring(6, numberOfProtocol.indexOf('.')));
                 }
             }
             else {
-                numbersOfProtocols.add(numberOfProtocol);
+                numbersOfProtocols.add(null);
             }
         }
         return numbersOfProtocols;
