@@ -19,22 +19,19 @@ angular
                 page: 1,
                 count: 10,
                 sorting: {
-                    providerFromBBI: 'desc',
-                    nameProvider: 'desc'
+                    client_last_name: 'desc'
                 }
             }, {
                 total: 0,
                 getData: function ($defer, params) {
                     var status;
-                    var sortCriteria;
                     if ($location.absUrl().indexOf("verifications-for-provider") != -1) {
                         status = "CREATED_FOR_PROVIDER";
-                        sortCriteria = Object.keys(params.sorting())[1];
                     } else {
                         status = "CREATED_BY_CALIBRATOR";
-                        sortCriteria = Object.keys(params.sorting())[0];
                     }
 
+                    var sortCriteria = Object.keys(params.sorting())[0];
                     var sortOrder = params.sorting()[sortCriteria];
 
                     verificationService.getPage(status, params.page(), params.count(), sortCriteria, sortOrder)
