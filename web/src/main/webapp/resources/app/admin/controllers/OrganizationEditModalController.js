@@ -43,9 +43,7 @@ angular
         'UserService',
         'DevicesService',
         'OrganizationService', '$log', 'regions',
-        function ($rootScope, $scope, $translate, $modal, $modalInstance, $filter, $timeout,
-                  addressService,
-                  userService, devicesService, organizationService, $log, regions) {
+        function ($rootScope, $scope, $translate, $modal, $modalInstance, $filter, $timeout, addressService, userService, devicesService, organizationService, $log, regions) {
 
             $scope.defaultData = {};
 
@@ -253,7 +251,7 @@ angular
             );
 
 
-            $scope.changePassword = function (){
+            $scope.changePassword = function () {
 
             }
 
@@ -859,7 +857,7 @@ angular
                 $modalInstance.dismiss();
             });
 
-            $scope.ORGANIZATION_NAME_REGEX = /^(?=.{5,50}$).*/;
+            $scope.ORGANIZATION_NAME_REGEX = /^[0-9A-Za-z\u0410\u002d\u042f\u0404\u0406\u0407\u0490\u0022\u0027\u0430\u002d\u044f\u0454\u0456\u0457\u0491\u0020\u002d]+$/;
             $scope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
             $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
             $scope.PASSWORD_REGEX = /^(?=.{4,20}$).*/;
@@ -889,7 +887,9 @@ angular
             $scope.selectRegionsFromDistrict = function (selectedDistrict, index) {
                 // if (!$scope.blockSearchFunctions) {
                 if ($scope.serviceArea.locality === undefined) {
-                    $scope.serviceArea.locality = [[]];
+                    $scope.serviceArea.locality = [
+                        []
+                    ];
                 }
                 if ($scope.serviceArea.locality[index] === undefined || $scope.serviceArea.locality[index].length === 0) {
                     addressService.findLocalitiesByDistrictId(selectedDistrict.id)
@@ -904,7 +904,9 @@ angular
             $scope.serviceArea = {};
             $scope.serviceArea.region = [];
             $scope.serviceArea.districts = [];
-            $scope.serviceArea.locality = [[]];
+            $scope.serviceArea.locality = [
+                []
+            ];
             $scope.selectedServiseAreaLocalities = [];
 
             /**
@@ -920,7 +922,9 @@ angular
                 $event.stopPropagation();
 
                 if ($scope.serviceArea.locality === undefined) {
-                    $scope.serviceArea.locality = [[]];
+                    $scope.serviceArea.locality = [
+                        []
+                    ];
                 }
                 if ($scope.serviceArea.locality[index] === undefined || $scope.serviceArea.locality[index].length === 0) {
                     addressService.findLocalitiesByDistrictId(district.id)

@@ -115,7 +115,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException, InvalidImageInBbiException{
+            throws IOException, DecoderException, InvalidImageInBbiException {
         DeviceTestData deviceTestData;
         try (InputStream inputStream = FileUtils.openInputStream(BBIfile)) {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);
@@ -127,7 +127,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     public DeviceTestData parseAndSaveBBIFile(MultipartFile BBIfile, String verificationID, String originalFileName)
-            throws IOException, NoSuchElementException, DecoderException{
+            throws IOException, NoSuchElementException, DecoderException {
         try {
             return parseAndSaveBBIFile(BBIfile.getInputStream(), verificationID, originalFileName);
         } catch (Exception e) {
@@ -184,7 +184,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
      */
     private List<BBIOutcomeDTO> processListOfBBIFiles(Map<String, Map<String, String>> verificationMapFromUnpackedFiles,
                                                       List<File> listOfBBIfiles, User calibratorEmployee) throws
-            ParseException, IOException,InvalidImageInBbiException {
+            ParseException, IOException, InvalidImageInBbiException {
         List<BBIOutcomeDTO> resultsOfBBIProcessing = new ArrayList<>();
 
         for (File bbiFile : listOfBBIfiles) {
@@ -231,7 +231,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (InvalidModuleIdException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
                 logger.error("Wrong module serial number in BBI file");
-            } catch (InvalidDeviceTypeIdException e){
+            } catch (InvalidDeviceTypeIdException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_DEVICE_TYPE_ID;
                 logger.error("Wrong device type id in BBI file");
             } catch (InvalidVerificationCodeException e) {
@@ -331,7 +331,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
                     verificationMap.put(Constants.COMMENT, resultSet.getString("Note"));
                 } catch (SQLException e) {
-                    logger.warn("User was trying to upload old archive format ", e);
+                    logger.warn("User was trying to upload old archive format ");
                 }
 
                 bbiFilesToVerification.put(resultSet.getString("FileNumber"), verificationMap);
@@ -357,17 +357,17 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
             Long streetIdLong = Long.parseLong(verificationData.get(Constants.STREET_ID));
             streetName = streetService.findStreetById(streetIdLong).getDesignation();
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             logger.info("Old *.db format", e);
         }
 
-        if (cityName != null && regionName != null && streetName != null){
+        if (cityName != null && regionName != null && streetName != null) {
             Address address = new Address(regionName, cityName,
                     streetName, verificationData.get(Constants.BUILDING), verificationData.get(Constants.FLAT));
             clientData = new ClientData(verificationData.get(Constants.FIRST_NAME),
                     verificationData.get(Constants.LAST_NAME), verificationData.get(Constants.MIDDLE_NAME),
                     verificationData.get(Constants.PHONE_NUMBER), address);
-        }else{
+        } else {
             Address address = new Address(verificationData.get(Constants.REGION), verificationData.get(Constants.CITY),
                     verificationData.get(Constants.STREET), verificationData.get(Constants.BUILDING),
                     verificationData.get(Constants.FLAT));
@@ -408,7 +408,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     }
 
-    private Long getDeviceIdByDeviceTypeId(int deviceTypeId) throws InvalidDeviceTypeIdException{
+    private Long getDeviceIdByDeviceTypeId(int deviceTypeId) throws InvalidDeviceTypeIdException {
         String deviceType = null;
         switch (deviceTypeId) {
             case 2:
@@ -426,7 +426,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, true).getId();
     }
 
-    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) throws InvalidDeviceTypeIdException{
+    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) throws InvalidDeviceTypeIdException {
         String sizeAndSymbol = verificationData.get(Constants.COUNTER_SIZE_AND_SYMBOL);
         String[] parts = sizeAndSymbol.split(" ");
         String standardSize = parts[0] + " " + parts[1];

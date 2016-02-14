@@ -3,7 +3,7 @@ angular
     'adminModule',
     ['spring-security-csrf-token-interceptor', 'ui.bootstrap',
         'ui.router', 'ui.bootstrap.showErrors', 'ngTable',
-        'pascalprecht.translate', 'ngCookies', 'ui.select', 'ngSanitize', 'localytics.directives', 'daterangepicker', 'checklist-model','ngAnimate', 'toaster',
+        'pascalprecht.translate', 'ngCookies', 'ui.select', 'ngSanitize', 'localytics.directives', 'daterangepicker', 'checklist-model', 'ngAnimate', 'toaster',
         'angular-loading-bar'])
 
     .config(
@@ -14,8 +14,7 @@ angular
         'showErrorsConfigProvider',
         'cfpLoadingBarProvider',
         '$provide', '$httpProvider',
-        function ($translateProvider, $stateProvider,
-                  $urlRouterProvider, showErrorsConfigProvider,cfpLoadingBarProvider, $provide, $httpProvider) {
+        function ($translateProvider, $stateProvider, $urlRouterProvider, showErrorsConfigProvider, cfpLoadingBarProvider, $provide, $httpProvider) {
 
             $httpProvider.interceptors.push('responseObserver');
 
@@ -125,21 +124,21 @@ angular
              When translation of page will end, items of select (on the scope) will be changed too.
              Then we refresh the items of select to get them from scope.
              */
-            $provide.decorator('uiSelectDirective', function( $delegate, $parse, $injector) {
+            $provide.decorator('uiSelectDirective', function ($delegate, $parse, $injector) {
                 var some_directive = $delegate[ 0],
                     preCompile = some_directive.compile;
 
                 some_directive.compile = function compile() {
-                    var link = preCompile.apply( this, arguments );
+                    var link = preCompile.apply(this, arguments);
 
-                    return function( scope, element, attrs, controller ) {
-                        link.apply( this, arguments );
+                    return function (scope, element, attrs, controller) {
+                        link.apply(this, arguments);
 
                         var $select = controller[ 0 ];
 
-                        var rootScope= $injector.get('$rootScope');
+                        var rootScope = $injector.get('$rootScope');
 
-                        rootScope.$on('$translateChangeEnd', function(event){
+                        rootScope.$on('$translateChangeEnd', function (event) {
                             scope.setTypeDataLanguage();
                             $select.refreshItems();
                         });
@@ -158,8 +157,8 @@ angular.module('adminModule').run(function (paginationConfig, $filter) {
     paginationConfig.lastText = $filter('translate')('LAST_PAGE');
 });
 
-angular.module('adminModule').run(function ($rootScope){
-    $rootScope.FIRST_LAST_NAME_REGEX = /^([A-Z][\u0027]{0,1}[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][\u0027]{0,1}[a-z]{1,20}\u002d[A-Z][\u0027]{0,1}[a-z]{1,20}|[A-Z][\u0027]{0,1}[a-z]{1,20}\u002d[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}\u002d[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}\u002d[A-Z][\u0027]{0,1}[a-z]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}\u002d\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
+angular.module('adminModule').run(function ($rootScope) {
+    $rootScope.FIRST_LAST_NAME_REGEX = /^([A-Z][\u0027]?[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][\u0027]?[a-z]{1,20}[\u002d\u0020]?[A-Z][\u0027]?[a-z]{1,20}|[A-Z][\u0027]?[a-z]{1,20}[\u002d\u0020]?[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}[\u002d\u0020]?[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}[\u002d\u0020]?[A-Z][\u0027]?[a-z]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}[\u002d\u0020]?\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
     $rootScope.MIDDLE_NAME_REGEX = /^([A-Z][\u0027]{0,1}[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
     $rootScope.PHONE_REGEX = /^[1-9]\d{8}$/;
 });
