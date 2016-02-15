@@ -1,6 +1,7 @@
 package com.softserve.edu.service.calibrator.impl;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
+import com.softserve.edu.entity.verification.BbiProtocol;
 import com.softserve.edu.repository.UploadBbiRepository;
 import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
@@ -38,9 +39,11 @@ public class BbiFileServiceImpl implements BbiFileService {
     }
 
     @Override
-    public String findBBIByFileName(String fileName){
-        String bbiName = uploadBbiRepository.findBBIProtocolByFileName(fileName);
-        return bbiName;
+    public boolean findByFileNameAndDate(String fileName, String date){
+        if (uploadBbiRepository.findBBIProtocolByFileNameAndDate(fileName, date) != null) {
+            return true;
+        }
+        return false;
     }
 
 

@@ -791,5 +791,6 @@
     "RESPONSIBLE_PERSON_CANCEL": "Cancel responsible person",
     "CANCEL_TEST": "Cancel test",
     "DUPLICATE_SERIAL_NUMBER": "Duplicate serial number",
-    "VERIFICATIONS_FOR_PROVIDER" : "Verification for provider"
+    "VERIFICATIONS_FOR_PROVIDER" : "Verification for provider",
+    "CREATED_FOR_PROVIDER" : "Created by calibrator"
 }

@@ -80,7 +80,6 @@ public class CalibratorServiceImpl implements CalibratorService {
         bbiProtocolsOfVerification.add(bbiProtocol);
         verification.setBbiProtocols(bbiProtocolsOfVerification);
         verificationRepository.save(verification);
-        uploadBbiRepository.save(bbiProtocol);
     }
 
 

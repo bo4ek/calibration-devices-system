@@ -11,6 +11,7 @@ import com.softserve.edu.entity.verification.calibration.*;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -148,6 +149,8 @@ public class Verification implements Comparable {
     @Column(columnDefinition = "int default 0")
     private Integer calibrationInterval;
 
+    @Column(name = "verificationTime")
+    private String verificationTime;
 
     public Verification(String verificationId, int queue) {
         this.id = verificationId;

@@ -94,10 +94,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Transactional
     public DeviceTestData parseBBIFile(File BBIFile, String originalFileName) throws IOException, DecoderException, InvalidImageInBbiException {
-        String bbiName = bbiFileService.findBBIByFileName(originalFileName);
-        if (bbiName != null) {
-            throw new FileAlreadyExistsException(originalFileName);
-        }
         inStream = FileUtils.openInputStream(BBIFile);
         bufferedInputStream = new BufferedInputStream(inStream);
         bufferedInputStream.mark(inStream.available());
@@ -193,6 +189,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
             DeviceTestData deviceTestData;
             try {
+                if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), correspondingVerificationMap.get(Constants.DATE))) {
+                    throw new FileAlreadyExistsException(bbiFile.getName());
+                }
                 if (correspondingVerificationMap == null) {
                     throw new MismatchBbiFilesNamesException();
                 }
@@ -386,9 +385,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Verification verification = new Verification(date, clientData,
                 Status.CREATED_BY_CALIBRATOR, calibrator, providerFromBBI, calibratorEmployee,
                 counter, verId, verificationData.get(Constants.COMMENT));
-        String verificationId = verification.getId();
+        verification.setVerificationTime(verificationData.get(Constants.DATE));
         verificationService.saveVerification(verification);
-        return verificationId;
+        return verId;
     }
 
     private void updateVerificationFromMap(Map<String, String> verificationData, String verificationId, DeviceTestData deviceTestData)
@@ -402,6 +401,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
         Device device = deviceService.getById(deviceId);
         verification.setDevice(device);
+        verification.setVerificationTime(verificationData.get(Constants.DATE));
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);
         verificationService.saveVerification(verification);
