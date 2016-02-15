@@ -43,11 +43,12 @@
                                     <tr ng-repeat="moduleTask in $data"
                                         ng-class="{ 'info': moduleTask.status === 'SENT_TO_TEST_DEVICE' }">
                                         <td data-title="''"><input type="checkbox"
-                                                ng-click="resolveTaskID(moduleTask.taskID)"/>
+                                                                   ng-hide="moduleTask.numOfVerifications > 0 && moduleTask.numOfVerifications == moduleTask.numOfCompletedVerifications "
+                                                                   ng-click="resolveTaskID(moduleTask.taskID)"/>
                                         </td>
                                         <td data-title="'DATE_OF_TASK' | translate" sortable="'dateOfTask'"
-                                                filter="{ dateOfTask : 'daterange' }" class="require"
-                                                style="width: 22%; min-width: 260px">
+                                            filter="{ dateOfTask : 'daterange' }" class="require"
+                                            style="width: 22%; min-width: 260px">
                                             <span ng-hide="moduleTask.status === 'TEST_PLACE_DETERMINED'">
                                                 {{ moduleTask.dateOfTask }}
                                             </span>
@@ -63,27 +64,30 @@
                                                    ng-show="moduleTask.status === 'TEST_PLACE_DETERMINED'" readonly/>
                                         </td>
                                         <td data-title="'INSTALLATION_TYPE' | translate" sortable="'module.moduleType'"
-                                                filter="{ moduleType : 'moduleType' }">
+                                            filter="{ moduleType : 'moduleType' }">
                                             {{ moduleTask.moduleType | translate }}
                                         </td>
                                         <td data-title="'MODULE_NUMBER' | translate" sortable="'module.serialNumber'"
-                                                filter="{ moduleSerialNumber : 'text' }">
+                                            filter="{ moduleSerialNumber : 'text' }">
                                             {{ moduleTask.moduleSerialNumber }}
                                         </td>
-                                        <td data-title="'CONTACT_PERSON_FULL_NAME' | translate" sortable="'module.employeeFullName'"
-                                                filter="{ employeeFullName: 'text' }">
+                                        <td data-title="'CONTACT_PERSON_FULL_NAME' | translate"
+                                            sortable="'module.employeeFullName'"
+                                            filter="{ employeeFullName: 'text' }">
                                             {{ moduleTask.employeeFullName }}
                                         </td>
                                         <td data-title="'PHONE_NUMBER' | translate" sortable="'module.telephone'"
-                                                filter="{ phoneNumber : 'text' }">
+                                            filter="{ phoneNumber : 'text' }">
                                             +380{{ moduleTask.telephone }}
                                         </td>
                                         <td data-title="'COUNT_OF_VERIFICATION' | translate">
                                             {{ moduleTask.numOfVerifications }}
+                                            ({{moduleTask.numOfCompletedVerifications}})
                                         </td>
-                                        <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
+                                        <td data-title="'ACTIONS' | translate" style="width: 12%"
+                                            class="control_buttons">
                                             <i class="fa fa-info-circle info_icon"
-                                                    ng-click="openVerificationListModal(moduleTask.taskID)">
+                                               ng-click="openVerificationListModal(moduleTask.taskID)">
                                             </i>
                                         </td>
                                     </tr>
@@ -140,7 +144,8 @@
                                     <i id="calendar_icon" class="glyphicon glyphicon-calendar"
                                        ng-click="showPicker($event)"></i>
                                     <input date-range-picker="opts" class="form-control date-picker" type="text"
-                                           ng-model="myDatePicker.pickerDate" ng-change="onTableHandling()" options="opts"
+                                           ng-model="myDatePicker.pickerDate" ng-change="onTableHandling()"
+                                           options="opts"
                                            id="datepickerfield" readonly/>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default myGroupBtn"

@@ -593,12 +593,10 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             }
 
             try {
-                String date;
-                String time;
                 SimpleDateFormat simpleTaskDate = new SimpleDateFormat("dd.MM.yyyy");
-                date = simpleTaskDate.format(calibrationTask.getDateOfTask());
-                time = (verification.getInfo() != null && verification.getInfo().getTimeFrom() != null && verification.getInfo().getTimeTo() != null ? verification.getInfo().getTimeFrom() + " " : empty);
-                datetime.add(date + time);
+                String date = simpleTaskDate.format(calibrationTask.getDateOfTask());
+                String time = (verification.getInfo() != null && verification.getInfo().getTimeFrom() != null && verification.getInfo().getTimeTo() != null ? verification.getInfo().getTimeFrom() + "" : empty);
+                datetime.add(date + " " + time);
             } catch (IllegalArgumentException e) {
                 datetime.add(empty);
                 logger.debug("The date of calibration task is absent or having wrong format, id of this task is:" + calibrationTask.getId(), e);
