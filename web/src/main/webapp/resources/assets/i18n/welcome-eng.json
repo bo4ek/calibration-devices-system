@@ -792,5 +792,6 @@
     "CANCEL_TEST": "Cancel test",
     "DUPLICATE_SERIAL_NUMBER": "Duplicate serial number",
     "VERIFICATIONS_FOR_PROVIDER" : "Verification for provider",
-    "CREATED_FOR_PROVIDER" : "Created by calibrator"
+    "CREATED_FOR_PROVIDER" : "Created by calibrator",
+    "TASK_TITLE" : "Task for team"
 }

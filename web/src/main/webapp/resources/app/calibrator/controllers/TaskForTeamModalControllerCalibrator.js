@@ -6,10 +6,11 @@ angular
             $scope.calibrationTask = {};
             $scope.incorrectValue = false;
 
+
             /**
              * Closes modal window on browser's back/forward button click.
              */
-            $rootScope.$on('$locationChangeStart', function() {
+            $rootScope.$on('$locationChangeStart', function () {
                 $modalInstance.close();
             });
 
@@ -48,7 +49,7 @@ angular
             $scope.dateOptions = {
                 formatYear: 'yyyy',
                 startingDay: 1,
-                showWeeks: 'false',
+                showWeeks: 'false'
 
             };
 
@@ -58,18 +59,8 @@ angular
             $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
             $scope.format = $scope.formats[2];
 
-            /**
-             * Disable weekend selection
-             *
-             * @param date
-             * @param mode
-             * @returns {boolean}
-             */
-            $scope.disabled = function(date, mode) {
-                return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-            };
 
-            $scope.toggleMin = function() {
+            $scope.toggleMin = function () {
                 $scope.minDate = $scope.minDate ? null : new Date();
             };
 
@@ -102,25 +93,25 @@ angular
              */
             $scope.teams = [];
             function createTeamArray(data) {
-              for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i < data.length; i++) {
                     $scope.teams[i] = {
                         teamName: data[i].teamName,
                         teamNumber: data[i].teamNumber
                     }
-              }
+                }
             }
 
             /**
              * make asynchronous request to the server
              * and receive the teams info
              */
-            $scope.receiveTeams = function(){
+            $scope.receiveTeams = function () {
                 console.log($scope.calibrationTask.taskDate + " " + $scope.calibrationTask.applicationFiled);
                 var taskDate = $scope.calibrationTask.taskDate;
                 var applicationFiled = $scope.calibrationTask.applicationFiled;
                 verificationPlanningTaskService.getTeams(taskDate, applicationFiled)
                     .then(function (result) {
-                       createTeamArray(result.data);
+                        createTeamArray(result.data);
                     });
             }
 
@@ -132,7 +123,7 @@ angular
              * if response status 200 opens success modal,
              * else open error modal
              */
-            $scope.save = function (){
+            $scope.save = function () {
                 if ($rootScope.emptyStatus == true) {
                     $scope.showSendingMessage = true;
                 } else {
