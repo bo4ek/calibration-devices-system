@@ -150,7 +150,7 @@ angular
                     case ('email') :
                         var email = $scope.employeeFormData.email;
                         if (email == null) {
-                        } else if ($scope.EMAIL_REGEX.test(email)) {
+                        } else if ($rootScope.EMAIL_REGEX.test(email)) {
                             validator('email', false);
                         } else {
                             validator('email', true);
@@ -334,9 +334,7 @@ angular
              *
              */
             $scope.PNOHE_REGEX_MY = /^[1-9]\d{8}$/;
-            $scope.EMAIL_REGEX = /^[-a-z0-9~$%^&*_=+}{\'?]+(\.[-a-z0-9~$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
             $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
-
 
             /* Closes the modal window
              */
