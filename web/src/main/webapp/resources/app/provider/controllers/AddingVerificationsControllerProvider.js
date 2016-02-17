@@ -40,14 +40,15 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
         $scope.applicationCodes = [];
         $scope.codes = [];
-        $scope.selectedData.selectedCount = '1';
-        $scope.deviceCountOptions = [1, 2, 3, 4];
+        $scope.selectedData.firstDeviceCount = '1';
+        $scope.values = [1, 2, 3, 4, 5, 6];
 
         $scope.addInfo = {};
         $scope.addInfo.serviceability = true;
 
         $scope.formData = {};
         $scope.formData.comment = "";
+        $scope.formData.flat = '0';
 
         $scope.options = {
             hstep: [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
@@ -141,10 +142,8 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         addressServiceProvider.findAllDevices()
             .success(function (devices) {
                 $scope.devices = devices;
-                $log.debug('device');
-                $log.debug(devices);
-                $scope.selectedData.selectedDevice = undefined;  //$scope.devices[0];
-                $log.debug($scope.selectedData.selectedCount);
+                $scope.selectedData.firstSelectedDevice = undefined;
+                $scope.selectedData.secondSelectedDevice = undefined;
             });
 
         /**
@@ -153,20 +152,20 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         addressServiceProvider.findAllDeviceTypes()
             .success(function (deviceTypes) {
                 $scope.deviceTypes = deviceTypes;
-                $log.debug('deviceTypes');
-                $log.debug(deviceTypes);
-                $scope.selectedData.selectedDeviceType = undefined;  //$scope.devices[0];
-                $log.debug($scope.selectedData.selectedCount);
+                $scope.selectedData.firstSelectedDeviceType = undefined;
+                $scope.selectedData.secondSelectedDeviceType = undefined;
             });
 
         /**
          * select device by deviceType (isn't very usefull. only not to broke another functionality)
          */
         $scope.selectDevice = function() {
-
             angular.forEach($scope.devices, function(value){
-                if(value.deviceType ===  $scope.selectedData.selectedDeviceType){
-                    $scope.selectedData.selectedDevice = value;
+                if (value.deviceType === $scope.selectedData.firstSelectedDeviceType) {
+                    $scope.selectedData.firstSelectedDevice = value;
+                }
+                if (value.deviceType === $scope.selectedData.secondSelectedDeviceType) {
+                    $scope.selectedData.secondSelectedDevice = value;
                 }
             });
 
@@ -236,11 +235,10 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                 });
         };
 
-        addressServiceProvider.findStreetsTypes().success(function (streetsTypes) {
-            $scope.streetsTypes = streetsTypes;
-            $scope.selectedData.selectedStreetType = "";
-            $log.debug("$scope.streetsTypes");
-            $log.debug($scope.streetsTypes);
+        addressServiceProvider.findStreetsTypes()
+            .success(function (streetsTypes) {
+                $scope.streetsTypes = streetsTypes;
+                $scope.selectedData.selectedStreetType = "";
         });
 
         /**
@@ -254,12 +252,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                     .success(function (streets) {
                         $scope.streets = streets;
                         $scope.selectedData.selectedStreet = "";
-                    });
-                $scope.indexes = [];
-                addressServiceProvider.findMailIndexByLocality(selectedLocality.designation, selectedDistrict.id)
-                    .success(function (indexes) {
-                        $scope.indexes = indexes;
-                        $scope.selectedData.index = indexes[0];
                     });
             }
         };
@@ -281,6 +273,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
          * On-click handler in send button.
          */
         $scope.isMailValid = true;
+
         $scope.sendApplicationData = function () {
             $scope.selectedData.calibratorRequired = true;
             $scope.$broadcast('show-errors-check-validity');

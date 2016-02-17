@@ -4,6 +4,8 @@ angular
         'VerificationServiceCalibrator', 'DataReceivingServiceCalibrator', '$filter', '$translate',
         function ($scope, $modalInstance, $log, response, verificationService, dataReceivingService, $filter, $translate) {
 
+            $scope.ACCUMULATED_VOLUME_REGEX = /^[\d]{5}$/;
+
             /**
 	         * Closes modal window on browser's back/forward button click.
 	         */ 
@@ -16,7 +18,6 @@ angular
             $scope.close = function () {
                 $modalInstance.close();
             };
-
 
             $scope.showAddInfoTable = {
                 status: false
@@ -265,6 +266,7 @@ angular
 
                 // COUNTER
                 $scope.counterInfo.deviceType = $scope.verificationInfo.deviceType;
+                $scope.receiveAllSymbols($scope.counterInfo.deviceType);
                 $scope.counterInfo.counterStatus = ($scope.verificationInfo.dismantled) ? $filter('translate')('YES') : $filter('translate')('NO');
                 $scope.counterInfo.dateOfDismantled = ($scope.verificationInfo.dateOfDismantled)
                     ? new Date($scope.verificationInfo.dateOfDismantled).toLocaleDateString() : $filter('translate')('NO_TIME');
@@ -276,7 +278,7 @@ angular
                 $scope.counterInfo.counterSymbol = $scope.verificationInfo.symbol;
                 $scope.counterInfo.counterStandardSize = $scope.verificationInfo.standardSize;
                 $scope.counterInfo.releaseYear = $scope.verificationInfo.releaseYear;
-
+                $scope.counterInfo.accumulatedVolume =  $scope.verificationInfo.accumulatedVolume;
             };
 
             $scope.convertInfoForView = function() {
@@ -303,6 +305,7 @@ angular
                 $scope.formData.middleName = $scope.verificationData.middleName;
                 $scope.formData.email = $scope.verificationData.email;
                 $scope.formData.phone = $scope.verificationData.phone;
+                $scope.formData.mailIndex = $scope.verificationData.mailIndex;
 
                 $scope.selectedData.selectedBuilding = $scope.verificationData.building;
                 $scope.formData.flat = $scope.verificationData.flat;
@@ -331,14 +334,6 @@ angular
                                             $scope.selectedData.selectedStreet = $scope.streets[index];
 
                                         });
-
-                                    dataReceivingService.findMailIndexByLocality($scope.selectedData.locality.designation,
-                                        $scope.selectedData.district.id)
-                                        .success(function (indexes) {
-                                            $scope.indexes = indexes;
-                                            $scope.selectedData.index = $scope.indexes[0];
-                                            $scope.blockSearchFunctions = false;
-                                        });
                                 });
                         });
                 });
@@ -359,6 +354,7 @@ angular
                 $scope.counterData.numberCounter = $scope.verificationInfo.numberCounter;
                 $scope.counterData.sealPresence = $scope.verificationInfo.sealPresence;
                 $scope.counterData.releaseYear = $scope.verificationInfo.releaseYear;
+                $scope.counterData.accumulatedVolume = $scope.verificationInfo.accumulatedVolume;
 
                 if ($scope.verificationInfo.deviceName) {
                     dataReceivingService.findAllDevices().then(function (devices) {
@@ -681,7 +677,6 @@ angular
              * send clientInfo to server for updating
              */
             $scope.editClientForm = function() {
-
                 var clientInfo = {
                     "verificationId": $scope.verificationDataMain.id,
                     "lastName": $scope.formData.lastName,
@@ -695,7 +690,8 @@ angular
                     "locality": $scope.selectedData.locality.designation,
                     "street": $scope.selectedData.selectedStreet.designation || $scope.selectedData.selectedStreet,
                     "building": $scope.selectedData.selectedBuilding.designation || $scope.selectedData.selectedBuilding,
-                    "flat": $scope.formData.flat
+                    "flat": $scope.formData.flat,
+                    "mailIndex": $scope.formData.mailIndex
                 };
                 verificationService.editClientInfo(clientInfo)
                     .then(function(response) {
@@ -731,7 +727,8 @@ angular
                     "sealPresence": $scope.counterData.sealPresence,
                     "symbol": $scope.counterData.counterSymbol,
                     "standardSize": $scope.counterData.counterStandardSize,
-                    "releaseYear": $scope.counterData.releaseYear
+                    "releaseYear": $scope.counterData.releaseYear,
+                    "accumulatedVolume": $scope.counterData.accumulatedVolume
                 };
                 verificationService.editCounterInfo(counter)
                     .then(function(response) {
@@ -786,6 +783,8 @@ angular
                         });
                 }
 
-            }
+            };
+
+
 
         }]);

@@ -140,7 +140,7 @@ public class ProviderApplicationController {
 
             return verification.getId();
         } catch(Exception e) {
-            logger.info(e);
+            logger.error(e);
             return null;
         }
     }
@@ -213,7 +213,6 @@ public class ProviderApplicationController {
     public OrganizationStageVerificationDTO getVerificationCode(@PathVariable String verificationId) {
         Verification verification = verificationService.findById(verificationId);
         if (verification != null) {
-            //logger.trace(verification.getRejectedMessage());
             return OrganizationStageVerificationDTOTransformer.toDtoFromVerification(
                     verification.getClientData(),
                     verification.getClientData().getClientAddress(),

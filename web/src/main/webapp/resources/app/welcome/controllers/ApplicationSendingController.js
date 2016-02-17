@@ -46,6 +46,8 @@ angular
             $scope.FLAT_REGEX = /^([1-9][0-9]{0,3}|0)$/;
             $scope.BUILDING_REGEX = /^[1-9][0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457])?$/;
             $scope.PHONE_REGEX_SECOND = /^[1-9]\d{8}$/;
+            $scope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{'?]+(\.[-a-z0-9~!$%^&*_=+}{'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+            $scope.MAIL_INDEX_REGEX = /^[\d]{5}$/;
 
             /**
              * Selected values from select will be temporary saved here.
@@ -81,6 +83,7 @@ angular
                     $scope.formData.email = $scope.verification.data.email;
                     $scope.formData.phone = $scope.verification.data.phone;
                     $scope.formData.flat = $scope.verification.data.flat;
+                    $scope.formData.mailIndex = $scope.verification.data.mailIndex;
                     $scope.formData.comment = $scope.verification.data.comment;
                     $scope.defaultValue = {};
                     $scope.defaultValue.privateHouse = $scope.verification.data.flat == 0;
@@ -114,13 +117,6 @@ angular
                                                         $scope.buildings = buildings.data;
                                                         var index = arrayObjectIndexOf($scope.buildings, $scope.verification.data.building, "designation");
                                                         $scope.selectedValues.selectedBuilding = $scope.buildings[index].designation;
-
-                                                        dataReceivingService.findMailIndexByLocality($scope.selectedValues.selectedLocality.designation, $scope.selectedValues.selectedDistrict.id)
-                                                            .success(function (indexes) {
-                                                                $scope.indexes = indexes;
-                                                                $scope.selectedValues.selectedIndex = $scope.indexes[0];
-                                                                $scope.blockSearchFunctions = false;
-                                                            });
                                                     });
                                             });
                                     });
@@ -177,7 +173,6 @@ angular
                         .success(function (localities) {
                             $scope.localities = localities;
                             $scope.selectedValues.selectedLocality = undefined;
-                            $scope.selectedValues.selectedIndex = undefined;
                             $scope.selectedValues.selectedStreet = "";
                         }
                     );
@@ -234,17 +229,6 @@ angular
                         .success(function (streets) {
                             $scope.streets = streets;
                             $scope.selectedValues.selectedStreet = undefined;
-                        }
-                    );
-
-                    $scope.indexes = [];
-                    dataReceivingService.findMailIndexByLocality(selectedLocality.designation, selectedDistrict.id)
-                        .success(function (indexes) {
-                            $scope.indexes = indexes;
-                            if (indexes.length > 0) {
-                                $scope.indexes = indexes;
-                                $scope.selectedValues.selectedIndex = indexes[0];
-                            }
                         }
                     );
 
@@ -368,22 +352,25 @@ angular
                     dataSendingService.sendApplication($scope.formData)
                         .then(function (data) {
                             $scope.codes = data.data;
-                            if ($scope.selectedValues.secondDeviceCount > 0) {
-                                $scope.formData.quantity = $scope.selectedValues.secondDeviceCount;
-                                $scope.formData.deviceId = $scope.selectedValues.secondSelectedDevice.id;
-                                $scope.formData.providerId = $scope.selectedValues.secondSelectedProvider.id;
-                                $scope.formData.comment = $scope.secondDeviceComment;
-                                dataSendingService.sendApplication($scope.formData)
-                                    .then(function (data) {
-                                        Array.prototype.push.apply($scope.codes, data.data);
-                                        $scope.appProgress = false;
-                                    });
+                            if (data.status == 201) {
+                                if ($scope.selectedValues.secondDeviceCount > 0) {
+                                    $scope.formData.quantity = $scope.selectedValues.secondDeviceCount;
+                                    $scope.formData.deviceId = $scope.selectedValues.secondSelectedDevice.id;
+                                    $scope.formData.providerId = $scope.selectedValues.secondSelectedProvider.id;
+                                    $scope.formData.comment = $scope.secondDeviceComment;
+                                    dataSendingService.sendApplication($scope.formData)
+                                        .then(function (data) {
+                                            Array.prototype.push.apply($scope.codes, data.data);
+                                            $scope.appProgress = false;
+                                        });
+                                } else {
+                                    $scope.appProgress = false;
+                                }
                             } else {
-                                $scope.appProgress = false;
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_WHILE_CREATING_VERIFICATIONS'));
                             }
                         });
-
-                    $log.debug(" $scope.codes.length =", $scope.codes.length);
                 }
             };
 
@@ -463,7 +450,6 @@ angular
                 $scope.selectedValues.selectedStreetType = undefined;
                 $scope.selectedValues.selectedStreet = "";
                 $scope.selectedValues.selectedBuilding = "";
-                $scope.selectedValues.selectedIndex = undefined;
                 $scope.defaultValue.privateHouse = false;
                 $scope.firstDeviceProviders = [];
                 $scope.secondDeviceProviders = [];
@@ -475,20 +461,17 @@ angular
             $scope.$watch('selectedValues.selectedRegion', function () {
                 $scope.selectedValues.selectedDistrict = undefined;
                 $scope.selectedValues.selectedLocality = undefined;
-                $scope.selectedValues.selectedIndex = undefined;
                 $scope.selectedValues.selectedStreetType = undefined;
                 $scope.selectedValues.selectedStreet = "";
             });
 
             $scope.$watch('selectedValues.selectedDistrict', function () {
                 $scope.selectedValues.selectedLocality = undefined;
-                $scope.selectedValues.selectedIndex = undefined;
                 $scope.selectedValues.selectedStreetType = undefined;
                 $scope.selectedValues.selectedStreet = "";
             });
 
             $scope.$watch('selectedValues.selectedLocality', function () {
-                $scope.selectedValues.selectedIndex = undefined;
                 $scope.selectedValues.selectedStreetType = undefined;
                 $scope.selectedValues.selectedStreet = "";
             });

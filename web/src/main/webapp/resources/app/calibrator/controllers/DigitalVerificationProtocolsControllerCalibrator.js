@@ -30,7 +30,7 @@ angular
                             $log.debug('error fetching data:', result);
                         });
                 }
-            })
+            });
             $scope.idsOfVerifications = [];
             $scope.checkedItems = [];
             $scope.allIsEmpty = true;

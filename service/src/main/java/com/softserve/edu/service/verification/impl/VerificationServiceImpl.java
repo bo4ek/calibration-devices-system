@@ -751,7 +751,7 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence,
                             Long dateOfDismantled, Long dateOfMounted, String numberCounter, String releaseYear,
-                            String symbol, String standardSize, String comment, Long deviceId) {
+                            String accumulatedVolume, String symbol, String standardSize, String comment, Long deviceId) {
         Verification verification = verificationRepository.findOne(verificationId);
 
         verification.setCounterStatus(dismantled);
@@ -766,7 +766,7 @@ public class VerificationServiceImpl implements VerificationService {
             counter.setDateOfMounted(dateOfMounted);
             counter.setNumberCounter(numberCounter);
             counter.setReleaseYear(releaseYear);
-
+            counter.setAccumulatedVolume(accumulatedVolume);
             if (counterType != null) {
                 counter.setCounterType(counterType);
             }

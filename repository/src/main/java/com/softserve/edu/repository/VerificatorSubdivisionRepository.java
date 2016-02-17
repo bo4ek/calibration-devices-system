@@ -22,4 +22,6 @@ public interface VerificatorSubdivisionRepository extends PagingAndSortingReposi
     Page<VerificatorSubdivision> findByOrganizationAndIdLikeIgnoreCase(Organization organization, String id, Pageable pageable);
 
     List<VerificatorSubdivision> findByOrganizationId(Long organizationId);
+
+
 }

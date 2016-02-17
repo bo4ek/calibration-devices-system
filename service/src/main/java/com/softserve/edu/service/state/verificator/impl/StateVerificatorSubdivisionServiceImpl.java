@@ -30,7 +30,7 @@ public class StateVerificatorSubdivisionServiceImpl implements StateVerificatorS
 
     @Override
     @Transactional
-    public void editSubdivision(String id, String name, String leader, String leaderEmail, String leaderPhone) {
+    public void editSubdivision(Long organizationId ,String id, String name, String leader, String leaderEmail, String leaderPhone) {
         VerificatorSubdivision subdivision = subdivisionRepository.findOne(id);
         subdivision.setName(name);
         subdivision.setLeader(leader);

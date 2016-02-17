@@ -69,7 +69,6 @@
                 <div class="form-group" show-errors>
                     <label for="middleName" class="col-md-2 control-label">
                         {{'MIDDLE_NAME' | translate}} </label>
-
                     <div class="col-md-8">
                         <input id="middleName" name="middleName" type="text"
                                class="form-control" ng-model="formData.middleName"
@@ -262,11 +261,9 @@
                                 <span ng-bind-html="locality.designation"></span>
                             </ui-select-choices>
                         </ui-select>
-                        <a ng-if="!isProvidersExist
-                        && selectedValues.selectedDistrict
-                        && selectedValues.selectedLocality
-                        " style="color: #b27e77"
-                           ng-click="feedbackModalNoProvider()"> <i class="fa fa-info-circle">
+                        <a ng-if="!isProvidersExist && selectedValues.selectedDistrict && selectedValues.selectedLocality"
+                           style="color: #b27e77" ng-click="feedbackModalNoProvider()">
+                            <i class="fa fa-info-circle">
                             <ins>{{'PROVIDER_NOT_FOUND' | translate }}</ins>
                         </i>
                         </a>
@@ -278,31 +275,26 @@
 
                     </div>
                 </div>
-                <!--Index-->
+                <!--Mail Index-->
                 <div class="form-group" show-errors>
-                    <label for="index" class="col-md-2 control-label"> {{'INDEX' | translate}}</label>
-
+                    <label for="mailIndex" class="col-md-2 control-label">
+                        {{'INDEX' | translate}} </label>
                     <div class="col-md-8">
-                        <ui-select class="form-control" type="text" theme="select2"
-                                   ng-model="selectedValues.selectedIndex"
-                                   ng-disabled="!selectedValues.selectedLocality"
-                                   on-select="receiveStreetsTypes()"
-                                   name="index" id="index" required>
-                            <ui-select-match placeholder="{{'SELECT_MAIL_INDEX' | translate}}" allow-clear="true">
-                                {{$select.selected}}
-                                <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
-                                      style="margin-right:20px"></span>
-                            </ui-select-match>
-                            <ui-select-choices repeat="index in indexes | filter: $select.search">
-                                <span ng-bind-html="index"></span>
-                            </ui-select-choices>
-                        </ui-select>
+                        <input id="mailIndex" name="mailIndex" type="text"
+                               class="form-control" ng-model="formData.mailIndex"
+                               ng-disabled="!selectedValues.selectedLocality"
+                               ng-pattern="MAIL_INDEX_REGEX" required>
+                        <span class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"></span>
 
-                        <p class="help-block" ng-if="clientForm.index.$error.required">
+                        <p class="help-block" ng-if="clientForm.mailIndex.$error.required">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
                         </p>
 
+                        <p class="help-block" ng-if="clientForm.mailIndex.$error.pattern">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'MAIL_INDEX_ERROR' | translate}}
+                        </p>
                     </div>
                 </div>
                 <!--Street-->
@@ -314,7 +306,7 @@
                         <div class="pull-left col-xs-3" id="typeStreet">
                             <ui-select class="form-control" type="text" theme="select2"
                                        ng-model="selectedValues.selectedStreetType"
-                                       ng-disabled="!selectedValues.selectedIndex"
+                                       ng-disabled="!formData.mailIndex"
                                        search-enabled="false"
                                        name="streetType" required>
                                 <ui-select-match placeholder="{{'TYPE_OF_STREET' | translate}}" allow-clear="true">
@@ -333,7 +325,7 @@
                                    type="text" id="street"
                                    autocomplete="off"
                                    ng-model="selectedValues.selectedStreet"
-                                   ng-disabled="!selectedValues.selectedIndex"
+                                   ng-disabled="!selectedValues.selectedStreetType"
                                    typeahead="street as street.designation for street in streets | filter: $viewValue | limitTo: 4"
                                    typeahead-editable="false"
                                    typeahead-on-select="receiveBuildings(selectedValues.selectedStreet)"
@@ -412,7 +404,7 @@
                 <!--FirstDevice-->
                 <div class="form-group" show-errors>
                     <label for="firstDeviceCount" class="col-md-2 control-label">
-                        {{'COUNTER_CATEGORY' | translate}} </label>
+                        {{'COUNTER' | translate}} </label>
 
                     <div class="col-md-8 ">
                         <div class="pull-left col-xs-2" id="counterNumber">
@@ -437,7 +429,7 @@
                                        id="firstSelectedDeviceDeviceType"
                                        ng-required="test"
                                        name="firstSelectedDeviceType" required>
-                                <ui-select-match placeholder="{{'TYPE_OF_COUNTER' | translate}}">
+                                <ui-select-match placeholder="{{'SERVICE_TYPE' | translate}}">
                                     {{$select.selected | translate}}
                                 </ui-select-match>
                                 <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
@@ -495,7 +487,7 @@
                 <div ng-show="isSecondDevice">
                     <div class="form-group" show-errors>
                         <label for="device2" class="col-md-2 control-label">
-                            {{'COUNTER_CATEGORY' | translate}} </label>
+                            {{'COUNTER' | translate}} </label>
 
                         <div class="col-md-8 ">
                             <div class="pull-left col-xs-2" id="counterNumber">
@@ -520,7 +512,7 @@
                                            on-select="getProvidersByLocalityAndDeviceType(selectedValues.selectedLocality,selectedValues.secondSelectedDeviceType,'secondDeviceGroup')"
                                            id="secondSelectedDeviceType"
                                            name="secondSelectedDeviceType">
-                                    <ui-select-match placeholder="{{'TYPE_OF_COUNTER' | translate}}">
+                                    <ui-select-match placeholder="{{'SERVICE_TYPE' | translate}}">
                                         {{$select.selected | translate}}
                                     </ui-select-match>
                                     <ui-select-choices

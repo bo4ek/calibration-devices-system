@@ -2,41 +2,26 @@
     <br>
 
     <div class="row">
-        <div class="form-group">
-            <div class="col-md-4 form-group">
-                <label for="device">
-                    {{'COUNTER_CATEGORY' | translate}} </label>
+
+        <div class="form-group" show-errors>
+            <div class="col-md-4">
+                <label >{{'COUNTER_CATEGORY' | translate}}</label>
             </div>
-            <div class="col-md-8" >
-                <div class="pull-left col-lg-3 form-group" id="counterNumber" show-errors>
-                    <ui-select class="form-control" type="text" theme="select2"
-                               ng-model="counterData.selectedCount"
-                               ng-disabled="true"
-                               name="device" id="device" required>
-                        <ui-select-match allow-clear="false">
-                            {{$select.selected}}
-                        </ui-select-match>
-                        <ui-select-choices
-                                repeat="option in deviceCountOptions | filter: $select.search">
-                            <span ng-bind-html="option"></span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <div class="col-md-9 pull-right form-group" id="deviceBox" show-errors>
-                    <ui-select class="form-control" type="text" theme="select2"
-                               ng-model="counterData.deviceType"
-                               on-select="receiveAllSymbols(counterData.deviceType)"
-                               ng-disabled="true"
-                               name="device" required>
-                        <ui-select-match placeholder="{{'COUNTER_CATEGORY' | translate}}"
-                                         allow-clear="true">
-                            {{$select.selected | translate}}
-                        </ui-select-match>
-                        <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
-                            <span ng-bind-html="deviceType | translate"></span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
+            <div class="col-md-8">
+                <ui-select class="form-control" type="text" theme="select2"
+                           ng-model="counterData.deviceType"
+                           on-select="receiveAllSymbols(counterData.deviceType)"
+                           ng-disabled="true"
+                           name="device" required>
+                    <ui-select-match placeholder="{{'COUNTER_CATEGORY' | translate}}"
+                                     allow-clear="true">
+                        {{$select.selected | translate}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
+                        <span ng-bind-html="deviceType | translate"></span>
+                    </ui-select-choices>
+                </ui-select>
+                <br>
                 <p class="help-block">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'TYPEAHEAD_ERROR' | translate}}
@@ -79,15 +64,17 @@
                     <input type="text" class="form-control date-picker"
                            ng-model="counterData.dateOfDismantled"
                            ng-click="showPicker()"
+                           ng-disabled="!counterData.dismantled"
                            date-range-picker="optsMax" options="optsMax"
                            ng-change="receiveModuleNumbers()" readonly/>
-                                         <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default myGroupBtn"
-                                            ng-show="!isDateDefault()"
-                                            ng-click="clearDateOfDismantled()">
-                                        <i class="glyphicon glyphicon-remove"></i>
-                                    </button>
-                                </span>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default myGroupBtn"
+                                ng-disabled="!counterData.dismantled"
+                                ng-show="!isDateDefault()"
+                                ng-click="clearDateOfDismantled()">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </button>
+                    </span>
                 </div>
                 <br>
             </div>
@@ -234,12 +221,31 @@
             </div>
         </div>
 
-        <!-- BUTTONS -->
-
-            <div class="form-group col-md-10">
-                <button class="btn btn-success" ng-click="editCounter()">{{'SAVE' | translate}}</button>
-                <button class="btn btn-warning" ng-click="resetCounterForm()">{{'RESET' | translate}}</button>
+        <!--ACCUMULATED VOLUME-->
+        <div class="form-group" show-errors>
+            <div class="col-md-4">
+                <label for="accumulatedVolume" class="control-label">{{'ACCUMULATED_VOLUME' |translate}}</label>
             </div>
+            <div class="col-md-8">
+                <input type="text"
+                       ng-model="counterData.accumulatedVolume"
+                       ng-pattern="ACCUMULATED_VOLUME_REGEX"
+                       id="accumulatedVolume" name="accumulatedVolume" class="form-control">
+
+                <p class="help-block" ng-if="counterForm.accumulatedVolume.$error.pattern">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    {{'VOLUME_ERROR' | translate}}
+                </p>
+
+                <br>
+            </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="form-group col-md-10">
+            <button class="btn btn-success" ng-click="editCounter()">{{'SAVE' | translate}}</button>
+            <button class="btn btn-warning" ng-click="resetCounterForm()">{{'RESET' | translate}}</button>
+        </div>
     </div>
     <hr>
 

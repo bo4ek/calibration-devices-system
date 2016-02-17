@@ -21,8 +21,8 @@ public class CounterInfoDTO {
     private String numberCounter;
     private Boolean sealPresence;
     private String releaseYear;
+    private String accumulatedVolume;
 
     private String symbol;
     private String standardSize;
-
 }

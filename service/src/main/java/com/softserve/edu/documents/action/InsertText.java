@@ -112,7 +112,7 @@ public enum InsertText implements Operation {
         for (String match : allMatches) {
             int indexOfColumn = textInRunBuilder.indexOf(match);
             String substring = match.substring(1).trim();
-            String columnValue = null;
+            String columnValue;
             try {
                 columnValue = columnsNamesValues.get(substring).toString();
             } catch (Exception e) {

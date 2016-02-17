@@ -33,6 +33,8 @@ import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,69 +82,76 @@ public class CalibratorApplicationController {
 
     /**
      * create new verification and send to provider to accept or reject
+     *
      * @param verificationDTO
      * @param employeeUser
      * @return
      */
     @RequestMapping(value = "send", method = RequestMethod.POST)
-    public String getInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
-                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
-       try {
-           ClientData clientData = new ClientData(
-                   verificationDTO.getFirstName(),
-                   verificationDTO.getLastName(),
-                   verificationDTO.getMiddleName(),
-                   verificationDTO.getEmail(),
-                   verificationDTO.getPhone(),
-                   verificationDTO.getSecondPhone(),
-                   new Address(
-                           verificationDTO.getRegion(),
-                           verificationDTO.getDistrict(),
-                           verificationDTO.getLocality(),
-                           verificationDTO.getStreet(),
-                           verificationDTO.getBuilding(),
-                           verificationDTO.getFlat()
-                   )
-           );
-           CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
-                   verificationDTO.getStandardSize());
-           Counter counter = new Counter(
-                   verificationDTO.getReleaseYear(),
-                   verificationDTO.getDateOfDismantled(),
-                   verificationDTO.getDateOfMounted(),
-                   verificationDTO.getNumberCounter(),
-                   counterType
-           );
-           AdditionalInfo info = new AdditionalInfo(
-                   verificationDTO.getEntrance(),
-                   verificationDTO.getDoorCode(),
-                   verificationDTO.getFloor(),
-                   verificationDTO.getDateOfVerif(),
-                   verificationDTO.getServiceability(),
-                   verificationDTO.getNoWaterToDate(),
-                   verificationDTO.getNotes(),
-                   verificationDTO.getTimeFrom(),
-                   verificationDTO.getTimeTo()
-           );
-
-           User calibratorEmployee = userService.findOne(employeeUser.getUsername());
-           Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
-           Organization provider = providerService.findById(verificationDTO.getProviderId());
-
-           Device device = deviceService.getById(verificationDTO.getDeviceId());
-           String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
-           Verification verification = new Verification(new Date(), clientData, provider, device,
-                   Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info, verificationDTO.getDismantled(),
-                   counter, verificationDTO.getComment(), verificationDTO.getSealPresence(), verificationId, new Date(), Status.PLANNING_TASK, calibratorEmployee);
-
-           verificationService.saveVerification(verification);
-           // випадку ексепшину присвоювати айдішці null
-
-           return verification.getId();
-       } catch (Exception e) {
-           logger.info(e);
-           return null;
-       }
+    public ResponseEntity getInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
+                                                @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        List<String> verificationIds = new ArrayList<>();
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        try {
+            ClientData clientData = new ClientData(
+                    verificationDTO.getFirstName(),
+                    verificationDTO.getLastName(),
+                    verificationDTO.getMiddleName(),
+                    verificationDTO.getEmail(),
+                    verificationDTO.getPhone(),
+                    verificationDTO.getSecondPhone(),
+                    new Address(
+                            verificationDTO.getRegion(),
+                            verificationDTO.getDistrict(),
+                            verificationDTO.getLocality(),
+                            verificationDTO.getStreet(),
+                            verificationDTO.getBuilding(),
+                            verificationDTO.getFlat(),
+                            verificationDTO.getMailIndex()
+                    )
+            );
+            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize());
+            Counter counter = new Counter(
+                    verificationDTO.getReleaseYear(),
+                    verificationDTO.getDateOfDismantled(),
+                    verificationDTO.getDateOfMounted(),
+                    verificationDTO.getNumberCounter(),
+                    counterType
+            );
+            counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
+            AdditionalInfo info = new AdditionalInfo(
+                    verificationDTO.getEntrance(),
+                    verificationDTO.getDoorCode(),
+                    verificationDTO.getFloor(),
+                    verificationDTO.getDateOfVerif(),
+                    verificationDTO.getServiceability(),
+                    verificationDTO.getNoWaterToDate(),
+                    verificationDTO.getNotes(),
+                    verificationDTO.getTimeFrom(),
+                    verificationDTO.getTimeTo()
+            );
+            User calibratorEmployee = userService.findOne(employeeUser.getUsername());
+            Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
+            Organization provider = providerService.findById(verificationDTO.getProviderId());
+            Device device = deviceService.getById(verificationDTO.getDeviceId());
+            for (byte i = 0; i < verificationDTO.getQuantity(); i++) {
+                String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(),
+                        device.getDeviceType());
+                Verification verification = new Verification(new Date(), clientData, provider, device,
+                        Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info,
+                        verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
+                        verificationDTO.getSealPresence(), verificationId, new Date(), Status.PLANNING_TASK,
+                        calibratorEmployee);
+                verificationService.saveVerification(verification);
+                verificationIds.add(verificationId);
+            }
+        } catch (Exception e) {
+            logger.error("Exception while inserting calibrator's verifications into DB ", e);
+            httpStatus = HttpStatus.CONFLICT;
+            return new ResponseEntity<>(verificationIds, httpStatus);
+        }
+        return new ResponseEntity<>(verificationIds, httpStatus);
     }
 
     /**
@@ -171,17 +180,19 @@ public class CalibratorApplicationController {
 
     /**
      * get all counter symbols from table counter_type by deviceType
+     *
      * @param deviceType
      * @return
      */
     @RequestMapping(value = "symbols/{deviceType}", method = RequestMethod.GET)
-    public Set<String> findAllSymbolsByDeviceType(@PathVariable String deviceType){
+    public Set<String> findAllSymbolsByDeviceType(@PathVariable String deviceType) {
 
         return verificationService.findSymbolsByDeviceType(deviceType);
     }
 
     /**
      * get all standardSizes by symbol and deviceType of counter
+     *
      * @param symbol
      * @param deviceType
      * @return
@@ -193,6 +204,7 @@ public class CalibratorApplicationController {
 
     /**
      * get all symbols by standardSize and DeviceType from counter_type
+     *
      * @param standardSize
      * @param deviceType
      * @return
@@ -204,6 +216,7 @@ public class CalibratorApplicationController {
 
     /**
      * get all standardSize from counter_type
+     *
      * @return
      */
     @RequestMapping(value = "standardSizes/", method = RequestMethod.GET)
@@ -213,6 +226,7 @@ public class CalibratorApplicationController {
 
     /**
      * get all deviceTypes counters of which this organization can verify
+     *
      * @param employeeUser
      * @return
      */

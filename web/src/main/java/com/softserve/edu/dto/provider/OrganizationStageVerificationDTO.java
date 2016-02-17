@@ -25,6 +25,7 @@ public class OrganizationStageVerificationDTO {
 	private String locality;
 	private String district;
 	private String street;
+	private String mailIndex;
 	private String building;
 	private String flat;
 	private Long providerId;
@@ -46,7 +47,6 @@ public class OrganizationStageVerificationDTO {
 	private String symbol;
 	private String standardSize;
 
-
 	private String entrance;
 	private String doorCode;
 	private String floor;
@@ -61,35 +61,17 @@ public class OrganizationStageVerificationDTO {
 	private Long initialDate;
 	private Long expirationDate;
 
+	private String accumulatedVolume;
+
+	private byte quantity;
 
 	public OrganizationStageVerificationDTO() {
 	}
 
-	public OrganizationStageVerificationDTO(ClientData clientData, Address address, Long providerId, Long calibratorId,
-											Long deviceId, String verificationId) {
-		this.firstName = clientData.getFirstName();
-		this.lastName = clientData.getLastName();
-		this.middleName = clientData.getMiddleName();
-		this.email = clientData.getEmail();
-		this.phone = clientData.getPhone();
-		this.secondPhone = clientData.getSecondPhone();
-		this.region = address.getRegion();
-		this.locality = address.getLocality();
-		this.district = address.getDistrict();
-		this.street = address.getStreet();
-		this.building = address.getBuilding();
-		this.flat = address.getFlat();
-		this.providerId = providerId;
-		this.calibratorId = calibratorId;
-		this.deviceId = deviceId;
-		this.verificationId = verificationId;
-	}
-
-
 	public OrganizationStageVerificationDTO(ClientData clientData, String comment, Address address, String verificationId, String calibratorName,
 											String entrance, String doorCode, String floor, Long dateOfVerif, Boolean serviceability,
 											Long noWaterToDate, String notes, String timeFrom, String timeTo, Boolean dismantled, Long dateOfDismantled,
-											Long dateOfMounted, String numberCounter, String releaseYear, String symbol,
+											Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol,
 											String standardSize, String deviceName, Boolean sealPresence, Device.DeviceType deviceType,
 											Long deviceId) {
 		this.firstName = clientData.getFirstName();
@@ -107,6 +89,7 @@ public class OrganizationStageVerificationDTO {
 		this.street = address.getStreet();
 		this.building = address.getBuilding();
 		this.flat = address.getFlat();
+		this.mailIndex = address.getMailIndex();
 
 		this.verificationId = verificationId;
 		this.calibratorName = calibratorName;
@@ -127,6 +110,7 @@ public class OrganizationStageVerificationDTO {
 		this.dateOfMounted = dateOfMounted;
 		this.numberCounter = numberCounter;
 		this.releaseYear = releaseYear;
+		this.accumulatedVolume = accumulatedVolume;
 
 		this.symbol = symbol;
 		this.standardSize = standardSize;
@@ -136,133 +120,4 @@ public class OrganizationStageVerificationDTO {
 		this.deviceId = deviceId;
 
 	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getRegion() {
-		return region;
-	}
-
-	public void setRegion(String region) {
-		this.region = region;
-	}
-
-	public String getLocality() {
-		return locality;
-	}
-
-	public void setLocality(String locality) {
-		this.locality = locality;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getBuilding() {
-		return building;
-	}
-
-	public void setBuilding(String building) {
-		this.building = building;
-	}
-
-	public String getFlat() {
-		return flat;
-	}
-
-	public void setFlat(String flat) {
-		this.flat = flat;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getSecondPhone() {
-		return secondPhone;
-	}
-
-	public void setSecondPhone(String secondPhone) {
-		this.secondPhone = secondPhone;
-	}
-
-	public Long getProviderId() {
-		return providerId;
-	}
-
-	public void setProviderId(Long providerId) {
-		this.providerId = providerId;
-	}
-
-	public Long getCalibratorId() {
-		return calibratorId;
-	}
-
-	public void setCalibratorId(Long calibratorId) {
-		this.calibratorId = calibratorId;
-	}
-
-	public Long getDeviceId() {
-		return deviceId;
-	}
-
-	public void setDeviceId(Long deviceId) {
-		this.deviceId = deviceId;
-	}
-
-	public String getVerificationId() {
-		return verificationId;
-	}
-
-	public void setVerificationId(String verificationId) {
-		this.verificationId = verificationId;
-	}
-
 }

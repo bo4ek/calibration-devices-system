@@ -20,11 +20,12 @@ public class ClientStageVerificationDTO {
     private String street;
     private String building;
     private String flat;
+    private String mailIndex;
     private Long providerId;
     private Long deviceId;
     private String verificationId;
     private String comment;
-    private int quantity;
+    private byte quantity;
 
     protected ClientStageVerificationDTO() {
     }
@@ -51,6 +52,7 @@ public class ClientStageVerificationDTO {
         this.street = address.getStreet();
         this.building = address.getBuilding();
         this.flat = address.getFlat();
+        this.mailIndex = address.getMailIndex();
         this.providerId = providerId;
         this.deviceId = deviceId;
         this.verificationId = verificationId;

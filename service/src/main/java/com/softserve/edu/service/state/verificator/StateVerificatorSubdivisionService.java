@@ -14,7 +14,7 @@ public interface StateVerificatorSubdivisionService {
 
     void addSubdivision(VerificatorSubdivision subdivision);
 
-    void editSubdivision(String id, String name, String leader, String leaderEmail, String leaderPhone);
+    void editSubdivision(Long organizationId, String id, String name, String leader, String leaderEmail, String leaderPhone);
 
     void deleteSubdivision(String subdivisionId);
 

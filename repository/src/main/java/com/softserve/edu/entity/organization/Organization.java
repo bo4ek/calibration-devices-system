@@ -41,7 +41,8 @@ public class Organization {
             @AttributeOverride(name = "locality", column = @Column(name = "localityRegistered")),
             @AttributeOverride(name = "street", column = @Column(name = "streetRegistered")),
             @AttributeOverride(name = "building", column = @Column(name = "buildingRegistered")),
-            @AttributeOverride(name = "flat", column = @Column(name = "flatRegistered"))
+            @AttributeOverride(name = "flat", column = @Column(name = "flatRegistered")),
+            @AttributeOverride(name = "mailIndex", column = @Column(name = "mailIndexRegistered")),
     })
     private Address addressRegistered;
 

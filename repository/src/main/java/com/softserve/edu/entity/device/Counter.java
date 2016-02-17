@@ -36,6 +36,8 @@ public class Counter {
 
     private String stamp;
 
+    private String accumulatedVolume;
+
     @ManyToOne
     @JoinColumn(name = "counterTypeId")
     private CounterType counterType;
@@ -45,21 +47,17 @@ public class Counter {
 
     public Counter(String releaseYear, Long dateOfDismantled, Long dateOfMounted, String numberCounter,
                    CounterType counterType, Verification verification) {
-        this.releaseYear = releaseYear;
-        this.dateOfDismantled = (dateOfDismantled != null) ? new Date(dateOfDismantled) : null;
-        this.dateOfMounted = (dateOfMounted != null) ? new Date(dateOfMounted) : null;
-        this.numberCounter = numberCounter;
-        this.counterType = counterType;
+        this(releaseYear, dateOfDismantled, dateOfMounted,numberCounter, counterType);
         this.verification = verification;
     }
 
     public Counter(String releaseYear, Long dateOfDismantled, Long dateOfMounted, String numberCounter,
                    CounterType counterType) {
-        this.releaseYear = releaseYear;
         this.dateOfDismantled = (dateOfDismantled != null) ? new Date(dateOfDismantled) : null;
         this.dateOfMounted = (dateOfMounted != null) ? new Date(dateOfMounted) : null;
         this.numberCounter = numberCounter;
         this.counterType = counterType;
+        this.releaseYear = releaseYear;
     }
 
     public Counter(String releaseYear, String numberCounter, CounterType counterType, String stamp) {

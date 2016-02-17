@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Set User's subdivision null
+     * Finds all users according subdivision's id
      *
      * @param subdivisionId id of subdivision
      * @return list of Users
@@ -166,6 +166,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByVerificatorSubdivision(subdivisionId);
     }
 
+    /**
+     * Updates users column "subdivisionId" with "null", if it's value matches with @param id
+     *
+     * @param id id of subdivision
+     * @return
+     */
     @Transactional
     @Override
     public int setSubdivisionIdNull(String id) {

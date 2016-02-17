@@ -145,7 +145,7 @@ public interface VerificationService {
     void returnVerificationToCalibratorFromProvider(String verificationId, String rejectMessage);
     
     void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence, Long dateOfDismantled,
-                     Long dateOfMounted, String numberCounter, String releaseYear, String symbol, String standardSize,
+                     Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol, String standardSize,
                      String comment, Long deviceId);
 
     void editAddInfo(int entrance, int doorCode, int floor, Long dateOfVerif, String timeFrom, String timeTo, Boolean serviceability,
