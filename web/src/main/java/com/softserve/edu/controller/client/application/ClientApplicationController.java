@@ -88,17 +88,18 @@ public class ClientApplicationController {
 
             Organization provider = providerService.findById(verificationDTO.getProviderId());
             Device device = deviceService.getById(verificationDTO.getDeviceId());
-            for (byte i = 0; i < verificationDTO.getQuantity(); i++) {
-                String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
-                Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
-                        Status.SENT, Verification.ReadStatus.UNREAD, null, verificationDTO.getComment(), verificationId);
-                verificationService.saveVerification(verification);
-                verificationIds.add(verificationId);
-            }
+
+            Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
+                    Status.SENT, Verification.ReadStatus.UNREAD, null, verificationDTO.getComment(), null);
+
+            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
+
+            logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by unauthorized user");
+
             String name = clientData.getFirstName() + " " + clientData.getLastName();
             mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), provider.getName(), device.getDeviceType().toString());
         } catch (Exception e) {
-            logger.error("Exception while inserting not authorized user verifications into DB ", e);
+            logger.error("Exception while inserting verifications by unauthorized user into DB ", e);
             httpStatus = HttpStatus.CONFLICT;
             return new ResponseEntity<>(verificationIds, httpStatus);
         }

@@ -11,7 +11,6 @@ import com.softserve.edu.entity.verification.calibration.*;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -28,7 +27,6 @@ import java.util.Set;
 public class Verification implements Comparable {
 
     @Id
-    @Setter(AccessLevel.PRIVATE)
     private String id;
 
     @Enumerated(EnumType.STRING)
@@ -193,7 +191,8 @@ public class Verification implements Comparable {
 
     public Verification(Date initialDate, ClientData clientData, Organization provider,
                         Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
-                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus, User calibratorEmployee) {
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId,
+                        Date sentToCalibratorDate, Status taskStatus, User calibratorEmployee) {
 
         this.id = verificationId;
         this.initialDate = initialDate;
@@ -257,7 +256,7 @@ public class Verification implements Comparable {
     }
 
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
-                        User calibratorEmployee, Counter counter, String verificationId, String comment) {
+                        User calibratorEmployee, Counter counter, String verificationId, String comment, String verificationTime) {
 
         this.id = verificationId;
         this.initialDate = initialDate;
@@ -274,6 +273,7 @@ public class Verification implements Comparable {
         this.readStatus = ReadStatus.UNREAD;
         this.counterStatus = false;
         this.comment = comment;
+        this.verificationTime = verificationTime;
     }
 
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,

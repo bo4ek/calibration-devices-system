@@ -176,4 +176,6 @@ public interface VerificationService {
     Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType);
 
     Set<String> findAllStandardSizes();
+
+    List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType);
 }

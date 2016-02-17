@@ -884,12 +884,31 @@ public class VerificationServiceImpl implements VerificationService {
         return counterTypeRepository.findOneBySymbolAndStandardSizeAndDeviceId(symbol, standardSize, deviceId);
     }
 
+    //todo This method should be replaced by method "saveVerificationCustom"
     @Override
+    @Deprecated
     public String getNewVerificationDailyIdByDeviceType(Date date, Device.DeviceType deviceType) {
         String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(date)) + deviceType.getId();
         String countPart = String.format("%04d", verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(date,
                 deviceType) + 1);
         return datePart + countPart;
+    }
+
+    @Override
+    @Transactional
+    public synchronized List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType) {
+        List<String> verificationIds = new ArrayList<>();
+
+        String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
+        long count = verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(verification.getInitialDate(), deviceType);
+
+        for (byte i = 0; i < quantity; i++) {
+            String id = datePart + String.format("%04d", count += 1);
+            verification.setId(id);
+            verificationRepository.save(verification);
+            verificationIds.add(id);
+        }
+        return verificationIds;
     }
 
     @Override

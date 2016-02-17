@@ -60,6 +60,12 @@ public class Counter {
         this.releaseYear = releaseYear;
     }
 
+    public Counter(String releaseYear, Long dateOfDismantled, Long dateOfMounted, String numberCounter,
+                   CounterType counterType, String accumulatedVolume) {
+        this(releaseYear, dateOfDismantled,dateOfMounted,numberCounter, counterType);
+        this.accumulatedVolume = accumulatedVolume;
+    }
+
     public Counter(String releaseYear, String numberCounter, CounterType counterType, String stamp) {
         this.releaseYear = releaseYear;
         this.numberCounter = numberCounter;

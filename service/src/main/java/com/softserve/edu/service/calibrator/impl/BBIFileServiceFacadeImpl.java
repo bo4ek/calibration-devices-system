@@ -243,7 +243,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 if (inStream != null) {
                     bufferedInputStream.close();
                     inStream.close();
-
                 }
             }
             if (reasonOfRejection == null) {
@@ -345,7 +344,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         String cityName = null;
         String regionName = null;
         String streetName = null;
-        ClientData clientData = null;
+        ClientData clientData;
 
         try {
             Long cityIdLong = Long.parseLong(verificationData.get(Constants.CITY_ID));
@@ -379,15 +378,16 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Organization calibrator = organizationService.getOrganizationById(calibratorOrganisationId);
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
-        String verId = verificationService.getNewVerificationDailyIdByDeviceType(date,
-                counter.getCounterType().getDevice().getDeviceType());
         Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
-        Verification verification = new Verification(date, clientData,
-                Status.CREATED_BY_CALIBRATOR, calibrator, providerFromBBI, calibratorEmployee,
-                counter, verId, verificationData.get(Constants.COMMENT));
-        verification.setVerificationTime(verificationData.get(Constants.DATE));
-        verificationService.saveVerification(verification);
-        return verId;
+
+        Verification verification = new Verification(date, clientData, Status.CREATED_BY_CALIBRATOR, calibrator,
+                providerFromBBI, calibratorEmployee, counter, null, verificationData.get(Constants.COMMENT),
+                verificationData.get(Constants.DATE));
+
+        List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION,
+                counter.getCounterType().getDevice().getDeviceType());
+
+        return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
 
     private void updateVerificationFromMap(Map<String, String> verificationData, String verificationId, DeviceTestData deviceTestData)

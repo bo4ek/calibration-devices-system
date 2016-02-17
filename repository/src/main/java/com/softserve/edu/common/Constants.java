@@ -26,6 +26,8 @@ public interface Constants {
     int THIRTY_TWO_BYTES = 32;
     double THOUSAND = 1000.0;
 
+    byte ONE_VERIFICATION = 1;
+    int FIRST_INDEX_IN_ARRAY = 0;
 
     String UTF8_ENCODING = "UTF-8";
     String MAIN_PHOTO = "mainPhoto";

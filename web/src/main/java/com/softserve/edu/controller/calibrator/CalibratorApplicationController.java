@@ -117,9 +117,9 @@ public class CalibratorApplicationController {
                     verificationDTO.getDateOfDismantled(),
                     verificationDTO.getDateOfMounted(),
                     verificationDTO.getNumberCounter(),
-                    counterType
+                    counterType,
+                    verificationDTO.getAccumulatedVolume()
             );
-            counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
             AdditionalInfo info = new AdditionalInfo(
                     verificationDTO.getEntrance(),
                     verificationDTO.getDoorCode(),
@@ -131,21 +131,25 @@ public class CalibratorApplicationController {
                     verificationDTO.getTimeFrom(),
                     verificationDTO.getTimeTo()
             );
+
             User calibratorEmployee = userService.findOne(employeeUser.getUsername());
             Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
             Organization provider = providerService.findById(verificationDTO.getProviderId());
             Device device = deviceService.getById(verificationDTO.getDeviceId());
-            for (byte i = 0; i < verificationDTO.getQuantity(); i++) {
-                String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(),
-                        device.getDeviceType());
-                Verification verification = new Verification(new Date(), clientData, provider, device,
-                        Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info,
-                        verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
-                        verificationDTO.getSealPresence(), verificationId, new Date(), Status.PLANNING_TASK,
-                        calibratorEmployee);
-                verificationService.saveVerification(verification);
-                verificationIds.add(verificationId);
-            }
+
+            /**
+             * Creating Verification without ID
+             */
+            Verification verification = new Verification(new Date(), clientData, provider, device,
+                    Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info,
+                    verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
+                    verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK,
+                    calibratorEmployee);
+
+            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
+
+            logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by calibrator " + calibrator.getName());
+
         } catch (Exception e) {
             logger.error("Exception while inserting calibrator's verifications into DB ", e);
             httpStatus = HttpStatus.CONFLICT;
@@ -335,6 +339,4 @@ public class CalibratorApplicationController {
         }
         return (long) -1;
     }
-
-
 }
