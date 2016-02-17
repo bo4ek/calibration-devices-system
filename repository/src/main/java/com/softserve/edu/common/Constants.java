@@ -14,6 +14,9 @@ public interface Constants {
     int SKIP_TO_IMAGES = 2452;
     int START_OFFSET_IN_ARRAY = 0;
 
+    int WATER_ID = 0;
+    int THERMAL_ID = 1;
+
     int ONE_BYTE = 1;
     int TWO_BYTES = 2;
     int FOUR_BYTES = 4;
