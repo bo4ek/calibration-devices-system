@@ -35,6 +35,9 @@ public class CalibrationTaskDTO {
 
     private Integer numOfCompletedVerifications;
 
+    public CalibrationTaskDTO() {
+    }
+
     public CalibrationTaskDTO(String moduleNumber, Date dateOfTask, List<String> verificationsId) {
         this.moduleNumber = moduleNumber;
         this.dateOfTask = dateOfTask;

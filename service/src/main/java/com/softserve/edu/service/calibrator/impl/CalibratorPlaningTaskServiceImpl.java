@@ -132,8 +132,16 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     @Override
     public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userId) {
         Boolean taskAlreadyExists = true;
+        Boolean taskHasCompleteVerification = false;
         CalibrationTask task = taskRepository.findByDateOfTaskAndModule_SerialNumber(taskDate, moduleSerialNumber);
-        if (task == null) {
+        Iterable<Verification> verifications = verificationRepository.findAll(verificationsId);
+
+        for (Verification verification : verifications) {
+            verification.getStatus().equals(Status.TEST_COMPLETED);
+            taskHasCompleteVerification = true;
+        }
+
+        if (task == null | taskHasCompleteVerification.equals(true)) {
             taskAlreadyExists = false;
             CalibrationModule module = moduleRepository.findBySerialNumber(moduleSerialNumber);
             if (module == null) {
@@ -148,7 +156,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             task = new CalibrationTask(module, null, new Date(), taskDate, user);
             taskRepository.save(task);
         }
-        Iterable<Verification> verifications = verificationRepository.findAll(verificationsId);
+
         for (Verification verification : verifications) {
             verification.setStatus(Status.TEST_PLACE_DETERMINED);
             verification.setTaskStatus(Status.TEST_PLACE_DETERMINED);
