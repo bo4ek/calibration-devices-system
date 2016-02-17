@@ -3,11 +3,12 @@ package com.softserve.edu.service.calibrator.impl;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
-import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.calibrator.CalibratorDigitalProtocolsService;
 
+import com.softserve.edu.service.utils.DigitalProtocolQueryConstructorCalibrator;
+import com.softserve.edu.service.utils.ListToPageTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +22,6 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Veronika 11.11.2015
- */
 @Service
 public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalProtocolsService {
 
@@ -68,20 +66,28 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
         return typedQuery.getResultList();
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<String> findNumbersOfProtocolsFromBbi(List<Verification> verifications) {
-        List<String> numbersOfProtocols = new ArrayList<>();
-        for (Verification verification : verifications) {
-            if (!verification.isManual()) {
-                if (calibrationTestRepository.findByVerificationId(verification.getId()) != null) {
-                    String numberOfProtocol = calibrationTestRepository.findByVerificationId(verification.getId()).getName();
-                    numbersOfProtocols.add(numberOfProtocol.substring(6, numberOfProtocol.indexOf('.')));
-                }
-            }
-            else {
-                numbersOfProtocols.add(null);
-            }
-        }
-        return numbersOfProtocols;
+    public ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndStatus(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch,
+                                                                                              String idToSearch, String status, String nameProvider, String nameCalibrator, String numberOfCounter,
+                                                                                              String numberOfProtocol, String sentToVerificatorDate, String serialNumber, String sortCriteria,
+                                                                                              String sortOrder, User verificatorEmployee) {
+
+        CriteriaQuery<Verification> criteriaQuery = DigitalProtocolQueryConstructorCalibrator.buildSearchQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, sortCriteria, sortOrder, em);
+
+        Long count = em.createQuery(DigitalProtocolQueryConstructorCalibrator.buildCountQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter,
+                numberOfProtocol, sentToVerificatorDate, serialNumber, em)).getSingleResult();
+
+        TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
+        typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
+        typedQuery.setMaxResults(itemsPerPage);
+        List<Verification> verificationList = typedQuery.getResultList();
+
+        ListToPageTransformer<Verification> result = new ListToPageTransformer<Verification>();
+        result.setContent(verificationList);
+        result.setTotalItems(count);
+        return result;
     }
 }

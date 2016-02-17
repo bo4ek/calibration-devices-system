@@ -262,7 +262,8 @@ public class CalibrationTestController {
                         , calibrationTDMDTO.getStatusTestSecond(), calibrationTDMDTO.getStatusTestThird()
                         , calibrationTDMDTO.getStatusCommon()
                         , calibrationTestManual, calibrationTDMDTO.getVerificationId(), unsuitabilityReason
-                        , calibrationTDMDTO.getRealiseYear(), calibrationTDMDTO.getNumberCounter(), calibrationTestManualDTO.getCounterTypeId());
+                        , calibrationTDMDTO.getRealiseYear(), calibrationTDMDTO.getNumberCounter(),
+                        calibrationTestManualDTO.getCounterTypeId(), calibrationTestManualDTO.getModuleId());
             }
         } catch (Exception e) {
             logger.error("failed to create manual protocol", e);
@@ -332,7 +333,8 @@ public class CalibrationTestController {
             calibrationTestDataManualService.editTestDataManual(cTestDataManualDTO.getStatusTestFirst()
                     , cTestDataManualDTO.getStatusTestSecond(), cTestDataManualDTO.getStatusTestThird()
                     , cTestDataManualDTO.getStatusCommon(), cTestDataManual, verificationId, verificationEdit, unsuitabilityReason
-                    , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(), cTestManualDTO.getCounterTypeId());
+                    , cTestDataManualDTO.getRealiseYear(), cTestDataManualDTO.getNumberCounter(),
+                    cTestManualDTO.getCounterTypeId(), cTestManualDTO.getModuleId());
         } catch (Exception e) {
             logger.error("failed to edit manual protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);

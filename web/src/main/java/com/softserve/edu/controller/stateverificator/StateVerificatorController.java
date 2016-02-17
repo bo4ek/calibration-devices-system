@@ -87,23 +87,17 @@ public class StateVerificatorController {
                 employeeUser.getOrganizationId(), pageNumber, itemsPerPage,
                 searchData.getDate(),
                 searchData.getId(),
-                searchData.getClient_full_name(),
-                searchData.getStreet(),
                 searchData.getStatus(),
-                searchData.getEmployee_last_name(),
                 searchData.getNameProvider(),
                 searchData.getNameCalibrator(),
-                searchData.getLastName(),
-                searchData.getFirstName(),
-                searchData.getMiddleName(),
-                searchData.getDistrict(),
-                searchData.getBuilding(),
-                searchData.getFlat(),
+                searchData.getNumberOfCounter(),
+                searchData.getNumberOfProtocol(),
+                searchData.getSentToVerificatorDate(),
+                searchData.getSerialNumber(),
                 sortCriteria,
                 sortOrder,
 	verificatorEmployee);
-        List<String> numbersOfProtocolsFromBbi = protocolsService.findNumbersOfProtocolsFromBbi(queryResult.getContent());
-        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(queryResult.getContent(), numbersOfProtocolsFromBbi, userRoles);
+        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(queryResult.getContent(), userRoles);
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 

@@ -3,9 +3,9 @@ angular
     .factory('DigitalVerificationProtocolsServiceCalibrator', ['$http',
         function ($http) {
             return {
-                getProtocols: function (currentPage, itemsPerPage) {
+                getProtocols: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
                     var url = 'calibrator/protocols/' + currentPage + '/' + itemsPerPage;
-                    return getDataWithParams(url);
+                    return getDataWithParams('calibrator/protocols/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
                 },
                 sendProtocols: function (protocol) {
                     var url = '/calibrator/protocols/send';

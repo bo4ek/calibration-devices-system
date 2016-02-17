@@ -149,6 +149,9 @@ public class Verification implements Comparable {
     @Column(columnDefinition = "int default 0")
     private Integer calibrationInterval;
 
+    @Column
+    private String numberOfProtocol;
+
     @Column(name = "verificationTime")
     private String verificationTime;
 

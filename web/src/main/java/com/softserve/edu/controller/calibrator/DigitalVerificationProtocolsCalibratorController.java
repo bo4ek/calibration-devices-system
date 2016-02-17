@@ -1,6 +1,7 @@
 package com.softserve.edu.controller.calibrator;
 
 import com.softserve.edu.controller.calibrator.util.ProtocolDTOTransformer;
+import com.softserve.edu.dto.NewVerificationsFilterSearch;
 import com.softserve.edu.dto.VerificationUpdateDTO;
 import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.calibrator.ProtocolDTO;
@@ -18,6 +19,7 @@ import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.state.verificator.StateVerificatorService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,33 +56,6 @@ public class DigitalVerificationProtocolsCalibratorController {
     CalibrationTestService calibrationTestService;
 
     /**
-     * This method calls service whiche returns the list of verifications. The controller transform them with the help of
-     * ProtocolDTOTransformer to list of protocolsDTO. It's done to sent to the client only the necessary data.
-     *
-     * @param pageNumber
-     * @param itemsPerPage
-     * @param employeeUser
-     * @return list of ProtocolDTO - data for table with protocols
-     */
-    @RequestMapping(value = "{pageNumber}/{itemsPerPage}", method = RequestMethod.GET)
-    public PageDTO<ProtocolDTO> getPageOfAllSentVerificationsByStateCalibratorIdAndSearch(
-            @PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage,
-            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
-
-        User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
-        Set<UserRole> userRoles = calibratorEmployee.getUserRoles();
-        Status status = Status.TEST_COMPLETED;
-        List<Verification> verifications = protocolsService.findPageOfVerificationsByCalibratorIdAndStatus(
-                calibratorEmployee, pageNumber, itemsPerPage, status);
-        List<String> numbersOfProtocolsFromBbi = protocolsService.findNumbersOfProtocolsFromBbi(verifications);
-        Long count = protocolsService.countByCalibratorEmployee_usernameAndStatus(calibratorEmployee, status);
-        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(verifications, numbersOfProtocolsFromBbi, userRoles);
-
-        return new PageDTO<>(count, content);
-
-    }
-
-    /**
      * Change status for verification when it is sent to verificator
      *
      * @param verificationUpdateDTO
@@ -92,6 +67,42 @@ public class DigitalVerificationProtocolsCalibratorController {
             Organization verificator = stateVerificatorService.findById(idVerificator);
             verificationService.sendVerificationTo(verificationId, verificator, Status.SENT_TO_VERIFICATOR);
         }
+    }
+
+    /**
+     * This method calls service whiche returns the list of verifications. The controller transform them with the help of
+     * ProtocolDTOTransformer to list of protocolsDTO. It's done to sent to the client only the necessary data.
+     *
+     * @param pageNumber
+     * @param itemsPerPage
+     * @param employeeUser
+     * @return list of ProtocolDTO - data for table with protocols
+     */
+    @RequestMapping(value = "{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    public PageDTO<ProtocolDTO> getPageOfAllSentVerificationsByStateCalibratorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
+                                                                                          NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+
+        User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
+        Set<UserRole> userRoles = calibratorEmployee.getUserRoles();
+
+        ListToPageTransformer<Verification> queryResult = protocolsService.findPageOfVerificationsByCalibratorIdAndStatus(
+                employeeUser.getOrganizationId(), pageNumber, itemsPerPage,
+                searchData.getDate(),
+                searchData.getId(),
+                searchData.getStatus(),
+                searchData.getNameProvider(),
+                searchData.getNameCalibrator(),
+                searchData.getNumberOfCounter(),
+                searchData.getNumberOfProtocol(),
+                searchData.getSentToVerificatorDate(),
+                searchData.getSerialNumber(),
+                sortCriteria,
+                sortOrder,
+                calibratorEmployee);
+
+        List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(queryResult.getContent(), userRoles);
+        return new PageDTO<>(queryResult.getTotalItems(), content);
+
     }
 
     /**

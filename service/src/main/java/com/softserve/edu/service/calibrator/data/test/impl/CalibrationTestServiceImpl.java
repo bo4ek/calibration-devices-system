@@ -34,6 +34,8 @@ import java.util.*;
 @Service
 public class CalibrationTestServiceImpl implements CalibrationTestService {
 
+    private static final int POSITION_OF_PROTOCOL = 6;
+
     @Value("${photo.storage.local}")
     private String localStorage;
 
@@ -94,6 +96,8 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
 
         CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
         verification.setCalibrationModule(moduleId);
+        verification.setNumberOfProtocol(deviceTestData.getFileName().substring(POSITION_OF_PROTOCOL,
+                deviceTestData.getFileName().indexOf('.')));
         verificationRepository.save(verification);
         return calibrationTest.getId();
     }

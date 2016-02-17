@@ -11,9 +11,8 @@ import java.util.Set;
 
 public class ProtocolDTOTransformer {
 
-    public static List<ProtocolDTO> toDTOFromList(List<Verification> verifications, List<String> numbersOfProtocolsFromBbi, Set<UserRole> userRoles) {
+    public static List<ProtocolDTO> toDTOFromList(List<Verification> verifications, Set<UserRole> userRoles) {
         List<ProtocolDTO> resultList = new ArrayList<>();
-        int i = 0;
         boolean isVerificator = false;
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm");
         for(UserRole userRole : userRoles) {
@@ -22,7 +21,6 @@ public class ProtocolDTOTransformer {
             }
         }
         for (Verification verification : verifications) {
-            while (i < numbersOfProtocolsFromBbi.size()) {
                 resultList.add(new ProtocolDTO(
                         verification.getId(),
                         verification.getCalibrator().getName(),
@@ -34,16 +32,11 @@ public class ProtocolDTOTransformer {
                         Integer.parseInt(verification.getCounter().getReleaseYear()),
                         verification.getCounter().getNumberCounter(),
                         verification.getInitialDate().toString(), verification.getReadStatus(),
-                        verification.isManual() ? verification.getCalibrationTestDataManualId()
-                                .getCalibrationTestManual().getCalibrationModule().getSerialNumber() : verification.getCalibrationModule().getSerialNumber(),
-                        verification.isManual() ? verification.getCalibrationTestDataManualId()
-                                .getCalibrationTestManual().getGenerateNumberTest() : numbersOfProtocolsFromBbi.get(i),
+                        verification.getCalibrationModule().getSerialNumber(),
+                        verification.getNumberOfProtocol(),
                         verification.getProviderEmployee(), verification.getStateVerificatorEmployee(),
                         isVerificator ? dateFormat.format(verification.getSentToVerificatorDate()) : null
                 ));
-                i++;
-                break;
-            }
         }
         return resultList;
     }

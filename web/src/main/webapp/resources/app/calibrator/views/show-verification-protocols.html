@@ -20,7 +20,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <table show-filter="false" ng-table="tableParams" template-pagination="custom/pager"
+                            <table show-filter="true" ng-table="tableParams" template-pagination="custom/pager"
                                    class="table table-bordered table-hover users_table">
 
                                 <tbody>
@@ -29,24 +29,30 @@
                                                                ng-click="resolveVerificationId(verification.id)"
                                     />
                                     </td>
-                                    <td data-title="'PROTOCOL_DATE' | translate" class="datecolumn">
+                                    <td data-title="'PROTOCOL_DATE' | translate" class="col-md-2" sortable="'date'"
+                                        filter="{ 'date': 'date' }">
                                         {{ verification.initialDate | date :'dd-MM-yyyy'}}
                                         <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
                                             translate}} {{verification.initialDate}} {{'DAYS' |
                                             translate}}</b>
                                         </div>
                                     </td>
-                                    <td data-title="'SETTING_NUMBER' | translate">{{ verification.serialNumber }}
+                                    <td data-title="'SETTING_NUMBER' | translate" sortable="'serial_number'"
+                                        filter="{ 'serialNumber': 'text' }">{{ verification.serialNumber }}
                                     </td>
-                                    <td data-title="'NUMBER_OF_PROTOCOL' | translate">{{ verification.numberOfProtocol }}
+                                    <td data-title="'NUMBER_OF_PROTOCOL' | translate" sortable="'number_of_protocol'"
+                                        filter="{ 'numberOfProtocol': 'text' }">{{ verification.numberOfProtocol }}
                                     </td>
-                                    <td data-title="'NUMBER_OF_VERIFICATION' | translate">{{ verification.id }}
+                                    <td data-title="'NUMBER_OF_VERIFICATION' | translate" sortable="'id'"
+                                        filter="{ 'id': 'text' }">{{ verification.id }}
                                     </td>
-                                    <td data-title="'STATUS' | translate">{{ verification.status | translate }}
+                                    <td data-title="'STATUS' | translate" sortable="'status'"
+                                        filter="{ 'status': 'status' }">{{ verification.status | translate }}
                                     </td>
-                                    <td data-title="'NUMBER_OF_COUNTER' | translate">{{ verification.numberOfCounter | translate }}
+                                    <td data-title="'NUMBER_OF_COUNTER' | translate" sortable="'number_of_counter'"
+                                        filter="{ 'numberOfCounter': 'text' }">{{ verification.numberOfCounter | translate }}
                                     </td>
-                                    <td data-title="'COMMENT' | translate">{{ verification.comment}}
+                                    <td data-title="'COMMENT' | translate" sortable="'comment'">{{ verification.comment}}
                                     </td>
                                     <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
                                         <i class="fa fa-info-circle info_icon"
@@ -95,24 +101,41 @@
                                     </ul>
                                 </div>
                             </script>
-                            <script type="text/ng-template" id="ng-table/filters/daterange.html">
 
-                                <div class="input-group right-inner-addon" style="width: 100%">
+                            <script type="text/ng-template" id="ng-table/filters/date.html">
+
+                                <div class="input-group right-inner-addon">
                                     <i id="calendar_icon" class="glyphicon glyphicon-calendar"
                                        ng-click="showPicker($event)"></i>
-                                    <input date-range-picker="opts" class="form-control date-picker" type="text"
+                                    <input date-range-picker="opts" class="form-control input-md" type="text"
                                            ng-model="myDatePicker.pickerDate" ng-change="doSearch()" options="opts"
                                            id="datepickerfield" readonly/>
-
                                         <span class="input-group-btn">
                                                   <button type="button" class="btn btn-default myGroupBtn"
-                                                          ng-show="!isDateDefault()"
+                                                          ng-show="myDatePicker.pickerDate.startDate"
                                                           ng-click="clearDate()">
                                                       <i class="glyphicon glyphicon-remove"></i>
                                                   </button>
                                         </span>
                                 </div>
                             </script>
+
+                            <script type="text/ng-template" id="ng-table/filters/status.html">
+
+                                <ui-select ng-model="selectedStatus.name" theme="select2" on-select='doSearch()'
+                                           search-enabled="false"
+                                           name="filter-status">
+                                    <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                                     allow-clear="true">
+                                        {{$select.selected.label}}
+                                    </ui-select-match>
+                                    <ui-select-choices  repeat="status in statusData">
+                                        <span ng-bind-html="status.label"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </script>
+
                             <p id="emptyError" ng-if="allIsEmpty && isClicked" class="help-block">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {{'CHOOSE_AT_LEAST_ONE_PROTOCOL' | translate}}

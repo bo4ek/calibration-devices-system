@@ -17,7 +17,10 @@ public interface CalibratorDigitalProtocolsService {
     List<Verification> findPageOfVerificationsByCalibratorIdAndStatus(
             User calibratorEmployee, int pageNumber, int itemsPerPage, Status status);
 
-    Long countByCalibratorEmployee_usernameAndStatus (User calibratorEmployee, Status status);
+    ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndStatus(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String status, String nameProvider, String nameCalibrator,
+    String numberOfCounter, String numberOfProtocol,
+    String sentToVerificatorDate, String serialNumber,
+    String sortCriteria, String sortOrder, User verificatorEmployee);
 
-    List<String> findNumbersOfProtocolsFromBbi(List<Verification> verifications);
+    Long countByCalibratorEmployee_usernameAndStatus (User calibratorEmployee, Status status);
 }
