@@ -114,6 +114,8 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         fullNameToSearch = null;
         streetToSearch = null;
         employeeSearchName = null;
+        sortCriteria = "NUMBER_OF_PROTOCOL";
+        sortOrder = "asc";
 
         when(criteriaBuilder.and(criteriaBuilder.or(Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, criteriaBuilder),
                 Status.TEST_NOK.getQueryPredicate(root, criteriaBuilder),
