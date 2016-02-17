@@ -31,12 +31,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.text.Collator;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -1007,8 +1004,11 @@ public class VerificationServiceImpl implements VerificationService {
      */
     @Override
     @Transactional
-    public Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType) {
-        return counterTypeRepository.findSymbolByStandardSizeAndDeviceType(standardSize, deviceType);
+    public List<String> findSortedSymbolsByStandardSizeAndDeviceType(String standardSize, String deviceType) {
+        Collator collator = Collator.getInstance(new Locale("uk", "UA"));
+        List<String> listOfSymbols = counterTypeRepository.findSymbolsByStandardSizeAndDeviceType(standardSize, deviceType);
+        Collections.sort(listOfSymbols, collator);
+        return listOfSymbols;
     }
 
     /**

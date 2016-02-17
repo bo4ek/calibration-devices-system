@@ -38,10 +38,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.text.Collator;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -190,7 +188,6 @@ public class CalibratorApplicationController {
      */
     @RequestMapping(value = "symbols/{deviceType}", method = RequestMethod.GET)
     public Set<String> findAllSymbolsByDeviceType(@PathVariable String deviceType) {
-
         return verificationService.findSymbolsByDeviceType(deviceType);
     }
 
@@ -214,8 +211,8 @@ public class CalibratorApplicationController {
      * @return
      */
     @RequestMapping(value = "symbols/{standardSize}/{deviceType}", method = RequestMethod.GET)
-    public Set<String> findSymbolByStandardSizeAndDeviceType(@PathVariable String standardSize, @PathVariable String deviceType) {
-        return verificationService.findSymbolByStandardSizeAndDeviceType(standardSize, deviceType);
+    public List<String> findSymbolByStandardSizeAndDeviceType(@PathVariable String standardSize, @PathVariable String deviceType) {
+        return verificationService.findSortedSymbolsByStandardSizeAndDeviceType(standardSize, deviceType);
     }
 
     /**

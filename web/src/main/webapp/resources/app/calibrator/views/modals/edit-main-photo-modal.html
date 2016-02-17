@@ -124,7 +124,7 @@
                             {{$select.selected | translate}}
                         </ui-select-match>
                         <ui-select-choices repeat="counterType in symbols
-                        | unique: 'symbol'">
+                        | unique: 'symbol' | filter: $select.search">
                             <span ng-bind-html="counterType | translate "></span>
                         </ui-select-choices>
                     </ui-select>

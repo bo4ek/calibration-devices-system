@@ -203,7 +203,6 @@ angular
                     .getTestProtocol(verificationID)
                     .then(function (data) {
                         $scope.parseBbiFile(data);
-                        $log.debug("inside");
                     });
             }
 

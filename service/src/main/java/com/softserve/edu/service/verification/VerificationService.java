@@ -173,7 +173,7 @@ public interface VerificationService {
 
     Set<String> findStandardSizesBySymbolAndDeviceType(String symbol, String deviceType);
 
-    Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType);
+    List<String> findSortedSymbolsByStandardSizeAndDeviceType(String standardSize, String deviceType);
 
     Set<String> findAllStandardSizes();
 
