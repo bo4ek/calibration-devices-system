@@ -34,7 +34,7 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
     @PersistenceContext
     private EntityManager em;
 
-    public Long countByCalibratorEmployee_usernameAndStatus(User calibratorEmployee, Status status) {
+    public Long countByCalibratorEmployeeUsernameAndStatus(User calibratorEmployee, Status status) {
         return verificationRepository.countByCalibratorEmployeeUsernameAndStatus(calibratorEmployee.getUsername(), status);
     }
 

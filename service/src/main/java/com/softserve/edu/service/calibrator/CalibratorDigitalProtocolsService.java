@@ -22,5 +22,5 @@ public interface CalibratorDigitalProtocolsService {
     String sentToVerificatorDate, String serialNumber,
     String sortCriteria, String sortOrder, User verificatorEmployee);
 
-    Long countByCalibratorEmployee_usernameAndStatus (User calibratorEmployee, Status status);
+    Long countByCalibratorEmployeeUsernameAndStatus (User calibratorEmployee, Status status);
 }

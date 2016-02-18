@@ -71,7 +71,7 @@ public class CalibratorDigitalProtocolsServiceImplTest {
                 .thenReturn(expected);
         when(user.getUsername()).thenReturn(username);
 
-        Long actual = digitalProtocolsService.countByCalibratorEmployee_usernameAndStatus(user, status);
+        Long actual = digitalProtocolsService.countByCalibratorEmployeeUsernameAndStatus(user, status);
 
         Assert.assertEquals(expected, actual);
     }
