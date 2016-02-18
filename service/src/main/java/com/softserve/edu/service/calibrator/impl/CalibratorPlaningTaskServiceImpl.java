@@ -126,18 +126,28 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param taskDate
      * @param moduleSerialNumber
      * @param verificationsId
-     * @param userId
+     * @param userName
      * @throws IllegalArgumentException().
      */
     @Override
-    public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userId) {
+    public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userName) {
         Boolean taskAlreadyExists = true;
         Boolean taskHasCompleteVerification = false;
         CalibrationTask task = taskRepository.findByDateOfTaskAndModule_SerialNumber(taskDate, moduleSerialNumber);
         Iterable<Verification> verifications = verificationRepository.findAll(verificationsId);
 
+        User user = userRepository.findOne(userName);
+        if (user == null) {
+            logger.warn("User with name:" + userName + "was trying to create task for user with id: " + userName + " wasn't found");
+            throw new IllegalArgumentException();
+        }
+
         for (Verification verification : verifications) {
             verification.getStatus().equals(Status.TEST_COMPLETED);
+            if (verification.getCalibrator().getId().equals(user.getOrganization().getId())) {
+                logger.error("User with name: " + userName + " was trying to change verification and task from other organization");
+                return taskAlreadyExists;
+            }
             taskHasCompleteVerification = true;
         }
 
@@ -145,12 +155,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             taskAlreadyExists = false;
             CalibrationModule module = moduleRepository.findBySerialNumber(moduleSerialNumber);
             if (module == null) {
-                logger.error("module wasn't found");
-                throw new IllegalArgumentException();
-            }
-            User user = userRepository.findOne(userId);
-            if (user == null) {
-                logger.error("user wasn't found");
+                logger.warn("User with name:" + userName + "was trying to create task for module with serial number: " + moduleSerialNumber + " wasn't found");
                 throw new IllegalArgumentException();
             }
             task = new CalibrationTask(module, null, new Date(), taskDate, user);
