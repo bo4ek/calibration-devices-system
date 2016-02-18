@@ -138,7 +138,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
         User user = userRepository.findOne(userName);
         if (user == null) {
-            logger.warn("User with name:" + userName + "was trying to create task for user with id: " + userName + " wasn't found");
+            logger.error("User with name:" + userName + "was trying to create task for user with id: " + userName + " wasn't found");
             throw new IllegalArgumentException();
         }
 
@@ -155,7 +155,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             taskAlreadyExists = false;
             CalibrationModule module = moduleRepository.findBySerialNumber(moduleSerialNumber);
             if (module == null) {
-                logger.warn("User with name:" + userName + "was trying to create task for module with serial number: " + moduleSerialNumber + " wasn't found");
+                logger.error("User with name:" + userName + "was trying to create task for module with serial number: " + moduleSerialNumber + " wasn't found");
                 throw new IllegalArgumentException();
             }
             task = new CalibrationTask(module, null, new Date(), taskDate, user);
