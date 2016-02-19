@@ -72,22 +72,17 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
                                             String employeeName, Long protocolId, String protocolStatus,
                                             Long measurementDeviceId, String measurementDeviceType,
                                             User employee, Join<Verification, Organization> calibratorJoin) {
-        Predicate queryPredicate = cb.conjunction();
-        queryPredicate = cb.and(cb.equal(calibratorJoin.get("id"), employeeId), queryPredicate);
+        Predicate queryPredicate = cb.equal(calibratorJoin.get("id"), employeeId);
 
         if (searchStatus != null) {
             queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(searchStatus.trim())), queryPredicate);
         } else {
-            queryPredicate = cb.and(cb.not(cb.or(
-                    Status.SENT.getQueryPredicate(root, cb),
-                    Status.ACCEPTED.getQueryPredicate(root, cb),
-                    Status.IN_PROGRESS.getQueryPredicate(root, cb),
-                    Status.TEST_PLACE_DETERMINED.getQueryPredicate(root, cb),
-                    Status.SENT_TO_TEST_DEVICE.getQueryPredicate(root, cb),
-                    Status.TEST_COMPLETED.getQueryPredicate(root, cb),
-                    Status.CREATED_BY_CALIBRATOR.getQueryPredicate(root, cb),
-                    Status.SENT_TO_PROVIDER.getQueryPredicate(root, cb)
-            )), queryPredicate);
+            queryPredicate = cb.and(cb.or(
+                    Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb),
+                    Status.TEST_OK.getQueryPredicate(root, cb),
+                    Status.TEST_NOK.getQueryPredicate(root, cb),
+                    Status.REJECTED.getQueryPredicate(root, cb)
+            ), queryPredicate);
         }
 
         if (startDateToSearch != null && endDateToSearch != null) {
