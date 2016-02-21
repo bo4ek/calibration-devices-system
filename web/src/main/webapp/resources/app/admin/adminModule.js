@@ -114,6 +114,11 @@ angular
                     templateUrl: 'resources/app/admin/views/measurement-equipments.html',
                     controller: 'MeasuringEquipmentControllerAdmin'
                 })
+                .state("street-directory", {
+                    url: '/street-directory',
+                    templateUrl: 'resources/app/admin/views/streets-directory.html',
+                    controller: 'StreetDirectoryControllerAdmin'
+                })
                 .state("unsuitability-reasons", {
                     url: '/unsuitability-reasons',
                     templateUrl: 'resources/app/admin/views/unsuitability-reasons.html',
@@ -167,6 +172,7 @@ angular.module('adminModule').run(function ($rootScope) {
 define(['controllers/TopNavBarController', 'controllers/MainPanelController',
 
     'controllers/MeasuringEquipmentControllerAdmin',
+    'controllers/StreetDirectoryControllerAdmin',
     'controllers/MeasuringEquipmentAddModalControllerAdmin',
     'controllers/MeasuringEquipmentDisableModalControllerAdmin',
 

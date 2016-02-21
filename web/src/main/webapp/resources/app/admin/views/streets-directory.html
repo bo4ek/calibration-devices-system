@@ -1,0 +1,75 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{{ 'STREET_DIRECTORY' | translate }}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <button type="submit" class="btn btn-primary col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                    ng-click="openAddCalibrationModuleModal()">
+                <span class="glyphicon glyphicon-plus"></span>
+                {{'ADD_STREET' | translate}}
+            </button>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <p></p>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 pull-right" ng-show="isFilter()">
+            <button ng-click="clearAll()"
+                    class="btn btn-danger pull-right col-xs-12 col-sm-12 col-md-10 col-lg-10">
+                {{'CLEAR_ALL' | translate }}
+            </button>
+        </div>
+    </div>
+    <p></p>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <span class="pull-right"><span
+                                translate="TOTAL_NUMBER_OF_STREETS"></span>: {{resultsCount}}
+                        </span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table ng-table="tableParams"
+                                       class="table table-bordered table-hover users_table" show-filter="true">
+                                    <tbody>
+                                    <tr ng-repeat="street in $data">
+                                        <td data-title="'STREET_ID' | translate">
+                                            {{street.id}}
+                                        </td>
+                                        <td filter="{ region: 'text'}" sortable="'region'"
+                                            data-title="'REGION' | translate">
+                                            {{street.region}}
+                                        </td>
+                                        <td filter="{ district: 'text'}" sortable="'district'"
+                                            data-title="'DISTRICT' | translate">
+                                            {{street.district}}
+                                        </td>
+                                        <td filter="{ city: 'text'}" sortable="'city'"
+                                            data-title="'LOCALITY' | translate">
+                                            {{street.city}}
+                                        </td>
+                                        <td filter="{ streetName: 'text'}" sortable="'streetName'"
+                                            data-title="'STREET' | translate">
+                                            {{street.streetName}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-wrapper -->

@@ -13,6 +13,14 @@ angular
             findAllRegions: function () {
                 return findAll('regions');
             },
+            getAllStreets: function(pageNumber, itemsPerPage, search, sortCriteria, sortOrder) {
+                return $http.get('admin/streets/' + pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, {
+                    params: search
+                })
+                    .then(function(response) {
+                       return response.data;
+                    });
+            },
             findDistrictsByRegionId: function (id) {
                 return findAll('districts/' + id);
             },

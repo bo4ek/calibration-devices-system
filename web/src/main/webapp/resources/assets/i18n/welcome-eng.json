@@ -797,5 +797,9 @@
     "VOLUME_ERROR": "Error im counter's volume",
     "COUNTER_STATE": "Counter state",
     "SAVE_AND_CREATE_BY_PATTERN": "Save and create by pattern",
-    "VERIFICATION_WITH_DISMANTLE": "Make verification with dismantling"
+    "VERIFICATION_WITH_DISMANTLE": "Make verification with dismantling",
+    "STREET_DIRECTORY": "Street directory",
+    "STREET_ID": "ID",
+    "TOTAL_NUMBER_OF_STREETS": "Total number of streets",
+    "ADD_STREET": "Add street"
 }

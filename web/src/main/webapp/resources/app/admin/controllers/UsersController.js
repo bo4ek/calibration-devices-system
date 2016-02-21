@@ -72,10 +72,6 @@ angular
 
                     userService.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
                         .success(function (result) {
-                            console.log(params.filter());
-                            console.log(sortCriteria);
-                            console.log(result);
-                            console.log(result.totalItems);
                             $scope.totalEmployee=result.totalItems;
                             $defer.resolve(result.content);
                             params.total(result.totalItems);
