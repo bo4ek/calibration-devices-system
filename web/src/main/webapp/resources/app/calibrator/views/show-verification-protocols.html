@@ -29,8 +29,8 @@
                                                                ng-click="resolveVerificationId(verification.id)"
                                     />
                                     </td>
-                                    <td data-title="'PROTOCOL_DATE' | translate" class="col-md-2" sortable="'date'"
-                                        filter="{ 'date': 'date' }">
+                                    <td data-title="'PROTOCOL_DATE' | translate" class="datecolumn" sortable="'date'"
+                                        filter="{ 'date': 'protocolDate' }">
                                         {{ verification.initialDate | date :'dd-MM-yyyy'}}
                                         <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
                                             translate}} {{verification.initialDate}} {{'DAYS' |
@@ -102,17 +102,18 @@
                                 </div>
                             </script>
 
-                            <script type="text/ng-template" id="ng-table/filters/date.html">
+                            <script type="text/ng-template" id="ng-table/filters/protocolDate.html">
 
-                                <div class="input-group right-inner-addon">
+                                <div class="input-group right-inner-addon" style="width: 100%">
                                     <i id="calendar_icon" class="glyphicon glyphicon-calendar"
                                        ng-click="showPicker($event)"></i>
-                                    <input date-range-picker="opts" class="form-control input-md" type="text"
-                                           ng-model="myDatePicker.pickerDate" ng-change="doSearch()" options="opts"
+                                    <input date-range-picker="opts" class="form-control date-picker" type="text"
+                                           ng-model="datePicker.initialDate" ng-change="doSearch()" options="opts"
                                            id="datepickerfield" readonly/>
+
                                         <span class="input-group-btn">
                                                   <button type="button" class="btn btn-default myGroupBtn"
-                                                          ng-show="myDatePicker.pickerDate.startDate"
+                                                          ng-show="!isInitialDateDefault()"
                                                           ng-click="clearDate()">
                                                       <i class="glyphicon glyphicon-remove"></i>
                                                   </button>

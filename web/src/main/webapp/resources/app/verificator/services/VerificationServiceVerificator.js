@@ -71,6 +71,14 @@ angular
             },
             getIfEmployeeStateVerificator: function(url) {
                 return getData('verifications/verificator/role');
+            },
+
+            getEarliestCreatingProtocolDate: function () {
+                return getData('verifications/earliestCreatingProtocolDate');
+            },
+
+            getEarliestSentToVerificatorDate: function () {
+                return getData('verifications/earliestSentToVerificatorDate');
             }
 
         };

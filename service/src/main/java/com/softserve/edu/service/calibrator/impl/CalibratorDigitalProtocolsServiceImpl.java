@@ -68,17 +68,17 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
 
     @Override
     @Transactional(readOnly = true)
-    public ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndStatus(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch,
+    public ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndStatus(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch,
                                                                                               String idToSearch, String status, String nameProvider, String nameCalibrator, String numberOfCounter,
-                                                                                              String numberOfProtocol, String sentToVerificatorDate, String serialNumber, String sortCriteria,
+                                                                                              String numberOfProtocol, String serialNumber, String sortCriteria,
                                                                                               String sortOrder, User verificatorEmployee) {
 
-        CriteriaQuery<Verification> criteriaQuery = DigitalProtocolQueryConstructorCalibrator.buildSearchQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
-                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, sortCriteria, sortOrder, em);
+        CriteriaQuery<Verification> criteriaQuery = DigitalProtocolQueryConstructorCalibrator.buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, serialNumber, sortCriteria, sortOrder, em);
 
-        Long count = em.createQuery(DigitalProtocolQueryConstructorCalibrator.buildCountQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+        Long count = em.createQuery(DigitalProtocolQueryConstructorCalibrator.buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
                 nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDate, serialNumber, em)).getSingleResult();
+                numberOfProtocol, serialNumber, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);

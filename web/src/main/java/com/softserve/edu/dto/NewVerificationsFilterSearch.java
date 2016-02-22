@@ -31,7 +31,8 @@ public class NewVerificationsFilterSearch {
 	private String address;
 	private String numberOfCounter;
 	private String numberOfProtocol;
-	private String sentToVerificatorDate;
+	private String sentToVerificatorDateFrom;
+	private String sentToVerificatorDateTo;
 	private String serialNumber;
 	private String comment;
 }

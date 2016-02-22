@@ -150,6 +150,15 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status IN ('IN_PROGRESS', 'TEST_PLACE_DETERMINED', 'SENT_TO_TEST_DEVICE', 'TEST_COMPLETED') and u.calibrator = :calibrator")
     java.sql.Date getEarliestDateOfAllNewVerificationsByCalibrator(@Param("calibrator") Organization calibrator);
 
+    @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status = 'TEST_COMPLETED' and u.calibrator = :calibrator")
+    java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByCalibrator(@Param("calibrator") Organization calibrator);
+
+    @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status IN ('SENT_TO_VERIFICATOR', 'TEST_NOK', 'TEST_OK') and u.stateVerificator = :verificator")
+    java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByVerificator(@Param("verificator") Organization verificator);
+
+    @Query("SELECT MIN(u.sentToVerificatorDate) FROM Verification u WHERE u.status IN ('SENT_TO_VERIFICATOR', 'TEST_NOK', 'TEST_OK') and u.stateVerificator = :verificator")
+    java.sql.Timestamp getEarliestSentToVerificatorDate(@Param("verificator") Organization verificator);
+
     @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status NOT IN ('CREATED_BY_CALIBRATOR','SENT_TO_PROVIDER','ACCEPTED', 'SENT', 'IN_PROGRESS') and u.calibrator = :calibrator")
     java.sql.Date getEarliestDateOfArchivalVerificationsByCalibrator(@Param("calibrator") Organization calibrator);
 

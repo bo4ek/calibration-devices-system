@@ -31,9 +31,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.sql.*;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
@@ -352,16 +354,16 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String status, String nameProvider,
-                                                                                                       String nameCalibrator, String numberOfCounter, String numberOfProtocol, String sentToVerificatorDate, String serialNumber,
+    public ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String status, String nameProvider,
+                                                                                                       String nameCalibrator, String numberOfCounter, String numberOfProtocol, String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber,
                                                                                                        String sortCriteria, String sortOrder, User verificatorEmployee) {
 
-        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorVerificator.buildSearchQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
-                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, sortCriteria, sortOrder, em);
+        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorVerificator.buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, sortCriteria, sortOrder, em);
 
-        Long count = em.createQuery(NewVerificationsQueryConstructorVerificator.buildCountQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+        Long count = em.createQuery(NewVerificationsQueryConstructorVerificator.buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
                 nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDate, serialNumber, em)).getSingleResult();
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
@@ -693,6 +695,21 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional(readOnly = true)
     public java.sql.Date getNewVerificationEarliestDateByCalibrator(Organization organization) {
         return verificationRepository.getEarliestDateOfAllNewVerificationsByCalibrator(organization);
+    }
+
+    @Override
+    public java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByCalibrator(Organization organization) {
+        return verificationRepository.getEarliestDateOfDigitalVerificationProtocolsByCalibrator(organization);
+    }
+
+    @Override
+    public java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByVerificator(Organization organization) {
+        return verificationRepository.getEarliestDateOfDigitalVerificationProtocolsByVerificator(organization);
+    }
+
+    @Override
+    public java.sql.Timestamp getEarliestSentToVerificatorDate(Organization organization) {
+        return verificationRepository.getEarliestSentToVerificatorDate(organization);
     }
 
     @Override

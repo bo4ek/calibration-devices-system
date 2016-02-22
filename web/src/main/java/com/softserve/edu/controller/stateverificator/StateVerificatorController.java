@@ -31,6 +31,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -86,13 +90,15 @@ public class StateVerificatorController {
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfVerificationsByVerificatorIdAndCriteriaSearch(
                 employeeUser.getOrganizationId(), pageNumber, itemsPerPage,
                 searchData.getDate(),
+                searchData.getEndDate(),
                 searchData.getId(),
                 searchData.getStatus(),
                 searchData.getNameProvider(),
                 searchData.getNameCalibrator(),
                 searchData.getNumberOfCounter(),
                 searchData.getNumberOfProtocol(),
-                searchData.getSentToVerificatorDate(),
+                searchData.getSentToVerificatorDateFrom(),
+                searchData.getSentToVerificatorDateTo(),
                 searchData.getSerialNumber(),
                 sortCriteria,
                 sortOrder,
@@ -351,5 +357,37 @@ public class StateVerificatorController {
     public void removeVerificatorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
         String idVerification = verificationUpdatingDTO.getIdVerification();
         stateVerificatorService.assignVerificatorEmployee(idVerification, null);
+    }
+
+    @RequestMapping(value = "earliestCreatingProtocolDate", method = RequestMethod.GET)
+    public String getEarliestDateOfDigitalVerificationProtocolsByVerificator(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if (user != null) {
+            Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
+            Date earliestDate = verificationService.getEarliestDateOfDigitalVerificationProtocolsByVerificator(organization);
+            if (earliestDate != null) {
+                return earliestDate.toString();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "earliestSentToVerificatorDate", method = RequestMethod.GET)
+    public String getEarliestSentToVerificatorDate(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if (user != null) {
+            Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
+            Date earliestDate = verificationService.getEarliestSentToVerificatorDate(organization);
+            DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+            if (earliestDate != null) {
+                LocalDateTime localDate = LocalDateTime.ofInstant(earliestDate.toInstant(), ZoneId.systemDefault());
+                return localDate.format(dbDateTimeFormatter);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }

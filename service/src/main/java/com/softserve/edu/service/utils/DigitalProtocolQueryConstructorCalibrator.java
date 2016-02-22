@@ -31,7 +31,7 @@
 		 * Method dynamically builds query to database depending on input parameters specified.
 		 * Needed to get max count of rows with current predicates for pagination
 		 * @param verificatorID - search by organization ID
-		 * @param dateToSearch - search by date
+		 * @param startDateToSearch - search by date
 		 * @param idToSearch  - search by id
 		 * @param status - search by status
 		 * @param verificatorEmployee - search by verificatorEmployee
@@ -39,22 +39,21 @@
 		 * @param nameCalibrator - search by nameCalibrator
 		 * @param numberOfCounter - search by numberOfCounter
 		 * @param numberOfProtocol - search by numberOfProtocol
-		 * @param sentToVerificatorDate - search by sentToVerificatorDate
 		 * @param serialNumber - search by serialNumber
 		 * @param em
 		 * @return
 		 */
-        public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String dateToSearch, String idToSearch, String status,
+        public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                           User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
-                                                          String numberOfProtocol, String sentToVerificatorDate, String serialNumber, EntityManager em) {
+                                                          String numberOfProtocol, String serialNumber, EntityManager em) {
 
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
             Root<Verification> root = countQuery.from(Verification.class);
             Join<Verification, Organization> verificatorJoin = root.join("calibrator");
-            Predicate predicate = DigitalProtocolQueryConstructorCalibrator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch,
+            Predicate predicate = DigitalProtocolQueryConstructorCalibrator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
 					status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-					numberOfProtocol, sentToVerificatorDate, serialNumber);
+					numberOfProtocol, serialNumber);
             countQuery.select(cb.count(root));
             countQuery.where(predicate);
             return countQuery;
@@ -63,7 +62,7 @@
 		/**
 		 * Method dynamically builds query to database depending on input parameters specified.
 		 * @param verificatorID - search by organization ID
-		 * @param dateToSearch - search by date
+		 * @param startDateToSearch - search by date
 		 * @param idToSearch  - search by id
 		 * @param status - search by status
 		 * @param verificatorEmployee - search by verificatorEmployee
@@ -71,23 +70,22 @@
 		 * @param nameCalibrator - search by nameCalibrator
 		 * @param numberOfCounter - search by numberOfCounter
 		 * @param numberOfProtocol - search by numberOfProtocol
-		 * @param sentToVerificatorDate - search by sentToVerificatorDate
 		 * @param serialNumber - search by serialNumber
 		 * @param em
 		 * @return
 		 */
-        public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String dateToSearch, String idToSearch, String status,
+        public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                                    User verificatorEmployee,  String nameProvider,String nameCalibrator, String numberOfCounter,
-                                                                   String numberOfProtocol, String sentToVerificatorDate, String serialNumber, String sortCriteria, String sortOrder, EntityManager em) {
+                                                                   String numberOfProtocol, String serialNumber, String sortCriteria, String sortOrder, EntityManager em) {
 
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
             Root<Verification> root = criteriaQuery.from(Verification.class);
             Join<Verification, Organization> verificatorJoin = root.join("calibrator");
 
-            Predicate predicate = DigitalProtocolQueryConstructorCalibrator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch,
+            Predicate predicate = DigitalProtocolQueryConstructorCalibrator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
 					status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-					numberOfProtocol, sentToVerificatorDate, serialNumber);
+					numberOfProtocol, serialNumber);
 
             if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
                 criteriaQuery.orderBy(cb.desc(root.get("initialDate")), cb.asc((root.get("calibrationModule").get("serialNumber"))),
@@ -105,9 +103,8 @@
 		 * Method builds list of predicates
 		 */
         private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long verificatorId,
-                                                String dateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
-                                                String numberOfCounter, String numberOfProtocol,
-                                                String sentToVerificatorDate, String serialNumber) {
+                                                String startDateToSearch, String endDateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
+                                                String numberOfCounter, String numberOfProtocol, String serialNumber) {
 
             String userName = verificatorEmployee.getUsername();
             Predicate queryPredicate = cb.conjunction();
@@ -131,15 +128,14 @@
 
             queryPredicate = cb.and(cb.equal(joinSearch.get("id"), verificatorId), queryPredicate);
 
-            if (dateToSearch != null) {
+            if (startDateToSearch != null && endDateToSearch != null) {
                 DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-                LocalDate date = null;
-                try {
-                    date = LocalDate.parse(dateToSearch.substring(0, 10), dbDateTimeFormatter);
-                } catch (Exception pe) {
-                    logger.error("Cannot parse date", pe);
-                }
-                queryPredicate = cb.and(cb.equal(root.get("initialDate"), java.sql.Date.valueOf(date)), queryPredicate);
+
+                LocalDate startDate = LocalDate.parse(startDateToSearch, dbDateTimeFormatter);
+                LocalDate endDate = LocalDate.parse(endDateToSearch, dbDateTimeFormatter);
+                queryPredicate = cb.and(cb.between(root.get("initialDate"), java.sql.Date.valueOf(startDate),
+                        java.sql.Date.valueOf(endDate)), queryPredicate);
+
             }
 
             if ((idToSearch != null)&&(idToSearch.length()>0)) {

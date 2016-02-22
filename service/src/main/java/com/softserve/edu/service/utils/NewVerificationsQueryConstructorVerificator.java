@@ -1,8 +1,11 @@
 package com.softserve.edu.service.utils;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +29,8 @@ import com.softserve.edu.entity.enumeration.verification.Status;
  */
 @Deprecated
 public class NewVerificationsQueryConstructorVerificator {
-
+    public static final String MAX_TIME = "23:59:59.999999999";
+    public static final String MIN_TIME = "00:00:00";
     static Logger logger = Logger.getLogger(NewVerificationsQueryConstructorVerificator.class);
 
     /**
@@ -34,7 +38,7 @@ public class NewVerificationsQueryConstructorVerificator {
      *
      * @param verificatorID
      * 		search by organization ID
-     * @param dateToSearch
+     * @param startDateToSearch
      * 		search by initial date of verification (optional)
      * @param idToSearch
      * 		search by verification ID
@@ -44,19 +48,19 @@ public class NewVerificationsQueryConstructorVerificator {
      * 		EntityManager needed to have a possibility to create query
      * @return CriteriaQuery<Verification>
      */
-    public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String dateToSearch, String idToSearch, String status,
+    public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                                User verificatorEmployee,  String nameProvider,String nameCalibrator, String numberOfCounter,
                                                                String numberOfProtocol,
-                                                               String sentToVerificatorDate, String serialNumber, String sortCriteria, String sortOrder, EntityManager em) {
+                                                               String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber, String sortCriteria, String sortOrder, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
         Root<Verification> root = criteriaQuery.from(Verification.class);
         Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
 
-        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch,
+        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
                 status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDate, serialNumber);
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber);
 
         if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
             criteriaQuery.orderBy(cb.desc(root.get("sentToVerificatorDate")),cb.desc(root.get("initialDate")),
@@ -77,7 +81,7 @@ public class NewVerificationsQueryConstructorVerificator {
      * 		search by client's last name
      * @param verificatorID
      * 		search by organization ID
-     * @param dateToSearch
+     * @param startDateToSearch
      * 		search by initial date of verification (optional)
      * @param idToSearch
      * 		search by verification ID
@@ -87,18 +91,18 @@ public class NewVerificationsQueryConstructorVerificator {
      * @param em
 * 		EntityManager needed to have a possibility to create query    @return CriteriaQuery<Long>
      */
-    public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String dateToSearch, String idToSearch, String status,
+    public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                       User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
                                                       String numberOfProtocol,
-                                                      String sentToVerificatorDate, String serialNumber, EntityManager em) {
+                                                      String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Verification> root = countQuery.from(Verification.class);
         Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
-        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch,
+        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
                 status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDate, serialNumber);
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
         return countQuery;
@@ -109,9 +113,9 @@ public class NewVerificationsQueryConstructorVerificator {
      * Rule for predicates compounding - conjunction (AND)
      */
     private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long verificatorId,
-                                            String dateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
+                                            String startDateToSearch, String endDateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
                                             String numberOfCounter, String numberOfProtocol,
-                                            String sentToVerificatorDate, String serialNumber) {
+                                            String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber) {
 
         String userName = verificatorEmployee.getUsername();
         Predicate queryPredicate = cb.conjunction();
@@ -137,18 +141,15 @@ public class NewVerificationsQueryConstructorVerificator {
 
         queryPredicate = cb.and(cb.equal(joinSearch.get("id"), verificatorId), queryPredicate);
 
-        if (dateToSearch != null) {
+        if (startDateToSearch != null && endDateToSearch != null) {
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-            LocalDate date = null;
-            try {
-                date = LocalDate.parse(dateToSearch.substring(0, 10), dbDateTimeFormatter);
-            } catch (Exception pe) {
-                logger.error("Cannot parse date", pe);
-            }
-            queryPredicate = cb.and(cb.equal(root.get("initialDate"), java.sql.Date.valueOf(date)), queryPredicate);
+
+            LocalDate startDate = LocalDate.parse(startDateToSearch, dbDateTimeFormatter);
+            LocalDate endDate = LocalDate.parse(endDateToSearch, dbDateTimeFormatter);
+            queryPredicate = cb.and(cb.between(root.get("initialDate"), java.sql.Date.valueOf(startDate),
+                    java.sql.Date.valueOf(endDate)), queryPredicate);
+
         }
-
-
 
         if ((idToSearch != null)&&(idToSearch.length()>0)) {
             queryPredicate = cb.and(cb.like(root.get("id"), "%" + idToSearch + "%"), queryPredicate);
@@ -183,6 +184,12 @@ public class NewVerificationsQueryConstructorVerificator {
                     queryPredicate);
         }
 
+        if (sentToVerificatorDateFrom != null && sentToVerificatorDateTo != null) {
+            StringBuffer startDate = new StringBuffer(sentToVerificatorDateFrom).append(" " + MIN_TIME);
+            StringBuffer endDate = new StringBuffer(sentToVerificatorDateTo).append(" " + MAX_TIME);
+            queryPredicate = cb.and(cb.between(root.get("sentToVerificatorDate"),
+                    Timestamp.valueOf(startDate.toString()), Timestamp.valueOf(endDate.toString())), queryPredicate);
+        }
         return queryPredicate;
     }
 }

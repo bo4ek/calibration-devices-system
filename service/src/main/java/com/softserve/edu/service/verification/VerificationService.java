@@ -69,9 +69,9 @@ public interface VerificationService {
                                                                                      String streetToSearch, String status, String employeeName, Long protocolId, String protocolStatus, Long measurementDeviceId, String measurementDeviceType, String sortCriteria, String sortOrder, User calibratorEmployee);
 
 
-    ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String status, String nameProvider, String nameCalibrator,
+    ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String status, String nameProvider, String nameCalibrator,
                                                                                                 String numberOfCounter, String numberOfProtocol,
-                                                                                                String sentToVerificatorDate, String serialNumber,
+                                                                                                String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber,
                                                                                                 String sortCriteria, String sortOrder, User verificatorEmployee);
 
 
@@ -127,6 +127,12 @@ public interface VerificationService {
     java.sql.Date getArchivalVerificationEarliestDateByProvider(Organization organization);
 
     java.sql.Date getNewVerificationEarliestDateByCalibrator(Organization organization);
+
+    java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByCalibrator(Organization organization);
+
+    java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByVerificator(Organization organization);
+
+    java.sql.Timestamp getEarliestSentToVerificatorDate(Organization organization);
 
     java.sql.Date getArchivalVerificationEarliestDateByCalibrator(Organization organization);
 
