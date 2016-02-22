@@ -15,6 +15,7 @@ import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.verification.VerificationService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,8 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/calibrator/not-standard-verifications/")
 public class NotStandardVerificationCalibratorController {
 
+    private Logger logger = Logger.getLogger(NotStandardVerificationCalibratorController.class);
+
     @Autowired
     VerificationService verificationService;
 
@@ -36,8 +39,10 @@ public class NotStandardVerificationCalibratorController {
 
     @Autowired
     OrganizationService organizationService;
+
     @Autowired
     ProviderService providerService;
+
     @Autowired
     CalibratorEmployeeService calibratorEmployeeService;
 
@@ -61,7 +66,6 @@ public class NotStandardVerificationCalibratorController {
                 calibratorEmployee, pageNumber, itemsPerPage, status, sortCriteria, sortOrder);
         Long count = verificationService.countByCalibratorEmployeeUsernameAndStatus(calibratorEmployee, status);
         List<NotStandardVerificationDTO> content = toDTOFromList(verifications, status);
-
         return new PageDTO<>(count, content);
     }
 
@@ -126,35 +130,39 @@ public class NotStandardVerificationCalibratorController {
     private List<NotStandardVerificationDTO> toDTOFromList(List<Verification> verifications, Status status) {
 
         List<NotStandardVerificationDTO> resultList = new ArrayList<>();
-        if (status.name().equalsIgnoreCase("CREATED_FOR_PROVIDER")) {
-            for (Verification verification : verifications) {
-                resultList.add(new NotStandardVerificationDTO(
-                        verification.getId(),
-                        verification.getInitialDate(),
-                        verification.getClientData().getClientAddress(),
-                        verification.getClientData().getFirstName(),
-                        verification.getClientData().getLastName(),
-                        verification.getClientData().getMiddleName(),
-                        verification.getProvider(),
-                        verification.getRejectedMessage()));
+        try {
+            if (status.name().equalsIgnoreCase("CREATED_FOR_PROVIDER")) {
+                for (Verification verification : verifications) {
+                    resultList.add(new NotStandardVerificationDTO(
+                            verification.getId(),
+                            verification.getInitialDate(),
+                            verification.getClientData().getClientAddress(),
+                            verification.getClientData().getFirstName(),
+                            verification.getClientData().getLastName(),
+                            verification.getClientData().getMiddleName(),
+                            verification.getProvider(),
+                            verification.getRejectedMessage()));
+                }
+            } else {
+                for (Verification verification : verifications) {
+                    resultList.add(new NotStandardVerificationDTO(
+                            verification.getId(),
+                            verification.getInitialDate(),
+                            verification.getClientData().getClientAddress(),
+                            verification.getClientData().getFirstName(),
+                            verification.getClientData().getLastName(),
+                            verification.getClientData().getMiddleName(),
+                            verification.getCounter(),
+                            verification.getCalibrationTests(),
+                            verification.getProviderFromBBI(),
+                            verification.getRejectedMessage(),
+                            verification.getComment()));
+                }
             }
-        } else {
-            for (Verification verification : verifications) {
-                resultList.add(new NotStandardVerificationDTO(
-                        verification.getId(),
-                        verification.getInitialDate(),
-                        verification.getClientData().getClientAddress(),
-                        verification.getClientData().getFirstName(),
-                        verification.getClientData().getLastName(),
-                        verification.getClientData().getMiddleName(),
-                        verification.getCounter(),
-                        verification.getCalibrationTests(),
-                        verification.getProviderFromBBI(),
-                        verification.getRejectedMessage(),
-                        verification.getComment()));
-            }
+            return resultList;
+        } catch (Exception e) {
+            logger.error("Error while transforming verification into DTO ", e);
+            return null;
         }
-        return resultList;
     }
 }
-

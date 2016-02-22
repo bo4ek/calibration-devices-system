@@ -42,9 +42,9 @@ public class NotStandardVerificationDTO {
     private String rejectMessage;
     private String comment;
 
-    public NotStandardVerificationDTO(String id, Date initialDate, Address address,
-                                      String firstName, String lastName, String middleName,
-                                      Counter counter, Set<CalibrationTest> tests, Organization providerFromBBI, String rejectMessage, String comment) {
+    public NotStandardVerificationDTO(String id, Date initialDate, Address address, String firstName, String lastName,
+                                      String middleName, Counter counter, Set<CalibrationTest> tests,
+                                      Organization providerFromBBI, String rejectMessage, String comment) {
         this.id = id;
         this.initialDate = initialDate;
         this.fullName = lastName + " " + firstName + " " + middleName;
@@ -76,9 +76,8 @@ public class NotStandardVerificationDTO {
 
     }
 
-    public NotStandardVerificationDTO(String id, Date initialDate, Address address,
-                                      String firstName, String lastName, String middleName,
-                                      Organization provider, String rejectMessage) {
+    public NotStandardVerificationDTO(String id, Date initialDate, Address address, String firstName, String lastName,
+                                      String middleName, Organization provider, String rejectMessage) {
         this.id = id;
         this.initialDate = initialDate;
         this.fullName = lastName + " " + firstName + " " + middleName;
