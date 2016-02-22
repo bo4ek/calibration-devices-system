@@ -895,12 +895,12 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public synchronized List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType) {
         List<String> verificationIds = new ArrayList<>();
-
+        String id;
         String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
         long count = verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(verification.getInitialDate(), deviceType);
 
         for (byte i = 0; i < quantity; i++) {
-            String id = datePart + String.format("%04d", count += 1);
+            id = datePart + String.format("%04d", count += 1);
             verification.setId(id);
             verificationRepository.save(verification);
             verificationIds.add(id);
