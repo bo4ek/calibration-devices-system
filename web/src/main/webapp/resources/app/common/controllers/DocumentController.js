@@ -13,7 +13,7 @@ angular
                                     if (!initializeLibForDigitalSign.isInitialized()) {
                                         initializeLibForDigitalSign.initializeWithoutSelectCA();
                                     }
-                                    if (fileFormat == 'pdf') var fileFormatTemp = 'docx';
+                                    var fileFormatTemp = 'docx';
                                     documentService.getDocument(documentType, verificationId, fileFormatTemp).then(
                                         function (file) {
                                             var resObj = initializeLibForDigitalSign.getVerifySign(file.data);
