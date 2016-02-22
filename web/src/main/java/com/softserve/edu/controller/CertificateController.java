@@ -29,4 +29,20 @@ public class CertificateController {
         }
         return false;
     }
+    /**
+     * Checks whether verification with {@code verificationId} id is parsed
+     * @param verificationId id of verification
+     * @return  {@literal true} if verification certificate is parsed, or otherwise {@literal false}
+     */
+    @RequestMapping(value = "isParsed/{verificationId}", method = RequestMethod.GET)
+    public Boolean isCertificateParsed(@PathVariable
+                                       String verificationId) {
+        Verification verification = verificationService.findById(verificationId);
+        if(verification != null) {
+            return verification.isParsed();
+        }
+        return false;
+    }
+
+
 }

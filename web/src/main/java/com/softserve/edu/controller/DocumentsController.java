@@ -1,12 +1,20 @@
 package com.softserve.edu.controller;
 
 import com.softserve.edu.documents.parameter.FileFormat;
+import com.softserve.edu.documents.parameter.FileParameters;
+import com.softserve.edu.documents.parameter.FileSystem;
 import com.softserve.edu.documents.resources.DocumentType;
+import com.softserve.edu.documents.utils.FileUtils;
 import com.softserve.edu.entity.user.User;
+import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTest;
+import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
 import com.softserve.edu.service.tool.DocumentService;
 import com.softserve.edu.service.tool.ReportsService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.verification.VerificationService;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +22,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.beans.PropertyEditorSupport;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Controller for file generation requests.
@@ -100,6 +114,45 @@ public class DocumentsController {
         sendFile(response, fileFormat, file);
     }
 
+
+    @Autowired
+    private VerificationService verificationService;
+    @RequestMapping(value = "{documentType}/{verificationCode}/{fileFormat}/signed",
+            method = RequestMethod.POST)
+    public void addSignToDocument(HttpServletResponse response,
+                                  @PathVariable DocumentType documentType,
+                                  @PathVariable String verificationCode,
+                                  @PathVariable FileFormat fileFormat,
+                                  @RequestParam("file") MultipartFile file,
+                                  @RequestParam("signature") String signature
+    )
+            throws IOException, IllegalStateException {
+
+        if (file.isEmpty())
+            throw new IOException("File is Empty");
+        byte[] documentByteArray = file.getBytes();
+        byte[] signatureByteArray = signature.getBytes();
+        byte[] finalDocument = ArrayUtils.addAll(documentByteArray, signatureByteArray);
+
+        Verification verification = verificationService.findById(verificationCode);
+        verification.setSignedDocument(finalDocument);
+        verification.setParsed(true);
+        verificationService.saveVerification(verification);
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        response.setHeader("Content-Length", String.valueOf(finalDocument.length));
+        response.setHeader("Content-Disposition", "attachment; filename=" + verificationCode + ".docx");
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            outputStream.write(finalDocument);
+        } finally {
+            if (outputStream != null)
+                outputStream.flush();
+                outputStream.close();
+        }
+    }
+
     /**
      * Returns a document with a specific fileFormat using verification that
      * has only one test. For example: .../verification_certificate/1/pdf.
@@ -141,22 +194,17 @@ public class DocumentsController {
     private void sendFile(HttpServletResponse response, FileFormat fileFormat,
                           FileObject file) throws IOException {
         setContentType(response, fileFormat);
-        response.setHeader("Content-Disposition", "attachment; " +
-                "filename=\"" + file.getName().getBaseName() + "." + fileFormat.name().toLowerCase() + "\"");
-        ServletOutputStream outputStream = response.getOutputStream();
-
-        int bufferSize = 10240;  // 10Kb
-        byte[] buffer = new byte[(int)file.getContent().getSize()];
+        byte[] buffer = new byte[(int) file.getContent().getSize()];
 
         try (InputStream inputStream = file.getContent().getInputStream()) {
-//            int length = inputStream.read(buffer);
-//            int offset = 0;
-//
-//            do {
-//                outputStream.write(buffer, offset, length);
-//                length = inputStream.read(buffer);
-//            } while (length > 0);
+
             inputStream.read(buffer);
+            response.setHeader("Content-Length", String.valueOf(buffer.length));
+
+            response.setHeader("Content-Disposition", "attachment; " +
+                    "filename=" + file.getName().getBaseName() + "." + fileFormat.name().toLowerCase());
+            OutputStream outputStream = response.getOutputStream();
+
             outputStream.write(buffer);
             outputStream.flush();
             outputStream.close();

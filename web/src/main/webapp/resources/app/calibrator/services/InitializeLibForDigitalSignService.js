@@ -173,6 +173,19 @@ angular
             }
 
         }
+        function loadCAsSettingsWithoutSelect(onSuccess, onError){
+            var _onSuccess = function (casResponse) {
+                try {
+                    var servers = JSON.parse(casResponse.replace(/\\'/g, "'"));
+                    CAsServers = servers;
+
+                    onSuccess();
+                } catch (e) {
+                    onError();
+                }
+            };
+            euSign.LoadDataFromServer(URL_CAS, _onSuccess, onError, false);
+        }
 
         function loadCAsSettings(onSuccess, onError) {
 
@@ -263,6 +276,7 @@ angular
                 isReaded ? 'Readed' : 'Read';
             document.getElementById('PKeyReadButton').innerHTML =
                 isReaded ? 'Зчитано' : 'Зчитати';
+            setStatus(isReaded ? 'signing document' : 'reading key')
 
 
             document.getElementById('PKeyPassword').disabled = disabled;
@@ -460,12 +474,33 @@ angular
             return;
 
         }
+        var initialized = false;
+        function verifyFile(file) {
+            var info = "";
+            var data = new Uint8Array(file);
+            info = euSign.VerifyDataInternal(data);
+            var ownerInfo = info.GetOwnerInfo();
+            var timeInfo = info.GetTimeInfo();
+            var message = "Підписувач: " + ownerInfo.GetSubjCN() + "\n" +
+                "ЦСК: " + ownerInfo.GetIssuerCN() + "\n" +
+                "Серійний номер: " + ownerInfo.GetSerial() + "\n";
+            if (timeInfo.IsTimeAvail()) {
+                message += (timeInfo.IsTimeStamp() ?
+                    "Мітка часу:" : "Час підпису: ") + timeInfo.GetTime();
+            } else {
+                message += "Час підпису відсутній";
+            }
+            var originalData = info.GetData();
+            var resultObject = {
+                resultData: originalData,
+                notice: message
+            };
+            return resultObject;
 
-        return {
-            getEuSign: function(){
-                return euSign;
-            },
-            initialize: function () {
+
+        }
+
+        function init(){
             var _onSuccess = function () {
                 try {
                     euSign.Initialize();
@@ -484,6 +519,38 @@ angular
                         };
                         setTimeout(_readPrivateKeyAsStoredFile, 10);
                     }
+                    initialized = true;
+                } catch (e) {
+                    alert(e);
+                }
+            };
+            var _onError = function () {
+                alert('Виникла помилка ' +
+                    'при завантаженні криптографічної бібліотеки');
+            };
+            loadCAsSettingsWithoutSelect(_onSuccess, _onError);
+        }
+
+        function initializeLib(){
+            var _onSuccess = function () {
+                try {
+                    euSign.Initialize();
+                    euSign.SetJavaStringCompliant(true);
+                    euSign.SetCharset("UTF-16LE");
+
+                    if (euSign.DoesNeedSetSettings()) {
+                        setDefaultSettings();
+                    }
+                    loadCertsFromServer();
+                    setCASettings(0);
+
+                    if (utils.IsSessionStorageSupported()) {
+                        var _readPrivateKeyAsStoredFile = function () {
+                            readPrivateKeyAsStoredFile();
+                        };
+                        setTimeout(_readPrivateKeyAsStoredFile, 10);
+                    }
+                    initialized = true;
                 } catch (e) {
                     alert(e);
                 }
@@ -493,16 +560,31 @@ angular
                     'при завантаженні криптографічної бібліотеки');
             };
             loadCAsSettings(_onSuccess, _onError);
-        },
-            getReadPrivateKey: function(keyName, key, password, certificates, fromCache){
+        }
+
+        return {
+            getEuSign: function () {
+                return euSign;
+            },
+            initialize: function () {
+                return initializeLib();
+            },
+            getReadPrivateKey: function (keyName, key, password, certificates, fromCache) {
                 return readPrivateKey(keyName, key, password, certificates, fromCache);
+            },
+            getVerifySign: function (file) {
+                var resultObj = verifyFile(file);
+                return resultObj;
+            },
+            isInitialized: function(){
+                return initialized;
+            },
+            initializeWithoutSelectCA: function(){
+                return init();
             }
 
 
         };
-
-
-
 
 
     });

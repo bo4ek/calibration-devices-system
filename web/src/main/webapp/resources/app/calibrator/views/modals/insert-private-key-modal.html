@@ -2,6 +2,9 @@
     <h4 class="modal-title">{{'INSTALL_PRIVATE_KEY' | translate }}</h4>
     <span id="status"></span>
     <progress value="0" max="100" id="progress" hidden=1></progress>
+    <progressbar value="progressValue" max="100" min="0" class="progress-striped active" type="success" animate="true" ng-show="statusInProgress">
+        {{progressValue}}%
+    </progressbar>
 </div>
 <div class="modal-body">
     <form name="insertPKeyForm" class="form-group" id="installPKeyForm" novalidate>

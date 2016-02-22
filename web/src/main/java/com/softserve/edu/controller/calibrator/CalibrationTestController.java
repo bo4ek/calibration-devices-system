@@ -529,7 +529,7 @@ public class CalibrationTestController {
 
             response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
             response.setHeader("Content-Length", String.valueOf(documentByteArray.length));
-            response.setHeader("Content-Disposition", "inline; filename=" + file.getName().getBaseName() + ".docx");
+            response.setHeader("Content-Disposition", "attachment; filename=" + file.getName().getBaseName() + ".docx");
 
             os = response.getOutputStream();
             os.write(documentByteArray);

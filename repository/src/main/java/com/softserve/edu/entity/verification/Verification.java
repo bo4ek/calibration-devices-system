@@ -143,6 +143,9 @@ public class Verification implements Comparable {
     @Column(columnDefinition = "boolean default false")
     private boolean signed;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean parsed;
+
     @Lob
     @Column(length = 100000)
     private byte[] signedDocument;

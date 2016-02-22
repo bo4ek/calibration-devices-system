@@ -19,13 +19,13 @@ angular
                 $modalInstance.dismiss('cancel');
             };
 
-
-
             $scope.parentScope = parentScope;
             $scope.fileToSign = aFile;
             $scope.signedFile = false;
             $scope.disableOk = true;
             $scope.disableRead = false;
+            $scope.progressValue = 0;
+            $scope.statusInProgress = false;
 
             $scope.fileNameChanged = function (element) {
                 $scope.$apply(function ($scope) {
@@ -33,10 +33,12 @@ angular
                 });
             };
             $scope.privateKeyPassword = null;
-            $scope.EU_ERROR_CERT_NOT_FOUND = 0x0033;
 
             $scope.readPrivateKeyButtonClick = function () {
-
+                $scope.statusInProgress = true;
+                for (var i = 0; i < 91; i++) {
+                    $scope.progressValue = i;
+                }
                 var onError = function (message) {
                     setStatus('');
                     alert(message);
@@ -45,11 +47,17 @@ angular
                 var onSuccess = function (keyName, key) {
                     initializeLibForDigitalSign.getReadPrivateKey(keyName, new Uint8Array(key),
                         $scope.privateKeyPassword, null, false);
-                    $scope.signFile();
+                    if (document.getElementById('PKeyReadButton').innerHTML == 'Зчитано') {
+                        $scope.progressValue = 95;
+                        $scope.signFile();
+                        $scope.progressValue = 100;
+                        $scope.statusInProgress = false;
+                    }
+
+
                 };
                 if (document.getElementById('PKeyReadButton').title == 'Read') {
-                    setStatus('reading key');
-
+                    setStatus('reading key...');
                     if ($scope.privateKeyPassword == null) {
                         onError('No password!');
                         return;
@@ -64,11 +72,6 @@ angular
 
 
             $scope.signFile = function () {
-                if ($scope.fileToSign.size > Module.MAX_DATA_SIZE) {
-                    alert("Розмір файлу для піпису занадто великий");
-                    return;
-                }
-
                 var fileReader = new FileReader();
 
                 fileReader.onloadend = (function () {
@@ -77,13 +80,11 @@ angular
                             return;
                         var isAddCert = false;
                         var data = new Uint8Array(evt.target.result);
-
-
                         try {
                             $scope.signedFileArray = initializeLibForDigitalSign.getEuSign().SignDataInternal(isAddCert, data, false);
                             $scope.signedFileBlob = new Blob([$scope.signedFileArray], {type: 'application/octet-stream' });
                             $scope.signedFileBlob.lastModifiedDate;
-                            $scope.signedFileBlob.name = parentScope.testId + ".p7s";
+                            $scope.signedFileBlob.name = parentScope.testId;
                             $scope.signedFile = true;
                             $scope.info = "Файл успішно підписано";
                             $scope.disableOk = false;
@@ -95,7 +96,7 @@ angular
                     };
                 })($scope.fileToSign.name);
 
-                setStatus('signing file');
+                setStatus('signing file...');
                 fileReader.readAsArrayBuffer($scope.fileToSign);
 
             };

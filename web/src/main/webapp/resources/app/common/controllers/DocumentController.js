@@ -1,12 +1,42 @@
 angular
     .module('employeeModule')
-    .controller('DocumentController', ['$rootScope', '$scope', '$sce', '$http', '$modal', 'DocumentService', 'toaster', '$filter', function ($rootScope, $scope, $sce, $http, $modal, documentService, toaster, $filter) {
+    .controller('DocumentController', ['$rootScope', '$scope', '$sce', '$http', '$modal', 'DocumentService', 'toaster', '$filter', 'InitializeLibForDigitalSign', function ($rootScope, $scope, $sce, $http, $modal, documentService, toaster, $filter, initializeLibForDigitalSign) {
         $scope.downloadDocument = function (documentType, verificationId, fileFormat) {
+            var message = null;
             documentService.isSignedCertificate(verificationId).then(
                 function (result) {
                     if (result.data) {
-                        var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
-                        location.href = url;
+                        documentService.isParsedCertificate(verificationId).then(
+                            function (response) {
+                                if (!response.data) {
+
+                                    if (!initializeLibForDigitalSign.isInitialized()) {
+                                        initializeLibForDigitalSign.initializeWithoutSelectCA();
+                                    }
+                                    if (fileFormat == 'pdf') var fileFormatTemp = 'docx';
+                                    documentService.getDocument(documentType, verificationId, fileFormatTemp).then(
+                                        function (file) {
+                                            var resObj = initializeLibForDigitalSign.getVerifySign(file.data);
+                                            message = resObj.notice;
+                                            var originalFile = new Blob([resObj.resultData], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+                                            console.log(originalFile);
+                                            documentService.addSignToDocument(documentType, verificationId, fileFormat, originalFile, message).then(
+                                                function (file) {
+                                                    console.log(file);
+                                                    var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
+                                                    location.href = url;
+                                                    toaster.pop('success', $filter('translate')('INFORMATION'), 'Підпис успішно перевірено!\n' + message);
+                                                }
+                                            );
+                                        }
+                                    )
+                                } else {
+                                    var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
+                                    location.href = url;
+                                    toaster.pop('success', $filter('translate')('INFORMATION'), 'Підпис успішно перевірено!');
+                                }
+                            }
+                        )
                     } else {
                         toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_DOWNLOAD_UNSIGNED_DOCUMENT'));
                     }
