@@ -217,7 +217,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
             } catch (MismatchBbiFilesNamesException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
-                logger.error("File is not found");
+                logger.error("Mismatch of bbi file names");
             } catch (FileAlreadyExistsException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
                 logger.error("BBI file is already in database");
@@ -423,7 +423,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 //        if (deviceType == null){
 //            throw new InvalidDeviceTypeIdException();
 //        }
-        return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, true).getId();
+        return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, Constants.DEFAULT_DEVICE).getId();
     }
 
     private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) throws InvalidDeviceTypeIdException {
