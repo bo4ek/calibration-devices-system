@@ -270,8 +270,7 @@ public class OrganizationController {
                     organization.getFirstName(),
                     organization.getLastName(),
                     organization.getMiddleName(),
-                    adminName,
-                    organization.getServiceAreas());
+                    adminName, organization.getServiceAreas());
 
         } catch (UnsupportedEncodingException | MessagingException e) {
             logger.error("Got exception while editing organization ", e);

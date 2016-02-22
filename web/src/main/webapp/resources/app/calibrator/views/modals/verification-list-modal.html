@@ -82,10 +82,12 @@
                                         <td data-title="'ACTIONS' | translate" class="text-center">
                                             <div class="btn-group-vertical">
                                                 <button type="button" class="btn btn-warning"
+                                                        ng-hide="verification.status == 'TEST_COMPLETED' "
                                                         ng-click="openEditVerificationModal(verification.verificationId)">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </button>
                                                 <button type="button" class="btn btn-danger"
+                                                        ng-hide="verification.status == 'TEST_COMPLETED' "
                                                         ng-click="removeVerificationFromTask(verification.verificationId)">
                                                     <span class="glyphicon glyphicon-remove"></span>
                                                 </button>

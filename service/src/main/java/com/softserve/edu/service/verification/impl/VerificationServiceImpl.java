@@ -31,12 +31,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.text.Collator;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -355,12 +352,16 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                                       String streetToSearch, String status, String employeeName, String nameProvider, String nameCalibrator, String lastName, String firstName, String middleName, String district, String building, String flat, String sortCriteria, String sortOrder, User verificatorEmployee) {
+    public ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String status, String nameProvider,
+                                                                                                       String nameCalibrator, String numberOfCounter, String numberOfProtocol, String sentToVerificatorDate, String serialNumber,
+                                                                                                       String sortCriteria, String sortOrder, User verificatorEmployee) {
 
-        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorVerificator.buildSearchQuery(verificatorId, dateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, verificatorEmployee, nameProvider, nameCalibrator, lastName, firstName, middleName, district, building, flat, sortCriteria, sortOrder, employeeName, em);
+        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorVerificator.buildSearchQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, sortCriteria, sortOrder, em);
 
-        Long count = em.createQuery(NewVerificationsQueryConstructorVerificator.buildCountQuery(verificatorId, dateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, verificatorEmployee, nameProvider, nameCalibrator, lastName, firstName, middleName, district, building, flat, employeeName, em)).getSingleResult();
+        Long count = em.createQuery(NewVerificationsQueryConstructorVerificator.buildCountQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter,
+                numberOfProtocol, sentToVerificatorDate, serialNumber, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
@@ -500,6 +501,7 @@ public class VerificationServiceImpl implements VerificationService {
             verification.setSentToCalibratorDate(new Date());
         } else if (status.equals(Status.SENT_TO_VERIFICATOR)) {
             verification.setStateVerificator(oraganization);
+            verification.setSentToVerificatorDate(new Date());
         } else if ((status.equals(Status.TEST_OK)) || (status.equals(Status.TEST_NOK))) {
             verification.setProvider(oraganization);
         } else if (status.equals((Status.SENT_TO_PROVIDER))) {
@@ -750,7 +752,7 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence,
                             Long dateOfDismantled, Long dateOfMounted, String numberCounter, String releaseYear,
-                            String symbol, String standardSize, String comment, Long deviceId) {
+                            String accumulatedVolume, String symbol, String standardSize, String comment, Long deviceId) {
         Verification verification = verificationRepository.findOne(verificationId);
 
         verification.setCounterStatus(dismantled);
@@ -765,7 +767,7 @@ public class VerificationServiceImpl implements VerificationService {
             counter.setDateOfMounted(dateOfMounted);
             counter.setNumberCounter(numberCounter);
             counter.setReleaseYear(releaseYear);
-
+            counter.setAccumulatedVolume(accumulatedVolume);
             if (counterType != null) {
                 counter.setCounterType(counterType);
             }
@@ -879,7 +881,9 @@ public class VerificationServiceImpl implements VerificationService {
         return counterTypeRepository.findOneBySymbolAndStandardSizeAndDeviceId(symbol, standardSize, deviceId);
     }
 
+    //todo This method should be replaced by method "saveVerificationCustom"
     @Override
+    @Deprecated
     public String getNewVerificationDailyIdByDeviceType(Date date, Device.DeviceType deviceType) {
         String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(date)) + deviceType.getId();
         String countPart = String.format("%04d", verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(date,
@@ -888,9 +892,32 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
+    @Transactional
+    public synchronized List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType) {
+        List<String> verificationIds = new ArrayList<>();
+
+        String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
+        long count = verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(verification.getInitialDate(), deviceType);
+
+        for (byte i = 0; i < quantity; i++) {
+            String id = datePart + String.format("%04d", count += 1);
+            verification.setId(id);
+            verificationRepository.save(verification);
+            verificationIds.add(id);
+        }
+        return verificationIds;
+    }
+
+    @Override
     public Long findCountOfNewNotStandardVerificationsByCalibratorId(Long calibratorId) {
         return verificationRepository.countByCalibratorIdAndStatusAndReadStatus(
                 calibratorId, Status.CREATED_BY_CALIBRATOR, Verification.ReadStatus.UNREAD);
+    }
+
+    @Override
+    public Long findCountOfNewVerificationsForProviderByCalibratorId(Long calibratorId) {
+        return verificationRepository.countByCalibratorIdAndStatusAndReadStatus(
+                calibratorId, Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD);
     }
 
     @Override
@@ -910,7 +937,7 @@ public class VerificationServiceImpl implements VerificationService {
         if ((sortCriteria != null) && (sortOrder != null)) {
             cq.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(verifications, cb, sortOrder));
         } else {
-            cq.orderBy(cb.desc(verifications.get("providerFromBBI")));
+            cq.orderBy(cb.desc(verifications.get("initialDate")));
         }
         cq.where(cb.and(cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee),
                 cb.equal(verifications.get("status"), status)));
@@ -958,8 +985,12 @@ public class VerificationServiceImpl implements VerificationService {
 
         Verification verification = verificationRepository.findOne(verificationId);
         verification.setRejectedMessage(rejectMessage);
-        verification.setStatus(Status.CREATED_BY_CALIBRATOR);
-        verification.setProvider(null);
+        if (verification.getProviderFromBBI() != null) {
+            verification.setStatus(Status.CREATED_BY_CALIBRATOR);
+            verification.setProvider(null);
+        } else {
+            verification.setStatus(Status.CREATED_FOR_PROVIDER);
+        }
         verificationRepository.save(verification);
 
     }
@@ -973,8 +1004,11 @@ public class VerificationServiceImpl implements VerificationService {
      */
     @Override
     @Transactional
-    public Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType) {
-        return counterTypeRepository.findSymbolByStandardSizeAndDeviceType(standardSize, deviceType);
+    public List<String> findSortedSymbolsByStandardSizeAndDeviceType(String standardSize, String deviceType) {
+        Collator collator = Collator.getInstance(new Locale("uk", "UA"));
+        List<String> listOfSymbols = counterTypeRepository.findSymbolsByStandardSizeAndDeviceType(standardSize, deviceType);
+        Collections.sort(listOfSymbols, collator);
+        return listOfSymbols;
     }
 
     /**

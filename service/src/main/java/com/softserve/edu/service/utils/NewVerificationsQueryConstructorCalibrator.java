@@ -101,6 +101,7 @@
 				countQuery.where(predicate);
 				return countQuery;
 				}
+
 		/**
 		 * Method builds list of predicates depending on parameters passed
 		 * Rule for predicates compounding - conjunction (AND)

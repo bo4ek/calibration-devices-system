@@ -33,7 +33,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("minute", readLongValueReversed(Constants.ONE_BYTE)); //0x800005
         resultMap.put("second", readLongValueReversed(Constants.ONE_BYTE)); //0x800006
         resultMap.put("dayOfWeek", readLongValueReversed(Constants.ONE_BYTE)); //0x800007
-        resultMap.put("unixTime", readLongValueReversed(Constants.FOUR_BYTES) * 1000); //0x800008 + 0x04
+        resultMap.put("unixTime", readLongValueReversed(Constants.FOUR_BYTES) * Constants.THOUSAND_INT); //0x800008 + 0x04
         resultMap.put("regStart", readConsecutiveBytesReversed(Constants.FOUR_BYTES)); //0x80000c + 0x04
         count = reader.skip(Constants.FOUR_BYTES); //0x800010 + 0x04
         resultMap.put("temperature", readLongValueReversed(Constants.FOUR_BYTES)); //0x800014 + 0x04
@@ -48,8 +48,8 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("regControl", readConsecutiveBytesReversed(Constants.FOUR_BYTES)); //0x800040 + 0x04
         resultMap.put("installmentNumber", readLongValueReversed(Constants.FOUR_BYTES)); //0x800044 + 0x04
         resultMap.put("currentCounterNumber", readConsecutiveBytesAsUTF8(Constants.TWELVE_BYTES));
-        resultMap.put("latitude", readLongValueReversed(Constants.FOUR_BYTES) / 100000.0);  //0x800054+0x04
-        resultMap.put("longitude", readLongValueReversed(Constants.FOUR_BYTES) / 100000.0); //0x800058+0x04
+        resultMap.put("latitude", readLongValueReversed(Constants.FOUR_BYTES) / Constants.ONE_HUNDER_THOUSANDS_DOUBLE);  //0x800054+0x04
+        resultMap.put("longitude", readLongValueReversed(Constants.FOUR_BYTES) / Constants.ONE_HUNDER_THOUSANDS_DOUBLE); //0x800058+0x04
         resultMap.put("impulsePricePerLitre", readLongValueReversed(Constants.FOUR_BYTES)); //0x80005c+0x04
         resultMap.put("initialCapacity", readConsecutiveBytesAsUTF8(Constants.EIGHT_BYTES)); //0x800060+0x08
         resultMap.put("counterType1", readConsecutiveBytesAsUTF8(Constants.SIXTEEN_BYTES)); //0x800068+0x10
@@ -69,7 +69,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         count = reader.skip(Constants.SKIP_TO_IMAGES); //go to images
 
         resultMap.put("testPhoto", readImageBase64());
-        for (int i = 0; i < 12; ++i) {
+        for (int i = 0; i < Constants.TWELVE_BYTES; ++i) {
             String imageKey = "test" + (i / 2 + 1) + (i % 2 == 0 ? "begin" : "end") + "Photo";
             resultMap.put(imageKey, readImageBase64());
         }
@@ -142,18 +142,18 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("test" + testIndex + "specifiedConsumption", readLongValueReversed(Constants.FOUR_BYTES)); //0x800100+0x04
         resultMap.put("test" + testIndex + "lowerConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800104+0x04
         resultMap.put("test" + testIndex + "upperConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800108+0x04
-        resultMap.put("test" + testIndex + "allowableError", readLongValueReversed(Constants.FOUR_BYTES) / 10); //0x80010с+0x04
-        resultMap.put("test" + testIndex + "specifiedImpulsesAmount", readLongValueReversed(Constants.FOUR_BYTES) / 10000.0); //0x800110+0x04
-        resultMap.put("test" + testIndex + "correctedCumulativeImpulsesValue", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800114+0x04
-        resultMap.put("test" + testIndex + "correctedCurrentConsumption", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800118+0x04
-        resultMap.put("test" + testIndex + "cumulativeImpulsesValueWithoutCorrection", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x80011с+0x04
-        resultMap.put("test" + testIndex + "currentConsumptionWithoutCorrection", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800120+0x04
+        resultMap.put("test" + testIndex + "allowableError", readLongValueReversed(Constants.FOUR_BYTES) / Constants.TEN); //0x80010с+0x04
+        resultMap.put("test" + testIndex + "specifiedImpulsesAmount", readLongValueReversed(Constants.FOUR_BYTES) / Constants.TEN_THOUSANDS_DOUBLE); //0x800110+0x04
+        resultMap.put("test" + testIndex + "correctedCumulativeImpulsesValue", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND_DOUBLE); //0x800114+0x04
+        resultMap.put("test" + testIndex + "correctedCurrentConsumption", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND_DOUBLE); //0x800118+0x04
+        resultMap.put("test" + testIndex + "cumulativeImpulsesValueWithoutCorrection", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND_DOUBLE); //0x80011с+0x04
+        resultMap.put("test" + testIndex + "currentConsumptionWithoutCorrection", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND_DOUBLE); //0x800120+0x04
         resultMap.put("test" + testIndex + "estimatedError", readLongValueReversed(Constants.FOUR_BYTES)); //0x800124+0x04
-        resultMap.put("test" + testIndex + "initialCounterValue", readLongValueReversed(Constants.FOUR_BYTES) / 10000.0); //0x800128+0x04
-        resultMap.put("test" + testIndex + "terminalCounterValue", readLongValueReversed(Constants.FOUR_BYTES) / 10000.0); //0x80012с+0x04
+        resultMap.put("test" + testIndex + "initialCounterValue", readLongValueReversed(Constants.FOUR_BYTES) / Constants.TEN_THOUSANDS_DOUBLE); //0x800128+0x04
+        resultMap.put("test" + testIndex + "terminalCounterValue", readLongValueReversed(Constants.FOUR_BYTES) / Constants.TEN_THOUSANDS_DOUBLE); //0x80012с+0x04
         resultMap.put("test" + testIndex + "unixTestBeginTime", readLongValueReversed(Constants.FOUR_BYTES)); //0x800130+0x04
         resultMap.put("test" + testIndex + "unixTestEndTime", readLongValueReversed(Constants.FOUR_BYTES)); //0x800134+0x04
-        resultMap.put("test" + testIndex + "testDuration", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND); //0x800138+0x04
+        resultMap.put("test" + testIndex + "testDuration", readLongValueReversed(Constants.FOUR_BYTES) / Constants.THOUSAND_DOUBLE); //0x800138+0x04
         resultMap.put("test" + testIndex + "correctionFactor", readLongValueReversed(Constants.FOUR_BYTES)); //0x80013с+0x04
         resultMap.put("test" + testIndex + "minConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800140+0x04
         resultMap.put("test" + testIndex + "maxConsumptionLimit", readLongValueReversed(Constants.FOUR_BYTES)); //0x800144+0x04

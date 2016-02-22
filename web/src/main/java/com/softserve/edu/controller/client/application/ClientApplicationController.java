@@ -22,6 +22,8 @@ import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,35 +67,43 @@ public class ClientApplicationController {
      */
     @ResponseBody
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public List<String> saveApplication(@RequestBody ClientStageVerificationDTO verificationDTO) {
+    public ResponseEntity saveApplication(@RequestBody ClientStageVerificationDTO verificationDTO) {
+        HttpStatus httpStatus = HttpStatus.CREATED;
         List<String> verificationIds = new ArrayList<>();
-        ClientData clientData = new ClientData(verificationDTO.getFirstName(),
-                verificationDTO.getLastName(),
-                verificationDTO.getMiddleName(),
-                verificationDTO.getEmail(),
-                verificationDTO.getPhone(),
-                verificationDTO.getSecondPhone(),
-                new Address(verificationDTO.getRegion(),
-                        verificationDTO.getDistrict(),
-                        verificationDTO.getLocality(),
-                        verificationDTO.getStreet(),
-                        verificationDTO.getBuilding(),
-                        verificationDTO.getFlat())
-        );
+        try {
+            ClientData clientData = new ClientData(verificationDTO.getFirstName(),
+                    verificationDTO.getLastName(),
+                    verificationDTO.getMiddleName(),
+                    verificationDTO.getEmail(),
+                    verificationDTO.getPhone(),
+                    verificationDTO.getSecondPhone(),
+                    new Address(verificationDTO.getRegion(),
+                            verificationDTO.getDistrict(),
+                            verificationDTO.getLocality(),
+                            verificationDTO.getStreet(),
+                            verificationDTO.getBuilding(),
+                            verificationDTO.getFlat(),
+                            verificationDTO.getMailIndex())
+            );
 
-        Organization provider = providerService.findById(verificationDTO.getProviderId());
-        Device device = deviceService.getById(verificationDTO.getDeviceId());
+            Organization provider = providerService.findById(verificationDTO.getProviderId());
+            Device device = deviceService.getById(verificationDTO.getDeviceId());
 
-        for (int i = 0; i < verificationDTO.getQuantity(); i++) {
-            String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
             Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
-                    Status.SENT, Verification.ReadStatus.UNREAD, null, verificationDTO.getComment(), verificationId);
-            verificationService.saveVerification(verification);
+                    Status.SENT, Verification.ReadStatus.UNREAD, null, verificationDTO.getComment(), null);
+
+            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
+
+            logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by unauthorized user");
+
             String name = clientData.getFirstName() + " " + clientData.getLastName();
-            mail.sendMail(clientData.getEmail(), name, verification.getId(), verification.getProvider().getName(), verification.getDevice().getDeviceType().toString());
-            verificationIds.add(verification.getId());
+            mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), provider.getName(), device.getDeviceType().toString());
+        } catch (Exception e) {
+            logger.error("Exception while inserting verifications by unauthorized user into DB ", e);
+            httpStatus = HttpStatus.CONFLICT;
+            return new ResponseEntity<>(verificationIds, httpStatus);
         }
-        return verificationIds;
+        return new ResponseEntity<>(verificationIds, httpStatus);
     }
 
     @RequestMapping(value = "check/{verificationId}", method = RequestMethod.GET)

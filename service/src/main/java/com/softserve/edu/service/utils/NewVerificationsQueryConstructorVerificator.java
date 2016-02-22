@@ -9,12 +9,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.apache.log4j.Logger;
 
@@ -43,33 +38,35 @@ public class NewVerificationsQueryConstructorVerificator {
      * 		search by initial date of verification (optional)
      * @param idToSearch
      * 		search by verification ID
-     * @param fullNameToSearch
-     * 		search by client's last name
-     * @param streetToSearch
-     * 		search by client's street
      * @param verificatorEmployee
      * 		used to additional query restriction if logged user is simple employee (not admin)
      * @param em
      * 		EntityManager needed to have a possibility to create query
      * @return CriteriaQuery<Verification>
      */
-    public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String dateToSearch, String idToSearch, String fullNameToSearch, String streetToSearch, String status,
-                                                               User verificatorEmployee,  String nameProvider,String nameCalibrator, String lastName, String firstName, String middleName,String district, String building, String flat, String sortCriteria, String sortOrder, String employeeSearchName, EntityManager em) {
+    public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String dateToSearch, String idToSearch, String status,
+                                                               User verificatorEmployee,  String nameProvider,String nameCalibrator, String numberOfCounter,
+                                                               String numberOfProtocol,
+                                                               String sentToVerificatorDate, String serialNumber, String sortCriteria, String sortOrder, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
         Root<Verification> root = criteriaQuery.from(Verification.class);
         Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
 
-        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch, fullNameToSearch,
-                streetToSearch, status, verificatorEmployee, nameProvider, nameCalibrator, lastName, firstName, middleName, district, building, flat, employeeSearchName);
-        if((sortCriteria != null)&&(sortOrder != null)) {
-			criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
-		} else {
-			criteriaQuery.orderBy(cb.desc(root.get("initialDate")));
-		}
+        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch,
+                status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
+                numberOfProtocol, sentToVerificatorDate, serialNumber);
+
+        if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
+            criteriaQuery.orderBy(cb.desc(root.get("sentToVerificatorDate")),cb.desc(root.get("initialDate")),
+                    cb.asc((root.get("calibrationModule").get("serialNumber"))), cb.asc(root.get("numberOfProtocol")));
+        } else if ((sortCriteria != null) && (sortOrder != null)) {
+            criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
+        }
         criteriaQuery.select(root);
         criteriaQuery.where(predicate);
+
         return criteriaQuery;
     }
 
@@ -77,7 +74,6 @@ public class NewVerificationsQueryConstructorVerificator {
      * Method dynamically builds query to database depending on input parameters specified.
      * Needed to get max count of rows with current predicates for pagination
      *
-     * @param lastNameToSearch
      * 		search by client's last name
      * @param verificatorID
      * 		search by organization ID
@@ -85,44 +81,37 @@ public class NewVerificationsQueryConstructorVerificator {
      * 		search by initial date of verification (optional)
      * @param idToSearch
      * 		search by verification ID
-     * @param fullNameToSearch
-     *@param streetToSearch
      * 		search by client's street
      * @param verificatorEmployee
  * 		used to additional query restriction if logged user is simple employee (not admin)
      * @param em
 * 		EntityManager needed to have a possibility to create query    @return CriteriaQuery<Long>
      */
-    public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String dateToSearch, String idToSearch, String fullNameToSearch, String streetToSearch, String status,
-                                                      User verificatorEmployee, String nameProvider, String nameCalibrator,String lastName, String firstName, String middleName, String district, String building, String flat, String employeeSearchName, EntityManager em) {
+    public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String dateToSearch, String idToSearch, String status,
+                                                      User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
+                                                      String numberOfProtocol,
+                                                      String sentToVerificatorDate, String serialNumber, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Verification> root = countQuery.from(Verification.class);
         Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
-        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch, fullNameToSearch,
-                 streetToSearch, status, verificatorEmployee, nameProvider, nameCalibrator,lastName, firstName, middleName, district, building, flat, employeeSearchName);
+        Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, dateToSearch, idToSearch,
+                status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
+                numberOfProtocol, sentToVerificatorDate, serialNumber);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
         return countQuery;
     }
+
     /**
      * Method builds list of predicates depending on parameters passed
      * Rule for predicates compounding - conjunction (AND)
-     *
-     * @param verificatorID
-     * @param root
-     * @param cb
-     * @param joinSearch
-     * @param dateToSearch
-     * @param idToSearch
-     * @param fullNameToSearch
-     * @param streetToSearch
-     * @param verificatorEmployee
-     * @return Predicate
      */
     private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long verificatorId,
-                                            String dateToSearch, String idToSearch, String fullNameToSearch, String street, String status, User verificatorEmployee, String nameProvider, String nameCalibrator, String lastName, String firstName, String middleName, String district, String building, String flat, String employeeSearchName) {
+                                            String dateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
+                                            String numberOfCounter, String numberOfProtocol,
+                                            String sentToVerificatorDate, String serialNumber) {
 
         String userName = verificatorEmployee.getUsername();
         Predicate queryPredicate = cb.conjunction();
@@ -159,47 +148,12 @@ public class NewVerificationsQueryConstructorVerificator {
             queryPredicate = cb.and(cb.equal(root.get("initialDate"), java.sql.Date.valueOf(date)), queryPredicate);
         }
 
+
+
         if ((idToSearch != null)&&(idToSearch.length()>0)) {
             queryPredicate = cb.and(cb.like(root.get("id"), "%" + idToSearch + "%"), queryPredicate);
         }
 
-        if (lastName != null && lastName.length() > 0) {
-            queryPredicate = cb.and(cb.like(root.get("clientData").get("lastName"), "%" + lastName + "%"), queryPredicate);
-            if (firstName != null && firstName.length() > 0) {
-                queryPredicate = cb.and(cb.like(root.get("clientData").get("firstName"), "%" + firstName + "%"), queryPredicate);
-            }
-            if (middleName != null && middleName.length() > 0) {
-                queryPredicate = cb.and(cb.like(root.get("clientData").get("middleName"), "%" + middleName + "%"), queryPredicate);
-            }
-        } else if (lastName == null && fullNameToSearch != null && fullNameToSearch.length() > 0) {
-            Predicate searchByClientFirstName = cb.like(root.get("clientData").get("firstName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientLastName = cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientMiddleName = cb.like(root.get("clientData").get("middleName"), "%" + fullNameToSearch + "%");
-            Predicate searchPredicateByClientFullName = cb.or(searchByClientFirstName, searchByClientLastName, searchByClientMiddleName);
-            queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
-        }
-
-        if (district != null && district.length() > 0) {
-            queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("district"), "%" + district + "%"), queryPredicate);
-            if (street != null && street.length() > 0) {
-                queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("street"), "%" + street + "%"), queryPredicate);
-            }
-            if (building != null && building.length() > 0) {
-                queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"), queryPredicate);
-            }
-            if (flat != null && flat.length() > 0) {
-                queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("flat"), "%" + flat + "%"), queryPredicate);
-            }
-        }
-
-        if ((employeeSearchName != null)&&(employeeSearchName.length()>0)) {
-			Join<Verification, User> joinCalibratorEmployee = root.join("stateVerificatorEmployee");
-			Predicate searchByProviderName = cb.like(joinCalibratorEmployee.get("firstName"),"%" + employeeSearchName + "%");
-			Predicate searchByProviderSurname = cb.like(joinCalibratorEmployee.get("lastName"),"%" + employeeSearchName + "%");
-			Predicate searchByProviderLastName = cb.like(joinCalibratorEmployee.get("middleName"),"%" + employeeSearchName + "%");
-			Predicate searchPredicateByProviderEmployeeName = cb.or(searchByProviderName, searchByProviderSurname, searchByProviderLastName);
-			queryPredicate = cb.and(searchPredicateByProviderEmployeeName, queryPredicate);
-		}
         if (nameProvider != null && nameProvider.length() > 0) {
             queryPredicate = cb.and(
                     cb.like(root.get("provider").get("name"), "%" + nameProvider + "%"),
@@ -208,6 +162,24 @@ public class NewVerificationsQueryConstructorVerificator {
         if ((nameCalibrator != null) && (nameCalibrator.length() > 0)) {
             queryPredicate = cb.and(
                     cb.like(root.get("calibrator").get("name"), "%" + nameCalibrator + "%"),
+                    queryPredicate);
+        }
+
+        if ((numberOfCounter != null) && (numberOfCounter.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("counter").get("numberCounter"), "%" + numberOfCounter + "%"),
+                    queryPredicate);
+        }
+
+        if ((numberOfProtocol != null) && (numberOfProtocol.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("numberOfProtocol"), "%" + numberOfProtocol + "%"),
+                    queryPredicate);
+        }
+
+        if ((serialNumber != null) && (serialNumber.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("calibrationModule").get("serialNumber"), "%" + serialNumber + "%"),
                     queryPredicate);
         }
 

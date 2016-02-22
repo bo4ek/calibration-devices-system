@@ -34,11 +34,13 @@ import java.util.*;
 @Service
 public class CalibrationTestServiceImpl implements CalibrationTestService {
 
+    private static final int POSITION_OF_PROTOCOL = 6;
+
     @Value("${photo.storage.local}")
     private String localStorage;
 
     @Autowired
-    private CalibrationTestRepository testRepository;
+    private CalibrationTestRepository calibrationTestRepository;
     @Autowired
     private CalibrationTestDataService testDataService;
     @Autowired
@@ -72,7 +74,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         ImageIO.write(buffered, Constants.IMAGE_TYPE, new File(absolutePath));
         calibrationTest.setPhotoPath(testPhoto);
 
-        testRepository.save(calibrationTest);
+        calibrationTestRepository.save(calibrationTest);
 
         for (int testDataId = 1; testDataId <= Constants.TEST_COUNT; testDataId++) {
             if (!deviceTestData.getBeginPhoto(testDataId).equals("")) { // if there is no photo there is now test data
@@ -89,11 +91,13 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
                 }
             }
         }
-        testRepository.save(calibrationTest);
+        calibrationTestRepository.save(calibrationTest);
         verification.setStatus(Status.TEST_COMPLETED);
 
         CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
         verification.setCalibrationModule(moduleId);
+        verification.setNumberOfProtocol(deviceTestData.getFileName().substring(POSITION_OF_PROTOCOL,
+                deviceTestData.getFileName().indexOf('.')));
         verificationRepository.save(verification);
         return calibrationTest.getId();
     }
@@ -101,19 +105,19 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Override
     @Transactional
     public CalibrationTest findTestById(Long testId) {
-        return testRepository.findOne(testId);
+        return calibrationTestRepository.findOne(testId);
     }
 
     @Override
     @Transactional
     public CalibrationTest findByVerificationId(String verifId) {
-        return testRepository.findByVerificationId(verifId);
+        return calibrationTestRepository.findByVerificationId(verifId);
     }
 
     @Override
     @Transactional
     public CalibrationTestList findAllCalibrationTests() {
-        List<CalibrationTest> list = (ArrayList<CalibrationTest>) testRepository.findAll();
+        List<CalibrationTest> list = (ArrayList<CalibrationTest>) calibrationTestRepository.findAll();
         return new CalibrationTestList(list);
     }
 
@@ -122,8 +126,8 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     public Page<CalibrationTest> getCalibrationTestsBySearchAndPagination(int pageNumber,
                                                                           int itemsPerPage, String search) {
         PageRequest pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);
-        return search.equalsIgnoreCase("null") ? testRepository.findAll(pageRequest) :
-                testRepository.findByNameLikeIgnoreCase("%" + search + "%", pageRequest);
+        return search.equalsIgnoreCase("null") ? calibrationTestRepository.findAll(pageRequest) :
+                calibrationTestRepository.findByNameLikeIgnoreCase("%" + search + "%", pageRequest);
     }
 
     @Override
@@ -131,7 +135,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     public CalibrationTest editTest(Long testId, String name, String capacity, Integer settingNumber,
                                     Double latitude, Double longitude, Verification.ConsumptionStatus consumptionStatus,
                                     Verification.CalibrationTestResult testResult) {
-        CalibrationTest calibrationTest = testRepository.findOne(testId);
+        CalibrationTest calibrationTest = calibrationTestRepository.findOne(testId);
         testResult = Verification.CalibrationTestResult.SUCCESS;
         calibrationTest.setName(name);
         calibrationTest.setCapacity(capacity);
@@ -145,13 +149,13 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Override
     @Transactional
     public void deleteTest(Long testId) {
-        testRepository.delete(testId);
+        calibrationTestRepository.delete(testId);
     }
 
     @Override
     @Transactional
     public void createTestData(Long testId, CalibrationTestData testData) {
-        CalibrationTest calibrationTest = testRepository.findOne(testId);
+        CalibrationTest calibrationTest = calibrationTestRepository.findOne(testId);
         testData.setCalibrationTest(calibrationTest);
         dataRepository.save(testData);
     }
@@ -159,7 +163,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Override
     @Transactional
     public CalibrationTestDataList findAllTestDataAsociatedWithTest(Long calibrationTestId) {
-        CalibrationTest calibrationTest = testRepository.findOne(calibrationTestId);
+        CalibrationTest calibrationTest = calibrationTestRepository.findOne(calibrationTestId);
         if (calibrationTest == null) {
             throw new NotAvailableException("Тесту з таким ID не існує!");
         } else {
@@ -230,7 +234,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     public CalibrationTest createNewCalibrationTest(Long testId, String name, String capacity, Integer settingNumber,
                                                     Double latitude, Double longitude) {
         Verification.CalibrationTestResult testResult;
-        CalibrationTest calibrationTest = testRepository.findOne(testId);
+        CalibrationTest calibrationTest = calibrationTestRepository.findOne(testId);
         testResult = Verification.CalibrationTestResult.SUCCESS;
         Date initial = new Date();
         calibrationTest.setName(name);
@@ -252,7 +256,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
             String statusToSend = statusReceived.equals(Status.TEST_OK) ? Constants.TEST_OK : Constants.TEST_NOK;
             verification.setStatus(statusReceived);
             mailService.sendPassedTestMail(verification.getClientData().getEmail(), verificationId, statusToSend);
-            if(verification.getProviderEmployee() != null) {
+            if (verification.getProviderEmployee() != null) {
                 mailService.sendPassedTestMail(verification.getProviderEmployee().getEmail(), verificationId, statusToSend);
             }
             verificationRepository.save(verification);

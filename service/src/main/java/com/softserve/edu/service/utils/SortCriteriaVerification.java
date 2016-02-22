@@ -2,9 +2,8 @@ package com.softserve.edu.service.utils;
 
 import com.softserve.edu.entity.verification.Verification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.function.Predicate;
 
 /**
  * @deprecated this class have a lot of repeated code <br/>
@@ -262,10 +261,60 @@ public enum SortCriteriaVerification {
 				return (cb.desc(root.get("clientData").get("clientAddress").get("district")));
 			}
 		}
+	},
+
+	NUMBER_OF_COUNTER() {
+		public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+			if (sortOrder.equalsIgnoreCase("asc")) {
+				return (cb.asc(root.get("counter").get("numberCounter")));
+			} else {
+				return (cb.desc(root.get("counter").get("numberCounter")));
+			}
+		}
+	},
+
+	SERIAL_NUMBER() {
+		public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+			if (sortOrder.equalsIgnoreCase("asc")) {
+				return (cb.asc(root.get("calibrationModule").get("serialNumber")));
+			} else {
+				return (cb.desc(root.get("calibrationModule").get("serialNumber")));
+			}
+		}
+	},
+
+	NUMBER_OF_PROTOCOL() {
+		public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+			if (sortOrder.equalsIgnoreCase("asc")) {
+				return (cb.asc(root.get("numberOfProtocol")));
+			} else {
+				return (cb.desc(root.get("numberOfProtocol")));
+			}
+		}
+	},
+
+	SENT_TO_VERIFICATOR_DATE() {
+		public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+
+			if(sortOrder.equalsIgnoreCase("asc")) {
+				return cb.asc(root.get("sentToVerificatorDate"));
+			} else {
+				return cb.desc(root.get("sentToVerificatorDate"));
+			}
+		}
+	},
+
+	COMMENT() {
+		public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+
+			if(sortOrder.equalsIgnoreCase("asc")) {
+				return cb.asc(root.get("comment"));
+			} else {
+				return cb.desc(root.get("comment"));
+			}
+		}
 	};
 
-
-	
 	 public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
 	    	return null;
 	    }

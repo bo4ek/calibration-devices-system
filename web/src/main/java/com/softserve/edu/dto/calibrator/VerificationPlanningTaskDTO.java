@@ -27,6 +27,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
     private String entrance;
     private String floor;
     private String notes;
+    private String status;
     private Date dateOfVerif;
     private LocalTime timeFrom;
     private LocalTime timeTo;
@@ -69,7 +70,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
 
     public VerificationPlanningTaskDTO(Date sentDate, String verificationId, String providerName, String district,
                                        String street, String building, String flat, String clientFullName,
-                                       String telephone, AdditionalInfo additionalInfo, int queue) {
+                                       String telephone, AdditionalInfo additionalInfo, int queue, String status) {
         this.sentToCalibrator = sentDate;
         this.verificationId = verificationId;
         this.providerName = providerName;
@@ -94,6 +95,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
             this.notes = additionalInfo.getNotes();
         }
         this.queue = queue;
+        this.status = status;
     }
 
     public VerificationPlanningTaskDTO(Date sentDate, String verificationID, String providerName, String fullName,

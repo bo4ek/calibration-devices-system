@@ -2,11 +2,12 @@
     <div class="modal-header">
         <h3 class="modal-title" id="myModalLabel">{{'TASK_TITLE' | translate}}
             <strong style="color: green;">{{verifId}}</strong></h3>
-        <h4 class="modal-title" ng-show="showSendingMessage"><strong style="color: red;">{{'SEND_MESSAGE' | translate}}</strong></h4>
+        <h4 class="modal-title" ng-show="showSendingMessage"><strong style="color: red;">{{'SEND_MESSAGE' |
+            translate}}</strong></h4>
     </div>
     <div class="modal-body">
         <form name="formTask" novalidate>
-            <p class="validation-message" ng-show="incorrectValue">{{'ERROR_VALIDATION' |  translate}}</p>
+            <p class="validation-message" ng-show="incorrectValue">{{'ERROR_VALIDATION' | translate}}</p>
             <!-- CALIBRATION PLACE -->
 
             <!-- Field of application (WATER or TERMAL) -->
@@ -15,18 +16,19 @@
                     <label class="control-label">{{'APPLICATION_FIELD' | translate}}</label>
                 </div>
                 <div class="form-group col-md-8">
-                    <select chosen data-placeholder="{{'CHOOSE_APPLICATION_FIELD'| translate}}" class="form-control" ng-model="calibrationTask.applicationFiled"
+                    <select chosen data-placeholder="{{'CHOOSE_APPLICATION_FIELD'| translate}}" class="form-control"
+                            ng-model="calibrationTask.applicationFiled"
                             class="col-xs-5 selectContainer"
                             id="applicationFiled" name="applicationFiled" allow-single-deselect="true"
                             disable-search="true" required>
                         <option type="text" value="THERMAL">Гаряча вода</option>
-                        <option type="text" value="WATER">Вода</option>
-                        <!--<option type="text" value="GASEOUS">Газ</option>-->
-                        <!--<option type="text" value="ELECTRICAL">Електрика</option>-->
+                        <option type="text" value="WATER">Холодна вода</option>
                     </select>
+
                     <div ng-show="formTask.$submitted || formTask.applicationFiled.$touched">
                         <div ng-show="formTask.applicationFiled.$error.required">
-                            <span style="color: red" class="glyphicon glyphicon-exclamation-sign"> </span>{{'REQUIRED' | translate}}
+                            <span style="color: red" class="glyphicon glyphicon-exclamation-sign"> </span>{{'REQUIRED' |
+                            translate}}
                         </div>
                     </div>
                 </div>
@@ -34,15 +36,15 @@
 
             <!-- DATE OF VISIT -->
             <div class="row">
-                <div class="form-group col-md-4" >
+                <div class="form-group col-md-4">
                     <label class="control-label">{{'DATE_OF_VISIT'| translate }}</label>
                 </div>
 
-                <div class="form-group col-md-8" ng-class="dateValidation.css" >
+                <div class="form-group col-md-8" ng-class="dateValidation.css">
                     <div class="input-group right-inner-addon" style="width: 100%">
                         <span class="input-group-btn" style="height: 100%">
                             <button type="button" class="btn btn-default myGroupBtn" ng-click="open1($event)">
-                                <i class="glyphicon glyphicon-calendar" ></i>
+                                <i class="glyphicon glyphicon-calendar"></i>
                             </button>
                         </span>
                         <input type="text" class="form-control date-picker" datepicker-popup
@@ -50,7 +52,7 @@
                                is-open="firstCalendar.isOpen"
                                min-date="minDate" max-date="maxDate"
                                datepicker-options="dateOptions"
-                               date-disabled="disabled(date, mode)" close-text="Close"
+                               close-text="Close"
                                ng-change="receiveTeams()" readonly required/>
                          <span class="input-group-btn">
                                <button type="button" class="btn btn-default myGroupBtn"
@@ -64,7 +66,8 @@
                     </div>
                     <div ng-show="formTask.$submitted || formTask.date.$touched">
                         <div ng-show="formTask.date.$error.required">
-                            <span style="color: red" class="glyphicon glyphicon-exclamation-sign"> </span>{{'REQUIRED' | translate}}
+                            <span style="color: red" class="glyphicon glyphicon-exclamation-sign"> </span>{{'REQUIRED' |
+                            translate}}
                         </div>
                     </div>
                 </div>
@@ -73,23 +76,26 @@
             <!-- MOUNTING CREW -->
             <div class="row" ng-hide="checkCounterStatus()">
                 <div class="form-group col-md-4">
-                     <label class="control-label">{{'MOUNTING_CREW' | translate}}</label>
+                    <label class="control-label">{{'MOUNTING_CREW' | translate}}</label>
                 </div>
-                    <div class="form-group col-md-8">
-                        <select chosen data-placeholder="{{'CHOOSE_MOUNTING_CREW'| translate}}" class="form-control" ng-model="calibrationTask.mountingCrew"
-                                 class="col-xs-5 selectContainer"
-                                 id="mountingCrew" name="mountingCrew"
-                                allow-single-deselect="true"
-                                disable-search="false"
-                                ng-options="option.teamNumber for option in teams | filter"
-                                required>
-                        </select>
-                        <div ng-show="formTask.$submitted || formTask.$touched">
-                            <div ng-show="formTask.$error.required">
-                                <span style="color: red" class="glyphicon glyphicon-exclamation-sign"> </span>{{'REQUIRED' | translate}}
-                            </div>
+                <div class="form-group col-md-8">
+                    <select chosen data-placeholder="{{'CHOOSE_MOUNTING_CREW'| translate}}" class="form-control"
+                            ng-model="calibrationTask.mountingCrew"
+                            class="col-xs-5 selectContainer"
+                            id="mountingCrew" name="mountingCrew"
+                            allow-single-deselect="true"
+                            disable-search="false"
+                            ng-options="option.teamNumber for option in teams | filter"
+                            required>
+                    </select>
+
+                    <div ng-show="formTask.$submitted || formTask.$touched">
+                        <div ng-show="formTask.$error.required">
+                            <span style="color: red" class="glyphicon glyphicon-exclamation-sign"> </span>{{'REQUIRED' |
+                            translate}}
                         </div>
-                     </div>
+                    </div>
+                </div>
             </div>
 
 

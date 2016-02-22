@@ -89,6 +89,9 @@ angular
             },
             getCountOfNewNotStandardVerifications: function (data) {
                 return getData('not-standard-verifications/new/count');
+            },
+            getCountOfNewVerificationsForProvider: function (data) {
+                return getData('not-standard-verifications/new/count/verificationsForProvider');
             }
         };
 

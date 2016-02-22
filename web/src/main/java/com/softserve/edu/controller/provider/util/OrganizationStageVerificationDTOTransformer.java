@@ -33,6 +33,7 @@ public class OrganizationStageVerificationDTOTransformer {
                 counter.getDateOfMounted().getTime() : null;
         String numberCounter = (counter != null) ? counter.getNumberCounter() : null;
         String releaseYear = (counter != null) ? counter.getReleaseYear() : null;
+        String accumulatedVolume = (counter != null) ? counter.getAccumulatedVolume() : null;
         String symbol = (counter != null && counter.getCounterType() != null)
                 ? counter.getCounterType().getSymbol() : null;
         String standardSize = (counter != null && counter.getCounterType() != null) ?
@@ -41,8 +42,9 @@ public class OrganizationStageVerificationDTOTransformer {
         Device.DeviceType deviceType = device.getDeviceType();
         Long deviceId = device.getId();
 
+
         return new OrganizationStageVerificationDTO(clientData, comment, address, verificationId, calibratorName, entrance, doorCode, floor, dateOfVerif,
                 serviceability, noWaterToDate, notes, timeFrom, timeTo, dismantled, dateOfDismantled, dateOfMounted, numberCounter,
-                releaseYear, symbol, standardSize, deviceName, sealPresence, deviceType, deviceId);
+                releaseYear, accumulatedVolume,symbol, standardSize, deviceName, sealPresence, deviceType, deviceId);
     }
 }

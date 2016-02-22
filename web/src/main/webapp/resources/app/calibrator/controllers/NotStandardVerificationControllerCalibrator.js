@@ -10,24 +10,31 @@ angular
         'ngTableParams',
         '$filter',
         'toaster',
+        '$location',
 
-        function ($rootScope, $scope, $log, $modal, verificationService, verificationServiceCalibrator, ngTableParams, $filter, toaster) {
+        function ($rootScope, $scope, $log, $modal, verificationService, verificationServiceCalibrator, ngTableParams, $filter, toaster, $location) {
             $scope.totalItems = 0;
             $scope.pageContent = [];
             $scope.tableParams = new ngTableParams({
                 page: 1,
                 count: 10,
                 sorting: {
-                    providerFromBBI: 'desc'
+                    client_last_name: 'desc'
                 }
             }, {
                 total: 0,
                 getData: function ($defer, params) {
+                    var status;
+                    if ($location.absUrl().indexOf("verifications-for-provider") != -1) {
+                        status = "CREATED_FOR_PROVIDER";
+                    } else {
+                        status = "CREATED_BY_CALIBRATOR";
+                    }
 
                     var sortCriteria = Object.keys(params.sorting())[0];
                     var sortOrder = params.sorting()[sortCriteria];
 
-                    verificationService.getPage(params.page(), params.count(), sortCriteria, sortOrder)
+                    verificationService.getPage(status, params.page(), params.count(), sortCriteria, sortOrder)
                         .success(function (result) {
                             $scope.resultsCount = result.totalItems;
                             $defer.resolve(result.content);
@@ -65,7 +72,7 @@ angular
             };
 
             $scope.openDetails = function (verificationId, verificationReadStatus) {
-                $modal.open({
+                var modalInstance = $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/calibrator/views/modals/new-verification-details.html',
                     controller: 'DetailsModalControllerCalibrator',
@@ -81,6 +88,9 @@ angular
                                 });
                         }
                     }
+                });
+                modalInstance.result.then(function () {
+                    $scope.tableParams.reload();
                 });
             };
 
@@ -135,5 +145,3 @@ angular
                 $scope.allIsEmpty = $scope.idsOfVerifications.length === 0;
             };
         }]);
-
-

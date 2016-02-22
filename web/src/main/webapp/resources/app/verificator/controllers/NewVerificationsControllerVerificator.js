@@ -24,11 +24,8 @@ angular
              */
             $scope.createManualTest = function (verification) {
                 var manualTest = {
-                    standardSize: verification.standardSize,
-                    symbol: verification.symbol,
                     realiseYear: verification.realiseYear,
-                    numberCounter: verification.numberCounter,
-                    counterId: verification.counterId,
+                    numberCounter: verification.numberOfCounter,
                     status:verification.status
                 };
                 $scope.dataToManualTest.set(verification.id, manualTest);
@@ -36,7 +33,7 @@ angular
 
 
             $scope.openAddTest = function (verification) {
-                if (!verification.isManual) {
+                if (!verification.manual) {
                     $location.path('/calibrator/verifications/calibration-test-add/').search({
                         'param': verification.id,
                         'loadProtocol': 1,
@@ -157,7 +154,7 @@ angular
                 page: 1,
                 count: 10,
                 sorting: {
-                    date: 'desc'
+                    default: 'default'
                 }
             }, {
                 total: 0,
@@ -173,49 +170,6 @@ angular
 
                     if ($scope.selectedStatus.name != null) {
                         params.filter().status = $scope.selectedStatus.name.id;
-                    }
-
-                    if (params.filter().client_full_name != null && params.filter().client_full_name.split(" ").length > 1) {
-                        var allNames = params.filter().client_full_name.split(" ");
-                        var modifiedFilter = params.filter();
-                        if (allNames.length == 1) {
-                            modifiedFilter.lastName = allNames[0].trim();
-                        } else if (allNames.length == 2) {
-                            modifiedFilter.lastName = allNames[0].trim();
-                            modifiedFilter.firstName = allNames[1].trim();
-                        } else if (allNames.length == 3) {
-                            modifiedFilter.lastName = allNames[0].trim();
-                            modifiedFilter.firstName = allNames[1].trim();
-                            modifiedFilter.middleName = allNames[2].trim();
-                        }
-                    } else {
-                        params.filter().lastName = null;
-                        params.filter().middleName = null;
-                        params.filter().firstName = null;
-                    }
-                    if (params.filter().address != null && params.filter().address.length > 0) {
-                        var allPoints = params.filter().address.split(",");
-                        var modified = params.filter();
-                        if (allPoints.length == 1) {
-                            modified.district = allPoints[0].trim();
-                        } else if (allPoints.length == 2) {
-                            modified.district = allPoints[0].trim();
-                            modified.street = allPoints[1].trim();
-                        } else if (allPoints.length == 3) {
-                            modified.district = allPoints[0].trim();
-                            modified.street = allPoints[1].trim();
-                            modified.building = allPoints[2].trim();
-                        } else if (allPoints.length == 4) {
-                            modified.district = allPoints[0].trim();
-                            modified.street = allPoints[1].trim();
-                            modified.building = allPoints[2].trim();
-                            modified.flat = allPoints[3].trim();
-                        }
-                    } else {
-                        params.filter().district = null;
-                        params.filter().street = null;
-                        params.filter().building = null;
-                        params.filter().flat = null;
                     }
 
                     verificationServiceVerificator.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
@@ -253,7 +207,7 @@ angular
             };
 
             $scope.openDetails = function (verifId, verifDate, verifReadStatus) {
-                $modal.open({
+                var modalInstance = $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/verificator/views/modals/new-verification-details.html',
                     controller: 'DetailsModalControllerVerificator',
@@ -271,6 +225,9 @@ angular
                                 });
                         }
                     }
+                });
+                modalInstance.result.then(function () {
+                    $scope.tableParams.reload();
                 });
             };
 

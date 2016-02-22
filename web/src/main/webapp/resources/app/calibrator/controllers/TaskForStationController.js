@@ -291,4 +291,17 @@ angular
                 toaster.pop('success', title, text);
             };
 
+            $scope.uploadArchive = function() {
+                console.log("Entered upload archive function");
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/calibrator/views/modals/upload-archive.html',
+                    controller: 'UploadArchiveController',
+                    size: 'lg'
+                });
+                modalInstance.result.then(function () {
+                    $scope.tableParams.reload();
+                });
+            }
+
         }]);

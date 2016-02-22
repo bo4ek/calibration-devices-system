@@ -45,7 +45,7 @@ public class StateVerificatorSubdivisionController {
      *
      * @param subdivisionDTO
      * @param user
-     * @return http status response 201 or 409
+     * @return http status response 201 (CREATED) or 409 (CONFLICT)
      */
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseEntity addSubdivision(@RequestBody VerificatorSubdivisionDTO subdivisionDTO,
@@ -53,13 +53,14 @@ public class StateVerificatorSubdivisionController {
         HttpStatus httpStatus = HttpStatus.CREATED;
         Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
         try {
-            VerificatorSubdivision subdivision = new VerificatorSubdivision(subdivisionDTO.getSubdivisionId(), subdivisionDTO.getSubdivisionName(),
-                    subdivisionDTO.getSubdivisionLeader(), subdivisionDTO.getSubdivisionLeaderEmail(), subdivisionDTO.getSubdivisionLeaderPhone());
+            VerificatorSubdivision subdivision = new VerificatorSubdivision(subdivisionDTO.getSubdivisionId(),
+                    subdivisionDTO.getSubdivisionName(), subdivisionDTO.getSubdivisionLeader(),
+                    subdivisionDTO.getSubdivisionLeaderEmail(), subdivisionDTO.getSubdivisionLeaderPhone());
             subdivision.setOrganization(organization);
             subdivisionService.addSubdivision(subdivision);
-            logger.info("Subdivision was successfully added");
+            logger.info("Subdivision was successfully added by user " + user.getUsername());
         } catch (Exception e) {
-            logger.error("Error occurred while creating subdivision", e);
+            logger.error("Error occurred while creating subdivision by user " + user.getUsername(), e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -69,19 +70,22 @@ public class StateVerificatorSubdivisionController {
      * Edits verificator's subdivisions with @param id
      *
      * @param subdivisionDTO
-     * @param id
+     * @param id id of the subdivision
      * @return
      */
     @RequestMapping(value = "edit/{id}", method = RequestMethod.PUT)
     public ResponseEntity editSubdivision(@RequestBody VerificatorSubdivisionDTO subdivisionDTO,
-                                          @PathVariable String id) {
+                                          @PathVariable String id,
+                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         HttpStatus httpStatus = HttpStatus.OK;
+        Long organizationId = organizationService.getOrganizationById(user.getOrganizationId()).getId();
         try {
-            subdivisionService.editSubdivision(id, subdivisionDTO.getSubdivisionName(), subdivisionDTO.getSubdivisionLeader(),
-                    subdivisionDTO.getSubdivisionLeaderEmail(), subdivisionDTO.getSubdivisionLeaderPhone());
-            logger.info("Subdivision was successfully edited");
+            subdivisionService.editSubdivision(organizationId, id, subdivisionDTO.getSubdivisionName(),
+                    subdivisionDTO.getSubdivisionLeader(), subdivisionDTO.getSubdivisionLeaderEmail(),
+                    subdivisionDTO.getSubdivisionLeaderPhone());
+            logger.info("Subdivision was successfully edited by user " + user.getUsername());
         } catch (Exception e) {
-            logger.error("Error occurred while editing subdivision", e);
+            logger.error("Error occurred while editing subdivision by user " + user.getUsername(), e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -90,8 +94,8 @@ public class StateVerificatorSubdivisionController {
     /**
      * Deletes verificator's subdivision from database
      *
-     * @param id
-     * @return OK or CONFLICT status
+     * @param id id of the subdivision
+     * @return http status response 200 (OK) or 409 (CONFLICT)
      */
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteSubdivision(@PathVariable String id) {
@@ -110,8 +114,8 @@ public class StateVerificatorSubdivisionController {
     /**
      * Check's for availability the number for verificator's subdivision
      *
-     * @param id
-     * @return
+     * @param id id of the subdivision
+     * @return "true" if subdivision's number is available, or "false" if opposite
      */
     @RequestMapping(value = "available/{id}", method = RequestMethod.GET)
     public Boolean isIdAvailable(@PathVariable String id) {
@@ -165,8 +169,8 @@ public class StateVerificatorSubdivisionController {
         Page<VerificatorSubdivisionPageItem> page = subdivisionService
                 .findByOrganizationAndSearchAndPagination(pageNumber, itemsPerPage, organization, search)
                 .map(verificatorSubdivision -> new VerificatorSubdivisionPageItem(verificatorSubdivision.getId(),
-                        verificatorSubdivision.getName(), verificatorSubdivision.getLeader(), verificatorSubdivision.getLeaderEmail(),
-                        verificatorSubdivision.getLeaderPhone()));
+                        verificatorSubdivision.getName(), verificatorSubdivision.getLeader(),
+                        verificatorSubdivision.getLeaderEmail(), verificatorSubdivision.getLeaderPhone()));
         return new PageDTO<>(page.getTotalElements(), page.getContent());
     }
 

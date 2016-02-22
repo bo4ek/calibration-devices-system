@@ -159,6 +159,11 @@
                         templateUrl: 'resources/app/calibrator/views/not-standard-verifications.html',
                         controller: 'NotStandardVerificationControllerCalibrator'
                     })
+                    .state("verifications-for-provider", {
+                        url: 'calibrator/verifications-for-provider',
+                        templateUrl: 'resources/app/calibrator/views/verifications-for-provider.html',
+                        controller: 'NotStandardVerificationControllerCalibrator'
+                    })
                     .state("not-standard-verifications-provider", {
                         url: 'provider/not-standard-verifications',
                         templateUrl: 'resources/app/provider/views/not-standard-verifications.html',
@@ -242,8 +247,10 @@
     })
 
     .run(function ($rootScope){
-        $rootScope.FIRST_LAST_NAME_REGEX = /^([A-Z][\u0027]{0,1}[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][\u0027]{0,1}[a-z]{1,20}\u002d[A-Z][\u0027]{0,1}[a-z]{1,20}|[A-Z][\u0027]{0,1}[a-z]{1,20}\u002d[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}\u002d[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]{0,1}[a-z]{0,20}\u002d[A-Z][\u0027]{0,1}[a-z]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}\u002d\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10}\u002d[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]{0,1}[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
-        $rootScope.PHONE_REGEX = /^[1-9]\d{8}$/;
+            $rootScope.FIRST_LAST_NAME_REGEX = /^([A-Z][\u0027]?[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][\u0027]?[a-z]{1,20}[\u002d\u0020]?[A-Z][\u0027]?[a-z]{1,20}|[A-Z][\u0027]?[a-z]{1,20}[\u002d\u0020]?[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}[\u002d\u0020]?[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}[\u002d\u0020]?[A-Z][\u0027]?[a-z]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}[\u002d\u0020]?\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
+            $rootScope.MIDDLE_NAME_REGEX = /^([A-Z][\u0027]?[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
+            $rootScope.PHONE_REGEX = /^[1-9]\d{8}$/;
+            $rootScope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
 
     });
 
@@ -327,6 +334,7 @@
         'calibrator/controllers/NotStandardVerificationControllerCalibrator',
         'calibrator/services/NotStandardVerificationCalibratorService',
         'calibrator/controllers/NotStandardVerificationSendingControllerCalibrator',
+        'calibrator/controllers/VerificationsForProviderNotificationController',
 
         'verificator/controllers/TopNavBarControllerVerificator',
         'verificator/controllers/MainPanelControllerVerificator',

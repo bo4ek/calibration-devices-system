@@ -678,6 +678,20 @@ form[name='CalibrationTestForm'] #testColumnHead {
     width: 322px !important;
 }
 
+.vertical-test-image-photo {
+    height: 640px !important;
+    width: 480px !important;
+}
+
+.test-image img {
+    width: 640px;
+    height: 480px;
+}
+
+.test-image img.rotated90, .test-image img.rotated270 {
+    margin-left: 115px;
+}
+
 form[name='CalibrationTestForm'] tr > td {
     min-height: 30px;
 }

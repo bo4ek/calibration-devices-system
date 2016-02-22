@@ -197,6 +197,15 @@
                               	</span>
                             </a>
                         </li>
+                        <li ui-sref-active="active" ng-controller="VerificationsForProviderNotificationController">
+                            <a ui-sref="verifications-for-provider" ng-click="reloadVerifications()"><i
+                                    class="fa fa-list-alt fa-fw"></i> <span
+                                    translate="VERIFICATIONS_FOR_PROVIDER"> </span>
+                                <span class="ui teal label" ng-bind="countOfUnreadVerifications"
+                                      ng-show="countOfUnreadVerifications>0" ng-cloak>
+                              	</span>
+                            </a>
+                        </li>
                         <li ui-sref-active="active" ng-controller="DigitalVerificationProtocolsControllerCalibrator">
                             <a ui-sref="verifications-protocols-calibrator" ng-click="onTableHandling()">
                                 <i class="fa fa-file-powerpoint-o"></i>
@@ -226,7 +235,7 @@
                     <sec:authorize url="/verificator">
                         <li ui-sref-active="active" ng-controller="NotificationsControllerVerificator">
                             <a ui-sref="new-verifications-verificator" ng-click="reloadVerifications()"><i
-                                    class="fa fa-list-alt fa-fw"></i> <span translate="VERIFICATION_PROTOCOLS"></span>
+                                    class="fa fa-list-alt fa-fw"></i> <span translate="DIGITAL_PROTOCOLS"></span>
                                 <span class="ui teal label" ng-bind="countOfUnreadVerifications"
                                       ng-show="countOfUnreadVerifications>0" ng-cloak>
                               	</span>

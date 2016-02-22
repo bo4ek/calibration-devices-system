@@ -557,7 +557,7 @@ public class CalibratorVerificationController {
         try {
             verificationService.editCounter(counterInfo.getVerificationId(), counterInfo.getDeviceName(), counterInfo.getDismantled(),
                     counterInfo.getSealPresence(), counterInfo.getDateOfDismantled(), counterInfo.getDateOfMounted(),
-                    counterInfo.getNumberCounter(), counterInfo.getReleaseYear(), counterInfo.getSymbol(),
+                    counterInfo.getNumberCounter(), counterInfo.getReleaseYear(), counterInfo.getAccumulatedVolume(), counterInfo.getSymbol(),
                     counterInfo.getStandardSize(), counterInfo.getComment(), counterInfo.getDeviceId());
         } catch (Exception e) {
             logger.error("GOT EXCEPTION " + e);
@@ -602,7 +602,8 @@ public class CalibratorVerificationController {
                 clientDTO.getLocality(),
                 clientDTO.getStreet(),
                 clientDTO.getBuilding(),
-                clientDTO.getFlat()
+                clientDTO.getFlat(),
+                clientDTO.getMailIndex()
         );
 
         ClientData clientData = new ClientData(
@@ -640,7 +641,8 @@ public class CalibratorVerificationController {
                         verificationDTO.getLocality(),
                         verificationDTO.getStreet(),
                         verificationDTO.getBuilding(),
-                        verificationDTO.getFlat()
+                        verificationDTO.getFlat(),
+                        verificationDTO.getMailIndex()
                 )
         );
 
@@ -655,6 +657,7 @@ public class CalibratorVerificationController {
         counter.setDateOfDismantled(verificationDTO.getDateOfDismantled());
         counter.setDateOfMounted(verificationDTO.getDateOfMounted());
         counter.setNumberCounter(verificationDTO.getNumberCounter());
+        counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
         counter.setCounterType(counterType);
 
         // updating addition info

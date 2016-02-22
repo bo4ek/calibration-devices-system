@@ -305,7 +305,7 @@ angular
             };
 
             $scope.openDetails = function (verifId, verifDate, verifReadStatus) {
-                $modal.open({
+                var modalInstance = $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/calibrator/views/modals/new-verification-details.html',
                     controller: 'DetailsModalControllerCalibrator',
@@ -323,6 +323,9 @@ angular
                                 });
                         }
                     }
+                });
+                modalInstance.result.then(function () {
+                    $scope.tableParams.reload();
                 });
             };
 

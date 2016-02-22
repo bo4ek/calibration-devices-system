@@ -69,8 +69,10 @@ public interface VerificationService {
                                                                                      String streetToSearch, String status, String employeeName, Long protocolId, String protocolStatus, Long measurementDeviceId, String measurementDeviceType, String sortCriteria, String sortOrder, User calibratorEmployee);
 
 
-    ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                                String streetToSearch, String status, String employeeName, String nameProvider, String nameCalibrator, String lastName, String firstName, String middleName, String district, String building, String flat, String sortCriteria, String sortOrder, User verificatorEmployee);
+    ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String status, String nameProvider, String nameCalibrator,
+                                                                                                String numberOfCounter, String numberOfProtocol,
+                                                                                                String sentToVerificatorDate, String serialNumber,
+                                                                                                String sortCriteria, String sortOrder, User verificatorEmployee);
 
 
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorId(Long organizationId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String fullNameToSearch,
@@ -145,7 +147,7 @@ public interface VerificationService {
     void returnVerificationToCalibratorFromProvider(String verificationId, String rejectMessage);
     
     void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence, Long dateOfDismantled,
-                     Long dateOfMounted, String numberCounter, String releaseYear, String symbol, String standardSize,
+                     Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol, String standardSize,
                      String comment, Long deviceId);
 
     void editAddInfo(int entrance, int doorCode, int floor, Long dateOfVerif, String timeFrom, String timeTo, Boolean serviceability,
@@ -163,13 +165,17 @@ public interface VerificationService {
 
     Long findCountOfNewNotStandardVerificationsByCalibratorId(Long calibratorId);
 
+    Long findCountOfNewVerificationsForProviderByCalibratorId(Long calibratorId);
+
     Long findCountOfNotStandardNewVerificationsByProviderId(Long providerId);
 
     Set<String> findSymbolsByDeviceType (String deviceType);
 
     Set<String> findStandardSizesBySymbolAndDeviceType(String symbol, String deviceType);
 
-    Set<String> findSymbolByStandardSizeAndDeviceType(String standardSize, String deviceType);
+    List<String> findSortedSymbolsByStandardSizeAndDeviceType(String standardSize, String deviceType);
 
     Set<String> findAllStandardSizes();
+
+    List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType);
 }

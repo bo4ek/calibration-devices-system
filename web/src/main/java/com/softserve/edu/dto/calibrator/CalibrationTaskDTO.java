@@ -33,7 +33,10 @@ public class CalibrationTaskDTO {
 
     private Integer numOfVerifications;
 
-    public CalibrationTaskDTO() {}
+    private Integer numOfCompletedVerifications;
+
+    public CalibrationTaskDTO() {
+    }
 
     public CalibrationTaskDTO(String moduleNumber, Date dateOfTask, List<String> verificationsId) {
         this.moduleNumber = moduleNumber;
@@ -52,5 +55,16 @@ public class CalibrationTaskDTO {
         this.telephone = telephone;
         this.numOfVerifications = verifications.size();
         this.status = status.toString();
+        this.numOfCompletedVerifications = countNumberOfTestedVerification(verifications);
+    }
+
+    private Integer countNumberOfTestedVerification(Set<Verification> verifications) {
+        Integer count = 0;
+        for (Verification verification : verifications) {
+            if (verification.getStatus().equals(Status.TEST_COMPLETED)) {
+                count++;
+            }
+        }
+        return count;
     }
 }

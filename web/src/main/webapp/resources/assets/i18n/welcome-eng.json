@@ -93,7 +93,6 @@
     "FILL_IN_INFORMATION_ABOUT_ORGANIZATION": "Fill in information about organization",
     "FILL_IN_INFORMATION_ABOUT_COUNTER" : "Fill in information about counter",
     "FILL_IN_INFORMATION_ABOUT_CATEGORY_DEVICES": "Fill in information about category devices",
-    "FILL_IN_INFORMATION_ABOUT_COUNTER": "Fill in information about counters type",
     "ORGANIZATION_NAME_ADMIN": "Organization name",
     "ORGANIZATION_TYPE_ADMIN": "Organization type",
     "ORGANIZATION_SERVICE_TYPE_ADMIN": "Service type",
@@ -790,6 +789,17 @@
     "RESPONSIBLE_PERSON_CHOOSE": "Choose responsible person",
     "RESPONSIBLE_PERSON_CANCEL": "Cancel responsible person",
     "CANCEL_TEST": "Cancel test",
-    "DUPLICATE_SERIAL_NUMBER": "Duplicate serial number"
-
- }
+    "DUPLICATE_SERIAL_NUMBER": "Duplicate serial number",
+    "VERIFICATIONS_FOR_PROVIDER" : "Verification for provider",
+    "CREATED_FOR_PROVIDER" : "Created by calibrator",
+    "TASK_TITLE" : "Task for team",
+    "MAIL_INDEX_ERROR" : "Error im index",
+    "VOLUME_ERROR": "Error im counter's volume",
+    "COUNTER_STATE": "Counter state",
+    "SAVE_AND_CREATE_BY_PATTERN": "Save and create by pattern",
+    "VERIFICATION_WITH_DISMANTLE": "Make verification with dismantling",
+    "STREET_DIRECTORY": "Street directory",
+    "STREET_ID": "ID",
+    "TOTAL_NUMBER_OF_STREETS": "Total number of streets",
+    "ADD_STREET": "Add street"
+}

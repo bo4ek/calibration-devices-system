@@ -8,7 +8,7 @@
         <div id="box" class="form-group col-md-6">
             <div ng-class="{ 'vertical-image-modal-photo': rotateIndex == 90 || rotateIndex == 270}">
                 <div class="image">
-                    <img id="mainPhoto" src='{{photo}}' ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+                    <img id="mainPhoto" data-ng-src='{{photo}}' ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
                     'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}">
                 </div>
             </div>
@@ -44,9 +44,6 @@
                            id="accumulatedVolume"
                            name="accumulatedVolume"
                            required>
-                    <!--ng-change="checkAll('accumulatedVolume')"-->
-                    <!--<p class="validation-message" ng-show="accumulatedVolume.isValid">-->
-                    <!--{{'ACCUMULATEDVOLUME_REGEX' | translate}}</p>-->
 
                     <p class="help-block" ng-if="clientForm.accumulatedVolume.$error.required">
                         <span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -127,7 +124,7 @@
                             {{$select.selected | translate}}
                         </ui-select-match>
                         <ui-select-choices repeat="counterType in symbols
-                        | unique: 'symbol'">
+                        | unique: 'symbol' | filter: $select.search">
                             <span ng-bind-html="counterType | translate "></span>
                         </ui-select-choices>
                     </ui-select>
@@ -180,35 +177,6 @@
                         <span class="glyphicon glyphicon-exclamation-sign"></span>
                         {{'REQUIRED' | translate}}
                     </p>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="form-group col-md-6" ng-if="photoType == 'begin'">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label class="control-label">{{'INITIAL_VALUE' | translate }}</label>
-                </div>
-                <div class="form-group col-md-6" id="client-form" ng-class="floorValidation.css">
-                    <input type="number" id="value"
-                           ng-model="newValues.counterValue"
-                           class="form-control ">
-
-                    <!--ng-change="checkAll('counterValue')"-->
-                    <!--<p class="validation-message" ng-show="entranceValidation.isValid">-->
-                    <!--{{'DOOR_CODE_REGEX' | translate}}</p>-->
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group col-md-6" ng-if="photoType == 'end'">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label class="control-label">{{'TERMINAL_VALUE' | translate }}</label>
-                </div>
-                <div class="form-group col-md-6">
-                    <input type="number" ng-model="newValues.counterValue"  class="form-control" required >
                 </div>
             </div>
         </div>

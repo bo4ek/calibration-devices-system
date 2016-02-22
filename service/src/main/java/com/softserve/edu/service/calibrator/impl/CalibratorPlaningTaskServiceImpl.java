@@ -126,29 +126,42 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param taskDate
      * @param moduleSerialNumber
      * @param verificationsId
-     * @param userId
+     * @param userName
      * @throws IllegalArgumentException().
      */
     @Override
-    public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userId) {
+    public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userName) {
         Boolean taskAlreadyExists = true;
+        Boolean taskHasCompleteVerification = false;
         CalibrationTask task = taskRepository.findByDateOfTaskAndModule_SerialNumber(taskDate, moduleSerialNumber);
-        if (task == null) {
+        Iterable<Verification> verifications = verificationRepository.findAll(verificationsId);
+
+        User user = userRepository.findOne(userName);
+        if (user == null) {
+            logger.error("User with name:" + userName + "was trying to create task for user with id: " + userName + " wasn't found");
+            throw new IllegalArgumentException();
+        }
+
+        for (Verification verification : verifications) {
+            verification.getStatus().equals(Status.TEST_COMPLETED);
+            if (verification.getCalibrator().getId().equals(user.getOrganization().getId())) {
+                logger.error("User with name: " + userName + " was trying to change verification and task from other organization");
+                return taskAlreadyExists;
+            }
+            taskHasCompleteVerification = true;
+        }
+
+        if (task == null | taskHasCompleteVerification.equals(true)) {
             taskAlreadyExists = false;
             CalibrationModule module = moduleRepository.findBySerialNumber(moduleSerialNumber);
             if (module == null) {
-                logger.error("module wasn't found");
-                throw new IllegalArgumentException();
-            }
-            User user = userRepository.findOne(userId);
-            if (user == null) {
-                logger.error("user wasn't found");
+                logger.error("User with name:" + userName + "was trying to create task for module with serial number: " + moduleSerialNumber + " wasn't found");
                 throw new IllegalArgumentException();
             }
             task = new CalibrationTask(module, null, new Date(), taskDate, user);
             taskRepository.save(task);
         }
-        Iterable<Verification> verifications = verificationRepository.findAll(verificationsId);
+
         for (Verification verification : verifications) {
             verification.setStatus(Status.TEST_PLACE_DETERMINED);
             verification.setTaskStatus(Status.TEST_PLACE_DETERMINED);
@@ -594,7 +607,9 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
             try {
                 SimpleDateFormat simpleTaskDate = new SimpleDateFormat("dd.MM.yyyy");
-                datetime.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
+                String date = simpleTaskDate.format(calibrationTask.getDateOfTask());
+                String time = (verification.getInfo() != null && verification.getInfo().getTimeFrom() != null && verification.getInfo().getTimeTo() != null ? verification.getInfo().getTimeFrom() + "" : empty);
+                datetime.add(date + " " + time);
             } catch (IllegalArgumentException e) {
                 datetime.add(empty);
                 logger.debug("The date of calibration task is absent or having wrong format, id of this task is:" + calibrationTask.getId(), e);

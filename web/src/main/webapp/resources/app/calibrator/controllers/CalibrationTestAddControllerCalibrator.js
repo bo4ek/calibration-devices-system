@@ -166,6 +166,26 @@ angular
                 }
             };
 
+            $scope.showEditPhotoModal = function (id) {
+                if (!$scope.TestForm.signed) {
+                    var modalInstance = $modal.open({
+                        animation: true,
+                        windowClass: 'preview-protocol-image',
+                        templateUrl: 'resources/app/calibrator/views/modals/edit-photo-modal.html',
+                        controller: 'EditPhotoController',
+                        size: 'md',
+                        resolve: {
+                            photoId: function () {
+                                return id;
+                            },
+                            parentScope: function () {
+                                return $scope;
+                            }
+                        }
+                    });
+                }
+            };
+
             $scope.setMainPhoto = function (data) {
                 $scope.TestForm.testPhoto = data;
             };
@@ -183,7 +203,6 @@ angular
                     .getTestProtocol(verificationID)
                     .then(function (data) {
                         $scope.parseBbiFile(data);
-                        $log.debug("inside");
                     });
             }
 

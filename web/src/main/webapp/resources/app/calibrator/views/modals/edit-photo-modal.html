@@ -1,0 +1,45 @@
+<form name="clientForm" class="form-group" ng-submit="saveOnExit()" id="editMainPhotoForm" novalidate>
+    <div class="modal-header">
+        <div ng-if="photoType == 'begin'">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'INITIAL_VALUE' | translate }}</label>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="number" id="value"
+                           ng-model="newValues.counterValue"
+                           class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <div ng-if="photoType == 'end'">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">{{'TERMINAL_VALUE' | translate }}</label>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="number" ng-model="newValues.counterValue" class="form-control" required>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div id="box">
+            <div ng-class="{ 'vertical-test-image-photo': rotateIndex == 90 || rotateIndex == 270}">
+                <div class="test-image">
+                    <img data-ng-src="{{photo}}" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+                    'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="clear: left">
+        <button ng-click="cancel()" class="btn btn-info pull-right" type="button">
+            {{'CLOSE' | translate }}
+        </button>
+        <button ng-show="changed" class="btn btn-info pull-right" type="submit">
+            {{'SAVE' | translate }}
+        </button>
+    </div>
+</form>

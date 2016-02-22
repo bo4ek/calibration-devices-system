@@ -104,7 +104,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "OWNER_NAME")
     public String getOwnerFullName() {
         ClientData ownerData = getVerification().getClientData();
-        return ownerData.getLastName() + " " + ownerData.getFirstName() + " " + ownerData.getMiddleName();
+        return String.join(" ", ownerData.getLastName(), ownerData.getFirstName(), ownerData.getMiddleName());
     }
 
     @Placeholder(name = "OWNER_PHONE")
@@ -132,7 +132,9 @@ public class InfoDocument implements Document {
         Address address = getVerification().getClientData().getClientAddress();
         StringBuilder sb = new StringBuilder();
         String region = address.getRegion();
-        if (region == null ) {region = "";}
+        if (region == null) {
+            region = "";
+        }
         sb.append("обл.").append(region).append("; район ").append(address.getDistrict()).append("; місто ").append(address.getLocality())
                 .append("; вулиця ").append(address.getStreet()).append("; будинок ").append(address.getBuilding()).append("; квартира ").append(address.getFlat());
         return sb.toString();
@@ -168,7 +170,7 @@ public class InfoDocument implements Document {
     public String getProviderEmployee() {
         User providerEmployee = getVerification().getProviderEmployee();
         if (providerEmployee != null) {
-            return providerEmployee.getLastName() + " " + providerEmployee.getFirstName() + " " + providerEmployee.getMiddleName();
+            return String.join(" ", providerEmployee.getLastName(), providerEmployee.getFirstName(), providerEmployee.getMiddleName());
         }
         return "No employee assigned";
     }
@@ -246,8 +248,7 @@ public class InfoDocument implements Document {
     public String getCalibratorEmployee() {
         User calibratorEmployee = getVerification().getCalibratorEmployee();
         if (calibratorEmployee != null) {
-            String name = calibratorEmployee.getLastName() + " " + calibratorEmployee.getFirstName() + calibratorEmployee.getMiddleName();
-            return name;
+            return String.join(" ", calibratorEmployee.getLastName(), calibratorEmployee.getFirstName(), calibratorEmployee.getMiddleName());
         }
         return "No employee assigned";
     }
@@ -312,10 +313,8 @@ public class InfoDocument implements Document {
         Organization verificator = getVerification().getStateVerificator();
         if (verificator != null) {
             Address address = verificator.getAddress();
-            StringBuilder sb = new StringBuilder();
-            sb.append("обл.").append(address.getRegion()).append("; район ").append(address.getDistrict()).append("; місто ").append(address.getLocality())
-                    .append("; вулиця ").append(address.getStreet()).append("; будинок ").append(address.getBuilding()).append("; квартира ").append(address.getFlat());
-            return sb.toString();
+            return new StringBuilder().append("обл.").append(address.getRegion()).append("; р-н ").append(address.getDistrict()).append("; м. ").append(address.getLocality())
+                    .append("; вул. ").append(address.getStreet()).append("; буд. ").append(address.getBuilding()).append("; кв. ").append(address.getFlat()).toString();
         }
         return "None";
     }
@@ -325,8 +324,7 @@ public class InfoDocument implements Document {
 
         User verificatorEmployee = getVerification().getStateVerificatorEmployee();
         if (verificatorEmployee != null) {
-            String name = verificatorEmployee.getLastName() + " " + verificatorEmployee.getFirstName() + verificatorEmployee.getMiddleName();
-            return name;
+            return String.join(" ", verificatorEmployee.getLastName(), verificatorEmployee.getFirstName(), verificatorEmployee.getMiddleName());
         }
         return "No employee assigned";
     }

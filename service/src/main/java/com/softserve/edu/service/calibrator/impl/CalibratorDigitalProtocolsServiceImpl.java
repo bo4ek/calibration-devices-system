@@ -3,9 +3,12 @@ package com.softserve.edu.service.calibrator.impl;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.calibrator.CalibratorDigitalProtocolsService;
 
+import com.softserve.edu.service.utils.DigitalProtocolQueryConstructorCalibrator;
+import com.softserve.edu.service.utils.ListToPageTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,21 +19,22 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Veronika 11.11.2015
- */
 @Service
 public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalProtocolsService {
 
     @Autowired
     private VerificationRepository verificationRepository;
 
+    @Autowired
+    CalibrationTestRepository calibrationTestRepository;
+
     @PersistenceContext
     private EntityManager em;
 
-    public Long countByCalibratorEmployee_usernameAndStatus(User calibratorEmployee, Status status) {
+    public Long countByCalibratorEmployeeUsernameAndStatus(User calibratorEmployee, Status status) {
         return verificationRepository.countByCalibratorEmployeeUsernameAndStatus(calibratorEmployee.getUsername(), status);
     }
 
@@ -60,5 +64,30 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
         typedQuery.setMaxResults(itemsPerPage);
 
         return typedQuery.getResultList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndStatus(Long verificatorId, int pageNumber, int itemsPerPage, String dateToSearch,
+                                                                                              String idToSearch, String status, String nameProvider, String nameCalibrator, String numberOfCounter,
+                                                                                              String numberOfProtocol, String sentToVerificatorDate, String serialNumber, String sortCriteria,
+                                                                                              String sortOrder, User verificatorEmployee) {
+
+        CriteriaQuery<Verification> criteriaQuery = DigitalProtocolQueryConstructorCalibrator.buildSearchQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, sortCriteria, sortOrder, em);
+
+        Long count = em.createQuery(DigitalProtocolQueryConstructorCalibrator.buildCountQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee,
+                nameProvider, nameCalibrator, numberOfCounter,
+                numberOfProtocol, sentToVerificatorDate, serialNumber, em)).getSingleResult();
+
+        TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
+        typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
+        typedQuery.setMaxResults(itemsPerPage);
+        List<Verification> verificationList = typedQuery.getResultList();
+
+        ListToPageTransformer<Verification> result = new ListToPageTransformer<Verification>();
+        result.setContent(verificationList);
+        result.setTotalItems(count);
+        return result;
     }
 }

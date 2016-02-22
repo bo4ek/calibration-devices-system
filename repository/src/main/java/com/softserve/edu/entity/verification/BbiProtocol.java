@@ -7,13 +7,17 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "fileName")
+@EqualsAndHashCode(of = "id")
 @Table(name = "BBI_PROTOCOL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BbiProtocol {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     @Setter(AccessLevel.PRIVATE)
+    private Long id;
+
     private String fileName;
 
     @ManyToOne(fetch = FetchType.LAZY)

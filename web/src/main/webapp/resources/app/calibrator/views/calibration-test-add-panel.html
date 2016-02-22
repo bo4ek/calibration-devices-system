@@ -1,9 +1,5 @@
 <div id="page-wrapper">
-<div>
-    <h2 class="text-center">{{'FILL_INFO_ABOUT_PROTOCOL' | translate }}</h2>
-</div>
 <form name="CalibrationTestForm" novalidate style="padding-top: 10px">
-
 <div class="first-column">
     <div class="row">
         <label class="control-label" style="min-height: 30px"></label>
@@ -214,7 +210,7 @@
 <div class="second-column">
 
     <div class="scroll-wrapper">
-        <table class="table table-bordered" style="overflow: scroll">
+        <table class="table table-bordered">
             <thead>
             <tr>
                 <td id="titelsColumn">
@@ -343,7 +339,7 @@
                 <td ng-repeat="testData in TestDataFormData"
                     ng-show="testData.dataAvailable" class="photo-cell">
                     <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0 image-td"
-                         ng-click="showEditMainPhotoModal( 'beginPhoto' + $index )"
+                         ng-click="showEditPhotoModal( 'beginPhoto' + $index )"
                          ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                          data-ng-src="data:image/png;base64,{{testData.beginPhoto}}">
@@ -354,7 +350,7 @@
                 <td ng-repeat="testData in TestDataFormData"
                     ng-show="testData.dataAvailable" class="photo-cell">
                     <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0 image-td"
-                         ng-click="showEditMainPhotoModal( 'endPhoto' + $index )"
+                         ng-click="showEditPhotoModal( 'endPhoto' + $index )"
                          ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                          data-ng-src="data:image/png;base64,{{testData.endPhoto}}">

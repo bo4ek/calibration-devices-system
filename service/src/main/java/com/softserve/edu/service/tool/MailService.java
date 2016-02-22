@@ -2,13 +2,10 @@ package com.softserve.edu.service.tool;
 
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
-import org.springframework.scheduling.annotation.AsyncResult;
 
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.concurrent.Future;
 
 public interface MailService {
     void sendMail(String to, String userName, String clientCode, String providerName, String deviceType);
@@ -17,7 +14,9 @@ public interface MailService {
 
     void sendAdminNewPasswordMail(String employeeEmail, String employeeName, String newPassword);
 
-    void sendOrganizationPasswordMail(String organizationMail, String organizationName, String username, String password)  throws UnsupportedEncodingException, MessagingException;
+    void sendOrganizationPasswordMail(String organizationMail, String organizationName, String username, String password) throws UnsupportedEncodingException, MessagingException;
+
+    void sendOrganizationNewPasswordMail(String organizationMail, String organizationName, String username, String password);
 
     void sendRejectMail(String to, String userName, String verificationId, String msg, String deviceType);
 

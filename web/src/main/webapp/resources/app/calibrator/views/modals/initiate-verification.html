@@ -13,6 +13,7 @@
                     </accordion-heading>
                     <div class="panel-body">
                         <div class="row">
+                            <!--LAST NAME-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="lastName">{{'LAST_NAME' | translate}} </label>
@@ -39,6 +40,7 @@
 
                                 </div>
                             </div>
+                            <!--FIRST NAME-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="firstName">
@@ -88,7 +90,6 @@
                                     </p>
                                 </div>
                             </div>
-
                             <div class="form-group" show-errors>
                                 <div class="col-md-4 form-group">
                                     <label for="email">
@@ -114,7 +115,6 @@
                                     </p>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="phoneNumber">
@@ -193,6 +193,8 @@
                     </accordion-heading>
                     <div class="panel-body">
                         <div class="row">
+
+                            <!--Region-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="region">
@@ -218,6 +220,8 @@
                                     </p>
                                 </div>
                             </div>
+
+                            <!--District-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="district">{{'DISTRICT' | translate}}</label>
@@ -243,6 +247,8 @@
                                     </p>
                                 </div>
                             </div>
+
+                            <!--Locality-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="locality">
@@ -253,7 +259,7 @@
                                     <ui-select class="form-control" type="text" theme="select2"
                                                ng-model="selectedData.locality"
                                                ng-disabled="!selectedData.district"
-                                               on-select="receiveStreets(selectedData.locality,selectedData.district)"
+                                               on-select="receiveStreets(selectedData.locality)"
                                                name="locality" id="locality" required>
                                         <ui-select-match placeholder="{{'SELECT_LOCALITY' | translate}}"
                                                          allow-clear="true">
@@ -270,69 +276,62 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-md-4" form-group>
-                                    <label for="index"> {{'INDEX' | translate}}
-                                    </label>
-                                </div>
 
+                            <!--Mail Index-->
+                            <div class="form-group">
+                                <div class="col-md-4 form-group">
+                                    <label for="mailIndex">{{'INDEX' | translate}} </label>
+                                </div>
                                 <div class="col-md-8 form-group" show-errors>
-                                    <ui-select class="form-control" type="text" theme="select2"
-                                               ng-model="selectedData.index"
-                                               ng-disabled="!selectedData.locality"
-                                               name="index" id="index">
-                                        <ui-select-match placeholder="{{'INDEX' | translate}}" allow-clear="true">
-                                            {{$select.selected}}
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="index  in indexes | filter: $select.search">
-                                            <span ng-bind-html="index"></span>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input id="mailIndex" name="mailIndex" class="form-control" type="text"
+                                           ng-model="formData.mailIndex"
+                                           ng-pattern="MAIL_INDEX_REGEX"
+                                           ng-disabled="!selectedData.locality"
+                                           required>
+                                    <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                          id="okFeedBack"></span>
+
+                                    <p class="help-block" ng-if="clientForm.mailIndex.$error.required">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        {{'REQUIRED' | translate}}
+                                    </p>
+
+                                    <p class="help-block" ng-if="clientForm.mailIndex.$error.pattern">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        {{'MAIL_INDEX_ERROR' | translate}}
+                                    </p>
 
                                 </div>
                             </div>
+
+                            <!--Street-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="street">
                                         {{'STREET' | translate}} </label>
                                 </div>
                                 <div class="col-md-8 form-group" show-errors>
-                                    <div class="pull-left col-lg-3" id="typeStreet">
-                                        <ui-select class="form-control" type="text" theme="select2"
-                                                   ng-model="selectedData.selectedStreetType"
-                                                   name="street" id="street">
-                                            <ui-select-match placeholder="{{'TYPE_OF_STREET' | translate}}"
-                                                             allow-clear="true">
-                                                {{$select.selected.designation}}
-                                            </ui-select-match>
-                                            <ui-select-choices
-                                                    repeat="streetsType in streetsTypes | filter: $select.search">
-                                                <span ng-bind-html="streetsType.designation"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-                                    <div class="col-md-9" id="streetBox">
-                                        <input name="street" class="form-control" type="text"
-                                               ng-model="selectedData.selectedStreet"
-                                               ng-disabled="!selectedData.selectedStreetType"
-                                               typeahead="street as street.designation for street in streets | filter: $viewValue | limitTo: 4"
-                                               ng-pattern="STREET_REGEX"
-                                               autocomplete="off"
-                                               typeahead-editable="false"
-                                               typeahead-on-select="receiveBuildings(selectedData.selectedStreet)"
-                                               required>
-
-
-                                    </div>
+                                    <input name="street" class="form-control" type="text"
+                                           ng-model="selectedData.selectedStreet"
+                                           ng-disabled="!formData.mailIndex"
+                                           typeahead="street as street.designation for street in streets | filter: $viewValue | limitTo: 4"
+                                           ng-pattern="STREET_REGEX"
+                                           autocomplete="off"
+                                           typeahead-editable="false"
+                                           typeahead-on-select="receiveBuildings(selectedData.selectedStreet)"
+                                           placeholder="{{'NAME_OF_STREET' | translate}}"
+                                           required>
                                     <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
                                           id="okFeedBack"></span>
 
+                                    <p class="help-block">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        {{'DOUBLE_NAME_ERROR' | translate}}
+                                    </p>
                                 </div>
-                                <p class="help-block col-md-offset-2">
-                                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                    {{'DOUBLE_NAME_ERROR' | translate}}
-                                </p>
                             </div>
+
+                            <!--Building-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="building">
@@ -358,6 +357,8 @@
                                     </p>
                                 </div>
                             </div>
+
+                            <!--Flat-->
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="flat">{{'FLAT' | translate}}</label>
@@ -381,12 +382,97 @@
                                     </p>
                                 </div>
                             </div>
+
+                            <!--Counter-->
+                            <div class="form-group" show-errors>
+
+                                <div class="col-md-4 form-group">
+                                    <label>{{'COUNTER' | translate}}</label>
+                                </div>
+
+                                <div class="col-md-8 form-group" >
+
+                                    <div class="pull-left col-xg-2">
+                                        <ui-select class="form-control" type="text" theme="select2"
+                                                   ng-model="selectedData.firstDeviceCount"
+                                                   search-enabled="false"
+                                                   name="firstDeviceCount"
+                                                   id="firstDeviceCount" required>
+                                            <ui-select-match placeholder="{{'NUMBER_OF_COUNTERS' | translate}}">
+                                                {{$select.selected}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="value in values">
+                                                <span ng-bind-html="value"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <div class="pull-left col-xs-4">
+                                        <ui-select class="form-control" type="text" theme="select2"
+                                                   ng-model="selectedData.firstSelectedDeviceType"
+                                                   search-enabled="false"
+                                                   on-select="receiveProviders(selectedData.firstSelectedDeviceType); receiveAllSymbols(selectedData.firstSelectedDeviceType);"
+                                                   id="firstSelectedDeviceType"
+                                                   name="firstSelectedDeviceType" required>
+                                            <ui-select-match placeholder="{{'SERVICE_TYPE' | translate}}">
+                                                {{$select.selected | translate}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
+                                                <span ng-bind-html="deviceType | translate"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                        <p class="help-block">
+                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                            {{'REQUIRED' | translate}}
+                                        </p>
+                                    </div>
+
+                                    <div class="col-xs-6 input-group pull-right">
+                                        <ui-select class="form-control" type="text" theme="select2"
+                                                   ng-model="selectedData.firstSelectedProvider"
+                                                   search-enable="false"
+                                                   name="firstDeviceProvider"
+                                                   id="firstDeviceProvider" required>
+                                            <ui-select-match placeholder="{{'SELECT_PROVIDER' | translate}}">
+                                                {{ $select.selected.designation}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="provider in firstDeviceProviders">
+                                                <span ng-bind-html="provider.designation"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <p class="help-block">
+                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                            {{'REQUIRED' | translate}}
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!--Verification with Dismantle-->
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="dismantledCounter" class="control-label">
+                                        {{ 'VERIFICATION_WITH_DISMANTLE' | translate}}
+                                    </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="checkbox" ng-value="true"
+                                           ng-model="selectedData.verificationWithDismantle"
+                                           id="dismantledCounter" name="dismantledCounter" class="form-control-checkbox"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <br><br>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </accordion-group>
             </div>
 
-            <div class="panel panel-primary">
+            <div class="panel panel-primary" ng-hide="selectedData.verificationWithDismantle">
                 <accordion-group is-open="counter.open">
                     <accordion-heading>
                         <div class="panel-heading">
@@ -397,98 +483,7 @@
                     </accordion-heading>
                     <div class="panel-body">
                         <div class="row">
-
-                            <div class="form-group">
-                                <div class="col-md-4 form-group">
-                                    <label for="device">
-                                        {{'COUNTER_CATEGORY' | translate}} </label>
-                                </div>
-                                <div class="col-md-8 form-group">
-                                    <div class="pull-left col-lg-3 form-group" id="counterNumber" show-errors>
-                                        <ui-select class="form-control" type="text" theme="select2"
-                                                   ng-model="selectedData.selectedCount"
-                                                   name="device" id="device" required>
-                                            <ui-select-match allow-clear="false">
-                                                {{$select.selected}}
-                                            </ui-select-match>
-                                            <ui-select-choices
-                                                    repeat="option in deviceCountOptions | filter: $select.search">
-                                                <span ng-bind-html="option"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-                                    <div class="col-md-9 pull-right form-group" id="deviceBox" show-errors>
-                                        <ui-select class="form-control" type="text" theme="select2"
-                                                   ng-model="selectedData.selectedDeviceType"
-                                                   on-select="receiveProviders(selectedData.selectedDeviceType); receiveAllSymbols(selectedData.selectedDeviceType);"
-                                                   name="device" required>
-                                            <ui-select-match placeholder="{{'COUNTER_CATEGORY' | translate}}"
-                                                             allow-clear="true">
-                                                {{$select.selected | translate}}
-                                            </ui-select-match>
-                                            <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
-                                                <span ng-bind-html="deviceType | translate"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
-
-                                        <p class="help-block">
-                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                            {{'TYPEAHEAD_ERROR' | translate}}
-                                        </p>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <!--<div class="form-group" ng-show="isProvider>0">-->
-                                <!--<label for="provider" class="col-md-4 control-label">-->
-                                    <!--{{'I_AM_PROVIDER' | translate}}-->
-                                <!--</label>-->
-
-                                <!--<div class="col-md-8 pull-left">-->
-                                    <!--<input type="checkbox" class="form-control" ng-model="providerDefined">-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <div class="form-group"  ng-hide="providerDefined">
-                                <div class="col-md-4">
-                                    <label for="provider">
-                                        {{'PROVIDER' | translate}}
-                                    </label>
-                                </div>
-                                <div class="col-md-8 form-group" show-errors>
-                                    <ui-select class="form-control" type="text" theme="select2"
-                                               ng-model="selectedData.selectedProvider"
-                                               ng-required="!providerDefined"
-                                               name="provider" id="provider" required>
-                                        <ui-select-match placeholder="{{'PROVIDER' | translate}}" allow-clear="true">
-                                            {{$select.selected.designation}}
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="provider in providers | filter: $select.search">
-                                            <span ng-bind-html="provider.designation"></span>
-                                        </ui-select-choices>
-                                    </ui-select>
-
-                                    <p class="help-block">
-                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                        {{'TYPEAHEAD_ERROR' | translate}}
-                                    </p>
-
-                                </div>
-                            </div>
-
-                            <div class="form-group" ng-show="providerDefined">
-                                <div class="col-md-4 form-group">
-                                    <label for="provider" >{{ 'PROVIDER' | translate}} </label>
-                                </div>
-                                <div class="col-md-8 form-group" show-errors>
-                                    <input id="providerInfo" name="providerInfo" class="form-control"
-                                           ng-model="selectedProvider.designation"
-                                           placeholder={{selectedProvider.designation}}
-                                           readonly>
-                                </div>
-                            </div>
-
-                            <!-- ISdismantled  -->
+                            <!-- IsDismantled  -->
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">{{ 'DISMANTLED_COUNTER' | translate}}</label>
@@ -513,6 +508,7 @@
                                     <div class="input-group right-inner-addon">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default myGroupBtn"
+                                            ng-disabled="!selectedData.dismantled"
                                             ng-model="selectedData.dateOfDismantled"
                                             ng-click="showPicker()" options="optsMax" date-range-picker="optsMax">
                                         <i class="glyphicon glyphicon-calendar"></i>
@@ -521,11 +517,13 @@
 
                                         <input type="text" class="form-control date-picker"
                                                ng-model="selectedData.dateOfDismantled "
+                                               ng-disabled="!selectedData.dismantled"
                                                ng-click="showPicker()"
                                                date-range-picker="optsMax" options="optsMax"
                                                ng-change="receiveModuleNumbers()" readonly/>
                                          <span class="input-group-btn">
                                     <button type="button" class="btn btn-default myGroupBtn"
+                                            ng-disabled="!selectedData.dismantled"
                                             ng-show="!isDateDefault()"
                                             ng-click="clearDateOfDismantled()">
                                         <i class="glyphicon glyphicon-remove"></i>
@@ -570,10 +568,10 @@
                                 </div>
                             </div>
 
-                            <!-- Comment-->
+                            <!-- Counter state-->
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="comment">
-                                    {{'APPLICATION_COMMENT' | translate}}
+                                    {{'COUNTER_STATE' | translate}}
                                 </label>
 
                                 <div class="col-md-8">
@@ -624,7 +622,7 @@
                                     <ui-select class="form-control" type="text" theme="select2"
                                                ng-model="selectedData.counterSymbol"
                                                ng-required="selectedData.dismantled"
-                                               on-select="recieveStandardSizesBySymbol(selectedData.counterSymbol, selectedData.selectedDeviceType)"
+                                               on-select="recieveStandardSizesBySymbol(selectedData.counterSymbol, selectedData.firstSelectedDeviceType)"
                                                name="symbol" id="symbol">
                                         <ui-select-match allow-clear="false">
                                             {{$select.selected}}
@@ -695,6 +693,28 @@
                                 </div>
                             </div>
 
+                            <!--ACCUMULATED VOLUME-->
+                            <div class="form-group" >
+                                <div class="col-md-4 form-group">
+                                    <label for="accumulatedVolume">{{'ACCUMULATED_VOLUME' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 form-group" show-errors>
+                                    <input id="accumulatedVolume" name="accumulatedVolume" type="text" class="form-control"
+                                           ng-model="formData.accumulatedVolume"
+                                           ng-required="selectedData.dismantled"
+                                           ng-pattern="ACCUMULATED_VOLUME_REGEX"
+                                           placeholder="XXXXX">
+                                    <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                          id="okFeedBack"></span>
+
+                                    <p class="help-block" ng-if="clientForm.accumulatedVolume.$error.pattern">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        {{'VOLUME_ERROR' | translate}}
+                                    </p>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </accordion-group>
@@ -711,7 +731,6 @@
                     </accordion-heading>
                     <div class="panel-body">
                         <div class="row">
-
                             <div class="form-group">
 
                                 <!-- ENTRANCE -->
@@ -757,11 +776,9 @@
                                 </div>
 
                                 <!-- DATE OF verification/disassembly -->
-
                                 <div class="form-group col-md-4">
                                     <label class="control-label">{{'DATE_OF_VERIF/DISASSEMBLY'| translate }}</label>
                                 </div>
-
                                 <div class="form-group col-md-8" ng-class="dateValidation.css">
                                     <div class="input-group right-inner-addon">
                                     <span class="input-group-btn">
@@ -824,7 +841,6 @@
                                 <div class="form-group col-md-4">
                                     <label class="control-label">{{'NO_WATER_TO'| translate }}</label>
                                 </div>
-
                                 <div class="form-group col-md-8" ng-class="dateValidation.css">
                                     <div class="input-group right-inner-addon">
                                     <span class="input-group-btn">
@@ -867,7 +883,6 @@
         </accordion>
 
         <div class="row">
-
             <div class="form group col-md-10">
                 <button type="submit" class="btn btn-success"
                         ng-show="!showEditButton">
@@ -880,6 +895,10 @@
                 <button type="button" class="btn btn-primary" ng-hide="verificationID"
                         ng-click="createNew()">
                     {{'CREATE_BY_PATTERN'| translate}}
+                </button>
+                <button type="button" class="btn btn-primary" ng-hide="verificationID"
+                        ng-click="saveAndCreateByPattern()">
+                    {{'SAVE_AND_CREATE_BY_PATTERN'| translate}}
                 </button>
             </div>
             <div class="form-group col-md-2">
@@ -894,12 +913,11 @@
 
 </div>
 
-<div ng-show="!isShownForm " class="row col-md-12 alert alert-success alert-dismissible centered" role="alert">
+<div ng-show="!isShownForm" class="row col-md-12 alert alert-success alert-dismissible centered" role="alert">
     <button ng-click="closeAlert()" type="button" class="close btn-close-alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
     <i ng-show="!applicationCodes" class="fa fa-3x fa-spinner fa-spin col-md-6 col-md-offset-5"></i>
-
 
     <div ng-if="isMailValid" class="text-center" ng-show="applicationCodes">
         {{'APP_SENT_ORG' | translate}}
@@ -914,5 +932,4 @@
         </div>
         {{'APP_INVALID_MAIL' | translate}} <b>+380{{ clientForm.phoneNumber.$viewValue }} </b> <br>
     </div>
-</div>
 </div>
