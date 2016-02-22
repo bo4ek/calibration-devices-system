@@ -167,8 +167,8 @@ public class Verification implements Comparable {
     public Verification(
             Date initialDate, ClientData clientData, Organization provider,
             Device device, Status status, ReadStatus readStatus, AdditionalInfo info, boolean dismantled, Counter counter,
-            String comment, boolean sealPresence, String verificationId
-    ) {
+            String comment, boolean sealPresence, String verificationId) {
+
         this(initialDate, clientData, provider, device, status, readStatus, null, info, dismantled, counter,
                 comment, sealPresence, verificationId);
     }
@@ -311,8 +311,8 @@ public class Verification implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        int compareage = ((Verification) o).getQueue();
-        return this.queue - compareage;
+        int compareAge = ((Verification) o).getQueue();
+        return this.queue - compareAge;
     }
 
     public enum ReadStatus {

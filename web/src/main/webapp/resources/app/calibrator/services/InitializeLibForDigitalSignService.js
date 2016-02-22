@@ -462,7 +462,6 @@ angular
 
             loadCAServer();
 
-
             setPointerEvents(document.getElementById('PKeyReadButton'), true);
             document.getElementById('PKeyFileName').value = keyName;
             document.getElementById('PKeyPassword').value = password;
@@ -573,8 +572,7 @@ angular
                 return readPrivateKey(keyName, key, password, certificates, fromCache);
             },
             getVerifySign: function (file) {
-                var resultObj = verifyFile(file);
-                return resultObj;
+                return verifyFile(file);
             },
             isInitialized: function(){
                 return initialized;
@@ -582,16 +580,6 @@ angular
             initializeWithoutSelectCA: function(){
                 return init();
             }
-
-
         };
 
-
-
     });
-
-
-
-
-
-

@@ -71,11 +71,9 @@ public abstract class BaseCertificate implements Document {
     public String getCalibratorCompanyAddress() {
         try {
             Address address = verification.getStateVerificator().getAddress();
-            return address.getLocality() + ", " +
-                    address.getStreet() + ", " +
-                    address.getBuilding();
+            return String.join(",", address.getLocality(), address.getStreet(), address.getBuilding());
         } catch (Exception e) {
-            logger.error("address" + e);
+            logger.error("Vereficator's address has not been specified " + e);
             return Constants.NOT_SPECIFIED;
         }
     }
@@ -181,9 +179,7 @@ public abstract class BaseCertificate implements Document {
     public String getOwnerFullName() {
         try {
             ClientData ownerData = verification.getClientData();
-            return ownerData.getLastName() + " " +
-                    ownerData.getFirstName() + " " +
-                    ownerData.getMiddleName();
+            return String.join(" ", ownerData.getLastName(), ownerData.getFirstName(), ownerData.getMiddleName());
         } catch (Exception e) {
             logger.error("Data about owner has not been specified ", e);
             return Constants.NOT_SPECIFIED;
@@ -270,7 +266,7 @@ public abstract class BaseCertificate implements Document {
     }
 
     /**
-     * @return get the calibration type from module's characteristics, which was used to test
+     * @return get the calibration type from module's characteristics, which was used to test counter
      */
     @Placeholder(name = "CALIBRATION_TYPE")
     public String getCalibrationType() {
@@ -282,6 +278,19 @@ public abstract class BaseCertificate implements Document {
             }
         } catch (Exception e) {
             logger.error("Calibration type for this module had not been specified ", e);
+            return Constants.NOT_SPECIFIED;
+        }
+    }
+
+    /**
+     * @return digital signature for this document
+     */
+    @Placeholder(name = "SIGNATURE")
+    public String getSignature() {
+        try {
+            return verification.getSignature();
+        } catch (Exception e) {
+            logger.error("Signature for this document had not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }
