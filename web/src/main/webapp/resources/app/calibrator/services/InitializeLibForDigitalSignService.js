@@ -572,7 +572,8 @@ angular
                 return readPrivateKey(keyName, key, password, certificates, fromCache);
             },
             getVerifySign: function (file) {
-                return verifyFile(file);
+                var resultObj = verifyFile(file);
+                return resultObj;
             },
             isInitialized: function(){
                 return initialized;
@@ -583,3 +584,5 @@ angular
         };
 
     });
+
+

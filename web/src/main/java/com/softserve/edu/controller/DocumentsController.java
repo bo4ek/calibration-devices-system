@@ -117,6 +117,8 @@ public class DocumentsController {
 
     @Autowired
     private VerificationService verificationService;
+    @Autowired
+    private CalibrationTestService testService;
     @RequestMapping(value = "{documentType}/{verificationCode}/{fileFormat}/signed",
             method = RequestMethod.POST)
     public void addSignToDocument(HttpServletResponse response,
@@ -135,11 +137,16 @@ public class DocumentsController {
         byte[] finalDocument = ArrayUtils.addAll(documentByteArray, signatureByteArray);
 
         Verification verification = verificationService.findById(verificationCode);
-        verification.setSignedDocument(finalDocument);
         verification.setParsed(true);
         verification.setSignature(signature);
         verificationService.saveVerification(verification);
 
+        CalibrationTest calibrationTest = testService.findByVerificationId(verificationCode);
+        FileObject fileNew = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
+        byte[] documentNewByteArray = new byte[(int)fileNew.getContent().getSize()];
+        fileNew.getContent().getInputStream().read(documentNewByteArray);
+        verification.setSignedDocument(documentNewByteArray);
+        verificationService.saveVerification(verification);
         //new build
         response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         response.setHeader("Content-Length", String.valueOf(finalDocument.length));
