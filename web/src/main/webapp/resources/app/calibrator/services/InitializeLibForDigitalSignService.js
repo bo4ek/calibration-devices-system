@@ -7,7 +7,7 @@ angular
 
         var euSign = new EUSignCP();
         var utils = new Utils(euSign);
-        var URL_XML_HTTP_PROXY_SERVICE = "http://java.training.local:8080/Data/java/ProxyHandler.php";
+        var URL_XML_HTTP_PROXY_SERVICE = "http://localhost:8080/Data/java/ProxyHandler.php";
         var CAsServers = null;
         var CAServer = {
             "issuerCNs": null,
@@ -31,8 +31,8 @@ angular
         var CAServerIndexSessionStorageName = "CAServerIndex";
         var PrivateKeyCertificatesChainSessionStorageName = "PrivateKeyCertificatesChain";
         var PrivateKeyCertificatesSessionStorageName = "PrivateKeyCertificates";
-        var URL_GET_CERTIFICATES = "http://java.training.local:8080/Data/CACertificates.p7b?version=1.0.4";
-        var URL_CAS = "http://java.training.local:8080/Data/CAs.json?version=1.0.4";
+        var URL_GET_CERTIFICATES = "http://localhost:8080/Data/CACertificates.p7b?version=1.0.4";
+        var URL_CAS = "http://localhost:8080/Data/CAs.json?version=1.0.4";
         var EU_ERROR_CERT_NOT_FOUND = 0x0033;
         var privateKeyCerts = null;
 
@@ -572,7 +572,8 @@ angular
                 return readPrivateKey(keyName, key, password, certificates, fromCache);
             },
             getVerifySign: function (file) {
-                return verifyFile(file);
+                var resultObj = verifyFile(file);
+                return resultObj;
             },
             isInitialized: function(){
                 return initialized;
