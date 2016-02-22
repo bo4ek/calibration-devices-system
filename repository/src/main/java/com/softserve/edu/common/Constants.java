@@ -14,16 +14,24 @@ public interface Constants {
     int SKIP_TO_IMAGES = 2452;
     int START_OFFSET_IN_ARRAY = 0;
 
-    int WATER_ID = 0;
-    int THERMAL_ID = 1;
+    int MODULE_WATER_ID = 2;
+    int MODULE_WATER_NUMBER_INITIAL = 20_000;
+    int MODULE_THERMAL_ID = 1;
+    int MODULE_THERMAL_NUMBER_INITIAL = 10_000;
+    int MODULE_ID_INCREMENT = 1;
 
     int ONE_BYTE = 1;
     int TWO_BYTES = 2;
     int FOUR_BYTES = 4;
     int EIGHT_BYTES = 8;
+    int TEN = 10;
     int TWELVE_BYTES = 12;
     int SIXTEEN_BYTES = 16;
     int THIRTY_TWO_BYTES = 32;
+    double THOUSAND_DOUBLE = 1000.0;
+    int THOUSAND_INT = 1000;
+    double TEN_THOUSANDS_DOUBLE = 10_000.0;
+    double ONE_HUNDER_THOUSANDS_DOUBLE = 100_000.0;
     double THOUSAND = 1000.0;
 
     byte ONE_VERIFICATION = 1;
