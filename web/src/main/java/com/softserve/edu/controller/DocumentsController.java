@@ -137,8 +137,10 @@ public class DocumentsController {
         Verification verification = verificationService.findById(verificationCode);
         verification.setSignedDocument(finalDocument);
         verification.setParsed(true);
+        verification.setSignature(signature);
         verificationService.saveVerification(verification);
 
+        //new build
         response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         response.setHeader("Content-Length", String.valueOf(finalDocument.length));
         response.setHeader("Content-Disposition", "attachment; filename=" + verificationCode + ".docx");

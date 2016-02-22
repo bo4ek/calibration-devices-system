@@ -156,6 +156,9 @@ public class Verification implements Comparable {
     @Column(name = "verificationTime")
     private String verificationTime;
 
+    @Column
+    private String signature;
+
     public Verification(String verificationId, int queue) {
         this.id = verificationId;
         this.queue = queue;
