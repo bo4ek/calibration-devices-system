@@ -221,7 +221,7 @@ angular
              */
             $scope.openDetails = function (verifId, verifDate, verifReadStatus, verifStatus) {
 
-                $modal.open({
+                var modalInstance = $modal.open({
                     animation: true,
                     backdrop: 'static',
                     templateUrl: 'resources/app/provider/views/modals/new-verification-details.html',
@@ -242,6 +242,9 @@ angular
                                 });
                         }
                     }
+                });
+                modalInstance.result.then(function () {
+                    $scope.tableParams.reload();
                 });
             };
 

@@ -302,44 +302,19 @@
                     <label for="street" class="col-md-2 control-label">{{'STREET' | translate}}</label>
 
                     <div class="col-md-8">
-                        <!--Street type-->
-                        <div class="pull-left col-xs-3" id="typeStreet">
-                            <ui-select class="form-control" type="text" theme="select2"
-                                       ng-model="selectedValues.selectedStreetType"
-                                       ng-disabled="!formData.mailIndex"
-                                       search-enabled="false"
-                                       name="streetType" required>
-                                <ui-select-match placeholder="{{'TYPE_OF_STREET' | translate}}" allow-clear="true">
-                                    {{$select.selected.designation}}
-                                </ui-select-match>
-                                <ui-select-choices repeat="streetsType in streetsTypes | filter: $select.search">
-                                    <span ng-bind-html="streetsType.designation"></span>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
                         <!--Street name-->
-                        <div class="col-xs-9" id="streetBox"
-                             ng-class="{'has-success' : selectedValues.selectedStreet  && selectedValues.selectedIndex,
-                                        'has-error' : !selectedValues.selectedStreet &&  clientForm.street.$dirty && selectedValues.selectedIndex}">
-                            <input name="street" class="form-control"
-                                   type="text" id="street"
-                                   autocomplete="off"
-                                   ng-model="selectedValues.selectedStreet"
-                                   ng-disabled="!selectedValues.selectedStreetType"
-                                   typeahead="street as street.designation for street in streets | filter: $viewValue | limitTo: 4"
-                                   typeahead-editable="false"
-                                   typeahead-on-select="receiveBuildings(selectedValues.selectedStreet)"
-                                   required
-                                   placeholder="{{'NAME_OF_STREET' | translate}}">
+                        <input name="street" class="form-control"
+                               type="text" id="street"
+                               autocomplete="off"
+                               ng-model="selectedValues.selectedStreet"
+                               ng-disabled="!formData.mailIndex"
+                               typeahead="street as street.designation for street in streets | filter: $viewValue | limitTo: 4"
+                               typeahead-editable="false"
+                               typeahead-on-select="receiveBuildings(selectedValues.selectedStreet)"
+                               required
+                               placeholder="{{'NAME_OF_STREET' | translate}}">
 
-                            <span class="form-control-feedback street_ok_padding glyphicon form-horizontal glyphicon glyphicon-ok-sign"></span>
-
-                        </div>
-
-                        <p class="help-block" ng-if="clientForm.streetType.$error.required">
-                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{'REQUIRED' | translate}}
-                        </p>
+                        <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"></span>
 
                         <p class="help-block street-required" ng-if="clientForm.street.$error.required || clientForm.street.$invalid" >
                             <span class="glyphicon glyphicon-exclamation-sign"></span>

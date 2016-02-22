@@ -20,7 +20,7 @@ angular
                 {id: 'PROVIDER_EMPLOYEE', label: null},
                 {id: 'PROVIDER_ADMIN', label: null},
                 {id: 'STATE_VERIFICATOR_EMPLOYEE', label: null},
-                {id: 'STATE_VERIFICATOR_ADMIN', label: null},
+                {id: 'STATE_VERIFICATOR_ADMIN', label: null}
             ];
 
             $scope.setTypeDataLanguage = function () {
