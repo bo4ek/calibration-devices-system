@@ -122,7 +122,7 @@ angular
                     case ('login') :
                         var username = $scope.sysAdminFormData.username;
                         if (username == null) {
-                        } else if ($scope.USERNAME_REGEX.test(username)) {
+                        } else if ($rootScope.USERNAME_REGEX.test(username)) {
                             isUsernameAvailable(username);
                         } else {
                             validator('loginValid', false);
@@ -390,22 +390,11 @@ angular
                     });
             }
 
-            /**
-             * Receives all regex for input fields
-             *
-             *
-             */
             $scope.PNOHE_REGEX_MY = /^[1-9]\d{8}$/;
-            $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
-            $scope.BUILDING_REGEX = /^[1-9][0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457])?$/;
-            $scope.FLAT_REGEX = /^([1-9][0-9]{0,3}|0)$/;
 
             /* Closes the modal window
              */
             $rootScope.closeModal = function () {
                 $modalInstance.dismiss();
             };
-
-            //   $log.info(sysAdminFormData);
-
         }]);

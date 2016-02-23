@@ -159,7 +159,7 @@ angular
                     case ('login') :
                         var username = $scope.employeeFormData.username;
                         if (username == null) {
-                        } else if ($scope.USERNAME_REGEX.test(username)) {
+                        } else if ($rootScope.USERNAME_REGEX.test(username)) {
                             isUsernameAvailable(username)
                         } else {
                             validator('loginValid', false);
@@ -331,10 +331,8 @@ angular
 
             /**
              * Receives all regex for input fields
-             *
              */
             $scope.PNOHE_REGEX_MY = /^[1-9]\d{8}$/;
-            $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
 
             /* Closes the modal window
              */

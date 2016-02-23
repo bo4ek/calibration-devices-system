@@ -261,7 +261,7 @@ angular
                 userService.isUsernameAvailable(username).then(
                     function (data) {
 
-                        if ($scope.USERNAME_REGEX.test(username) && ($scope.oldUsername != username) && (username != "")) {
+                        if ($rootScope.USERNAME_REGEX.test(username) && ($scope.oldUsername != username) && (username != "")) {
                             $scope.isUsernameAvailable = data;
                         } else {
                             $scope.isUsernameAvailable = true;
@@ -294,7 +294,7 @@ angular
                         var lastName = $rootScope.organization.lastName;
                         if (lastName == null) {
 
-                        } else if ($scope.FIRST_LAST_NAME_REGEX.test(lastName)) {
+                        } else if ($rootScope.FIRST_LAST_NAME_REGEX.test(lastName)) {
 
                             validator('lastName', false);
                         } else {
@@ -331,7 +331,7 @@ angular
                     case ('login') :
                         var username = $scope.adminsUserName;
                         if (username == null) {
-                        } else if ($scope.USERNAME_REGEX.test(username)) {
+                        } else if ($rootScope.USERNAME_REGEX.test(username)) {
                             $scope.checkIfUsernameIsAvailable();
                         } else {
                             validator('loginValid', false);
@@ -858,10 +858,6 @@ angular
             });
 
             $scope.ORGANIZATION_NAME_REGEX = /^[0-9A-Za-z\u0410\u002d\u042f\u0404\u0406\u0407\u0490\u0022\u0027\u0430\u002d\u044f\u0454\u0456\u0457\u0491\u0020\u002d]+$/;
-            $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
-            $scope.PASSWORD_REGEX = /^(?=.{4,20}$).*/;
-            $scope.BUILDING_REGEX = /^[1-9][0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457])?$/;
-            $scope.FLAT_REGEX = /^([1-9][0-9]{0,3}|0)$/;
 
             /**
              * Receives all possible Districts for service area

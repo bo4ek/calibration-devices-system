@@ -166,15 +166,9 @@ angular
                 }
             }
 
-
             $scope.CATEGORY_DEVICE_CODE = /^[\u0430-\u044f\u0456\u0457\u0454a-z\d]{13}$/;
-            $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
-            $scope.PASSWORD_REGEX = /^(?=.{4,20}$).*/;
-            $scope.BUILDING_REGEX = /^[1-9]{1}[0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457]){0,1}$/;
-            $scope.FLAT_REGEX = /^([1-9]{1}[0-9]{0,3}|0)$/;
 
             if (agreement !== undefined) {
-
 
             }
         }
