@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
  */
 @Deprecated
 public class ArchivalVerificationsQueryConstructorCalibrator {
-    static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorProvider.class);
+    static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorCalibrator.class);
 
 
     public static CriteriaQuery<Verification> buildSearchQuery(Long employeeId, String startDateToSearch,
@@ -78,10 +78,8 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
             queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(searchStatus.trim())), queryPredicate);
         } else {
             queryPredicate = cb.and(cb.or(
-                    Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb),
                     Status.TEST_OK.getQueryPredicate(root, cb),
-                    Status.TEST_NOK.getQueryPredicate(root, cb),
-                    Status.REJECTED.getQueryPredicate(root, cb)
+                    Status.TEST_NOK.getQueryPredicate(root, cb)
             ), queryPredicate);
         }
 
