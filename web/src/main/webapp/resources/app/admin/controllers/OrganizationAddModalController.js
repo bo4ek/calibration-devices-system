@@ -523,11 +523,5 @@ angular
                         $modalInstance.close();
                     });
             }
-
-            $scope.ORGANIZATION_NAME_REGEX = /^[0-9A-Za-z\u0410\u002d\u042f\u0404\u0406\u0407\u0490\u0022\u0027\u0430\u002d\u044f\u0454\u0456\u0457\u0491\u0020\u002d]+$/;
-            $scope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
-            $scope.PASSWORD_REGEX = /^(?=.{4,20}$).*/;
-            $scope.BUILDING_REGEX = /^[1-9]{1}[0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457]){0,1}$/;
-            $scope.FLAT_REGEX = /^([1-9]{1}[0-9]{0,3}|0)$/;
         }
     ]);

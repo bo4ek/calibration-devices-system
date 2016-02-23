@@ -43,10 +43,10 @@
                                                                    ng-click="resolveVerificationId(verification.id)"/>
                                         </td>
                                         <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'sent_to_verificator_date'"
-                                            filter="{ 'sentToVerificatorDate': 'text' }">{{ verification.sentToVerificatorDate }}
+                                            filter="{ 'date': 'sentToVerificationDate' }">{{ verification.sentToVerificatorDate }}
                                         </td>
                                         <td data-title="'PROTOCOL_DATE' | translate" class="col-md-2" sortable="'date'"
-                                            filter="{ 'date': 'date' }">{{ verification.initialDate }}
+                                            filter="{ 'date': 'protocolDate' }">{{ verification.initialDate }}
                                         </td>
                                         <td data-title="'SETTING_NUMBER' | translate" sortable="'serial_number'"
                                             filter="{ 'serialNumber': 'text' }">{{ verification.serialNumber }}
@@ -171,18 +171,39 @@
                                         </ul>
                                     </div>
                                 </script>
-                                <script type="text/ng-template" id="ng-table/filters/date.html">
 
-                                    <div class="input-group right-inner-addon">
+                                <script type="text/ng-template" id="ng-table/filters/protocolDate.html">
+
+                                    <div class="input-group right-inner-addon" style="width: 100%">
                                         <i id="calendar_icon" class="glyphicon glyphicon-calendar"
                                            ng-click="showPicker($event)"></i>
-                                        <input date-range-picker="opts" class="form-control input-md" type="text"
-                                               ng-model="myDatePicker.pickerDate" ng-change="doSearch()" options="opts"
+                                        <input date-range-picker="opts" class="form-control date-picker" type="text"
+                                               ng-model="datePicker.initialDate" ng-change="doSearch()" options="opts"
                                                id="datepickerfield" readonly/>
+
                                         <span class="input-group-btn">
                                                   <button type="button" class="btn btn-default myGroupBtn"
-                                                          ng-show="myDatePicker.pickerDate.startDate"
-                                                          ng-click="clearDate()">
+                                                          ng-show="!isInitialDateDefault()"
+                                                          ng-click="clearInitialDate()">
+                                                      <i class="glyphicon glyphicon-remove"></i>
+                                                  </button>
+                                        </span>
+                                    </div>
+                                </script>
+
+                                <script type="text/ng-template" id="ng-table/filters/sentToVerificationDate.html">
+
+                                    <div class="input-group right-inner-addon" style="width: 100%">
+                                        <i id="sent_to_verificator_calendar_icon" class="glyphicon glyphicon-calendar"
+                                           ng-click="showPickerMy($event)"></i>
+                                        <input date-range-picker="opts" class="form-control date-picker" type="text"
+                                               ng-model="datePicker.sentToVerificatorDate" ng-change="doSearch()" options="opts"
+                                               id="sent_to_verificator_datepicker" readonly/>
+
+                                        <span class="input-group-btn">
+                                                  <button type="button" class="btn btn-default myGroupBtn"
+                                                          ng-show="!isSentVerificatorDateDefault()"
+                                                          ng-click="clearSentToVerificatorDate()">
                                                       <i class="glyphicon glyphicon-remove"></i>
                                                   </button>
                                         </span>

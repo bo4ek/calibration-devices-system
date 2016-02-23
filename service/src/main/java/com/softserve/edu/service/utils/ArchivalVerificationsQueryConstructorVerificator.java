@@ -20,7 +20,7 @@ import java.util.Date;
  */
 @Deprecated
 public class ArchivalVerificationsQueryConstructorVerificator {
-    static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorProvider.class);
+    static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorVerificator.class);
 
 
     public static CriteriaQuery<Verification> buildSearchQuery(Long employeeId, String dateToSearch,
@@ -70,6 +70,11 @@ public class ArchivalVerificationsQueryConstructorVerificator {
 
         if (searchStatus != null) {
             queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(searchStatus.trim())), queryPredicate);
+        } else {
+            queryPredicate = cb.and(cb.or(
+                    Status.TEST_NOK.getQueryPredicate(root, cb),
+                    Status.TEST_OK.getQueryPredicate(root, cb)
+            ), queryPredicate);
         }
 
         if (dateToSearch != null) {

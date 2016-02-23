@@ -34,7 +34,8 @@ import static org.junit.Assert.*;
 public class NewVerificationsQueryConstructorVerificatorTest {
 
     private Long verificatorId;
-    private String dateToSearch;
+    private String startDateToSearch;
+    private String endDateToSearch;
     private String idToSearch;
     private String fullNameToSearch;
     private String streetToSearch;
@@ -50,7 +51,8 @@ public class NewVerificationsQueryConstructorVerificatorTest {
     private String flat;
     private String numberOfCounter;
     private String numberOfProtocol;
-    private String sentToVerificatorDate;
+    private String sentToVerificatorDateFrom;
+    private String sentToVerificatorDateTo;
     private String serialNumber;
 
     @Mock
@@ -109,7 +111,8 @@ public class NewVerificationsQueryConstructorVerificatorTest {
     @Test
     public void testBuildSearchQueryWithAllParametrsSetNull() throws Exception {
         status = null;
-        dateToSearch = null;
+        startDateToSearch = null;
+        endDateToSearch = null;
         idToSearch = null;
         fullNameToSearch = null;
         streetToSearch = null;
@@ -123,9 +126,9 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         when(criteriaBuilder.and(criteriaBuilder.equal(join.get("id"), verificatorId), predicate)).thenReturn(predicate);
         CriteriaQuery<Verification> expected = verificationCriteriaQuery;
         CriteriaQuery<Verification> actual = NewVerificationsQueryConstructorVerificator
-                .buildSearchQuery(verificatorId, dateToSearch,
+                .buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch,
                         idToSearch, status, verificatorEmployee, nameProvider,
-                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, sortCriteria,
+                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, sortCriteria,
                         sortOrder, entityManager);
         assertEquals(expected, actual);
     }
@@ -135,7 +138,8 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         status = "TEST_OK";
         when(criteriaBuilder.and(criteriaBuilder.equal(root.get("status"), Status.valueOf(status.trim())), predicate))
                 .thenReturn(predicate);
-        dateToSearch = "2015-10-27";
+        startDateToSearch = "2015-10-27";
+        endDateToSearch = "2015-11-27";
         idToSearch = "idToSearch";
         when(criteriaBuilder.and(criteriaBuilder.like(root.get("id"), "%" + idToSearch + "%"), predicate))
                 .thenReturn(predicate);
@@ -172,9 +176,9 @@ public class NewVerificationsQueryConstructorVerificatorTest {
 
         CriteriaQuery<Verification> expected = verificationCriteriaQuery;
         CriteriaQuery<Verification> actual = NewVerificationsQueryConstructorVerificator
-                .buildSearchQuery(verificatorId, dateToSearch,
+                .buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch,
                         idToSearch, status, verificatorEmployee, nameProvider,
-                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, sortCriteria,
+                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, sortCriteria,
                         sortOrder, entityManager);
         assertEquals(expected, actual);
 
@@ -186,8 +190,8 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         when(longCriteriaQuery.from(Verification.class)).thenReturn(root);
         CriteriaQuery<Long> expected = longCriteriaQuery;
         CriteriaQuery<Long> actual = NewVerificationsQueryConstructorVerificator
-                .buildCountQuery(verificatorId, dateToSearch, idToSearch, status, verificatorEmployee, nameProvider,
-                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDate, serialNumber, entityManager);
+                .buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee, nameProvider,
+                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, entityManager);
         assertEquals(expected, actual);
 
     }

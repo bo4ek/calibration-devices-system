@@ -37,6 +37,8 @@ public interface Constants {
     byte ONE_VERIFICATION = 1;
     int FIRST_INDEX_IN_ARRAY = 0;
 
+    boolean DEFAULT_DEVICE = true;
+
     String UTF8_ENCODING = "UTF-8";
     String MAIN_PHOTO = "mainPhoto";
     String BEGIN_PHOTO = "beginPhoto";

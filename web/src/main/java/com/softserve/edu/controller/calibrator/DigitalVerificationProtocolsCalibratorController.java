@@ -26,6 +26,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -88,13 +89,13 @@ public class DigitalVerificationProtocolsCalibratorController {
         ListToPageTransformer<Verification> queryResult = protocolsService.findPageOfVerificationsByCalibratorIdAndStatus(
                 employeeUser.getOrganizationId(), pageNumber, itemsPerPage,
                 searchData.getDate(),
+                searchData.getEndDate(),
                 searchData.getId(),
                 searchData.getStatus(),
                 searchData.getNameProvider(),
                 searchData.getNameCalibrator(),
                 searchData.getNumberOfCounter(),
                 searchData.getNumberOfProtocol(),
-                searchData.getSentToVerificatorDate(),
                 searchData.getSerialNumber(),
                 sortCriteria,
                 sortOrder,
@@ -119,5 +120,20 @@ public class DigitalVerificationProtocolsCalibratorController {
                 OrganizationType.STATE_VERIFICATOR, userOrganization.getDeviceTypes().iterator().next()).stream()
                 .map(organization -> new OrganizationDTO(organization.getId(), organization.getName()))
                 .collect(Collectors.toSet());
+    }
+
+    @RequestMapping(value = "earliestDate", method = RequestMethod.GET)
+    public String getEarliestDateOfDigitalVerificationProtocolsByCalibrator(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if (user != null) {
+            Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
+            Date earliestDate = verificationService.getEarliestDateOfDigitalVerificationProtocolsByCalibrator(organization);
+            if (earliestDate != null) {
+                return earliestDate.toString();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }

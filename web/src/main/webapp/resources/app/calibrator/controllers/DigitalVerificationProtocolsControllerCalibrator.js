@@ -19,56 +19,100 @@ angular
             $scope.clearAll = function () {
                 $scope.selectedStatus.name = null;
                 $scope.tableParams.filter({});
-                $scope.myDatePicker.pickerDate = $scope.defaultDate;
+                $scope.clearDate();
+            };
+
+            $scope.clearDate = function () {
+                $scope.datePicker.initialDate = $scope.defaultDate;
+                $scope.tableParams.filter()['date'] = $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD");
+                $scope.tableParams.filter()['endDate'] = $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD");
             };
 
             $scope.doSearch = function () {
                 $scope.tableParams.reload();
             };
 
-            $scope.myDatePicker = {};
-            $scope.myDatePicker.pickerDate = null;
+            $scope.datePicker = {};
+            $scope.datePicker.initialDate = null;
             $scope.defaultDate = null;
 
-            $scope.initDatePicker = function () {
 
-                $scope.myDatePicker.pickerDate = {
+            $scope.initDatePicker = function (date) {
 
+                $scope.datePicker.initialDate = {
+                    startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
+                    endDate: moment()
                 };
 
                 if ($scope.defaultDate == null) {
-                    $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
+                    $scope.defaultDate = angular.copy($scope.datePicker.initialDate);
                 }
-
-                $scope.setTypeDataLangDatePicker = function () {
-                    var lang = $translate.use();
-                    if (lang === 'ukr') {
-                        moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
-                    } else {
-                        moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
-                    }
-                    $scope.opts = {
-                        format: 'DD-MM-YYYY',
-                        singleDatePicker: true,
-                        showDropdowns: true,
-                        eventHandlers: {}
-                    };
+                moment.locale('uk');
+                $scope.opts = {
+                    format: 'DD-MM-YYYY',
+                    showDropdowns: true,
+                    locale: {
+                        firstDay: 1,
+                        fromLabel: 'Від',
+                        toLabel: 'До',
+                        applyLabel: "Прийняти",
+                        cancelLabel: "Зачинити",
+                        customRangeLabel: "Обрати самостійно"
+                    },
+                    ranges: {
+                        'Сьогодні': [moment(), moment()],
+                        'Вчора': [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
+                        'Цього тижня': [moment().startOf('week'), moment().endOf('week')],
+                        'Цього місяця': [moment().startOf('month'), moment().endOf('month')],
+                        'Попереднього місяця': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        'За увесь час': [$scope.defaultDate.startDate, $scope.defaultDate.endDate]
+                    },
+                    eventHandlers: {}
                 };
-
-                $scope.setTypeDataLangDatePicker();
             };
 
             $scope.showPicker = function ($event) {
                 angular.element("#datepickerfield").trigger("click");
             };
 
-            $scope.clearDate = function () {
-                //daterangepicker doesn't support null dates
-                $scope.myDatePicker.pickerDate = $scope.defaultDate;
-                $scope.tableParams.filter({});
+            $scope.isInitialDateDefault = function () {
+                var initialDate = $scope.datePicker.initialDate;
+
+                if (initialDate == null || $scope.defaultDate == null) {
+                    return true;
+                }
+                if (initialDate.startDate.isSame($scope.defaultDate.startDate, 'day')
+                    && initialDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
+                    return true;
+                }
+                return false;
             };
 
-            $scope.initDatePicker();
+
+            $scope.checkFilters = function () {
+                if ($scope.tableParams == null) return false;
+                var obj = $scope.tableParams.filter();
+                for (var i in obj) {
+                    if (obj.hasOwnProperty(i) && obj[i]) {
+                        if (i == 'date' || i == 'endDate')
+                            continue;
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            $scope.checkDateFilters = function () {
+                if ($scope.tableParams == null) return false;
+                var obj = $scope.tableParams.filter();
+                if ($scope.isInitialDateDefault())
+                    return false;
+                else if (!moment(obj.date).isSame($scope.defaultDate.startDate)
+                    || !moment(obj.endDate).isSame($scope.defaultDate.endDate)) {
+                    return true;
+                }
+                return false;
+            };
 
             $scope.selectedStatus = {
                 name: null
@@ -99,6 +143,8 @@ angular
 
             $scope.setTypeDataLanguage();
 
+            digitalVerificationProtocolsServiceCalibrator.getNewVerificationEarliestDate().success(function (date) {
+                $scope.initDatePicker(date);
             $scope.tableParams = new ngTableParams({
                 page: 1,
                 count: 10,
@@ -112,15 +158,14 @@ angular
                     var sortCriteria = Object.keys(params.sorting())[0];
                     var sortOrder = params.sorting()[sortCriteria];
 
-                    if ($scope.myDatePicker.pickerDate.startDate != null) {
-                        params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
-                    }
+                    params.filter().date = $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD");
+                    params.filter().endDate = $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD");
 
                     if ($scope.selectedStatus.name != null) {
                         params.filter().status = $scope.selectedStatus.name.id;
                     }
                     else {
-                        params.filter().status = null; //case when the filter is cleared with a button on the select
+                        params.filter().status = null;
                     }
                     digitalVerificationProtocolsServiceCalibrator.getProtocols(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
                         .success(function (result) {
@@ -131,7 +176,7 @@ angular
                             $log.debug('error fetching data:', result);
                         });
                 }
-            });
+            })});
             $scope.idsOfVerifications = [];
             $scope.checkedItems = [];
             $scope.allIsEmpty = true;

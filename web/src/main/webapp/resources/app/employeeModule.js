@@ -251,7 +251,9 @@
             $rootScope.MIDDLE_NAME_REGEX = /^([A-Z][\u0027]?[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
             $rootScope.PHONE_REGEX = /^[1-9]\d{8}$/;
             $rootScope.EMAIL_REGEX = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
-
+            $rootScope.FLAT_REGEX = /^([1-9][0-9]{0,3}|0)$/;
+            $rootScope.BUILDING_REGEX = /^[1-9]{1}[0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457]){0,1}$/;
+            $rootScope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
     });
 
     define([

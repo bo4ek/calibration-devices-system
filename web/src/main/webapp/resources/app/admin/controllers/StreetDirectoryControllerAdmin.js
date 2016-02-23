@@ -15,16 +15,30 @@ angular
         'AddressService',
         function ($rootScope, $scope, $modal, $http, $filter, ngTableParams, $translate, $timeout, toaster, AddressService) {
 
+            $scope.filterData = {};
+            $scope.filterData.selectedRegion = 'Київ'; //default value for filter
+            $scope.filterData.selectedCity = 'Київ'; //default value for filter
+
+            $scope.doSearch = function () {
+                $scope.tableParams.reload();
+            };
+
             $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 5
+                    count: 10
                 },
                 {
                     total: 0,
-                    filterDelay: 1000,
+                    filterDelay: 5000,
                     getData: function ($defer, params) {
                         var sortCriteria = Object.keys(params.sorting())[0];
                         var sortOrder = params.sorting()[sortCriteria];
+                        if ($scope.filterData.selectedRegion != null) {
+                            params.filter().region = $scope.filterData.selectedRegion;
+                        }
+                        if ($scope.filterData.selectedCity != null) {
+                            params.filter().city = $scope.filterData.selectedCity;
+                        }
                         AddressService.getAllStreets(params.page(), params.count(), params.filter(), sortCriteria, sortOrder).then(function (response) {
                             $scope.resultsCount = response.totalItems;
                             $defer.resolve(response.content);
@@ -47,9 +61,17 @@ angular
             };
 
             $scope.clearAll = function () {
+                $scope.filterData.selectedRegion = null;
+                $scope.filterData.selectedCity = null;
                 $scope.tableParams.filter({});
             };
 
+            /**
+             * Opens modal window for adding new calibration module.
+             */
+            $scope.openAddStreetModal = function () {
+
+            };
 
         }]);
 

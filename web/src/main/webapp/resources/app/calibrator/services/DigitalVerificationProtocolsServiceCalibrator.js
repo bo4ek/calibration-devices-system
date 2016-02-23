@@ -25,6 +25,17 @@ angular
                             return err;
                         });
                 },
+
+                getNewVerificationEarliestDate: function () {
+                    var url = '/calibrator/protocols/earliestDate';
+                    return $http.get(url)
+                        .success(function (data) {
+                            return data;
+                        })
+                        .error(function (err) {
+                            return err;
+                        });
+                }
             };
             function getDataWithParams(url, params) {
                 return $http.get(url, {

@@ -720,7 +720,19 @@ input[type="radio"], input[type="checkbox"] {
     z-index: 100;
 }
 
+#sent_to_verificator_calendar_icon {
+    position: absolute;
+    left: 10px;
+    padding-right: 22px;
+    padding-top: 10px;
+    z-index: 100;
+}
+
 #datepickerfield:read-only {
+    background-color: white;
+}
+
+#sent_to_verificator_datepicker:read-only {
     background-color: white;
 }
 

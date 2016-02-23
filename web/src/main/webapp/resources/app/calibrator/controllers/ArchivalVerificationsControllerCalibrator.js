@@ -28,24 +28,22 @@ angular
 
             $scope.doSearch = function () {
                 $scope.tableParams.reload();
-            }
+            };
 
             $scope.selectedStatus = {
                 name: null
-            }
+            };
             //for measurement device type
             $scope.selectedDeviceType = {
                 name: null
-            }
+            };
             $scope.selectedProtocolStatus = {
                 name: null
-            }
+            };
 
 
 
             $scope.statusData = [
-                {id: 'REJECTED', label: null},
-                {id: 'SENT_TO_VERIFICATOR', label: null},
                 {id: 'TEST_OK', label: null},
                 {id: 'TEST_NOK', label: null}
             ];
@@ -67,10 +65,8 @@ angular
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    $scope.statusData[0].label = 'Відхилена';
-                    $scope.statusData[1].label = 'Предявлено повірнику';
-                    $scope.statusData[2].label = 'Перевірено придатний';
-                    $scope.statusData[3].label = 'Перевірено непридатний';
+                    $scope.statusData[0].label = 'Перевірено придатний';
+                    $scope.statusData[1].label = 'Перевірено непридатний';
 
                     $scope.deviceTypeData[0].label = 'Холодна вода';
                     $scope.deviceTypeData[1].label = 'Гаряча вода';
@@ -81,10 +77,8 @@ angular
                     $scope.protocolStatusData[1].label = 'Не придатний';
 
                 } else if (lang === 'eng') {
-                    $scope.statusData[0].label = 'Rejected';
-                    $scope.statusData[1].label = 'Sent to verificator';
-                    $scope.statusData[2].label = 'Tested OK';
-                    $scope.statusData[3].label = 'Tested NOK';
+                    $scope.statusData[0].label = 'Tested OK';
+                    $scope.statusData[1].label = 'Tested NOK';
 
                     $scope.deviceTypeData[0].label = 'Cold water';
                     $scope.deviceTypeData[1].label = 'Hot water';

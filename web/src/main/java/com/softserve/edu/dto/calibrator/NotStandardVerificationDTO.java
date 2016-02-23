@@ -44,7 +44,7 @@ public class NotStandardVerificationDTO {
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address, String firstName, String lastName,
                                       String middleName, Counter counter, Set<CalibrationTest> tests,
-                                      Organization providerFromBBI, String rejectMessage, String comment) {
+                                      Organization providerFromBBI, Organization nameProvider, String rejectMessage, String comment) {
         this.id = id;
         this.initialDate = initialDate;
         this.fullName = lastName + " " + firstName + " " + middleName;
@@ -53,16 +53,18 @@ public class NotStandardVerificationDTO {
         this.locality = address.getLocality();
         this.building = address.getBuilding();
         this.flat = address.getFlat();
-        this.symbol = counter.getCounterType().getSymbol();
-        this.standardSize = counter.getCounterType().getStandardSize();
-        this.realiseYear = counter.getReleaseYear();
-        this.stamp = counter.getStamp();
+         this.symbol = (counter != null && counter.getCounterType() != null ? counter.getCounterType().getSymbol() : null);
+
+        this.standardSize = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getStandardSize() : null;
+        this.realiseYear = (counter != null ) ? counter.getReleaseYear() : null;
+        this.stamp = (counter != null) ? counter.getStamp() : null;
         this.rejectMessage = rejectMessage;
         this.comment = comment;
-        this.providerFromBBI = providerFromBBI.getName();
+        this.providerFromBBI = (providerFromBBI != null) ? providerFromBBI.getName(): null;
+        this.nameProvider = (nameProvider != null) ? nameProvider.getName() : null;
         // In case of Not Standard Verifications one verification has only one test
-        this.fileName = tests.iterator().next().getName();
-        this.testResult = tests.iterator().next().getTestResult().toString();
+        this.fileName = (tests != null && tests.size() != 0) ? tests.iterator().next().getName() : null;
+        this.testResult = (tests != null && tests.size() != 0) ? tests.iterator().next().getTestResult().toString() : null;
     }
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address,
@@ -76,18 +78,4 @@ public class NotStandardVerificationDTO {
 
     }
 
-    public NotStandardVerificationDTO(String id, Date initialDate, Address address, String firstName, String lastName,
-                                      String middleName, Organization provider, String rejectMessage) {
-        this.id = id;
-        this.initialDate = initialDate;
-        this.fullName = lastName + " " + firstName + " " + middleName;
-        this.street = address.getStreet();
-        this.district = address.getDistrict();
-        this.locality = address.getLocality();
-        this.building = address.getBuilding();
-        this.flat = address.getFlat();
-        this.rejectMessage = rejectMessage;
-        this.nameProvider = provider.getName();
-
-    }
 }

@@ -40,10 +40,7 @@ public class BbiFileServiceImpl implements BbiFileService {
 
     @Override
     public boolean findByFileNameAndDate(String fileName, String date){
-        if (uploadBbiRepository.findBBIProtocolByFileNameAndDate(fileName, date) != null) {
-            return true;
-        }
-        return false;
+        return uploadBbiRepository.findBBIProtocolByFileNameAndDate(fileName, date) != null ? true : false;
     }
 
 

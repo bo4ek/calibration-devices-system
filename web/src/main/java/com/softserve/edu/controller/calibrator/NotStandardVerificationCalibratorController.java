@@ -118,6 +118,7 @@ public class NotStandardVerificationCalibratorController {
     /**
      * Finds count of verifications for provider
      * assigned to this organization
+     *
      * @param user
      * @return Long
      */
@@ -131,38 +132,28 @@ public class NotStandardVerificationCalibratorController {
 
         List<NotStandardVerificationDTO> resultList = new ArrayList<>();
         try {
-            if (status.name().equalsIgnoreCase("CREATED_FOR_PROVIDER")) {
-                for (Verification verification : verifications) {
-                    resultList.add(new NotStandardVerificationDTO(
-                            verification.getId(),
-                            verification.getInitialDate(),
-                            verification.getClientData().getClientAddress(),
-                            verification.getClientData().getFirstName(),
-                            verification.getClientData().getLastName(),
-                            verification.getClientData().getMiddleName(),
-                            verification.getProvider(),
-                            verification.getRejectedMessage()));
-                }
-            } else {
-                for (Verification verification : verifications) {
-                    resultList.add(new NotStandardVerificationDTO(
-                            verification.getId(),
-                            verification.getInitialDate(),
-                            verification.getClientData().getClientAddress(),
-                            verification.getClientData().getFirstName(),
-                            verification.getClientData().getLastName(),
-                            verification.getClientData().getMiddleName(),
-                            verification.getCounter(),
-                            verification.getCalibrationTests(),
-                            verification.getProviderFromBBI(),
-                            verification.getRejectedMessage(),
-                            verification.getComment()));
-                }
+            for (Verification verification : verifications) {
+                resultList.add(new NotStandardVerificationDTO(
+                        verification.getId(),
+                        verification.getInitialDate(),
+                        verification.getClientData().getClientAddress(),
+                        verification.getClientData().getFirstName(),
+                        verification.getClientData().getLastName(),
+                        verification.getClientData().getMiddleName(),
+                        verification.getCounter(),
+                        verification.getCalibrationTests(),
+                        verification.getProviderFromBBI(),
+                        verification.getProvider(),
+                        verification.getRejectedMessage(),
+                        verification.getComment()));
             }
             return resultList;
-        } catch (Exception e) {
+        }catch(Exception e) {
             logger.error("Error while transforming verification into DTO ", e);
             return null;
         }
+
     }
+
+
 }
