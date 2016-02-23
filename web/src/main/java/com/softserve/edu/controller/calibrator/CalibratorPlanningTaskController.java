@@ -28,7 +28,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -135,12 +134,13 @@ public class CalibratorPlanningTaskController {
      * @return ResponseEntity
      */
     @RequestMapping(value = "/changeTaskDate/{taskID}", method = RequestMethod.POST)
-    public ResponseEntity changeTaskDate(@PathVariable Long taskID, @RequestBody Date dateOfTask) {
+    public ResponseEntity changeTaskDate(@PathVariable Long taskID, @RequestBody Date dateOfTask,
+                                         @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             taskService.changeTaskDate(taskID, dateOfTask);
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION ", e);
+            logger.error("User " + employeeUser.getUsername() + "can not change task date", e);
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity(httpStatus);
@@ -154,14 +154,15 @@ public class CalibratorPlanningTaskController {
      * @return ResponseEntity
      */
     @RequestMapping(value = "/sendTask", method = RequestMethod.POST)
-    public ResponseEntity sendTaskToStation(@RequestBody List<Long> taskIDs) {
+    public ResponseEntity sendTaskToStation(@RequestBody List<Long> taskIDs,
+                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             for (Long taskID : taskIDs) {
                 taskService.sendTaskToStation(taskID);
             }
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION ", e);
+            logger.error("User " + employeeUser.getUsername() + " was not able to send task to station", e);
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return new ResponseEntity(httpStatus);
@@ -180,16 +181,14 @@ public class CalibratorPlanningTaskController {
     public ResponseEntity saveTaskForStation(@RequestBody CalibrationTaskDTO taskDTO,
                                              @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
-        HttpHeaders responseHeaders = new HttpHeaders();
         try {
-            Boolean taskAlreadyExists = taskService.addNewTaskForStation(taskDTO.getDateOfTask(),
+            taskService.addNewTaskForStation(taskDTO.getDateOfTask(),
                     taskDTO.getModuleSerialNumber(), taskDTO.getVerificationsId(), employeeUser.getUsername());
-            responseHeaders.set("verifications-were-added-to-existing-task", taskAlreadyExists.toString());
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION ", e);
+            logger.error("User with user name " + employeeUser.getUsername() + " are not able to save task for station", e);
             httpStatus = HttpStatus.CONFLICT;
         }
-        return new ResponseEntity(responseHeaders, httpStatus);
+        return new ResponseEntity(httpStatus);
     }
 
     /**
@@ -200,12 +199,13 @@ public class CalibratorPlanningTaskController {
      * @return ResponseEntity
      */
     @RequestMapping(value = "/removeVerification/{verificationId}", method = RequestMethod.GET)
-    public ResponseEntity removeVerificationFromTask(@PathVariable String verificationId) {
+    public ResponseEntity removeVerificationFromTask(@PathVariable String verificationId,
+                                                     @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             verificationService.removeVerificationFromTask(verificationId);
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION ", e);
+            logger.error("User " + employeeUser.getUsername() + " was not able to remove verification", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -227,7 +227,7 @@ public class CalibratorPlanningTaskController {
         try {
             taskService.addNewTaskForTeam(taskDTO.getDateOfTask(), taskDTO.getModuleNumber(), taskDTO.getVerificationsId(), employeeUser.getUsername());
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION ", e);
+            logger.error("User " + employeeUser.getUsername() + " was not able to save for team", e);
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);
@@ -310,8 +310,9 @@ public class CalibratorPlanningTaskController {
      * @return SymbolsAndSizesDTO
      */
     @RequestMapping(value = "findSymbolsAndSizes/{verificationId}", method = RequestMethod.GET)
-    public SymbolsAndSizesDTO findSymbolsAndSizes(@PathVariable String verificationId) {
-        List<CounterType> counterTypes = new ArrayList<>();
+    public SymbolsAndSizesDTO findSymbolsAndSizes(@PathVariable String verificationId,
+                                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        List<CounterType> counterTypes;
         List<String> sizes = new ArrayList<>();
         List<String> symbols = new ArrayList<>();
         SymbolsAndSizesDTO symbolsAndSizesDTO = new SymbolsAndSizesDTO();
@@ -324,7 +325,7 @@ public class CalibratorPlanningTaskController {
             symbolsAndSizesDTO.setSizes(sizes);
             symbolsAndSizesDTO.setSymbols(symbols);
         } catch (Exception e) {
-            logger.error("GOT EXCEPTION ", e);
+            logger.error("User " + employeeUser.getUsername() + " was not able to get list of sizes and list of symbols for the counter in verification from the counter type directory", e);
         }
         return symbolsAndSizesDTO;
     }
@@ -334,7 +335,7 @@ public class CalibratorPlanningTaskController {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
             Date gottenDate = verificationService.getEarliestPlanningTaskDate(organization);
-            Date date = null;
+            Date date;
             if (gottenDate != null) {
                 date = new Date(gottenDate.getTime());
             } else {
@@ -371,7 +372,7 @@ public class CalibratorPlanningTaskController {
                 httpStatus = HttpStatus.FORBIDDEN;
             }
         } catch (Exception e) {
-            logger.error("Exception of update queue by verification id");
+            logger.error("User " + employeeUser.getUsername() + " was not able save new queue");
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity(httpStatus);

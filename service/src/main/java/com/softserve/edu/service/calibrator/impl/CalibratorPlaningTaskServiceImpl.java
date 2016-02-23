@@ -138,13 +138,13 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
         User user = userRepository.findOne(userName);
         if (user == null) {
-            logger.error("User with name:" + userName + "was trying to create task for user with id: " + userName + " wasn't found");
+            logger.error("User with name:" + userName + "was trying to create task for user with name: " + userName + " wasn't found");
             throw new IllegalArgumentException();
         }
 
         for (Verification verification : verifications) {
             verification.getStatus().equals(Status.TEST_COMPLETED);
-            if (verification.getCalibrator().getId().equals(user.getOrganization().getId())) {
+            if (!verification.getCalibrator().getId().equals(user.getOrganization().getId())) {
                 logger.error("User with name: " + userName + " was trying to change verification and task from other organization");
                 return taskAlreadyExists;
             }
@@ -360,7 +360,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                                                                                  String sortOrder) {
         User user = userRepository.findOne(userName);
         if (user == null) {
-            logger.error("Cannot found user!");
+            logger.error("Cannot found user with name " + userName);
             throw new NullPointerException();
         }
         Set<UserRole> roles = user.getUserRoles();
