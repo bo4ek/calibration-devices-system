@@ -10,7 +10,7 @@ angular
                 $scope.selectedStatus.name = null;
                 $scope.tableParams.filter({});
                 $scope.clearDate(); // sets 'all time' timerange
-            }
+            };
 
             $scope.clearDate = function () {
                 //daterangepicker doesn't support null dates
@@ -22,19 +22,13 @@ angular
             };
             $scope.doSearch = function () {
                 $scope.tableParams.reload();
-            }
+            };
 
             $scope.selectedStatus = {
                 name: null
-            }
+            };
 
             $scope.statusData = [
-                {id: 'REJECTED', label: null},
-                {id: 'IN_PROGRESS', label: null},
-                {id: 'TEST_PLACE_DETERMINED', label: null},
-                {id: 'SENT_TO_TEST_DEVICE', label: null},
-                {id: 'TEST_COMPLETED', label: null},
-                {id: 'SENT_TO_VERIFICATOR', label: null},
                 {id: 'TEST_OK', label: null},
                 {id: 'TEST_NOK', label: null}
             ];
@@ -42,24 +36,12 @@ angular
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    $scope.statusData[0].label = 'Відхилена';
-                    $scope.statusData[1].label = 'В роботі';
-                    $scope.statusData[2].label = 'Визначено спосіб повірки';
-                    $scope.statusData[3].label = 'Відправлено на установку';
-                    $scope.statusData[4].label = 'Проведено вимірювання';
-                    $scope.statusData[5].label = 'Предявлено повірнику';
-                    $scope.statusData[6].label = 'Перевірено придатний';
-                    $scope.statusData[7].label = 'Перевірено непридатний';
+                    $scope.statusData[0].label = 'Перевірено придатний';
+                    $scope.statusData[1].label = 'Перевірено непридатний';
 
                 } else if (lang === 'eng') {
-                    $scope.statusData[0].label = 'Rejected';
-                    $scope.statusData[1].label = 'In progress';
-                    $scope.statusData[2].label = 'Test place determined';
-                    $scope.statusData[3].label = 'Sent to test device';
-                    $scope.statusData[4].label = 'Test completed';
-                    $scope.statusData[5].label = 'Sent to verificator';
-                    $scope.statusData[6].label = 'Tested OK';
-                    $scope.statusData[7].label = 'Tested NOK';
+                    $scope.statusData[0].label = 'Tested OK';
+                    $scope.statusData[1].label = 'Tested NOK';
 
                 }
             };
