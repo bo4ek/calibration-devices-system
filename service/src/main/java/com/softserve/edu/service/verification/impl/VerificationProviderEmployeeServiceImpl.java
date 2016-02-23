@@ -60,7 +60,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
     public void assignProviderEmployeeForNotStandardVerification(String verificationId, User providerEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
         if (verification == null) {
-            logger.error("verification haven't found");
+            logger.error("verification has not been found");
             return;
         }
         verification.setProviderEmployee(providerEmployee);
