@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <button type="submit" class="btn btn-primary col-xs-12 col-sm-12 col-md-6 col-lg-6"
-                    ng-click="openAddCalibrationModuleModal()">
+                    ng-click="openAddStreetModal()">
                 <span class="glyphicon glyphicon-plus"></span>
                 {{'ADD_STREET' | translate}}
             </button>
@@ -45,7 +45,7 @@
                                         <td data-title="'STREET_ID' | translate">
                                             {{street.id}}
                                         </td>
-                                        <td filter="{ region: 'text'}" sortable="'region'"
+                                        <td filter="{ region: 'region'}" sortable="'region'"
                                             data-title="'REGION' | translate">
                                             {{street.region}}
                                         </td>
@@ -53,7 +53,7 @@
                                             data-title="'DISTRICT' | translate">
                                             {{street.district}}
                                         </td>
-                                        <td filter="{ city: 'text'}" sortable="'city'"
+                                        <td filter="{ city: 'city'}" sortable="'city'"
                                             data-title="'LOCALITY' | translate">
                                             {{street.city}}
                                         </td>
@@ -65,6 +65,12 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <script type="text/ng-template" id="ng-table/filters/region.html">
+                                <input type="text" ng-model="filterData.selectedRegion" ng-change='doSearch()' class="form-control">
+                            </script>
+                            <script type="text/ng-template" id="ng-table/filters/city.html">
+                                <input type="text" ng-model="filterData.selectedCity" ng-change='doSearch()' class="form-control">
+                            </script>
                         </div>
                     </div>
                 </div>
