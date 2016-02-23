@@ -19,6 +19,7 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,12 @@ public class DocumentsController {
     @Autowired
     ReportsService reportsService;
     @Autowired
+    private VerificationService verificationService;
+    @Autowired
+    private CalibrationTestService testService;
+    @Autowired
     private ProviderEmployeeService providerEmployeeService;
+
 
     @RequestMapping(value = "report/{documentType}/{fileFormat}", method = RequestMethod.GET)
     public void getReport(HttpServletResponse response,
@@ -64,7 +70,6 @@ public class DocumentsController {
         FileObject file = reportsService.buildFile(providerId, documentType, fileFormat);
         sendFile(response, fileFormat, file);
     }
-
 
     /**
      * Returns a document with a specific fileFormat using verification and it's
@@ -87,6 +92,7 @@ public class DocumentsController {
         FileObject file = documentService.buildFile(verificationCode, fileFormat);
         sendFile(response, fileFormat, file);
     }
+
 
     /**
      * Returns a document with a specific fileFormat using verification and one
@@ -114,52 +120,33 @@ public class DocumentsController {
         sendFile(response, fileFormat, file);
     }
 
-
-    @Autowired
-    private VerificationService verificationService;
-    @Autowired
-    private CalibrationTestService testService;
-    @RequestMapping(value = "{documentType}/{verificationCode}/{fileFormat}/signed",
+    @RequestMapping(value = "{documentType}/{verificationCode}/signed",
             method = RequestMethod.POST)
-    public void addSignToDocument(HttpServletResponse response,
-                                  @PathVariable DocumentType documentType,
-                                  @PathVariable String verificationCode,
-                                  @PathVariable FileFormat fileFormat,
-                                  @RequestParam("file") MultipartFile file,
-                                  @RequestParam("signature") String signature
-    )
-            throws IOException, IllegalStateException {
+    public ResponseEntity addSignToDocument(@PathVariable DocumentType documentType,
+                                            @PathVariable String verificationCode,
+                                            @RequestParam("signature") String signature
+    ) throws IOException {
 
-        if (file.isEmpty())
-            throw new IOException("File is Empty");
-        byte[] documentByteArray = file.getBytes();
-        byte[] signatureByteArray = signature.getBytes();
-        byte[] finalDocument = ArrayUtils.addAll(documentByteArray, signatureByteArray);
-
+        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
         Verification verification = verificationService.findById(verificationCode);
         verification.setParsed(true);
         verification.setSignature(signature);
         verificationService.saveVerification(verification);
 
         CalibrationTest calibrationTest = testService.findByVerificationId(verificationCode);
-        FileObject fileNew = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
-        byte[] documentNewByteArray = new byte[(int)fileNew.getContent().getSize()];
-        fileNew.getContent().getInputStream().read(documentNewByteArray);
-        verification.setSignedDocument(documentNewByteArray);
-        verificationService.saveVerification(verification);
-        //new build
-        response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        response.setHeader("Content-Length", String.valueOf(finalDocument.length));
-        response.setHeader("Content-Disposition", "attachment; filename=" + verificationCode + ".docx");
-        OutputStream outputStream = null;
         try {
-            outputStream = response.getOutputStream();
-            outputStream.write(finalDocument);
-        } finally {
-            if (outputStream != null)
-                outputStream.flush();
-                outputStream.close();
+            FileObject fileNew = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
+
+            byte[] documentNewByteArray = new byte[(int) fileNew.getContent().getSize()];
+            fileNew.getContent().getInputStream().read(documentNewByteArray);
+            verification.setSignedDocument(documentNewByteArray);
+            verificationService.saveVerification(verification);
+
+        } catch (IOException e) {
+            log.error("Cannot build document with digital signature ", e);
+            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        return responseEntity;
     }
 
     /**
@@ -180,8 +167,7 @@ public class DocumentsController {
     public void getDocument(HttpServletResponse response,
                             @PathVariable DocumentType documentType,
                             @PathVariable String verificationCode,
-                            @PathVariable FileFormat fileFormat)
-            throws IOException, IllegalStateException {
+                            @PathVariable FileFormat fileFormat) {
         try {
             sendFile(response, fileFormat, documentService.getSignedDocument(verificationCode, fileFormat, documentType));
         } catch (IllegalArgumentException e) {

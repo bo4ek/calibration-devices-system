@@ -17,28 +17,31 @@ public class CertificateController {
 
     /**
      * Checks whether verification with {@code verificationId} id is signed
+     *
      * @param verificationId id of verification
-     * @return  {@literal true} if verification certificate is signed, or otherwise {@literal false}
+     * @return {@literal true} if verification certificate is signed, or otherwise {@literal false}
      */
     @RequestMapping(value = "isSigned/{verificationId}", method = RequestMethod.GET)
     public Boolean isCertificateSigned(@PathVariable
                                        String verificationId) {
         Verification verification = verificationService.findById(verificationId);
-        if(verification != null) {
+        if (verification != null) {
             return verification.isSigned();
         }
         return false;
     }
+
     /**
      * Checks whether verification with {@code verificationId} id is parsed
+     *
      * @param verificationId id of verification
-     * @return  {@literal true} if verification certificate is parsed, or otherwise {@literal false}
+     * @return {@literal true} if verification certificate is parsed, or otherwise {@literal false}
      */
     @RequestMapping(value = "isParsed/{verificationId}", method = RequestMethod.GET)
     public Boolean isCertificateParsed(@PathVariable
                                        String verificationId) {
         Verification verification = verificationService.findById(verificationId);
-        if(verification != null) {
+        if (verification != null) {
             return verification.isParsed();
         }
         return false;

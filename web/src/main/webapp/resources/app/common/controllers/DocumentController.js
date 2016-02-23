@@ -11,21 +11,22 @@ angular
                                 if (!response.data) {
 
                                     if (!initializeLibForDigitalSign.isInitialized()) {
-                                        initializeLibForDigitalSign.initializeWithoutSelectCA();
+                                        $http.get('resources/httpproxy.properties').then(function(response){
+                                        initializeLibForDigitalSign.initializeWithoutSelectCA(response);
+                                        })
                                     }
                                     var fileFormatTemp = 'docx';
                                     documentService.getDocument(documentType, verificationId, fileFormatTemp).then(
                                         function (file) {
                                             var resObj = initializeLibForDigitalSign.getVerifySign(file.data);
                                             message = resObj.notice;
-                                            var originalFile = new Blob([resObj.resultData], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
-                                            console.log(originalFile);
-                                            documentService.addSignToDocument(documentType, verificationId, fileFormat, originalFile, message).then(
-                                                function (file) {
-                                                    console.log(file);
-                                                    var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
-                                                    location.href = url;
-                                                    toaster.pop('success', $filter('translate')('INFORMATION'), 'Підпис успішно перевірено!\n' + message);
+                                            documentService.addSignToDocument(documentType, verificationId, message).then(
+                                                function (resp) {
+                                                    if (resp) {
+                                                        var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
+                                                        location.href = url;
+                                                        toaster.pop('success', $filter('translate')('INFORMATION'), 'Підпис успішно перевірено!\n' + message);
+                                                    }
                                                 }
                                             );
                                         }

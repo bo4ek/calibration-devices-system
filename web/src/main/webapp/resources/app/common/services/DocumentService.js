@@ -10,21 +10,18 @@ angular
 
                     });
             },
-            addSignToDocument: function (documentType, verificationId, fileFormat, file, signature) {
-
-                var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat + "/" + "signed";
+            addSignToDocument: function (documentType, verificationId, signature) {
+                var url = "doc/" + documentType + "/" + verificationId + "/" + "signed";
                 var formData = new FormData();
-                formData.append('file', file);
                 formData.append('signature', signature);
-                console.log("form data " + formData);
-                return $http.post(url, formData, {
-                    transformRequest: angular.identity,
-                    headers: { 'Content-Type': undefined},
-                    responseType: 'arraybuffer'})
+                return $http.post(url, formData
+                    , {
+                        transformRequest: angular.identity,
+                        headers: { 'Content-Type': undefined}
+                    }
+                )
                     .then(function (response) {
-                        var file = new Blob([response.data], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
-                        console.log(file);
-                        return file;
+                        return response;
                     });
             },
             isSignedCertificate: function (verificationId) {
@@ -34,7 +31,7 @@ angular
                         return result;
                     });
             },
-            isParsedCertificate: function (verificationId){
+            isParsedCertificate: function (verificationId) {
                 var url = "certificate/isParsed/" + verificationId;
                 return $http.get(url)
                     .success(function (result) {

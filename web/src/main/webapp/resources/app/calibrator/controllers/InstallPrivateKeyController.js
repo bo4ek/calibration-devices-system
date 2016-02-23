@@ -36,9 +36,9 @@ angular
 
             $scope.readPrivateKeyButtonClick = function () {
                 $scope.statusInProgress = true;
-                for (var i = 0; i < 91; i++) {
-                    $scope.progressValue = i;
-                }
+
+                    $scope.progressValue = 50;
+
                 var onError = function (message) {
                     setStatus('');
                     alert(message);
@@ -48,7 +48,7 @@ angular
                     initializeLibForDigitalSign.getReadPrivateKey(keyName, new Uint8Array(key),
                         $scope.privateKeyPassword, null, false);
                     if (document.getElementById('PKeyReadButton').innerHTML == 'Зчитано') {
-                        $scope.progressValue = 95;
+
                         $scope.signFile();
                         $scope.progressValue = 100;
                         $scope.statusInProgress = false;

@@ -7,7 +7,7 @@ angular
 
         var euSign = new EUSignCP();
         var utils = new Utils(euSign);
-        var URL_XML_HTTP_PROXY_SERVICE = "http://localhost:8080/Data/java/ProxyHandler.php";
+        var URL_XML_HTTP_PROXY_SERVICE = undefined;
         var CAsServers = null;
         var CAServer = {
             "issuerCNs": null,
@@ -31,8 +31,8 @@ angular
         var CAServerIndexSessionStorageName = "CAServerIndex";
         var PrivateKeyCertificatesChainSessionStorageName = "PrivateKeyCertificatesChain";
         var PrivateKeyCertificatesSessionStorageName = "PrivateKeyCertificates";
-        var URL_GET_CERTIFICATES = "http://localhost:8080/Data/CACertificates.p7b?version=1.0.4";
-        var URL_CAS = "http://localhost:8080/Data/CAs.json?version=1.0.4";
+        var URL_GET_CERTIFICATES = undefined;
+        var URL_CAS = undefined;
         var EU_ERROR_CERT_NOT_FOUND = 0x0033;
         var privateKeyCerts = null;
 
@@ -198,10 +198,6 @@ angular
                         option.text = servers[i].issuerCNs[0];
                         select.add(option);
                     }
-
-                    var option = document.createElement("option");
-                    option.text = "інший";
-                    select.add(option);
 
                     select.onchange = function () {
                         setCASettings(select.selectedIndex);
@@ -565,20 +561,25 @@ angular
             getEuSign: function () {
                 return euSign;
             },
-            initialize: function () {
+            initialize: function (response) {
+                URL_XML_HTTP_PROXY_SERVICE = response.data.URL_XML_HTTP_PROXY_SERVICE;
+                URL_GET_CERTIFICATES = response.data.URL_GET_CERTIFICATES;
+                URL_CAS = response.data.URL_CAS;
                 return initializeLib();
             },
             getReadPrivateKey: function (keyName, key, password, certificates, fromCache) {
                 return readPrivateKey(keyName, key, password, certificates, fromCache);
             },
             getVerifySign: function (file) {
-                var resultObj = verifyFile(file);
-                return resultObj;
+                return verifyFile(file);
             },
             isInitialized: function(){
                 return initialized;
             },
-            initializeWithoutSelectCA: function(){
+            initializeWithoutSelectCA: function(response){
+                URL_XML_HTTP_PROXY_SERVICE = response.data.URL_XML_HTTP_PROXY_SERVICE;
+                URL_GET_CERTIFICATES = response.data.URL_GET_CERTIFICATES;
+                URL_CAS = response.data.URL_CAS;
                 return init();
             }
         };

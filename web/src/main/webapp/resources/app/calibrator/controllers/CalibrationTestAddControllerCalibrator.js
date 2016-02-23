@@ -39,9 +39,12 @@ angular
             };
 
             $scope.installPKeyModalLoad = function () {
-                initializeLibForDigitalSign.initialize();
-                document.getElementById('PKeyFileInput').addEventListener('change',
-                    $scope.selectPrivateKeyFile, false);
+                $http.get('resources/httpproxy.properties').then(function(response){
+                    initializeLibForDigitalSign.initialize(response);
+                    document.getElementById('PKeyFileInput').addEventListener('change',
+                        $scope.selectPrivateKeyFile, false);
+                })
+
             };
 
 
