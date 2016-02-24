@@ -27,9 +27,8 @@ public class MailConfig {
 	@Bean
 	public JavaMailSender mailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		// TODO Move all strings to static final fields
 		mailSender.setDefaultEncoding(MailConstant.DEFAULT_ENCODING);
-		
+
 		mailSender.setHost(env.getProperty(MailConstant.CONFIG_HOST));
 		mailSender.setPort(env.getProperty(MailConstant.CONFIG_PORT, Integer.class, 25));
 		mailSender.setProtocol(env.getProperty(MailConstant.CONFIG_PROTOCOL));
@@ -42,7 +41,7 @@ public class MailConfig {
 		mailSender.setJavaMailProperties(properties);
 		return mailSender;
 	}
-	
+
 	@Bean
 	public VelocityEngine velocityEngine() throws VelocityException, IOException{
 		VelocityEngineFactoryBean factory = new VelocityEngineFactoryBean();
