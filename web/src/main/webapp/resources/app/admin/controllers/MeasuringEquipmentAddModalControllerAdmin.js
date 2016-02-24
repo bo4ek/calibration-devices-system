@@ -117,10 +117,9 @@ angular
                         return i;
                     }
                 }
-                var elem = {
+                myArray.push(elem = {
                     organizationCode: searchTerm
-                };
-                myArray.push(elem);
+                });
                 return (myArray.length - 1);
             }
 

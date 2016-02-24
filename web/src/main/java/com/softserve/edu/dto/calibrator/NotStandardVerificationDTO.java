@@ -53,7 +53,7 @@ public class NotStandardVerificationDTO {
         this.locality = address.getLocality();
         this.building = address.getBuilding();
         this.flat = address.getFlat();
-         this.symbol = (counter != null && counter.getCounterType() != null ? counter.getCounterType().getSymbol() : null);
+         this.symbol = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getSymbol() : null;
 
         this.standardSize = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getStandardSize() : null;
         this.realiseYear = (counter != null ) ? counter.getReleaseYear() : null;

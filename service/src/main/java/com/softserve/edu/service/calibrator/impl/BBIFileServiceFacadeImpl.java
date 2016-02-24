@@ -189,11 +189,11 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
             DeviceTestData deviceTestData;
             try {
-                if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), correspondingVerificationMap.get(Constants.DATE))) {
-                    throw new FileAlreadyExistsException(bbiFile.getName());
-                }
                 if (correspondingVerificationMap == null) {
                     throw new MismatchBbiFilesNamesException();
+                }
+                if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), correspondingVerificationMap.get(Constants.DATE))) {
+                    throw new FileAlreadyExistsException(bbiFile.getName());
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
@@ -409,7 +409,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     private Long getDeviceIdByDeviceTypeId(int deviceTypeId) throws InvalidDeviceTypeIdException {
-        String deviceType = null;
+        String deviceType;
         switch (deviceTypeId) {
             case 2:
                 deviceType = "THERMAL";
@@ -418,11 +418,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 deviceType = "WATER";
                 break;
         }
-
-        //Will be implemented in future (reject *.bbi if there's no such deviceTypeId)
-//        if (deviceType == null){
-//            throw new InvalidDeviceTypeIdException();
-//        }
         return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, Constants.DEFAULT_DEVICE).getId();
     }
 
@@ -443,8 +438,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
          * and NullPointerException will be generated
          */
         if (counterType == null) {
-            Long deviceId;
-            deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+            Long deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
             String deviceName = deviceService.getById(deviceId).getDeviceName();
             counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
             counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
