@@ -9,6 +9,8 @@ public interface StreetService {
 
     List<Street> getStreetsCorrespondingLocality(Long localityId);
 
+    Street findByDesignation(String designation);
+
     Street findStreetById(Long id);
 
     Iterable<Street> findAll();

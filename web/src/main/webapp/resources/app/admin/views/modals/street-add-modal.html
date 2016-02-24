@@ -1,0 +1,172 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{'ADD_STREET' | translate}}</h3>
+</div>
+
+<div class="modal-body modal-padding">
+    <form name="addStreetForm" id="addStreetForm" role="form"
+          ng-submit="sendStreetData()"
+          class="form-group" novalidate>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                {{'GENERAL_INFORMATION' | translate}}
+            </div>
+            <div class="panel-body">
+                <div class="form-group row" show-errors>
+                    <label class="control-label col-md-4" for="streetId">
+                        {{'STREET_ID' | translate }}
+                    </label>
+
+                    <div class="col-md-8">
+                        <input type="number" ng-model="addStreetFormData.streetId" id="streetId"
+                               name="streetId" ng-blur="checkStreetIdForDuplicates()" ng-change="hideStreetIdDuplicateError()"
+                               class="form-control" required>
+                <span class="form-control-feedback glyphicon
+                form-horizontal glyphicon glyphicon-ok-sign" style="margin-right:20px"></span>
+
+                        <p class="help-block" ng-if="addStreetForm.streetId.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+                        <p class="help-block" ng-if="addStreetForm.streetId.$error.duplicate">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'DUPLICATE_STREET_ID' | translate}}
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="form-group row" show-errors>
+                    <label class="control-label col-md-4" for="region">
+                        {{'REGION' | translate }}
+                    </label>
+
+                    <div class="col-md-8">
+                        <ui-select class="form-control" type="text" theme="select2"
+                                   ng-model="selectedValues.selectedRegion"
+                                   on-select="receiveDistricts(selectedValues.selectedRegion)"
+                                   name="region" id="region" required>
+                            <ui-select-match placeholder="{{'SELECT_REGION' | translate}}" allow-clear="true">
+                                {{$select.selected.designation}}
+
+                            <span class="form-control-feedback glyphicon
+                            form-horizontal glyphicon glyphicon-ok-sign" style="margin-right:20px"></span>
+
+                            </ui-select-match>
+                            <ui-select-choices repeat="region in regions | filter: $select.search">
+                                <span>{{region.designation}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <p class="help-block" ng-if="addStreetForm.region.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-group row" show-errors>
+                    <label class="control-label col-md-4" for="district">
+                        {{'DISTRICT' | translate }}
+                    </label>
+
+                    <div class="col-md-8">
+                        <ui-select class="form-control" type="text" theme="select2"
+                                   ng-model="selectedValues.selectedDistrict"
+                                   on-select="receiveLocalities(selectedValues.selectedDistrict)"
+                                   ng-disabled="!selectedValues.selectedRegion"
+                                   name="district" id="district" required>
+                            <ui-select-match placeholder="{{'SELECT_DISTRICT' | translate}}" allow-clear="true">
+                                {{$select.selected.designation}}
+
+                <span class="form-control-feedback glyphicon
+                form-horizontal glyphicon glyphicon-ok-sign" style="margin-right:20px"></span>
+
+                            </ui-select-match>
+                            <ui-select-choices repeat="district in districts | filter: $select.search">
+                                <span>{{district.designation}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <p class="help-block" ng-if="addStreetForm.district.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-group row" show-errors>
+                    <label class="control-label col-md-4" for="locality">
+                        {{'LOCALITY' | translate }}
+                    </label>
+
+                    <div class="col-md-8">
+                        <ui-select class="form-control" type="text" theme="select2"
+                                   ng-model="selectedValues.selectedLocality"
+                                   ng-disabled="!selectedValues.selectedDistrict"
+                                   name="locality" id="locality" required>
+                            <ui-select-match placeholder="{{'SELECT_LOCALITY' | translate}}" allow-clear="true">
+                                {{$select.selected.designation}}
+
+                <span class="form-control-feedback glyphicon
+                form-horizontal glyphicon glyphicon-ok-sign" style="margin-right:20px"></span>
+
+                            </ui-select-match>
+                            <ui-select-choices repeat="locality in localities | filter: $select.search">
+                                <span>{{locality.designation}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+
+                        <p class="help-block" ng-if="addStreetForm.locality.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-group row" show-errors>
+                    <label class="control-label col-md-4" for="streetName">
+                        {{'STREET' | translate }}
+                    </label>
+
+                    <div class="col-md-8">
+                        <input type="text" ng-model="addStreetFormData.streetName" id="streetName"
+                               name="streetName" ng-blur="checkStreetNameForDuplicates()" ng-change="hideStreetNameDuplicateError()"
+                               class="form-control" popover="{{'NAME_OF_STREET' | translate}}"
+                               ng-disabled="!selectedValues.selectedLocality"
+                               popover-trigger="focus" popover-placement="top"
+                               required>
+            <span class="form-control-feedback glyphicon
+            form-horizontal glyphicon glyphicon-ok-sign"></span>
+
+                        <p class="help-block" ng-if="addStreetForm.streetName.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
+                        <p class="help-block" ng-if="addStreetForm.streetName.$error.duplicate">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'DUPLICATE_STREET_NAME' | translate}}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row row-buttons">
+            <button type="submit" class="btn btn-success col-md-2 col-sm-12 col-xs-12 col-lg-2">
+                {{'ADD' | translate }}
+            </button>
+            <button type="reset" class="btn btn-warning col-md-3 col-sm-12 col-xs-12 col-lg-3"
+                    ng-click="resetForm()">
+                {{'CLEAR_FORM' | translate }}
+            </button>
+
+            <div class="col-md-5 col-sm-0 col-xs-0 col-lg-5">
+                <p>
+                </p>
+            </div>
+            <input type="button" class="btn btn-danger col-md-2 col-sm-12 col-xs-12 col-lg-2 pull-right"
+                   value="{{'CLOSE' | translate}}" ng-click="closeModal()">
+        </div>
+    </form>
+</div>

@@ -33,10 +33,16 @@ public class StreetServiceImpl implements StreetService {
     }
 
     @Override
+    public Street findByDesignation(String designation) {
+        return streetRepository.findByDesignation(designation);
+    }
+
+    @Override
     public Street findStreetById(Long id) {
         return streetRepository.findOne(id);
     }
 
+    @Override
     public Iterable<Street> findAll() {
         return streetRepository.findAll();
     }

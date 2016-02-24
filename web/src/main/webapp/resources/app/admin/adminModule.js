@@ -178,7 +178,7 @@ define(['controllers/TopNavBarController', 'controllers/MainPanelController',
     'controllers/StreetDirectoryControllerAdmin',
     'controllers/MeasuringEquipmentAddModalControllerAdmin',
     'controllers/MeasuringEquipmentDisableModalControllerAdmin',
-
+    'controllers/StreetAddModalControllerAdmin',
     'controllers/OrganizationPanelController',
     'controllers/OrganizationAddModalController',
     'controllers/OrganizationEditModalController',

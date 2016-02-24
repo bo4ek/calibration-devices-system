@@ -12,4 +12,6 @@ public interface StreetRepository extends CrudRepository<Street, Long> {
     List<Street> findByLocalityId(Long id);
 
     Long findIdByDesignation(String designation);
+
+    Street findByDesignation(String designation);
 }

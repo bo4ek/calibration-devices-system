@@ -70,7 +70,22 @@ angular
              * Opens modal window for adding new calibration module.
              */
             $scope.openAddStreetModal = function () {
-
+                var addStreetModal = $modal.open({
+                    animation: true,
+                    backdrop: 'static',
+                    controller: 'StreetAddModalControllerAdmin',
+                    templateUrl: '/resources/app/admin/views/modals/street-add-modal.html',
+                    size: 'md',
+                    resolve: {
+                        street: undefined
+                    }
+                });
+                /**
+                 * executes when modal closing
+                 */
+                addStreetModal.result.then(function () {
+                    $scope.tableParams.reload();
+                });
             };
 
         }]);

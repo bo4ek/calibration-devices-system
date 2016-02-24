@@ -801,5 +801,8 @@
     "STREET_DIRECTORY": "Street directory",
     "STREET_ID": "ID",
     "TOTAL_NUMBER_OF_STREETS": "Total number of streets",
-    "ADD_STREET": "Add street"
+    "ADD_STREET": "Add street",
+    "STREET_SUCCESSFULLY_ADDED": "Street successfully added",
+    "DUPLICATE_STREET_ID": "Duplicate street id",
+    "DUPLICATE_STREET_NAME": "Duplicate street name"
 }

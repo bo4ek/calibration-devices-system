@@ -15,8 +15,6 @@ import static com.softserve.edu.entity.catalogue.util.Checker.checkForNull;
 public class Street extends AbstractCatalogue {
 
     @Id
-    @GeneratedValue
-    @Setter(AccessLevel.PRIVATE)
     private Long id;
 
     @Column(nullable = false)
@@ -35,6 +33,11 @@ public class Street extends AbstractCatalogue {
         setDesignation(designation);
         setLocality(locality);
         setStreetType(streetType);
+    }
+
+    public Street(Long id, String designation, Locality locality) {
+        this(designation, locality, null);
+        this.id = id;
     }
 
     private void setDesignation(String designation) {
