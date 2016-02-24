@@ -382,8 +382,7 @@ public class StateVerificatorController {
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
             if (earliestDate != null) {
                 LocalDateTime localDate = LocalDateTime.ofInstant(earliestDate.toInstant(), ZoneId.systemDefault());
-                String isoLocalDateString = localDate.format(dbDateTimeFormatter);
-                return isoLocalDateString;
+                return localDate.format(dbDateTimeFormatter);
             } else {
                 return null;
             }

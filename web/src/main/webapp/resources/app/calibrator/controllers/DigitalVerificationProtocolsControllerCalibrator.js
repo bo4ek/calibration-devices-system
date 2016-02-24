@@ -19,11 +19,11 @@ angular
             $scope.clearAll = function () {
                 $scope.selectedStatus.name = null;
                 $scope.tableParams.filter({});
-                $scope.clearDate();
+                $scope.clearInitialDate();
             };
 
-            $scope.clearDate = function () {
-                $scope.datePicker.initialDate = $scope.defaultDate;
+            $scope.clearInitialDate = function () {
+                $scope.datePicker.initialDate = $scope.defaultInitialDate;
                 $scope.tableParams.filter()['date'] = $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD");
                 $scope.tableParams.filter()['endDate'] = $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD");
             };
@@ -34,7 +34,7 @@ angular
 
             $scope.datePicker = {};
             $scope.datePicker.initialDate = null;
-            $scope.defaultDate = null;
+            $scope.defaultInitialDate = null;
 
 
             $scope.initDatePicker = function (date) {
@@ -44,8 +44,8 @@ angular
                     endDate: moment()
                 };
 
-                if ($scope.defaultDate == null) {
-                    $scope.defaultDate = angular.copy($scope.datePicker.initialDate);
+                if ($scope.defaultInitialDate == null) {
+                    $scope.defaultInitialDate = angular.copy($scope.datePicker.initialDate);
                 }
                 moment.locale('uk');
                 $scope.opts = {
@@ -67,7 +67,7 @@ angular
                 $scope.opts.ranges[$filter('translate')('THIS_WEEK')] = [moment().startOf('week'), moment().endOf('week')];
                 $scope.opts.ranges[$filter('translate')('THIS_MONTH')] = [moment().startOf('month'), moment().endOf('month')];
                 $scope.opts.ranges[$filter('translate')('LAST_MONTH')] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
-                $scope.opts.ranges[$filter('translate')('ALL_TIME')] = [$scope.defaultDate.startDate, $scope.defaultDate.endDate];
+                $scope.opts.ranges[$filter('translate')('ALL_TIME')] = [$scope.defaultInitialDate.startDate, $scope.defaultInitialDate.endDate];
             };
 
             $scope.showPicker = function ($event) {
@@ -77,11 +77,11 @@ angular
             $scope.isInitialDateDefault = function () {
                 var initialDate = $scope.datePicker.initialDate;
 
-                if (initialDate == null || $scope.defaultDate == null) {
+                if (initialDate == null || $scope.defaultInitialDate == null) {
                     return true;
                 }
-                if (initialDate.startDate.isSame($scope.defaultDate.startDate, 'day')
-                    && initialDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
+                if (initialDate.startDate.isSame($scope.defaultInitialDate.startDate, 'day')
+                    && initialDate.endDate.isSame($scope.defaultInitialDate.endDate, 'day')) {
                     return true;
                 }
                 return false;
@@ -106,8 +106,8 @@ angular
                 var obj = $scope.tableParams.filter();
                 if ($scope.isInitialDateDefault())
                     return false;
-                else if (!moment(obj.date).isSame($scope.defaultDate.startDate)
-                    || !moment(obj.endDate).isSame($scope.defaultDate.endDate)) {
+                else if (!moment(obj.date).isSame($scope.defaultInitialDate.startDate)
+                    || !moment(obj.endDate).isSame($scope.defaultInitialDate.endDate)) {
                     return true;
                 }
                 return false;
