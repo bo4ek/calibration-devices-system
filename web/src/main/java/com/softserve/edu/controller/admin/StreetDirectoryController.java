@@ -83,4 +83,22 @@ public class StreetDirectoryController {
     public Boolean isDuplicateStreetName(@PathVariable String streetName) {
         return streetService.findByDesignation(streetName) != null;
     }
+
+    /**
+     * Delete street with id {@code streetId}
+     *
+     * @param streetId id of street
+     * @return http status
+     */
+    @RequestMapping(value = "delete/{streetId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteStreet(@PathVariable Long streetId) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            streetRepository.delete(streetId);
+        } catch (Exception e) {
+            logger.error("Invalid street id", e);
+            httpStatus = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity(httpStatus);
+    }
 }

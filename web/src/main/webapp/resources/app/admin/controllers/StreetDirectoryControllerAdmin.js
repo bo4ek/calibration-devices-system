@@ -88,5 +88,16 @@ angular
                 });
             };
 
+
+            $scope.deleteStreet = function (id) {
+                AddressService.deleteStreet(id).then(function (response) {
+                    if (response.status == 200) {
+                        $scope.tableParams.reload();
+                        toaster.pop('success', $filter('translate')('INFORMATION'),
+                            $filter('translate')('SUCCESSFULLY_DELETED_STREET'));
+                    }
+                });
+            };
+
         }]);
 

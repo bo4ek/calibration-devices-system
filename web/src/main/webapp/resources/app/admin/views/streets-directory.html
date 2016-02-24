@@ -61,6 +61,13 @@
                                             data-title="'STREET' | translate">
                                             {{street.streetName}}
                                         </td>
+                                        <td data-title="'ACTIONS' | translate" class="text-center">
+                                            <div class="control_buttons">
+                                                <i class="glyphicon glyphicon-remove-sign cancel_icon"
+                                                   ng-click="deleteStreet(street.id)">
+                                                </i>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>

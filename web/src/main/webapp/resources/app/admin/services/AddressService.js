@@ -24,6 +24,12 @@ angular
             });
         }
 
+        function deleteData(url) {
+            return $http.delete('admin/streets/' + url).then(function (result) {
+                return result;
+            });
+        }
+
         return {
             findAllRegions: function () {
                 return findAll('regions');
@@ -35,6 +41,9 @@ angular
                     .then(function (response) {
                         return response.data;
                     });
+            },
+            deleteStreet: function (id) {
+                return deleteData("delete/" + id);
             },
             addNewStreet: function (data) {
                 return sendData('add', data);

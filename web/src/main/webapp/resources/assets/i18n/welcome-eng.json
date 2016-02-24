@@ -804,5 +804,6 @@
     "ADD_STREET": "Add street",
     "STREET_SUCCESSFULLY_ADDED": "Street successfully added",
     "DUPLICATE_STREET_ID": "Duplicate street id",
-    "DUPLICATE_STREET_NAME": "Duplicate street name"
+    "DUPLICATE_STREET_NAME": "Duplicate street name",
+    "SUCCESSFULLY_DELETED_STREET": "Street successfully deleted"
 }
