@@ -55,20 +55,19 @@ angular
 
 
             $scope.clearAll = function () {
-                $scope.selectedStatus.name = null;
                 $scope.tableParams.filter({});
                 $scope.clearInitialDate();
                 $scope.clearSentToVerificatorDate();
             };
 
             $scope.clearInitialDate = function () {
-                $scope.datePicker.initialDate = $scope.defaultDate;
+                $scope.datePicker.initialDate = $scope.defaultInitialDate;
                 $scope.tableParams.filter()['date'] = $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD");
                 $scope.tableParams.filter()['endDate'] = $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD");
             };
 
             $scope.clearSentToVerificatorDate = function () {
-                $scope.datePicker.sentToVerificatorDate = $scope.defaultDate;
+                $scope.datePicker.sentToVerificatorDate = $scope.defaultSentToVerificatorDate;
                 $scope.tableParams.filter()['sentToVerificatorDateFrom'] = $scope.datePicker.sentToVerificatorDate.startDate.format("YYYY-MM-DD");
                 $scope.tableParams.filter()['sentToVerificatorDateTo'] = $scope.datePicker.sentToVerificatorDate.endDate.format("YYYY-MM-DD");
             };
@@ -85,7 +84,8 @@ angular
             $scope.datePicker = {};
             $scope.datePicker.initialDate = null;
             $scope.datePicker.sentToVerificatorDate = null;
-            $scope.defaultDate = null;
+            $scope.defaultInitialDate = null;
+            $scope.defaultSentToVerificatorDate = null;
 
 
             $scope.initDatePicker = function (date, sentToVerificatorDate) {
@@ -98,8 +98,12 @@ angular
                     startDate: (sentToVerificatorDate ? moment(sentToVerificatorDate, "YYYY-MM-DD") : moment()),
                     endDate: moment()
                 };
-                if ($scope.defaultDate == null) {
-                    $scope.defaultDate = angular.copy($scope.datePicker.initialDate);
+                if ($scope.defaultInitialDate == null) {
+                    $scope.defaultInitialDate = angular.copy($scope.datePicker.initialDate);
+                }
+
+                if ($scope.defaultSentToVerificatorDate == null) {
+                    $scope.defaultSentToVerificatorDate = angular.copy($scope.datePicker.sentToVerificatorDate);
                 }
                 moment.locale('uk');
                 $scope.opts = {
@@ -107,22 +111,21 @@ angular
                     showDropdowns: true,
                     locale: {
                         firstDay: 1,
-                        fromLabel: 'Від',
-                        toLabel: 'До',
-                        applyLabel: "Прийняти",
-                        cancelLabel: "Зачинити",
-                        customRangeLabel: "Обрати самостійно"
+                        fromLabel: $filter('translate')('FROM'),
+                        toLabel: $filter('translate')('TO_LABEL'),
+                        applyLabel: $filter('translate')('APPLY_LABEL'),
+                        cancelLabel: $filter('translate')('CANCEL_LABEL'),
+                        customRangeLabel: $filter('translate')('CUSTOM_RANGE_LABEL')
                     },
-                    ranges: {
-                        'Сьогодні': [moment(), moment()],
-                        'Вчора': [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
-                        'Цього тижня': [moment().startOf('week'), moment().endOf('week')],
-                        'Цього місяця': [moment().startOf('month'), moment().endOf('month')],
-                        'Попереднього місяця': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                        'За увесь час': [$scope.defaultDate.startDate, $scope.defaultDate.endDate]
-                    },
+                    ranges: {},
                     eventHandlers: {}
                 };
+                $scope.opts.ranges[$filter('translate')('TODAY')] = [moment(), moment()];
+                $scope.opts.ranges[$filter('translate')('YESTERDAY')] = [moment().subtract(1, 'day'), moment().subtract(1, 'day')];
+                $scope.opts.ranges[$filter('translate')('THIS_WEEK')] = [moment().startOf('week'), moment().endOf('week')];
+                $scope.opts.ranges[$filter('translate')('THIS_MONTH')] = [moment().startOf('month'), moment().endOf('month')];
+                $scope.opts.ranges[$filter('translate')('LAST_MONTH')] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+                $scope.opts.ranges[$filter('translate')('ALL_TIME')] = [$scope.defaultInitialDate.startDate, $scope.defaultInitialDate.endDate];
             };
 
             $scope.showPicker = function ($event) {
@@ -136,11 +139,11 @@ angular
             $scope.isInitialDateDefault = function () {
                 var initialDate = $scope.datePicker.initialDate;
 
-                if (initialDate == null || $scope.defaultDate == null) {
+                if (initialDate == null || $scope.defaultInitialDate == null) {
                     return true;
                 }
-                if (initialDate.startDate.isSame($scope.defaultDate.startDate, 'day')
-                    && initialDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
+                if (initialDate.startDate.isSame($scope.defaultInitialDate.startDate, 'day')
+                    && initialDate.endDate.isSame($scope.defaultInitialDate.endDate, 'day')) {
                     return true;
                 }
                 return false;
@@ -149,11 +152,11 @@ angular
             $scope.isSentVerificatorDateDefault = function () {
                 var sentToVerificatorDate = $scope.datePicker.sentToVerificatorDate;
 
-                if (sentToVerificatorDate == null || $scope.defaultDate == null) {
+                if (sentToVerificatorDate == null || $scope.defaultSentToVerificatorDate == null) {
                     return true;
                 }
-                if (sentToVerificatorDate.startDate.isSame($scope.defaultDate.startDate, 'day')
-                    && sentToVerificatorDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
+                if (sentToVerificatorDate.startDate.isSame($scope.defaultSentToVerificatorDate.startDate, 'day')
+                    && sentToVerificatorDate.endDate.isSame($scope.defaultSentToVerificatorDate.endDate, 'day')) {
                     return true;
                 }
                 return false;
@@ -172,37 +175,8 @@ angular
                 return false;
             };
 
-            $scope.selectedStatus = {
-                name: null
-            };
-
-            $scope.statusData = [
-                {id: 'SENT_TO_VERIFICATOR', label: null},
-                {id: 'TEST_OK', label: null},
-                {id: 'TEST_NOK', label: null}
-            ];
-
-            $scope.setTypeDataLanguage = function () {
-                var lang = $translate.use();
-                if (lang === 'ukr') {
-
-                    $scope.statusData[0].label = 'Предявлено повірнику';
-                    $scope.statusData[1].label = 'Перевірено придатний';
-                    $scope.statusData[2].label = 'Перевірено непридатний';
-
-                } else if (lang === 'eng') {
-
-                    $scope.statusData[0].label = 'Sent to verificator';
-                    $scope.statusData[1].label = 'Tested OK';
-                    $scope.statusData[2].label = 'Tested NOK';
-                }
-            };
-
-            $scope.setTypeDataLanguage();
-
-
-            verificationServiceVerificator.getEarliestCreatingProtocolDate().success(function (date) {
-                verificationServiceVerificator.getEarliestSentToVerificatorDate().success(function (sentToVerificatorDate) {
+            verificationServiceVerificator.getEarliestDateOfCreatingProtocol().success(function (date) {
+                verificationServiceVerificator.getEarliestDateOfSentToVerificator().success(function (sentToVerificatorDate) {
                     $scope.initDatePicker(date, sentToVerificatorDate);
                     $scope.tableParams = new ngTableParams({
                         page: 1,
@@ -223,10 +197,6 @@ angular
 
                             params.filter().sentToVerificatorDateFrom = $scope.datePicker.sentToVerificatorDate.startDate.format("YYYY-MM-DD");
                             params.filter().sentToVerificatorDateTo = $scope.datePicker.sentToVerificatorDate.endDate.format("YYYY-MM-DD");
-
-                            if ($scope.selectedStatus.name != null) {
-                                params.filter().status = $scope.selectedStatus.name.id;
-                            }
 
                             verificationServiceVerificator.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
                                 .success(function (result) {

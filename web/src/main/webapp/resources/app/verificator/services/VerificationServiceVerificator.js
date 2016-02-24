@@ -73,12 +73,12 @@ angular
                 return getData('verifications/verificator/role');
             },
 
-            getEarliestCreatingProtocolDate: function () {
-                return getData('verifications/earliestCreatingProtocolDate');
+            getEarliestDateOfCreatingProtocol: function () {
+                return getData('verifications/earliestDate/creatingProtocol');
             },
 
-            getEarliestSentToVerificatorDate: function () {
-                return getData('verifications/earliestSentToVerificatorDate');
+            getEarliestDateOfSentToVerificator: function () {
+                return getData('verifications/earliestDate/sentToVerificator');
             }
 
         };

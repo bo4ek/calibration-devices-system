@@ -122,7 +122,7 @@ public class DigitalVerificationProtocolsCalibratorController {
                 .collect(Collectors.toSet());
     }
 
-    @RequestMapping(value = "earliestDate", method = RequestMethod.GET)
+    @RequestMapping(value = "earliestDate/creatingProtocol", method = RequestMethod.GET)
     public String getEarliestDateOfDigitalVerificationProtocolsByCalibrator(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());

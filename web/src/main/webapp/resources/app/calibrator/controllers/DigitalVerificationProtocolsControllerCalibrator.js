@@ -53,22 +53,21 @@ angular
                     showDropdowns: true,
                     locale: {
                         firstDay: 1,
-                        fromLabel: 'Від',
-                        toLabel: 'До',
-                        applyLabel: "Прийняти",
-                        cancelLabel: "Зачинити",
-                        customRangeLabel: "Обрати самостійно"
+                        fromLabel: $filter('translate')('FROM'),
+                        toLabel: $filter('translate')('TO_LABEL'),
+                        applyLabel: $filter('translate')('APPLY_LABEL'),
+                        cancelLabel: $filter('translate')('CANCEL_LABEL'),
+                        customRangeLabel: $filter('translate')('CUSTOM_RANGE_LABEL')
                     },
-                    ranges: {
-                        'Сьогодні': [moment(), moment()],
-                        'Вчора': [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
-                        'Цього тижня': [moment().startOf('week'), moment().endOf('week')],
-                        'Цього місяця': [moment().startOf('month'), moment().endOf('month')],
-                        'Попереднього місяця': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                        'За увесь час': [$scope.defaultDate.startDate, $scope.defaultDate.endDate]
-                    },
+                    ranges: {},
                     eventHandlers: {}
                 };
+                $scope.opts.ranges[$filter('translate')('TODAY')] = [moment(), moment()];
+                $scope.opts.ranges[$filter('translate')('YESTERDAY')] = [moment().subtract(1, 'day'), moment().subtract(1, 'day')];
+                $scope.opts.ranges[$filter('translate')('THIS_WEEK')] = [moment().startOf('week'), moment().endOf('week')];
+                $scope.opts.ranges[$filter('translate')('THIS_MONTH')] = [moment().startOf('month'), moment().endOf('month')];
+                $scope.opts.ranges[$filter('translate')('LAST_MONTH')] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+                $scope.opts.ranges[$filter('translate')('ALL_TIME')] = [$scope.defaultDate.startDate, $scope.defaultDate.endDate];
             };
 
             $scope.showPicker = function ($event) {
@@ -119,29 +118,11 @@ angular
             };
 
             $scope.statusData = [
-                {id: 'IN_PROGRESS', label: null},
-                {id: 'TEST_PLACE_DETERMINED', label: null},
-                {id: 'SENT_TO_TEST_DEVICE', label: null},
-                {id: 'TEST_COMPLETED', label: null}
+                {id: 'IN_PROGRESS', label: $filter('translate')('IN_PROGRESS')},
+                {id: 'TEST_PLACE_DETERMINED', label: $filter('translate')('TEST_PLACE_DETERMINED')},
+                {id: 'SENT_TO_TEST_DEVICE', label: $filter('translate')('SENT_TO_TEST_DEVICE')},
+                {id: 'TEST_COMPLETED', label: $filter('translate')('TEST_COMPLETED')}
             ];
-
-            $scope.setTypeDataLanguage = function () {
-                var lang = $translate.use();
-                if (lang === 'ukr') {
-                    $scope.statusData[0].label = 'В роботі';
-                    $scope.statusData[1].label = 'Визначено спосіб повірки';
-                    $scope.statusData[2].label = 'Відправлено на установку';
-                    $scope.statusData[3].label = 'Проведено вимірювання';
-                } else if (lang === 'eng') {
-                    $scope.statusData[0].label = 'In progress';
-                    $scope.statusData[1].label = 'Test place determined';
-                    $scope.statusData[2].label = 'Sent to test device';
-                    $scope.statusData[3].label = 'Test completed';
-
-                }
-            };
-
-            $scope.setTypeDataLanguage();
 
             digitalVerificationProtocolsServiceCalibrator.getNewVerificationEarliestDate().success(function (date) {
                 $scope.initDatePicker(date);

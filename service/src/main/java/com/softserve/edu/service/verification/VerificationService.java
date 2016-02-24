@@ -132,7 +132,7 @@ public interface VerificationService {
 
     java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByVerificator(Organization organization);
 
-    java.sql.Timestamp getEarliestSentToVerificatorDate(Organization organization);
+    java.sql.Timestamp getEarliestDateOfSentToVerificator(Organization organization);
 
     java.sql.Date getArchivalVerificationEarliestDateByCalibrator(Organization organization);
 

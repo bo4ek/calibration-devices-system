@@ -27,7 +27,7 @@ angular
                 },
 
                 getNewVerificationEarliestDate: function () {
-                    var url = '/calibrator/protocols/earliestDate';
+                    var url = '/calibrator/protocols/earliestDate/creatingProtocol';
                     return $http.get(url)
                         .success(function (data) {
                             return data;

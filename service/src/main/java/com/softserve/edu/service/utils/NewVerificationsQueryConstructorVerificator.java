@@ -29,7 +29,6 @@ import com.softserve.edu.entity.enumeration.verification.Status;
  */
 @Deprecated
 public class NewVerificationsQueryConstructorVerificator {
-    public static final String MAX_TIME = "23:59:59.999999999";
     public static final String MIN_TIME = "00:00:00";
     static Logger logger = Logger.getLogger(NewVerificationsQueryConstructorVerificator.class);
 
@@ -185,8 +184,8 @@ public class NewVerificationsQueryConstructorVerificator {
         }
 
         if (sentToVerificatorDateFrom != null && sentToVerificatorDateTo != null) {
-            StringBuffer startDate = new StringBuffer(sentToVerificatorDateFrom).append(" " + MIN_TIME);
-            StringBuffer endDate = new StringBuffer(sentToVerificatorDateTo).append(" " + MAX_TIME);
+            StringBuilder startDate = new StringBuilder(sentToVerificatorDateFrom).append(" " + MIN_TIME);
+            StringBuilder endDate = new StringBuilder(sentToVerificatorDateTo).append(" " + LocalTime.MAX.toString());
             queryPredicate = cb.and(cb.between(root.get("sentToVerificatorDate"),
                     Timestamp.valueOf(startDate.toString()), Timestamp.valueOf(endDate.toString())), queryPredicate);
         }

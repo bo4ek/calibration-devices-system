@@ -359,7 +359,7 @@ public class StateVerificatorController {
         stateVerificatorService.assignVerificatorEmployee(idVerification, null);
     }
 
-    @RequestMapping(value = "earliestCreatingProtocolDate", method = RequestMethod.GET)
+    @RequestMapping(value = "earliestDate/creatingProtocol", method = RequestMethod.GET)
     public String getEarliestDateOfDigitalVerificationProtocolsByVerificator(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
@@ -374,15 +374,16 @@ public class StateVerificatorController {
         }
     }
 
-    @RequestMapping(value = "earliestSentToVerificatorDate", method = RequestMethod.GET)
-    public String getEarliestSentToVerificatorDate(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+    @RequestMapping(value = "earliestDate/sentToVerificator", method = RequestMethod.GET)
+    public String getEarliestDateOfSentToVerificator(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
-            Date earliestDate = verificationService.getEarliestSentToVerificatorDate(organization);
+            Date earliestDate = verificationService.getEarliestDateOfSentToVerificator(organization);
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
             if (earliestDate != null) {
                 LocalDateTime localDate = LocalDateTime.ofInstant(earliestDate.toInstant(), ZoneId.systemDefault());
-                return localDate.format(dbDateTimeFormatter);
+                String isoLocalDateString = localDate.format(dbDateTimeFormatter);
+                return isoLocalDateString;
             } else {
                 return null;
             }

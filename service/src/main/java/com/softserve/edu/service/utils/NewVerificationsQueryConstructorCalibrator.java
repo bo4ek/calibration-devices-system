@@ -26,9 +26,6 @@
 
 		/**
 		 * Method dynamically builds query to database depending on input parameters specified.
-		 * @param lastNameToSearch  search by client's last name
-		 * @param providerEmployee  used to additional query restriction if logged user is simple employee (not admin)
-		 * @param dateToSearch      search by initial date of verification (optional)
 		 * @param providerId        search by organization ID
 		 * @param startDateToSearch
 		 * @param endDateToSearch
@@ -77,9 +74,6 @@
 		 * Method dynamically builds query to database depending on input parameters specified.
 		 * Needed to get max count of rows with current predicates for pagination
 		 *
-		 * @param providerId        search by organization ID
-		 * @param lastNameToSearch  search by client's last name
-		 * @param providerEmployee  used to additional query restriction if logged user is simple employee (not admin)
 		 * @param startDateToSearch search by initial date of verification (optional)
 		 * @param endDateToSearch
 		 * @param idToSearch        search by verification ID
@@ -105,10 +99,6 @@
 		/**
 		 * Method builds list of predicates depending on parameters passed
 		 * Rule for predicates compounding - conjunction (AND)
-		 *  @param providerId
-		 * @param lastNameToSearch
-		 * @param providerEmployee
-		 * @param dateToSearch
 		 * @param root
 		 * @param cb
 		 * @param joinSearch

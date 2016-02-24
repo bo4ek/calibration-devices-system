@@ -708,8 +708,8 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public java.sql.Timestamp getEarliestSentToVerificatorDate(Organization organization) {
-        return verificationRepository.getEarliestSentToVerificatorDate(organization);
+    public java.sql.Timestamp getEarliestDateOfSentToVerificator(Organization organization) {
+        return verificationRepository.getEarliestDateOfSentToVerificator(organization);
     }
 
     @Override
