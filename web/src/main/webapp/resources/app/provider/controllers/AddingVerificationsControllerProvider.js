@@ -1,9 +1,9 @@
 angular.module('employeeModule').controller('AddingVerificationsControllerProvider', ['$scope', '$modal', '$state', '$http', '$log',
     'AddressServiceProvider', 'VerificationServiceProvider', '$stateParams',
     '$rootScope', '$location', '$window', '$modalInstance', '$filter', '$translate', 'toaster',
-
     function ($scope, $modal, $state, $http, $log, addressServiceProvider, verificationServiceProvider, $stateParams,
               $rootScope, $location, $window, $modalInstance, $filter, $translate, toaster) {
+
         $scope.isShownForm = true;
         $scope.isCalibrator = -1;
         $scope.calibratorDefined = false;
@@ -32,7 +32,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         $scope.standardSizes = [];
 
         $scope.selectedData = {};
-        $scope.selectedData.selectedStreetType = "";
         $scope.selectedData.dismantled = false;
         $scope.selectedData.sealPresence = true;
 

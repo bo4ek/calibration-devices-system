@@ -8,7 +8,6 @@ angular
 
             $scope.resultsCount = 0;
 
-
             $scope.searchParameters = [
                 {
                     name: 'TASK_STATUS',
@@ -149,7 +148,6 @@ angular
 
             $scope.setTypeDataL();
 
-
             $scope.myDatePicker = {};
             $scope.myDatePicker.pickerDate = null;
             $scope.defaultDate = null;
@@ -196,11 +194,9 @@ angular
                 };
             };
 
-
             $scope.showPicker = function ($event) {
                 angular.element("#datepickerfield").trigger("click");
             };
-
 
             $scope.isDateDefault = function () {
                 var pickerDate = $scope.myDatePicker.pickerDate;
@@ -212,7 +208,6 @@ angular
                 && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day'));
 
             };
-
 
             verificationServiceCalibrator.getNewVerificationEarliestDate().success(function (date) {
                 //first we will try to receive date period
@@ -457,8 +452,6 @@ angular
                 $scope.dataToManualTest.set(verification.id, manualTest);
             };
 
-
-
             $scope.resolveVerificationId = function (verification) {
                 $scope.createDataForManualTest(verification);
                 var index = $scope.idsOfVerifications.indexOf(verification.id);
@@ -469,8 +462,6 @@ angular
                 }
                 checkForEmpty();
             };
-
-
 
             $scope.openSendingModal = function () {
                 if (!$scope.allIsEmpty) {
@@ -518,7 +509,6 @@ angular
             var checkForEmpty = function () {
                 $scope.allIsEmpty = $scope.idsOfVerifications.length === 0;
             };
-
 
             $scope.uploadBbiFile = function (idVerification) {
 
@@ -671,4 +661,3 @@ angular
             }
 
         }]);
-

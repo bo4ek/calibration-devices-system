@@ -6,6 +6,12 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.softserve.edu.entity.verification.Verification.*;
+import static com.softserve.edu.entity.verification.Verification.CalibrationTestResult.*;
+
 /**
  * Represents an unfitness certificate.
  */
@@ -24,7 +30,7 @@ public class UnfitnessCertificate extends BaseCertificate {
     }
 
     /**
-     * @return Returns the identification number of the
+     * @return Returns the identification number of the document
      */
     @Override
     @Placeholder(name = "UNFITNESS_CERTIFICATE_NUMBER")
@@ -33,54 +39,57 @@ public class UnfitnessCertificate extends BaseCertificate {
     }
 
     /**
-     * @return Returns the reason of device's unsuitability
+     * @return Returns the reason(s) of device's unsuitability
      */
     @Placeholder(name = "REASON_UNSUITABLE")
     public String getReasonUnusable() {
-        StringBuilder sb = new StringBuilder(Constants.MEASURING_ERROR_MESSAGE);
-        Verification.CalibrationTestResult first;
-        Verification.CalibrationTestResult second;
-        Verification.CalibrationTestResult third;
-        Verification.CalibrationTestResult notProcessed = Verification.CalibrationTestResult.NOT_PROCESSED;
-        Verification.CalibrationTestResult failed = Verification.CalibrationTestResult.FAILED;
+        List<String> reasons = new ArrayList<>();
+        CalibrationTestResult firstResult;
+        CalibrationTestResult secondResult;
+        CalibrationTestResult thirdResult;
+        CalibrationTestResult notProcessed = NOT_PROCESSED;
+        CalibrationTestResult failed = FAILED;
+        try {
+            if (verification.isManual()) {
+                firstResult = verification.getCalibrationTestDataManualId().getStatusTestFirst();
+                secondResult = verification.getCalibrationTestDataManualId().getStatusTestSecond();
+                thirdResult = verification.getCalibrationTestDataManualId().getStatusTestThird();
 
-        if (verification.isManual()) {
-            first = verification.getCalibrationTestDataManualId().getStatusTestFirst();
-            second = verification.getCalibrationTestDataManualId().getStatusTestSecond();
-            third = verification.getCalibrationTestDataManualId().getStatusTestThird();
+                if (firstResult.equals(notProcessed) || secondResult.equals(notProcessed) || thirdResult.equals(notProcessed)) {
+                    return verification.getCalibrationTestDataManualId().getUnsuitabilityReason().getName();
+                }
+                if (firstResult.equals(failed)) {
+                    reasons.add(Constants.RATED_FLAW);
+                }
+                if (secondResult.equals(failed)) {
+                    reasons.add(Constants.TRANSIENT_FLAW);
+                }
+                if (thirdResult.equals(failed)) {
+                    reasons.add(Constants.MINIMAL_FLAW);
+                }
+                return Constants.MEASURING_ERROR_MESSAGE + String.join(",", reasons);
+            } else {
+                firstResult = calibrationTest.getCalibrationTestDataList().get(Constants.FIRST_TEST_RESULT).getTestResult();
+                secondResult = calibrationTest.getCalibrationTestDataList().get(Constants.SECOND_TEST_RESULT).getTestResult();
+                thirdResult = calibrationTest.getCalibrationTestDataList().get(Constants.THIRD_TEST_RESULT).getTestResult();
 
-            if (first.equals(notProcessed) || second.equals(notProcessed) || third.equals(notProcessed)) {
-                return verification.getCalibrationTestDataManualId().getUnsuitabilityReason().getName();
+                if (firstResult.equals(notProcessed) || secondResult.equals(notProcessed) || thirdResult.equals(notProcessed)) {
+                    return calibrationTest.getUnsuitabilityReason().getName();
+                }
+                if (firstResult.equals(failed)) {
+                    reasons.add(Constants.RATED_FLAW);
+                }
+                if (secondResult.equals(failed)) {
+                    reasons.add(Constants.TRANSIENT_FLAW);
+                }
+                if (thirdResult.equals(failed)) {
+                    reasons.add(Constants.MINIMAL_FLAW);
+                }
+                return Constants.MEASURING_ERROR_MESSAGE + String.join(",", reasons);
             }
-            if (first.equals(failed)) {
-                sb.append(" ").append(Constants.RATED_FLAW).append(",");
-            }
-            if (second.equals(failed)) {
-                sb.append(" ").append(Constants.TRANSIENT_FLAW).append(",");
-            }
-            if (third.equals(failed)) {
-                sb.append(" ").append(Constants.MINIMAL_FLAW);
-            }
-            return sb.toString();
-
-        } else {
-            first = calibrationTest.getCalibrationTestDataList().get(0).getTestResult();
-            second = calibrationTest.getCalibrationTestDataList().get(1).getTestResult();
-            third = calibrationTest.getCalibrationTestDataList().get(2).getTestResult();
-
-            if (first.equals(notProcessed) || second.equals(notProcessed) || third.equals(notProcessed)) {
-                return calibrationTest.getUnsuitabilityReason().getName();
-            }
-            if (first.equals(failed)) {
-                sb.append(" ").append(Constants.RATED_FLAW).append(",");
-            }
-            if (second.equals(failed)) {
-                sb.append(" ").append(Constants.TRANSIENT_FLAW).append(",");
-            }
-            if (third.equals(failed)) {
-                sb.append(" ").append(Constants.MINIMAL_FLAW);
-            }
-            return sb.toString();
+        } catch (Exception e) {
+            logger.error("Test results for this verification are corrupted ", e);
+            return Constants.NOT_SPECIFIED;
         }
     }
 }

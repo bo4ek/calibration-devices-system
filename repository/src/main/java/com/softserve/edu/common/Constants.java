@@ -73,16 +73,17 @@ public interface Constants {
     String WATER_DEVICE_MAIL = "лічильника холодної води";
     String THERMAL_DEVICE_MAIL = "лічильника гарячої води";
 
-
-    //reasons o counter unusability
-    String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за";
+    //reasons o counter unsuitability
+    String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
     String RATED_FLAW = "номінальною витратою";
     String TRANSIENT_FLAW = "перехідною витратою";
     String MINIMAL_FLAW = "мінімальною витратою";
     String NOT_SPECIFIED = "не вказано";
+    int FIRST_TEST_RESULT = 0;
+    int SECOND_TEST_RESULT = 1;
+    int THIRD_TEST_RESULT = 2;
 
     // region Address details
-
     String CITY = "Місто";
     String CITY_ID = "Id міста";
     String REGION = "Район";
@@ -114,14 +115,12 @@ public interface Constants {
     // region File extensions and names
 
     String XLS_EXTENSION = "xls";
-    String ZIP_EXTENSION = "zip";
     String DB_EXTENSION = "db";
     String IMAGE_TYPE = "jpg";
 
     // endregion
 
     // region Task
-
     String TASK = "Завдання";
     String TASK_DATE = "Дата завдання";
     String DESIRABLE_TIME = "Бажаний час";

@@ -9,13 +9,11 @@ import com.softserve.edu.entity.verification.Verification;
 import lombok.*;
 import com.softserve.edu.entity.verification.Verification.CalibrationTestResult;
 
-
 /**
  * Created by Misha on 12/11/2015.
  * Calibration Test Data Manual entity.
  * Contains detailed information about manual calibration test
  */
-
 @Entity
 @Getter
 @Setter
@@ -31,13 +29,15 @@ public class CalibrationTestDataManual {
 
     @Enumerated(EnumType.STRING)
     public CalibrationTestResult statusTestFirst;
+
     @Enumerated(EnumType.STRING)
     public CalibrationTestResult statusTestSecond;
+
     @Enumerated(EnumType.STRING)
     public CalibrationTestResult statusTestThird;
+
     @Enumerated(EnumType.STRING)
     public CalibrationTestResult statusCommon;
-
 
     @ManyToOne
     @JoinColumn(name = "counterId")
@@ -66,4 +66,3 @@ public class CalibrationTestDataManual {
         this.unsuitabilityReason = unsuitabilityReason;
     }
 }
-

@@ -106,7 +106,7 @@ public abstract class BaseCertificate implements Document {
     }
 
     /**
-     * @return Returns the identification number of the team, that was making verification
+     * @return Returns the identification number of the verification
      */
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
@@ -277,7 +277,7 @@ public abstract class BaseCertificate implements Document {
                 return verification.getCalibrationModule().getCalibrationType();
             }
         } catch (Exception e) {
-            logger.error("Calibration type for this module had not been specified ", e);
+            logger.error("Calibration type for this module has not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }
@@ -290,7 +290,7 @@ public abstract class BaseCertificate implements Document {
         try {
             return verification.getSignature();
         } catch (Exception e) {
-            logger.error("Signature for this document had not been specified ", e);
+            logger.error("Signature for this document has not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }

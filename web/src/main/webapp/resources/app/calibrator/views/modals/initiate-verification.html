@@ -319,7 +319,6 @@
                                            autocomplete="off"
                                            typeahead-editable="false"
                                            typeahead-on-select="receiveBuildings(selectedData.selectedStreet)"
-                                           placeholder="{{'NAME_OF_STREET' | translate}}"
                                            required>
                                     <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
                                           id="okFeedBack"></span>
@@ -499,7 +498,7 @@
                             </div>
 
                             <!-- DATE OF dismantled  -->
-                            <div class="form-group">
+                            <div class="form-group" ng-hide="!selectedData.dismantled">
                                 <div class="col-md-4">
                                     <label class="control-label">{{' DATE_OF_DISMANTLED '| translate }}</label>
                                 </div>
@@ -508,22 +507,18 @@
                                     <div class="input-group right-inner-addon">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default myGroupBtn"
-                                            ng-disabled="!selectedData.dismantled"
                                             ng-model="selectedData.dateOfDismantled"
                                             ng-click="showPicker()" options="optsMax" date-range-picker="optsMax">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button>
                                 </span>
-
                                         <input type="text" class="form-control date-picker"
                                                ng-model="selectedData.dateOfDismantled "
-                                               ng-disabled="!selectedData.dismantled"
                                                ng-click="showPicker()"
                                                date-range-picker="optsMax" options="optsMax"
                                                ng-change="receiveModuleNumbers()" readonly/>
                                          <span class="input-group-btn">
                                     <button type="button" class="btn btn-default myGroupBtn"
-                                            ng-disabled="!selectedData.dismantled"
                                             ng-show="!isDateDefault()"
                                             ng-click="clearDateOfDismantled()">
                                         <i class="glyphicon glyphicon-remove"></i>

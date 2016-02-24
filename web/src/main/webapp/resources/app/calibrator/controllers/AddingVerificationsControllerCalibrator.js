@@ -35,7 +35,6 @@ angular.module('employeeModule')
             $scope.standardSizes = [];
 
             $scope.selectedData = {};
-            $scope.selectedData.selectedStreetType = "";
             $scope.selectedData.dismantled = false;
             $scope.selectedData.sealPresence = true;
             $scope.selectedData.verificationWithDismantle = false;
@@ -148,7 +147,6 @@ angular.module('employeeModule')
                 .success(function (deviceTypes) {
                     $scope.deviceTypes = deviceTypes;
                     $scope.selectedData.firstSelectedDeviceType = undefined;
-                    $scope.selectedData.secondSelectedDeviceType = undefined;
                 });
 
             /**
@@ -158,9 +156,6 @@ angular.module('employeeModule')
                 angular.forEach($scope.devices, function (value) {
                     if (value.deviceType === $scope.selectedData.firstSelectedDeviceType) {
                         $scope.selectedData.firstSelectedDevice = value;
-                    }
-                    if (value.deviceType === $scope.selectedData.secondSelectedDeviceType) {
-                        $scope.selectedData.secondSelectedDevice = value;
                     }
                 });
             };
@@ -237,7 +232,6 @@ angular.module('employeeModule')
             dataReceivingService.findStreetsTypes()
                 .success(function (streetsTypes) {
                     $scope.streetsTypes = streetsTypes;
-                    $scope.selectedData.selectedStreetType = "";
                 });
 
             /**
@@ -288,8 +282,6 @@ angular.module('employeeModule')
              * Sends data to the server where Verification entity will be created.
              * On-click handler in send button.
              */
-
-
             $scope.sendApplicationData = function () {
                 $scope.$broadcast('show-errors-check-validity');
                 if ($scope.clientForm.$valid) {
@@ -310,7 +302,6 @@ angular.module('employeeModule')
                                 }
                             })
                     } else {
-
                         $scope.formData.quantity = $scope.selectedData.firstDeviceCount;
                         verificationServiceCalibrator.sendInitiatedVerification($scope.formData)
                             .then(function (data) {
@@ -322,8 +313,7 @@ angular.module('employeeModule')
                                     toaster.pop('error', $filter('translate')('INFORMATION'),
                                         $filter('translate')('ERROR_WHILE_CREATING_VERIFICATIONS'));
                                 }
-                            }
-                        );
+                            });
                     }
                 }
             };
@@ -360,7 +350,6 @@ angular.module('employeeModule')
             $scope.fillFormData = function () {
 
                 $scope.selectDevice();
-
                 //LOCATION
                 $scope.formData.region = $scope.selectedData.region.designation;
                 $scope.formData.district = $scope.selectedData.district.designation;
@@ -448,7 +437,6 @@ angular.module('employeeModule')
                 $scope.selectedData.region = undefined;
                 $scope.selectedData.district = undefined;
                 $scope.selectedData.locality = undefined;
-                $scope.selectedData.selectedStreetType = undefined;
                 $scope.selectedData.selectedStreet = "";
                 $scope.selectedData.selectedBuilding = "";
                 $scope.selectedData.firstDeviceCount = '1';
@@ -538,17 +526,15 @@ angular.module('employeeModule')
                             dataReceivingService.findAllDevices().then(function (devices) {
                                 $scope.devices = devices.data;
                                 var index = arrayObjectIndexOf($scope.devices, $scope.verification.data.deviceName, "designation");
-                                $scope.selectedData.selectedDevice = $scope.devices[index];
+                                $scope.selectedData.firstSelectedDevice = $scope.devices[index];
                             });
 
                             dataReceivingService.findAllDeviceTypes().then(function (deviceTypes) {
                                 $scope.deviceTypes = deviceTypes.data;
                                 var index = arrayIndexOf($scope.deviceTypes, $scope.verification.data.deviceType);
-                                $scope.selectedData.selectedDeviceType = $scope.deviceTypes[index];
-
+                                $scope.selectedData.firstSelectedDeviceType = $scope.deviceTypes[index];
 
                                 if ($scope.verification.data.symbol) {
-
                                     dataReceivingService.findAllSymbols($scope.verification.data.deviceType).then(function (respSymbols) {
                                         $scope.symbols = respSymbols.data;
                                         var index = arrayIndexOf($scope.symbols, $scope.verification.data.symbol);
@@ -574,7 +560,6 @@ angular.module('employeeModule')
 
                     });
                 } else {
-
                     toaster.pop('warning', $filter('translate')('CREATE_BY_PATTERN_WARNING'));
                 }
 
@@ -595,7 +580,6 @@ angular.module('employeeModule')
              *  Date picker and formatter setup
              *
              */
-
             $scope.selectedData.dateOfDismantled = null;
             $scope.selectedData.dateOfMounted = null;
             $scope.addInfo.dateOfVerif = null;
@@ -620,7 +604,6 @@ angular.module('employeeModule')
                         showDropdowns: true,
                         eventHandlers: {}
                     };
-
                     $scope.optsMin = {
                         format: 'DD-MM-YYYY',
                         singleDatePicker: true,
@@ -628,7 +611,6 @@ angular.module('employeeModule')
                         minDate: new Date(),
                         eventHandlers: {}
                     };
-
                     $scope.optsMax = {
                         format: 'DD-MM-YYYY',
                         singleDatePicker: true,
@@ -638,7 +620,6 @@ angular.module('employeeModule')
                     };
 
                 };
-
                 $scope.setTypeDataLangDatePicker();
             };
 
@@ -785,6 +766,5 @@ angular.module('employeeModule')
             if ($rootScope.verifIDforEditing) {
                 $scope.createNew();
             }
-
         }
     ]);

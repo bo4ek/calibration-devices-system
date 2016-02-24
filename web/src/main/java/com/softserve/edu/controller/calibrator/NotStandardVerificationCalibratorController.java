@@ -148,12 +148,9 @@ public class NotStandardVerificationCalibratorController {
                         verification.getComment()));
             }
             return resultList;
-        }catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Error while transforming verification into DTO ", e);
             return null;
         }
-
     }
-
-
 }
