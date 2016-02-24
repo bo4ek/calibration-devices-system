@@ -1,0 +1,55 @@
+﻿What you need to do in the application "Calibration devices system" to provide the verificator perform signing and verifying electronic signature (digital signature).
+For use PHP for all tomcat applications you must:
+1. Download the PHP/Java Bridge binary.
+2. Copy JavaBridge.jar, php-servlet.jar and php-script.jar from the JavaBridge.war zip archive to $CATALINA_HOME/lib.
+3. Add the following 9 lines marked with a + to the tomcat $CATALINA_HOME/conf/web.xml web app:
+<listener>
+        <listener-class>php.java.servlet.ContextLoaderListener</listener-class>        
+</listener>
+ <servlet>
+        <servlet-name>PhpJavaServlet</servlet-name>
+        <servlet-class>php.java.servlet.PhpJavaServlet</servlet-class>
+ </servlet>
+ <servlet>
+        <servlet-name>PhpCGIServlet</servlet-name>
+        <servlet-class>php.java.servlet.fastcgi.FastCGIServlet</servlet-class>
+                <init-param>
+                        <param-name>prefer_system_php_exec</param-name>
+                        <param-value>On</param-value>
+                </init-param>
+                <init-param>
+                        <param-name>php_include_java</param-name>
+                        <param-value>Off</param-value>
+                </init-param>
+ </servlet>
+ <servlet-mapping>
+        <servlet-name>PhpJavaServlet</servlet-name>
+        <url-pattern>*.phpjavabridge</url-pattern>
+        </servlet-mapping>
+ <servlet-mapping>
+        <servlet-name>PhpCGIServlet</servlet-name>
+        <url-pattern>*.php</url-pattern>
+</servlet-mapping>
+        4. Start tomcat.
+Previously you need to install PHP(one of versions 5.3.*, 5.4.*, 5.5.*, 5.6.*) . PHP must be put or in C:/ProgramFile/PHP(Windows) or in /usr/bin/php-cgi(Linux/Unix).
+For user library CA "Signature (java-script)" euscp.js must be such components:
+* euscpm.js - implementation of interface interaction with java-script library euscp.js
+* euscpt.js - implementation of the basic data types used library euscp.js
+* euutils.js - implementation of additional features for working with the library euscp.js
+* ProxyHandler.php - script implementation proxy service that uses the library euscp.js, for servers that use PHP interprytator
+* caocspr.64.tar - library for a proxy service that uses the library euscp.js, for servers that use interprytator PHP.
+Version caocspr.64.tar library depends on the operating system and version of PHP.
+To install this library (module PHP) is needed in the php.ini configuration file to specify the module as follows:
+1. ОS Microsoft Windows: extension = caocspr.dll
+2. ОS Linux extension = caocspr.so
+To use the library version of PHP 5.6.x should be set:
+* always_populate_raw_post_data = -1
+Installation library for php-cgi running on Linux:
+1. create the directory /usr/lib64/php/caocspr_extension;
+2. extract from the archive library caocspri.tar to library directory /usr/lib64/php/caocspr_extension: tar –xC /usr/lib64/php/caocspr_extension –f path_to_archive/caocspri.tar
+3. add to file $CATALINA_HOME/conf/catalina.properties: LD_LIBRARY_PATH=/usr/lib64/php/caocspr_extension
+4. create file /etc/php.d/caocspr.ini and add into this file: extension=/usr/lib/php5/caocspr_extension/caocspr.so
+You need add directory Data in $CATALINA_HOME/webapps with such files:
+* CAs.json - file with all Certification Authority
+* CACertificates.p7b
+After running tomcat there is directory java with two files Java.inc and JavaProxy.php in the directory Data. You must add ProxyHandler.php file into directory java.

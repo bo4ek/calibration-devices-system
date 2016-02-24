@@ -1,0 +1,64 @@
+﻿Що потрібно зробити, щоб в аплікації “Calibration devices system” працювала функціональність накладання і перевірки ЕЦП(електронного цифрового підпису) при встановленні результату повірки лічильника.
+
+Щоб використовувати PHP на tomcat додатках необхідно:
+
+
+1. Скопіювати JavaBridge.jar, php-servlet.jar і php-script.jar з JavaBridge.war до  $CATALINA_HOME/lib.
+2. Додати наступні лінійки коду у  $CATALINA_HOME/conf/web.xml:
+
+
+<listener>
+        <listener-class>php.java.servlet.ContextLoaderListener</listener-class>        
+</listener>
+ <servlet>
+        <servlet-name>PhpJavaServlet</servlet-name>
+        <servlet-class>php.java.servlet.PhpJavaServlet</servlet-class>
+ </servlet>
+ <servlet>
+        <servlet-name>PhpCGIServlet</servlet-name>
+        <servlet-class>php.java.servlet.fastcgi.FastCGIServlet</servlet-class>
+                <init-param>
+                        <param-name>prefer_system_php_exec</param-name>
+                        <param-value>On</param-value>
+                </init-param>
+                <init-param>
+                        <param-name>php_include_java</param-name>
+                        <param-value>Off</param-value>
+                </init-param>
+ </servlet>
+ <servlet-mapping>
+        <servlet-name>PhpJavaServlet</servlet-name>
+        <url-pattern>*.phpjavabridge</url-pattern>
+        </servlet-mapping>
+ <servlet-mapping>
+        <servlet-name>PhpCGIServlet</servlet-name>
+        <url-pattern>*.php</url-pattern>
+</servlet-mapping>
+      3. Start tomcat.
+Попередньо потрібно інсталювати PHP( одна з версій: 5.3.*, 5.4.*, 5.5.*, 5.6.* ). PHP повинне бути розташоване або у C:/ProgramFile/PHP(Windows) чи /usr/bin/php-cgi(Linux/Unix), або у WEB-INF/cgi/ARCHITECTURE-OS/php-cgi.exe(Windows) чи php-cgi(Linux/Unix), де WEB-INF - директорія аплікації.
+PHP розширення - у WEB-INF/cgi/ARCHITECTORE-OS/ext. Розширення може бути налаштоване у WEB-INF/cgi/ARCHITECTURE-OS/conf.d/EXTENSION.ini файлі.
+
+
+Для функціонування бібліотеки користувача ЦСК “Підпис (java-скрипт)”euscp.js необхідні такі компоненти:
+* euscpm.js - реалізація інтерфейсу взаємодії з java-скрипт-бібліотекою euscp.js
+* euscpt.js - реалізація основних типів даних, що використовуються бібліотекою euscp.js
+* euutils.js - реалізація додаткових функцій для роботи з бібліотекою euscp.js
+* ProxyHandler.php - скрипт реалізації проксі-сервісу, що використовується бібліотекою euscp.js, для серверів, які використовують інтерпритатор PHP
+* caocspr.64.tar - бібліотеки для роботи проксі-сервісу, що використовується бібліотекою euscp.js, для серверів, які використовують інтерпритатор PHP.
+Версія бібліотеки caocspr.64.tar залежить від операційної системи і версії PHP.
+Для підключення цієї бібліотеки (модуля PHP) необхідно в файлі конфігурації php.ini вказати цей модуль наступним чином:
+* ОС Microsoft Windows: extension = caocspr.dll
+* ОС Linux extension = caocspr.so
+Для роботи бібліотеки з версією PHP 5.6.x необхідно встановити значення:
+* always_populate_raw_post_data = -1
+Інсталяція бібліотеки для php-cgi на ОС Linux:
+1. створити каталог /usr/lib64/php/caocspr_extension;
+2. разархівувати бібліотеки з архіву caocspri.tar до каталогу /usr/lib64/php/caocspr_extension бібліотеки: tar –xC /usr/lib64/php/caocspr_extension –f /шлях_до_файлу/caocspri.tar
+3. до файлу $CATALINA_HOME/conf/catalina.properties додати: LD_LIBRARY_PATH=/usr/lib64/php/caocspr_extension
+4. створити файл /etc/php.d/caocspr.ini з наступним вмістом: extension=/usr/lib/php5/caocspr_extension/caocspr.so
+
+
+Для роботи нашої аплікації “Calibration devices system” потрібно у папку tomcat сервера webapps (auto deploy) додати папку Data з таким вмістом:
+* CAs.json - файл з усіма ЦСК(саме сюди потрібно буде додавати новий центр сертифікації ключів з налаштуваннями при необхідності)
+* CACertificates.p7b
+Після запуску tomcat у папці Data створиться директорія java з двома файлами: Java.inc та JavaProxy.php. Тоді у цю папку java потрібно додати файл ProxyHandler.php.
