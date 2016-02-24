@@ -31,8 +31,8 @@ public class CalibrationModuleRepositoryImpl implements CalibrationModuleReposit
         List<Integer> listOfWater = new ArrayList<>();
         List<Integer> listOfThermal = new ArrayList<>();
 
-        listOfWater.add(Constants.MODULE_WATER_NUMBER_INITIAL);
-        listOfThermal.add(Constants.MODULE_THERMAL_NUMBER_INITIAL);
+        listOfWater.add(Constants.MODULE_WATER_INITIAL_NUMBER);
+        listOfThermal.add(Constants.MODULE_THERMAL_INITIAL_NUMBER);
 
         for (CalibrationModule oneCalibrationModule : calibrationModuleRepository.findAll()) {
             if (oneCalibrationModule.getModuleNumber() != null) {
@@ -55,7 +55,7 @@ public class CalibrationModuleRepositoryImpl implements CalibrationModuleReposit
         } else {
             for (Device.DeviceType deviceType : setOfDeviceType) {
                 switch (deviceType.getId()) {
-                    case (1): {
+                    case (Constants.DEVICE_TYPE_ID_WATER): {
                         moduleNumber = listOfWater.get(listOfWater.size() - 1) + Constants.MODULE_ID_INCREMENT;
                         calibrationModule.setModuleNumber(moduleNumber.toString());
                         break;

@@ -1,6 +1,8 @@
 package com.softserve.edu.service.tool.impl;
 
 import com.softserve.edu.common.Constants;
+import com.softserve.edu.config.MailConstant;
+import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.repository.OrganizationRepository;
@@ -67,31 +69,31 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(to);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 String domain = null;
                 try {
                     domain = InetAddress.getLocalHost().getHostAddress();
                 } catch (UnknownHostException ue) {
-                    logger.error("Cannot get host address", ue);
+                    logger.error("Cannot get host address ", ue);
                 }
 
                 SimpleDateFormat form = new SimpleDateFormat("dd-MM-yyyy");
                 String date = form.format(new Date());
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("name", userName);
-                templateVariables.put("protocol", protocol);
-                templateVariables.put("domain", domain);
-                templateVariables.put("applicationId", clientCode);
-                templateVariables.put("providerName", providerName);
-                if (deviceType.equals("WATER")) {
-                    templateVariables.put("deviceType", Constants.WATER_DEVICE_MAIL);
+                templateVariables.put(MailConstant.NAME, userName);
+                templateVariables.put(MailConstant.PROTOCOL, protocol);
+                templateVariables.put(MailConstant.DOMAIN, domain);
+                templateVariables.put(MailConstant.APPLICATION_ID, clientCode);
+                templateVariables.put(MailConstant.PROVIDER_NAME, providerName);
+                if (deviceType.equals(Device.DeviceType.WATER.toString())) {
+                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.WATER_DEVICE_MAIL);
                 } else {
-                    templateVariables.put("deviceType", Constants.THERMAL_DEVICE_MAIL);
+                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
                 }
-                templateVariables.put("date", date);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailTemplate.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.DATE, date);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailTemplate.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -105,13 +107,13 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws MessagingException, UnsupportedEncodingException {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(employeeEmail);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("name", employeeName);
-                templateVariables.put("password", newPassword);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/mailNewPasswordEmployee.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.NAME, employeeName);
+                templateVariables.put(MailConstant.PASSWORD, newPassword);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailNewPasswordEmployee.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -124,13 +126,13 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws MessagingException, UnsupportedEncodingException {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(employeeEmail);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("name", employeeName);
-                templateVariables.put("password", newPassword);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/createdAdminPassword", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.NAME, employeeName);
+                templateVariables.put(MailConstant.PASSWORD, newPassword);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/createdAdminPassword", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -143,14 +145,14 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws UnsupportedEncodingException, MessagingException {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(organizationMail);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("name", organizationName);
-                templateVariables.put("username", username);
-                templateVariables.put("password", password);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationAdminMail.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.NAME, organizationName);
+                templateVariables.put(MailConstant.USERNAME, username);
+                templateVariables.put(MailConstant.PASSWORD, password);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationAdminMail.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -163,14 +165,14 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws UnsupportedEncodingException, MessagingException {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(organizationMail);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME)); //properties
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("name", organizationName);
-                templateVariables.put("username", username);
-                templateVariables.put("password", password);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationAdminPasswordChange.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.NAME, organizationName);
+                templateVariables.put(MailConstant.USERNAME, username);
+                templateVariables.put(MailConstant.PASSWORD, password);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationAdminPasswordChange.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -184,19 +186,19 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(to);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("name", userName);
-                templateVariables.put("verificationId", verificationId);
+                templateVariables.put(MailConstant.NAME, userName);
+                templateVariables.put(MailConstant.VERIFICATION_ID, verificationId);
                 if (deviceType.equals("WATER")) {
-                    templateVariables.put("deviceType", Constants.WATER_DEVICE_MAIL);
+                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.WATER_DEVICE_MAIL);
                 } else {
-                    templateVariables.put("deviceType", Constants.THERMAL_DEVICE_MAIL);
+                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
                 }
-                templateVariables.put("message", msg);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/rejectVerification.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.MESSAGE, msg);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/rejectVerification.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
 
             }
         };
@@ -213,7 +215,7 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(to);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 String domain = null;
                 try {
                     domain = InetAddress.getLocalHost().getHostAddress();
@@ -221,15 +223,15 @@ public class MailServiceImpl implements MailService {
                     logger.error("Cannot get host address", ue);
                 }
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("verificationId", verificationId);
+                templateVariables.put(MailConstant.VERIFICATION_ID, verificationId);
                 if (deviceType.equals("WATER")) {
-                    templateVariables.put("deviceType", Constants.WATER_DEVICE_MAIL);
+                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.WATER_DEVICE_MAIL);
                 } else {
-                    templateVariables.put("deviceType", Constants.THERMAL_DEVICE_MAIL);
+                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
                 }
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/accepted.vm", "UTF-8", templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/accepted.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -244,7 +246,7 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(to);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 String domain = null;
                 try {
                     domain = InetAddress.getLocalHost().getHostAddress();
@@ -252,11 +254,11 @@ public class MailServiceImpl implements MailService {
                     logger.error("Cannot get host address", ue);
                 }
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("verificationId", verificationId);
-                templateVariables.put("status", status);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/changedStatus.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.VERIFICATION_ID, verificationId);
+                templateVariables.put(MailConstant.STATUS, status);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/changedStatus.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -283,14 +285,14 @@ public class MailServiceImpl implements MailService {
                 message.setTo(to);
                 message.setFrom(new InternetAddress(from));
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("firstName", userFirstName);
-                templateVariables.put("lastName", userLastName);
-                templateVariables.put("mailAddress", from);
-                templateVariables.put("message", msg);
-                templateVariables.put("applicationId", verificationId);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/clientMail.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.FIRST_NAME, userFirstName);
+                templateVariables.put(MailConstant.LAST_NAME, userLastName);
+                templateVariables.put(MailConstant.MAIL_ADDRESS, from);
+                templateVariables.put(MailConstant.MESSAGE, msg);
+                templateVariables.put(MailConstant.APPLICATION_ID, verificationId);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/clientMail.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
 
             }
         };
@@ -303,14 +305,14 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(mailTo);
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("processTimeExceeding", processTimeExceeding);
-                templateVariables.put("verificationId", verificationId);
-                templateVariables.put("maxProcessTime", maxProcessTime);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/processTimeExceeded.vm", "UTF-8", templateVariables);
+                templateVariables.put(MailConstant.PROCESS_TIME_EXCEEDING, processTimeExceeding);
+                templateVariables.put(MailConstant.VERIFICATION_ID, verificationId);
+                templateVariables.put(MailConstant.MAX_PROCESS_TIME, maxProcessTime);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/processTimeExceeded.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -331,7 +333,7 @@ public class MailServiceImpl implements MailService {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(organization.getEmail());
-                message.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
                 String domain = null;
                 try {
                     domain = InetAddress.getLocalHost().getHostAddress();
@@ -339,26 +341,26 @@ public class MailServiceImpl implements MailService {
                     logger.error("Cannot get host address", ue);
                 }
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put("name", organization.getName());
-                templateVariables.put("email", organization.getEmail());
-                templateVariables.put("phone", organization.getPhone());
-                templateVariables.put("types", organization.getOrganizationTypes());
-                templateVariables.put("employeesCapacity", organization.getEmployeesCapacity());
-                templateVariables.put("maxProcessTime", organization.getMaxProcessTime());
-                templateVariables.put("region", organization.getAddress().getRegion());
-                templateVariables.put("locality", organization.getAddress().getLocality());
-                templateVariables.put("district", organization.getAddress().getDistrict());
-                templateVariables.put("street", organization.getAddress().getStreet());
-                templateVariables.put("building", organization.getAddress().getBuilding());
-                templateVariables.put("flat", organization.getAddress().getFlat());
-                templateVariables.put("firstName", admin.getFirstName());
-                templateVariables.put("middleName", admin.getMiddleName());
-                templateVariables.put("lastName", admin.getLastName());
-                templateVariables.put("username", admin.getUsername());
+                templateVariables.put(MailConstant.NAME, organization.getName());
+                templateVariables.put(MailConstant.EMAIL, organization.getEmail());
+                templateVariables.put(MailConstant.PHONE, organization.getPhone());
+                templateVariables.put(MailConstant.TYPES, organization.getOrganizationTypes());
+                templateVariables.put(MailConstant.EMPLOYEES_CAPACITY, organization.getEmployeesCapacity());
+                templateVariables.put(MailConstant.MAX_PROCESS_TIME, organization.getMaxProcessTime());
+                templateVariables.put(MailConstant.REGION, organization.getAddress().getRegion());
+                templateVariables.put(MailConstant.LOCALITY, organization.getAddress().getLocality());
+                templateVariables.put(MailConstant.DISTRICT, organization.getAddress().getDistrict());
+                templateVariables.put(MailConstant.STREET, organization.getAddress().getStreet());
+                templateVariables.put(MailConstant.BUILDING, organization.getAddress().getBuilding());
+                templateVariables.put(MailConstant.FLAT, organization.getAddress().getFlat());
+                templateVariables.put(MailConstant.FIRST_NAME, admin.getFirstName());
+                templateVariables.put(MailConstant.MIDDLE_NAME, admin.getMiddleName());
+                templateVariables.put(MailConstant.LAST_NAME, admin.getLastName());
+                templateVariables.put(MailConstant.USERNAME, admin.getUsername());
 
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" + "/organizationChanges.vm", "UTF-8", templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationChanges.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
-                message.setSubject("Important notification");
+                message.setSubject(MailConstant.MAIL_SUBJECT);
             }
         };
         mailSender.send(preparator);
@@ -369,7 +371,7 @@ public class MailServiceImpl implements MailService {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(new InternetAddress("metrology.calibrations@gmail.com", "Calibration devices system"));
+            mimeMessageHelper.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(message);

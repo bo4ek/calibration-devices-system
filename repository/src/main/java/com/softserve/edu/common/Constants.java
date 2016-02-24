@@ -15,10 +15,11 @@ public interface Constants {
     int START_OFFSET_IN_ARRAY = 0;
 
     int MODULE_WATER_ID = 2;
-    int MODULE_WATER_NUMBER_INITIAL = 20_000;
+    int MODULE_WATER_INITIAL_NUMBER = 20_000;
     int MODULE_THERMAL_ID = 1;
-    int MODULE_THERMAL_NUMBER_INITIAL = 10_000;
+    int MODULE_THERMAL_INITIAL_NUMBER = 10_000;
     int MODULE_ID_INCREMENT = 1;
+    int DEVICE_TYPE_ID_WATER = 1;
 
     int ONE_BYTE = 1;
     int TWO_BYTES = 2;
@@ -32,7 +33,6 @@ public interface Constants {
     int THOUSAND_INT = 1000;
     double TEN_THOUSANDS_DOUBLE = 10_000.0;
     double ONE_HUNDER_THOUSANDS_DOUBLE = 100_000.0;
-    double THOUSAND = 1000.0;
 
     byte ONE_VERIFICATION = 1;
     int FIRST_INDEX_IN_ARRAY = 0;
