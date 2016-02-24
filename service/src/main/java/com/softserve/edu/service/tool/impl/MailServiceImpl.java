@@ -91,7 +91,8 @@ public class MailServiceImpl implements MailService {
                     templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
                 }
                 templateVariables.put(MailConstant.DATE, date);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailTemplate.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/mailTemplate.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -111,7 +112,8 @@ public class MailServiceImpl implements MailService {
                 Map<String, Object> templateVariables = new HashMap<>();
                 templateVariables.put(MailConstant.NAME, employeeName);
                 templateVariables.put(MailConstant.PASSWORD, newPassword);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailNewPasswordEmployee.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/mailNewPasswordEmployee.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -130,7 +132,8 @@ public class MailServiceImpl implements MailService {
                 Map<String, Object> templateVariables = new HashMap<>();
                 templateVariables.put(MailConstant.NAME, employeeName);
                 templateVariables.put(MailConstant.PASSWORD, newPassword);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/createdAdminPassword", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/createdAdminPassword", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -150,7 +153,8 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put(MailConstant.NAME, organizationName);
                 templateVariables.put(MailConstant.USERNAME, username);
                 templateVariables.put(MailConstant.PASSWORD, password);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationAdminMail.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/organizationAdminMail.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -170,7 +174,8 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put(MailConstant.NAME, organizationName);
                 templateVariables.put(MailConstant.USERNAME, username);
                 templateVariables.put(MailConstant.PASSWORD, password);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationAdminPasswordChange.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/organizationAdminPasswordChange.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -196,7 +201,8 @@ public class MailServiceImpl implements MailService {
                     templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
                 }
                 templateVariables.put(MailConstant.MESSAGE, msg);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/rejectVerification.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/rejectVerification.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
 
@@ -229,7 +235,8 @@ public class MailServiceImpl implements MailService {
                 } else {
                     templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
                 }
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/accepted.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/accepted.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -256,7 +263,8 @@ public class MailServiceImpl implements MailService {
                 Map<String, Object> templateVariables = new HashMap<>();
                 templateVariables.put(MailConstant.VERIFICATION_ID, verificationId);
                 templateVariables.put(MailConstant.STATUS, status);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/changedStatus.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/changedStatus.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -290,7 +298,8 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put(MailConstant.MAIL_ADDRESS, from);
                 templateVariables.put(MailConstant.MESSAGE, msg);
                 templateVariables.put(MailConstant.APPLICATION_ID, verificationId);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/clientMail.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/clientMail.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
 
@@ -310,7 +319,8 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put(MailConstant.PROCESS_TIME_EXCEEDING, processTimeExceeding);
                 templateVariables.put(MailConstant.VERIFICATION_ID, verificationId);
                 templateVariables.put(MailConstant.MAX_PROCESS_TIME, maxProcessTime);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/processTimeExceeded.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/processTimeExceeded.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
@@ -358,7 +368,8 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put(MailConstant.LAST_NAME, admin.getLastName());
                 templateVariables.put(MailConstant.USERNAME, admin.getUsername());
 
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationChanges.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
+                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates" +
+                        "/organizationChanges.vm", env.getProperty(MailConstant.MAIL_ENCODING), templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
             }
