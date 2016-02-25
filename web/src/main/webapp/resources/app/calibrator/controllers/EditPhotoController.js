@@ -40,21 +40,29 @@ angular
                 $scope.isChanged = true;
             };
 
+            $scope.isTestSuccess = function(tests) {
+                for (var i = 0; i < tests.length; i++) {
+                    if (tests[i].testResult != 'SUCCESS') {
+                        return false;
+                    }
+                }
+                return true;
+            };
+
             $scope.updateValues = function (index) {
                 var test = parentScope.TestDataFormData[index];
                 if (test.endValue == 0 || test.initialValue > test.endValue || test.initialValue == 0) {
                     test.testResult = 'NOT_PROCESSED';
-                    parentScope.TestForm.testResult = 'FAILED';
                 } else if (test.initialValue == test.endValue) {
                     test.testResult = 'FAILED';
-                    parentScope.TestForm.testResult = 'FAILED';
                 } else if (test.acceptableError >= Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))) {
                     test.testResult = 'SUCCESS';
-                    parentScope.TestForm.testResult = 'SUCCESS';
                 } else {
                     test.testResult = 'FAILED';
-                    parentScope.TestForm.testResult = 'FAILED';
                 }
+
+                parentScope.TestForm.testResult = $scope.isTestSuccess(parentScope.TestDataFormData) ? 'SUCCESS': 'FAILED';
+
                 test.calculationError = (Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))).toFixed($scope.ACCURACY_OF_CALCULATION);
                 test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 parentScope.TestDataFormData[index] = test;
