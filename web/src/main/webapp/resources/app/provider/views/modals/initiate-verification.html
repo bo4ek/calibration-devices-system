@@ -272,23 +272,28 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-4 form-group">
-                                    <label for="index"> {{'INDEX' | translate}}
+                                    <label for="mailIndex"> {{'INDEX' | translate}}
                                     </label>
                                 </div>
 
                                 <div class="col-md-8 form-group" show-errors>
-                                    <ui-select class="form-control" type="text" theme="select2"
-                                               ng-model="selectedData.index"
-                                               ng-disabled="!selectedData.locality"
-                                               name="index" id="index" required>
-                                        <ui-select-match placeholder="{{'INDEX' | translate}}" allow-clear="true">
-                                            {{$select.selected}}
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="index  in indexes | filter: $select.search">
-                                            <span ng-bind-html="index"></span>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                    <input id="mailIndex" name="mailIndex" class="form-control" type="text"
+                                           ng-model="formData.mailIndex"
+                                           ng-pattern="MAIL_INDEX_REGEX"
+                                           ng-disabled="!selectedData.locality"
+                                           required>
+                                    <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                          id="okFeedBack"></span>
 
+                                    <p class="help-block" ng-if="clientForm.mailIndex.$error.required">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        {{'REQUIRED' | translate}}
+                                    </p>
+
+                                    <p class="help-block" ng-if="clientForm.mailIndex.$error.pattern">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        {{'MAIL_INDEX_ERROR' | translate}}
+                                    </p>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -299,7 +304,7 @@
                                 <div class="col-md-8 form-group" show-errors>
                                     <input name="street" class="form-control" type="text"
                                            ng-model="selectedData.selectedStreet"
-                                           ng-disabled="!selectedData.index"
+                                           ng-disabled="!formData.mailIndex"
                                            typeahead="street as street.designation for street in streets | filter: $viewValue | limitTo: 4"
                                            ng-pattern="STREET_REGEX"
                                            autocomplete="off"
@@ -383,7 +388,7 @@
                                                 {{$select.selected}}
                                             </ui-select-match>
                                             <ui-select-choices
-                                                    repeat="option in deviceCountOptions | filter: $select.search">
+                                                    repeat="option in values | filter: $select.search">
                                                 <span ng-bind-html="option"></span>
                                             </ui-select-choices>
                                         </ui-select>
@@ -411,15 +416,6 @@
                                 </div>
                             </div>
 
-                            <!--<div class="form-group" ng-show="isCalibrator>0">-->
-                                <!--<label for="calibrator" class="col-md-2 control-label">-->
-                                    <!--{{'I_AM_CALIBRATOR' | translate}}-->
-                                <!--</label>-->
-
-                                <!--<div class="col-md-8 pull-left">-->
-                                    <!--<input type="checkbox" class="form-control" ng-model="calibratorDefined">-->
-                                <!--</div>-->
-                            <!--</div>-->
                             <div class="form-group" ng-hide="calibratorDefined">
                                 <div class="col-md-4">
                                     <label for="calibrator">

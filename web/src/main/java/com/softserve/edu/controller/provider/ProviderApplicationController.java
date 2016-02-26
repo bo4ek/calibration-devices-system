@@ -100,7 +100,8 @@ public class ProviderApplicationController {
                             verificationDTO.getLocality(),
                             verificationDTO.getStreet(),
                             verificationDTO.getBuilding(),
-                            verificationDTO.getFlat()
+                            verificationDTO.getFlat(),
+                            verificationDTO.getMailIndex()
                     )
             );
             CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(

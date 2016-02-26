@@ -12,6 +12,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
          * Receives all regex for input fields
          */
         $scope.PHONE_REGEX_SECOND = /^[1-9]\d{8}$/;
+        $scope.MAIL_INDEX_REGEX = /^[\d]{5}$/;
 
         $scope.checkboxModel = false;
 
@@ -158,11 +159,8 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
          */
         $scope.selectDevice = function() {
             angular.forEach($scope.devices, function(value){
-                if (value.deviceType === $scope.selectedData.firstSelectedDeviceType) {
-                    $scope.selectedData.firstSelectedDevice = value;
-                }
-                if (value.deviceType === $scope.selectedData.secondSelectedDeviceType) {
-                    $scope.selectedData.secondSelectedDevice = value;
+                if (value.deviceType === $scope.selectedData.selectedDeviceType) {
+                    $scope.selectedData.selectedDevice = value;
                 }
             });
 
@@ -293,10 +291,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                             }
                         });
                 }
-                verificationServiceProvider.checkMailIsExist($scope.formData)
-                    .success(function (isMailValid) {
-                        $scope.isMailValid = isMailValid;
-                    });
 
                 //hide form because application status is shown
 
@@ -439,7 +433,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.selectedData.district = undefined;
             $scope.selectedData.locality = undefined;
             $scope.selectedData.selectedStreetType = undefined;
-            $scope.selectedData.index = undefined;
 
             $scope.addInfo.serviceability = true;
             $scope.selectedData.dismantled = false;
@@ -469,6 +462,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                     $scope.formData.phone = $scope.verification.data.phone;
                     $scope.formData.flat = $scope.verification.data.flat;
                     $scope.formData.comment = $scope.verification.data.comment;
+                    $scope.formData.mailIndex = $scope.verification.data.mailIndex;
 
                     $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null)
                         ? $scope.verification.data.dismantled : true;
@@ -518,15 +512,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                                                 $scope.streets = streets.data;
                                                 var index = arrayObjectIndexOf($scope.streets, $scope.verification.data.street, "designation");
                                                 $scope.selectedData.selectedStreet = $scope.streets[index];
-
-                                            });
-
-                                        addressServiceProvider.findMailIndexByLocality($scope.selectedData.locality.designation,
-                                            $scope.selectedData.district.id)
-                                            .success(function (indexes) {
-                                                $scope.indexes = indexes;
-                                                $scope.selectedData.index = $scope.indexes[0];
-                                                $scope.blockSearchFunctions = false;
                                             });
                                     });
                             });
