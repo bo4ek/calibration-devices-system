@@ -578,12 +578,12 @@ form[name='CalibrationTestForm'] input {
 }
 
 .first-column {
-    width: 35%;
+    width: 32%;
     float: left;
 }
 
 .second-column {
-    width: 65%;
+    width: 68%;
     float: right;
     padding-left: 30px;
 }
@@ -596,21 +596,22 @@ form[name='CalibrationTestForm'] .failed-result {
     background-color: #FF7878;
 }
 
+form[name='CalibrationTestForm'] #header-column {
+    float: left;
+    width: 185px;
+}
+
 form[name='CalibrationTestForm'] table {
-/*    width: 400px;*/
     overflow: scroll;
 }
 
-form[name='CalibrationTestForm'] .scroll-wrapper {
-    overflow-x: scroll;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+form[name='CalibrationTestForm'] table .title-cell{
+    height: 51px;
 }
 
-form[name='handheldProtocolForm'] .scroll-wrapper {
-    overflow-x: scroll;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+form[name='CalibrationTestForm'] table .title-cell > td{
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 form[name='CalibrationTestForm'] .control-label {
@@ -626,8 +627,8 @@ form[name='CalibrationTestForm'] .photo-cell {
     padding: 0;
 }
 
-form[name='CalibrationTestForm'] #titelsColumn {
-    width: 30%;
+form[name='CalibrationTestForm'] #titlesColumn {
+    height: 29px;
 }
 
 form[name='CalibrationTestForm'] #testColumnHead {
@@ -683,9 +684,27 @@ form[name='CalibrationTestForm'] #testColumnHead {
     width: 480px !important;
 }
 
+.vertical-test-image-photo-large {
+    height: 960px !important;
+    width: 720px !important;
+}
+
+.vertical-test-image-photo img {
+    margin-top: 80px !important;
+}
+
+.vertical-test-image-photo-large img {
+    margin-top: 120px !important;
+}
+
 .test-image img {
-    width: 640px;
-    height: 480px;
+     width: 640px;
+     height: 480px;
+ }
+
+.test-image-large img {
+    width: 960px;
+    height: 720px;
 }
 
 .test-image img.rotated90, .test-image img.rotated270 {

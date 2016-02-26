@@ -33,6 +33,8 @@ angular
             $scope.manufacturers = [];
             $scope.photoType = null;
             $scope.photoIndex = null;
+            $scope.imageSize = {};
+            $scope.imageSize.small = true;
 
             $scope.isChanged = false;
 
@@ -47,6 +49,16 @@ angular
                     }
                 }
                 return true;
+            };
+
+            $scope.zoom = function() {
+                if($scope.imageSize.small) {
+                    $(".modal-dialog").css({ "width": "1000px"});
+                    $scope.imageSize.small = false;
+                } else {
+                    $(".modal-dialog").css({ "width": "900px"});
+                    $scope.imageSize.small = true;
+                }
             };
 
             $scope.updateValues = function (index) {

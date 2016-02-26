@@ -210,154 +210,183 @@
 <div class="second-column">
 
     <div class="scroll-wrapper">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <td id="titelsColumn">
-                    <label class="control-label"></label>
-                </td>
-                <td id="testColumnHead" ng-repeat="testData in TestDataFormData">
-                    {{testData.testNumber | translate}}
-                </td>
-            </tr>
-            </thead>
+        <div class="headcol">
+            <table id="header-column" class="table table-bordered">
+                <thead>
+                    <th id="titlesColumn">
+                        <label class="control-label"></label>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'GIVEN_CONSUMPTION' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'ACCEPTABLE_ERROR' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'VOLUME_OF_STANDARD'
+                                | translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'INITIAL_VALUE' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'TERMINAL_VALUE' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'VOLUME_IN_DEVICE' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'TEST_DURATION' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'ACTUAL_CONSUMPTION' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'CONSUMPTION_LOL_STATUS'
+                                | translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'CALCULATION_ERROR' |
+                                translate }}</label>
+                        </td>
+                    </tr>
+                    <tr class="title-cell">
+                        <td>
+                            <label class="control-label">{{'TEST_RESULT' | translate }}</label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-            <tbody>
-            <tr>
-                <td>
-                    <label class="control-label">{{'GIVEN_CONSUMPTION' |
-                        translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.givenConsumption" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'ACCEPTABLE_ERROR' |
-                        translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.acceptableError" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'VOLUME_OF_STANDARD'
-                        | translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.volumeOfStandard" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'INITIAL_VALUE' |
-                        translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.initialValue" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'TERMINAL_VALUE' |
-                        translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.endValue" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'VOLUME_IN_DEVICE' |
-                        translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.volumeInDevice" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'TEST_DURATION' |
-                        translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.testTime" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'ACTUAL_CONSUMPTION'
-                        | translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.actualConsumption" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'CONSUMPTION_LOL_STATUS'
-                        | translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="text" ng-value="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
-                           ng-class="{'success-result': consumptionStatusResult(testData.consumptionStatus), 'failed-result': !consumptionStatusResult(testData.consumptionStatus)}"
-                           class="form-control" required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'CALCULATION_ERROR' |
-                        translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="number" ng-value="testData.calculationError" ng-disabled="fileLoaded"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label class="control-label">{{'TEST_RESULT' | translate }}</label>
-                </td>
-                <td ng-repeat="testData in TestDataFormData">
-                    <input type="text" ng-value="testData.testResult | translate" ng-disabled="fileLoaded"
-                           ng-class="{'success-result': commonTestResult(testData.testResult), 'failed-result': !commonTestResult(testData.testResult)}"
-                           class="form-control " required>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td ng-repeat="testData in TestDataFormData"
-                    ng-show="testData.dataAvailable" class="photo-cell">
-                    <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0 image-td"
-                         ng-click="showEditPhotoModal( 'beginPhoto' + $index )"
-                         ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+        <div class="right" style="overflow-x: auto; overflow-y: hidden">
+            <table class="table table-bordered">
+                <thead>
+                    <th id="testColumnHead" ng-repeat="testData in TestDataFormData">
+                        {{testData.testNumber | translate}}
+                    </th>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.givenConsumption" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.acceptableError" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.volumeOfStandard" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.initialValue" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.endValue" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.volumeInDevice" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.testTime" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.actualConsumption" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="text" ng-value="testData.consumptionStatus | translate" ng-disabled="fileLoaded"
+                               ng-class="{'success-result': consumptionStatusResult(testData.consumptionStatus), 'failed-result': !consumptionStatusResult(testData.consumptionStatus)}"
+                               class="form-control" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="number" ng-value="testData.calculationError" ng-disabled="fileLoaded"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData">
+                        <input type="text" ng-value="testData.testResult | translate" ng-disabled="fileLoaded"
+                               ng-class="{'success-result': commonTestResult(testData.testResult), 'failed-result': !commonTestResult(testData.testResult)}"
+                               class="form-control " required>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData"
+                        ng-show="testData.dataAvailable" class="photo-cell">
+                        <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0 image-td"
+                             ng-click="showEditPhotoModal( 'beginPhoto' + $index )"
+                             ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
-                         data-ng-src="data:image/png;base64,{{testData.beginPhoto}}">
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td ng-repeat="testData in TestDataFormData"
-                    ng-show="testData.dataAvailable" class="photo-cell">
-                    <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0 image-td"
-                         ng-click="showEditPhotoModal( 'endPhoto' + $index )"
-                         ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+                             data-ng-src="data:image/png;base64,{{testData.beginPhoto}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="testData in TestDataFormData"
+                        ng-show="testData.dataAvailable" class="photo-cell">
+                        <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0 image-td"
+                             ng-click="showEditPhotoModal( 'endPhoto' + $index )"
+                             ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
-                         data-ng-src="data:image/png;base64,{{testData.endPhoto}}">
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                             data-ng-src="data:image/png;base64,{{testData.endPhoto}}">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
