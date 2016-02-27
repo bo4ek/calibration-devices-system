@@ -29,6 +29,7 @@ require.config({
         angularJsToaster : "../assets/bower_components/angularjs-toaster/toaster.min",
         semanticUI: "../assets/bower_components/semantic/dist/semantic.min",
         globalSearchModule:'globalSearch/globalSearchModule',
+        focusModule: 'common/directives/focusModule',
         angularLocaleUk: '../assets/bower_components/angular-i18n/angular-locale_uk'
     },
     shim: {
@@ -122,11 +123,15 @@ require.config({
         globalSearchModule:{
             deps:['angular']
         },
+        focusModule:{
+            deps:['angular']
+        },
         employeeModule: {
             deps: ['angular', 'csrfInterceptor', 'angularBootstrap', 'angularTranslate', 'angularCookie', 'angularTranslateStorageCookie',
                    'angularTranslateStorageLocal', 'angularTranslateLoaderStaticFiles', 'angularUIRouter', 'angularLocaleUk',
                 'showErrors', 'ngTable', 'highchartsAngular', 'chosen', 'upload', 'ngRoute', 'angularLoadingBar',
-                'moment', 'bootstrapDateRangePicker', 'angularDateRangePicker', 'angularUISelect', 'ngSanitize', 'angularAnimate', 'angularJsToaster', 'semanticUI','globalSearchModule']
+                'moment', 'bootstrapDateRangePicker', 'angularDateRangePicker', 'angularUISelect', 'ngSanitize',
+                'angularAnimate', 'angularJsToaster', 'semanticUI','globalSearchModule', 'focusModule']
         }
     }
 });
@@ -134,7 +139,3 @@ require.config({
 require(['employeeModule'], function () {
     angular.bootstrap(document.getElementById('employeeModule'), ['employeeModule']);
 });
-
-//require(['globalSearchModule'], function () {
-//    angular.bootstrap(document.getElementById('globalSearchModule'), ['globalSearchModule']);
-//});

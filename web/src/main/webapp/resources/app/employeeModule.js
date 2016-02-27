@@ -1,7 +1,7 @@
 (function () {
     angular.module('employeeModule', ['spring-security-csrf-token-interceptor',
         'ui.bootstrap', 'ui.bootstrap.datepicker', 'ui.router', 'ui.bootstrap.showErrors', 'ngTable', 'pascalprecht.translate', 'ngCookies', 'localytics.directives',
-        'highcharts-ng', 'ngFileUpload', 'ngRoute', 'angular-loading-bar', 'daterangepicker', 'ui.select', 'ngSanitize', 'ngAnimate', 'toaster','globalSearchModule'])
+        'highcharts-ng', 'ngFileUpload', 'ngRoute', 'angular-loading-bar', 'daterangepicker', 'ui.select', 'ngSanitize', 'ngAnimate', 'toaster','globalSearchModule', 'focusModule'])
 
         .config(['$translateProvider', '$stateProvider', '$urlRouterProvider', 'showErrorsConfigProvider', 'cfpLoadingBarProvider', '$provide',
 
