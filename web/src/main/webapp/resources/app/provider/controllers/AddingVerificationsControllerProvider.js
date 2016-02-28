@@ -6,12 +6,12 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
         $scope.isShownForm = true;
         $scope.isCalibrator = -1;
-        $scope.calibratorDefined = false;
 
         /**
          * Receives all regex for input fields
          */
         $scope.PHONE_REGEX_SECOND = /^[1-9]\d{8}$/;
+        $scope.ACCUMULATED_VOLUME_REGEX = /^[\d]{5}$/;
         $scope.MAIL_INDEX_REGEX = /^[\d]{5}$/;
 
         $scope.checkboxModel = false;
@@ -159,7 +159,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
          */
         $scope.selectDevice = function() {
             angular.forEach($scope.devices, function(value){
-                if (value.deviceType === $scope.selectedData.selectedDeviceType) {
+                if (value.deviceType === $scope.selectedData.firstSelectedDeviceType) {
                     $scope.selectedData.selectedDevice = value;
                 }
             });
@@ -272,32 +272,52 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         $scope.sendApplicationData = function () {
             $scope.selectedData.calibratorRequired = true;
             $scope.$broadcast('show-errors-check-validity');
-            if ($scope.clientForm.$valid) { // && $scope.selectedData.selectedCalibrator
+            if ($scope.clientForm.$valid) {
 
                 $scope.fillFormData();
                 $scope.formData.calibratorId = $scope.selectedData.selectedCalibrator.id;
 
-                for (var i = 0; i < $scope.selectedData.selectedCount; i++) {
-                    verificationServiceProvider.sendInitiatedVerification($scope.formData)
-                        .success(function (applicationCode) {
-                            if(applicationCode) {
-                                if (!$scope.applicationCodes) {
-                                    $scope.applicationCodes = [];
-                                }
-                                $scope.applicationCodes.push(applicationCode);
-                                $scope.isShownForm = false;
-                            } else {
-                                toaster.pop('error', $filter('translate')('SAVE_VERIF_ERROR'));
-                            }
-                        });
-                }
+                $scope.formData.quantity = $scope.selectedData.firstDeviceCount;
+                verificationServiceProvider.sendInitiatedVerification($scope.formData)
+                    .then(function (data) {
+                        if(data.status == 201) {
+                            $scope.applicationCodes = data.data;
+                            $scope.isShownForm = false;
+                        } else {
+                            toaster.pop('error', $filter('translate')('INFORMATION'),
+                                $filter('translate')('ERROR_WHILE_CREATING_VERIFICATIONS'));
+                        }
+                    });
 
                 //hide form because application status is shown
 
             }
         };
 
+        $scope.saveAndCreateByPattern = function () {
+            $scope.$broadcast('show-errors-check-validity');
+            if ($scope.clientForm.$valid) {
+                $scope.isMailValid = true;
+                $scope.fillFormData();
+                $scope.formData.calibratorId = $scope.selectedData.selectedCalibrator.id;
+                $scope.formData.quantity = $scope.selectedData.firstDeviceCount;
 
+                verificationServiceProvider.sendInitiatedVerification($scope.formData)
+                    .then(function (data) {
+                        $rootScope.$broadcast('calibrator-save-verification');
+                        if(data.status == 201) {
+                            toaster.pop('success', $filter('translate')('APP_SENT_ORG'), data.data);
+                            $scope.selectedData.firstDeviceCount = '1';
+                            $scope.selectedData.selectedCalibrator = undefined;
+                            $scope.selectedData.firstSelectedDeviceType = undefined;
+                        } else {
+                            toaster.pop('error', $filter('translate')('INFORMATION'),
+                                $filter('translate')('ERROR_WHILE_CREATING_VERIFICATIONS'));
+                        }
+                    }
+                );
+            }
+        };
 
         /**
          * create and save in database the verification from filled fields in form when user clicks "Save"
@@ -437,7 +457,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.addInfo.serviceability = true;
             $scope.selectedData.dismantled = false;
             $scope.selectedData.sealPresence = true;
-            $scope.selectedData.selectedCount = '1';
+            $scope.selectedData.firstDeviceCount = '1';
             $scope.selectedData.calibratorRequired = false;
 
             $scope.updateTimepicker();
@@ -472,6 +492,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                     $scope.selectedData.dateOfMounted = $scope.verification.data.dateOfMounted;
                     $scope.selectedData.numberCounter = $scope.verification.data.numberCounter;
                     $scope.selectedData.releaseYear = $scope.verification.data.releaseYear;
+                    $scope.formData.accumulatedVolume = $scope.verification.data.accumulatedVolume;
 
                     $scope.addInfo.entrance = $scope.verification.data.entrance;
                     $scope.addInfo.doorCode = $scope.verification.data.doorCode;
@@ -528,7 +549,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                         addressServiceProvider.findAllDeviceTypes().then(function(deviceTypes) {
                             $scope.deviceTypes = deviceTypes.data;
                             var index = arrayIndexOf($scope.deviceTypes, $scope.verification.data.deviceType);
-                            $scope.selectedData.selectedDeviceType = $scope.deviceTypes[index];
+                            $scope.selectedData.firstSelectedDeviceType = $scope.deviceTypes[index];
 
                             if ($scope.verification.data.symbol) {
 

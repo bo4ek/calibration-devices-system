@@ -357,6 +357,67 @@
                                     </p>
                                 </div>
                             </div>
+
+                            <div class="form-group" show-errors>
+                                <div class="col-md-4 form-group">
+                                    <label>
+                                        {{'COUNTER_CATEGORY' | translate}} </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <div class="pull-left col-xs-2" id="counterNumber">
+                                        <ui-select class="form-control" type="text" theme="select2"
+                                                   ng-model="selectedData.firstDeviceCount"
+                                                   search-enabled="false"
+                                                   name="firstDeviceCount"
+                                                   id="firstDeviceCount" required>
+                                            <ui-select-match placeholder="{{'NUMBER_OF_COUNTERS' | translate}}">
+                                                {{$select.selected}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="value in values">
+                                                <span ng-bind-html="value"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <div class="col-xs-4 pull-left " id="deviceBox">
+                                        <ui-select class="form-control" type="text" theme="select2"
+                                                   ng-model="selectedData.firstSelectedDeviceType"
+                                                   search-enabled="false"
+                                                   on-select="receiveAllSymbols(selectedData.firstSelectedDeviceType);receiveCalibrators(selectedData.firstSelectedDeviceType);"
+                                                   id="firstSelectedDeviceType"
+                                                   name="firstSelectedDeviceType" required>
+                                            <ui-select-match placeholder="{{'SERVICE_TYPE' | translate}}">
+                                                {{$select.selected | translate}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
+                                                <span ng-bind-html="deviceType | translate"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+
+                                        <p class="help-block">
+                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                            {{'REQUIRED' | translate}}
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-6 input-group pull-right">
+                                        <ui-select class="form-control" type="text" theme="select2"
+                                                   ng-model="selectedData.selectedCalibrator"
+                                                   search-enable="false"
+                                                   name="calibrator"
+                                                   id="calibrator" required>
+                                            <ui-select-match placeholder="{{'CALIBRATOR' | translate}}">
+                                                {{ $select.selected.designation}}
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="calibrator in calibrators">
+                                                <span ng-bind-html="calibrator.designation"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <p class="help-block">
+                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                            {{'REQUIRED' | translate}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </accordion-group>
@@ -374,88 +435,7 @@
                     <div class="panel-body">
                         <div class="row">
 
-                            <div class="form-group">
-                                <div class="col-md-4 form-group">
-                                    <label for="device">
-                                        {{'COUNTER_CATEGORY' | translate}} </label>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="pull-left col-lg-3 form-group" id="counterNumber" show-errors>
-                                        <ui-select class="form-control" type="text" theme="select2"
-                                                   ng-model="selectedData.selectedCount"
-                                                   name="device" id="device" required>
-                                            <ui-select-match allow-clear="false">
-                                                {{$select.selected}}
-                                            </ui-select-match>
-                                            <ui-select-choices
-                                                    repeat="option in values | filter: $select.search">
-                                                <span ng-bind-html="option"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-                                    <div class="col-md-9 pull-right form-group" id="deviceBox" show-errors>
-                                        <ui-select class="form-control" type="text" theme="select2"
-                                                   ng-model="selectedData.selectedDeviceType"
-                                                   on-select="receiveAllSymbols(selectedData.selectedDeviceType);receiveCalibrators(selectedData.selectedDeviceType);"
-                                                   name="device" required>
-                                            <ui-select-match placeholder="{{'COUNTER_CATEGORY' | translate}}"
-                                                             allow-clear="true">
-                                                {{$select.selected | translate}}
-                                            </ui-select-match>
-                                            <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
-                                                <span ng-bind-html="deviceType | translate"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
-
-                                        <p class="help-block">
-                                            <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                            {{'TYPEAHEAD_ERROR' | translate}}
-                                        </p>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="form-group" ng-hide="calibratorDefined">
-                                <div class="col-md-4">
-                                    <label for="calibrator">
-                                        {{'CALIBRATOR' | translate}} </label>
-                                </div>
-                                <div class="col-md-8 form-group" show-errors>
-                                    <ui-select class="form-control" type="text" theme="select2"
-                                               ng-model="selectedData.selectedCalibrator"
-                                               name="calibrator"
-                                               ng-required="selectedData.calibratorRequired"
-                                                id="calibrator">
-                                        <ui-select-match placeholder="{{'CALIBRATOR' | translate}}" allow-clear="true">
-                                            {{$select.selected.designation}}
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="calibrator in calibrators | filter: $select.search">
-                                            <span ng-bind-html="calibrator.designation"></span>
-                                        </ui-select-choices>
-                                    </ui-select>
-
-                                    <p class="help-block">
-                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                        {{'TYPEAHEAD_ERROR' | translate}}
-                                    </p>
-
-                                </div>
-                            </div>
-
-                            <div class="form-group" ng-show="calibratorDefined">
-                                <div class="col-md-4 form-group">
-                                    <label for="calibrator">{{ 'CALIBRATOR' | translate}} </label>
-                                </div>
-                                <div class="col-md-8 form-group" show-errors>
-                                    <input id="calibratorInfo" name="calibratorInfo" class="form-control"
-                                           ng-model="selectedCalibrator.designation"
-                                           placeholder={{selectedCalibrator.designation}}
-                                           readonly>
-                                </div>
-                            </div>
-
-                            <!-- ISdismantled  -->
+                            <!-- IsDismantled  -->
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">{{ 'DISMANTLED_COUNTER' | translate}}</label>
@@ -471,7 +451,7 @@
                             </div>
 
                             <!-- DATE OF dismantled  -->
-                            <div class="form-group">
+                            <div class="form-group" ng-hide="!selectedData.dismantled">
                                 <div class="col-md-4">
                                     <label class="control-label">{{' DATE_OF_DISMANTLED '| translate }}</label>
                                 </div>
@@ -481,8 +461,7 @@
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default myGroupBtn"
                                             ng-model="selectedData.dateOfDismantled"
-                                            ng-click="showPicker()" options="optsMax" date-range-picker="optsMax"
-                                            ng-disabled="!selectedData.dismantled">
+                                            ng-click="showPicker()" options="optsMax" date-range-picker="optsMax">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button>
                                 </span>
@@ -554,7 +533,7 @@
                             <!--NUMBER OF COUNTER-->
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="counterNumber" class="control-label">{{' NUMBER_OF_COUNTER ' |
+                                    <label for="numberCounter" class="control-label">{{' NUMBER_OF_COUNTER ' |
                                         translate}}</label>
                                 </div>
                                 <div class="col-md-8">
@@ -583,7 +562,7 @@
                             <!--SYMBOL OF COUNTER-->
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="symbol"">
+                                    <label for="symbol">
                                         {{' SYMBOL_OF_COUNTER ' | translate}}
                                     </label>
                                 </div>
@@ -591,7 +570,7 @@
                                     <ui-select class="form-control" type="text" theme="select2"
                                                ng-model="selectedData.counterSymbol"
                                                ng-required="selectedData.dismantled"
-                                               on-select="recieveStandardSizesBySymbol(selectedData.counterSymbol, selectedData.selectedDeviceType)"
+                                               on-select="recieveStandardSizesBySymbol(selectedData.counterSymbol, selectedData.firstSelectedDeviceType)"
                                                name="symbol" id="symbol">
                                         <ui-select-match allow-clear="false">
                                             {{$select.selected}}
@@ -605,14 +584,13 @@
                                         <span class="glyphicon glyphicon-exclamation-sign"></span>
                                         {{'TYPEAHEAD_ERROR' | translate}}
                                     </p>
-                                    <br>
                                 </div>
                             </div>
 
                             <!--STANDART_SIZE_OF_COUNTER standard sizeSYMBOL OF COUNTER-->
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="standardSize"">
+                                    <label for="standardSize">
                                         {{' STANDART_SIZE_OF_COUNTER ' | translate}}
                                     </label>
                                 </div>
@@ -635,7 +613,6 @@
                                         <span class="glyphicon glyphicon-exclamation-sign"></span>
                                         {{'TYPEAHEAD_ERROR' | translate}}
                                     </p>
-                                    <br>
                                 </div>
                             </div>
 
@@ -659,7 +636,27 @@
                                         <span class="glyphicon glyphicon-exclamation-sign"></span>
                                         {{'REQUIRED' | translate}}
                                     </p>
-                                    <br>
+                                </div>
+                            </div>
+
+                            <!--ACCUMULATED VOLUME-->
+                            <div class="form-group" >
+                                <div class="col-md-4 form-group">
+                                    <label for="accumulatedVolume">{{'ACCUMULATED_VOLUME' | translate}}</label>
+                                </div>
+                                <div class="col-md-8 form-group" show-errors>
+                                    <input id="accumulatedVolume" name="accumulatedVolume" type="text" class="form-control"
+                                           ng-model="formData.accumulatedVolume"
+                                           ng-required="selectedData.dismantled"
+                                           ng-pattern="ACCUMULATED_VOLUME_REGEX"
+                                           placeholder="XXXXX">
+                                    <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
+                                          id="okFeedBack"></span>
+
+                                    <p class="help-block" ng-if="clientForm.accumulatedVolume.$error.pattern">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        {{'VOLUME_ERROR' | translate}}
+                                    </p>
                                 </div>
                             </div>
 
@@ -758,7 +755,6 @@
                                 </div>
 
                                 <!-- TIME OF CALIBRATION -->
-                                <div class="row">
                                 <div class="form-group col-md-4">
                                     <br><br>
                                     <label class="control-label">{{ 'TIME_OF_CALIBRATION' | translate}}</label>
@@ -774,7 +770,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                    </div>
 
                                 <!-- Plumbing serviceability -->
                                 <div class="form-group col-md-4">
@@ -847,13 +842,13 @@
                         ng-click="resetApplicationForm()">
                     {{'CLEAR_FORM'|translate}}
                 </button>
-                <button type="button" class="btn btn-success"
-                        ng-click="save()">
-                    {{'SAVE'|translate}}
-                </button>
                 <button type="button" class="btn btn-primary"
                         ng-click="createNew()">
                     {{'CREATE_BY_PATTERN'| translate}}
+                </button>
+                <button type="button" class="btn btn-primary"
+                        ng-click="saveAndCreateByPattern()">
+                    {{'SAVE_AND_CREATE_BY_PATTERN'| translate}}
                 </button>
             </div>
             <div class="form-group col-md-2">

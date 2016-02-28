@@ -31,6 +31,8 @@ import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,8 +86,10 @@ public class ProviderApplicationController {
      * @param verificationDTO object with verification data
      */
     @RequestMapping(value = "send", method = RequestMethod.POST)
-    public String getInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
+    public ResponseEntity getInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        List<String> verificationIds = new ArrayList<>();
+        HttpStatus httpStatus = HttpStatus.CREATED;
         try {
             ClientData clientData = new ClientData(
                     verificationDTO.getFirstName(),
@@ -111,7 +115,8 @@ public class ProviderApplicationController {
                     verificationDTO.getDateOfDismantled(),
                     verificationDTO.getDateOfMounted(),
                     verificationDTO.getNumberCounter(),
-                    counterType
+                    counterType,
+                    verificationDTO.getAccumulatedVolume()
             );
             AdditionalInfo info = new AdditionalInfo(
                     verificationDTO.getEntrance(),
@@ -129,21 +134,21 @@ public class ProviderApplicationController {
             Organization calibrator = calibratorService.findById(verificationDTO.getCalibratorId());
 
             Device device = deviceService.getById(verificationDTO.getDeviceId());
-            String verificationId = verificationService.getNewVerificationDailyIdByDeviceType(new Date(), device.getDeviceType());
             Verification verification = new Verification(new Date(), clientData, provider, device, Status.IN_PROGRESS,
                     Verification.ReadStatus.UNREAD, calibrator, info, verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
-                    verificationDTO.getSealPresence(), verificationId, new Date(), Status.PLANNING_TASK);
+                    verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK);
 
-            verificationService.saveVerification(verification);
+            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
             String name = clientData.getFirstName() + " " + clientData.getLastName();
             mail.sendMail(clientData.getEmail(), name, verification.getId(), verification.getProvider().getName(),
                     verification.getDevice().getDeviceType().toString());
 
-            return verification.getId();
         } catch(Exception e) {
-            logger.error(e);
-            return null;
+            logger.error("Exception while inserting calibrator's verifications into DB ", e);
+            httpStatus = HttpStatus.CONFLICT;
+            return new ResponseEntity<>(verificationIds, httpStatus);
         }
+        return new ResponseEntity<>(verificationIds, httpStatus);
     }
 
     /**
