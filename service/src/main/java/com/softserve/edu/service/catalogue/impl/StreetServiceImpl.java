@@ -38,6 +38,11 @@ public class StreetServiceImpl implements StreetService {
     }
 
     @Override
+    public Street findByLocalityIdAndDesignation(Long localityId, String designation) {
+        return streetRepository.findByLocalityIdAndDesignation(localityId, designation);
+    }
+
+    @Override
     public Street findStreetById(Long id) {
         return streetRepository.findOne(id);
     }

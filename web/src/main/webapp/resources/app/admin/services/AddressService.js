@@ -57,8 +57,8 @@ angular
             isStreetIdDuplicate: function(streetId){
                 return getData("isDuplicateId/" + streetId + "/");
             },
-            isStreetNameDuplicate: function(streetName){
-                return getData("isDuplicateName/" + streetName + "/");
+            isStreetNameDuplicate: function(streetName, localityId){
+                return getData("isDuplicateName/" + localityId + "/" + streetName + "/");
             },
             findStreetsByLocalityId: function (id) {
                 return findAll('streets/' + id);

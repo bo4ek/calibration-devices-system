@@ -11,6 +11,8 @@ public interface StreetService {
 
     Street findByDesignation(String designation);
 
+    Street findByLocalityIdAndDesignation(Long localityId, String designation);
+
     Street findStreetById(Long id);
 
     Iterable<Street> findAll();

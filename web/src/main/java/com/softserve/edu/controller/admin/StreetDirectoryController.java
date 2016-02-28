@@ -79,9 +79,9 @@ public class StreetDirectoryController {
      * @return {@literal true} if street with name {@code streetName} already exists,
      * {@literal false} in other case
      */
-    @RequestMapping(value = "isDuplicateName/{streetName}", method = RequestMethod.GET)
-    public Boolean isDuplicateStreetName(@PathVariable String streetName) {
-        return streetService.findByDesignation(streetName) != null;
+    @RequestMapping(value = "isDuplicateName/{localityId}/{streetName}", method = RequestMethod.GET)
+    public Boolean isDuplicateStreetName(@PathVariable Long localityId, @PathVariable String streetName) {
+        return streetService.findByLocalityIdAndDesignation(localityId, streetName) != null;
     }
 
     /**

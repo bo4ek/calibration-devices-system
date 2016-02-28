@@ -103,7 +103,7 @@ angular
             };
 
             $scope.isStreetNameDuplicate = function () {
-                return addressService.isStreetNameDuplicate($scope.addStreetFormData.streetName);
+                return addressService.isStreetNameDuplicate($scope.addStreetFormData.streetName, $scope.selectedValues.selectedLocality.id);
             };
 
             $scope.checkStreetIdForDuplicates = function () {
