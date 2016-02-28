@@ -13,6 +13,7 @@ import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
+import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.exceptions.NotAvailableException;
 import com.softserve.edu.service.tool.MailService;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
@@ -56,7 +57,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
 
     @Override
     @Transactional
-    public long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException {
+    public long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException, InvalidModuleIdException {
         Verification verification = verificationRepository.findOne(verificationId);
         CalibrationTest calibrationTest = new CalibrationTest(deviceTestData.getFileName(),
                 deviceTestData.getLatitude(), deviceTestData.getLongitude(), deviceTestData.getUnixTime(), verification,
@@ -95,6 +96,9 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         verification.setStatus(Status.TEST_COMPLETED);
 
         CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+        if (moduleId == null) {
+            throw new InvalidModuleIdException();
+        }
         verification.setCalibrationModule(moduleId);
         verification.setNumberOfProtocol(deviceTestData.getFileName().substring(POSITION_OF_PROTOCOL,
                 deviceTestData.getFileName().indexOf('.')));

@@ -102,7 +102,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return deviceTestData;
     }
 
-    public void saveBBIFile(DeviceTestData deviceTestData, String verificationID, String originalFileName) throws IOException {
+    public void saveBBIFile(DeviceTestData deviceTestData, String verificationID, String originalFileName) throws IOException, InvalidModuleIdException {
         calibratorService.uploadBbi(bufferedInputStream, verificationID, originalFileName);
         calibrationTestService.createNewTest(deviceTestData, verificationID);
         bufferedInputStream.close();
@@ -111,7 +111,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException, InvalidImageInBbiException {
+            throws IOException, DecoderException, InvalidImageInBbiException, InvalidModuleIdException {
         DeviceTestData deviceTestData;
         try (InputStream inputStream = FileUtils.openInputStream(BBIfile)) {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);

@@ -5,6 +5,7 @@ import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
+import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public interface CalibrationTestService {
 
     Page<CalibrationTest> getCalibrationTestsBySearchAndPagination(int pageNumber, int itemsPerPage, String search);
 
-    long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException;
+    long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException, InvalidModuleIdException;
 
     CalibrationTest editTest(Long testId, String name, String capacity, Integer settingNumber, Double latitude,
                              Double longitude, Verification.ConsumptionStatus consumptionStatus,
