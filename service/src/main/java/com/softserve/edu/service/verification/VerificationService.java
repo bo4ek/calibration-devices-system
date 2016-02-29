@@ -154,7 +154,7 @@ public interface VerificationService {
     
     void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence, Long dateOfDismantled,
                      Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol, String standardSize,
-                     String comment, Long deviceId);
+                     String comment, Long deviceId, Boolean verificationWithDismantle);
 
     void editAddInfo(int entrance, int doorCode, int floor, Long dateOfVerif, String timeFrom, String timeTo, Boolean serviceability,
                      Long noWaterToDate, String notes, String verificationId);

@@ -13,7 +13,8 @@ public class OrganizationStageVerificationDTOTransformer {
 
     public static OrganizationStageVerificationDTO toDtoFromVerification(ClientData clientData,
                                   Address address, String verificationId, Organization calibrator, String comment,
-                                  AdditionalInfo info, Boolean dismantled, Boolean sealPresence, Counter counter, Device device) {
+                                  AdditionalInfo info, Boolean dismantled, Boolean sealPresence, Counter counter,
+                                  Device device, Boolean verificationWithDismantle) {
 
         String calibratorName = (calibrator != null) ? calibrator.getName() : null;
 
@@ -45,6 +46,6 @@ public class OrganizationStageVerificationDTOTransformer {
 
         return new OrganizationStageVerificationDTO(clientData, comment, address, verificationId, calibratorName, entrance, doorCode, floor, dateOfVerif,
                 serviceability, noWaterToDate, notes, timeFrom, timeTo, dismantled, dateOfDismantled, dateOfMounted, numberCounter,
-                releaseYear, accumulatedVolume,symbol, standardSize, deviceName, sealPresence, deviceType, deviceId);
+                releaseYear, accumulatedVolume,symbol, standardSize, deviceName, sealPresence, deviceType, deviceId, verificationWithDismantle);
     }
 }

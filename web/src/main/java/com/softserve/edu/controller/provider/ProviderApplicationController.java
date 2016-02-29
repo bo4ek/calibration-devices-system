@@ -136,7 +136,7 @@ public class ProviderApplicationController {
             Device device = deviceService.getById(verificationDTO.getDeviceId());
             Verification verification = new Verification(new Date(), clientData, provider, device, Status.IN_PROGRESS,
                     Verification.ReadStatus.UNREAD, calibrator, info, verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
-                    verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK);
+                    verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK, verificationDTO.getVerificationWithDismantle());
 
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
             String name = clientData.getFirstName() + " " + clientData.getLastName();
@@ -229,7 +229,8 @@ public class ProviderApplicationController {
                     verification.isCounterStatus(),
                     verification.isSealPresence(),
                     verification.getCounter(),
-                    verification.getDevice()
+                    verification.getDevice(),
+                    verification.isVerificationWithDismantle()
             );
         } else {
             return null;

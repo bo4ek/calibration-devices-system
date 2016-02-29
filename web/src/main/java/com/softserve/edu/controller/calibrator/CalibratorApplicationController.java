@@ -142,7 +142,7 @@ public class CalibratorApplicationController {
                     Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info,
                     verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
                     verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK,
-                    calibratorEmployee);
+                    calibratorEmployee, verificationDTO.getVerificationWithDismantle());
 
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
 
@@ -173,7 +173,8 @@ public class CalibratorApplicationController {
                     verification.isCounterStatus(),
                     verification.isSealPresence(),
                     verification.getCounter(),
-                    verification.getDevice()
+                    verification.getDevice(),
+                    verification.isVerificationWithDismantle()
             );
         } else {
             return null;

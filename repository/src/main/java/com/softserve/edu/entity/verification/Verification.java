@@ -159,6 +159,9 @@ public class Verification implements Comparable {
     @Column
     private String signature;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean verificationWithDismantle;
+
     public Verification(String verificationId, int queue) {
         this.id = verificationId;
         this.queue = queue;
@@ -223,6 +226,15 @@ public class Verification implements Comparable {
 
     public Verification(Date initialDate, ClientData clientData, Organization provider,
                         Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId,
+                        Date sentToCalibratorDate, Status taskStatus, User calibratorEmployee, Boolean verificationWithDismantle) {
+        this(initialDate, clientData, provider, device, status, readStatus, calibrator, info, dismantled, counter, comment,
+                sealPresence, verificationId, sentToCalibratorDate, taskStatus, calibratorEmployee);
+        this.verificationWithDismantle = verificationWithDismantle;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
                         Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus) {
 
         this.id = verificationId;
@@ -243,6 +255,16 @@ public class Verification implements Comparable {
         this.sealPresence = sealPresence;
         this.sentToCalibratorDate = sentToCalibratorDate;
         this.taskStatus = taskStatus;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId,
+                        Date sentToCalibratorDate, Status taskStatus, Boolean verificationWithDismantle) {
+
+        this(initialDate, clientData, provider, device, status, readStatus, calibrator, info, dismantled, counter,
+                comment, sealPresence, verificationId, sentToCalibratorDate, taskStatus);
+        this.verificationWithDismantle = verificationWithDismantle;
     }
 
     public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,

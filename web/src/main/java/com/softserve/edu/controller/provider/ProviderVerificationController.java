@@ -374,7 +374,7 @@ public class ProviderVerificationController {
             verificationService.editCounter(counterInfo.getVerificationId(), counterInfo.getDeviceName(), counterInfo.getDismantled(),
                     counterInfo.getSealPresence(), counterInfo.getDateOfDismantled(), counterInfo.getDateOfMounted(),
                     counterInfo.getNumberCounter(), counterInfo.getReleaseYear(), counterInfo.getAccumulatedVolume(), counterInfo.getSymbol(),
-                    counterInfo.getStandardSize(), counterInfo.getComment(), counterInfo.getDeviceId());
+                    counterInfo.getStandardSize(), counterInfo.getComment(), counterInfo.getDeviceId(), counterInfo.getVerificationWithDismantle());
         } catch (Exception e) {
             logger.error("GOT EXCEPTION " + e);
             httpStatus = HttpStatus.CONFLICT;

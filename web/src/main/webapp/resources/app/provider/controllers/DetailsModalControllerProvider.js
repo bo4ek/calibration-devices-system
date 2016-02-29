@@ -11,6 +11,7 @@ angular
 			$scope.deviceCountOptions = [1, 2, 3, 4];
 
 			$scope.counterData.dismantled = true;
+            $scope.counterData.verificationWithDismantle = true;
 			$scope.counterData.sealPresence = true;
 
 			$scope.addInfo = {};
@@ -273,6 +274,7 @@ angular
 				// COUNTER
 				$scope.counterInfo.deviceType = $scope.verificationInfo.deviceType;
 				$scope.counterInfo.counterStatus = ($scope.verificationInfo.dismantled) ? $filter('translate')('YES') : $filter('translate')('NO');
+                $scope.counterInfo.verificationWithDismantle = ($scope.verificationInfo.verificationWithDismantle) ? $filter('translate')('YES') : $filter('translate')('NO');
 				$scope.counterInfo.dateOfDismantled = ($scope.verificationInfo.dateOfDismantled)
 					? new Date($scope.verificationInfo.dateOfDismantled).toLocaleDateString() : $filter('translate')('NO_TIME');
 				$scope.counterInfo.dateOfMounted = ($scope.verificationInfo.dateOfMounted)
@@ -306,6 +308,7 @@ angular
 
 				//COUNTER
 				$scope.counterData.dismantled = $scope.verificationInfo.dismantled;
+                $scope.counterData.verificationWithDismantle = $scope.verificationInfo.verificationWithDismantle;
 				$scope.counterData.dateOfDismantled = $scope.verificationInfo.dateOfDismantled;
 				$scope.counterData.dateOfMounted = $scope.verificationInfo.dateOfMounted;
 				$scope.counterData.dateOfDismantled = {
@@ -721,6 +724,7 @@ angular
 					"deviceId": $scope.counterData.selectedDevice.id,
 					"deviceName": $scope.counterData.selectedDevice.designation,
 					"dismantled": $scope.counterData.dismantled,
+                    "verificationWithDismantle": $scope.counterData.verificationWithDismantle,
 					"dateOfDismantled": ($scope.convertDateToLong($scope.counterData.dateOfDismantled) !== 0)
 						? $scope.convertDateToLong($scope.counterData.dateOfDismantled.endDate) : null,
 					"dateOfMounted": ($scope.convertDateToLong($scope.counterData.dateOfMounted) !== 0)

@@ -418,12 +418,30 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!--Verification with Dismantle-->
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label for="dismantledCounter" class="control-label">
+                                        {{ 'VERIFICATION_WITH_DISMANTLE' | translate}}
+                                    </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="checkbox" ng-value="true"
+                                           ng-model="selectedData.verificationWithDismantle"
+                                           id="dismantledCounter" name="dismantledCounter" class="form-control-checkbox"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <br><br>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </accordion-group>
             </div>
 
-            <div class="panel panel-primary">
+            <div class="panel panel-primary" ng-show="selectedData.verificationWithDismantle">
                 <accordion-group is-open="counter.open">
                     <accordion-heading>
                         <div class="panel-heading">

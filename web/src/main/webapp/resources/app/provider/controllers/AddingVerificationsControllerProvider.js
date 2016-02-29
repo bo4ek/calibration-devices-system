@@ -35,6 +35,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         $scope.selectedData = {};
         $scope.selectedData.dismantled = false;
         $scope.selectedData.sealPresence = true;
+        $scope.selectedData.verificationWithDismantle = false;
 
         $scope.applicationCodes = [];
         $scope.codes = [];
@@ -364,6 +365,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
             // COUNTER
             $scope.formData.dismantled = $scope.selectedData.dismantled;
+            $scope.formData.verificationWithDismantle = $scope.selectedData.verificationWithDismantle;
             $scope.formData.dateOfDismantled = ($scope.convertDateToLong($scope.selectedData.dateOfDismantled) !== 0) ?
                 $scope.convertDateToLong($scope.selectedData.dateOfDismantled.startDate) : null;
             $scope.formData.dateOfMounted = ($scope.convertDateToLong($scope.selectedData.dateOfMounted) !== 0) ?
@@ -486,6 +488,8 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
                     $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null)
                         ? $scope.verification.data.dismantled : true;
+                    $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null)
+                        ? $scope.verification.data.verificationWithDismantle : true;
                     $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null)
                         ? $scope.verification.data.sealPresence : true;
                     $scope.selectedData.dateOfDismantled = $scope.verification.data.dateOfDismantled;

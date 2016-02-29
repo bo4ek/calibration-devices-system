@@ -65,6 +65,8 @@ public class OrganizationStageVerificationDTO {
 
 	private byte quantity;
 
+    private Boolean verificationWithDismantle;
+
 	public OrganizationStageVerificationDTO() {
 	}
 
@@ -73,7 +75,7 @@ public class OrganizationStageVerificationDTO {
 											Long noWaterToDate, String notes, String timeFrom, String timeTo, Boolean dismantled, Long dateOfDismantled,
 											Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol,
 											String standardSize, String deviceName, Boolean sealPresence, Device.DeviceType deviceType,
-											Long deviceId) {
+											Long deviceId, Boolean verificationWithDismantle) {
 		this.firstName = clientData.getFirstName();
 		this.lastName = clientData.getLastName();
 		this.middleName = clientData.getMiddleName();
@@ -118,6 +120,8 @@ public class OrganizationStageVerificationDTO {
 		this.deviceName = deviceName;
 		this.deviceType = deviceType;
 		this.deviceId = deviceId;
+
+        this.verificationWithDismantle = verificationWithDismantle;
 
 	}
 }

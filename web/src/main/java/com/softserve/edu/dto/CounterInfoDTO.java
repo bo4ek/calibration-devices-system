@@ -25,4 +25,5 @@ public class CounterInfoDTO {
 
     private String symbol;
     private String standardSize;
+    private Boolean verificationWithDismantle;
 }
