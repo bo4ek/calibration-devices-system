@@ -59,6 +59,10 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Transactional
     public long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException, InvalidModuleIdException {
         Verification verification = verificationRepository.findOne(verificationId);
+        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+        if (moduleId == null) {
+            throw new InvalidModuleIdException();
+        }
         CalibrationTest calibrationTest = new CalibrationTest(deviceTestData.getFileName(),
                 deviceTestData.getLatitude(), deviceTestData.getLongitude(), deviceTestData.getUnixTime(), verification,
                 deviceTestData.getInitialCapacity(), deviceTestData.getTemperature());
@@ -95,10 +99,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         calibrationTestRepository.save(calibrationTest);
         verification.setStatus(Status.TEST_COMPLETED);
 
-        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
-        if (moduleId == null) {
-            throw new InvalidModuleIdException();
-        }
+
         verification.setCalibrationModule(moduleId);
         verification.setNumberOfProtocol(deviceTestData.getFileName().substring(POSITION_OF_PROTOCOL,
                 deviceTestData.getFileName().indexOf('.')));
