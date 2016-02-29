@@ -13,6 +13,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.tool.DeviceService;
@@ -89,9 +90,10 @@ public class ClientApplicationController {
             Organization provider = providerService.findById(verificationDTO.getProviderId());
             Device device = deviceService.getById(verificationDTO.getDeviceId());
 
+            AdditionalInfo info = new AdditionalInfo();
+            info.setNotes(verificationDTO.getComment());
             Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
-                    Status.SENT, Verification.ReadStatus.UNREAD, null, verificationDTO.getComment(), null);
-
+                    Status.SENT, Verification.ReadStatus.UNREAD, info);
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
 
             logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by unauthorized user");

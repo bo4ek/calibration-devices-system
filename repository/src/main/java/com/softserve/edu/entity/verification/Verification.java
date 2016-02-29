@@ -261,6 +261,13 @@ public class Verification implements Comparable {
         this.comment = comment;
     }
 
+    public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, AdditionalInfo info) {
+
+        this(initialDate, expirationDate, clientData, provider, device, status, readStatus, null, null, null);
+        this.info = info;
+    }
+
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
                         User calibratorEmployee, Counter counter, String verificationId, String comment, String verificationTime) {
 
