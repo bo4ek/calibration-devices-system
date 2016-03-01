@@ -42,24 +42,18 @@
 																   String district, String locality, String status,
 																   User calibratorEmployee, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String sortCriteria, String sortOrder, String employeeSearchName, EntityManager em, ArrayList<Map<String, Object>> globalSearchParams) {
 
-				CriteriaBuilder cb = em.getCriteriaBuilder();
-				CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
-				Root<Verification> root = criteriaQuery.from(Verification.class);
-				Join<Verification, Organization> calibratorJoin = root.join("calibrator");
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
+            Root<Verification> root = criteriaQuery.from(Verification.class);
+            Join<Verification, Organization> calibratorJoin = root.join("calibrator");
 
-				Predicate predicate = NewVerificationsQueryConstructorCalibrator.buildPredicate(root, cb, calibratorJoin, providerId, startDateToSearch, endDateToSearch,
-						idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, employeeSearchName);
-				if((sortCriteria != null)&&(sortOrder != null)) {
-					criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
-				} else {
-					criteriaQuery.orderBy(cb.desc(root.get("initialDate")));
-				}
-//            List<Map<String,String>> list=new ArrayList<>();
-//            Map<String,String>map=new HashMap<>();
-//            map.put("key","taskStatus");
-//            map.put("type","enumerated");
-//            map.put("value","PLANNING_TASK");
-//            list.add(map);
+            Predicate predicate = NewVerificationsQueryConstructorCalibrator.buildPredicate(root, cb, calibratorJoin, providerId, startDateToSearch, endDateToSearch,
+                    idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, employeeSearchName);
+            if((sortCriteria != null)&&(sortOrder != null)) {
+                criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
+            } else {
+                criteriaQuery.orderBy(cb.desc(root.get("initialDate")));
+            }
             List<Predicate> predicates=new ArrayList<>();
             predicates.add(predicate);
             if(globalSearchParams!=null&&globalSearchParams.size()>0) {
