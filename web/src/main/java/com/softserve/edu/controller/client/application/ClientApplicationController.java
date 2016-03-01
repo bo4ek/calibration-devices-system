@@ -6,6 +6,7 @@ import com.softserve.edu.dto.application.ClientMailDTO;
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
 import com.softserve.edu.dto.provider.VerificationDTO;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.enumeration.verification.Status;
@@ -94,6 +95,7 @@ public class ClientApplicationController {
             info.setNotes(verificationDTO.getComment());
             Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
                     Status.SENT, Verification.ReadStatus.UNREAD, info);
+            verification.setCounter(new Counter());
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
 
             logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by unauthorized user");
