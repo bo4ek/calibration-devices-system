@@ -441,7 +441,7 @@
                 </accordion-group>
             </div>
 
-            <div class="panel panel-primary" ng-show="selectedData.verificationWithDismantle">
+            <div class="panel panel-primary" ng-show="!selectedData.verificationWithDismantle">
                 <accordion-group is-open="counter.open">
                     <accordion-heading>
                         <div class="panel-heading">
@@ -854,7 +854,7 @@
             <div class="form group col-md-10">
                 <button type="submit" class="btn btn-success"
                         ng-show="!showEditButton">
-                    {{'SEND_BTN' | translate}}
+                    {{'SAVE' | translate}}
                 </button>
                 <button type="button" class="btn btn-warning"
                         ng-click="resetApplicationForm()">
