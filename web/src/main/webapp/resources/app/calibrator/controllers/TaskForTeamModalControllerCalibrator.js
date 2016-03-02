@@ -128,8 +128,8 @@ angular
                     $scope.showSendingMessage = true;
                 } else {
                     var calibrationTask = {
-                        "taskDate": $scope.calibrationTask.taskDate,
-                        "serialNumber": $scope.calibrationTask.mountingCrew.teamNumber,
+                        "dateOfTask": $scope.calibrationTask.taskDate,
+                        "moduleNumber": $scope.calibrationTask.mountingCrew.teamNumber,
                         "verificationsId": $rootScope.verifIds
                     };
                     console.log(calibrationTask);

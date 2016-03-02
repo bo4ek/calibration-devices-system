@@ -4,6 +4,8 @@ import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.Device;
 import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.criteria.Expression;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -13,6 +15,7 @@ public class CalibrationDisassenblyTeamSpecifications {
 
     /**
      * build query for id, filtering by id
+     *
      * @param id
      * @return query, for searching
      */
@@ -22,6 +25,7 @@ public class CalibrationDisassenblyTeamSpecifications {
 
     /**
      * build query for name, filtering by name
+     *
      * @param name
      * @return query, for searching
      */
@@ -31,25 +35,28 @@ public class CalibrationDisassenblyTeamSpecifications {
 
     /**
      * build query for effectiveTo, filtering by effective
+     *
      * @param effectiveTo
      * @return query, for searching
      */
     public static Specification<DisassemblyTeam> disassemblyTeamHasEffectiveTo(Date effectiveTo) {
-        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("effectiveTo"), effectiveTo);
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThan(root.get("effectiveTo"), effectiveTo);
     }
 
-   /**
+    /**
      * build query for disassemblyTeamType, filtering by disassemblyTeamType
+     *
      * @param disassemblyTeamType
      * @return query, for searching
      */
-    public static Specification<DisassemblyTeam> disassemblyTeamHasType(Device.DeviceType disassemblyTeamType){
+    public static Specification<DisassemblyTeam> disassemblyTeamHasType(Device.DeviceType disassemblyTeamType) {
         return (root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("specialization"), disassemblyTeamType);
+                criteriaBuilder.isMember(disassemblyTeamType, root.get("specialization"));
     }
 
     /**
      * build query for leaderFullName, filtering by leaderFullName
+     *
      * @param leaderFullName
      * @return query, for searching
      */
@@ -60,6 +67,7 @@ public class CalibrationDisassenblyTeamSpecifications {
 
     /**
      * build query for leaderPhone, filtering by leaderPhone
+     *
      * @param leaderPhone
      * @return query, for searching
      */
@@ -69,6 +77,7 @@ public class CalibrationDisassenblyTeamSpecifications {
 
     /**
      * build query for leaderEmail, filtering by leaderEmail
+     *
      * @param leaderEmail
      * @return query, for searching
      */
@@ -76,7 +85,7 @@ public class CalibrationDisassenblyTeamSpecifications {
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("leaderEmail"), leaderEmail);
     }
 
-    public static Specification<DisassemblyTeam> disassemblyTeamHasCalibratorId(Long calibratorId){
+    public static Specification<DisassemblyTeam> disassemblyTeamHasCalibratorId(Long calibratorId) {
         return (root, criteriaQuery, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("organization").get("id"), calibratorId);
     }
