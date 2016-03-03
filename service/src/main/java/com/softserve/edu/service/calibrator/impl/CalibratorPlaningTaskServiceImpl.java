@@ -187,7 +187,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     public void addNewTaskForTeam(Date taskDate, String serialNumber, List<String> verificationsId, String userId) {
         Set<Verification> verifications = new HashSet<>();
         DisassemblyTeam team = teamRepository.findOne(serialNumber);
-        team.setEffectiveTo(taskDate);
         int i = 0;
         boolean counterStatus = false;
         for (String verifID : verificationsId) {
@@ -216,7 +215,22 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         }
         teamRepository.save(team);
         User user = userRepository.findOne(userId);
-        taskRepository.save(new CalibrationTask(null, team, new Date(), taskDate, user, verifications));
+        CalibrationTask calibrationTask = taskRepository.save(new CalibrationTask(null, team, new Date(), taskDate, user, verifications));
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DAY_MONTH_YEAR);
+        String filename = calibrationTask.getTeam().getId() + "-" +
+                dateFormat.format(calibrationTask.getDateOfTask()) + "_";
+        File xlsFile;
+        try {
+            xlsFile = File.createTempFile(filename, "." + Constants.XLS_EXTENSION);
+            xlsFile.setWritable(true);
+            xlsFile.setReadable(true);
+            xlsFile.setExecutable(true);
+            XlsTableExporter xls = new XlsTableExporter();
+            Verification[] verif = verifications.toArray(new Verification[verifications.size()]);
+            List<TableExportColumn> dataForXls = getDataForXls(calibrationTask, verif);
+            xls.exportToFile(dataForXls, xlsFile);
+            mailService.sendMailWithAttachments(calibrationTask.getTeam().getLeaderEmail(), Constants.TASK + " " + calibrationTask.getId(), " ", xlsFile);
+        } catch (Exception ex) {/*Temporary try block*/}
     }
 
     /**
