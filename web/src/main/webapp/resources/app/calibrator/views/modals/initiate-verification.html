@@ -339,8 +339,7 @@
                                 <div class="col-md-8 form-group" show-errors>
                                     <input id="building" name="building" class="form-control"
                                            ng-model="selectedData.selectedBuilding"
-                                           typehead="building as building.designation for building in buildings | filter: $viewValue"
-                                           ng-pattern="BUILDING_REGEX" required>
+                                           typehead="building as building.designation for building in buildings | filter: $viewValue" required>
 
                                     <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
                                           id="okFeedBack"></span>
@@ -365,8 +364,7 @@
                                 <div class="col-md-8 form-group" show-errors>
                                     <input id="flat" name="flat" class="form-control"
                                            ng-model="formData.flat" popover="{{'FLAT_INFO' | translate}}"
-                                           popover-trigger="focus" popover-placement="right"
-                                           ng-pattern="FLAT_REGEX" required>
+                                           popover-trigger="focus" popover-placement="right" required>
 
                                     <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
                                           id="okFeedBack"></span>

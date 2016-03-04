@@ -330,8 +330,7 @@
                         <div class="input-group" style="width: 100%">
                             <input id="building" name="building" class="form-control"
                                    ng-model="selectedValues.selectedBuilding"
-                                   typehead="building as building.designation for building in buildings | filter: $viewValue | limitTo: 4"
-                                   ng-pattern="BUILDING_REGEX" required>
+                                   typehead="building as building.designation for building in buildings | filter: $viewValue" required>
                             <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign building-ok"></span>
 
                             <span class="input-group-addon">
@@ -360,7 +359,6 @@
                         <input id="flat" name="flat" class="form-control"
                                ng-model="formData.flat"
                                popover-trigger="focus" popover-placement="right"
-                               ng-pattern="FLAT_REGEX"
                                ng-required="!defaultValue.privateHouse">
                         <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"></span>
 
