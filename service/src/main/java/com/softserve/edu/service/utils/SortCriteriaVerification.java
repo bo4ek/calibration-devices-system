@@ -244,6 +244,15 @@ public enum SortCriteriaVerification {
 			}
 		}
 	},
+    FLAT() {
+        public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+            if (sortOrder.equalsIgnoreCase("asc")) {
+                return (cb.asc(root.get("clientData").get("clientAddress").get("flat")));
+            } else {
+                return (cb.desc(root.get("clientData").get("clientAddress").get("flat")));
+            }
+        }
+    },
   CLIENT_FULL_NAME() {
 	public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
 		if (sortOrder.equalsIgnoreCase("asc")) {
