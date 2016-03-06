@@ -469,6 +469,9 @@ angular
                     controller: 'AddingVerificationsControllerProvider',
                     size: 'lg'
                 });
+                modalInstance.result.then(function () {
+                    $scope.tableParams.reload();
+                });
             };
 
         }]);
