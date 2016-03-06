@@ -87,7 +87,7 @@ public class ProviderApplicationController {
      */
     @RequestMapping(value = "send", method = RequestMethod.POST)
     public ResponseEntity getInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
-                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         List<String> verificationIds = new ArrayList<>();
         HttpStatus httpStatus = HttpStatus.CREATED;
         try {
@@ -139,11 +139,12 @@ public class ProviderApplicationController {
                     verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK, verificationDTO.getVerificationWithDismantle());
 
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
-            String name = clientData.getFirstName() + " " + clientData.getLastName();
-            mail.sendMail(clientData.getEmail(), name, verification.getId(), verification.getProvider().getName(),
-                    verification.getDevice().getDeviceType().toString());
-
-        } catch(Exception e) {
+            if (verificationDTO.getEmail() != null) {
+                String name = clientData.getFirstName() + " " + clientData.getLastName();
+                mail.sendMail(clientData.getEmail(), name, verification.getId(), verification.getProvider().getName(),
+                        verification.getDevice().getDeviceType().toString());
+            }
+        } catch (Exception e) {
             logger.error("Exception while inserting calibrator's verifications into DB ", e);
             httpStatus = HttpStatus.CONFLICT;
             return new ResponseEntity<>(verificationIds, httpStatus);
@@ -152,13 +153,14 @@ public class ProviderApplicationController {
     }
 
     /**
-     *Save verification in database without sending to calibrator (without calibrator id)
+     * Save verification in database without sending to calibrator (without calibrator id)
+     *
      * @param verificationDTO
      * @param employeeUser
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public String saveInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
-                                         @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         try {
             ClientData clientData = new ClientData(
                     verificationDTO.getFirstName(),
@@ -205,7 +207,7 @@ public class ProviderApplicationController {
                     verificationDTO.getSealPresence(), verificationId);
             verificationService.saveVerification(verification);
             return verification.getId();
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.info(e);
             return null;
         }
@@ -239,17 +241,19 @@ public class ProviderApplicationController {
 
     /**
      * get all counter symbols from table counter_type by deviceType
+     *
      * @param deviceType
      * @return
      */
     @RequestMapping(value = "symbols/{deviceType}", method = RequestMethod.GET)
-    public Set<String> findAllSymbolsByDeviceType(@PathVariable String deviceType){
+    public Set<String> findAllSymbolsByDeviceType(@PathVariable String deviceType) {
 
         return verificationService.findSymbolsByDeviceType(deviceType);
     }
 
     /**
      * get all standardSizes by symbol and deviceType of counter
+     *
      * @param symbol
      * @param deviceType
      * @return
@@ -262,6 +266,7 @@ public class ProviderApplicationController {
 
     /**
      * get all deviceTypes counters of which this organization can verify
+     *
      * @param employeeUser
      * @return
      */

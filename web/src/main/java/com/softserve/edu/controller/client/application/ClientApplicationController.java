@@ -100,8 +100,10 @@ public class ClientApplicationController {
 
             logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by unauthorized user");
 
-            String name = clientData.getFirstName() + " " + clientData.getLastName();
-            mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), provider.getName(), device.getDeviceType().toString());
+            if (verificationDTO.getEmail() != null) {
+                String name = clientData.getFirstName() + " " + clientData.getLastName();
+                mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), provider.getName(), device.getDeviceType().toString());
+            }
         } catch (Exception e) {
             logger.error("Exception while inserting verifications by unauthorized user into DB ", e);
             httpStatus = HttpStatus.CONFLICT;
