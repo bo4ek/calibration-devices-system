@@ -141,7 +141,7 @@ public class ProviderApplicationController {
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
             if (verificationDTO.getEmail() != null) {
                 String name = clientData.getFirstName() + " " + clientData.getLastName();
-                mail.sendMail(clientData.getEmail(), name, verification.getId(), verification.getProvider().getName(),
+                mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), verification.getProvider().getName(),
                         verification.getDevice().getDeviceType().toString());
             }
         } catch (Exception e) {

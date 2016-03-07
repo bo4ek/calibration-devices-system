@@ -28,6 +28,7 @@ import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.tool.DeviceService;
+import com.softserve.edu.service.tool.MailService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.verification.VerificationService;
@@ -75,6 +76,9 @@ public class CalibratorApplicationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MailService mail;
 
     private final Logger logger = Logger.getLogger(CalibratorApplicationController.class);
 
@@ -145,6 +149,11 @@ public class CalibratorApplicationController {
                     calibratorEmployee, verificationDTO.getVerificationWithDismantle());
 
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
+            if (verificationDTO.getEmail() != null) {
+                String name = clientData.getFirstName() + " " + clientData.getLastName();
+                mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), verification.getProvider().getName(),
+                        verification.getDevice().getDeviceType().toString());
+            }
 
             logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by calibrator " + calibrator.getName());
 
