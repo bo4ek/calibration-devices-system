@@ -70,15 +70,15 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
     @Transactional(readOnly = true)
     public ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndStatus(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch,
                                                                                               String idToSearch, String status, String nameProvider, String nameCalibrator, String numberOfCounter,
-                                                                                              String numberOfProtocol, String serialNumber, String sortCriteria,
+                                                                                              String numberOfProtocol, String moduleNumber, String sortCriteria,
                                                                                               String sortOrder, User verificatorEmployee) {
 
         CriteriaQuery<Verification> criteriaQuery = DigitalProtocolQueryConstructorCalibrator.buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
-                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, serialNumber, sortCriteria, sortOrder, em);
+                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, moduleNumber, sortCriteria, sortOrder, em);
 
         Long count = em.createQuery(DigitalProtocolQueryConstructorCalibrator.buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
                 nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, serialNumber, em)).getSingleResult();
+                numberOfProtocol, moduleNumber, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);

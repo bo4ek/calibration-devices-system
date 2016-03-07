@@ -34,5 +34,6 @@ public class NewVerificationsFilterSearch {
 	private String sentToVerificatorDateFrom;
 	private String sentToVerificatorDateTo;
 	private String serialNumber;
+    private String moduleNumber;
 	private String comment;
 }

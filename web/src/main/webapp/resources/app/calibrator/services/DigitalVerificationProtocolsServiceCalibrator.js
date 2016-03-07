@@ -4,7 +4,6 @@ angular
         function ($http) {
             return {
                 getProtocols: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
-                    var url = 'calibrator/protocols/' + currentPage + '/' + itemsPerPage;
                     return getDataWithParams('calibrator/protocols/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
                 },
                 sendProtocols: function (protocol) {

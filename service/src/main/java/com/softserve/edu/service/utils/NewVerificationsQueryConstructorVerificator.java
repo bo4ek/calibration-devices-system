@@ -50,7 +50,7 @@ public class NewVerificationsQueryConstructorVerificator {
     public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                                User verificatorEmployee,  String nameProvider,String nameCalibrator, String numberOfCounter,
                                                                String numberOfProtocol,
-                                                               String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber, String sortCriteria, String sortOrder, EntityManager em) {
+                                                               String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, String sortCriteria, String sortOrder, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
@@ -59,12 +59,13 @@ public class NewVerificationsQueryConstructorVerificator {
 
         Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
                 status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber);
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber);
 
         if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
             criteriaQuery.orderBy(cb.desc(root.get("sentToVerificatorDate")),cb.desc(root.get("initialDate")),
-                    cb.asc((root.get("calibrationModule").get("serialNumber"))), cb.asc(root.get("numberOfProtocol")));
+                    cb.asc((root.get("calibrationModule").get("moduleNumber"))), cb.asc(root.get("numberOfProtocol")));
         } else if ((sortCriteria != null) && (sortOrder != null)) {
+            SortCriteriaVerification s = SortCriteriaVerification.valueOf(sortCriteria.toUpperCase());
             criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
         }
         criteriaQuery.select(root);
@@ -93,7 +94,7 @@ public class NewVerificationsQueryConstructorVerificator {
     public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                       User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
                                                       String numberOfProtocol,
-                                                      String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber, EntityManager em) {
+                                                      String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
@@ -101,7 +102,7 @@ public class NewVerificationsQueryConstructorVerificator {
         Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
         Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
                 status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber);
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
         return countQuery;
@@ -114,7 +115,7 @@ public class NewVerificationsQueryConstructorVerificator {
     private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long verificatorId,
                                             String startDateToSearch, String endDateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
                                             String numberOfCounter, String numberOfProtocol,
-                                            String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber) {
+                                            String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber) {
 
         String userName = verificatorEmployee.getUsername();
         Predicate queryPredicate = cb.conjunction();
@@ -133,9 +134,7 @@ public class NewVerificationsQueryConstructorVerificator {
         if (status != null) {
         	queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(status.trim())), queryPredicate);
         } else {
-        	queryPredicate = cb.and(cb.or(Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb),
-					Status.TEST_NOK.getQueryPredicate(root, cb),
-					Status.TEST_OK.getQueryPredicate(root, cb)), queryPredicate);
+            queryPredicate = cb.and(cb.or(Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb)));
         }
 
         queryPredicate = cb.and(cb.equal(joinSearch.get("id"), verificatorId), queryPredicate);
@@ -177,9 +176,9 @@ public class NewVerificationsQueryConstructorVerificator {
                     queryPredicate);
         }
 
-        if ((serialNumber != null) && (serialNumber.length() > 0)) {
+        if ((moduleNumber != null) && (moduleNumber.length() > 0)) {
             queryPredicate = cb.and(
-                    cb.like(root.get("calibrationModule").get("serialNumber"), "%" + serialNumber + "%"),
+                    cb.like(root.get("calibrationModule").get("moduleNumber"), "%" + moduleNumber + "%"),
                     queryPredicate);
         }
 

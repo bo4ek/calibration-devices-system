@@ -39,13 +39,13 @@
 		 * @param nameCalibrator - search by nameCalibrator
 		 * @param numberOfCounter - search by numberOfCounter
 		 * @param numberOfProtocol - search by numberOfProtocol
-		 * @param serialNumber - search by serialNumber
+		 * @param moduleNumber - search by moduleNumber
 		 * @param em
 		 * @return
 		 */
         public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                           User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
-                                                          String numberOfProtocol, String serialNumber, EntityManager em) {
+                                                          String numberOfProtocol, String moduleNumber, EntityManager em) {
 
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
@@ -53,7 +53,7 @@
             Join<Verification, Organization> verificatorJoin = root.join("calibrator");
             Predicate predicate = DigitalProtocolQueryConstructorCalibrator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
 					status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-					numberOfProtocol, serialNumber);
+					numberOfProtocol, moduleNumber);
             countQuery.select(cb.count(root));
             countQuery.where(predicate);
             return countQuery;
@@ -70,13 +70,13 @@
 		 * @param nameCalibrator - search by nameCalibrator
 		 * @param numberOfCounter - search by numberOfCounter
 		 * @param numberOfProtocol - search by numberOfProtocol
-		 * @param serialNumber - search by serialNumber
+		 * @param moduleNumber - search by moduleNumber
 		 * @param em
 		 * @return
 		 */
         public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                                    User verificatorEmployee,  String nameProvider,String nameCalibrator, String numberOfCounter,
-                                                                   String numberOfProtocol, String serialNumber, String sortCriteria, String sortOrder, EntityManager em) {
+                                                                   String numberOfProtocol, String moduleNumber, String sortCriteria, String sortOrder, EntityManager em) {
 
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
@@ -85,10 +85,10 @@
 
             Predicate predicate = DigitalProtocolQueryConstructorCalibrator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
 					status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-					numberOfProtocol, serialNumber);
+					numberOfProtocol, moduleNumber);
 
             if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
-                criteriaQuery.orderBy(cb.desc(root.get("initialDate")), cb.asc((root.get("calibrationModule").get("serialNumber"))),
+                criteriaQuery.orderBy(cb.desc(root.get("initialDate")), cb.asc((root.get("calibrationModule").get("moduleNumber"))),
                         cb.asc(root.get("numberOfProtocol")));
             } else if ((sortCriteria != null) && (sortOrder != null)) {
                 criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
@@ -104,7 +104,7 @@
 		 */
         private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long verificatorId,
                                                 String startDateToSearch, String endDateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
-                                                String numberOfCounter, String numberOfProtocol, String serialNumber) {
+                                                String numberOfCounter, String numberOfProtocol, String moduleNumber) {
 
             String userName = verificatorEmployee.getUsername();
             Predicate queryPredicate = cb.conjunction();
@@ -165,9 +165,9 @@
                         queryPredicate);
             }
 
-            if ((serialNumber != null) && (serialNumber.length() > 0)) {
+            if ((moduleNumber != null) && (moduleNumber.length() > 0)) {
                 queryPredicate = cb.and(
-                        cb.like(root.get("calibrationModule").get("serialNumber"), "%" + serialNumber + "%"),
+                        cb.like(root.get("calibrationModule").get("moduleNumber"), "%" + moduleNumber + "%"),
                         queryPredicate);
             }
             return queryPredicate;
