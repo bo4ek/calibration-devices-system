@@ -96,7 +96,7 @@ public class DigitalVerificationProtocolsCalibratorController {
                 searchData.getNameCalibrator(),
                 searchData.getNumberOfCounter(),
                 searchData.getNumberOfProtocol(),
-                searchData.getSerialNumber(),
+                searchData.getModuleNumber(),
                 sortCriteria,
                 sortOrder,
                 calibratorEmployee);
