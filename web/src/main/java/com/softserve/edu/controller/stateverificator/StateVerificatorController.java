@@ -99,7 +99,7 @@ public class StateVerificatorController {
                 searchData.getNumberOfProtocol(),
                 searchData.getSentToVerificatorDateFrom(),
                 searchData.getSentToVerificatorDateTo(),
-                searchData.getSerialNumber(),
+                searchData.getModuleNumber(),
                 sortCriteria,
                 sortOrder,
 	verificatorEmployee);
