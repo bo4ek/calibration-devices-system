@@ -159,17 +159,38 @@ public class MailServiceImpl implements MailService {
     }
 
     @Async
-    public void sendOrganizationNewPasswordMail(String organizationMail, String organizationName, String username, String password) {
+    public void sendOrganizationNewPasswordMail(Organization organization, User admin , String newPassword){// String organizationMail, String organizationName, String username, String password) {
 
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
             public void prepare(MimeMessage mimeMessage) throws UnsupportedEncodingException, MessagingException {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-                message.setTo(organizationMail);
+                message.setTo(organization.getEmail());//organizationMail);
                 message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME)); //properties
+
                 Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put(MailConstant.NAME, organizationName);
-                templateVariables.put(MailConstant.USERNAME, username);
-                templateVariables.put(MailConstant.PASSWORD, password);
+                templateVariables.put(MailConstant.NAME, organization.getName());//organizationName);
+                templateVariables.put(MailConstant.USERNAME, admin.getUsername());//username);
+                templateVariables.put(MailConstant.PASSWORD, newPassword);
+
+                //Map<String, Object> templateVariables = new HashMap<>();
+                //templateVariables.put(MailConstant.NAME, organization.getName());
+                templateVariables.put(MailConstant.EMAIL, organization.getEmail());
+                templateVariables.put(MailConstant.PHONE, organization.getPhone());
+                templateVariables.put(MailConstant.TYPES, organization.getOrganizationTypes());
+                templateVariables.put(MailConstant.EMPLOYEES_CAPACITY, organization.getEmployeesCapacity());
+                templateVariables.put(MailConstant.MAX_PROCESS_TIME, organization.getMaxProcessTime());
+                templateVariables.put(MailConstant.REGION, organization.getAddress().getRegion());
+                templateVariables.put(MailConstant.LOCALITY, organization.getAddress().getLocality());
+                templateVariables.put(MailConstant.DISTRICT, organization.getAddress().getDistrict());
+                templateVariables.put(MailConstant.STREET, organization.getAddress().getStreet());
+                templateVariables.put(MailConstant.BUILDING, organization.getAddress().getBuilding());
+                templateVariables.put(MailConstant.FLAT, organization.getAddress().getFlat());
+                templateVariables.put(MailConstant.FIRST_NAME, admin.getFirstName());
+                templateVariables.put(MailConstant.MIDDLE_NAME, admin.getMiddleName());
+                templateVariables.put(MailConstant.LAST_NAME, admin.getLastName());
+                //templateVariables.put(MailConstant.USERNAME, admin.getUsername());
+
+
                 String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationAdminPasswordChange.vm", "UTF-8", templateVariables);
                 message.setText(body, true);
                 message.setSubject(MailConstant.MAIL_SUBJECT);
@@ -340,6 +361,7 @@ public class MailServiceImpl implements MailService {
                 } catch (UnknownHostException ue) {
                     logger.error("Cannot get host address", ue);
                 }
+
                 Map<String, Object> templateVariables = new HashMap<>();
                 templateVariables.put(MailConstant.NAME, organization.getName());
                 templateVariables.put(MailConstant.EMAIL, organization.getEmail());

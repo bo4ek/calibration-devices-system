@@ -65,7 +65,7 @@ public class OrganizationController {
      */
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseEntity addOrganization(@RequestBody OrganizationDTO organizationDTO,
-            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         HttpStatus httpStatus = HttpStatus.CREATED;
         Address address = new Address(
                 organizationDTO.getRegion(),
@@ -150,7 +150,7 @@ public class OrganizationController {
 
     /**
      * Responds a page according to input data.
-     *
+     * <p>
      * Note that this uses method {@code pageOrganizationsWithSearch}, whereas
      * search values is {@literal null}
      *
@@ -277,9 +277,11 @@ public class OrganizationController {
             httpStatus = HttpStatus.CONFLICT;
         }
 
-        Organization org = organizationService.getOrganizationById(id);
-        User admin = userService.findOne(organization.getUsername());
-        organizationService.sendOrganizationChanges(org, admin);
+        if (organization.getPassword()==null || !organization.getPassword().equals("generate")) {
+            Organization org = organizationService.getOrganizationById(id);
+            User admin = userService.findOne(organization.getUsername());
+            organizationService.sendOrganizationChanges(org, admin);
+        }
 
         return new ResponseEntity(httpStatus);
     }
@@ -299,13 +301,13 @@ public class OrganizationController {
                     .getUsers()
                     .stream()
                     .filter(userChecked -> userChecked.getUserRoles()
-                                    .stream()
-                                    .map(UserRole::name)
-                                    .filter(userRole -> userRole.equals(UserRole.PROVIDER_ADMIN.name()) ||
-                                                    userRole.equals(UserRole.CALIBRATOR_ADMIN.name()) ||
-                                                    userRole.equals(UserRole.STATE_VERIFICATOR_ADMIN.name())
-                                    )
-                                    .collect(Collectors.toList()).size() > 0
+                            .stream()
+                            .map(UserRole::name)
+                            .filter(userRole -> userRole.equals(UserRole.PROVIDER_ADMIN.name()) ||
+                                    userRole.equals(UserRole.CALIBRATOR_ADMIN.name()) ||
+                                    userRole.equals(UserRole.STATE_VERIFICATOR_ADMIN.name())
+                            )
+                            .collect(Collectors.toList()).size() > 0
                     )
                     .findFirst().get();
             logger.info(user);

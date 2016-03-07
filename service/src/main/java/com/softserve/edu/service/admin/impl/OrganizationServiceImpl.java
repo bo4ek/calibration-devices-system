@@ -229,7 +229,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         if (employeeAdmin.getPassword().equals("generate")) {
             String newPassword = RandomStringUtils.randomAlphanumeric(5);
-            mail.sendOrganizationNewPasswordMail(organization.getEmail(), organization.getName(), employeeAdmin.getUsername(), newPassword);
+            mail.sendOrganizationNewPasswordMail(organization, employeeAdmin, newPassword);
             String passwordEncoded = new BCryptPasswordEncoder().encode(newPassword);
             employeeAdmin.setPassword(passwordEncoded);
         }
