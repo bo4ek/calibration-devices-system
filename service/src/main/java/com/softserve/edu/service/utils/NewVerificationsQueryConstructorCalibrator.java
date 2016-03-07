@@ -52,7 +52,7 @@
             if((sortCriteria != null)&&(sortOrder != null)) {
                 criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
             } else {
-                criteriaQuery.orderBy(cb.desc(root.get("initialDate")));
+                criteriaQuery.orderBy(cb.desc(root.get("sentToCalibratorDate")));
             }
             List<Predicate> predicates=new ArrayList<>();
             predicates.add(predicate);
@@ -143,7 +143,7 @@
 				logger.error("Cannot parse date", pe); //TODO: add exception catching
 			}
 			//verifications with date between these two dates
-			queryPredicate = cb.and(cb.between(root.get("initialDate"), java.sql.Date.valueOf(startDate), java.sql.Date.valueOf(endDate)), queryPredicate);
+			queryPredicate = cb.and(cb.between(root.get("sentToCalibratorDate"), java.sql.Date.valueOf(startDate), java.sql.Date.valueOf(endDate)), queryPredicate);
 
 		}
 
