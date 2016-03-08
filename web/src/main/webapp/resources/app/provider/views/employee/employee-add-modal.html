@@ -4,14 +4,8 @@
 
 <div class="modal-body">
 
-    <form name="employeeForm" novalidate ng-submit="!employeeForm.phone.$error.pattern &&
-    !employeeForm.lastName.$error.pattern &&!employeeForm.lastName.$error.required
-    &&!employeeForm.firstName.$error.pattern &&!employeeForm.firstName.$error.required
-    &&!employeeForm.middleName.$error.pattern &&!employeeForm.middleName.$error.required &&
-    !employeeForm.email.$error.pattern &&!employeeForm.email.$error.required &&
-     !employeeForm.username.$error.pattern && !employeeForm.username.$error.required &&
-      usernameValidation.isValid && !employeeForm.rePassword.$error.required
-    && !employeeForm.password.$error.required && onEmployeeFormSubmit()">
+    <form name="employeeForm" id="employeeForm" ng-submit="onEmployeeFormSubmit()" role="form"
+          class="form-group" novalidate>
 
         <div class="row">
             <div class="form-group col-md-4" ng-show="showListOfOrganization">
@@ -46,12 +40,10 @@
         <div class="panel panel-primary">
             <div class="panel-heading">{{'GENERAL_INFORMATION' | translate }}</div>
             <div class="panel-body">
-                <div class="row">
 
-                    <div class="form-group col-md-4" ng-show="showListOfSubdivisions">
-                        <label class="control-label">{{'SUBDIVISION' | translate}}*</label>
-                    </div>
-                    <div class="form-group col-md-8" show-errors ng-show="showListOfSubdivisions">
+                <div class="row form-group" ng-show="showListOfSubdivisions" show-errors>
+                    <label class="control-label col-md-4">{{'SUBDIVISION' | translate}}*</label>
+                    <div class="col-md-8">
                         <ui-select class="form-control" type="text" theme="select2"
                                    ng-model="selectedValues.subdivision"
                                    name="subdivision" id="subdivision" required>
@@ -68,11 +60,10 @@
                             {{'REQUIRED' | translate}}
                         </p>
                     </div>
-
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'LAST_NAME' |translate }}*</label>
-                    </div>
-                    <div class="form-group col-md-8" show-errors>
+                </div>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'LAST_NAME' |translate }}*</label>
+                    <div class="col-md-8">
                         <input id="lastName" name="lastName" class="form-control"
                                type="text" ng-model="employeeFormData.lastName"
                                popover="{{'ALPHABETIC_INFO' | translate}}"
@@ -80,24 +71,20 @@
                                ng-change="checkFirstName('lastName')"
                                ng-pattern="FIRST_LAST_NAME_REGEX" required>
 
-                        <div ng-show="employeeForm.$submitted || (employeeForm.lastName.$touched   && !employeeForm.lastName.$pristine)
-                        || (employeeForm.lastName.$dirty)">
-                            <p class="validation-message" ng-if="employeeForm.lastName.$error.required">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'REQUIRED' | translate}}
-                            </p>
+                        <p class="help-block" ng-if="employeeForm.lastName.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
 
-                            <p class="validation-message" ng-if="employeeForm.lastName.$error.pattern">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'INCORRECT_VALUE_LAST_NAME_ADD_EMPLOYEE' | translate }}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="employeeForm.lastName.$error.pattern">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'INCORRECT_VALUE_LAST_NAME_ADD_EMPLOYEE' | translate }}
+                        </p>
                     </div>
-
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'FIRST_NAME' |translate }}*</label>
-                    </div>
-                    <div class="form-group col-md-8" ng-class="firstNameValidation.css" show-errors>
+                </div>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'FIRST_NAME' |translate }}*</label>
+                    <div class="col-md-8" ng-class="firstNameValidation.css">
                         <input type="text" ng-model="employeeFormData.firstName"
                                ng-change="checkFirstName('firstName')"
                                popover="{{'ALPHABETIC_INFO' | translate}}"
@@ -105,24 +92,21 @@
                                id="firstName" ng-pattern="FIRST_LAST_NAME_REGEX"
                                name="firstName" class="form-control" required>
 
-                        <div ng-show="employeeForm.$submitted || (employeeForm.firstName.$touched  && !employeeForm.firstName.$pristine)
-                        || (employeeForm.firstName.$dirty)">
-                            <p class="validation-message" ng-if="employeeForm.firstName.$error.required">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'REQUIRED' | translate}}
-                            </p>
+                        <p class="help-block" ng-if="employeeForm.firstName.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
 
-                            <p class="validation-message" ng-if="employeeForm.firstName.$error.pattern">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'INCORRECT_VALUE_FIRST_NAME_ADD_EMPLOYEE' | translate }}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="employeeForm.firstName.$error.pattern">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'INCORRECT_VALUE_FIRST_NAME_ADD_EMPLOYEE' | translate }}
+                        </p>
                     </div>
+                </div>
 
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'MIDDLE_NAME' | translate }}*</label>
-                    </div>
-                    <div class="form-group col-md-8" ng-class="middleNameValidation.css" show-errors>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'MIDDLE_NAME' | translate }}*</label>
+                    <div class="col-md-8" ng-class="middleNameValidation.css">
                         <input type="text" ng-model="employeeFormData.middleName"
                                ng-pattern="MIDDLE_NAME_REGEX"
                                ng-change="checkFirstName('middleName')"
@@ -130,95 +114,77 @@
                                popover-trigger="focus" popover-placement="right"
                                id="middleName" name="middleName" class="form-control" required>
 
-                        <div ng-show="employeeForm.$submitted || (employeeForm.middleName.$touched && !employeeForm.middleName.$pristine)||
-                         (employeeForm.middleName.$dirty)">
+                        <p class="help-block" ng-if="employeeForm.middleName.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
 
-                            <p class="validation-message" ng-if="employeeForm.middleName.$error.required">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'REQUIRED' | translate}}
-                            </p>
-
-                            <p class="validation-message" ng-if="employeeForm.middleName.$error.pattern">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'INCORRECT_VALUE_MIDDLE_NAME_ADD_EMPLOYEE' | translate }}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="employeeForm.middleName.$error.pattern">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'INCORRECT_VALUE_MIDDLE_NAME_ADD_EMPLOYEE' | translate }}
+                        </p>
                     </div>
+                </div>
 
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'PHONE_NUMBER_TWO' | translate }}</label>
-                    </div>
-                    <div class="form-group col-md-8 " ng-class="phoneNumberValidation.css" show-errors>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'PHONE_NUMBER_TWO' | translate }}</label>
+                    <div class="col-md-8" ng-class="phoneNumberValidation.css">
                         <div class="input-group">
                             <div class="input-group-addon" id="basic-addon-code">+380</div>
                             <input type="text" ng-model="employeeFormData.phone"
                                    ng-pattern="PHONE_REGEX" placeholder="XXXXXXXXX"
                                    id="phone" name="phone" class="form-control">
                             <span class="input-group-addon">{{'SECOND_PHONE' |translate}}</span>
-								<span class="input-group-addon">
-								 	<input type="checkbox" ng-model="checkboxModel">
-								</span>
+                            <span class="input-group-addon">
+                                <input type="checkbox" ng-model="checkboxModel">
+                            </span>
                         </div>
-                        <div ng-show="employeeForm.$submitted || (employeeForm.phone.$touched && !employeeForm.phone.$pristine)
-                        || (employeeForm.phone.$dirty)">
-                            <p class="validation-message" ng-if="employeeForm.phone.$error.pattern">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'INCORRECT_VALUE_PHONE_ADD_EMPLOYEE' | translate }}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="employeeForm.phone.$error.pattern">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'INCORRECT_VALUE_PHONE_ADD_EMPLOYEE' | translate }}
+                        </p>
                     </div>
+                </div>
 
-                    <div class="form-group" ng-show="checkboxModel">
-                        <div class="col-md-4 form-group">
-                            <label for="phoneNumberSecond">
-                                {{'SECOND_PHONE' | translate}} </label>
-                        </div>
-                        <div class="col-md-8 form-group" show-errors>
-                            <div>
-                                <div class="input-group" ng-show="checkboxModel">
-
-                                    <span class="input-group-addon" id="basic-addon-code">+380</span>
-                                    <input id="phoneNumberSecond" name="phoneNumberSecond" class="form-control"
-                                           ng-model="employeeFormData.secondPhone"
-                                           placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX_SECOND"
-                                           popover="{{'PHONE_NUMBER_INFO' | translate}}"
-                                           popover-trigger="focus" popover-placement="right">
-                                </div>
-                        <span class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"
-                              id="okFeedBack" ng-show="checkboxModel"></span>
+                <div class="row form-group" ng-show="checkboxModel" show-errors>
+                    <label class="control-label col-md-4" for="phoneNumberSecond"> {{'SECOND_PHONE' | translate}} </label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon" id="basic-addon-code">+380</div>
+                            <input id="phoneNumberSecond" name="phoneNumberSecond" class="form-control"
+                                   ng-model="employeeFormData.secondPhone"
+                                   placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX_SECOND"
+                                   popover="{{'PHONE_NUMBER_INFO' | translate}}"
+                                   popover-trigger="focus" popover-placement="right">
+                            <span class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"
+                                  id="okFeedBack" ng-show="checkboxModel"></span>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <p class="help-block col-md-8 col-md-offset-2"
-                               ng-if="clientForm.phoneNumberSecond.$error.pattern">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'PHONE_NUMBER_ERROR' | translate}}
-                            </p>
-                        </div>
                     </div>
+                    <p class="help-block col-md-8 col-md-offset-2"
+                       ng-if="clientForm.phoneNumberSecond.$error.pattern">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{'PHONE_NUMBER_ERROR' | translate}}
+                    </p>
+                </div>
 
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'EMAIL' | translate }}*</label>
-                    </div>
-                    <div class="form-group col-md-8" ng-class="emailValidation.css" show-errors>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'EMAIL' | translate }}*</label>
+                    <div class="form-group col-md-8" ng-class="emailValidation.css">
                         <input type="text" ng-model="employeeFormData.email"
                                ng-pattern="EMAIL_REGEX"
                                ng-change="checkFirstName('email')"
                                placeholder="example@gmail.com"
                                id="email" name="email" class="form-control" required>
 
-                        <div ng-show="employeeForm.$submitted || (employeeForm.email.$touched && !employeeForm.email.$pristine)
-                        || (employeeForm.email.$dirty)">
-                            <p class="validation-message" ng-if="employeeForm.email.$error.required">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'REQUIRED' | translate}}
-                            </p>
+                        <p class="help-block" ng-if="employeeForm.email.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
 
-                            <p class="validation-message" ng-if="employeeForm.email.$error.pattern">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'INCORRECT_VALUE_EMAIL_ADD_EMPLOYEE' | translate }}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="employeeForm.email.$error.pattern">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'INCORRECT_VALUE_EMAIL_ADD_EMPLOYEE' | translate }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -227,11 +193,9 @@
         <div class="panel panel-primary">
             <div class="panel-heading">{{'ACCOUNT_INFORMATION' | translate }}</div>
             <div class="panel-body">
-                <div class="row">
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'LOGIN_TWO' | translate }}*</label>
-                    </div>
-                    <div class="form-group col-md-8" ng-class="usernameValidation.css" show-errors>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'LOGIN_TWO' | translate }}*</label>
+                    <div class="col-md-8" ng-class="usernameValidation.css">
                         <input type="text" ng-model="employeeFormData.username"
                                ng-change="checkFirstName('login')"
                                popover="{{'USERNAME_INFO' | translate}}"
@@ -239,60 +203,44 @@
                                ng-model-options="{debounce: 350}"
                                id="username" name="username" class="form-control" required>
 
-                        <div ng-show="employeeForm.$submitted || (employeeForm.username.$touched  && !employeeForm.username.$pristine)
-                        || (employeeForm.username.$dirty)">
-                            <p class="validation-message" ng-if="!usernameValidation.isValid">
-                                {{usernameValidation.message }}
-                            </p>
+                        <p class="help-block" ng-if="!usernameValidation.isValid">
+                            {{usernameValidation.message }}
+                        </p>
 
-                            <p class="validation-message" ng-if="employeeForm.username.$error.required">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'REQUIRED' | translate}}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="employeeForm.username.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
                     </div>
                 </div>
 
-
-                <div class="row">
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'PASSWORD_TWO' | translate}}*</label>
-                    </div>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'PASSWORD_TWO' | translate}}*</label>
                     <div class="form-group col-md-8" ng-class="passwordValidation.css" show-errors>
-                        <input type="password" ng-model="employeeFormData.password" style="display: none">
                         <input type="password" ng-model="employeeFormData.password" ng-change="checkPasswords()"
                                name="password" class="form-control" required>
-                        <div ng-show="employeeForm.$submitted || (employeeForm.rePassword.$touched  && !employeeForm.rePassword.$pristine)
-                        || (employeeForm.rePassword.$dirty)">
-                            <p class="validation-message" ng-if="employeeForm.rePassword.$error.required">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'REQUIRED' | translate}}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="employeeForm.rePassword.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
                     </div>
-
                 </div>
 
-                <div class="row">
-                    <div class="form-group col-md-4">
-                        <label class="control-label">{{'REPEAT_PASSWORD' | translate}}*</label>
-                    </div>
+                <div class="row form-group" show-errors>
+                    <label class="control-label col-md-4">{{'REPEAT_PASSWORD' | translate}}*</label>
                     <div class="form-group col-md-8" ng-class="passwordValidation.css" show-errors>
                         <input type="password" ng-model="employeeFormData.rePassword"
                                ng-change="checkPasswords()" name="rePassword" class="form-control" required>
 
-                        <div ng-show="employeeForm.$submitted || (employeeForm.rePassword.$touched  && !employeeForm.rePassword.$pristine)
-                        || (employeeForm.rePassword.$dirty)">
-                            <p class="validation-message" ng-if="employeeForm.rePassword.$error.required">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'REQUIRED' | translate}}
-                            </p>
+                        <p class="help-block" ng-if="employeeForm.rePassword.$error.required">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'REQUIRED' | translate}}
+                        </p>
 
-                            <p class="validation-message" ng-if="passwordValidation.isValid">
-                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                {{'PASSWORDS_DID_NOT_MATCH' | translate}}
-                            </p>
-                        </div>
+                        <p class="help-block" ng-if="passwordValidation.isValid">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{'PASSWORDS_DID_NOT_MATCH' | translate}}
+                        </p>
                     </div>
                 </div>
             </div>

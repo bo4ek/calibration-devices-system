@@ -19,20 +19,23 @@ angular
                     subdivisionLeaderPhone: $scope.subdivisionFormData.subdivisionLeaderPhone,
                     subdivisionLeaderEmail: $scope.subdivisionFormData.subdivisionLeaderEmail
                 };
-                verificatorSubdivisionService.editSubdivision($scope.subdivisionFormData, subdivision.subdivisionId)
-                    .then(function (data) {
-                        if (data == 200) {
+                $scope.$broadcast('show-errors-check-validity');
+                if ($scope.subdivisionForm.$valid) {
+                    verificatorSubdivisionService.editSubdivision($scope.subdivisionFormData, subdivision.subdivisionId)
+                        .then(function (data) {
                             $modalInstance.close();
                             $rootScope.onTableHandling();
-                            toaster.pop('success', $filter('translate')('INFORMATION'),
-                                $filter('translate')('SUCCESSFUL_EDIT_SUBDIVISION'));
-                        } else {
-                            $modalInstance.close();
-                            $rootScope.onTableHandling();
-                            toaster.pop('error', $filter('translate')('INFORMATION'),
-                                $filter('translate')('ERROR_EDIT_SUBDIVISION'));
-                        }
-                    });
+                            if (data == 200) {
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('SUCCESSFUL_EDIT_SUBDIVISION'));
+                            } else {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_EDIT_SUBDIVISION'));
+                            }
+                        });
+                } else {
+                    $scope.subdivisionFormData.subdivisionId = subdivision.subdivisionId;
+                }
             };
 
             /**
