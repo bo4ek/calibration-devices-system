@@ -56,8 +56,10 @@ angular
                 return getData('verifications/find/uploadFile?idVerification=' + idVerification);
             },
             sendEmployeeCalibrator: function (data) {
-                $log.debug("from service " + data);
                 return updateData('assign/calibratorEmployee', data);
+            },
+            assignEmployeeCalibrator: function (verificationId) {
+                return updateData('assign/calibratorEmployee/' + verificationId);
             },
             cleanCalibratorEmployeeField: function (data) {
                 return employeeUpdateData('remove/calibratorEmployee', data);

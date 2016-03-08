@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-;
-
 
 @RestController
 @RequestMapping(value = "calibrator/admin/users/")
@@ -83,18 +81,14 @@ public class CalibratorEmployeeController {
         return calibratorService.getAllCalibratorEmployee(role, employee);
     }
 
-    @RequestMapping(value = "assign/calibratorEmployee", method = RequestMethod.PUT)
-    public void assignCalibratorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationProviderEmployeeDTO) {
-        String userNameCalibrator = verificationProviderEmployeeDTO.getEmployeeCalibrator().getUsername();
-        String idVerification = verificationProviderEmployeeDTO.getIdVerification();
-        User employeeCalibrator = calibratorService.oneCalibratorEmployee(userNameCalibrator);
-        calibratorService.assignCalibratorEmployee(idVerification, employeeCalibrator);
-    }
-
     @RequestMapping(value = "remove/calibratorEmployee", method = RequestMethod.PUT)
-    public void removeCalibratorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
-        String idVerification = verificationUpdatingDTO.getIdVerification();
-        calibratorService.assignCalibratorEmployee(idVerification, null);
+    public void removeCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                         @RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
+        User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
+        if(calibratorService.isAdmin(user)) {
+            String idVerification = verificationUpdatingDTO.getIdVerification();
+            calibratorService.removeCalibratorEmployee(idVerification, user);
+        }
     }
     
     @RequestMapping(value = "graphicmainpanel", method = RequestMethod.GET)

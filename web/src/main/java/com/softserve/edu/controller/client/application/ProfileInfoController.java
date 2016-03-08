@@ -37,6 +37,12 @@ public class ProfileInfoController {
         return usersPageItem;
     }
 
+    @RequestMapping(value = "havePermissionToAssignPerson", method = RequestMethod.GET)
+    public Boolean haveUserPermissionToAssignPerson(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails) {
+        User user = userService.findOne(userDetails.getUsername());
+        return user != null && userService.haveUserPermissionToAssignPerson(user);
+    }
+
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public ResponseEntity<HttpStatus> updateUser(@RequestBody UserDTO userDTO) {

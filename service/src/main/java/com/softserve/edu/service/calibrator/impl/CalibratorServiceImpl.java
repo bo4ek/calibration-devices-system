@@ -117,17 +117,33 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Transactional
     public void assignCalibratorEmployee(String verificationId, User calibratorEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
-        verification.setCalibratorEmployee(calibratorEmployee);
-        verification.setReadStatus(Verification.ReadStatus.READ);
-        if (calibratorEmployee != null) {
+        if(verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
+            verification.setCalibratorEmployee(calibratorEmployee);
+            verification.setReadStatus(Verification.ReadStatus.READ);
             verification.setSentToCalibratorDate(new Date());
+            if (!verification.isCounterStatus()) {
+                verification.setTaskStatus(Status.PLANNING_TASK);
+            } else {
+                verification.setTaskStatus(null);
+            }
+            verificationRepository.save(verification);
         }
-        if (!verification.isCounterStatus() && (calibratorEmployee != null)) {
-            verification.setTaskStatus(Status.PLANNING_TASK);
-        } else {
+    }
+
+    @Override
+    @Transactional
+    public void removeCalibratorEmployee(String verificationId, User calibratorEmployee) {
+        Verification verification = verificationRepository.findOne(verificationId);
+        if(verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
+            verification.setCalibratorEmployee(null);
             verification.setTaskStatus(null);
+            verificationRepository.save(verification);
         }
-        verificationRepository.save(verification);
+    }
+
+    @Override
+    public boolean isAdmin(User user) {
+        return user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN);
     }
 
     /**

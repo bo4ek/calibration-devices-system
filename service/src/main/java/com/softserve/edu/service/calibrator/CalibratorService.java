@@ -4,13 +4,10 @@ import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
-import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.service.utils.EmployeeDTO;
-import net.lingala.zip4j.exception.ZipException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.*;
 
 public interface CalibratorService {
@@ -33,12 +30,11 @@ public interface CalibratorService {
 
     void assignCalibratorEmployee(String verificationId, User calibratorEmployee);
 
-//    void saveInfo (int entrance, int doorCode, int floor, Date dateOfVerif,
-//                   String time, boolean serviceability, Date noWaterToDate,String notes, String verificationId);
+    void removeCalibratorEmployee(String verificationId, User calibratorEmployee);
+
+    boolean isAdmin(User user);
 
     boolean checkIfAdditionalInfoExists(String verificationId);
-
-//    AdditionalInfo findAdditionalInfoByVerifId(String verificationId);
 
     Set<String> getTypesById(Long id);
 

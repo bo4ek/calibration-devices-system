@@ -7,6 +7,9 @@ angular
             },
             updateUser: function (userData) {
                 return saveData('employee/profile/update', userData);
+            },
+            havePermissionToAssignPerson: function () {
+                return getData('employee/profile/havePermissionToAssignPerson');
             }
         };
 

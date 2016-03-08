@@ -2,9 +2,10 @@ angular
     .module('employeeModule')
     .controller('NewVerificationsControllerCalibrator', ['$scope', '$log',
         '$modal', 'VerificationServiceCalibrator',
-        '$rootScope', 'ngTableParams', '$timeout', '$filter', '$window', '$location', '$translate', 'toaster', 'CalibrationTestServiceCalibrator',
+        '$rootScope', 'ngTableParams', '$timeout', '$filter', '$window', '$location', '$translate', 'toaster',
+        'CalibrationTestServiceCalibrator', 'ProfileService',
         function ($scope, $log, $modal, verificationServiceCalibrator, $rootScope, ngTableParams,
-                  $timeout, $filter, $window, $location, $translate, toaster, calibrationTestServiceCalibrator ) {
+                  $timeout, $filter, $window, $location, $translate, toaster, calibrationTestServiceCalibrator, profileService ) {
 
             $scope.resultsCount = 0;
 
@@ -61,9 +62,7 @@ angular
             $scope.globalSearchParams=[];
             $scope.showGlobalSearch=false;
 
-            /**
-             * this function return true if is StateVerificatorEmployee
-             */
+
             $scope.isCalibratorEmployee = function () {
                 verificationServiceCalibrator.getIfEmployeeCalibrator().success(function(data){
                     $scope.isEmployee =  data;
@@ -612,39 +611,50 @@ angular
                     });
             };
 
-            $scope.addCalibratorEmployee = function (verifId) {
-                var modalInstance = $modal.open({
-                    animation: true,
-                    templateUrl: 'resources/app/calibrator/views/employee/assigning-calibratorEmployee.html',
-                    controller: 'CalibratorEmployeeControllerCalibrator',
-                    size: 'md',
-                    windowClass: 'xx-dialog',
-                    resolve: {
-                        calibratorEmploy: function () {
-                            return verificationServiceCalibrator.getCalibrators()
-                                .success(function (calibrators) {
-                                    return calibrators;
+            $scope.addCalibratorEmployee = function (verificationId) {
+                profileService.havePermissionToAssignPerson()
+                    .then(function (response) {
+                        if (response.data) {
+                            var modalInstance = $modal.open({
+                                animation: true,
+                                templateUrl: 'resources/app/calibrator/views/employee/assigning-calibratorEmployee.html',
+                                controller: 'CalibratorEmployeeControllerCalibrator',
+                                size: 'md',
+                                windowClass: 'xx-dialog',
+                                resolve: {
+                                    calibratorEmploy: function () {
+                                        return verificationServiceCalibrator.getCalibrators()
+                                            .success(function (calibrators) {
+                                                return calibrators;
+                                            }
+                                        );
+                                    }
                                 }
-                            );
+                            });
+                            /**
+                             * executes when modal closing
+                             */
+                            modalInstance.result.then(function (formData) {
+                                idVerification = 0;
+                                var dataToSend = {
+                                    idVerification: verificationId,
+                                    employeeCalibrator: formData.provider
+                                };
+                                $log.info(dataToSend);
+                                verificationServiceCalibrator
+                                    .sendEmployeeCalibrator(dataToSend)
+                                    .success(function () {
+                                        $scope.tableParams.reload();
+                                    });
+                            });
+                        } else {
+                            verificationServiceCalibrator
+                                .assignEmployeeCalibrator(verificationId)
+                                .then(function () {
+                                    $scope.tableParams.reload();
+                                });
                         }
-                    }
-                });
-                /**
-                 * executes when modal closing
-                 */
-                modalInstance.result.then(function (formData) {
-                    idVerification = 0;
-                    var dataToSend = {
-                        idVerification: verifId,
-                        employeeCalibrator: formData.provider
-                    };
-                    $log.info(dataToSend);
-                    verificationServiceCalibrator
-                        .sendEmployeeCalibrator(dataToSend)
-                        .success(function () {
-                            $scope.tableParams.reload();
-                        });
-                });
+                    });
             };
 
             $scope.uploadArchive = function() {

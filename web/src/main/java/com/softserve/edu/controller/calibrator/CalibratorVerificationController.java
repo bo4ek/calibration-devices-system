@@ -523,15 +523,13 @@ public class CalibratorVerificationController {
         calibratorService.assignCalibratorEmployee(idVerification, employeeCalibrator);
     }
 
-    /**
-     * remove from verification assigned employee.
-     *
-     * @param verificationUpdatingDTO
-     */
-    @RequestMapping(value = "remove/calibratorEmployee", method = RequestMethod.PUT)
-    public void removeCalibratorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
-        String idVerification = verificationUpdatingDTO.getIdVerification();
-        calibratorService.assignCalibratorEmployee(idVerification, null);
+    @RequestMapping(value = "assign/calibratorEmployee/{verificationId}", method = RequestMethod.PUT)
+    public void assignCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                         @PathVariable String verificationId) {
+        User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
+        if(user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
+            calibratorService.assignCalibratorEmployee(verificationId, user);
+        }
     }
 
     /**

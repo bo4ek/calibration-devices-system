@@ -27,4 +27,6 @@ public interface UserService {
     List<User> findBySubdivisionId(String id);
 
     int setSubdivisionIdNull(String id);
+
+    boolean haveUserPermissionToAssignPerson(User user);
 }

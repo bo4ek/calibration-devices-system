@@ -264,7 +264,7 @@ angular
                 count: 5,
                 sorting: {
                     lastName: 'asc'     // initial sorting
-                },
+                }
             }, {
                 total: 0,
                 getData: function ($defer, params) {

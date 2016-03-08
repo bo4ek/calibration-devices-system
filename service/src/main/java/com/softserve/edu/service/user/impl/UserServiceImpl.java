@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -176,5 +177,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public int setSubdivisionIdNull(String id) {
         return userRepository.setSubdivisionIdNull(id);
+    }
+
+    @Override
+    public boolean haveUserPermissionToAssignPerson(User user) {
+        Set<UserRole> userRoles = user.getUserRoles();
+        return userRoles.contains(UserRole.CALIBRATOR_ADMIN) || userRoles.contains(UserRole.PROVIDER_ADMIN)
+                || userRoles.contains(UserRole.STATE_VERIFICATOR_ADMIN);
     }
 }
