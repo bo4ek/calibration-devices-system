@@ -4,6 +4,7 @@ import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.dto.calibrator.NotStandardVerificationDTO;
 import com.softserve.edu.dto.provider.VerificationProviderEmployeeDTO;
 import com.softserve.edu.dto.provider.VerificationStatusUpdateDTO;
+import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
@@ -65,6 +66,15 @@ public class NotStandardVerificationProviderController {
         User employeeProvider = verificationProviderEmployeeService.oneProviderEmployee(userNameProvider);
         verificationProviderEmployeeService.assignProviderEmployeeForNotStandardVerification(idVerification,
                 employeeProvider);
+    }
+
+    @RequestMapping(value = "assign/providerEmployee/{verificationId}", method = RequestMethod.PUT)
+    public void assignCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                         @PathVariable String verificationId) {
+        User user = verificationProviderEmployeeService.oneProviderEmployee(userDetails.getUsername());
+        if(user != null && user.getUserRoles().contains(UserRole.PROVIDER_EMPLOYEE)) {
+            verificationProviderEmployeeService.assignProviderEmployeeForNotStandardVerification(verificationId, user);
+        }
     }
 
     @RequestMapping(value = "new/reject", method = RequestMethod.PUT)

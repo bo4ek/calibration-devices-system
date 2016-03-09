@@ -1,5 +1,6 @@
 package com.softserve.edu.service.verification.impl;
 
+import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -40,42 +40,51 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
     @Transactional
     public void assignProviderEmployee(String verificationId, User providerEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
-        if (verification == null) {
-            logger.error("verification haven't found");
-            return;
-        }
-        verification.setProviderEmployee(providerEmployee);
-        if (providerEmployee == null) {
-            verification.setStatus(Status.SENT);
-        } else {
+        if (verification != null && verification.getProvider().getId().equals(providerEmployee.getOrganization().getId())) {
+            verification.setProviderEmployee(providerEmployee);
             verification.setStatus(Status.ACCEPTED);
             mailService.sendAcceptMail(verification.getClientData().getEmail(), verificationId, verification.getDevice().getDeviceType().name());
+            verification.setReadStatus(Verification.ReadStatus.READ);
+            verification.setExpirationDate(null);
+            verificationRepository.save(verification);
         }
-        verification.setReadStatus(Verification.ReadStatus.READ);
-        verification.setExpirationDate(null);
-        verificationRepository.save(verification);
+    }
+
+    @Override
+    @Transactional
+    public void removeProviderEmployee(String verificationId, User providerEmployee) {
+        Verification verification = verificationRepository.findOne(verificationId);
+        if (verification != null && verification.getProvider().getId().equals(providerEmployee.getOrganization().getId())) {
+            verification.setProviderEmployee(null);
+            verification.setStatus(Status.SENT);
+            verification.setExpirationDate(null);
+            verificationRepository.save(verification);
+        }
     }
 
     @Transactional
     public void assignProviderEmployeeForNotStandardVerification(String verificationId, User providerEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
-        if (verification == null) {
-            logger.error("verification has not been found");
-            return;
-        }
-        verification.setProviderEmployee(providerEmployee);
-        if (providerEmployee == null) {
-            verification.setStatus(Status.SENT_TO_PROVIDER);
-        } else {
-            if (verification.getProviderFromBBI() == null) {
-                verification.setStatus(Status.IN_PROGRESS);
+        if (verification != null && verification.getProvider().getId().equals(providerEmployee.getOrganization().getId())) {
+            verification.setProviderEmployee(providerEmployee);
+            if (providerEmployee == null) {
+                verification.setStatus(Status.SENT_TO_PROVIDER);
             } else {
-                verification.setStatus(Status.TEST_COMPLETED);
+                if (verification.getProviderFromBBI() == null) {
+                    verification.setStatus(Status.IN_PROGRESS);
+                } else {
+                    verification.setStatus(Status.TEST_COMPLETED);
+                }
             }
+            verification.setProviderFromBBI(verification.getProvider());
+            verification.setExpirationDate(null);
+            verificationRepository.save(verification);
         }
-        verification.setProviderFromBBI(verification.getProvider());
-        verification.setExpirationDate(null);
-        verificationRepository.save(verification);
+    }
+
+    @Override
+    public boolean isAdmin(User user) {
+        return user.getUserRoles().contains(UserRole.PROVIDER_ADMIN);
     }
 
     /**

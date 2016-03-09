@@ -31,8 +31,11 @@ angular
             sendEmployeeProvider: function (data) {
                 return updateData('assign/providerEmployee', data);
             },
+            assignEmployeeProvider: function(verificationId) {
+                return updateData('assign/providerEmployee/' + verificationId);
+            },
             cleanProviderEmployeeField:function (data) {
-                return updateData('remove/providerEmployee', data);
+                return employeeUpdateData('remove/providerEmployee', data);
             },
             sendInitiatedVerification:function(form){
                 return sendData('send',form);
@@ -102,6 +105,16 @@ angular
             return $http.get('provider/' + url)
                 .success(function (data) {
                 	return data;
+                })
+                .error(function (err) {
+                    return err;
+                });
+        }
+
+        function employeeUpdateData(url, data) {
+            return $http.put('provider/admin/users/' + url, data)
+                .success(function (responseData) {
+                    return responseData;
                 })
                 .error(function (err) {
                     return err;

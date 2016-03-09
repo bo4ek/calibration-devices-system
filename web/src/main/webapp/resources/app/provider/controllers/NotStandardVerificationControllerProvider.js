@@ -9,9 +9,9 @@ angular
         'VerificationServiceProvider',
         'ngTableParams',
         '$filter',
-        'toaster',
+        'toaster', 'ProfileService',
         function ($rootScope, $scope, $log, $modal, notStandardVerificationService, verificationServiceProvider,
-                  ngTableParams, $filter, toaster) {
+                  ngTableParams, $filter, toaster, profileService) {
             $scope.totalItems = 0;
             $scope.pageContent = [];
             $scope.tableParams = new ngTableParams({
@@ -39,43 +39,54 @@ angular
             $scope.allIsEmpty = true;
             $scope.idsOfCalibrators = null;
 
-            $scope.addProviderEmployee = function (verifId, providerEmployee) {
-                var modalInstance = $modal.open({
-                    animation: true,
-                    backdrop: 'static',
-                    templateUrl: 'resources/app/provider/views/modals/adding-providerEmployee.html',
-                    controller: 'ProviderEmployeeControllerProvider',
-                    size: 'md',
-                    windowClass: 'xx-dialog',
-                    resolve: {
-                        providerEmploy: function () {
-                            return verificationServiceProvider.getProviders()
-                                .success(function (providers) {
-                                        return providers;
+            $scope.addProviderEmployee = function (verificationId) {
+                profileService.havePermissionToAssignPerson()
+                    .then(function (response) {
+                        if (response.data) {
+                            var modalInstance = $modal.open({
+                                animation: true,
+                                backdrop: 'static',
+                                templateUrl: 'resources/app/provider/views/modals/adding-providerEmployee.html',
+                                controller: 'ProviderEmployeeControllerProvider',
+                                size: 'md',
+                                windowClass: 'xx-dialog',
+                                resolve: {
+                                    providerEmploy: function () {
+                                        return verificationServiceProvider.getProviders()
+                                            .success(function (providers) {
+                                                return providers;
+                                            }
+                                        );
                                     }
-                                );
+                                }
+                            });
+                            /**
+                             * executes when modal closing
+                             */
+                            modalInstance.result.then(function (formData) {
+                                var idVerification = 0;
+                                var dataToSend = {
+                                    idVerification: verificationId,
+                                    employeeProvider: formData.provider
+                                };
+                                $log.info(dataToSend);
+                                notStandardVerificationService
+                                    .sendEmployeeProvider(dataToSend)
+                                    .success(function () {
+                                        $scope.tableParams.reload();
+                                        $rootScope.$broadcast('verification-sent-to-calibrator');
+                                        toaster.pop('success', $filter('translate')('INFORMATION'),
+                                            $filter('translate')('SUCCESS_ASSIGN_AND_SENT'));
+                                    });
+                            });
+                        } else {
+                            notStandardVerificationService
+                                .assignEmployeeProvider(verificationId)
+                                .then(function () {
+                                    $scope.tableParams.reload();
+                                });
                         }
-                    }
-                });
-                /**
-                 * executes when modal closing
-                 */
-                modalInstance.result.then(function (formData) {
-                    var idVerification = 0;
-                    var dataToSend = {
-                        idVerification: verifId,
-                        employeeProvider: formData.provider
-                    };
-                    $log.info(dataToSend);
-                    notStandardVerificationService
-                        .sendEmployeeProvider(dataToSend)
-                        .success(function () {
-                            $scope.tableParams.reload();
-                            $rootScope.$broadcast('verification-sent-to-calibrator');
-                            toaster.pop('success', $filter('translate')('INFORMATION'),
-                                $filter('translate')('SUCCESS_ASSIGN_AND_SENT'));
-                        });
-                });
+                    })
             };
             /**
              * Modal window used to explain the reason of verification rejection

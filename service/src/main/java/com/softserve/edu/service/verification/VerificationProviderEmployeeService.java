@@ -8,6 +8,8 @@ import java.util.List;
 public interface VerificationProviderEmployeeService {
     void assignProviderEmployee(String verificationId, User providerEmployee);
 
+    boolean isAdmin(User user);
+
     User getProviderEmployeeById(String idVerification);
 
     List<Verification> getVerificationListByProviderEmployee(String username);
@@ -23,6 +25,8 @@ public interface VerificationProviderEmployeeService {
     Long countByStateVerificatorEmployeeTasks(String username);
 
     User oneProviderEmployee(String username);
+
+    void removeProviderEmployee(String verificationId, User providerEmployee);
 
     void assignProviderEmployeeForNotStandardVerification(String verificationId, User providerEmployee);
 }

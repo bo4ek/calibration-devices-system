@@ -16,6 +16,15 @@ angular
                             return err;
                         });
                 },
+                assignEmployeeProvider: function (verificationId) {
+                    var url = '/provider/not-standard-verifications/assign/providerEmployee/' + verificationId;
+                    return $http.put(url)
+                        .success(function (data) {
+                            return data;
+                        }).error(function (err) {
+                            return err;
+                        });
+                },
                 rejectVerification : function(verification) {
                     var url = '/provider/not-standard-verifications/new/reject';
                     return $http.put(url, verification)

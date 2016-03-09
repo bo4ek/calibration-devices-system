@@ -1,7 +1,8 @@
 angular
     .module('employeeModule')
-    .controller('NewVerificationsControllerProvider', ['$scope', '$log', '$modal', 'VerificationServiceProvider', '$rootScope', 'ngTableParams', '$filter', '$timeout', '$translate',
-        function ($scope, $log, $modal, verificationServiceProvider, $rootScope, ngTableParams, $filter, $timeout, $translate) {
+    .controller('NewVerificationsControllerProvider', ['$scope', '$log', '$modal', 'VerificationServiceProvider', '$rootScope',
+        'ngTableParams', '$filter', '$timeout', '$translate', 'ProfileService',
+        function ($scope, $log, $modal, verificationServiceProvider, $rootScope, ngTableParams, $filter, $timeout, $translate, profileService) {
 
             $scope.resultsCount = 0;
 
@@ -264,39 +265,50 @@ angular
                 return employee ? 'none' : 'mouseenter';
             };
 
-            $scope.addProviderEmployee = function (verifId, providerEmployee) {
-                var modalInstance = $modal.open({
-                    animation: true,
-                    templateUrl: 'resources/app/provider/views/modals/adding-providerEmployee.html',
-                    controller: 'ProviderEmployeeControllerProvider',
-                    size: 'md',
-                    windowClass: 'xx-dialog',
-                    resolve: {
-                        providerEmploy: function () {
-                            return verificationServiceProvider.getProviders()
-                                .success(function (providers) {
-                                    return providers;
+            $scope.addProviderEmployee = function (verificationId) {
+                profileService.havePermissionToAssignPerson()
+                    .then(function (response) {
+                        if (response.data) {
+                            var modalInstance = $modal.open({
+                                animation: true,
+                                templateUrl: 'resources/app/provider/views/modals/adding-providerEmployee.html',
+                                controller: 'ProviderEmployeeControllerProvider',
+                                size: 'md',
+                                windowClass: 'xx-dialog',
+                                resolve: {
+                                    providerEmploy: function () {
+                                        return verificationServiceProvider.getProviders()
+                                            .success(function (providers) {
+                                                return providers;
+                                            }
+                                        );
+                                    }
                                 }
-                            );
+                            });
+                            /**
+                             * executes when modal closing
+                             */
+                            modalInstance.result.then(function (formData) {
+                                var idVerification = 0;
+                                var dataToSend = {
+                                    idVerification: verificationId,
+                                    employeeProvider: formData.provider
+                                };
+                                $log.info(dataToSend);
+                                verificationServiceProvider
+                                    .sendEmployeeProvider(dataToSend)
+                                    .success(function () {
+                                        $scope.tableParams.reload();
+                                    });
+                            });
+                        } else {
+                            verificationServiceProvider
+                                .assignEmployeeProvider(verificationId)
+                                .then(function () {
+                                    $scope.tableParams.reload();
+                                });
                         }
-                    }
-                });
-                /**
-                 * executes when modal closing
-                 */
-                modalInstance.result.then(function (formData) {
-                    var idVerification = 0;
-                    var dataToSend = {
-                        idVerification: verifId,
-                        employeeProvider: formData.provider
-                    };
-                    $log.info(dataToSend);
-                    verificationServiceProvider
-                        .sendEmployeeProvider(dataToSend)
-                        .success(function () {
-                            $scope.tableParams.reload();
-                        });
-                });
+                    })
             };
 
             $scope.idsOfVerifications = [];
