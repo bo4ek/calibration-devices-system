@@ -296,22 +296,20 @@ public class ProviderVerificationController {
 
     @RequestMapping(value = "assign/providerEmployee", method = RequestMethod.PUT)
     public void assignProviderEmployee(@RequestBody VerificationProviderEmployeeDTO verificationProviderEmployeeDTO) {
-
         String userNameProvider = verificationProviderEmployeeDTO.getEmployeeProvider().getUsername();
-
         String idVerification = verificationProviderEmployeeDTO.getIdVerification();
-
         User employeeProvider = verificationProviderEmployeeService.oneProviderEmployee(userNameProvider);
-
         verificationProviderEmployeeService.assignProviderEmployee(idVerification, employeeProvider);
     }
 
-    @RequestMapping(value = "remove/providerEmployee", method = RequestMethod.PUT)
-    public void removeProviderEmployee(@RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
-        String idVerification = verificationUpdatingDTO.getIdVerification();
-        verificationProviderEmployeeService.assignProviderEmployee(idVerification, null);
+    @RequestMapping(value = "assign/providerEmployee/{verificationId}", method = RequestMethod.PUT)
+    public void assignCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                         @PathVariable String verificationId) {
+        User user = verificationProviderEmployeeService.oneProviderEmployee(userDetails.getUsername());
+        if(user != null && user.getUserRoles().contains(UserRole.PROVIDER_EMPLOYEE)) {
+            verificationProviderEmployeeService.assignProviderEmployee(verificationId, user);
+        }
     }
-
 
     @RequestMapping(value = "new/{verificationId}", method = RequestMethod.GET)
     public VerificationDTO getNewVerificationDetailsById(@PathVariable String verificationId) {
