@@ -389,6 +389,47 @@ public class MailServiceImpl implements MailService {
     }
 
     @Async
+    public void sendMailToStationWithAttachments(User user, String moduleNumber, String dateOfTask, String to, String subject, File... files) {
+        try {
+            MimeMessagePreparator preparator = new MimeMessagePreparator() {
+
+                public void prepare(MimeMessage mimeMessage) throws Exception {
+                    MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true);
+                    message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
+                    message.setTo(to);
+                    message.setSubject(subject);
+
+                    for (File file : files) {
+                        message.addAttachment(file.getName().substring(0, file.getName().indexOf('_')) + file.getName().substring(file.getName().indexOf('.')), file);
+                    }
+
+                    Map<String, Object> templateVariables = new HashMap<>();
+                    templateVariables.put(MailConstant.NAME, user.getOrganization().getName());
+                    templateVariables.put(MailConstant.FIRST_NAME, user.getFirstName());
+                    templateVariables.put(MailConstant.MIDDLE_NAME, user.getMiddleName());
+                    templateVariables.put(MailConstant.LAST_NAME, user.getLastName());
+                    templateVariables.put(MailConstant.PHONE, user.getPhone());
+                    templateVariables.put(MailConstant.MODULE_NUMBER, moduleNumber);
+                    templateVariables.put(MailConstant.DATE, dateOfTask);
+                    templateVariables.put(MailConstant.EMAIL, user.getEmail());
+
+                    String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/organizationToStationMailBody.vm", "UTF-8", templateVariables);
+                    message.setText(body, true);
+                }
+            };
+            mailSender.send(preparator);
+
+
+        } catch (Exception ex) {
+            logger.error(ex);
+        }
+
+        for (File file : files) {
+            file.delete();
+        }
+    }
+
+    @Async
     public void sendMailWithAttachments(String to, String subject, String message, File... files) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();

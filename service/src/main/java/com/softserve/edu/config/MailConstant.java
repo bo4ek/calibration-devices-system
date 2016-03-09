@@ -50,5 +50,6 @@ public interface MailConstant {
     String FLAT = "flat";
 
     String MAIL_ENCODING = "mail.encoding";
+    String MODULE_NUMBER = "moduleNumber";
 
 }

@@ -13,6 +13,7 @@ import com.softserve.edu.repository.*;
 import com.softserve.edu.repository.catalogue.DistrictRepository;
 import com.softserve.edu.repository.catalogue.LocalityRepository;
 import com.softserve.edu.repository.catalogue.StreetRepository;
+import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
 import com.softserve.edu.service.tool.MailService;
 import com.softserve.edu.service.utils.export.DbTableExporter;
@@ -66,6 +67,9 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
     @Autowired
     private StreetRepository streetRepository;
+
+    @Autowired
+    CalibratorEmployeeService calibratorEmployeeService;
 
 
     private Logger logger = Logger.getLogger(CalibratorPlaningTaskServiceImpl.class);
@@ -418,7 +422,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param id Task id
      * @throws Exception
      */
-    public void sendTaskToStation(Long id) throws Exception {
+    public void sendTaskToStation(Long id, String senderUsername) throws Exception {
         CalibrationTask calibrationTask = taskRepository.findOne(id);
         Verification[] verifications = verificationRepository.findByTaskIdOrderByQueueAsc(id);
 
@@ -446,7 +450,9 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             db.exportToFile(dataForDb, dbFile);
 
             String email = calibrationTask.getModule().getEmail();
-            mailService.sendMailWithAttachments(email, Constants.TASK + " " + calibrationTask.getId(), " ", xlsFile, dbFile);
+            User user = calibratorEmployeeService.oneCalibratorEmployee(senderUsername);
+
+            mailService.sendMailToStationWithAttachments(user, calibrationTask.getModule().getModuleNumber(), dateFormat.format(calibrationTask.getDateOfTask()).toString(), email, Constants.TASK + " " + calibrationTask.getId(), xlsFile, dbFile);
             calibrationTask.setStatus(Status.SENT_TO_TEST_DEVICE);
             for (Verification verification : verifications) {
                 verification.setStatus(Status.SENT_TO_TEST_DEVICE);

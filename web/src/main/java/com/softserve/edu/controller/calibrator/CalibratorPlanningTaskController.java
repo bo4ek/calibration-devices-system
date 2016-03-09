@@ -159,7 +159,7 @@ public class CalibratorPlanningTaskController {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             for (Long taskID : taskIDs) {
-                taskService.sendTaskToStation(taskID);
+                taskService.sendTaskToStation(taskID,employeeUser.getUsername());
             }
         } catch (Exception e) {
             logger.error("User " + employeeUser.getUsername() + " was not able to send task to station", e);
