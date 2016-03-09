@@ -2,7 +2,7 @@
 <body>
 Коментар до завдання:<br>
 Назва вимірювальної лабораторії: $name,<br>
-ПІБ, телефон користувача: $lastName $firstName $middleName, $phone,<br>
+ПІБ, телефон користувача: $lastName $firstName $middleName, 0$phone,<br>
 Заводський № установки: $moduleNumber,<br>
 Дата завдання: $date,<br> Протоколи надсилати на e-mail оператора: $email
 </body>
