@@ -2,6 +2,7 @@ package com.softserve.edu.service.verification;
 
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
@@ -53,6 +54,9 @@ public class VerificationProviderEmployeeServiceImplTest {
         Device mockDevice = mock(Device.class);
         Device.DeviceType type = Device.DeviceType.THERMAL;
         String device = type.name();
+        Organization mockVerificationProvider = mock(Organization.class);
+        Organization mockUserOrganization = mock(Organization.class);
+        Long organizationId = 1L;
 
         when(verificationRepository.findOne(anyString())).thenReturn(verification);
 
@@ -60,6 +64,10 @@ public class VerificationProviderEmployeeServiceImplTest {
         when(mockClientData.getEmail()).thenReturn(mail);
         when(verification.getDevice()).thenReturn(mockDevice);
         when(mockDevice.getDeviceType()).thenReturn(type);
+        when(verification.getProvider()).thenReturn(mockVerificationProvider);
+        when(mockUser.getOrganization()).thenReturn(mockUserOrganization);
+        when(mockVerificationProvider.getId()).thenReturn(organizationId);
+        when(mockUserOrganization.getId()).thenReturn(organizationId);
 
         verificationProviderEmployeeService.assignProviderEmployee(verificationID, mockUser);
 
@@ -73,18 +81,24 @@ public class VerificationProviderEmployeeServiceImplTest {
     }
 
     @Test
-    public void testAssignProviderEmployeeUserIsNull() {
+    public void testRemoveProviderEmployee() {
         String verificationID = " ";
-        User user = null;
+        User mockUser = mock(User.class);
+        Organization mockVerificationProvider = mock(Organization.class);
+        Organization mockUserOrganization = mock(Organization.class);
+        Long organizationId = 1L;
 
         when(verificationRepository.findOne(anyString())).thenReturn(verification);
+        when(verification.getProvider()).thenReturn(mockVerificationProvider);
+        when(mockUser.getOrganization()).thenReturn(mockUserOrganization);
+        when(mockVerificationProvider.getId()).thenReturn(organizationId);
+        when(mockUserOrganization.getId()).thenReturn(organizationId);
 
-        verificationProviderEmployeeService.assignProviderEmployee(verificationID, null);
+        verificationProviderEmployeeService.removeProviderEmployee(verificationID, mockUser);
 
         verify(verification).setProviderEmployee(null);
         verify(verification).setStatus(Status.SENT);
-        verify(verification).setReadStatus(Verification.ReadStatus.READ);
-        verify(verification).setExpirationDate(any(Date.class));
+        verify(verification).setExpirationDate(null);
         verify(verificationRepository).save(verification);
     }
 
