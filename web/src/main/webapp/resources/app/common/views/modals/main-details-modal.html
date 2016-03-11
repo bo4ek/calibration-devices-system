@@ -1,4 +1,4 @@
-<form name="counterForm" novalidate>
+<form name="clientForm" class="form-group" role="form" novalidate>
     <br>
 
     <div class="row">
@@ -104,60 +104,49 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-4 form-group">
-                <label for="phoneNumber">
-                    {{'PHONE_NUMBER' | translate}} </label>
-            </div>
-            <div class="col-md-8 form-group" show-errors>
-                <div>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon-code">+380</span>
-                        <input id="phoneNumber" name="phoneNumber" type="tel"
-                               class="form-control col-md-8 "
-                               ng-model="formData.phone"
-                               placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX" required>
-                        <span class="input-group-addon">{{'SECOND_PHONE' |translate}}</span>
-					            			<span class="input-group-addon">
-								 	            <input type="checkbox" ng-model="checkboxModel">
-								            </span>
-                    </div>
+        <div class="form-group" show-errors>
+            <label for="phoneNumber" class="col-md-4 control-label">
+                {{'PHONE_NUMBER' | translate}} </label>
+            <div class="col-md-8 form-group">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon-code">+380</span>
+                    <input id="phoneNumber" name="phoneNumber" type="tel"
+                           class="form-control col-md-8 "
+                           ng-model="formData.phone"
+                           placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX" required>
+                    <span class="input-group-addon">{{'SECOND_PHONE' |translate}}</span>
+                                        <span class="input-group-addon">
+                                            <input type="checkbox" ng-model="checkboxModel">
+                                        </span>
                 </div>
-            </div>
-            <div class="form-group">
-                <p class="help-block col-md-8 col-md-offset-2"
+                <p class="help-block"
                    ng-if="clientForm.phoneNumber.$error.pattern">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'PHONE_NUMBER_ERROR' | translate}}
 
-                <p class="help-block col-md-8 col-md-offset-2"
-                   ng-if="clientForm.email.$error.required">
+                <p class="help-block"
+                   ng-if="clientForm.phoneNumber.$error.required">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     {{'REQUIRED' | translate}}
                 </p>
             </div>
         </div>
-        <div class="form-group" ng-show="checkboxModel">
-            <div class="col-md-4 form-group">
-                <label for="phoneNumberSecond">
-                    {{'SECOND_PHONE' | translate}} </label>
-            </div>
-            <div class="col-md-8 form-group" show-errors>
-                <div>
-                    <div class="input-group" ng-show="checkboxModel">
+        <div class="form-group" ng-show="checkboxModel" show-errors>
+            <label for="phoneNumberSecond" class="col-md-4 control-label">
+                {{'SECOND_PHONE' | translate}}
+            </label>
+            <div class="col-md-8 form-group">
+                <div class="input-group" ng-show="checkboxModel">
 
-                        <span class="input-group-addon" id="basic-addon-code">+380</span>
-                        <input id="phoneNumberSecond" name="phoneNumberSecond" class="form-control"
-                               ng-model="formData.secondPhone"
-                               placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX_SECOND"
-                               popover="{{'PHONE_NUMBER_INFO' | translate}}"
-                               popover-trigger="focus" popover-placement="right">
-                    </div>
-                                        <span class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"
-                                              id="okFeedBack" ng-show="checkboxModel"></span>
+                    <span class="input-group-addon" id="basic-addon-code">+380</span>
+                    <input id="phoneNumberSecond" name="phoneNumberSecond" class="form-control"
+                           ng-model="formData.secondPhone"
+                           placeholder="XXXXXXXXX" ng-pattern="PHONE_REGEX_SECOND"
+                           popover="{{'PHONE_NUMBER_INFO' | translate}}"
+                           popover-trigger="focus" popover-placement="right">
+                     <span class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"
+                           id="okFeedBack" ng-show="checkboxModel"></span>
                 </div>
-            </div>
-            <div class="form-group">
                 <p class="help-block col-md-8 col-md-offset-2"
                    ng-if="clientForm.phoneNumberSecond.$error.pattern">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>

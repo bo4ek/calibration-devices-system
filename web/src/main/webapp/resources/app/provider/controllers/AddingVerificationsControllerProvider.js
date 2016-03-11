@@ -10,7 +10,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         /**
          * Receives all regex for input fields
          */
-        $scope.PHONE_REGEX_SECOND = /^[1-9]\d{8}$/;
+        $scope.PHONE_REGEX = /^[1-9]\d{8}$/;
         $scope.ACCUMULATED_VOLUME_REGEX = /^[\d]{5}$/;
         $scope.MAIL_INDEX_REGEX = /^[\d]{5}$/;
 
