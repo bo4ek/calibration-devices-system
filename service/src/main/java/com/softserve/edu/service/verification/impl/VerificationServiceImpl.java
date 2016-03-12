@@ -940,6 +940,12 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
+    public Long findCountOfNewVerificationsForProviderByCalibratorEmployeeUsername(String calibratorEmployeeUsername) {
+        return verificationRepository.countByCalibratorEmployeeUsernameAndStatusAndReadStatus(
+                calibratorEmployeeUsername, Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD);
+    }
+
+    @Override
     public Long findCountOfNotStandardNewVerificationsByProviderId(Long providerId) {
         return verificationRepository.countByProviderIdAndStatusAndReadStatus(providerId,
                 Status.SENT_TO_PROVIDER, Verification.ReadStatus.UNREAD);

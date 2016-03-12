@@ -94,6 +94,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Long countByCalibratorIdAndStatusAndReadStatus(Long providerId, Status status, Verification.ReadStatus readStatus);
 
+    Long countByCalibratorEmployeeUsernameAndStatusAndReadStatus(String calibratorEmployeeUsername, Status status, Verification.ReadStatus readStatus);
+
     Long countByStateVerificatorIdAndStatusAndReadStatus(Long stateVerificatorId, Status status, Verification.ReadStatus readStatus);
 
     Long countByCalibratorId(Long calibratorId);

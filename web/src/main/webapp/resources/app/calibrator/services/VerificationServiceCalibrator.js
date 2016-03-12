@@ -89,10 +89,10 @@ angular
             editClientInfo: function (data) {
                 return updateData('editClientInfo', data);
             },
-            getCountOfNewNotStandardVerifications: function (data) {
+            getCountOfNewNotStandardVerifications: function () {
                 return getData('not-standard-verifications/new/count');
             },
-            getCountOfNewVerificationsForProvider: function (data) {
+            getCountOfNewVerificationsForProvider: function () {
                 return getData('not-standard-verifications/new/count/verificationsForProvider');
             }
         };
