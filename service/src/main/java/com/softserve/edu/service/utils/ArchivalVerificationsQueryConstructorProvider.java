@@ -78,6 +78,7 @@ static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorPro
                     Status.TEST_NOK.getQueryPredicate(root, cb)
             ), queryPredicate);
         }
+        queryPredicate = cb.and(cb.isTrue(root.get("signed")));
 
 		if (startDateToSearch != null && endDateToSearch != null) {
 			DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;

@@ -132,11 +132,14 @@ public class NewVerificationsQueryConstructorVerificator {
         }
 
         if (status != null) {
-        	queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(status.trim())), queryPredicate);
+            queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(status.trim())), queryPredicate);
         } else {
-            queryPredicate = cb.and(cb.or(Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb)));
+            queryPredicate = cb.and(cb.or(Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb),
+                    Status.TEST_NOK.getQueryPredicate(root, cb),
+                    Status.TEST_OK.getQueryPredicate(root, cb)), queryPredicate);
         }
 
+        queryPredicate = cb.and(cb.isFalse(root.get("signed")));
         queryPredicate = cb.and(cb.equal(joinSearch.get("id"), verificatorId), queryPredicate);
 
         if (startDateToSearch != null && endDateToSearch != null) {

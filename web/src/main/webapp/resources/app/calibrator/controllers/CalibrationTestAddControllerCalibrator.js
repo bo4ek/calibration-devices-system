@@ -29,6 +29,15 @@ angular
                 element.style.pointerEvents = enable ? "auto" : "none";
             };
 
+            $scope.getVerificationStatus = function() {
+                calibrationTestServiceCalibrator.getVerificationStatus($scope.testId)
+                    .then(function(response) {
+                        $scope.verificationStatus = response.data;
+                    });
+            };
+
+            $scope.getVerificationStatus();
+
             $scope.selectPrivateKeyFile = function (event) {
                 var enable = (event.target.files.length == 1);
                 setPointerEvents(document.getElementById('PKeyReadButton'), enable);
@@ -120,7 +129,7 @@ angular
 
             $scope.getPNFromBBIName = function (fileName) {
                 return fileName.substring(6, fileName.length - ".bbi".length);
-            }
+            };
 
             /**
              * Get all reasons unsuitability for counter with {counterTypeId} type if
@@ -307,6 +316,7 @@ angular
                                             calibrationTestServiceCalibrator.signEDSTestProtocol($scope.signedFile, $scope.testId)
                                                 .then(function () {
                                                     $scope.TestForm.signed = true;
+                                                    $scope.getVerificationStatus();
                                                     toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
                                                 });
                                         }
@@ -327,6 +337,7 @@ angular
                         if (status == 200) {
                             toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_EDITED'));
                         }
+                        $scope.getVerificationStatus();
                     });
             };
 
@@ -336,11 +347,7 @@ angular
              * @returns {boolean} true - if test result is positive, false - in other case
              */
             $scope.consumptionStatusResult = function (consumptionStatus) {
-                if (consumptionStatus == 'IN_THE_AREA') {
-                    return true;
-                } else {
-                    return false;
-                }
+                return consumptionStatus == 'IN_THE_AREA';
             };
 
             /**
@@ -349,12 +356,8 @@ angular
              * @returns {boolean} true - if test result is positive, false - in other case
              */
             $scope.commonTestResult = function (testResult) {
-                if (testResult == 'SUCCESS') {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+                return testResult == 'SUCCESS';
+            };
 
             $scope.rotateLeft = function () {
                 $scope.rotateIndex -= 90;

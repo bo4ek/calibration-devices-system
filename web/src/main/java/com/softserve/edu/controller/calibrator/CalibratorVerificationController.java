@@ -532,6 +532,17 @@ public class CalibratorVerificationController {
         }
     }
 
+    @RequestMapping(value = "getStatus/{verificationId}", method = RequestMethod.GET)
+    public String getVerificationStatus(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                         @PathVariable String verificationId) {
+        User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
+        Verification verification = verificationService.findById(verificationId);
+        if(user.getOrganization().getId().equals(verification.getStateVerificator().getId())) {
+            return verification.getStatus().name();
+        }
+        return null;
+    }
+
     /**
      * check if additional info exists for the
      * the verification

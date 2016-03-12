@@ -48,12 +48,12 @@ angular
             var url = "doc/report/" + documentType + "/xls";
             location.href = url;
         };
-        $scope.printDocument = function (verification) {
-            documentService.isSignedCertificate(verification.id).then(
+        $scope.printDocument = function (verificationId, verificationStatus) {
+            documentService.isSignedCertificate(verificationId).then(
                 function (result) {
                     if (result.data) {
-                        var documentType = verification.status == 'TEST_OK' ? 'VERIFICATION_CERTIFICATE' : 'UNFITNESS_CERTIFICATE';
-                        var url = "doc/" + documentType + "/" + verification.id + "/pdf";
+                        var documentType = verificationStatus == 'TEST_OK' ? 'VERIFICATION_CERTIFICATE' : 'UNFITNESS_CERTIFICATE';
+                        var url = "doc/" + documentType + "/" + verificationId + "/pdf";
                         var frame = document.getElementById('pdf');
                         var frameDoc = frame.contentDocument || frame.contentWindow.document;
                         frameDoc.documentElement.innerHTML = "";

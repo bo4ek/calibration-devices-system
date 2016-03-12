@@ -27,7 +27,7 @@
         </div>
         <div class="form-group col-md-2" id="testPN" show-errors>
             <input type="text" ng-value="TestForm.testPN" ng-disabled="fileLoaded"
-                   name="testPN" class="form-control " required>
+                   name="testPN" class="form-control" required>
         </div>
     </div>
     <div class="row">
@@ -166,6 +166,56 @@
             </span>
         </div>
     </div>
+    <div class="row form-group"
+         ng-show="TestForm.signed && isVerification"
+         style="text-align:center">
+        <div class="ui simple icon dropdown fa-lg"
+             ng-controller="DocumentController">
+            <button ng-show="isVerification" class="btn btn-info" type="button">
+                <span class="fa fa-floppy-o"></span>
+                {{'PRINT' | translate}}
+            </button>
+
+            <div class=" left menu" style="right:0;left:auto;">
+                <div class="item" ng-show="verificationStatus == 'TEST_OK'"
+                     ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', testId, 'docx')">
+                    <a class="ng-binding">
+                        <i class="fa fa-file-word-o"></i>
+                        {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_DOCX' | translate}}
+                    </a>
+                </div>
+                <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
+                     ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', testId, 'docx')">
+                    <a class="ng-binding">
+                        <i class="fa fa-file-word-o"></i>
+                        {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_DOCX' | translate}}
+                    </a>
+                </div>
+                <div class="item" ng-show="verificationStatus == 'TEST_OK'"
+                     ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', testId, 'pdf')">
+                    <a class="ng-binding">
+                        <i class="fa fa-file-pdf-o"></i>
+                        {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_PDF' | translate}}
+                    </a>
+                </div>
+                <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
+                     ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', testId, 'pdf')">
+                    <a class="ng-binding">
+                        <i class="fa fa-file-pdf-o"></i>
+                        {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_PDF' | translate}}
+                    </a>
+                </div>
+                <div class="item" ng-click="printDocument(testId, verificationStatus)">
+                    <a class="ng-binding">
+                        <i class="print fa fa-print"></i>
+                        {{'PRINT_DOCUMENT' | translate}}
+                    </a>
+                    <iframe id="pdf"
+                            style="width:0px;height:0px;visibility:hidden;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="form-group">
             <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-success btn-md"
@@ -174,9 +224,15 @@
                     >{{'EDIT_CHANGES' | translate}}
             </button>
             <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)"
-                    ng-show="isVerification" type="submit"
+                    ng-show="isVerification && false" type="submit"
                     class="btn btn-warning btn-md"
                     ng-click="signCalibrationTest()">
+                {{'SIGN_PROTOCOL' | translate}}
+            </button>
+            <button id="signButtonWithoutEDS" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)"
+                    ng-show="isVerification" type="submit"
+                    class="btn btn-warning btn-md"
+                    ng-click="signCalibrationTestWithoutEDS()">
                 {{'SIGN_PROTOCOL' | translate}}
             </button>
             <!--ng-click="signCalibrationTest()"-->

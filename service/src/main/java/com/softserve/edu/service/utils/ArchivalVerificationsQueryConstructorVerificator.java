@@ -77,6 +77,8 @@ public class ArchivalVerificationsQueryConstructorVerificator {
             ), queryPredicate);
         }
 
+        queryPredicate = cb.and(cb.isTrue(root.get("signed")));
+
         if (dateToSearch != null) {
             Date date = null;
             try {

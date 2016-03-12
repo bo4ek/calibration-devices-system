@@ -38,6 +38,14 @@ angular
                 return getDataWithParams('calibrator/verifications/calibration-test/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
             },
 
+            getVerificationStatus: function(verificationId) {
+                var url = "calibrator/verifications/getStatus/" + verificationId;
+                return $http.get(url)
+                    .then(function(result) {
+                        return result;
+                    });
+            },
+
 
             editTestProtocol: function (data,testId) {
                 return $http.put("calibrator/calibrationTests/editTest/" + testId, data)
