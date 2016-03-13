@@ -679,6 +679,11 @@ form[name='CalibrationTestForm'] #testColumnHead {
     width: 322px !important;
 }
 
+.vertical-image-modal-photo-large {
+    height: 960px !important;
+    width: 720px !important;
+}
+
 .vertical-test-image-photo {
     height: 640px !important;
     width: 480px !important;
@@ -709,6 +714,16 @@ form[name='CalibrationTestForm'] #testColumnHead {
 
 .test-image img.rotated90, .test-image img.rotated270 {
     margin-left: 115px;
+}
+
+.main-image img {
+    width: 430px;
+    height: 322px;
+}
+
+.main-image-large img {
+    width: 960px;
+    height: 720px;
 }
 
 form[name='CalibrationTestForm'] tr > td {

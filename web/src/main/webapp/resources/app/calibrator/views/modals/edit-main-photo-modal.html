@@ -5,10 +5,16 @@
 
 <div class="modal-body">
     <form name="clientForm" class="form-group" id="editMainPhotoForm" novalidate>
-        <div id="box" class="form-group col-md-6">
-            <div ng-class="{ 'vertical-image-modal-photo': rotateIndex == 90 || rotateIndex == 270}">
-                <div class="image">
-                    <img id="mainPhoto" data-ng-src='{{photo}}' ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+        <div id="box" class="form-group" ng-class="{'col-md-6': imageSize.small, 'col-md-12': !imageSize.small}">
+            <div ng-show="imageSize.small" ng-class="{ 'vertical-image-modal-photo': rotateIndex == 90 || rotateIndex == 270}">
+                <div class="main-image">
+                    <img data-ng-src='{{photo}}' ng-click="zoom()" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+                    'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}">
+                </div>
+            </div>
+            <div ng-show="!imageSize.small" ng-class="{ 'vertical-image-modal-photo-large': rotateIndex == 90 || rotateIndex == 270}">
+                <div class="main-image-large">
+                    <img data-ng-src='{{photo}}' ng-click="zoom()" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
                     'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}">
                 </div>
             </div>
