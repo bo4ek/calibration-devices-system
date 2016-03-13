@@ -98,7 +98,7 @@
                                ng-click="addCalibratorEmployee(verification.id)">
                             </i>
                             <i class="fa fa-user-times remove_attached_user_icon" style="font-size: 24px"
-                               ng-show="verification.calibratorEmployee && !isEmployee"
+                               ng-show="verification.status=='IN_PROGRESS' && verification.calibratorEmployee && !isEmployee"
                                popover="{{'CANCEL_RESPONSIBLE_PERSON' | translate}}"
                                popover-trigger="mouseenter"
                                ng-click="removeCalibratorEmployee(verification.id)">

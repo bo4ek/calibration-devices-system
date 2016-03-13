@@ -134,7 +134,8 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Transactional
     public void removeCalibratorEmployee(String verificationId, User calibratorEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
-        if(verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
+        if (verification.getStatus().equals(Status.IN_PROGRESS) &&
+                verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
             verification.setCalibratorEmployee(null);
             verification.setTaskStatus(null);
             verificationRepository.save(verification);
