@@ -3,10 +3,6 @@ package com.softserve.edu.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Created by Lyubomyr on 28.11.2015.
- */
-
 @Getter
 @Setter
 public class VerificationPlanningTaskFilterSearch {
@@ -18,10 +14,12 @@ public class VerificationPlanningTaskFilterSearch {
     private String district;
     private String street;
     private String building;
+    private String flat;
     private String dateOfVerif;
     private String time;
     private String serviceability;
     private String noWaterToDate;
     private String sealPresence;
     private String telephone;
+    private String verificationWithDismantle;
 }

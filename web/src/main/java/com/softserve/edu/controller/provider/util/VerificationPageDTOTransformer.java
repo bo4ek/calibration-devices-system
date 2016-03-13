@@ -100,7 +100,8 @@ public class VerificationPageDTOTransformer {
                         (verification.getInfo() != null) ? verification.getInfo().getTimeTo() : null,
                         (verification.getInfo() != null) ? verification.getInfo().getServiceability() : null,
                         (verification.getInfo() != null) ? verification.getInfo().getNoWaterToDate() : null,
-                        verification.isSealPresence()
+                        verification.isSealPresence(),
+                        verification.isVerificationWithDismantle()
                 ));
             }
         }
@@ -117,14 +118,18 @@ public class VerificationPageDTOTransformer {
         String clientStreet = searchData.getStreet();
         String clientPhone = searchData.getTelephone();
         String clientBuilding = searchData.getBuilding();
+        String clientFlat = searchData.getFlat();
         String sealPresence = searchData.getSealPresence();
         String serviceability = searchData.getServiceability();
+        String verificationWithDismantle = searchData.getVerificationWithDismantle();
         if ((startDate.before(verification.getSentToCalibratorDate()) || startDate.equals(verification.getSentToCalibratorDate()))
                 && (endDate.after(verification.getSentToCalibratorDate()) || endDate.equals(verification.getSentToCalibratorDate()))) {
             if ((clientName == null || clientName.isEmpty()) && (providerName == null || providerName.isEmpty())
                     && (clientDistrict == null || clientDistrict.isEmpty()) && (clientStreet == null || clientStreet.isEmpty())
                     && (clientPhone == null || clientPhone.isEmpty()) && (clientBuilding == null || clientBuilding.isEmpty())
-                    && (sealPresence == null || sealPresence.isEmpty()) && (serviceability == null || serviceability.isEmpty())) {
+                    && (clientFlat == null || clientFlat.isEmpty())
+                    && (sealPresence == null || sealPresence.isEmpty()) && (serviceability == null || serviceability.isEmpty())
+                    && (verificationWithDismantle == null || verificationWithDismantle.isEmpty())) {
                 return true;
             } else if ((clientName != null && !clientName.isEmpty()) && verification.getClientData().getFullName().toLowerCase().contains(clientName.toLowerCase())) {
                 return true;
@@ -138,6 +143,8 @@ public class VerificationPageDTOTransformer {
                 return true;
             } else if ((clientBuilding != null && !clientBuilding.isEmpty()) && verification.getClientData().getClientAddress().getBuilding().toLowerCase().contains(clientBuilding.toLowerCase())) {
                 return true;
+            } else if ((clientFlat != null && !clientFlat.isEmpty()) && verification.getClientData().getClientAddress().getFlat().toLowerCase().contains(clientFlat.toLowerCase())) {
+                return true;
             } else if ((sealPresence != null && !sealPresence.isEmpty()) && verification.isSealPresence() && sealPresence.equals("True")) {
                 return true;
             } else if ((sealPresence != null && !sealPresence.isEmpty()) && !verification.isSealPresence() && sealPresence.equals("False")) {
@@ -145,6 +152,10 @@ public class VerificationPageDTOTransformer {
             } else if ((serviceability != null && !serviceability.isEmpty()) && (verification.getInfo() != null) && ((verification.getInfo().isServiceability() && serviceability.equals("True")))) {
                 return true;
             } else if ((serviceability != null && !serviceability.isEmpty()) && (verification.getInfo() != null) && ((!verification.getInfo().isServiceability() && serviceability.equals("False")))) {
+                return true;
+            } else if ((verificationWithDismantle != null && !verificationWithDismantle.isEmpty()) && ((verification.isVerificationWithDismantle() && verificationWithDismantle.equals("True")))) {
+                return true;
+            } else if ((verificationWithDismantle != null && !verificationWithDismantle.isEmpty()) && ((!verification.isVerificationWithDismantle() && verificationWithDismantle.equals("False")))) {
                 return true;
             } else {
                 return false;

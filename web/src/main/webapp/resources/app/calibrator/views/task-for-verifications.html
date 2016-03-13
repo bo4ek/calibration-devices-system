@@ -51,20 +51,27 @@
                                     <td data-title="'PROVIDER_NAME' | translate" sortable="'providerName'"
                                         filter="{ 'provider': 'text' }" ng-model="filters.id">{{ verification.providerName }}
                                     </td>
-                                    <td data-title="'DISTRICT' | translate" sortable="'district'" sortable="'district'"
+                                    <td data-title="'DISTRICT' | translate" sortable="'district'"
                                         filter="{ 'district': 'text' }">{{ verification.district}}
                                     </td>
-                                    <td data-title="'STREET' | translate" sortable="'street'" sortable="'street'"
+                                    <td data-title="'STREET' | translate" sortable="'street'"
                                         filter="{ 'street': 'text' }">{{ verification.street }}
                                     </td>
-                                    <td data-title="'BUILDING,FLAT' | translate"
-                                        filter="{ 'building': 'text' }">{{ verification.building_flat }}
+                                    <td data-title="'BUILDING' | translate" sortable="'building'"
+                                        filter="{ 'building': 'text' }">{{ verification.building }}
+                                    </td>
+                                    <td data-title="'FLAT' | translate" sortable="'flat'"
+                                        filter="{ 'flat': 'text' }">{{ verification.flat }}
                                     </td>
                                     <td data-title="'DESIRED_VERIFICATION_BY_DATE' | translate" sortable="'dateOfVerif'"
                                         filter="{ 'dateOfVerif': 'text' }">{{ verification.dateOfVerif }}
                                     </td>
                                     <td data-title="'DESIRED_VERIFICATION_BY_TIME' | translate" sortable="'timeOfVerif'"
                                         filter="{ 'time': 'text' }">{{ verification.time }}
+                                    </td>
+                                    <td data-title="'DISMANTLING' | translate" sortable="'verificationWithDismantle'"
+                                            filter="{'verificationWithDismantle': 'verificationWithDismantle'}">
+                                        {{ verification.verificationWithDismantle | translate}}
                                     </td>
                                     <td data-title="'PLUMBING_SERVICEABILITY' | translate" sortable="'serviceability'"
                                         filter="{ 'serviceability': 'serviceability' }">{{ verification.serviceability  | translate}}
@@ -151,6 +158,20 @@
                                     <span ng-bind-html="status.label"></span>
                                     </ui-select-choices>
                                     </ui-select>
+                            </script>
+
+                            <script type="text/ng-template" id="ng-table/filters/verificationWithDismantle.html">
+                                <ui-select ng-model="selectedVerificationWithDismantle.name" theme="select2" on-select='doSearch()'
+                                           search-enabled="false"
+                                           name="filter-verificationWithDismantle">
+                                    <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                                     allow-clear="true">
+                                        {{$select.selected.label}}
+                                    </ui-select-match>
+                                    <ui-select-choices  repeat="status in statusVerificationWithDismantle">
+                                        <span ng-bind-html="status.label"></span>
+                                    </ui-select-choices>
+                                </ui-select>
                             </script>
 
                             <script type="text/ng-template" id="ng-table/filters/serviceability.html">

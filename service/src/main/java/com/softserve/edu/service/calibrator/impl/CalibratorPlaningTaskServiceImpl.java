@@ -280,78 +280,117 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                                                               String sortCriteria, String sortOrder) {
         Pageable pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
                 "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
-        if (sortCriteria.equals("date")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "sentToCalibratorDate"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "sentToCalibratorDate"));
-            }
-        } else if (sortCriteria.equals("client_last_name")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "clientData.lastName", "clientData.firstName"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "clientData.lastName", "clientData.firstName"));
-            }
-        } else if (sortCriteria.equals("providerName")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "provider.name"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "provider.name"));
-            }
-        } else if (sortCriteria.equals("dateOfVerif") || sortCriteria.equals("timeOfVerif")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "info.dateOfVerif", "info.timeFrom"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "info.dateOfVerif", "info.timeFrom"));
-            }
-        } else if (sortCriteria.equals("noWaterToDate")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "info.noWaterToDate"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "info.noWaterToDate"));
-            }
-        } else if (sortCriteria.equals("district") || sortCriteria.equals("street") || sortCriteria.equals("building_flat")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
-            }
-        } else if (sortCriteria.equals("serviceability")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "info.serviceability"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "info.serviceability"));
-            }
-        } else if (sortCriteria.equals("sealPresence")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "sealPresence"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "sealPresence"));
-            }
-        } else if (sortCriteria.equals("telephone")) {
-            if (sortOrder.equals("asc")) {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                        "clientData.phone"));
-            } else {
-                pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
-                        "clientData.phone"));
-            }
+        switch (sortCriteria) {
+            case "date":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "sentToCalibratorDate"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "sentToCalibratorDate"));
+                }
+                break;
+            case "client_last_name":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "clientData.lastName", "clientData.firstName"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "clientData.lastName", "clientData.firstName"));
+                }
+                break;
+            case "providerName":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "provider.name"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "provider.name"));
+                }
+                break;
+            case "dateOfVerif":
+            case "timeOfVerif":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "info.dateOfVerif", "info.timeFrom"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "info.dateOfVerif", "info.timeFrom"));
+                }
+                break;
+            case "noWaterToDate":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "info.noWaterToDate"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "info.noWaterToDate"));
+                }
+                break;
+            case "district":
+            case "street":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
+                }
+                break;
+            case "building":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "clientData.clientAddress.building"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "clientData.clientAddress.building"));
+                }
+                break;
+            case "flat":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "clientData.clientAddress.flat"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "clientData.clientAddress.flat"));
+                }
+                break;
+            case "serviceability":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "info.serviceability"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "info.serviceability"));
+                }
+                break;
+            case "sealPresence":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "sealPresence"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "sealPresence"));
+                }
+                break;
+            case "verificationWithDismantle":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "verificationWithDismantle"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "verificationWithDismantle"));
+                }
+                break;
+            case "telephone":
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
+                            "clientData.phone"));
+                } else {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
+                            "clientData.phone"));
+                }
+                break;
         }
 
         return verificationRepository.findByTaskStatusAndCalibratorId(Status.PLANNING_TASK, id, pageRequest);

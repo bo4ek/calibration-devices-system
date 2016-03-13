@@ -37,24 +37,29 @@ angular
                 {id: 'False', label: null}
             ];
 
-            $scope.selectedSealPresence = {
-                name: $scope.statusSealPresence
-            };
+            $scope.selectedSealPresence = {};
+
+            $scope.selectedServiceability = {};
+
+            $scope.selectedVerificationWithDismantle = {};
 
             $scope.statusServiceability = [
                 {id: 'True', label: null},
                 {id: 'False', label: null}
             ];
 
-            $scope.selectedServiceability = {
-                name: $scope.statusServiceability
-            };
+            $scope.statusVerificationWithDismantle = [
+                {id: 'True', label: null},
+                {id: 'False', label: null}
+            ];
 
             $scope.setTypeDataLanguage = function () {
                 $scope.statusSealPresence[0].label = $filter('translate')('true');
                 $scope.statusSealPresence[1].label = $filter('translate')('false');
                 $scope.statusServiceability[0].label = $filter('translate')('true');
                 $scope.statusServiceability[1].label = $filter('translate')('false');
+                $scope.statusVerificationWithDismantle[0].label = $filter('translate')('true');
+                $scope.statusVerificationWithDismantle[1].label = $filter('translate')('false');
             };
 
             $scope.setTypeDataLanguage();
@@ -109,14 +114,6 @@ angular
                     $scope.opts.ranges[$filter('translate')('THIS_MONTH')] = [moment().startOf('month'), moment().endOf('month')];
                     $scope.opts.ranges[$filter('translate')('LAST_MONTH')] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
                     $scope.opts.ranges[$filter('translate')('ALL_TIME')] = [$scope.defaultDate.startDate, $scope.defaultDate.endDate];
-                };
-
-                $scope.setTypeDataLanguage = function () {
-                    $scope.statusSealPresence[0].label = $filter('translate')('true');
-                    $scope.statusSealPresence[1].label = $filter('translate')('false');
-                    $scope.statusServiceability[0].label = $filter('translate')('true');
-                    $scope.statusServiceability[1].label = $filter('translate')('false');
-                    $scope.setTypeDataLangDatePicker();
                 };
 
                 $scope.setTypeDataLangDatePicker();
@@ -225,6 +222,13 @@ angular
                         }
                         else {
                             params.filter().serviceability = null;
+                        }
+
+                        if ($scope.selectedVerificationWithDismantle.name != null) {
+                            params.filter().verificationWithDismantle = $scope.selectedVerificationWithDismantle.name.id;
+                        }
+                        else {
+                            params.filter().verificationWithDismantle = null;
                         }
 
 

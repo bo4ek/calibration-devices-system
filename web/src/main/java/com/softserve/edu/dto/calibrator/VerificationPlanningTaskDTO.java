@@ -35,6 +35,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
     private Date noWaterToDate;
     private boolean sealPresence;
     private int queue;
+    private boolean verificationWithDismantle;
 
     public VerificationPlanningTaskDTO() {
     }
@@ -101,7 +102,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
     public VerificationPlanningTaskDTO(Date sentDate, String verificationID, String providerName, String fullName,
                                        String district, String street, String building, String flat, String telephone,
                                        String secondphone, Date dateOfVerif, LocalTime timeFrom, LocalTime timeTo,
-                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence) {
+                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence, boolean verificationWithDismantle) {
         this.sentToCalibrator = sentDate;
         this.verificationId = verificationID;
         this.providerName = providerName;
@@ -116,6 +117,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
         this.noWaterToDate = noWaterToDate;
         this.serviceability = serviceability;
         this.sealPresence = sealPresence;
+        this.verificationWithDismantle = verificationWithDismantle;
 
         if ((timeFrom != null) || (timeTo != null)) {
             this.time = timeFrom.toString() + " - " + timeTo.toString();
