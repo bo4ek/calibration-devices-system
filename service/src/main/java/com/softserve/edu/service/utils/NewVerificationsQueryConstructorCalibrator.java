@@ -152,10 +152,11 @@
 		}
 
 		if ((fullNameToSearch != null)&&(fullNameToSearch.length()>0)) {
-			Predicate searchByClientFirstName = cb.like(root.get("clientData").get("firstName"), "%" + fullNameToSearch + "%");
-			Predicate searchByClientLastName = cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%");
-			Predicate searchByClientMiddleName = cb.like(root.get("clientData").get("middleName"), "%" + fullNameToSearch + "%");
-			Predicate searchPredicateByClientFullName = cb.or(searchByClientFirstName, searchByClientLastName, searchByClientMiddleName);
+            Expression<String> exp1 = cb.concat(root.get("clientData").get("lastName"), " ");
+            exp1 = cb.concat(exp1, root.get("clientData").get("firstName"));
+            exp1 = cb.concat(exp1, " ");
+            exp1 = cb.concat(exp1, root.get("clientData").get("middleName"));
+            Predicate searchPredicateByClientFullName = cb.or(cb.like(exp1, "%"+ fullNameToSearch +"%"));
 			queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
 		}
 		if ((streetToSearch != null)&&(streetToSearch.length()>0)) {
