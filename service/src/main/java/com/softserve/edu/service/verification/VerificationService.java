@@ -171,6 +171,8 @@ public interface VerificationService {
 
     Long findCountOfNewNotStandardVerificationsByCalibratorId(Long calibratorId);
 
+    Long findCountOfPlanedTasksByCalibratorId(Long calibratorId);
+
     Long findCountOfNewVerificationsForProviderByCalibratorId(Long calibratorId);
 
     Long findCountOfNewVerificationsForProviderByCalibratorEmployeeUsername(String calibratorEmployeeUsername);

@@ -92,6 +92,9 @@ angular
             getCountOfNewNotStandardVerifications: function () {
                 return getData('not-standard-verifications/new/count');
             },
+            getCountOfPlanedTasks: function () {
+                return getData('not-standard-verifications/planed/count');
+            },
             getCountOfNewVerificationsForProvider: function () {
                 return getData('not-standard-verifications/new/count/verificationsForProvider');
             }
