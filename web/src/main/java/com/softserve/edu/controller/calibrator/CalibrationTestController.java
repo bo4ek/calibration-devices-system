@@ -1,5 +1,6 @@
 package com.softserve.edu.controller.calibrator;
 
+import com.softserve.edu.controller.VerificationResultDTO;
 import com.softserve.edu.controller.calibrator.util.CalibrationModuleDTOTransformer;
 import com.softserve.edu.controller.calibrator.util.CounterTypeDTOTransformer;
 import com.softserve.edu.documents.parameter.FileFormat;
@@ -30,6 +31,7 @@ import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -490,7 +492,6 @@ public class CalibrationTestController {
                 testDataRepository.save(calibTestData);
             }
             testRepository.save(calibTest);
-            testService.updateTest(verificationId, cTestFileDataDTO.getStatus());
         } catch (Exception e) {
             logger.error("Cannot edit protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -499,7 +500,7 @@ public class CalibrationTestController {
     }
 
     @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.GET)
-    public void signTestProtocol(@PathVariable String verificationId, HttpServletResponse   response) {
+    public void signTestProtocol(@PathVariable String verificationId, HttpServletResponse response) {
         OutputStream os;
         try {
             Verification verification = verificationService.findById(verificationId);
@@ -536,7 +537,6 @@ public class CalibrationTestController {
             os = response.getOutputStream();
             os.write(documentByteArray);
 
-            testRepository.save(calibrationTest);
             verificationService.saveVerification(verification);
 
         } catch (Exception e) {
@@ -546,16 +546,17 @@ public class CalibrationTestController {
 
     }
 
-    @RequestMapping(value = "signEDSTest/{verificationId}", method = RequestMethod.POST)
-    public ResponseEntity signEDSTestProtocol(@RequestBody MultipartFile file, @PathVariable String verificationId){
+    @RequestMapping(value = "signEDSTest", method = RequestMethod.POST)
+    public ResponseEntity signEDSTestProtocol(@RequestBody VerificationResultDTO verificationResult){
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
-            byte[] bytes = file.getBytes();
+            byte[] bytes = verificationResult.getFile().getBytes();
 
-            Verification verification = verificationService.findById(verificationId);
+            Verification verification = verificationService.findById(verificationResult.getId());
             verification.setSignedDocument(bytes);
             verification.setSigned(true);
-            verificationService.saveVerification(verification);
+            testService.updateTest(verification, verificationResult.getStatus());
+
         }catch (Exception e) {
             logger.error("Cannot sing protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);

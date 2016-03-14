@@ -103,9 +103,8 @@ angular
 
             signEDSTestProtocol: function (file, testId) {
                 var formData=new FormData();
-                formData.append('file',file);
-                var url = 'calibrator/calibrationTests/signEDSTest/' + testId;
-                return $http.post(url, formData, {
+                var url = 'calibrator/calibrationTests/signEDSTest';
+                return $http.post(url, verificationResult, {
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined}
                 }).then(function (result) {

@@ -312,8 +312,12 @@ angular
                                         $scope.installPKeyModalLoad();
                                     }, 1000));
                                     modalInstance.result.then(function (signedFile) {
-                                            $scope.signedFile = signedFile;
-                                            calibrationTestServiceCalibrator.signEDSTestProtocol($scope.signedFile, $scope.testId)
+                                            var verificationResult = {
+                                                id: $scope.testId,
+                                                status: $scope.getStatus(),
+                                                signedFile: signedFile
+                                            };
+                                            calibrationTestServiceCalibrator.signEDSTestProtocol(verificationResult)
                                                 .then(function () {
                                                     $scope.TestForm.signed = true;
                                                     $scope.getVerificationStatus();

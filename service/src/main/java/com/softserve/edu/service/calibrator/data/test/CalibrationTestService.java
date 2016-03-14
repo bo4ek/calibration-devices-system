@@ -9,6 +9,7 @@ import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,5 +48,5 @@ public interface CalibrationTestService {
 
     Set<CalibrationTestData> getLatestTests(List<CalibrationTestData> rawListOfCalibrationTestData);
 
-
+    void updateTest(Verification verification, String status);
 }

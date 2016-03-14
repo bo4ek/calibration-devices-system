@@ -178,28 +178,28 @@
 
             <div class=" left menu" style="right:0;left:auto;">
                 <div class="item" ng-show="verificationStatus == 'TEST_OK'"
-                     ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', testId, 'docx')">
+                     ng-click="downloadDocument('VERIFICATION_CERTIFICATE', testId, 'docx')">
                     <a class="ng-binding">
                         <i class="fa fa-file-word-o"></i>
                         {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_DOCX' | translate}}
                     </a>
                 </div>
                 <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
-                     ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', testId, 'docx')">
+                     ng-click="downloadDocument('UNFITNESS_CERTIFICATE', testId, 'docx')">
                     <a class="ng-binding">
                         <i class="fa fa-file-word-o"></i>
                         {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_DOCX' | translate}}
                     </a>
                 </div>
                 <div class="item" ng-show="verificationStatus == 'TEST_OK'"
-                     ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', testId, 'pdf')">
+                     ng-click="downloadDocument('VERIFICATION_CERTIFICATE', testId, 'pdf')">
                     <a class="ng-binding">
                         <i class="fa fa-file-pdf-o"></i>
                         {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_PDF' | translate}}
                     </a>
                 </div>
                 <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
-                     ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', testId, 'pdf')">
+                     ng-click="downloadDocument('UNFITNESS_CERTIFICATE', testId, 'pdf')">
                     <a class="ng-binding">
                         <i class="fa fa-file-pdf-o"></i>
                         {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_PDF' | translate}}
