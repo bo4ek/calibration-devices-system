@@ -806,5 +806,9 @@
     "DUPLICATE_STREET_ID": "Duplicate street id",
     "DUPLICATE_STREET_NAME": "Duplicate street name",
     "SUCCESSFULLY_DELETED_STREET": "Street successfully deleted",
-    "DISMANTLING": "Dismantling"
+    "DISMANTLING": "Dismantling",
+    "EDIT_STREET": "Edit street",
+    "DELETE_STREET": "Delete street",
+    "SUCCESSFUL_EDITED_STREET" : "Street successfully edited",
+    "ACCEPTED_VERIFICATIONS": "Accepted verifications"
 }

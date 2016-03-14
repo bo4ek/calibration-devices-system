@@ -1,10 +1,12 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{'ADD_STREET' | translate}}</h3>
+    <h3 class="modal-title" ng-hide="editMode">{{'ADD_STREET' | translate}}</h3>
+
+    <h3 class="modal-title" ng-hide="!editMode">{{'EDIT_STREET' | translate}}</h3>
 </div>
 
 <div class="modal-body modal-padding">
     <form name="addStreetForm" id="addStreetForm" role="form"
-          ng-submit="sendStreetData()"
+
           class="form-group" novalidate>
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -17,9 +19,13 @@
                     </label>
 
                     <div class="col-md-8">
-                        <input type="number" ng-model="addStreetFormData.streetId" id="streetId"
-                               name="streetId" ng-blur="checkStreetIdForDuplicates()" ng-change="hideStreetIdDuplicateError()"
-                               class="form-control" required>
+                        <input type="number"
+                               ng-init="addStreetFormData.streetId = editingStreet.id"
+                               ng-model="addStreetFormData.streetId" id="streetId"
+                               name="streetId" ng-blur="checkStreetIdForDuplicates()"
+                               ng-change="hideStreetIdDuplicateError()"
+                               class="form-control"
+                               required>
                 <span class="form-control-feedback glyphicon
                 form-horizontal glyphicon glyphicon-ok-sign" style="margin-right:20px"></span>
 
@@ -27,6 +33,7 @@
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
                         </p>
+
                         <p class="help-block" ng-if="addStreetForm.streetId.$error.duplicate">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'DUPLICATE_STREET_ID' | translate}}
@@ -45,7 +52,8 @@
                                    ng-model="selectedValues.selectedRegion"
                                    on-select="receiveDistricts(selectedValues.selectedRegion)"
                                    name="region" id="region" required>
-                            <ui-select-match placeholder="{{'SELECT_REGION' | translate}}" allow-clear="true">
+                            <ui-select-match placeholder="{{'SELECT_REGION' | translate}}" allow-clear="true"
+                                             ng-init="$select.selected.designation = editingStreet.city">
                                 {{$select.selected.designation}}
 
                             <span class="form-control-feedback glyphicon
@@ -71,6 +79,7 @@
 
                     <div class="col-md-8">
                         <ui-select class="form-control" type="text" theme="select2"
+                                   ng-init="addStreetFormData.district = editingStreet.district"
                                    ng-model="selectedValues.selectedDistrict"
                                    on-select="receiveLocalities(selectedValues.selectedDistrict)"
                                    ng-disabled="!selectedValues.selectedRegion"
@@ -101,6 +110,7 @@
 
                     <div class="col-md-8">
                         <ui-select class="form-control" type="text" theme="select2"
+                                   ng-init="addStreetFormData.locality = editingStreet.city"
                                    ng-model="selectedValues.selectedLocality"
                                    ng-disabled="!selectedValues.selectedDistrict"
                                    name="locality" id="locality" required>
@@ -130,7 +140,9 @@
 
                     <div class="col-md-8">
                         <input type="text" ng-model="addStreetFormData.streetName" id="streetName"
-                               name="streetName" ng-blur="checkStreetNameForDuplicates()" ng-change="hideStreetNameDuplicateError()"
+                               ng-init="addStreetFormData.streetName = editingStreet.streetName"
+                               name="streetName" ng-blur="checkStreetNameForDuplicates()"
+                               ng-change="hideStreetNameDuplicateError()"
                                class="form-control" popover="{{'NAME_OF_STREET' | translate}}"
                                ng-disabled="!selectedValues.selectedLocality"
                                popover-trigger="focus" popover-placement="top"
@@ -142,6 +154,7 @@
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'REQUIRED' | translate}}
                         </p>
+
                         <p class="help-block" ng-if="addStreetForm.streetName.$error.duplicate">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {{'DUPLICATE_STREET_NAME' | translate}}
@@ -153,10 +166,15 @@
         </div>
 
         <div class="form-group row row-buttons">
-            <button type="submit" class="btn btn-success col-md-2 col-sm-12 col-xs-12 col-lg-2">
+            <button type="submit" class="btn btn-success col-md-2 col-sm-12 col-xs-12 col-lg-2" ng-hide="editMode"
+                    ng-click="sendStreetData()">
                 {{'ADD' | translate }}
             </button>
-            <button type="reset" class="btn btn-warning col-md-3 col-sm-12 col-xs-12 col-lg-3"
+            <button type="edit" class="btn btn-success col-md-2 col-sm-12 col-xs-12 col-lg-2" ng-hide="!editMode"
+                    ng-click="editStreet()">
+                {{'EDIT' | translate }}
+            </button>
+            <button type="reset" class="btn btn-warning col-md-3 col-sm-12 col-xs-12 col-lg-3" ng-hide="editMode"
                     ng-click="resetForm()">
                 {{'CLEAR_FORM' | translate }}
             </button>

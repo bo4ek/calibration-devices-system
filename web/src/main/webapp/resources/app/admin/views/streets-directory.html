@@ -63,7 +63,14 @@
                                         </td>
                                         <td data-title="'ACTIONS' | translate" class="text-center">
                                             <div class="control_buttons">
+                                                <i class="glyphicon glyphicon-edit verification_protocol_user_icon"
+                                                   popover="{{'EDIT_STREET' | translate}}"
+                                                   popover-trigger="mouseenter"
+                                                   ng-click="openEditStreetModal(street)">
+                                                </i>
                                                 <i class="glyphicon glyphicon-remove-sign cancel_icon"
+                                                   popover="{{'DELETE_STREET' | translate}}"
+                                                   popover-trigger="mouseenter"
                                                    ng-click="deleteStreet(street.id)">
                                                 </i>
                                             </div>
@@ -73,10 +80,12 @@
                                 </table>
                             </div>
                             <script type="text/ng-template" id="ng-table/filters/region.html">
-                                <input type="text" ng-model="filterData.selectedRegion" ng-change='doSearch()' class="form-control">
+                                <input type="text" ng-model="filterData.selectedRegion" ng-change='doSearch()'
+                                       class="form-control">
                             </script>
                             <script type="text/ng-template" id="ng-table/filters/city.html">
-                                <input type="text" ng-model="filterData.selectedCity" ng-change='doSearch()' class="form-control">
+                                <input type="text" ng-model="filterData.selectedCity" ng-change='doSearch()'
+                                       class="form-control">
                             </script>
                         </div>
                     </div>
