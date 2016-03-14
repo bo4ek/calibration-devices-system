@@ -115,8 +115,8 @@ public class VerificationServiceImplTest {
 	public void testFindCountOfNewVerificationsByCalibratorId() {
 		long calibratorId = 1;
 		when(mockVerificationRepository
-						.countByCalibratorIdAndStatusAndReadStatus(calibratorId,
-								Status.IN_PROGRESS, Verification.ReadStatus.UNREAD))
+						.countByCalibratorIdAndStatusAndCalibratorEmployeeUsername(calibratorId,
+								Status.IN_PROGRESS, null))
 				.thenReturn(null);
 		Assert.assertNull(verificationService.findCountOfNewVerificationsByCalibratorId(calibratorId));
 	}

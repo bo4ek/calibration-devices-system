@@ -121,8 +121,8 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional(readOnly = true)
     public Long findCountOfNewVerificationsByCalibratorId(Long calibratorId) {
-        return verificationRepository.countByCalibratorIdAndStatusAndReadStatus(calibratorId, Status.IN_PROGRESS,
-                Verification.ReadStatus.UNREAD);
+        return verificationRepository.countByCalibratorIdAndStatusAndCalibratorEmployeeUsername(calibratorId, Status.IN_PROGRESS,
+                null);
     }
 
     /**
