@@ -102,10 +102,7 @@ static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorPro
 		}
 
 		if ((fullNameToSearch != null)&&(fullNameToSearch.length()>0)) {
-			Predicate searchByClientFirstName = cb.like(root.get("clientData").get("firstName"), "%" + fullNameToSearch + "%");
-			Predicate searchByClientLastName = cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%");
-			Predicate searchByClientMiddleName = cb.like(root.get("clientData").get("middleName"), "%" + fullNameToSearch + "%");
-			Predicate searchPredicateByClientFullName = cb.or(searchByClientFirstName, searchByClientLastName, searchByClientMiddleName);
+			Predicate searchPredicateByClientFullName = cb.or(cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%"));
 			queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
 		}
 
@@ -134,12 +131,7 @@ static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorPro
 
 		if ((employeeName != null)&&(employeeName.length()>0)) {
 			Join<Verification, User> joinProviderEmployee = root.join("providerEmployee");
-			Predicate searchByProviderName = cb.like(joinProviderEmployee.get("firstName"), "%" + employeeName + "%");
-			Predicate searchByProviderSurname = cb.like(joinProviderEmployee.get("lastName"), "%" + employeeName + "%");
-			Predicate searchByProviderLastName = cb.like(joinProviderEmployee.get("middleName"),
-					"%" + employeeName + "%");
-			Predicate searchPredicateByProviderEmployeeName = cb.or(searchByProviderName, searchByProviderSurname,
-					searchByProviderLastName);
+			Predicate searchPredicateByProviderEmployeeName = cb.or(cb.like(joinProviderEmployee.get("lastName"), "%" + employeeName + "%"));
 			queryPredicate = cb.and(searchPredicateByProviderEmployeeName, queryPredicate);
 		}
 

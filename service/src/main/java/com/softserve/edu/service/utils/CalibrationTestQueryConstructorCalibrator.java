@@ -100,10 +100,7 @@ public class CalibrationTestQueryConstructorCalibrator {
 
         if (StringUtils.isNotEmpty(fullNameToSearch)) {
             Join<CalibrationTest, Verification> joinCalibratorTest = root.join("verification");
-            Predicate searchByClientFirstName = cb.like(joinCalibratorTest.get("clientData").get("firstName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientLastName = cb.like(joinCalibratorTest.get("clientData").get("lastName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientMiddleName = cb.like(joinCalibratorTest.get("clientData").get("middleName"), "%" + fullNameToSearch + "%");
-            Predicate searchPredicateByClientFullName = cb.or(searchByClientFirstName, searchByClientLastName, searchByClientMiddleName);
+            Predicate searchPredicateByClientFullName = cb.or(cb.like(joinCalibratorTest.get("clientData").get("lastName"), "%" + fullNameToSearch + "%"));
             queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
         }
 

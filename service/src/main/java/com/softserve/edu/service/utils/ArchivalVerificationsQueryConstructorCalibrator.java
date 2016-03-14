@@ -106,10 +106,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
 
         if ((fullNameToSearch != null) && (fullNameToSearch.length() > 0)) {
-            Predicate searchByClientFirstName = cb.like(root.get("clientData").get("firstName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientLastName = cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientMiddleName = cb.like(root.get("clientData").get("middleName"), "%" + fullNameToSearch + "%");
-            Predicate searchPredicateByClientFullName = cb.or(searchByClientFirstName, searchByClientLastName, searchByClientMiddleName);
+            Predicate searchPredicateByClientFullName = cb.or(cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%"));
             queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
         }
 
@@ -120,14 +117,8 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
         if ((employeeName != null) && (employeeName.length() > 0)) {
             Join<Verification, User> joinCalibratorEmployee = root.join("calibratorEmployee");
-            Predicate searchByCalibratorName = cb.like(joinCalibratorEmployee.get("firstName"),
-                    "%" + employeeName + "%");
-            Predicate searchByCalibratorSurname = cb.like(joinCalibratorEmployee.get("lastName"),
-                    "%" + employeeName + "%");
-            Predicate searchByCalibratorLastName = cb.like(joinCalibratorEmployee.get("middleName"),
-                    "%" + employeeName + "%");
-            Predicate searchPredicateByCalibratorEmployeeName = cb.or(searchByCalibratorName, searchByCalibratorSurname,
-                    searchByCalibratorLastName);
+            Predicate searchPredicateByCalibratorEmployeeName = cb.or(cb.like(joinCalibratorEmployee.get("lastName"),
+                    "%" + employeeName + "%"));
             queryPredicate = cb.and(searchPredicateByCalibratorEmployeeName, queryPredicate);
         }
         if (measurementDeviceId != null) {

@@ -101,10 +101,7 @@ public class ArchivalVerificationsQueryConstructorVerificator {
                     queryPredicate);
         }
         if ((fullNameToSearch != null) && (fullNameToSearch.length() > 0)) {
-            Predicate searchByClientFirstName = cb.like(root.get("clientData").get("firstName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientLastName = cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%");
-            Predicate searchByClientMiddleName = cb.like(root.get("clientData").get("middleName"), "%" + fullNameToSearch + "%");
-            Predicate searchPredicateByClientFullName = cb.or(searchByClientFirstName, searchByClientLastName, searchByClientMiddleName);
+            Predicate searchPredicateByClientFullName = cb.or(cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%"));
             queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
         }
 
@@ -115,14 +112,8 @@ public class ArchivalVerificationsQueryConstructorVerificator {
         }
         if ((employeeName != null) && (employeeName.length() > 0)) {
             Join<Verification, User> joinVerificatorEmployee = root.join("stateVerificatorEmployee");
-            Predicate searchByVerificatorName = cb.like(joinVerificatorEmployee.get("firstName"),
-                    "%" + employeeName + "%");
-            Predicate searchByVerificatorSurname = cb.like(joinVerificatorEmployee.get("lastName"),
-                    "%" + employeeName + "%");
-            Predicate searchByVerificatorLastName = cb.like(joinVerificatorEmployee.get("middleName"),
-                    "%" + employeeName + "%");
-            Predicate searchPredicateByVerificatorEmployeeName = cb.or(searchByVerificatorName,
-                    searchByVerificatorSurname, searchByVerificatorLastName);
+            Predicate searchPredicateByVerificatorEmployeeName = cb.or(cb.like(joinVerificatorEmployee.get("lastName"),
+                    "%" + employeeName + "%"));
             queryPredicate = cb.and(searchPredicateByVerificatorEmployeeName, queryPredicate);
         }
 

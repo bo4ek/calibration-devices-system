@@ -152,11 +152,7 @@
 		}
 
 		if ((fullNameToSearch != null)&&(fullNameToSearch.length()>0)) {
-            Expression<String> exp1 = cb.concat(root.get("clientData").get("lastName"), " ");
-            exp1 = cb.concat(exp1, root.get("clientData").get("firstName"));
-            exp1 = cb.concat(exp1, " ");
-            exp1 = cb.concat(exp1, root.get("clientData").get("middleName"));
-            Predicate searchPredicateByClientFullName = cb.or(cb.like(exp1, "%"+ fullNameToSearch +"%"));
+            Predicate searchPredicateByClientFullName = cb.or(cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%"));
 			queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
 		}
 		if ((streetToSearch != null)&&(streetToSearch.length()>0)) {
@@ -182,14 +178,8 @@
 
 		if ((employeeSearchName != null)&&(employeeSearchName.length()>0)) {
 			Join<Verification, User> joinCalibratorEmployee = root.join("calibratorEmployee");
-			Predicate searchByCalibratorName = cb.like(joinCalibratorEmployee.get("firstName"),
-					"%" + employeeSearchName + "%");
-			Predicate searchByCalibratorSurname = cb.like(joinCalibratorEmployee.get("lastName"),
-					"%" + employeeSearchName + "%");
-			Predicate searchByCalibratorLastName = cb.like(joinCalibratorEmployee.get("middleName"),
-					"%" + employeeSearchName + "%");
-			Predicate searchPredicateByCalibratorEmployeeName = cb.or(searchByCalibratorName, searchByCalibratorSurname,
-					searchByCalibratorLastName);
+			Predicate searchPredicateByCalibratorEmployeeName = cb.or(cb.like(joinCalibratorEmployee.get("lastName"),
+                    "%" + employeeSearchName + "%"));
 			queryPredicate = cb.and(searchPredicateByCalibratorEmployeeName, queryPredicate);
 		}
         if ((standardSize != null) && (standardSize.length() > 0)) {

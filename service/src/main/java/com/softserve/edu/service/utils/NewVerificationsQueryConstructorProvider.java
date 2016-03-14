@@ -155,10 +155,7 @@ public class NewVerificationsQueryConstructorProvider {
 			queryPredicate = cb.and(cb.like(root.get("id"), "%" + idToSearch + "%"), queryPredicate);
 		}
 		if ((fullNameToSearch != null)&&(fullNameToSearch.length()>0)) {
-			Predicate searchByClientFirstName = cb.like(root.get("clientData").get("firstName"), "%" + fullNameToSearch + "%");
-			Predicate searchByClientLastName = cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%");
-			Predicate searchByClientMiddleName = cb.like(root.get("clientData").get("middleName"), "%" + fullNameToSearch + "%");
-			Predicate searchPredicateByClientFullName = cb.or(searchByClientFirstName, searchByClientLastName, searchByClientMiddleName);
+			Predicate searchPredicateByClientFullName = cb.or(cb.like(root.get("clientData").get("lastName"), "%" + fullNameToSearch + "%"));
 			queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
 		}
 
@@ -184,10 +181,7 @@ public class NewVerificationsQueryConstructorProvider {
 		}
 		if ((employeeSearchName != null)&&(employeeSearchName.length()>0)) {
 			Join<Verification, User> joinProviderEmployee = root.join("providerEmployee");
-			Predicate searchByProviderName = cb.like(joinProviderEmployee.get("firstName"),"%" + employeeSearchName + "%");
-			Predicate searchByProviderSurname = cb.like(joinProviderEmployee.get("lastName"),"%" + employeeSearchName + "%");
-			Predicate searchByProviderLastName = cb.like(joinProviderEmployee.get("middleName"),"%" + employeeSearchName + "%");
-			Predicate searchPredicateByProviderEmployeeName = cb.or(searchByProviderName, searchByProviderSurname, searchByProviderLastName);
+			Predicate searchPredicateByProviderEmployeeName = cb.or(cb.like(joinProviderEmployee.get("lastName"),"%" + employeeSearchName + "%"));
 			queryPredicate = cb.and(searchPredicateByProviderEmployeeName, queryPredicate);
 		}
 	

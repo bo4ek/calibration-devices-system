@@ -131,7 +131,7 @@ public class VerificationPageDTOTransformer {
                     && (sealPresence == null || sealPresence.isEmpty()) && (serviceability == null || serviceability.isEmpty())
                     && (verificationWithDismantle == null || verificationWithDismantle.isEmpty())) {
                 return true;
-            } else if ((clientName != null && !clientName.isEmpty()) && verification.getClientData().getFullName().toLowerCase().contains(clientName.toLowerCase())) {
+            } else if ((clientName != null && !clientName.isEmpty()) && verification.getClientData().getLastName().toLowerCase().contains(clientName.toLowerCase())) {
                 return true;
             } else if ((providerName != null && !providerName.isEmpty()) && verification.getProvider().getName().toLowerCase().contains(providerName.toLowerCase())) {
                 return true;
