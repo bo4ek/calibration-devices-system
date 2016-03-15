@@ -3,22 +3,22 @@
         <div ng-if="photoType == 'begin'">
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label class="control-label">{{'INITIAL_VALUE' | translate }}</label>
+                    <label class="control-label counter-test-value">{{'INITIAL_VALUE' | translate }}</label>
                 </div>
                 <div class="form-group col-md-6">
-                    <input type="number" id="value"
+                    <input type="number" step="0.1" id="value"
                            ng-model="newValues.counterValue"
-                           class="form-control" required focus="true">
+                           class="form-control counter-test-value" required focus="true">
                 </div>
             </div>
         </div>
         <div ng-if="photoType == 'end'">
             <div class="row">
                 <div class="form-group col-md-6">
-                    <label class="control-label">{{'TERMINAL_VALUE' | translate }}</label>
+                    <label class="control-label counter-test-value">{{'TERMINAL_VALUE' | translate }}</label>
                 </div>
                 <div class="form-group col-md-6">
-                    <input type="number" ng-model="newValues.counterValue" class="form-control" required focus="true">
+                    <input type="number" step="0.1" ng-model="newValues.counterValue" class="form-control counter-test-value" required focus="true">
                 </div>
             </div>
         </div>

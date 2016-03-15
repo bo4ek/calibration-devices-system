@@ -20,6 +20,10 @@ body {
 
 }
 
+#editMainPhotoForm .counter-test-value {
+    font-size: 24px;
+}
+
 .incorrect {
     color: rgba(0, 0, 0, 0.35);
 }
