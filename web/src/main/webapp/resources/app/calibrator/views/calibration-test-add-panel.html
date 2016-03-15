@@ -239,6 +239,13 @@
             <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-danger " ng-click="closeForm()"
                     >{{'CLOSE' | translate}}
             </button>
+            <button class="btn">
+                <i class="fa fa-ban cancel_icon"
+                   ng-show="(verificationStatus == 'SENT_TO_VERIFICATOR')"
+                   popover="{{'CANCEL_TEST' | translate}}" popover-trigger="mouseenter"
+                   ng-click="openRejectTest(testId)">
+                </i>
+            </button>
         </div>
     </div>
     <div class="row">
