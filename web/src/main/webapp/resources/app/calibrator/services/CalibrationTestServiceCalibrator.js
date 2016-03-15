@@ -101,6 +101,13 @@ angular
                     });
             },
 
+            signTestProtocolWithoutEDS: function (verificationResult) {
+                return $http.put("calibrator/calibrationTests/signTestWithoutEDS", verificationResult)
+                    .then(function (result) {
+                        return result;
+                    });
+            },
+
             signEDSTestProtocol: function (file, testId) {
                 var formData=new FormData();
                 var url = 'calibrator/calibrationTests/signEDSTest';

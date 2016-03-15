@@ -44,6 +44,19 @@ angular
                 }
             )
         };
+
+        $scope.downloadDocumentWithoutEDS = function(documentType, verificationId, fileFormat) {
+            documentService.isSignedCertificate(verificationId).then(
+                function (result) {
+                    if (result.data) {
+                        var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
+                        location.href = url;
+                    } else {
+                        toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_DOWNLOAD_UNSIGNED_DOCUMENT'));
+                    }
+                });
+        };
+
         $scope.downloadReport = function (documentType) {
             var url = "doc/report/" + documentType + "/xls";
             location.href = url;

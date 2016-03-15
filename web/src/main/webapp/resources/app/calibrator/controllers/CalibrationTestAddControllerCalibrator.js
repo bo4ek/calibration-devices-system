@@ -283,6 +283,29 @@ angular
                 window.history.back();
             };
 
+            $scope.signCalibrationTestWithoutEDS = function () {
+                retranslater();
+                calibrationTestServiceCalibrator
+                    .editTestProtocol(protocol, $scope.testId)
+                    .then(function (status) {
+                        if (status == 200) {
+                            var verificationResult = {
+                                id: $scope.testId,
+                                status: $scope.getStatus()
+                            };
+                            calibrationTestServiceCalibrator
+                                .signTestProtocolWithoutEDS(verificationResult)
+                                .then(function (response) {
+                                    if (response.status == 200) {
+                                        $scope.TestForm.signed = true;
+                                        $scope.getVerificationStatus();
+                                        toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
+                                    }
+                                });
+                        }
+                    })
+            };
+
             $scope.signCalibrationTest = function () {
                 retranslater();
                 calibrationTestServiceCalibrator

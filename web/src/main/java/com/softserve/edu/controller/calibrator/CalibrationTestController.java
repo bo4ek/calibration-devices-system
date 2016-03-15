@@ -499,6 +499,51 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
+    @RequestMapping(value = "signTestWithoutEDS", method = RequestMethod.PUT)
+    public ResponseEntity signTestProtocolWithoutEDS(@RequestBody VerificationResultDTO verificationResult) {
+        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
+        try {
+            Verification verification = verificationService.findById(verificationResult.getId());
+            CalibrationTest calibrationTest = testService.findByVerificationId(verificationResult.getId());
+
+            byte[] documentByteArray = getDocument(verification, calibrationTest);
+            verification.setSigned(true);
+            verification.setSignedDocument(documentByteArray);
+            testService.updateTest(verification, verificationResult.getStatus());
+        } catch (Exception e) {
+            logger.error("Cannot sing protocol", e);
+            responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return responseEntity;
+    }
+
+    private byte[] getDocument(Verification verification, CalibrationTest calibrationTest) throws IOException {
+        if (verification.getStatus() == Status.TEST_OK) {
+            Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
+                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                    getDeviceType(verification), getYearIntroduction(verification));
+
+            Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
+                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                    getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
+
+            Calendar validityOfCertificate = Calendar.getInstance();
+            validityOfCertificate.setTime(new Date());
+            validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
+
+            verification.setExpirationDate(validityOfCertificate.getTime());
+            verification.setCalibrationInterval(calibrationInterval);
+        }
+        verification.setSignProtocolDate(new Date());
+
+        DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
+        FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
+
+        byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
+        file.getContent().getInputStream().read(documentByteArray);
+        return documentByteArray;
+    }
+
     @RequestMapping(value = "signTest/{verificationId}", method = RequestMethod.GET)
     public void signTestProtocol(@PathVariable String verificationId, HttpServletResponse response) {
         OutputStream os;
