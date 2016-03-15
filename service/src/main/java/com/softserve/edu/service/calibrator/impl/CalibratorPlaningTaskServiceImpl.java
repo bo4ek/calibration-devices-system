@@ -15,6 +15,8 @@ import com.softserve.edu.repository.catalogue.LocalityRepository;
 import com.softserve.edu.repository.catalogue.StreetRepository;
 import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
+import com.softserve.edu.service.exceptions.InvalidModuleSerialNumberException;
+import com.softserve.edu.service.exceptions.PermissionDeniedException;
 import com.softserve.edu.service.tool.MailService;
 import com.softserve.edu.service.utils.export.DbTableExporter;
 import com.softserve.edu.service.utils.export.TableExportColumn;
@@ -134,7 +136,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @throws IllegalArgumentException().
      */
     @Override
-    public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userName) {
+    public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userName) throws PermissionDeniedException, InvalidModuleSerialNumberException {
         Boolean taskAlreadyExists = true;
         Boolean taskHasCompleteVerification = false;
         CalibrationTask task = taskRepository.findByDateOfTaskAndModule_SerialNumber(taskDate, moduleSerialNumber);
@@ -143,16 +145,15 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         User user = userRepository.findOne(userName);
         if (user == null) {
             logger.error("User with name:" + userName + "was trying to create task for user with name: " + userName + " wasn't found");
-            throw new IllegalArgumentException();
+            throw new PermissionDeniedException();
         }
 
         for (Verification verification : verifications) {
-            verification.getStatus().equals(Status.TEST_COMPLETED);
             if (!verification.getCalibrator().getId().equals(user.getOrganization().getId())) {
                 logger.error("User with name: " + userName + " was trying to change verification and task from other organization");
-                return taskAlreadyExists;
+                throw new PermissionDeniedException();
             }
-            taskHasCompleteVerification = true;
+            taskHasCompleteVerification = verification.getStatus().equals(Status.TEST_COMPLETED);
         }
 
         if (task == null | taskHasCompleteVerification.equals(true)) {
@@ -160,7 +161,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             CalibrationModule module = moduleRepository.findBySerialNumber(moduleSerialNumber);
             if (module == null) {
                 logger.error("User with name:" + userName + "was trying to create task for module with serial number: " + moduleSerialNumber + " wasn't found");
-                throw new IllegalArgumentException();
+                throw new InvalidModuleSerialNumberException();
             }
             task = new CalibrationTask(module, null, new Date(), taskDate, user);
             taskRepository.save(task);

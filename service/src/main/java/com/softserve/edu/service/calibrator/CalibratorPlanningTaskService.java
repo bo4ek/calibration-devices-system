@@ -1,13 +1,13 @@
 package com.softserve.edu.service.calibrator;
 
-import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
+import com.softserve.edu.service.exceptions.InvalidModuleSerialNumberException;
+import com.softserve.edu.service.exceptions.PermissionDeniedException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ public interface CalibratorPlanningTaskService {
 
     Page<CalibrationTask> findAllCalibrationTasks(Pageable pageable);
 
-    Boolean addNewTaskForStation(Date taskDate, String serialNumber, List<String> verificationsId, String userId);
+    Boolean addNewTaskForStation(Date taskDate, String serialNumber, List<String> verificationsId, String userId) throws PermissionDeniedException, InvalidModuleSerialNumberException;
 
     void addNewTaskForTeam (Date taskDate, String serialNumber, List<String> verificationsId, String userId);
 

@@ -184,20 +184,23 @@ angular
                         "verificationsId": verificationIDs
                     };
                     verificationPlanningTaskService.saveTask(calibrationTask).then(function(data) {
-                        if (data.status == 200) {
-                            if (data.headers()['verifications-were-added-to-existing-task'] === 'false') {
-                                toaster.pop('success', $filter('translate')('INFORMATION'),
-                                    $filter('translate')('TASK_FOR_STATION_CREATED'));
-                            } else {
+                        switch(data.status) {
+                            case 200: {
                                 toaster.pop('success', $filter('translate')('INFORMATION'),
                                     $filter('translate')('VERIFICATIONS_ADDED_TO_TASK'));
+                                break;
                             }
-                            $scope.closeModal(true);
-                        } else {
-                            toaster.pop('error', $filter('translate')('INFORMATION'),
-                                $filter('translate')('ERROR_WHILE_CREATING_TASK'));
-                            $scope.closeModal();
+                            case 201: {
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('TASK_FOR_STATION_CREATED'));
+                                break;
+                            }
+                            default: {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_WHILE_CREATING_TASK'));
+                            }
                         }
+                        $scope.closeModal(true);
                     });
                 }
             }

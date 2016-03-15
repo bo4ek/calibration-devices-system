@@ -182,8 +182,13 @@ public class CalibratorPlanningTaskController {
                                              @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            taskService.addNewTaskForStation(taskDTO.getDateOfTask(),
+            Boolean taskAlreadyExist = taskService.addNewTaskForStation(taskDTO.getDateOfTask(),
                     taskDTO.getModuleSerialNumber(), taskDTO.getVerificationsId(), employeeUser.getUsername());
+            if(taskAlreadyExist == null) {
+                httpStatus = HttpStatus.BAD_REQUEST;
+            } else if(!taskAlreadyExist) {
+                httpStatus = HttpStatus.CREATED;
+            }
         } catch (Exception e) {
             logger.error("User with user name " + employeeUser.getUsername() + " are not able to save task for station", e);
             httpStatus = HttpStatus.CONFLICT;
@@ -254,7 +259,7 @@ public class CalibratorPlanningTaskController {
                                                                                                @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         Page<Verification> verifications = taskService.findVerificationsByCalibratorEmployeeAndTaskStatus(employeeUser.getUsername(),
                 pageNumber, itemsPerPage, sortCriteria, sortOrder);
-        Long count = Long.valueOf(taskService.findVerificationsByCalibratorEmployeeAndTaskStatusCount(employeeUser.getUsername()));
+        Long count = (long) taskService.findVerificationsByCalibratorEmployeeAndTaskStatusCount(employeeUser.getUsername());
         List<VerificationPlanningTaskDTO> content = VerificationPageDTOTransformer.toDoFromPageContent(verifications.getContent(), searchData);
         return new PageDTO<VerificationPlanningTaskDTO>(count, content);
     }
