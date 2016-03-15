@@ -30,7 +30,16 @@ angular
 
             $scope.statusData = [
                 {id: 'TEST_OK', label: null},
-                {id: 'TEST_NOK', label: null}
+                {id: 'TEST_NOK', label: null},
+                {id: 'SENT_TO_VERIFICATOR', label: null},
+                {id: 'TEST_COMPLETED', label: null},
+                {id: 'SENT_TO_TEST_DEVICE', label: null},
+                {id: 'TEST_PLACE_DETERMINED', label: null},
+                {id: 'TASK_PLANED', label: null},
+                {id: 'PLANNING_TASK', label: null},
+                {id: 'IN_PROGRESS', label: null},
+                {id: 'CREATED_FOR_PROVIDER', label: null},
+                {id: 'CREATED_BY_CALIBRATOR', label: null}
             ];
 
             $scope.setTypeDataLanguage = function () {
@@ -38,10 +47,28 @@ angular
                 if (lang === 'ukr') {
                     $scope.statusData[0].label = 'Перевірено придатний';
                     $scope.statusData[1].label = 'Перевірено непридатний';
+                    $scope.statusData[2].label = 'Пред\'явлено повірнику';
+                    $scope.statusData[3].label = 'Тест виконано';
+                    $scope.statusData[4].label = 'Відправлено на установку';
+                    $scope.statusData[5].label = 'Визначено спосіб повірки';
+                    $scope.statusData[6].label = 'Повірка спланована';
+                    $scope.statusData[7].label = 'Планування завдання';
+                    $scope.statusData[8].label = 'В роботі';
+                    $scope.statusData[9].label = 'Створено для провайдера';
+                    $scope.statusData[10].label = 'Створено калібратором';
 
                 } else if (lang === 'eng') {
                     $scope.statusData[0].label = 'Tested OK';
                     $scope.statusData[1].label = 'Tested NOK';
+                    $scope.statusData[2].label = 'Sent to verificator';
+                    $scope.statusData[3].label = 'Test completed';
+                    $scope.statusData[4].label = 'Sent to test device';
+                    $scope.statusData[5].label = 'Test place determined';
+                    $scope.statusData[6].label = 'Task planed';
+                    $scope.statusData[7].label = 'Planning task';
+                    $scope.statusData[8].label = 'In progress';
+                    $scope.statusData[9].label = 'Created for provider';
+                    $scope.statusData[10].label = 'Created by calibrator';
 
                 }
             };

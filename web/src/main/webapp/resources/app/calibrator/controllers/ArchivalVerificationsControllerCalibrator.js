@@ -45,7 +45,8 @@ angular
 
             $scope.statusData = [
                 {id: 'TEST_OK', label: null},
-                {id: 'TEST_NOK', label: null}
+                {id: 'TEST_NOK', label: null},
+                {id: 'SENT_TO_VERIFICATOR', label: null}
             ];
 
             //new select measurementDeviceType for search
@@ -67,6 +68,7 @@ angular
                 if (lang === 'ukr') {
                     $scope.statusData[0].label = 'Перевірено придатний';
                     $scope.statusData[1].label = 'Перевірено непридатний';
+                    $scope.statusData[2].label = 'Пред\'явлено повірнику';
 
                     $scope.deviceTypeData[0].label = 'Холодна вода';
                     $scope.deviceTypeData[1].label = 'Гаряча вода';
@@ -79,6 +81,7 @@ angular
                 } else if (lang === 'eng') {
                     $scope.statusData[0].label = 'Tested OK';
                     $scope.statusData[1].label = 'Tested NOK';
+                    $scope.statusData[2].label = 'Sent to verificator';
 
                     $scope.deviceTypeData[0].label = 'Cold water';
                     $scope.deviceTypeData[1].label = 'Hot water';

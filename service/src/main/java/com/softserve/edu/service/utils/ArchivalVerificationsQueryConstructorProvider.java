@@ -73,12 +73,12 @@ static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorPro
 			queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(searchStatus.trim())), queryPredicate);
 		}
 		else {
-            queryPredicate = cb.and(cb.or(
-                    Status.TEST_OK.getQueryPredicate(root, cb),
-                    Status.TEST_NOK.getQueryPredicate(root, cb)
-            ), queryPredicate);
+            queryPredicate = cb.and(cb.not(cb.or(
+                    Status.SENT.getQueryPredicate(root, cb),
+                    Status.ACCEPTED.getQueryPredicate(root, cb),
+                    Status.SENT_TO_PROVIDER.getQueryPredicate(root, cb)
+            )), queryPredicate);
         }
-        queryPredicate = cb.and(cb.isTrue(root.get("signed")));
 
 		if (startDateToSearch != null && endDateToSearch != null) {
 			DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;

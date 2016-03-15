@@ -79,11 +79,10 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         } else {
             queryPredicate = cb.and(cb.or(
                     Status.TEST_OK.getQueryPredicate(root, cb),
-                    Status.TEST_NOK.getQueryPredicate(root, cb)
+                    Status.TEST_NOK.getQueryPredicate(root, cb),
+                    Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb)
             ), queryPredicate);
         }
-
-        queryPredicate = cb.and(cb.isTrue(root.get("signed")));
 
         if (startDateToSearch != null && endDateToSearch != null) {
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
