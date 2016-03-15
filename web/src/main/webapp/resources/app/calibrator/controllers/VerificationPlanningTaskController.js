@@ -290,6 +290,7 @@ angular
                     });
                     $scope.$modalInstance.result.then(function () {
                         $scope.tableParams.reload();
+                        $rootScope.$broadcast('verification-sent-to-station');
                     });
                 }
             };
@@ -314,6 +315,7 @@ angular
                     $scope.tableParams.reload();
                     $scope.checkedItems = [];
                     $scope.idsOfVerifications = [];
+                    $rootScope.$broadcast('verification-sent-to-team');
                     // $scope.allIsEmpty = true;
                 });
             };

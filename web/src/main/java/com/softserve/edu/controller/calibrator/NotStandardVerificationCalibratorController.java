@@ -115,6 +115,15 @@ public class NotStandardVerificationCalibratorController {
         return verificationService.findCountOfNewNotStandardVerificationsByCalibratorId(user.getOrganizationId());
     }
 
+    @RequestMapping(value = "planed/count", method = RequestMethod.GET)
+    public Long getCountOfPlanedTasksByCalibratorId(
+            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if(user != null && calibratorService.findById(user.getOrganizationId()) != null) {
+            return verificationService.findCountOfPlanedTasksByCalibratorId(user.getOrganizationId());
+        }
+        return null;
+    }
+
     /**
      * Finds count of verifications for provider
      * assigned to this organization

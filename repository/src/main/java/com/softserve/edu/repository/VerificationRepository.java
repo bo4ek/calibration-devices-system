@@ -193,6 +193,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     void updateVerificationQueueById (@Param("queue") int queue , @Param("id") String id);
 
     Long countByCalibratorIdAndStatusAndCalibratorEmployeeUsername(Long calibratorId, Status status, String calibratorEmployeeUsername);
+
+    Long countByTaskStatusAndCalibratorId(Status status, Long calibratorId);
 }
 
 

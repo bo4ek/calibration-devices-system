@@ -934,6 +934,11 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
+    public Long findCountOfPlanedTasksByCalibratorId(Long calibratorId) {
+        return verificationRepository.countByTaskStatusAndCalibratorId(Status.PLANNING_TASK, calibratorId);
+    }
+
+    @Override
     public Long findCountOfNewVerificationsForProviderByCalibratorId(Long calibratorId) {
         return verificationRepository.countByCalibratorIdAndStatusAndReadStatus(
                 calibratorId, Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD);

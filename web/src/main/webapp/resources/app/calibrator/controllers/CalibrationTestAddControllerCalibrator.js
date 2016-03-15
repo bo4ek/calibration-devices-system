@@ -4,8 +4,9 @@
 angular
     .module('employeeModule')
     .controller('CalibrationTestAddControllerCalibrator', ['$rootScope', '$translate', '$scope', '$modal', '$http', '$log',
-        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout', 'toaster', '$filter', 'InitializeLibForDigitalSign',
-        function ($rootScope, $translate, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload, $timeout, toaster, $filter, initializeLibForDigitalSign) {
+        'CalibrationTestServiceCalibrator', 'VerificationServiceVerificator', '$location', 'Upload', '$timeout', 'toaster', '$filter', 'InitializeLibForDigitalSign',
+        function ($rootScope, $translate, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, verificationServiceVerificator,
+                  $location, Upload, $timeout, toaster, $filter, initializeLibForDigitalSign) {
 
             $scope.testId = $location.search().param;
             $scope.hasProtocol = $location.search().loadProtocol || false;
@@ -405,5 +406,47 @@ angular
                 if ($scope.rotateIndex >= 360) {
                     $scope.rotateIndex -= 360;
                 }
+            };
+
+            $scope.openRejectTest = function (verificationId) {
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/verificator/views/modals/mailComment.html',
+                    controller: 'TestRejectControllerVerificator',
+                    size: 'md'
+
+                });
+
+                $scope.idsOfVerifications = [verificationId];
+                /**
+                 * executes when modal closing
+                 */
+                modalInstance.result.then(function (formData) {
+                    var dataToSend = {
+                        idsOfVerifications: $scope.idsOfVerifications,
+                        message: formData.message
+                    };
+
+
+                    verificationServiceVerificator
+                        .rejectTestToCalibrator(dataToSend)
+                        .then(function (status) {
+                            $rootScope.$broadcast('verification-sent-to-calibrator');
+                            if(status.status==200){
+                                $modal.open({
+                                    animation: true,
+                                    templateUrl: 'resources/app/verificator/views/modals/rejecting-success.html',
+                                    controller: function ($modalInstance) {
+                                        this.ok = function () {
+                                            $modalInstance.close();
+                                        }
+                                    },
+                                    controllerAs: 'successController',
+                                    size: 'md'
+                                });
+                                $scope.closeForm();
+                            }
+                        });
+                });
             };
         }]);

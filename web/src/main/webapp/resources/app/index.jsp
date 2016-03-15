@@ -213,9 +213,12 @@
                             </a>
                         </li>
 
-                        <li ui-sref-active="active">
-                            <a ui-sref="planning-task-calibrator"><i class="fa fa-tasks"></i>
+                        <li ui-sref-active="active" ng-controller="PlaningTaskNotificationsControllerCalibrator">
+                            <a ui-sref="planning-task-calibrator" ng-click="reloadTasks()"><i class="fa fa-tasks"></i>
                                 <span translate="TASK_PLANNING"></span>
+                                <span class="ui teal label" ng-bind="countOfTasks"
+                                      ng-show="countOfTasks>0" ng-cloak>
+                              	</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
