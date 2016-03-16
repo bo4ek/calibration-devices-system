@@ -1,23 +1,11 @@
 angular
     .module('employeeModule')
-    .controller('NewVerificationsControllerProvider', ['$scope', '$log', '$modal', 'VerificationServiceProvider', '$rootScope',
+    .controller('AcceptedVerificationsControllerProvider', ['$scope', '$log', '$modal', 'VerificationServiceProvider', '$rootScope',
         'ngTableParams', '$filter', '$timeout', '$translate', 'ProfileService',
         function ($scope, $log, $modal, verificationServiceProvider, $rootScope, ngTableParams, $filter, $timeout, $translate, profileService) {
 
             $scope.resultsCount = 0;
-            $scope.isSentVerifications = true;
-
-            /**
-             * this function return true if is StateVerificatorEmployee
-             */
-            $scope.isVerificatorEmployee = function () {
-                verificationServiceProvider.getIfEmployeeProvider().success(function (data) {
-                    $scope.isEmployee = data;
-                });
-
-            };
-
-            $scope.isVerificatorEmployee();
+            $scope.isSentVerifications = false;
 
             $scope.clearAll = function () {
                 $scope.selectedStatus.name = null;
@@ -97,11 +85,9 @@ angular
                 if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
                     return true;
                 }
-                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
-                    && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
-                    return true;
-                }
-                return false;
+                return pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                    && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day');
+
             };
 
 
@@ -133,60 +119,46 @@ angular
             };
 
             verificationServiceProvider.getNewVerificationEarliestDate().success(function (date) {
-                    //first we will try to receive date period
-                    // to populate ng-table filter
-                    // I did this to reduce reloading and flickering of the table
-                    $scope.initDatePicker(date);
-                    $scope.tableParams = new ngTableParams({
-                        page: 1,
-                        count: 10,
-                        sorting: {
-                            date: 'desc'
-                        }
-                    }, {
-                        total: 0,
-                        filterDelay: 1000,
-                        getData: function ($defer, params) {
+                //first we will try to receive date period
+                // to populate ng-table filter
+                // I did this to reduce reloading and flickering of the table
+                $scope.initDatePicker(date);
+                $scope.tableParams = new ngTableParams({
+                    page: 1,
+                    count: 10,
+                    sorting: {
+                        date: 'desc'
+                    }
+                }, {
+                    total: 0,
+                    filterDelay: 1000,
+                    getData: function ($defer, params) {
 
-                            var sortCriteria = Object.keys(params.sorting())[0];
-                            var sortOrder = params.sorting()[sortCriteria];
+                        var sortCriteria = Object.keys(params.sorting())[0];
+                        var sortOrder = params.sorting()[sortCriteria];
 
-                            params.filter().status = 'SENT';
+                        params.filter().status = 'ACCEPTED';
 
-                            params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
-                            params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
+                        params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
+                        params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
-                            verificationServiceProvider.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
-                                .success(function (result) {
+                        verificationServiceProvider.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+                            .success(function (result) {
 
-                                    $scope.resultsCount = result.totalItems;
-                                    $defer.resolve(result.content);
-                                    params.total(result.totalItems);
-                                    $scope.allVerifications = result.content;
-                                }, function (result) {
-                                    $log.debug('error fetching data:', result);
-                                });
-                        }
-                    });
+                                $scope.resultsCount = result.totalItems;
+                                $defer.resolve(result.content);
+                                params.total(result.totalItems);
+                                $scope.allVerifications = result.content;
+                            }, function (result) {
+                                $log.debug('error fetching data:', result);
+                            });
+                    }
                 });
+            });
 
             $scope.$on('provider-save-verification', function(event, args) {
                 $scope.tableParams.reload();
             });
-
-
-            $scope.markAsRead = function (id) {
-                var dataToSend = {
-                    verificationId: id,
-                    readStatus: 'READ'
-                };
-
-                verificationServiceProvider.markVerificationAsRead(dataToSend).success(function () {
-                    $rootScope.$broadcast('verification-was-read');
-                    $scope.tableParams.reload();
-                });
-            };
-
 
             /**
              * open modal
@@ -206,9 +178,6 @@ angular
                                     $rootScope.verificationID = verifId;
                                     verification.id = $rootScope.verificationID;
                                     verification.initialDate = verifDate;
-                                    if (verifReadStatus == 'UNREAD') {
-                                        $scope.markAsRead(verifId);
-                                    }
                                     return verification;
                                 });
                         }
@@ -230,56 +199,9 @@ angular
                     });
             };
 
-            $scope.addProviderEmployee = function (verificationId) {
-                profileService.havePermissionToAssignPerson()
-                    .then(function (response) {
-                        if (response.data) {
-                            var modalInstance = $modal.open({
-                                animation: true,
-                                templateUrl: 'resources/app/provider/views/modals/adding-providerEmployee.html',
-                                controller: 'ProviderEmployeeControllerProvider',
-                                size: 'md',
-                                windowClass: 'xx-dialog',
-                                resolve: {
-                                    providerEmploy: function () {
-                                        return verificationServiceProvider.getProviders()
-                                            .success(function (providers) {
-                                                return providers;
-                                            }
-                                        );
-                                    }
-                                }
-                            });
-                            /**
-                             * executes when modal closing
-                             */
-                            modalInstance.result.then(function (formData) {
-                                var idVerification = 0;
-                                var dataToSend = {
-                                    idVerification: verificationId,
-                                    employeeProvider: formData.provider
-                                };
-                                $log.info(dataToSend);
-                                verificationServiceProvider
-                                    .sendEmployeeProvider(dataToSend)
-                                    .success(function () {
-                                        $scope.tableParams.reload();
-                                    });
-                            });
-                        } else {
-                            verificationServiceProvider
-                                .assignEmployeeProvider(verificationId)
-                                .then(function () {
-                                    $scope.tableParams.reload();
-                                });
-                        }
-                    })
-            };
-
             $scope.idsOfVerifications = [];
             $scope.checkedItems = [];
             $scope.allIsEmpty = true;
-            $scope.idsOfCalibrators = null;
 
             $scope.checkProviderEmployee = function () {
                 var result = false;
@@ -294,7 +216,6 @@ angular
                 if(!$scope.allVerifications) {
                     return false;
                 }
-
                 var checkedItems = $scope.allVerifications.filter(function (verification) {
                     return verification.selected;
                 });
@@ -340,13 +261,53 @@ angular
                 checkForEmpty();
             };
 
-            $scope.resolveVerification = function (verification) {
-                if($scope.selectedSentVerification && $scope.selectedSentVerification !== verification) {
-                    $scope.selectedSentVerification.selected = false;
-                }
-                $scope.selectedSentVerification = verification;
-                $scope.idsOfVerifications[0] = verification.id;
+            /**
+             * open modal
+             */
+            $scope.openSendingModal = function () {
+                if (!$scope.allIsEmpty) {
+                    var modalInstance = $modal.open({
+                        animation: true,
+                        templateUrl: 'resources/app/provider/views/modals/verification-sending.html',
+                        controller: 'SendingModalControllerProvider',
+                        size: 'md',
+                        resolve: {
+                            response: function () {
+                                return verificationServiceProvider.getCalibrators()
+                                    .success(function (calibrators) {
 
+                                        return calibrators;
+                                    }
+                                );
+                            }
+                        }
+                    });
+
+                    /**
+                     * executes when modal closing
+                     */
+                    modalInstance.result.then(function (formData) {
+
+                        var dataToSend = {
+                            idsOfVerifications: $scope.idsOfVerifications,
+                            organizationId: formData.calibrator.id
+                        };
+
+
+                        verificationServiceProvider
+                            .sendVerificationsToCalibrator(dataToSend)
+                            .success(function () {
+                                $log.debug('success sending');
+                                $scope.tableParams.reload();
+                                $rootScope.$broadcast('verification-sent-to-calibrator');
+                            });
+                        $scope.idsOfVerifications = [];
+                        $scope.checkedItems = [];
+
+                    });
+                } else {
+                    $scope.isClicked = true;
+                }
             };
 
             /**

@@ -12,6 +12,7 @@ import com.softserve.edu.service.utils.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public interface VerificationService {
     Long findCountOfNewVerificationsByCalibratorId(Long calibratorId);
 
     Long findCountOfNewVerificationsByProviderId(Long providerId);
+
+    Long findCountOfAcceptedVerificationsByProviderId(Long providerId);
 
     Long findCountOfNewVerificationsByStateVerificatorId(Long stateVerificatorId);
 

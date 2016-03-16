@@ -11,23 +11,21 @@ angular
 	    		verificationServiceProvider.getCountOfNewVerifications().success(function (count) {
 		       		$scope.countOfUnreadVerifications = count;
 					});
-	    	}
+	    	};
 	    	
 	    	$scope.initializeCounter();
 	    	
 	    	$scope.reloadVerifications = function() {
 	    		$rootScope.$broadcast('refresh-table');
-	    	}
+	    	};
 			
             $scope.startPolling = function(){
 					$scope.stopPolling();
 					if(angular.isDefined(promiseInterval)) return;
 					promiseInterval = $interval(function () {
-						verificationServiceProvider.getCountOfNewVerifications().success(function (count) {
-				       		$scope.countOfUnreadVerifications = count;
-							})
+                        $scope.initializeCounter()
 					}, 10000);
-			}
+			};
 
 	    	$scope.stopPolling = function() {
 	    		$interval.cancel(promiseInterval);
@@ -36,15 +34,11 @@ angular
 	    	$scope.startPolling();
 	    	
 			$rootScope.$on('verification-sent-to-calibrator', function(){
-				verificationServiceProvider.getCountOfNewVerifications().success(function (count) {
-			       		$scope.countOfUnreadVerifications = count;
-						});
+                $scope.initializeCounter();
 			});	   	
 		
 			$rootScope.$on('verification-was-read', function(){
-				verificationServiceProvider.getCountOfNewVerifications().success(function (count) {
-		       		$scope.countOfUnreadVerifications = count;
-					});
+                $scope.initializeCounter();
 			});
 		
 			$scope.$on('$destroy', function () {

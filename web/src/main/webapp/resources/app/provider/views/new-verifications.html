@@ -47,13 +47,19 @@
                                         ng-class="{'unreadClass': verification.readStatus=='UNREAD'}">
                                         <script type="text/ng-template" id="ng-table/headers/checkbox.html">
                                             <input type="checkbox" ng-model="allSelected" ng-model-options="{getterSetter: true}"
-                                                   name="filter-checkbox" value=""
-                                                    />     </script>
-                                        <td header="'ng-table/headers/checkbox.html'"  ng-show="checkProviderEmployee()">
+                                                   name="filter-checkbox" value=""/>
+                                        </script>
+                                        <td ng-if="!isSentVerifications" header="'ng-table/headers/checkbox.html'"  ng-show="checkProviderEmployee()">
                                             <div>
                                                 <input type="checkbox" ng-model="verification.selected"
-                                                       ng-click="resolveVerificationId(verification.id)"
-                                                       ng-show="verification.providerEmployee"/>
+                                                       ng-click="resolveVerificationId(verification.id)"/>
+
+                                            </div>
+                                        </td>
+                                        <td ng-if="isSentVerifications" ng-show="!checkProviderEmployee()">
+                                            <div>
+                                                <input type="checkbox" ng-model="verification.selected"
+                                                       ng-click="resolveVerification(verification)"/>
 
                                             </div>
                                         </td>
@@ -84,9 +90,6 @@
                                         <td data-title="'CLIENT_STREET' | translate" sortable="'street'"
                                             filter="{ 'street': 'text' }">{{ verification.street }}
                                         </td>
-                                        <td data-title="'STATUS' | translate" sortable="'status'"
-                                            filter="{ 'status': 'status' }" width="200">{{ verification.status | translate }}
-                                        </td>
                                         <td data-title="'EMPLOYEE_SINGLE' | translate"
                                             sortable="'provider_employee_last_name'"
                                             filter="{ 'employee_last_name': 'text' }">{{ verification.providerEmployee}}
@@ -96,11 +99,11 @@
                                             <i class="fa fa-info-circle info_icon"
                                                popover="Детальніше"
                                                popover-trigger="mouseenter"
-                                               ng-click="openDetails(verification.id, verification.initialDate, verification.readStatus, verification.status)">
+                                               ng-click="openDetails(verification.id, verification.initialDate, verification.readStatus)">
                                             </i>
 
                                             <i class="fa fa-user add_attached_user_icon"
-                                               ng-show="!verification.providerEmployee"
+                                               ng-show="isSentVerifications && !verification.providerEmployee"
                                                popover="Вибрати відповідальну особу"
                                                popover-trigger="mouseenter"
                                                ng-click="addProviderEmployee(verification.id)">
@@ -108,7 +111,7 @@
 
 
                                             <i class="fa fa-user-times remove_attached_user_icon" style="font-size: 24px"
-                                               ng-show="verification.providerEmployee && !isEmployee"
+                                               ng-show="!isSentVerifications && verification.providerEmployee && !isEmployee"
                                                popover="Скасувати відповідальну особу"
                                                popover-trigger="mouseenter"
                                                ng-click="removeProviderEmployee(verification.id)">
@@ -178,24 +181,12 @@
                                         </span>
                                 </div>
                             </script>
-                            <script type="text/ng-template" id="ng-table/filters/status.html">
-                                <ui-select ng-model="selectedStatus.name" theme="select2" on-select='doSearch()' search-enabled="false"
-                                           name="filter-status">   
-                                    <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}" allow-clear="true">
-                                        {{$select.selected.label}}
-                                    </ui-select-match>
-                                    <ui-select-choices
-                                            repeat="status in statusData">
-                                        <span ng-bind-html="status.label"></span>
-                                    </ui-select-choices>
-                                </ui-select>
-                            </script>
                             <p id="emptyError" ng-if="allIsEmpty && isClicked" class="help-block">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {{ 'CHOOSE_AT_LEAST_ONE_VERIFICATION' | translate}}
                             </p>
 
-                            <div class="pull-left">
+                            <div class="pull-left" ng-if="!isSentVerifications">
                                 <button type="button" class="btn btn-primary"
                                         ng-click="openSendingModal()"><span class="glyphicon glyphicon-send"></span>
                                     {{ 'SEND' | translate}}

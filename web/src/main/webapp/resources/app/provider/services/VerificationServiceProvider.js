@@ -55,6 +55,9 @@ angular
             getCountOfNewVerifications: function(url) {
             	return getData('verifications/new/count/provider');
             },
+            getCountOfAcceptedVerifications: function() {
+                return getData('verifications/accepted/count/provider');
+            },
             markVerificationAsRead : function(data) {
             	return updateData('new/read', data);
             },

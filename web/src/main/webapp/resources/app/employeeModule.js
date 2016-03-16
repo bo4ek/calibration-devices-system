@@ -39,6 +39,11 @@
                         templateUrl: 'resources/app/provider/views/new-verifications.html',
                         controller: 'NewVerificationsControllerProvider'
                     })
+                    .state("accepted-verifications-provider", {
+                        url: '/provider/verifications/accepted',
+                        templateUrl: 'resources/app/provider/views/new-verifications.html',
+                        controller: 'AcceptedVerificationsControllerProvider'
+                    })
                     .state("employee-show-provider", {
                         url: '/provider/employee-show',
                         templateUrl: 'resources/app/provider/views/employee/show-employee.html',
@@ -262,6 +267,7 @@
         'provider/controllers/MainPanelControllerProvider',
         'provider/controllers/ArchivalVerificationsControllerProvider',
         'provider/controllers/NewVerificationsControllerProvider',
+        'provider/controllers/AcceptedVerificationsControllerProvider',
         'provider/controllers/AddingVerificationsControllerProvider',
         'provider/controllers/DetailsModalControllerProvider',
         'provider/controllers/SendingModalControllerProvider',
@@ -271,6 +277,7 @@
         'provider/controllers/UsersController',
         'provider/controllers/SettingsControllerProvider',
         'provider/controllers/NotificationsControllerProvider',
+        'provider/controllers/AcceptedVerificationsNotificationsControllerProvider',
         'provider/controllers/ProviderEmployeeControllerProvider',
         'provider/controllers/MailSendingModalControllerProvider',
         'provider/services/VerificationServiceProvider',

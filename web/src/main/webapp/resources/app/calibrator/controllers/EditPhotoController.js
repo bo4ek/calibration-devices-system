@@ -81,7 +81,7 @@ angular
             };
 
             $scope.calcError = function (initialValue, endValue, volumeOfStandard) {
-                return parseFloat(((endValue - initialValue - volumeOfStandard) * 100 / (volumeOfStandard)));
+                return parseFloat(((endValue - initialValue - volumeOfStandard) * 100 / (volumeOfStandard))).toFixed(5);
             };
 
             $scope.selectedTypeWater = {

@@ -234,6 +234,20 @@ public class ProviderVerificationController {
         }
     }
 
+    /**
+     * Find count of accepted verifications
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "accepted/count/provider", method = RequestMethod.GET)
+    public Long getCountOfAcceptedVerificationsByProviderId(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if (user != null) {
+            return verificationService.findCountOfAcceptedVerificationsByProviderId(user.getOrganizationId());
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * Find calibrators which correspond provider agreements

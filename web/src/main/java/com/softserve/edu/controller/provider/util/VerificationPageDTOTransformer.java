@@ -26,7 +26,7 @@ public class VerificationPageDTOTransformer {
             }
             VerificationPageDTO verificationPageDTO = new VerificationPageDTO(
                             verification.getId(),
-                            verification.getSentToCalibratorDate(),
+                            verification.getInitialDate(),
                             verification.getClientData().getLastName(),
                             verification.getClientData().getClientAddress().getStreet(),
                             verification.getClientData().getClientAddress().getRegion(),

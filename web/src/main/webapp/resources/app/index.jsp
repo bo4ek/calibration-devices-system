@@ -165,6 +165,19 @@
                               </span>
                             </a>
                         </li>
+                        <li ui-sref-active="active" ng-controller="AcceptedVerificationsNotificationsControllerProvider">
+                            <a ui-sref="accepted-verifications-provider" ng-click="reloadVerifications()">
+                                <i class="fa fa-list-alt fa-fw"></i> <span translate="ACCEPTED_VERIFICATIONS"></span>
+                              <span class="ui teal label" ng-bind="countOfAcceptedVerifications"
+                                    ng-show="countOfAcceptedVerifications>0" ng-cloak>
+                              </span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="verifications-archive-provider"><i class="fa fa-archive fa-fw"></i><span
+                                    translate="VERIFICATIONS_ARCHIVE">
+                           </span></a>
+                        </li>
                         <li ui-sref-active="active" ng-controller="NotStandardNotificationsControllerProvider">
                             <a ui-sref="not-standard-verifications-provider" ng-click="reloadVerifications()"><i
                                     class="fa fa-list-alt fa-fw"></i> <span
@@ -280,11 +293,7 @@
                     </sec:authorize>
 
                     <sec:authorize url="/provider">
-                        <li ui-sref-active="active">
-                            <a ui-sref="verifications-archive-provider"><i class="fa fa-archive fa-fw"></i><span
-                                    translate="VERIFICATIONS_ARCHIVE">
-                           </span></a>
-                        </li>
+
                         <li ui-sref-active="active">
                             <a ui-sref="reports-provider"><i class="fa fa-file-excel-o"></i><span
                                     translate="REPORTS">
