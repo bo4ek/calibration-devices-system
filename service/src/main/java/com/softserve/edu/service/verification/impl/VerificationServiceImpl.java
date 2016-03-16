@@ -143,13 +143,13 @@ public class VerificationServiceImpl implements VerificationService {
      * Finds count of rows in database for verifications assigned to Provider with Read Status = 'UNREAD'.
      * Method is used for notification about unwatched verifications
      *
-     * @param providerId id of responsible person
+     * @param employeeUsername name of responsible person
      * @return count of accepted verifications
      */
     @Override
     @Transactional(readOnly = true)
-    public Long findCountOfAcceptedVerificationsByProviderId(Long providerId) {
-        return verificationRepository.countByProviderIdAndStatus(providerId, Status.ACCEPTED);
+    public Long findCountOfAcceptedVerificationsByProviderEmployeeUsername(String employeeUsername) {
+        return verificationRepository.countByProviderEmployeeUsernameAndStatus(employeeUsername, Status.ACCEPTED);
     }
 
     /**

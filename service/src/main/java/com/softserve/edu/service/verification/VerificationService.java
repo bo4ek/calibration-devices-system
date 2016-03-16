@@ -39,7 +39,7 @@ public interface VerificationService {
 
     Long findCountOfNewVerificationsByProviderId(Long providerId);
 
-    Long findCountOfAcceptedVerificationsByProviderId(Long providerId);
+    Long findCountOfAcceptedVerificationsByProviderEmployeeUsername(String employeeUsername);
 
     Long findCountOfNewVerificationsByStateVerificatorId(Long stateVerificatorId);
 

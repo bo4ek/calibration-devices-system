@@ -242,7 +242,7 @@ public class ProviderVerificationController {
     @RequestMapping(value = "accepted/count/provider", method = RequestMethod.GET)
     public Long getCountOfAcceptedVerificationsByProviderId(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         if (user != null) {
-            return verificationService.findCountOfAcceptedVerificationsByProviderId(user.getOrganizationId());
+            return verificationService.findCountOfAcceptedVerificationsByProviderEmployeeUsername(user.getUsername());
         } else {
             return null;
         }
