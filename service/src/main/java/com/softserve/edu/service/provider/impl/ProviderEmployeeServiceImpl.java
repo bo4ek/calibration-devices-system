@@ -93,8 +93,8 @@ public class ProviderEmployeeServiceImpl implements ProviderEmployeeService {
     public List<EmployeeDTO> getAllProviders(List<String> role, User employee) {
         List<EmployeeDTO> providerListEmployee = new ArrayList<>();
         if (role.contains(UserRole.PROVIDER_ADMIN.name())) {
-            List<User> allAvailableUsersList = providerEmployeeRepository.findAllAvailableUsersByRoleAndOrganizationId(
-                    UserRole.PROVIDER_EMPLOYEE, employee.getOrganization().getId())
+            List<User> allAvailableUsersList = providerEmployeeRepository.findAllAvailableUsersByEmployeeAndAdminRoleAndOrganizationId(
+                    UserRole.PROVIDER_EMPLOYEE, UserRole.PROVIDER_ADMIN, employee.getOrganization().getId())
                         .stream()
                         .collect(Collectors.toList());
             providerListEmployee = EmployeeDTO.giveListOfEmployeeDTOs(allAvailableUsersList);
