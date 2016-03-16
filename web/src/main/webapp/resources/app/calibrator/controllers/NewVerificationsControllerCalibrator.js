@@ -648,6 +648,15 @@ angular
                                     });
                             });
                         } else {
+                            var listOfVerifications = [];
+                            if ($scope.idsOfVerifications.length == 0) {
+                                listOfVerifications.push(verificationId);
+                            } else {
+                                listOfVerifications = $scope.idsOfVerifications;
+                            }
+                            var verificationsToAssign = {
+                                "verificationsId": listOfVerifications
+                            }
                             verificationServiceCalibrator
                                 .assignEmployeeCalibrator(verificationId)
                                 .then(function () {
