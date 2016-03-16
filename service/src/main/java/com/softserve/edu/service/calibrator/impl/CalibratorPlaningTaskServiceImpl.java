@@ -492,7 +492,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             String email = calibrationTask.getModule().getEmail();
             User user = calibratorEmployeeService.oneCalibratorEmployee(senderUsername);
 
-            mailService.sendMailToStationWithAttachments(user, calibrationTask.getModule().getModuleNumber(), dateFormat.format(calibrationTask.getDateOfTask()).toString(), email, Constants.TASK + " " + calibrationTask.getId(), xlsFile, dbFile);
+            mailService.sendMailToStationWithAttachments(user, calibrationTask.getModule().getSerialNumber(), dateFormat.format(calibrationTask.getDateOfTask()).toString(), email, Constants.TASK + " " + calibrationTask.getId(), xlsFile, dbFile);
             calibrationTask.setStatus(Status.SENT_TO_TEST_DEVICE);
             for (Verification verification : verifications) {
                 verification.setStatus(Status.SENT_TO_TEST_DEVICE);

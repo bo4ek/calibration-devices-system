@@ -32,5 +32,5 @@ public interface MailService {
 
     void sendMailWithAttachments(String to, String subject, String message, File... files);
 
-    void sendMailToStationWithAttachments(User user, String moduleNumber, String dateOfTask, String to, String subject, File... files);
+    void sendMailToStationWithAttachments(User user, String serialNumber, String dateOfTask, String to, String subject, File... files);
 }
