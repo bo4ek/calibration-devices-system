@@ -389,7 +389,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Async
-    public void sendMailToStationWithAttachments(User user, String moduleNumber, String dateOfTask, String to, String subject, File... files) {
+    public void sendMailToStationWithAttachments(User user, String serialNumber, String dateOfTask, String to, String subject, File... files) {
         try {
             MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
@@ -409,7 +409,7 @@ public class MailServiceImpl implements MailService {
                     templateVariables.put(MailConstant.MIDDLE_NAME, user.getMiddleName());
                     templateVariables.put(MailConstant.LAST_NAME, user.getLastName());
                     templateVariables.put(MailConstant.PHONE, user.getPhone());
-                    templateVariables.put(MailConstant.MODULE_NUMBER, moduleNumber);
+                    templateVariables.put(MailConstant.SERIAL_NUMBER, serialNumber);
                     templateVariables.put(MailConstant.DATE, dateOfTask);
                     templateVariables.put(MailConstant.EMAIL, user.getEmail());
 

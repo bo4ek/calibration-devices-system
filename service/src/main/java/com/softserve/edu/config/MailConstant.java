@@ -51,5 +51,6 @@ public interface MailConstant {
 
     String MAIL_ENCODING = "mail.encoding";
     String MODULE_NUMBER = "moduleNumber";
+    String SERIAL_NUMBER = "serialNumber";
 
 }
