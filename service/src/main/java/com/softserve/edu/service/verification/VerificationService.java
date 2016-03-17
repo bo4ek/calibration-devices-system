@@ -174,7 +174,7 @@ public interface VerificationService {
 
     Long findCountOfNewNotStandardVerificationsByCalibratorId(Long calibratorId);
 
-    Long findCountOfPlanedTasksByCalibratorId(Long calibratorId);
+    Long findCountOfPlanedTasksByCalibratorEmployeeUsername(User calibratorEmployee);
 
     Long findCountOfNewVerificationsForProviderByCalibratorId(Long calibratorId);
 

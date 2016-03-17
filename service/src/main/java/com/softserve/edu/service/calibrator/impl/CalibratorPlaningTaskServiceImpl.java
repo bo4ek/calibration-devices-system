@@ -248,7 +248,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @return count of verifications (int)
      */
     @Override
-    public int findVerificationsByCalibratorEmployeeAndTaskStatusCount(String userName) {
+    public long findVerificationsByCalibratorEmployeeAndTaskStatusCount(String userName) {
         User user = userRepository.findOne(userName);
         if (user == null) {
             logger.error("Cannot found user!");
@@ -256,10 +256,10 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         Set<UserRole> roles = user.getUserRoles();
         for (UserRole role : roles) {
             if (role.equals(UserRole.CALIBRATOR_ADMIN)) {
-                return verificationRepository.findByTaskStatusAndCalibratorId(Status.PLANNING_TASK, user.getOrganization().getId()).size();
+                return verificationRepository.countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, user.getOrganization().getId());
             }
         }
-        return verificationRepository.findByCalibratorEmployeeUsernameAndTaskStatus(user.getUsername(), Status.PLANNING_TASK).size();
+        return verificationRepository.countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, user.getUsername());
 
     }
 
@@ -394,7 +394,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 break;
         }
 
-        return verificationRepository.findByTaskStatusAndCalibratorId(Status.PLANNING_TASK, id, pageRequest);
+        return verificationRepository.findByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, id, pageRequest);
     }
 
 
@@ -430,7 +430,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         }
         Pageable pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
                 "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
-        return verificationRepository.findByCalibratorEmployeeUsernameAndTaskStatus(user.getUsername(), Status.PLANNING_TASK, pageRequest);
+        return verificationRepository.findByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, user.getUsername(), pageRequest);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
+import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
@@ -947,8 +948,13 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public Long findCountOfPlanedTasksByCalibratorId(Long calibratorId) {
-        return verificationRepository.countByTaskStatusAndCalibratorId(Status.PLANNING_TASK, calibratorId);
+    public Long findCountOfPlanedTasksByCalibratorEmployeeUsername(User calibratorEmployee) {
+        if (calibratorEmployee.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN)) {
+            return verificationRepository.countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK,
+                    calibratorEmployee.getOrganization().getId());
+        }
+        return verificationRepository.countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK,
+                calibratorEmployee.getUsername());
     }
 
     @Override

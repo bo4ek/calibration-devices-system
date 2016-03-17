@@ -86,7 +86,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Long countByProviderEmployeeUsernameAndStatus(String providerEmployeeUsername, Status status);
 
-    Long countByCalibratorEmployeeUsernameAndStatus(String providerEmployeeUsername, Status status);
+    Long countByCalibratorEmployeeUsernameAndStatus(String calibratorEmployeeUsername, Status status);
 
     Long countByStateVerificatorEmployeeUsernameAndStatus(String providerEmployee_username, Status status);
 
@@ -178,6 +178,10 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Page<Verification> findByTaskStatusAndCalibratorId(Status status, Long id, Pageable pageable);
 
+    Page<Verification> findByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status status, Long id, Pageable pageable);
+
+    Page<Verification> findByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status status, String calibratorEmployeeUsername, Pageable pageable);
+
     Page<Verification> findByCalibratorEmployeeUsernameAndTaskStatus(String userName, Status status, Pageable pageable);
 
     @Query("SELECT u FROM Verification u INNER JOIN u.device d WHERE d.id = u.device.id AND " +
@@ -196,7 +200,9 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Long countByCalibratorIdAndStatusAndCalibratorEmployeeUsername(Long calibratorId, Status status, String calibratorEmployeeUsername);
 
-    Long countByTaskStatusAndCalibratorId(Status status, Long calibratorId);
+    Long countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status status, String calibratorEmployeeUsername);
+
+    Long countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status status, Long calibratorId);
 }
 
 

@@ -119,7 +119,8 @@ public class NotStandardVerificationCalibratorController {
     public Long getCountOfPlanedTasksByCalibratorId(
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         if(user != null && calibratorService.findById(user.getOrganizationId()) != null) {
-            return verificationService.findCountOfPlanedTasksByCalibratorId(user.getOrganizationId());
+            User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(user.getUsername());
+            return verificationService.findCountOfPlanedTasksByCalibratorEmployeeUsername(calibratorEmployee);
         }
         return null;
     }

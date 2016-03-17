@@ -24,7 +24,7 @@ public interface CalibratorPlanningTaskService {
 
     void addNewTaskForTeam (Date taskDate, String serialNumber, List<String> verificationsId, String userId);
 
-    int findVerificationsByCalibratorEmployeeAndTaskStatusCount(String userName);
+    long findVerificationsByCalibratorEmployeeAndTaskStatusCount(String userName);
 
     Page<Verification> findByTaskStatusAndCalibratorId(Long Id, int pageNumber,
                                                        int itemsPerPage, String sortCriteria, String sortOrder);
