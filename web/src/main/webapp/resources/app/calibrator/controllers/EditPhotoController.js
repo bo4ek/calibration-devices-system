@@ -53,7 +53,11 @@ angular
 
             $scope.zoom = function() {
                 if($scope.imageSize.small) {
-                    $(".modal-dialog").css({ "width": "1000px"});
+                    if (photoId == "testMainPhoto") {
+                        $(".modal-dialog").css({ "width": "100%", "max-width": "1366px"});
+                    } else {
+                        $(".modal-dialog").css({ "width": "1000px"});
+                    }
                     $scope.imageSize.small = false;
                 } else {
                     $(".modal-dialog").css({ "width": "900px"});

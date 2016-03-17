@@ -5,7 +5,7 @@
 
 <div class="modal-body">
     <form name="clientForm" class="form-group" id="editMainPhotoForm" novalidate>
-        <div id="box" class="form-group" ng-class="{'col-md-6': imageSize.small, 'col-md-12': !imageSize.small}">
+        <div id="box" class="form-group col-md-6">
             <div ng-show="imageSize.small" ng-class="{ 'vertical-image-modal-photo': rotateIndex == 90 || rotateIndex == 270}">
                 <div class="main-image">
                     <img data-ng-src='{{photo}}' ng-click="zoom()" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,

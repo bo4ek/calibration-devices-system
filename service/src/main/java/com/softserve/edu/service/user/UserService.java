@@ -29,4 +29,8 @@ public interface UserService {
     int setSubdivisionIdNull(String id);
 
     boolean haveUserPermissionToAssignPerson(User user);
+
+    boolean isCalibrator(User user);
+
+    boolean isVerificator(User user);
 }

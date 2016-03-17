@@ -32,6 +32,7 @@ import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.state.verificator.StateVerificatorService;
 import com.softserve.edu.service.tool.DeviceService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationService;
@@ -88,6 +89,9 @@ public class CalibratorVerificationController {
 
     @Autowired
     UsersService usersService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     BbiFileService bbiFileService;
@@ -534,10 +538,11 @@ public class CalibratorVerificationController {
 
     @RequestMapping(value = "getStatus/{verificationId}", method = RequestMethod.GET)
     public String getVerificationStatus(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
-                                         @PathVariable String verificationId) {
+                                        @PathVariable String verificationId) {
         User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
         Verification verification = verificationService.findById(verificationId);
-        if(user.getOrganization().getId().equals(verification.getStateVerificator().getId())) {
+        if ((userService.isVerificator(user) && user.getOrganization().getId().equals(verification.getStateVerificator().getId()))
+                || (userService.isCalibrator(user) && user.getOrganization().getId().equals(verification.getCalibrator().getId()))) {
             return verification.getStatus().name();
         }
         return null;

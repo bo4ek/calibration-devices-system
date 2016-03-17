@@ -684,8 +684,8 @@ form[name='CalibrationTestForm'] #testColumnHead {
 }
 
 .vertical-image-modal-photo-large {
-    height: 960px !important;
-    width: 720px !important;
+    height: 640px !important;
+    width: 480px !important;
 }
 
 .vertical-test-image-photo {
@@ -726,8 +726,8 @@ form[name='CalibrationTestForm'] #testColumnHead {
 }
 
 .main-image-large img {
-    width: 960px;
-    height: 720px;
+    width: 640px;
+    height: 480px;
 }
 
 form[name='CalibrationTestForm'] tr > td {

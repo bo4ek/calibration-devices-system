@@ -185,4 +185,14 @@ public class UserServiceImpl implements UserService {
         return userRoles.contains(UserRole.CALIBRATOR_ADMIN) || userRoles.contains(UserRole.PROVIDER_ADMIN)
                 || userRoles.contains(UserRole.STATE_VERIFICATOR_ADMIN);
     }
+
+    @Override
+    public boolean isCalibrator(User user) {
+        return user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN) || user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE);
+    }
+
+    @Override
+    public boolean isVerificator(User user) {
+        return user.getUserRoles().contains(UserRole.STATE_VERIFICATOR_ADMIN) || user.getUserRoles().contains(UserRole.STATE_VERIFICATOR_EMPLOYEE);
+    }
 }
