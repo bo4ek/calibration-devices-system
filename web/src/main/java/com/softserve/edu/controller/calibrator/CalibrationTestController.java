@@ -31,17 +31,13 @@ import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
@@ -134,8 +130,6 @@ public class CalibrationTestController {
      * Deletes selected calibration-test by Id
      *
      * @param calibrationTestId id parameter of calibration test
-     * @return a response body with http status {@literal OK} if calibration-test
-     * successfully deleted
      */
     @RequestMapping(value = "delete/{calibrationTestId}", method = RequestMethod.POST)
     public void deleteCalibrationTest(@PathVariable Long calibrationTestId) {
@@ -391,7 +385,6 @@ public class CalibrationTestController {
      * get  scanDoc
      *
      * @param pathToScanDoc to file
-     * @return httpStatus 200 OK if everything went well
      */
     @RequestMapping(value = "getScanDoc/{pathToScanDoc}", produces = "application/pdf", method = RequestMethod.GET)
     public void getScanDoc(@PathVariable String pathToScanDoc, HttpServletResponse response) {
@@ -506,6 +499,7 @@ public class CalibrationTestController {
             Verification verification = verificationService.findById(verificationResult.getId());
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationResult.getId());
 
+            verification.setStatus(Status.valueOf(verificationResult.getStatus()));
             byte[] documentByteArray = getDocument(verification, calibrationTest);
             verification.setSigned(true);
             verification.setSignedDocument(documentByteArray);

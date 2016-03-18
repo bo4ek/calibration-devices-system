@@ -218,7 +218,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
             position = calibrationTestData.getTestPosition();
             position++;
             for (CalibrationTestData calibrationTestDataSearch : rawListOfCalibrationTestData) {
-                if (calibrationTestDataSearch.getTestPosition() == position) {
+                if (calibrationTestDataSearch.getTestPosition().equals(position)) {
                     calibrationTestData = calibrationTestDataSearch;
                     position++;
                 }
@@ -256,7 +256,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Transactional
     public void updateTest(String verificationId, String status) {
         Verification verification = verificationRepository.findOne(verificationId);
-        updateTest(verification.getId(), status);
+        updateTest(verification, status);
     }
 
     @Override
