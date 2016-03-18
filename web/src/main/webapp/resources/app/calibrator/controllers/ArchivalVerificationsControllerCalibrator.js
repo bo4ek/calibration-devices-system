@@ -1,9 +1,9 @@
 angular
     .module('employeeModule')
     .controller('ArchivalVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
-        'VerificationServiceCalibrator', 'ngTableParams', '$filter', '$rootScope', '$timeout', '$translate',
+        'VerificationServiceCalibrator', 'CalibrationTestServiceCalibrator', 'ngTableParams', '$location', '$filter', '$rootScope', '$timeout', '$translate',
 
-        function ($scope, $modal, $log, verificationServiceCalibrator, ngTableParams, $filter, $rootScope,
+        function ($scope, $modal, $log, verificationServiceCalibrator, calibrationTestServiceCalibrator, ngTableParams, $location, $filter, $rootScope,
                   $timeout, $translate) {
 
             $scope.resultsCount = 0;
@@ -245,7 +245,6 @@ angular
             };
 
             $scope.openDetails = function (verifId, verifDate) {
-
                 $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/provider/views/modals/archival-verification-details.html',
@@ -287,5 +286,21 @@ angular
             $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
             $scope.format = $scope.formats[2];
 
+
+            $scope.openAddTest = function (verification) {
+                if (!verification.manual) {
+                    $location.path('/calibrator/verifications/calibration-test-add/').search({
+                        'param': verification.id,
+                        'loadProtocol': 1
+                    });
+                } else {
+                    $scope.createManualTest(verification);
+                    calibrationTestServiceCalibrator.dataOfVerifications().setIdsOfVerifications($scope.dataToManualTest);
+                    $location.path('/calibrator/verifications/calibration-test/').search({
+                        'param': verification.id,
+                        'loadProtocol': 1
+                    });
+                }
+            };
 
         }]);

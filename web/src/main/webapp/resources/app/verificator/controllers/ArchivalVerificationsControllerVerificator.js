@@ -1,8 +1,10 @@
 angular
     .module('employeeModule')
-    .controller('ArchivalVerificationsControllerVerificator', ['$scope', '$modal', '$log', 'VerificationServiceVerificator', 'ngTableParams', '$filter', '$rootScope', '$timeout', '$translate',
+    .controller('ArchivalVerificationsControllerVerificator', ['$scope', '$modal', '$log', 'VerificationServiceVerificator',
+        'ngTableParams', '$filter', '$rootScope', '$timeout', '$translate', '$location',
 
-        function ($scope, $modal, $log, verificationServiceVerificator, ngTableParams, $filter, $rootScope, $timeout, $translate) {
+        function ($scope, $modal, $log, verificationServiceVerificator, ngTableParams, $filter, $rootScope, $timeout,
+                  $translate, $location) {
 
             $scope.resultsCount = 0;
 
@@ -151,6 +153,26 @@ angular
                         }
                     }
                 });
+            };
+
+
+            $scope.openAddTest = function (verification) {
+                if (!verification.manual) {
+                    $location.path('/calibrator/verifications/calibration-test-add/').search({
+                        'param': verification.id,
+                        'loadProtocol': 1,
+                        'ver': 1
+                    });
+                } else {
+                    $scope.createManualTest(verification);
+                    calibrationTestServiceCalibrator.dataOfVerifications().setIdsOfVerifications($scope.dataToManualTest);
+                    $location.path('/calibrator/verifications/calibration-test/').search({
+                        'param': verification.id,
+                        'editVer': 1,
+                        'loadProtocol': 1,
+                        'ver': 1
+                    });
+                }
             };
 
         }]);

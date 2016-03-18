@@ -69,6 +69,11 @@
                                                  popover-trigger="mouseenter"
                                                  ng-click="openDetails(verification.id, verification.initialDate)">
                                             </i>
+                                            <i class="fa fa-edit protocol_edit_user_icon"
+                                               popover="{{'EDIT_PROTOCOL' | translate}}"
+                                               popover-trigger="mouseenter"
+                                               ng-click="openAddTest(verification)">
+                                            </i>
                                             <div class="ui simple icon dropdown fa-lg"
                                                  ng-controller="DocumentController"
                                                  ng-show="(verification.status == 'TEST_OK') || (verification.status == 'TEST_NOK')">
