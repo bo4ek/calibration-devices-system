@@ -31,7 +31,7 @@
 
     <tr>
         <th>{{'PHONE_NUMBER' | translate}}</th>
-        <th>{{verificationData.phone}}, {{verificationData.secondPhone}}</th>
+        <th>{{verificationData.phone}}<span ng-show="verificationData.secondPhone">,</span> {{verificationData.secondPhone}}</th>
     </tr>
 
     <tr>

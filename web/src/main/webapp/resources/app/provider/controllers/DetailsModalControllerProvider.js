@@ -387,6 +387,10 @@ angular
 				$scope.formData.middleName = $scope.verificationData.middleName;
 				$scope.formData.email = $scope.verificationData.email;
 				$scope.formData.phone = $scope.verificationData.phone;
+                $scope.formData.secondPhone = $scope.verificationData.secondPhone;
+                if($scope.formData.secondPhone != null) {
+                    $scope.checkboxModel = true;
+                }
 
 				$scope.selectedData.selectedBuilding = $scope.verificationData.building;
 				$scope.formData.flat = $scope.verificationData.flat;
@@ -684,6 +688,10 @@ angular
 			 */
 			$scope.editClientForm = function() {
 
+                if(!$scope.checkboxModel || !$scope.formData.secondPhone){
+                    $scope.formData.secondPhone = null;
+                    $scope.checkboxModel = false;
+                }
 				var clientInfo = {
 					"verificationId": $scope.verificationDataMain.id,
 					"lastName": $scope.formData.lastName,
