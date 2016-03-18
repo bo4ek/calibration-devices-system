@@ -93,9 +93,11 @@ public class ClientApplicationController {
 
             AdditionalInfo info = new AdditionalInfo();
             info.setNotes(verificationDTO.getComment());
+            info.setServiceability(true);
             Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
                     Status.SENT, Verification.ReadStatus.UNREAD, info);
             verification.setCounter(new Counter());
+            verification.setSealPresence(true);
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
 
             logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by unauthorized user");
