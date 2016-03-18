@@ -175,7 +175,7 @@
                         controller: 'NotStandardVerificationControllerProvider'
                     })
                     .state("verifications-protocols-calibrator", {
-                        url: 'calibrator/protocols',
+                        url: '/calibrator/protocols',
                         templateUrl: 'resources/app/calibrator/views/show-verification-protocols.html',
                         controller: 'DigitalVerificationProtocolsControllerCalibrator'
                     });
