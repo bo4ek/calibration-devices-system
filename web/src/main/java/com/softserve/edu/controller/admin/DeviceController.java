@@ -30,11 +30,11 @@ public class DeviceController {
      */
     @RequestMapping(value = "available/{id}", method = RequestMethod.GET)
     public boolean isValidId(@PathVariable Long id) {
-        boolean isAvaible = false;
+        boolean isAvailable = false;
         if (id != null) {
-            isAvaible = deviceService.existsWithDeviceId(id);
+            isAvailable = deviceService.existsWithDeviceId(id);
         }
-        return isAvaible;
+        return isAvailable;
     }
 
     /**
@@ -84,7 +84,7 @@ public class DeviceController {
     /**
      * Remove device category from database
      * @param deviceCategoryId
-     * @returna response body with http status {@literal OK} if device category
+     * @return response body with http status {@literal OK} if device category
      * successfully removed or else http status {@literal CONFLICT}
      */
     @RequestMapping(value = "delete/{deviceCategoryId}", method = RequestMethod.DELETE)
