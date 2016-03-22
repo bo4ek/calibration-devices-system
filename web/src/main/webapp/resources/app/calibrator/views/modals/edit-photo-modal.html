@@ -1,51 +1,57 @@
 <form name="clientForm" class="form-group" ng-submit="saveOnExit()" id="editMainPhotoForm" novalidate>
-    <div class="modal-header">
-        <div ng-if="photoType == 'begin'">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label class="control-label counter-test-value">{{'INITIAL_VALUE' | translate }}</label>
+    <div ng-keypress="nextPhotoOnSpaceBarPress($event)">
+        <div class="modal-header">
+            <div ng-if="photoType == 'begin'">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label counter-test-value">{{'INITIAL_VALUE' | translate }}</label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="number" step="0.01" id="value"
+                               ng-model="newValues.counterValue"
+                               class="form-control counter-test-value" required focus="true">
+                    </div>
                 </div>
-                <div class="form-group col-md-6">
-                    <input type="number" step="0.01" id="value"
-                           ng-model="newValues.counterValue"
-                           class="form-control counter-test-value" required focus="true">
+            </div>
+            <div ng-if="photoType == 'end'">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label counter-test-value">{{'TERMINAL_VALUE' | translate }}</label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="number" step="0.01" ng-model="newValues.counterValue"
+                               class="form-control counter-test-value" required focus="true">
+                    </div>
                 </div>
             </div>
         </div>
-        <div ng-if="photoType == 'end'">
-            <div class="row">
-                <div class="form-group col-md-6">
-                    <label class="control-label counter-test-value">{{'TERMINAL_VALUE' | translate }}</label>
-                </div>
-                <div class="form-group col-md-6">
-                    <input type="number" step="0.01" ng-model="newValues.counterValue" class="form-control counter-test-value" required focus="true">
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="modal-body">
-        <div id="box">
-            <div ng-show="imageSize.small" ng-class="{ 'vertical-test-image-photo': rotateIndex == 90 || rotateIndex == 270}">
-                <div class="test-image">
-                    <img  data-ng-src="{{photo}}" ng-click="zoom()" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+        <div class="modal-body">
+            <div id="box">
+                <div ng-show="imageSize.small"
+                     ng-class="{ 'vertical-test-image-photo': rotateIndex == 90 || rotateIndex == 270}">
+                    <div class="test-image">
+                        <img data-ng-src="{{photo}}" ng-click="zoom()" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
                     'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"/>
+                    </div>
                 </div>
-            </div>
-            <div ng-show="!imageSize.small" ng-class="{ 'vertical-test-image-photo-large': rotateIndex == 90 || rotateIndex == 270}">
-                <div class="test-image-large">
-                    <img  data-ng-src="{{photo}}" ng-click="zoom()" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
+                <div ng-show="!imageSize.small"
+                     ng-class="{ 'vertical-test-image-photo-large': rotateIndex == 90 || rotateIndex == 270}">
+                    <div class="test-image-large">
+                        <img data-ng-src="{{photo}}" ng-click="zoom()" ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
                     'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"/>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer" style="clear: left">
-        <button ng-click="cancel()" class="btn btn-info pull-right" type="button">
-            {{'CLOSE' | translate }}
-        </button>
-        <button ng-show="changed" class="btn btn-info pull-right" type="submit">
-            {{'SAVE' | translate }}
-        </button>
+        <div class="modal-footer" style="clear: left">
+            <label class="control-label counter-test-value pull-left">{{testNumber | translate }}</label>
+            <button ng-click="cancel()" class="btn btn-info pull-right" type="button">
+                {{'CLOSE' | translate }}
+            </button>
+            <button ng-show="changed" class="btn btn-info pull-right" type="submit">
+                {{'SAVE' | translate }}
+            </button>
+        </div>
     </div>
 </form>

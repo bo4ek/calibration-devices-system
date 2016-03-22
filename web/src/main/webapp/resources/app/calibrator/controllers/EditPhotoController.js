@@ -1,8 +1,8 @@
 angular
     .module('employeeModule')
     .controller('EditPhotoController', ['$scope', '$rootScope', '$route', '$log', '$modalInstance',
-        '$timeout', 'photoId', 'CalibrationTestServiceCalibrator', 'parentScope', '$translate', 'DataReceivingServiceCalibrator',
-        function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, calibrationTestServiceCalibrator,
+        '$timeout', 'photoId', 'testNumber', 'CalibrationTestServiceCalibrator', 'parentScope', '$translate', 'DataReceivingServiceCalibrator',
+        function ($scope, $rootScope, $route, $log, $modalInstance, $timeout, photoId, testNumber, calibrationTestServiceCalibrator,
                   parentScope, $translate, dataReceivingService) {
 
             /**
@@ -19,6 +19,7 @@ angular
             $scope.ACCURACY_OF_CALCULATION = 2;
 
             $scope.photoId = photoId;
+            $scope.testNumber = testNumber;
             $scope.parentScope = parentScope;
 
             $scope.newValues = {};
@@ -37,6 +38,33 @@ angular
             $scope.imageSize.small = true;
 
             $scope.isChanged = false;
+
+            $scope.nextPhotoOnSpaceBarPress = function($event) {
+                $scope.saveTestPhoto();
+                var SPACE_BAR_CODE = 32;
+                if($event.keyCode === SPACE_BAR_CODE || $event.charCode === SPACE_BAR_CODE) {
+                    var idSplit = $scope.photoId.split("Photo");
+                    var photoType = idSplit[0];
+                    var photoIndex = parseInt(idSplit[1]);
+                    if(photoType === 'begin') {
+                        photoType = 'end';
+                    } else {
+                        if(photoType == 'end') {
+                            photoType = 'begin';
+                            photoIndex = photoIndex + 1;
+                            if(photoIndex == 3) {
+                                photoIndex = 0;
+                            }
+                            $scope.testNumber = 'Test' + (photoIndex  + 1);
+                        }
+                    }
+                    $scope.photoType = photoType;
+                    $scope.photoIndex = photoIndex;
+                    $scope.photoId = photoType + 'Photo' + photoIndex;
+                    $scope.photo = document.getElementById($scope.photoId).src;
+                    $scope.initialize();
+                }
+            };
 
             $scope.changed = function () {
                 $scope.isChanged = true;
@@ -179,6 +207,12 @@ angular
                 $scope.newValues.counterManufacturer = undefined;
             };
 
+            $scope.initialize = function() {
+                $scope.newValues.counterValue = $scope.photoType == 'begin'
+                    ? parentScope.TestDataFormData[$scope.photoIndex].initialValue
+                    : parentScope.TestDataFormData[$scope.photoIndex].endValue;
+            };
+
             if (photoId == "testMainPhoto") {
                 $scope.newValues.counterNumber = parentScope.TestForm.counterNumber;
                 $scope.newValues.counterYear = parentScope.TestForm.counterProductionYear;
@@ -191,9 +225,7 @@ angular
                 var idSplit = photoId.split("Photo");
                 $scope.photoType = idSplit[0];
                 $scope.photoIndex = parseInt(idSplit[1]);
-                $scope.newValues.counterValue = $scope.photoType == 'begin'
-                    ? parentScope.TestDataFormData[$scope.photoIndex].initialValue
-                    : parentScope.TestDataFormData[$scope.photoIndex].endValue;
+                $scope.initialize();
             }
             $scope.rotateIndex = parentScope.rotateIndex;
 
@@ -215,22 +247,26 @@ angular
                             parentScope.isReasonsUnsuitabilityShown();
                         }
                     } else {
-                        if ($scope.photoType == 'begin') {
-                            parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;
-                            $scope.updateValues($scope.photoIndex);
-                        } else {
-                            parentScope.TestDataFormData[$scope.photoIndex].endValue = $scope.newValues.counterValue;
-                            $scope.updateValues($scope.photoIndex);
-                        }
-                        $scope.isChanged = false;
-                        if (parentScope.showReasons) {
-                            parentScope.showReasons = parentScope.isTestRaw();
-                        } else {
-                            parentScope.selectedReason.selected = undefined;
-                            parentScope.isReasonsUnsuitabilityShown();
-                        }
+                        $scope.saveTestPhoto();
                     }
                     $modalInstance.close("saved");
+                }
+            };
+
+            $scope.saveTestPhoto = function() {
+                if ($scope.photoType == 'begin') {
+                    parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;
+                    $scope.updateValues($scope.photoIndex);
+                } else {
+                    parentScope.TestDataFormData[$scope.photoIndex].endValue = $scope.newValues.counterValue;
+                    $scope.updateValues($scope.photoIndex);
+                }
+                $scope.isChanged = false;
+                if (parentScope.showReasons) {
+                    parentScope.showReasons = parentScope.isTestRaw();
+                } else {
+                    parentScope.selectedReason.selected = undefined;
+                    parentScope.isReasonsUnsuitabilityShown();
                 }
             };
 

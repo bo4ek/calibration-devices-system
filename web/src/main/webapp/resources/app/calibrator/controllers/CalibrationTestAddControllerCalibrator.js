@@ -9,6 +9,9 @@ angular
                   $location, Upload, $timeout, toaster, $filter, initializeLibForDigitalSign) {
 
             $scope.testId = $location.search().param;
+            $scope.verificationIndex = $location.search().index;
+            $scope.sortCriteria = $location.search().sortCriteria;
+            $scope.sortOrder = $location.search().sortOrder;
             $scope.hasProtocol = $location.search().loadProtocol || false;
             $scope.isVerification = $location.search().ver || false;
             $scope.showReasons = false;
@@ -179,7 +182,7 @@ angular
                 }
             };
 
-            $scope.showEditPhotoModal = function (id) {
+            $scope.showEditPhotoModal = function (id, testNumber) {
                 if (!$scope.TestForm.signed) {
                     var modalInstance = $modal.open({
                         animation: true,
@@ -190,6 +193,9 @@ angular
                         resolve: {
                             photoId: function () {
                                 return id;
+                            },
+                            testNumber: function() {
+                                return testNumber;
                             },
                             parentScope: function () {
                                 return $scope;
@@ -448,5 +454,17 @@ angular
                             }
                         });
                 });
+            };
+
+
+            $scope.next = function() {
+                calibrationTestServiceCalibrator
+                    .getNextTestProtocol($scope.testId, $scope.index, $scope.sortCriteria, $scope.sortOrder)
+                    .then(function (data) {
+                        $scope.parseBbiFile(data);
+                    });
+            };
+
+            $scope.previous = function() {
             };
         }]);

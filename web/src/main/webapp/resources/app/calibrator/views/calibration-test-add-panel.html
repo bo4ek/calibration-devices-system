@@ -423,7 +423,7 @@
                     <td ng-repeat="testData in TestDataFormData"
                         ng-show="testData.dataAvailable" class="photo-cell">
                         <img ng-show="testData.dataAvailable" id="{{ 'beginPhoto' + $index }}" class="rotated0 image-td"
-                             ng-click="showEditPhotoModal( 'beginPhoto' + $index )"
+                             ng-click="showEditPhotoModal( 'beginPhoto' + $index, testData.testNumber)"
                              ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                              data-ng-src="data:image/png;base64,{{testData.beginPhoto}}">
@@ -433,7 +433,7 @@
                     <td ng-repeat="testData in TestDataFormData"
                         ng-show="testData.dataAvailable" class="photo-cell">
                         <img ng-show="testData.dataAvailable" id="{{ 'endPhoto' + $index }}" class="rotated0 image-td"
-                             ng-click="showEditPhotoModal( 'endPhoto' + $index )"
+                             ng-click="showEditPhotoModal( 'endPhoto' + $index, testData.testNumber)"
                              ng-class="{ 'rotated90': rotateIndex == 90, 'rotated180': rotateIndex == 180,
             'rotated270': rotateIndex == 270, 'rotated0': rotateIndex == 0}"
                              data-ng-src="data:image/png;base64,{{testData.endPhoto}}">
