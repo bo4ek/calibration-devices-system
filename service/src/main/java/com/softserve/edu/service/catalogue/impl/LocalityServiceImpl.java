@@ -65,4 +65,10 @@ public class LocalityServiceImpl implements LocalityService {
     public List<Locality> findByLocalityIdIn(List<Long> localityIds) {
         return localityRepository.findByIdIn(localityIds);
     }
+
+    @Override
+    @Transactional
+    public boolean existByIdAndDistrictId(Long id, Long districtId) {
+        return localityRepository.existByIdAndDistrictId(id, districtId);
+    }
 }

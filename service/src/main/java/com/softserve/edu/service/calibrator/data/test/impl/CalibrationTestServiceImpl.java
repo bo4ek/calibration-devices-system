@@ -59,13 +59,13 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     @Transactional
     public long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException, InvalidModuleIdException {
         Verification verification = verificationRepository.findOne(verificationId);
-        CalibrationModule moduleId = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+        CalibrationModule moduleId = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
         if (moduleId == null) {
             throw new InvalidModuleIdException();
         }
         CalibrationTest calibrationTest = new CalibrationTest(deviceTestData.getFileName(),
                 deviceTestData.getLatitude(), deviceTestData.getLongitude(), deviceTestData.getUnixTime(), verification,
-                deviceTestData.getInitialCapacity(), deviceTestData.getTemperature());
+                deviceTestData.getInitialCapacity());
         BufferedImage buffered = ImageIO.read(new ByteArrayInputStream(
                 Base64.decodeBase64(deviceTestData.getTestPhoto())));
         String testPhoto = Constants.MAIN_PHOTO + Constants.DOT + Constants.IMAGE_TYPE;

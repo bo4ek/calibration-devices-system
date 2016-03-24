@@ -3,6 +3,8 @@ package com.softserve.edu.service.calibrator.impl;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.catalogue.Locality;
+import com.softserve.edu.entity.catalogue.Street;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
@@ -198,7 +200,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
                     deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                    CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(deviceTestData.getInstallmentNumber());
+                    CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
                     if (calibrationModule == null) {
                         throw new InvalidModuleIdException();
                     }
@@ -236,6 +238,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (InvalidVerificationCodeException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
                 logger.error("Invalid verification code");
+            } catch (IncorrectCityIdException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_CITY_ID;
+                logger.error("Incorrect city id");
+            } catch (IncorrectStreetIdException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_STREET_ID;
+                logger.error("Incorrect street id");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
                 logger.error("Unknown reason of rejection");
@@ -339,28 +347,38 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData)
-            throws ParseException, InvalidDeviceTypeIdException {
+            throws ParseException, InvalidDeviceTypeIdException, IncorrectCityIdException, IncorrectStreetIdException {
 
-        String cityName = null;
         String regionName = null;
+        String districtName = null;
+        String cityName = null;
         String streetName = null;
         ClientData clientData;
 
         try {
-            Long cityIdLong = Long.parseLong(verificationData.get(Constants.CITY_ID));
-            cityName = localityService.findById(cityIdLong).getDesignation();
-
             Long districtIdLong = Long.parseLong(verificationData.get(Constants.DISTRICT_ID));
-            regionName = districtService.findDistrictById(districtIdLong).getDesignation();
 
+            Long cityIdLong = Long.parseLong(verificationData.get(Constants.CITY_ID));
+            boolean isExistLocality = localityService.existByIdAndDistrictId(cityIdLong, districtIdLong);
+            if(!isExistLocality) {
+                throw new IncorrectCityIdException();
+            }
             Long streetIdLong = Long.parseLong(verificationData.get(Constants.STREET_ID));
-            streetName = streetService.findStreetById(streetIdLong).getDesignation();
+            Street street = streetService.findByIdAndLocalityId(streetIdLong, cityIdLong);
+
+            if(street == null) {
+                throw new IncorrectStreetIdException();
+            }
+            regionName = street.getLocality().getDistrict().getRegion().getDesignation();
+            districtName = street.getLocality().getDistrict().getDesignation();
+            cityName = street.getLocality().getDesignation();
+            streetName = street.getDesignation();
         } catch (NumberFormatException e) {
             logger.info("Old *.db format", e);
         }
 
         if (cityName != null && regionName != null && streetName != null) {
-            Address address = new Address(regionName, cityName,
+            Address address = new Address(regionName, districtName, cityName,
                     streetName, verificationData.get(Constants.BUILDING), verificationData.get(Constants.FLAT));
             clientData = new ClientData(verificationData.get(Constants.FIRST_NAME),
                     verificationData.get(Constants.LAST_NAME), verificationData.get(Constants.MIDDLE_NAME),
@@ -379,10 +397,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
         Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
+        Long deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+        Device device = deviceService.getById(deviceId);
 
         Verification verification = new Verification(date, clientData, Status.CREATED_BY_CALIBRATOR, calibrator,
                 providerFromBBI, calibratorEmployee, counter, null, verificationData.get(Constants.COMMENT),
-                verificationData.get(Constants.DATE));
+                verificationData.get(Constants.DATE), device);
 
         List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION,
                 counter.getCounterType().getDevice().getDeviceType());
@@ -397,10 +417,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         if (verification == null) {
             throw new InvalidVerificationCodeException();
         }
-        Long deviceId;
-        deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
-        Device device = deviceService.getById(deviceId);
-        verification.setDevice(device);
+        if((deviceTestData.getDeviceTypeId() == 1) || (deviceTestData.getDeviceTypeId() == 2)) {
+            Long deviceId;
+            deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+            Device device = deviceService.getById(deviceId);
+            verification.setDevice(device);
+        }
         verification.setVerificationTime(verificationData.get(Constants.DATE));
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);

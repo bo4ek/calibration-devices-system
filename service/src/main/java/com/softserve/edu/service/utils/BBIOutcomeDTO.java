@@ -15,7 +15,9 @@ public class BBIOutcomeDTO {
         NAME_OF_BBI_FILE_DOES_NOT_MATCH,
         INVALID_MODULE_ID,
         INVALID_DEVICE_TYPE_ID,
-        UNKNOWN_REASON_OF_REJECTION
+        UNKNOWN_REASON_OF_REJECTION,
+        INCORRECT_CITY_ID,
+        INCORRECT_STREET_ID
     }
 
     private String verificationID;

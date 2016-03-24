@@ -54,6 +54,12 @@ public class StreetServiceImpl implements StreetService {
 
     @Override
     @Transactional
+    public Street findByIdAndLocalityId(Long id, Long localityId) {
+        return streetRepository.findByIdAndLocalityId(id, localityId);
+    }
+
+    @Override
+    @Transactional
     public ListToPageTransformer<Street> findPageOfAllStreets(int pageNumber, int itemsPerPage, String city,
                            String district, String region, String streetName, String sortCriteria, String sortOrder) {
         CriteriaQuery<Street> criteriaQuery = StreetsQueryConstructor.buildSearchQuery(city, district, region,

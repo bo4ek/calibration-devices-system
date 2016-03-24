@@ -52,4 +52,7 @@ public interface LocalityRepository extends CrudRepository<Locality, Long> {
     List<Locality> findLocalitiesByOrganizationId(@Param("organizationId") Long organizationId);
 
     Long findIdByDesignation(@Param("Designation") String designation); // find city id by city name???
+
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Locality c JOIN c.district d WHERE c.id = :id AND d.id =:districtId")
+    boolean existByIdAndDistrictId(@Param("id")Long id, @Param("districtId") Long districtId);
 }

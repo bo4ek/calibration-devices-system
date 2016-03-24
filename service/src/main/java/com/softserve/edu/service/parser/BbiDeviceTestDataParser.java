@@ -36,7 +36,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("unixTime", readLongValueReversed(Constants.FOUR_BYTES) * Constants.THOUSAND_INT); //0x800008 + 0x04
         resultMap.put("regStart", readConsecutiveBytesReversed(Constants.FOUR_BYTES)); //0x80000c + 0x04
         count = reader.skip(Constants.FOUR_BYTES); //0x800010 + 0x04
-        resultMap.put("temperature", readLongValueReversed(Constants.FOUR_BYTES)); //0x800014 + 0x04
+        resultMap.put("deviceTypeId", readLongValueReversed(Constants.FOUR_BYTES)); //0x800014 + 0x04
         resultMap.put("batteryCharge", readLongValueReversed(Constants.FOUR_BYTES)); //0x800018 + 0x04
         resultMap.put("bbiWritten", readLongValueReversed(Constants.FOUR_BYTES)); //0x80001c + 0x04
         resultMap.put("bbiAvailableToWrite", readLongValueReversed(Constants.FOUR_BYTES)); //0x800020 + 0x04
@@ -57,7 +57,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("counterProductionYear", readLongValueReversed(Constants.FOUR_BYTES)); //0x80007c+0x04
         resultMap.put("counterType2", readConsecutiveBytesAsUTF8(Constants.SIXTEEN_BYTES)); //0x800080+0x10
         resultMap.put("fileOpened", readLongValueReversed(Constants.FOUR_BYTES)); //0x800090+0x04
-        resultMap.put("deviceTypeId", readLongValueReversed(Constants.FOUR_BYTES)); // 0x800094+0x04 DeviceType WATER(1), THERMAL(2), ELECTRICAL(3), GASEOUS(4)
+        count = reader.skip(Constants.FOUR_BYTES); // 0x800094+0x04 DeviceType WATER(1), THERMAL(2), ELECTRICAL(3), GASEOUS(4)
         count = reader.skip(Constants.SKIP_TO_TESTS); //0x800100 now
         for (int i = 1; i <= Constants.TEST_COUNT; ++i) {
             readTest(i);

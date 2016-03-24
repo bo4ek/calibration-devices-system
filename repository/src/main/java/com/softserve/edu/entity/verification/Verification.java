@@ -291,6 +291,12 @@ public class Verification implements Comparable {
     }
 
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
+                        User calibratorEmployee, Counter counter, String verificationId, String comment, String verificationTime, Device device) {
+        this(initialDate, clientData, status, calibrator, providerFromBBI, calibratorEmployee, counter, verificationId, comment, verificationTime);
+        this.device = device;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
                         User calibratorEmployee, Counter counter, String verificationId, String comment, String verificationTime) {
 
         this.id = verificationId;

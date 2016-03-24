@@ -17,6 +17,8 @@ public interface StreetService {
 
     Iterable<Street> findAll();
 
+    Street findByIdAndLocalityId(Long id, Long localityId);
+
     ListToPageTransformer<Street> findPageOfAllStreets(int pageNumber, int itemsPerPage, String city,
                                                          String district, String region, String streetName,
                                                          String sortCriteria, String sortOrder);
