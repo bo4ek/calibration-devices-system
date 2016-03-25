@@ -36,7 +36,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("unixTime", readLongValueReversed(Constants.FOUR_BYTES) * Constants.THOUSAND_INT); //0x800008 + 0x04
         resultMap.put("regStart", readConsecutiveBytesReversed(Constants.FOUR_BYTES)); //0x80000c + 0x04
         count = reader.skip(Constants.FOUR_BYTES); //0x800010 + 0x04
-        resultMap.put("deviceTypeId", readLongValueReversed(Constants.FOUR_BYTES)); //0x800014 + 0x04
+        resultMap.put("temperature", readLongValueReversed(Constants.FOUR_BYTES)); //0x800014 + 0x04
         resultMap.put("batteryCharge", readLongValueReversed(Constants.FOUR_BYTES)); //0x800018 + 0x04
         resultMap.put("bbiWritten", readLongValueReversed(Constants.FOUR_BYTES)); //0x80001c + 0x04
         resultMap.put("bbiAvailableToWrite", readLongValueReversed(Constants.FOUR_BYTES)); //0x800020 + 0x04

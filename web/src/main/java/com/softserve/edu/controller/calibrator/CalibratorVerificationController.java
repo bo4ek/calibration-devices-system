@@ -398,7 +398,7 @@ public class CalibratorVerificationController {
                         searchData.getEmployee_last_name(),
                         searchData.getProtocol_id(),
                         searchData.getProtocol_status(),
-                        searchData.getMeasurement_device_id(),
+                        searchData.getNumberCounter(),
                         searchData.getMeasurement_device_type(),
                         sortCriteria,
                         sortOrder, calibratorEmployee);
@@ -424,7 +424,9 @@ public class CalibratorVerificationController {
                 verification.getProvider(),
                 verification.getProviderEmployee(),
                 verification.getStateVerificator(),
-                verification.getStateVerificatorEmployee());
+                verification.getStateVerificatorEmployee(),
+                verification.getRejectedMessage(),
+                verification.getCounter());
     }
 
     @RequestMapping(value = "new/earliest_date/calibrator", method = RequestMethod.GET)

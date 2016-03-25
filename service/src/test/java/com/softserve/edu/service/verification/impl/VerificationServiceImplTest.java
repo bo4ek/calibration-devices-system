@@ -438,13 +438,13 @@ public class VerificationServiceImplTest {
         String sortOrder = "sortOrded";
         Long protocolId = 2L;
         String protocolStatus = "protocolStatus";
-        Long measurementDeviceId = 3L;
+        String numberCounter = "3";
         String measurementDeviceType = "measurementDeviceType";
         User calibratorEmployee = mock(User.class);
 
         PowerMockito.mockStatic(ArchivalVerificationsQueryConstructorCalibrator.class);
-        PowerMockito.when(ArchivalVerificationsQueryConstructorCalibrator.buildSearchQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, measurementDeviceId, measurementDeviceType, sortCriteria, sortOrder, calibratorEmployee, mockEntityManager)).thenReturn(criteriaQuery);
-        PowerMockito.when(ArchivalVerificationsQueryConstructorCalibrator.buildCountQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, measurementDeviceId, measurementDeviceType, calibratorEmployee, mockEntityManager)).thenReturn(longCriteriaQuery);
+        PowerMockito.when(ArchivalVerificationsQueryConstructorCalibrator.buildSearchQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, numberCounter, measurementDeviceType, sortCriteria, sortOrder, calibratorEmployee, mockEntityManager)).thenReturn(criteriaQuery);
+        PowerMockito.when(ArchivalVerificationsQueryConstructorCalibrator.buildCountQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, numberCounter, measurementDeviceType, calibratorEmployee, mockEntityManager)).thenReturn(longCriteriaQuery);
 
         stub(mockEntityManager.createQuery(criteriaQuery)).toReturn(verificationTypedQuery);
         stub(mockEntityManager.createQuery(longCriteriaQuery)).toReturn(longTypedQuery);
@@ -453,7 +453,7 @@ public class VerificationServiceImplTest {
         List<Verification> verificationList = verificationTypedQuery.getResultList();
         Long count = mockEntityManager.createQuery(longCriteriaQuery).getSingleResult();
 
-        ListToPageTransformer<Verification> actual = verificationService.findPageOfArchiveVerificationsByCalibratorId(organizationId, pageNumber, itemsPerPage, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, measurementDeviceId, measurementDeviceType, sortCriteria, sortOrder, calibratorEmployee);
+        ListToPageTransformer<Verification> actual = verificationService.findPageOfArchiveVerificationsByCalibratorId(organizationId, pageNumber, itemsPerPage, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, numberCounter, measurementDeviceType, sortCriteria, sortOrder, calibratorEmployee);
 
         assertEquals(verificationList, actual.getContent());
         assertEquals(count, actual.getTotalItems());

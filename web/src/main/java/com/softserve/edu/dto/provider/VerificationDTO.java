@@ -2,6 +2,7 @@ package com.softserve.edu.dto.provider;
 
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
@@ -22,6 +23,7 @@ public class VerificationDTO extends ClientStageVerificationDTO {
     private Date expirationDate;
     private String device;
     private String deviceNumber;
+    private String counterNumber;
     private String provider;
     private String providerEmployee;
     private String calibrator;
@@ -74,6 +76,15 @@ public class VerificationDTO extends ClientStageVerificationDTO {
         this(clientData, id, initialDate, expirationDate, status, calibrator, calibratorEmployee, device, provider,
                 providerEmployee, stateVerificator, stateVerificatorEmployee);
         this.rejectedMessage = rejectedMessage;
+    }
+
+    public VerificationDTO(ClientData clientData, String id, Date initialDate, Date expirationDate, Status status,
+                           Organization calibrator, User calibratorEmployee, Device device, Organization provider,
+                           User providerEmployee, Organization stateVerificator, User stateVerificatorEmployee, String rejectedMessage, Counter counter) {
+
+        this(clientData, id, initialDate, expirationDate, status, calibrator, calibratorEmployee, device, provider,
+                providerEmployee, stateVerificator, stateVerificatorEmployee, rejectedMessage);
+        this.counterNumber = counter.getNumberCounter();
     }
 
     /**

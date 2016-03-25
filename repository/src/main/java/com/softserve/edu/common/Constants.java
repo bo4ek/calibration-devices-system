@@ -20,6 +20,8 @@ public interface Constants {
     int MODULE_THERMAL_INITIAL_NUMBER = 10_000;
     int MODULE_ID_INCREMENT = 1;
     int DEVICE_TYPE_ID_WATER = 1;
+    int WATER_ID = 1;
+    int THERMAL_ID = 2;
 
     int ONE_BYTE = 1;
     int TWO_BYTES = 2;

@@ -166,56 +166,7 @@
             </span>
         </div>
     </div>
-    <div class="row form-group"
-         ng-show="TestForm.signed && isVerification"
-         style="text-align:center">
-        <div class="ui simple icon dropdown fa-lg"
-             ng-controller="DocumentController">
-            <button ng-show="isVerification" class="btn btn-info" type="button">
-                <span class="fa fa-floppy-o"></span>
-                {{'PRINT' | translate}}
-            </button>
 
-            <div class=" left menu" style="right:0;left:auto;">
-                <div class="item" ng-show="verificationStatus == 'TEST_OK'"
-                     ng-click="downloadDocument('VERIFICATION_CERTIFICATE', testId, 'docx')">
-                    <a class="ng-binding">
-                        <i class="fa fa-file-word-o"></i>
-                        {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_DOCX' | translate}}
-                    </a>
-                </div>
-                <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
-                     ng-click="downloadDocument('UNFITNESS_CERTIFICATE', testId, 'docx')">
-                    <a class="ng-binding">
-                        <i class="fa fa-file-word-o"></i>
-                        {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_DOCX' | translate}}
-                    </a>
-                </div>
-                <div class="item" ng-show="verificationStatus == 'TEST_OK'"
-                     ng-click="downloadDocument('VERIFICATION_CERTIFICATE', testId, 'pdf')">
-                    <a class="ng-binding">
-                        <i class="fa fa-file-pdf-o"></i>
-                        {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_PDF' | translate}}
-                    </a>
-                </div>
-                <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
-                     ng-click="downloadDocument('UNFITNESS_CERTIFICATE', testId, 'pdf')">
-                    <a class="ng-binding">
-                        <i class="fa fa-file-pdf-o"></i>
-                        {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_PDF' | translate}}
-                    </a>
-                </div>
-                <div class="item" ng-click="printDocument(testId, verificationStatus)">
-                    <a class="ng-binding">
-                        <i class="print fa fa-print"></i>
-                        {{'PRINT_DOCUMENT' | translate}}
-                    </a>
-                    <iframe id="pdf"
-                            style="width:0px;height:0px;visibility:hidden;"></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row">
         <div class="form-group">
             <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-success btn-md"
@@ -236,14 +187,66 @@
                      ng-click="fileName = uploadBbiFile(testId)">
                 </img> {{ 'UPLOAD_BBI_FILE' | translate }}
             </button>
-            <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-danger " ng-click="closeForm()"
+            <button ng-if="hasProtocol || fileLoaded" type="submit" class="btn btn-info " ng-click="closeForm()"
                     >{{'CLOSE' | translate}}
             </button>
-            <button class="btn" ng-show="(verificationStatus == 'SENT_TO_VERIFICATOR')">
-                <i class="fa fa-ban cancel_icon"
-                   popover="{{'CANCEL_TEST' | translate}}" popover-trigger="mouseenter"
-                   ng-click="openRejectTest(testId)">
-                </i>
+            <button class="btn btn-danger" ng-show="(verificationStatus == 'SENT_TO_VERIFICATOR')" popover="{{'CANCEL_TEST' | translate}}"
+                    popover-trigger="mouseenter" ng-click="openRejectTest(testId)">
+                {{'REJECT' | translate}}
+            </button>
+            <span ng-controller="DocumentController" ng-show="TestForm.signed && isVerification">
+                <span class="ui simple icon dropdown">
+                    <button class="btn btn-info" type="button">
+                        {{'DOCUMENT' | translate}}
+                    </button>
+                    <div class=" left menu" style="right:0;left:auto;">
+                        <div class="item" ng-show="verificationStatus == 'TEST_OK'"
+                             ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', testId, 'docx')">
+                            <a class="ng-binding">
+                                <i class="fa fa-file-word-o"></i>
+                                {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_DOCX' | translate}}
+                            </a>
+                        </div>
+                        <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
+                             ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', testId, 'docx')">
+                            <a class="ng-binding">
+                                <i class="fa fa-file-word-o"></i>
+                                {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_DOCX' | translate}}
+                            </a>
+                        </div>
+                        <div class="item" ng-show="verificationStatus == 'TEST_OK'"
+                             ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', testId, 'pdf')">
+                            <a class="ng-binding">
+                                <i class="fa fa-file-pdf-o"></i>
+                                {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_PDF' | translate}}
+                            </a>
+                        </div>
+                        <div class="item" ng-show="verificationStatus == 'TEST_NOK'"
+                             ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', testId, 'pdf')">
+                            <a class="ng-binding">
+                                <i class="fa fa-file-pdf-o"></i>
+                                {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_PDF' | translate}}
+                            </a>
+                        </div>
+                    </div>
+                </span>
+                <span>
+                    <button class="btn btn-info" type="button" ng-click="printDocument(testId, verificationStatus)">
+                        {{'PRINT_SIGNED' | translate}}
+                    </button>
+                    <iframe id="pdf"
+                            style="width:0px;height:0px;visibility:hidden;"></iframe>
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-offset-3 col-sm-6" style="text-align:center">
+            <button ng-click="previous()" class="btn btn-info" type="button">
+                <i class="fa fa-arrow-left"></i>
+            </button>
+            <button ng-click="next()" class="btn btn-info" type="button">
+                <i class="fa fa-arrow-right"></i>
             </button>
         </div>
     </div>
@@ -276,7 +279,8 @@
                     <tr class="title-cell">
                         <td>
                             <label class="control-label">{{'GIVEN_CONSUMPTION' |
-                                translate }}</label>
+                                translate }}, {{'METER_SHORT' | translate}}
+                                <sup>3</sup>/{{'HOUR_SHORT' | translate}}</label>
                         </td>
                     </tr>
                     <tr class="title-cell">
@@ -288,25 +292,25 @@
                     <tr class="title-cell">
                         <td>
                             <label class="control-label">{{'VOLUME_OF_STANDARD'
-                                | translate }}</label>
+                                | translate }}, {{'DECIMETRE_SHORT' | translate }}<sup>3</sup></label>
                         </td>
                     </tr>
                     <tr class="title-cell">
                         <td>
-                            <label class="control-label">{{'INITIAL_VALUE' |
-                                translate }}</label>
+                            <label class="control-label">{{'INITIAL_COUNTER_VALUE' |
+                                translate }}, {{'DECIMETRE_SHORT' | translate }}<sup>3</sup></label>
                         </td>
                     </tr>
                     <tr class="title-cell">
                         <td>
-                            <label class="control-label">{{'TERMINAL_VALUE' |
-                                translate }}</label>
+                            <label class="control-label">{{'TERMINAL_COUNTER_VALUE' |
+                                translate }}, {{'DECIMETRE_SHORT' | translate }}<sup>3</sup></label>
                         </td>
                     </tr>
                     <tr class="title-cell">
                         <td>
                             <label class="control-label">{{'VOLUME_IN_DEVICE' |
-                                translate }}</label>
+                                translate }}, {{'DECIMETRE_SHORT' | translate }}<sup>3</sup></label>
                         </td>
                     </tr>
                     <tr class="title-cell">
@@ -318,7 +322,8 @@
                     <tr class="title-cell">
                         <td>
                             <label class="control-label">{{'ACTUAL_CONSUMPTION' |
-                                translate }}</label>
+                                translate }}, {{'METER_SHORT' | translate}}
+                                <sup>3</sup>/{{'HOUR_SHORT' | translate}}</label>
                         </td>
                     </tr>
                     <tr class="title-cell">
@@ -415,7 +420,8 @@
                 <tr>
                     <td ng-repeat="testData in TestDataFormData">
                         <input type="text" ng-value="testData.testResult | translate" ng-disabled="fileLoaded"
-                               ng-class="{'success-result': commonTestResult(testData.testResult), 'failed-result': !commonTestResult(testData.testResult)}"
+                               ng-class="{'success-result': testData.testResult == 'SUCCESS', 'failed-result': testData.testResult == 'FAILED',
+                               'not-processed-result': testData.testResult == 'NOT_PROCESSED'}"
                                class="form-control " required>
                     </td>
                 </tr>

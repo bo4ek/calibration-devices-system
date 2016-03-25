@@ -54,9 +54,8 @@
                                                         <span>{{ 'VERIFICATION_DROPDOWN' | translate }}</span>
 
                                                         <div class="menu">
-                                                            <div class="item">
-                                                                <a
-                                                                        ng-click="openDetails(verification.id, verification.initialDate)">
+                                                            <div class="item" ng-click="openDetails(verification.id, verification.initialDate)">
+                                                                <a>
                                                                     <i class="fa fa-info-circle"></i>
                                                                     {{ 'DETAIL' | translate }}
                                                                 </a>
@@ -143,9 +142,9 @@
                                             verification.protocolStatus | translate}}
                                         </td>
                                         <td data-title="'MEASUREMENT_DEVICE_ID' | translate"
-                                            sortable="'measurement_device_id'"
-                                            filter="{ measurement_device_id : 'text' }">
-                                            {{verification.measurementDeviceId}}
+                                            sortable="'NUMBER_OF_COUNTER'"
+                                            filter="{ numberCounter : 'text' }">
+                                            {{verification.numberCounter}}
                                         </td>
                                         <td data-title="'MEASUREMENT_DEVICE_TYPE' | translate"
                                             sortable="'measurement_device_type'"

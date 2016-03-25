@@ -13,6 +13,7 @@ import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestData;
@@ -22,11 +23,13 @@ import com.softserve.edu.exceptions.NotFoundException;
 import com.softserve.edu.repository.*;
 import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.admin.CounterTypeService;
+import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataManualService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestManualService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.exceptions.NotAvailableException;
 import com.softserve.edu.service.tool.DocumentService;
+import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.utils.CalibrationTestDataList;
 import com.softserve.edu.service.utils.CalibrationTestList;
 import com.softserve.edu.service.verification.VerificationService;
@@ -35,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,6 +93,9 @@ public class CalibrationTestController {
 
     @Autowired
     private DocumentService documentService;
+
+    @Autowired
+    private UsersService usersService;
 
     /**
      * Finds all calibration-tests form database
@@ -445,6 +452,17 @@ public class CalibrationTestController {
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
+    }
+
+    @RequestMapping(value = "getNextTest/{verificationIndex}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    public ResponseEntity getNextTestProtocol(@PathVariable Integer verificationIndex, @PathVariable String sortCriteria, @PathVariable String sortOrder,
+                                              @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        User user = usersService.findOne(employeeUser.getUsername());
+        Verification verification = verificationService.findNextVerificationByVerificationIdAndVerificationIndex(user.getOrganization().getId(),
+                verificationIndex, sortCriteria, sortOrder, user);
+        CalibrationTest calibrationTest = testService.findByVerificationId(verification.getId());
+        return new ResponseEntity((new CalibrationTestFileDataDTO(calibrationTest, testService, verification)), HttpStatus.OK);
+
     }
 
     /**

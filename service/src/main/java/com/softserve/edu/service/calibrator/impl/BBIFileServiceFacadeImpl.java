@@ -397,7 +397,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
         Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
-        Long deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+        Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
         Device device = deviceService.getById(deviceId);
 
         Verification verification = new Verification(date, clientData, Status.CREATED_BY_CALIBRATOR, calibrator,
@@ -405,7 +405,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 verificationData.get(Constants.DATE), device);
 
         List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION,
-                counter.getCounterType().getDevice().getDeviceType());
+                device.getDeviceType());
 
         return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
@@ -417,9 +417,10 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         if (verification == null) {
             throw new InvalidVerificationCodeException();
         }
-        if((deviceTestData.getDeviceTypeId() == 1) || (deviceTestData.getDeviceTypeId() == 2)) {
-            Long deviceId;
-            deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+        Long deviceId;
+        Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
+        if( deviceTypeId != null) {
+            deviceId = getDeviceIdByDeviceTypeId(deviceTypeId);
             Device device = deviceService.getById(deviceId);
             verification.setDevice(device);
         }
@@ -430,7 +431,16 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     }
 
-    private Long getDeviceIdByDeviceTypeId(int deviceTypeId) throws InvalidDeviceTypeIdException {
+    private Integer getDeviceTypeIdByTemperature(int temperature) {
+        if (temperature >= 0 && temperature <= 30) {
+            return Constants.WATER_ID;
+        } else if (temperature > 30 && temperature <= 90) {
+            return Constants.THERMAL_ID;
+        }
+        return null;
+    }
+
+    private Long getDeviceIdByDeviceTypeId(Integer deviceTypeId) throws InvalidDeviceTypeIdException {
         String deviceType;
         switch (deviceTypeId) {
             case 2:
@@ -460,7 +470,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
          * and NullPointerException will be generated
          */
         if (counterType == null) {
-            Long deviceId = getDeviceIdByDeviceTypeId(deviceTestData.getDeviceTypeId());
+            Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
             String deviceName = deviceService.getById(deviceId).getDeviceName();
             counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
             counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);

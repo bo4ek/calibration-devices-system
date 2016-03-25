@@ -4,7 +4,7 @@
             <div ng-if="photoType == 'begin'">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="control-label counter-test-value">{{'INITIAL_VALUE' | translate }}</label>
+                        <label class="control-label counter-test-value">{{testNumber | translate }}, {{'INITIAL_VALUE' | translate }}, {{'DECIMETRE_SHORT' | translate }}<sup>3</sup></label>
                     </div>
                     <div class="form-group col-md-6">
                         <input type="number" step="0.01" id="value"
@@ -16,7 +16,7 @@
             <div ng-if="photoType == 'end'">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label class="control-label counter-test-value">{{'TERMINAL_VALUE' | translate }}</label>
+                        <label class="control-label counter-test-value">{{testNumber | translate }}, {{'TERMINAL_VALUE' | translate }}, {{'DECIMETRE_SHORT' | translate }}<sup>3</sup></label>
                     </div>
                     <div class="form-group col-md-6">
                         <input type="number" step="0.01" ng-model="newValues.counterValue"
@@ -45,7 +45,6 @@
             </div>
         </div>
         <div class="modal-footer" style="clear: left">
-            <label class="control-label counter-test-value pull-left">{{testNumber | translate }}</label>
             <button ng-click="cancel()" class="btn btn-info pull-right" type="button">
                 {{'CLOSE' | translate }}
             </button>

@@ -300,7 +300,7 @@ public class StateVerificatorController {
                 verification.getExpirationDate(), verification.getStatus(), verification.getCalibrator(),
                 verification.getCalibratorEmployee(), verification.getDevice(), verification.getProvider(),
                 verification.getProviderEmployee(), verification.getStateVerificator(),
-                verification.getStateVerificatorEmployee(), verification.getRejectedMessage()
+                verification.getStateVerificatorEmployee(), verification.getRejectedMessage(), verification.getCounter()
         );
     }
 

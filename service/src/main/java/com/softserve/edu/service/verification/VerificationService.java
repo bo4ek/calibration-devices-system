@@ -69,7 +69,7 @@ public interface VerificationService {
 
 
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByCalibratorId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                     String streetToSearch, String status, String employeeName, Long protocolId, String protocolStatus, Long measurementDeviceId, String measurementDeviceType, String sortCriteria, String sortOrder, User calibratorEmployee);
+                                                                                     String streetToSearch, String status, String employeeName, Long protocolId, String protocolStatus, String numberCounter, String measurementDeviceType, String sortCriteria, String sortOrder, User calibratorEmployee);
 
 
     ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String status, String nameProvider, String nameCalibrator,

@@ -80,6 +80,7 @@ angular
             };
 
             $scope.zoom = function() {
+                $( ".counter-test-value" ).focus();
                 if($scope.imageSize.small) {
                     if (photoId == "testMainPhoto") {
                         $(".modal-dialog").css({ "width": "100%", "max-width": "1366px"});

@@ -1,5 +1,6 @@
 package com.softserve.edu.service.utils;
 
+import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.organization.Organization;
@@ -26,7 +27,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
     public static CriteriaQuery<Verification> buildSearchQuery(Long employeeId, String startDateToSearch,
                                                                String endDateToSearch, String idToSearch, String fullNameToSearch, String streetToSearch, String status, String employeeName,
                                                                Long protocolId, String protocolStatus,
-                                                               Long measurementDeviceId,
+                                                               String numberCounter,
                                                                String measurementDeviceType,
                                                                String sortCriteria, String sortOrder, User calibratorEmployee, EntityManager em) {
 
@@ -37,7 +38,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         Join<Verification, Organization> calibratorJoin = root.join("calibrator");
 
         Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicate(root, cb, employeeId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch,
-                status, employeeName, protocolId, protocolStatus, measurementDeviceId, measurementDeviceType, calibratorEmployee, calibratorJoin);
+                status, employeeName, protocolId, protocolStatus, numberCounter, measurementDeviceType, calibratorEmployee, calibratorJoin);
         if ((sortCriteria != null) && (sortOrder != null)) {
             criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
         } else {
@@ -52,7 +53,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
     public static CriteriaQuery<Long> buildCountQuery(Long employeeId, String startDateToSearch, String endDateToSearch,
                                                       String idToSearch, String fullNameToSearch,
                                                       String streetToSearch, String status, String employeeName,
-                                                      Long protocolId, String protocolStatus, Long measurementDeviceId, String measurementDeviceType,
+                                                      Long protocolId, String protocolStatus, String numberCounter, String measurementDeviceType,
                                                       User calibratorEmployee, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -60,7 +61,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         Root<Verification> root = countQuery.from(Verification.class);
         Join<Verification, Organization> calibratorJoin = root.join("calibrator");
         Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicate(root, cb, employeeId, startDateToSearch, endDateToSearch,
-                idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, measurementDeviceId, measurementDeviceType, calibratorEmployee, calibratorJoin);
+                idToSearch, fullNameToSearch, streetToSearch, status, employeeName, protocolId, protocolStatus, numberCounter, measurementDeviceType, calibratorEmployee, calibratorJoin);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
         return countQuery;
@@ -70,7 +71,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
                                             String startDateToSearch, String endDateToSearch, String idToSearch,
                                             String fullNameToSearch, String streetToSearch, String searchStatus,
                                             String employeeName, Long protocolId, String protocolStatus,
-                                            Long measurementDeviceId, String measurementDeviceType,
+                                            String numberCounter, String measurementDeviceType,
                                             User employee, Join<Verification, Organization> calibratorJoin) {
         Predicate queryPredicate = cb.equal(calibratorJoin.get("id"), employeeId);
 
@@ -120,9 +121,10 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
                     "%" + employeeName + "%"));
             queryPredicate = cb.and(searchPredicateByCalibratorEmployeeName, queryPredicate);
         }
-        if (measurementDeviceId != null) {
-            queryPredicate = cb.and(cb.like(new FilteringNumbersDataLikeStringData<Long>(cb, root.get("device").get("id")),
-                    "%" + measurementDeviceId.toString() + "%"), queryPredicate);
+        if (numberCounter != null) {
+            Join<Verification, Counter> joinVerificationCounter = root.join("counter");
+            queryPredicate = cb.and(cb.like(joinVerificationCounter.get("numberCounter"),
+                    "%" + numberCounter + "%"), queryPredicate);
         }
         if (measurementDeviceType != null) {
             queryPredicate = cb.and(cb.equal(root.get("device").get("deviceType"),
