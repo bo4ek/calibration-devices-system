@@ -356,15 +356,15 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         ClientData clientData;
 
         try {
-            Long districtIdLong = Long.parseLong(verificationData.get(Constants.DISTRICT_ID));
+            /*Long districtIdLong = Long.parseLong(verificationData.get(Constants.DISTRICT_ID));
 
             Long cityIdLong = Long.parseLong(verificationData.get(Constants.CITY_ID));
             boolean isExistLocality = localityService.existByIdAndDistrictId(cityIdLong, districtIdLong);
             if(!isExistLocality) {
                 throw new IncorrectCityIdException();
-            }
+            }*/
             Long streetIdLong = Long.parseLong(verificationData.get(Constants.STREET_ID));
-            Street street = streetService.findByIdAndLocalityId(streetIdLong, cityIdLong);
+            Street street = streetService.findStreetById(streetIdLong);
 
             if(street == null) {
                 throw new IncorrectStreetIdException();
