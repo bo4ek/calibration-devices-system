@@ -454,16 +454,7 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
-    @RequestMapping(value = "getNextTest/{verificationIndex}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
-    public ResponseEntity getNextTestProtocol(@PathVariable Integer verificationIndex, @PathVariable String sortCriteria, @PathVariable String sortOrder,
-                                              @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
-        User user = usersService.findOne(employeeUser.getUsername());
-        Verification verification = verificationService.findNextVerificationByVerificationIdAndVerificationIndex(user.getOrganization().getId(),
-                verificationIndex, sortCriteria, sortOrder, user);
-        CalibrationTest calibrationTest = testService.findByVerificationId(verification.getId());
-        return new ResponseEntity((new CalibrationTestFileDataDTO(calibrationTest, testService, verification)), HttpStatus.OK);
 
-    }
 
     /**
      * update test
