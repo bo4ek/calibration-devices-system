@@ -4,6 +4,8 @@ package com.softserve.edu.service.admin;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 
+import java.util.List;
+
 public interface CounterTypeService {
     /**
      * Save counter type with params
@@ -75,5 +77,7 @@ public interface CounterTypeService {
      * @return CounterType
      */
     CounterType findOneBySymbolAndStandardSize(String symbol, String standardSize);
+
+    List<CounterType> findBySymbolAndStandardSize(String symbol, String standardSize);
 
 }

@@ -150,4 +150,9 @@ public class CounterTypeServiceImpl implements CounterTypeService{
     public CounterType findOneBySymbolAndStandardSize(String symbol, String standardSize) {
         return counterTypeRepository.findOneBySymbolAndStandardSize(symbol,standardSize);
     }
+
+    @Override
+    public List<CounterType> findBySymbolAndStandardSize(String symbol, String standardSize) {
+        return counterTypeRepository.findBySymbolAndStandardSize(symbol, standardSize);
+    }
 }

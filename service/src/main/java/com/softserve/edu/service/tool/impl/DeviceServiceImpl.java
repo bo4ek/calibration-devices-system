@@ -107,4 +107,10 @@ public class DeviceServiceImpl implements DeviceService {
 	public void removeDeviceCategory(Long id) {
 		deviceRepository.delete(id);
 	}
+
+    @Override
+    public Device.DeviceType getDeviceTypeById(Long id)
+    {
+        return deviceRepository.getDeviceTypeById(id);
+    }
 }

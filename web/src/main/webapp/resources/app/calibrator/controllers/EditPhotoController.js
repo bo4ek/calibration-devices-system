@@ -108,7 +108,7 @@ angular
 
                 parentScope.TestForm.testResult = $scope.isTestSuccess(parentScope.TestDataFormData) ? 'SUCCESS': 'FAILED';
 
-                test.calculationError = (Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))).toFixed($scope.ACCURACY_OF_CALCULATION);
+                test.calculationError = (parseFloat($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))).toFixed($scope.ACCURACY_OF_CALCULATION);
                 test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
                 parentScope.TestDataFormData[index] = test;
             };

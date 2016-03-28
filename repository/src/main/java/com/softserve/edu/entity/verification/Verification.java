@@ -310,7 +310,7 @@ public class Verification implements Comparable {
         this.providerFromBBI = providerFromBBI;
         this.calibratorEmployee = calibratorEmployee;
         this.counter = counter;
-        this.device = counter.getCounterType().getDevice();
+        this.device = counter.getCounterType() == null ? null : counter.getCounterType().getDevice();
         this.readStatus = ReadStatus.UNREAD;
         this.counterStatus = false;
         this.comment = comment;

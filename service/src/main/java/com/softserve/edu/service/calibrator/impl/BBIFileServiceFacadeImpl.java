@@ -440,7 +440,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return null;
     }
 
-    private Long getDeviceIdByDeviceTypeId(Integer deviceTypeId) throws InvalidDeviceTypeIdException {
+    private Long getDeviceIdByDeviceTypeId(Integer deviceTypeId) {
         String deviceType;
         switch (deviceTypeId) {
             case 2:
@@ -463,21 +463,33 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 symbol += " " + parts[i];
             }
         }
-        CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
-        /**
-         * If there is no such counterType, a new one will be created. After that super admin under his login
-         * should complete all necessary data about this device, otherwise there will be no full data about this device
-         * and NullPointerException will be generated
-         */
-        if (counterType == null) {
-            Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
-            String deviceName = deviceService.getById(deviceId).getDeviceName();
-            counterTypeService.addCounterType(deviceName, symbol, standardSize, null, null, null, null, deviceId);
-            counterType = counterTypeService.findOneBySymbolAndStandardSize(symbol, standardSize);
-            logger.info("Device with id=" + counterType.getId() + " was created");
-
+        List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(symbol, standardSize);
+        CounterType resultCounterType;
+        switch (counterTypes.size()) {
+            case 1: {
+                resultCounterType = counterTypes.get(0);
+                break;
+            }
+            case 2: {
+                Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
+                Device.DeviceType deviceType = deviceService.getDeviceTypeById(deviceId);
+                resultCounterType = getCounterTypeByDeviceType(counterTypes, deviceType);
+                break;
+            }
+            default: {
+                throw new InvalidDeviceTypeIdException();
+            }
         }
         return new Counter(verificationData.get(Constants.YEAR),
-                verificationData.get(Constants.COUNTER_NUMBER), counterType, verificationData.get(Constants.STAMP));
+                verificationData.get(Constants.COUNTER_NUMBER), resultCounterType, verificationData.get(Constants.STAMP));
+    }
+
+    private CounterType getCounterTypeByDeviceType(List<CounterType> counterType, Device.DeviceType deviceType) {
+        for (CounterType type : counterType) {
+            if (type.getDevice().getDeviceType().equals(deviceType)) {
+                return type;
+            }
+        }
+        return null;
     }
 }

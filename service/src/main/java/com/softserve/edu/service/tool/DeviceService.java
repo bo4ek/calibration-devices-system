@@ -29,4 +29,6 @@ public interface DeviceService {
     void editDeviceCategory(Long id, String deviceType, String deviceName);
 
     void removeDeviceCategory(Long id);
+
+    Device.DeviceType getDeviceTypeById(Long id);
 }

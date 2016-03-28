@@ -90,7 +90,7 @@ public class CalibrationTestFileDataDTO {
         this.consumptionStatus = calibrationTest.getConsumptionStatus();
         this.testResult = calibrationTest.getTestResult();
         this.listTestData = new ArrayList();
-        this.typeWater = counter.getCounterType().getDevice().getDeviceType().toString();
+        this.typeWater = counter.getCounterType() == null ? null : counter.getCounterType().getDevice().getDeviceType().toString();
         this.serviceType = verification.getDevice().getDeviceType().name();
         this.signed = verification.isSigned();
         this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
@@ -101,9 +101,9 @@ public class CalibrationTestFileDataDTO {
         CalibrationTestIMG calibrationTestIMG;
         this.status = calibrationTest.getVerification().getStatus().toString();
         this.counterId = counter.getId();
-        this.standardSize = counter.getCounterType().getStandardSize();
-        this.symbol = counter.getCounterType().getSymbol();
-        this.counterTypeId = counter.getCounterType().getId();
+        this.standardSize = counter.getCounterType() == null ? null : counter.getCounterType().getStandardSize();
+        this.symbol = counter.getCounterType() == null ? null : counter.getCounterType().getSymbol();
+        this.counterTypeId = counter.getCounterType() == null ? null : counter.getCounterType().getId();
         for (CalibrationTestData calibrationTestData : testService.getLatestTests(calibrationTest.getCalibrationTestDataList())) {
             CalibrationTestDataDTO testDataDTO = new CalibrationTestDataDTO();
             testDataDTO.setDataAvailable(true);

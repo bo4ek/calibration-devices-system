@@ -63,6 +63,8 @@ public interface CounterTypeRepository extends CrudRepository<CounterType, Long>
     Integer findCalibrationInterval(String standardSize, String symbol,
                                     String manufacturer, String deviceType, Integer yearIntroduction, Integer maxOfYearIntroduction);
 
+    List<CounterType> findBySymbolAndStandardSize(String symbol, String standardSize);
+
 
 
 }
