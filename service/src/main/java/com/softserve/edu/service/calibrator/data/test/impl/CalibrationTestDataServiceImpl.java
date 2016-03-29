@@ -36,9 +36,7 @@ public class CalibrationTestDataServiceImpl implements CalibrationTestDataServic
     public CalibrationTestData createNewTestData(Long testId, DeviceTestData deviceTestData,
                                                  int testDataId) throws IOException {
 
-        double actualConsumption = convertImpulsesPerSecToCubicMetersPerHour(
-                deviceTestData.getTestSpecifiedImpulsesAmount(testDataId),
-                deviceTestData.getTestDuration(testDataId));
+        double actualConsumption = deviceTestData.getActualConsumption(testDataId);
         double givenConsumption = convertImpulsesPerSecToCubicMetersPerHour(
                 deviceTestData.getTestSpecifiedConsumption(testDataId),
                 deviceTestData.getImpulsePricePerLitre());

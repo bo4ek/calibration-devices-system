@@ -47,6 +47,7 @@ public interface DeviceTestData {
     double getTestTerminalCounterValue(int testIndex);
     long getTestUnixBeginTime(int testIndex);
     long getTestUnixEndTime(int testIndex);
+    double getActualConsumption(int testIndex);
 
     /**
      * Returns test duration in seconds

@@ -242,6 +242,11 @@ public class BbiDeviceTestData implements DeviceTestData {
         return getIntegerValue("test" + testIndex + "testNumber");
     }
 
+    @Override
+    public double getActualConsumption(int testIndex) {
+        return getDoubleValue("test" + testIndex + "actualConsumption");
+    }
+
     /**
      *
      * @return Test photo in hex.
