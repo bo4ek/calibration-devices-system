@@ -115,7 +115,7 @@ public class VerificationProviderEmployeeServiceImplTest {
     public void testGetVerificationListbyProviderEmployee() {
         List<Verification> expected = Collections.singletonList(verification);
         String username = "username";
-        when(verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.IN_PROGRESS)).thenReturn(expected);
+        when(verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED)).thenReturn(expected);
 
         Assert.assertEquals(expected, verificationProviderEmployeeService.getVerificationListByProviderEmployee(username));
     }
@@ -134,7 +134,7 @@ public class VerificationProviderEmployeeServiceImplTest {
     public void testCountByProviderEmployeeTasks() {
         Long expected = 1L;
         String username = "username";
-        when(verificationRepository.countByProviderEmployeeUsernameAndStatus(username, Status.IN_PROGRESS)).thenReturn(expected);
+        when(verificationRepository.countByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED)).thenReturn(expected);
 
         Assert.assertEquals(expected, verificationProviderEmployeeService.countByProviderEmployeeTasks(username));
 

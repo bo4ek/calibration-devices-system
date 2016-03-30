@@ -103,7 +103,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      */
     @Transactional
     public List<Verification> getVerificationListByProviderEmployee(String username) {
-        return verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.IN_PROGRESS);
+        return verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED);
     }
 
     /**
@@ -136,7 +136,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      */
     @Transactional
     public Long countByProviderEmployeeTasks(String username) {
-        return verificationRepository.countByProviderEmployeeUsernameAndStatus(username, Status.IN_PROGRESS);
+        return verificationRepository.countByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED);
     }
 
     /**
