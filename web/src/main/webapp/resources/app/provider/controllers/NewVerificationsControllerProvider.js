@@ -20,7 +20,7 @@ angular
             $scope.isVerificatorEmployee();
 
             $scope.clearAll = function () {
-                $scope.selectedStatus.name = null;
+                $scope.selectedStatus = null;
                 $scope.tableParams.filter({});
                 $scope.clearDate(); // sets 'all time' timerange
             };
