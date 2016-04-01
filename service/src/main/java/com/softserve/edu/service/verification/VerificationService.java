@@ -141,6 +141,8 @@ public interface VerificationService {
 
     java.sql.Date getEarliestPlanningTaskDate(Organization organization);
 
+    java.sql.Date getEarliestInitialDateForPlanningTask(Organization organization);
+
     Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable);
 
     void removeVerificationFromTask(String verificationId);

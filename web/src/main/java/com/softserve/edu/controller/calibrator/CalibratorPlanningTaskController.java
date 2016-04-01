@@ -339,7 +339,7 @@ public class CalibratorPlanningTaskController {
     public String getArchivalVerificationEarliestDateByProviderId(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
-            Date gottenDate = verificationService.getEarliestPlanningTaskDate(organization);
+            Date gottenDate = verificationService.getEarliestInitialDateForPlanningTask(organization);
             Date date;
             if (gottenDate != null) {
                 date = new Date(gottenDate.getTime());

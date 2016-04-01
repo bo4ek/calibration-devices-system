@@ -101,7 +101,8 @@ public class VerificationPageDTOTransformer {
                         (verification.getInfo() != null) ? verification.getInfo().getServiceability() : null,
                         (verification.getInfo() != null) ? verification.getInfo().getNoWaterToDate() : null,
                         verification.isSealPresence(),
-                        verification.isVerificationWithDismantle()
+                        verification.isVerificationWithDismantle(),
+                        verification.getInitialDate()
                 ));
             }
         }
@@ -122,8 +123,8 @@ public class VerificationPageDTOTransformer {
         String sealPresence = searchData.getSealPresence();
         String serviceability = searchData.getServiceability();
         String verificationWithDismantle = searchData.getVerificationWithDismantle();
-        if ((startDate.before(verification.getSentToCalibratorDate()) || startDate.equals(verification.getSentToCalibratorDate()))
-                && (endDate.after(verification.getSentToCalibratorDate()) || endDate.equals(verification.getSentToCalibratorDate()))) {
+        if ((startDate.before(verification.getInitialDate()) || startDate.equals(verification.getInitialDate()))
+                && (endDate.after(verification.getInitialDate()) || endDate.equals(verification.getInitialDate()))) {
             if ((clientName == null || clientName.isEmpty()) && (providerName == null || providerName.isEmpty())
                     && (clientDistrict == null || clientDistrict.isEmpty()) && (clientStreet == null || clientStreet.isEmpty())
                     && (clientPhone == null || clientPhone.isEmpty()) && (clientBuilding == null || clientBuilding.isEmpty())

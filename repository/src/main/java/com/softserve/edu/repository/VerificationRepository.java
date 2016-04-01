@@ -170,6 +170,11 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
             "and u.calibrator = :calibrator")
     java.sql.Date getEarliestPlanningTaskDate(@Param("calibrator") Organization calibrator);
 
+    @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.taskStatus IN ('PLANNING_TASK') " +
+            "and u.calibrator = :calibrator")
+    java.sql.Date getEarliestInitialDateForPlanningTask(@Param("calibrator") Organization calibrator);
+
+
     List<Verification> findByCalibratorEmployeeUsernameAndTaskStatus(String userName, Status status);
 
     List<Verification> findByTaskStatusAndCalibratorId(Status status, Long id);

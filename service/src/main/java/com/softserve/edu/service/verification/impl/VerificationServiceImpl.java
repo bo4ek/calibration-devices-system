@@ -739,6 +739,12 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public java.sql.Date getEarliestInitialDateForPlanningTask(Organization organization) {
+        return verificationRepository.getEarliestInitialDateForPlanningTask(organization);
+    }
+
+    @Override
     @Transactional
     public Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable) {
         return verificationRepository.findByTaskId(taskID, pageable);

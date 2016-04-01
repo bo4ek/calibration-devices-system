@@ -38,7 +38,7 @@
                                     <td data-title="''"><input type="checkbox" ng-click="resolveVerificationId(verification.verificationId)"/>
                                     </td>
                                     <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'date'"
-                                        filter="{ 'date': 'daterange' }">{{ verification.sentToCalibrator | date :
+                                        filter="{ 'date': 'daterange' }">{{ verification.initialDate | date :
                                         'dd-MM-yyyy'}}
                                         <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
                                             translate}} {{verification.processTimeExceeding}} {{'DAYS' |

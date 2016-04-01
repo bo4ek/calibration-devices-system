@@ -12,6 +12,7 @@ import java.util.Date;
 public class VerificationPlanningTaskDTO implements Comparable {
 
     private Date sentToCalibrator;
+    private Date initialDate;
     private String verificationId;
     private String providerName;
     private String clientFullName;
@@ -102,8 +103,9 @@ public class VerificationPlanningTaskDTO implements Comparable {
     public VerificationPlanningTaskDTO(Date sentDate, String verificationID, String providerName, String fullName,
                                        String district, String street, String building, String flat, String telephone,
                                        String secondphone, Date dateOfVerif, LocalTime timeFrom, LocalTime timeTo,
-                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence, boolean verificationWithDismantle) {
+                                       Boolean serviceability, Date noWaterToDate, boolean sealPresence, boolean verificationWithDismantle, Date initialDate) {
         this.sentToCalibrator = sentDate;
+        this.initialDate = initialDate;
         this.verificationId = verificationID;
         this.providerName = providerName;
         this.clientFullName = fullName;
