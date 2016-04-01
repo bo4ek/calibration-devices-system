@@ -819,5 +819,6 @@
     "EDIT_STREET": "Edit street",
     "DELETE_STREET": "Delete street",
     "SUCCESSFUL_EDITED_STREET" : "Street successfully edited",
-    "ACCEPTED_VERIFICATIONS": "Accepted verifications"
+    "ACCEPTED_VERIFICATIONS": "Accepted verifications",
+    "FILL_IN_INFORMATION_ABOUT_COUNTER_TYPE": "Fill in information about counter type"
 }

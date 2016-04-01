@@ -25,19 +25,19 @@ angular
              * init fields for none visible fileds of form
              * and insert them into select
              */
-            var index = arrayObjectIndexOf($scope.names, $rootScope.countersType.name, "designation");
+            var index = arrayObjectIndexOf($scope.names, $rootScope.countersType.name, $rootScope.countersType.typeWater, "designation", "deviceType");
             $scope.deviceCategoryName = $scope.names[index];
             $scope.deviceId = $scope.names[index].id;
 
-            function arrayObjectIndexOf(myArray, searchTerm, property) {
+            function arrayObjectIndexOf(myArray, name, typeWater, firstProperty, secondPropery) {
                 for (var i = 0, len = myArray.length; i < len; i++) {
-                    if (myArray[i][property] === searchTerm) {
+                    if (myArray[i][firstProperty] === name && myArray[i][secondPropery] == typeWater) {
                         return i;
                     }
                 }
                 var elem = {
                     id: length,
-                    designation: searchTerm
+                    designation: name
                 };
                 myArray.push(elem);
                 return (myArray.length - 1);
