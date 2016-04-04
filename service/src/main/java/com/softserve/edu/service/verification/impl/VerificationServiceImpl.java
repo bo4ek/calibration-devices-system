@@ -955,15 +955,11 @@ public class VerificationServiceImpl implements VerificationService {
         for (byte i = 0; i < quantity; i++) {
             id = datePart + String.format("%04d", count += 1);
             verification.setId(id);
-            //verificationRepository.save(verification);
+            verification.setGroup(group);
+            verificationRepository.save(verification);
             verificationIds.add(id);
             verifications.add(verification);
         }
-        for (Verification v : verifications) {
-            v.setGroup(group);
-        }
-        verificationRepository.save(verifications);
-        //groupRepository.save(new VerificationGroup(verifications));
         return verificationIds;
     }
 
