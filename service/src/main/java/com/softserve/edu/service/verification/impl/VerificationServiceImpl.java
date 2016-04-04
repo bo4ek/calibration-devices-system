@@ -5,6 +5,7 @@ import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.user.UserRole;
+import com.softserve.edu.entity.verification.VerificationGroup;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
@@ -46,6 +47,9 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Autowired
     private CalibrationPlanningTaskRepository taskRepository;
+
+    @Autowired
+    private VerificationGroupRepository groupRepository;
 
     @Autowired
     private VerificationRepository verificationRepository;
@@ -751,9 +755,15 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Transactional
-    public Verification[] getVerificationsByTaskID(Long taskID) {
+    public List<Verification> getVerificationsByTaskID(Long taskID) {
         return verificationRepository.findByTaskId(taskID);
     }
+
+//    @Transactional
+//    public List<Verification> getGroupVerificationsByTaskID(Long taskID, Long groupId) {
+//        return null;//verificationRepository.findSameGroupVerificationsByTaskId(taskID);
+//    }
+
 
     @Override
     @Transactional
@@ -934,16 +944,26 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public synchronized List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType) {
         List<String> verificationIds = new ArrayList<>();
+        Set<Verification> verifications = new HashSet<>();
         String id;
         String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
         long count = verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(verification.getInitialDate(), deviceType);
 
+        VerificationGroup group = new VerificationGroup();
+        groupRepository.save(group);
+
         for (byte i = 0; i < quantity; i++) {
             id = datePart + String.format("%04d", count += 1);
             verification.setId(id);
-            verificationRepository.save(verification);
+            //verificationRepository.save(verification);
             verificationIds.add(id);
+            verifications.add(verification);
         }
+        for (Verification v : verifications) {
+            v.setGroup(group);
+        }
+        verificationRepository.save(verifications);
+        //groupRepository.save(new VerificationGroup(verifications));
         return verificationIds;
     }
 

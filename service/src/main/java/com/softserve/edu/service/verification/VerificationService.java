@@ -145,6 +145,10 @@ public interface VerificationService {
 
     Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable);
 
+    List<Verification> getVerificationsByTaskID(Long taskID);
+
+    //List<Verification> getGroupVerificationsByTaskID(Long taskID, Long groupId);
+
     void removeVerificationFromTask(String verificationId);
 
     List<Verification> findPageOfVerificationsByCalibratorEmployeeAndStatus(User employee, int pageNumber,

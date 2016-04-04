@@ -110,13 +110,20 @@ public class CalibratorVerificationController {
         if (calibrator == null || verification == null) {
             throw new RuntimeException();
         }
-        updateVerificationData(verification, verificationDTO, calibrator);
-        try {
-            verificationService.saveVerification(verification);
-            logger.info("Verification was saved with parameters: "+verification);
-        } catch (Exception e) {
-            logger.error("GOT EXCEPTION WHILE UPDATING VERIFICATION", e);
-            httpStatus = HttpStatus.CONFLICT;
+        Long id = verification.getTask().getId();
+        //Long groupId = verification.getGroup().getId();
+        //TODO get verifications from the same group and the same task
+        List<Verification> verif = verificationService.getVerificationsByTaskID(id);//.getGroupVerificationsByTaskID(id,13L);
+        boolean updateAll = true;// TODO get value from page
+        for (Verification v : verif) {
+            updateVerificationData(v, verificationDTO, calibrator, true);
+            try {
+                verificationService.saveVerification(v);
+                logger.info("Verification was saved with parameters: " + verification);
+            } catch (Exception e) {
+                logger.error("GOT EXCEPTION WHILE UPDATING VERIFICATION", e);
+                httpStatus = HttpStatus.CONFLICT;
+            }
         }
         return new ResponseEntity(httpStatus);
     }
@@ -533,7 +540,7 @@ public class CalibratorVerificationController {
     public void assignCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
                                          @PathVariable String verificationId) {
         User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
-        if(user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
+        if (user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
             calibratorService.assignCalibratorEmployee(verificationId, user);
         }
     }
@@ -644,7 +651,7 @@ public class CalibratorVerificationController {
     }
 
     private void updateVerificationData(Verification verification, OrganizationStageVerificationDTO verificationDTO,
-                                        Organization calibrator) {
+                                        Organization calibrator, boolean updateAll) {
         // updating client data
         ClientData clientData = new ClientData(
                 verificationDTO.getFirstName(),
@@ -665,19 +672,20 @@ public class CalibratorVerificationController {
         );
 
         // updating counter information
-        CounterType counterType = calibratorService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
-                verificationDTO.getStandardSize());
-        Counter counter = verification.getCounter();
-        if (counter == null) {
-            counter = new Counter();
+        if (!updateAll) {
+            CounterType counterType = calibratorService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize());
+            Counter counter = verification.getCounter();
+            if (counter == null) {
+                counter = new Counter();
+            }
+            counter.setReleaseYear(verificationDTO.getReleaseYear());
+            counter.setDateOfDismantled(verificationDTO.getDateOfDismantled());
+            counter.setDateOfMounted(verificationDTO.getDateOfMounted());
+            counter.setNumberCounter(verificationDTO.getNumberCounter());
+            counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
+            counter.setCounterType(counterType);
         }
-        counter.setReleaseYear(verificationDTO.getReleaseYear());
-        counter.setDateOfDismantled(verificationDTO.getDateOfDismantled());
-        counter.setDateOfMounted(verificationDTO.getDateOfMounted());
-        counter.setNumberCounter(verificationDTO.getNumberCounter());
-        counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
-        counter.setCounterType(counterType);
-
         // updating addition info
         AdditionalInfo info = verification.getInfo();
         if (info == null) {
