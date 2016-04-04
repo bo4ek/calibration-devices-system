@@ -43,7 +43,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -104,19 +103,20 @@ public class CalibratorVerificationController {
                                            @PathVariable String verificationID,
                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
+
+        boolean updateAll = true;// TODO get value from page
+
         Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
         Verification verification = verificationService.findById(verificationID);
 
         if (calibrator == null || verification == null) {
             throw new RuntimeException();
         }
-        Long id = verification.getTask().getId();
-        //Long groupId = verification.getGroup().getId();
-        //TODO get verifications from the same group and the same task
-        List<Verification> verif = verificationService.getVerificationsByTaskID(id);//.getGroupVerificationsByTaskID(id,13L);
-        boolean updateAll = true;// TODO get value from page
-        for (Verification v : verif) {
-            updateVerificationData(v, verificationDTO, calibrator, true);
+
+        List<Verification> verifications = verificationService.getTaskGroupVerifications(verification,updateAll);
+
+        for (Verification v : verifications) {
+            updateVerificationData(v, verificationDTO, calibrator, updateAll);
             try {
                 verificationService.saveVerification(v);
                 logger.info("Verification was saved with parameters: " + verification);

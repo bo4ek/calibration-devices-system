@@ -33,7 +33,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.sql.*;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -759,10 +758,18 @@ public class VerificationServiceImpl implements VerificationService {
         return verificationRepository.findByTaskId(taskID);
     }
 
-//    @Transactional
-//    public List<Verification> getGroupVerificationsByTaskID(Long taskID, Long groupId) {
-//        return null;//verificationRepository.findSameGroupVerificationsByTaskId(taskID);
-//    }
+    @Transactional
+    public List<Verification> getTaskGroupVerifications(Verification verification, boolean all) {
+        List<Verification> verifications = null;
+        if (all) {
+            Long taskId = verification.getTask().getId();
+            Long groupId = verification.getGroup().getId();
+            verifications = verificationRepository.findByTaskIdAndGroupId(taskId, groupId);
+        }else{
+            verifications = Arrays.asList(verification);
+        }
+        return verifications;
+    }
 
 
     @Override

@@ -194,16 +194,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     List<Verification> findVerificationByDateAndDeviceType(@Param("initialDate") Date initialDate,
                                                            @Param("deviceType") Device.DeviceType deviceType);
 
-//    @Query("SELECT v FROM com.softserve.edu.entity.verification.Verification v " +
-//            "WHERE v.task.id = :taskId ")
-//    List<Verification> findSameGroupVerificationsByTaskId(@Param("taskId") Long taskId);
-
-//    @Query("SELECT E FROM Organization O INNER JOIN O.agreements A " +
-//            "INNER JOIN A.executor E " +
-//            "WHERE O.id =:customerId AND A.deviceType =:deviceType AND A.isAvailable = true AND  :orgType in elements(E.organizationTypes)")
-//    Set<Organization> findByIdAndTypeAndActiveAgreementDeviceType(@Param("customerId") Long customerId,
-//                                                                  @Param("orgType") OrganizationType orgType,
-//                                                                  @Param("deviceType") Device.DeviceType deviceType);
+    List<Verification> findByTaskIdAndGroupId(Long taskId, Long groupId);
 
     @Query("SELECT COUNT(u.id) FROM Verification u INNER JOIN u.device d WHERE d.id = u.device.id AND " +
             "d.deviceType= :deviceType AND u.initialDate = :initialDate")
