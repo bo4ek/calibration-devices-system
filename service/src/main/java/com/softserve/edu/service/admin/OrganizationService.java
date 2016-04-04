@@ -8,6 +8,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.organization.OrganizationEditHistory;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.service.utils.ListToPageTransformer;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -66,4 +67,6 @@ public interface OrganizationService {
     Set<Organization> findByIdAndTypeAndActiveAgreementDeviceType(Long customerId, OrganizationType organizationType, Device.DeviceType deviceType);
 
     Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceType(Long executorId, OrganizationType organizationType, String deviceType);
+
+    Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceTypes(Long executorId, OrganizationType organizationType, Set<Device.DeviceType> deviceTypes);
 }

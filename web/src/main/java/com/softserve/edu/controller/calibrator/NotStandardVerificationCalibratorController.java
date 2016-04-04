@@ -79,8 +79,8 @@ public class NotStandardVerificationCalibratorController {
     public Set<OrganizationDTO> getProviders(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
 
         Organization userOrganization = organizationService.getOrganizationById(user.getOrganizationId());
-        return organizationService.findCustomersByIdAndTypeAndActiveAgreementDeviceType(user.getOrganizationId(),
-                OrganizationType.PROVIDER, userOrganization.getDeviceTypes().iterator().next().toString()).stream()
+        return organizationService.findCustomersByIdAndTypeAndActiveAgreementDeviceTypes(user.getOrganizationId(),
+                OrganizationType.PROVIDER, userOrganization.getDeviceTypes()).stream()
                 .map(organization -> new OrganizationDTO(organization.getId(), organization.getName()))
                 .collect(Collectors.toSet());
     }

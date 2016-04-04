@@ -31,6 +31,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -325,6 +326,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional(readOnly = true)
     public Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceType(Long executorId, OrganizationType organizationType, String deviceType) {
         return organizationRepository.findCustomersByIdAndTypeAndActiveAgreementDeviceType(executorId, deviceType);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceTypes(Long executorId, OrganizationType organizationType, Set<Device.DeviceType> deviceTypes) {
+        Set<String> result = deviceTypes.stream().map(device -> device.toString()).collect(Collectors.toSet());
+        return organizationRepository.findCustomersByIdAndTypeAndActiveAgreementDeviceTypes(executorId, result);
     }
 
 }
