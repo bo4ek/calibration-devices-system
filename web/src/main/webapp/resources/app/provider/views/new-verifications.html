@@ -2,7 +2,12 @@
 
     <div class="row header_row">
         <div class="col-md-12">
-            <h1 class="page-header">{{'NEW_VERIFICATIONS' | translate}}</h1>
+            <div ng-if="isSentVerifications">
+                <h1 class="page-header">{{'NEW_VERIFICATIONS' | translate}}</h1>
+            </div>
+            <div ng-if="!isSentVerifications">
+                <h1 class="page-header">{{'ACCEPTED_VERIFICATIONS' | translate}}</h1>
+            </div>
         </div>
     </div>
 
