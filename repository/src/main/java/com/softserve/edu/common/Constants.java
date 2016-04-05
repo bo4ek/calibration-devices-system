@@ -138,4 +138,10 @@ public interface Constants {
     String DATE = "Дата";
 
     // endregion
+
+    String HEX_OF_EMPTY_SYMBOL = "\u0000";
+    String KYIV_CITY_NAME = "м. Київ";
+
+    String ERROR_FOR_TERMAL = "3";
+    String ERROR_FOR_WATER = "2";
 }

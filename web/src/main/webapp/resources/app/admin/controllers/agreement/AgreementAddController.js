@@ -167,9 +167,5 @@ angular
             }
 
             $scope.CATEGORY_DEVICE_CODE = /^[\u0430-\u044f\u0456\u0457\u0454a-z\d]{13}$/;
-
-            if (agreement !== undefined) {
-
-            }
         }
     ]);

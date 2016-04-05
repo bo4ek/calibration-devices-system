@@ -3,6 +3,7 @@ package com.softserve.edu.documents.document;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.documents.document.meta.Placeholder;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
@@ -71,7 +72,7 @@ public abstract class BaseCertificate implements Document {
     public String getCalibratorCompanyAddress() {
         try {
             Address address = verification.getStateVerificator().getAddress();
-            return String.join(",", address.getLocality(), address.getStreet(), address.getBuilding());
+            return String.join(",", Constants.KYIV_CITY_NAME, address.getStreet(), address.getBuilding());
         } catch (Exception e) {
             logger.error("Vereficator's address has not been specified " + e);
             return Constants.NOT_SPECIFIED;
@@ -142,6 +143,35 @@ public abstract class BaseCertificate implements Document {
             return verification.getCounter().getCounterType().getSymbol();
         } catch (Exception e) {
             logger.error("Symbol for counterType had not been specified ", e);
+            return Constants.NOT_SPECIFIED;
+        }
+    }
+
+    @Placeholder(name = "ERROR")
+    public String getError() {
+        try {
+            Device.DeviceType type = verification.getCounter().getCounterType().getDevice().getDeviceType();
+            if (type.equals(Device.DeviceType.THERMAL)) {
+                return Constants.ERROR_FOR_TERMAL;
+            } else {
+                if (type.equals(Device.DeviceType.WATER)) {
+                    return Constants.ERROR_FOR_WATER;
+                } else {
+                    return Constants.NOT_SPECIFIED;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Symbol for counterType had not been specified ", e);
+            return Constants.NOT_SPECIFIED;
+        }
+    }
+
+    @Placeholder(name = "DEV_STANDARD_SIZE")
+    public String getDeviceStandardSize() {
+        try {
+            return verification.getCounter().getCounterType().getStandardSize();
+        } catch (Exception e) {
+            logger.error("Standard size for counterType had not been specified ", e);
             return Constants.NOT_SPECIFIED;
         }
     }

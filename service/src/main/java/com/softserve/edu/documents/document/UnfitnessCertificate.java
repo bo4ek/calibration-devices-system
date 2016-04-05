@@ -92,4 +92,43 @@ public class UnfitnessCertificate extends BaseCertificate {
             return Constants.NOT_SPECIFIED;
         }
     }
+
+    private String prepareAcceptableError(Long error) {
+        StringBuilder builder = new StringBuilder();
+        if(error < 0) {
+            builder.append(" - ");
+            error *= -1;
+        } else {
+            builder.append(" = ");
+        }
+        builder.append(error);
+        return builder.toString();
+    }
+
+    @Placeholder(name = "ERROR_TEST1")
+    public String getErrorTest1() {
+        if (!verification.isManual()) {
+            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.FIRST_TEST_RESULT).getAcceptableError());
+        } else {
+            return Constants.NOT_SPECIFIED;
+        }
+    }
+
+    @Placeholder(name = "ERROR_TEST2")
+    public String getErrorTest2() {
+        if (!verification.isManual()) {
+            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.SECOND_TEST_RESULT).getAcceptableError());
+        } else {
+            return Constants.NOT_SPECIFIED;
+        }
+    }
+
+    @Placeholder(name = "ERROR_TEST3")
+    public String getErrorTest3() {
+        if (!verification.isManual()) {
+            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.THIRD_TEST_RESULT).getAcceptableError());
+        } else {
+            return Constants.NOT_SPECIFIED;
+        }
+    }
 }
