@@ -21,7 +21,8 @@ public enum Status {
     TEST_COMPLETED,
     SENT_TO_VERIFICATOR,
     TEST_OK,
-    TEST_NOK;
+    TEST_NOK,
+    NOT_VALID;
 
     public Predicate getQueryPredicate(Root<Verification> root, CriteriaBuilder cb) {
         return cb.equal(root.get("status"), this);

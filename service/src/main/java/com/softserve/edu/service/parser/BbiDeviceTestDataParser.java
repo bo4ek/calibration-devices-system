@@ -102,7 +102,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private String readConsecutiveBytesAsUTF8(int bytesAmount) throws IOException {
         byte[] byteArray = new byte[bytesAmount];
         reader.read(byteArray, Constants.START_OFFSET_IN_ARRAY, bytesAmount);
-        return new String(byteArray, Constants.UTF8_ENCODING);
+        return new String(byteArray, Constants.UTF8_ENCODING).replaceAll(Constants.HEX_OF_EMPTY_SYMBOL, "");
     }
 
     /**
@@ -173,6 +173,9 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
 
         try {
             int imageSize = (int) readLongValue(Constants.FOUR_BYTES);
+            if (imageSize > Constants.ALLOCATED_IMAGE_SIZE) {
+                throw new IOException();
+            }
             byte[] decodedHex = new byte[imageSize];
             int n = reader.read(decodedHex, Constants.START_OFFSET_IN_ARRAY, imageSize);
             encodedHexB64 = Base64.encodeBase64String(decodedHex);

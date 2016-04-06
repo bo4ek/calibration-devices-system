@@ -17,7 +17,7 @@ public interface BbiFileService {
 
     File findBbiFileByFileName(String fileName);
 
-    boolean findByFileNameAndDate(String fileName, String date);
+    boolean findByFileNameAndDate(String fileName, String date, String moduleNumber);
 
     DeviceTestData parseBbiFile(InputStream fileStream, String fileName) throws IOException, DecoderException, InvalidImageInBbiException;
 }

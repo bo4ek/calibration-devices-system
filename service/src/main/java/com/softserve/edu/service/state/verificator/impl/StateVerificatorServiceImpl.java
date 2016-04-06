@@ -108,7 +108,7 @@ public class StateVerificatorServiceImpl implements StateVerificatorService {
     public List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization) {
         Organization organization = organizationRepository.findOne(idOrganization);
         List<Verification> verifications = verificationRepository.
-                findByStateVerificatorAndInitialDateBetween
+                findByStateVerificatorAndSentToVerificatorDateBetween
                         (organization, from, to);
         List<ProviderEmployeeGraphic> graficData = null;
         try {

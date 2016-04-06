@@ -1,7 +1,6 @@
 package com.softserve.edu.service.calibrator.impl;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
-import com.softserve.edu.entity.verification.BbiProtocol;
 import com.softserve.edu.repository.UploadBbiRepository;
 import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
@@ -34,21 +33,19 @@ public class BbiFileServiceImpl implements BbiFileService {
     public File findBbiFileByFileName(String fileName) {
         String verificationId = uploadBbiRepository.findVerificationIdByFileName(fileName);
         String absolutePath = bbiLocalStorage + verificationId + "/" + fileName;
-        File file = new File(absolutePath);
-        return file;
+        return new File(absolutePath);
     }
 
     @Override
-    public boolean findByFileNameAndDate(String fileName, String date){
-        return uploadBbiRepository.findBBIProtocolByFileNameAndDate(fileName, date) != null ? true : false;
+    public boolean findByFileNameAndDate(String fileName, String date, String moduleNumber){
+        return uploadBbiRepository.findBBIProtocolByFileNameAndDateAndModuleNumber(fileName, date, moduleNumber) != null;
     }
 
 
     @Override
     public DeviceTestData parseBbiFile(InputStream fileStream, String fileName) throws IOException, DecoderException,InvalidImageInBbiException {
         DeviceTestDataParser parser = testDataParserFactory.getParser(fileName);
-        DeviceTestData parsedData = parser.parse(fileStream);
-        return parsedData;
+        return parser.parse(fileStream);
     }
 
 }

@@ -58,16 +58,7 @@ public class UnfitnessCertificate extends BaseCertificate {
                 if (firstResult.equals(notProcessed) || secondResult.equals(notProcessed) || thirdResult.equals(notProcessed)) {
                     return verification.getCalibrationTestDataManualId().getUnsuitabilityReason().getName();
                 }
-                if (firstResult.equals(failed)) {
-                    reasons.add(Constants.RATED_FLAW);
-                }
-                if (secondResult.equals(failed)) {
-                    reasons.add(Constants.TRANSIENT_FLAW);
-                }
-                if (thirdResult.equals(failed)) {
-                    reasons.add(Constants.MINIMAL_FLAW);
-                }
-                return Constants.MEASURING_ERROR_MESSAGE + String.join(",", reasons);
+
             } else {
                 firstResult = calibrationTest.getCalibrationTestDataList().get(Constants.FIRST_TEST_RESULT).getTestResult();
                 secondResult = calibrationTest.getCalibrationTestDataList().get(Constants.SECOND_TEST_RESULT).getTestResult();
@@ -76,24 +67,19 @@ public class UnfitnessCertificate extends BaseCertificate {
                 if (firstResult.equals(notProcessed) || secondResult.equals(notProcessed) || thirdResult.equals(notProcessed)) {
                     return calibrationTest.getUnsuitabilityReason().getName();
                 }
-                if (firstResult.equals(failed)) {
-                    reasons.add(Constants.RATED_FLAW);
-                }
-                if (secondResult.equals(failed)) {
-                    reasons.add(Constants.TRANSIENT_FLAW);
-                }
-                if (thirdResult.equals(failed)) {
-                    reasons.add(Constants.MINIMAL_FLAW);
-                }
-                return Constants.MEASURING_ERROR_MESSAGE + String.join(",", reasons);
             }
+            if (firstResult.equals(failed) || secondResult.equals(failed) || thirdResult.equals(failed)) {
+                return String.format("Відносна похибка лічильника води перевищує границі нормованих значень та складає: δQn%s%%, δQt%s%%, δQmin%s%%",
+                        getErrorTest1(), getErrorTest2(), getErrorTest3());
+            }
+            return Constants.MEASURING_ERROR_MESSAGE + String.join(",", reasons);
         } catch (Exception e) {
             logger.error("Test results for this verification are corrupted ", e);
             return Constants.NOT_SPECIFIED;
         }
     }
 
-    private String prepareAcceptableError(Long error) {
+    private String prepareAcceptableError(Double error) {
         StringBuilder builder = new StringBuilder();
         if(error < 0) {
             builder.append(" - ");
@@ -105,28 +91,25 @@ public class UnfitnessCertificate extends BaseCertificate {
         return builder.toString();
     }
 
-    @Placeholder(name = "ERROR_TEST1")
     public String getErrorTest1() {
         if (!verification.isManual()) {
-            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.FIRST_TEST_RESULT).getAcceptableError());
+            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.FIRST_TEST_RESULT).getCalculationError());
         } else {
             return Constants.NOT_SPECIFIED;
         }
     }
 
-    @Placeholder(name = "ERROR_TEST2")
     public String getErrorTest2() {
         if (!verification.isManual()) {
-            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.SECOND_TEST_RESULT).getAcceptableError());
+            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.SECOND_TEST_RESULT).getCalculationError());
         } else {
             return Constants.NOT_SPECIFIED;
         }
     }
 
-    @Placeholder(name = "ERROR_TEST3")
     public String getErrorTest3() {
         if (!verification.isManual()) {
-            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.THIRD_TEST_RESULT).getAcceptableError());
+            return prepareAcceptableError(calibrationTest.getCalibrationTestDataList().get(Constants.THIRD_TEST_RESULT).getCalculationError());
         } else {
             return Constants.NOT_SPECIFIED;
         }

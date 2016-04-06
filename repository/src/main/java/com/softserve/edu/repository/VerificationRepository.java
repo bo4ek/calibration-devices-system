@@ -123,7 +123,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     List<Verification> findByProviderAndInitialDateBetween(Organization organization, Date dateFrom, Date DateTo);
 
-    List<Verification> findByStateVerificatorAndInitialDateBetween(Organization organization, Date dateFrom, Date DateTo);
+    List<Verification> findByStateVerificatorAndSentToVerificatorDateBetween(Organization organization, Date dateFrom, Date DateTo);
 
     List<Verification> findByInitialDate(Date date);
 

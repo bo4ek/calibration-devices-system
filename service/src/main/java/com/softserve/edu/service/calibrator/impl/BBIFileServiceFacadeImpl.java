@@ -44,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 import java.sql.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -194,16 +195,16 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 if (correspondingVerificationMap == null) {
                     throw new MismatchBbiFilesNamesException();
                 }
-                if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), correspondingVerificationMap.get(Constants.DATE))) {
+                deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
+                if (calibrationModule == null) {
+                    throw new InvalidModuleIdException();
+                }
+                if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), correspondingVerificationMap.get(Constants.DATE), calibrationModule.getModuleNumber())) {
                     throw new FileAlreadyExistsException(bbiFile.getName());
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
-                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                    CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
-                    if (calibrationModule == null) {
-                        throw new InvalidModuleIdException();
-                    }
                     correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
                             calibratorEmployee, deviceTestData);
 
@@ -213,7 +214,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verification.setStatus(Status.CREATED_BY_CALIBRATOR);
                     verificationService.saveVerification(verification);
                 } else {
-                    deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
                     updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 }
@@ -477,7 +477,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 break;
             }
             default: {
-                throw new InvalidDeviceTypeIdException();
+                resultCounterType = counterTypes.get(0);
             }
         }
         return new Counter(verificationData.get(Constants.YEAR),

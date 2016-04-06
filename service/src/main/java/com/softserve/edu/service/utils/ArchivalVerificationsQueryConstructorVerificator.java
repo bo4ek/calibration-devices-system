@@ -70,14 +70,8 @@ public class ArchivalVerificationsQueryConstructorVerificator {
 
         if (searchStatus != null) {
             queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(searchStatus.trim())), queryPredicate);
-        } else {
-            queryPredicate = cb.and(cb.or(
-                    Status.TEST_NOK.getQueryPredicate(root, cb),
-                    Status.TEST_OK.getQueryPredicate(root, cb)
-            ), queryPredicate);
         }
-
-        queryPredicate = cb.and(cb.isTrue(root.get("signed")));
+        queryPredicate = cb.and(cb.isTrue(root.get("signed")), queryPredicate);
 
         if (dateToSearch != null) {
             Date date = null;
