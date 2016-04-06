@@ -67,6 +67,8 @@ public class OrganizationStageVerificationDTO {
 
     private Boolean verificationWithDismantle;
 
+    private Boolean editAll;
+
 	public OrganizationStageVerificationDTO() {
 	}
 
@@ -122,6 +124,20 @@ public class OrganizationStageVerificationDTO {
 		this.deviceId = deviceId;
 
         this.verificationWithDismantle = verificationWithDismantle;
-
 	}
+    public OrganizationStageVerificationDTO(ClientData clientData, String comment, Address address, String verificationId, String calibratorName,
+                                            String entrance, String doorCode, String floor, Long dateOfVerif, Boolean serviceability,
+                                            Long noWaterToDate, String notes, String timeFrom, String timeTo, Boolean dismantled, Long dateOfDismantled,
+                                            Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol,
+                                            String standardSize, String deviceName, Boolean sealPresence, Device.DeviceType deviceType,
+                                            Long deviceId, Boolean verificationWithDismantle, Boolean editAll){
+
+        this(clientData, comment, address, verificationId, calibratorName,
+                entrance, doorCode, floor, dateOfVerif, serviceability,
+                noWaterToDate, notes, timeFrom, timeTo, dismantled, dateOfDismantled,
+                dateOfMounted, numberCounter, releaseYear, accumulatedVolume, symbol,
+                standardSize, deviceName, sealPresence, deviceType,
+                deviceId, verificationWithDismantle);
+        this.editAll = editAll;
+    }
 }

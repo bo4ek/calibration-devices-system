@@ -44,6 +44,17 @@ angular
                 });
             };
 
+            $scope.openCheckGroupVerificationModal = function(verificationId) {
+                $rootScope.verifIDforEditing = verificationId;
+                $rootScope.taskId = taskID;
+                $modal.open({
+                    animation: true,
+                    controller: 'EditAllUserVerificationsInTaskControllerCalibrator',
+                    templateUrl: 'resources/app/calibrator/views/modals/check-group-tasks-verifications-modal.html',
+                    size: 'md'
+                });
+            };
+
             $scope.inputQueue = function(verification,input,allverification) {
 
                 allverification.forEach(function (item, i, allverification) {

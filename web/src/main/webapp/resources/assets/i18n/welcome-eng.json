@@ -820,5 +820,6 @@
     "DELETE_STREET": "Delete street",
     "SUCCESSFUL_EDITED_STREET" : "Street successfully edited",
     "ACCEPTED_VERIFICATIONS": "Accepted verifications",
-    "FILL_IN_INFORMATION_ABOUT_COUNTER_TYPE": "Fill in information about counter type"
+    "FILL_IN_INFORMATION_ABOUT_COUNTER_TYPE": "Fill in information about counter type",
+    "EDIT_ALL_VERIFICATIONS_TASKS": "Edit all applications of a given user in this task?"
 }

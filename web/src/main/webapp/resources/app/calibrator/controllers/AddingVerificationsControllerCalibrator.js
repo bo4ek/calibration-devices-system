@@ -9,6 +9,7 @@ angular.module('employeeModule')
             $scope.isProvider = -1;
             $scope.providerDefined = false;
             $scope.verificationID = $rootScope.verifIDforEditing;
+            $scope.editAllUserVerifications = $rootScope.editAll;
 
             /**
              * to open first block "General Information" when the modal form is loaded
@@ -350,6 +351,7 @@ angular.module('employeeModule')
             $scope.fillFormData = function () {
 
                 $scope.selectDevice();
+                $scope.formData.editAll = $scope.editAllUserVerifications;
                 //LOCATION
                 $scope.formData.region = $scope.selectedData.region.designation;
                 $scope.formData.district = $scope.selectedData.district.designation;

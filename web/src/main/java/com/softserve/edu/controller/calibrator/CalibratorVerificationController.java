@@ -104,7 +104,7 @@ public class CalibratorVerificationController {
                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
 
-        boolean updateAll = true;// TODO get value from page
+        boolean updateAll = verificationDTO.getEditAll();//get value from page
 
         Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
         Verification verification = verificationService.findById(verificationID);
