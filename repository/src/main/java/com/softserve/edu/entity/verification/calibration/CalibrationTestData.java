@@ -71,7 +71,7 @@ public class CalibrationTestData {
         if (this.getEndValue() == 0 || this.getInitialValue() > this.getEndValue()) {
             this.testResult = Verification.CalibrationTestResult.NOT_PROCESSED;
         } else {
-            if (this.getCalculationError() <= Math.abs(this.getAcceptableError())) {
+            if (Math.abs(this.getCalculationError()) <= this.getAcceptableError()) {
                 this.testResult = Verification.CalibrationTestResult.SUCCESS;
             } else {
                 this.testResult = Verification.CalibrationTestResult.FAILED;
