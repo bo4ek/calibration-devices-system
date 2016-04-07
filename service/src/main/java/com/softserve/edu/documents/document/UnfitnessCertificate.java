@@ -68,11 +68,17 @@ public class UnfitnessCertificate extends BaseCertificate {
                     return calibrationTest.getUnsuitabilityReason().getName();
                 }
             }
-            if (firstResult.equals(failed) || secondResult.equals(failed) || thirdResult.equals(failed)) {
-                return String.format("Відносна похибка лічильника води перевищує границі нормованих значень та складає: δQn%s%%, δQt%s%%, δQmin%s%%",
-                        getErrorTest1(), getErrorTest2(), getErrorTest3());
+
+            if (firstResult.equals(failed) ) {
+                reasons.add(String.format("δQn%s%%", getErrorTest1()));
             }
-            return Constants.MEASURING_ERROR_MESSAGE + String.join(",", reasons);
+            if (secondResult.equals(failed)) {
+                reasons.add(String.format("δQt%s%%", getErrorTest2()));
+            }
+            if (thirdResult.equals(failed)) {
+                reasons.add(String.format("δQmin%s%%", getErrorTest3()));
+            }
+            return Constants.ERROR_PATTERN + " " + String.join(", ", reasons);
         } catch (Exception e) {
             logger.error("Test results for this verification are corrupted ", e);
             return Constants.NOT_SPECIFIED;
@@ -82,7 +88,7 @@ public class UnfitnessCertificate extends BaseCertificate {
     private String prepareAcceptableError(Double error) {
         StringBuilder builder = new StringBuilder();
         if(error < 0) {
-            builder.append(" - ");
+            builder.append(" = мінус ");
             error *= -1;
         } else {
             builder.append(" = ");
