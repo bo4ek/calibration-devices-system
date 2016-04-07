@@ -209,7 +209,7 @@ angular
                     total: 0,
                     getData: function ($defer, params) {
 
-                        verificationServiceVerificator.getNewVerificationsForMainPanel(params.page(), params.count(), $scope.search)
+                        verificationServiceVerificator.getNewVerificationsForMainPanel(params.page(), params.count())
                             .success(function (result) {
                                 $scope.resultsCount = result.totalItems;
                                 $defer.resolve(result.content);

@@ -117,22 +117,12 @@ public class StateVerificatorController {
      */
     @RequestMapping(value = "new/mainpanel/{pageNumber}/{itemsPerPage}", method = RequestMethod.GET)
     public PageDTO<VerificationPageDTO> getPageOfAllSentVerificationsByVerificatorIdAndSearchOnMainPanel(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage,
-                                                                                                      NewVerificationsSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                                      @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         User stateVerificatorEmployee = stateVerificatorEmployeeService.oneProviderEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfArchiveVerificationsByVerificatorIdOnMainPanel(
-                employeeUser.getOrganizationId(),
+                stateVerificatorEmployee.getOrganization().getId(),
                 pageNumber,
-                itemsPerPage,
-                searchData.getFormattedDate(),
-                searchData.getIdText(),
-                searchData.getClient_full_name(),
-                searchData.getStreetText(),
-                searchData.getRegion(),
-                searchData.getDistrict(),
-                searchData.getLocality(),
-                searchData.getStatus(),
-                searchData.getEmployee(),
-                stateVerificatorEmployee);
+                itemsPerPage);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }

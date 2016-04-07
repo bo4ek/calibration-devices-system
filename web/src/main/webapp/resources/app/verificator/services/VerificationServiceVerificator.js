@@ -9,8 +9,8 @@ angular
             getNewVerifications: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
                 return getDataWithParams('verificator/verifications/new/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
             },
-            getNewVerificationsForMainPanel: function (currentPage, itemsPerPage, search) {
-                return getDataWithParams('verificator/verifications/new/mainpanel/' + currentPage + '/' + itemsPerPage, search);
+            getNewVerificationsForMainPanel: function (currentPage, itemsPerPage) {
+                return getDataWithParams('verificator/verifications/new/mainpanel/' + currentPage + '/' + itemsPerPage);
             },
             getNewVerificationDetails: function (verificationId) {
                 return getData('verifications/new/' + verificationId);

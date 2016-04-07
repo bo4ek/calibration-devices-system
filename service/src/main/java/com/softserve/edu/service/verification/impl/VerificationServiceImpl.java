@@ -308,11 +308,10 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorIdOnMainPanel(Long organizationId, int pageNumber, int itemsPerPage, String initialDateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                                        String streetToSearch, String region, String district, String locality, String status, String employeeName, User stateVerificatorEmployee) {
-        CriteriaQuery<Verification> criteriaQuery = ArchivalVerificationsQueryConstructorVerificator.buildSearchQuery(organizationId, initialDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, null, null, null, em);
+    public ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorIdOnMainPanel(Long organizationId, int pageNumber, int itemsPerPage) {
+        CriteriaQuery<Verification> criteriaQuery = MainPanelVerificationsQueryConstructorVerificator.buildSearchQuery(organizationId, em);
 
-        Long count = em.createQuery(ArchivalVerificationsQueryConstructorVerificator.buildCountQuery(organizationId, initialDateToSearch, idToSearch, fullNameToSearch, streetToSearch, status, employeeName, null, em)).getSingleResult();
+        Long count = em.createQuery(MainPanelVerificationsQueryConstructorVerificator.buildCountQuery(organizationId, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
