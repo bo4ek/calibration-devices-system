@@ -61,7 +61,7 @@ public class GraphicBuilderMainPanelTest {
         List<Verification> verifications = new ArrayList<>();
         Verification verification = mock(Verification.class);
 
-        when(verification.getInitialDate())
+        when(verification.getSentToVerificatorDate())
                 .thenReturn(new Date(2015 - 1900, 1, 20))
                 .thenReturn(new Date(2015 - 1900, 2, 25))
                 .thenReturn(new Date(2015 - 1900, 2, 31));

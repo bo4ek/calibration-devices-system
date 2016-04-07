@@ -48,14 +48,13 @@ public class GraphicBuilderMainPanel {
                 graphicItem.name = organization.getName();
                 employeeGraphicMap.put(organization.getName(), graphicItem);
             }
-            expirDate.setTime(verification.getInitialDate());
+            expirDate.setTime(verification.getSentToVerificatorDate());
             MonthOfYear item = new MonthOfYear(expirDate.get(Calendar.MONTH), expirDate.get(Calendar.YEAR));
             int indexOfMonth = months.indexOf(item);
             graphicItem.data[indexOfMonth]++;
         }
-        List<ProviderEmployeeGraphic> graphicItemsList = listOfProviderEmployeeGrafic(employeeGraphicMap, organization);
 
-        return graphicItemsList;
+        return listOfProviderEmployeeGrafic(employeeGraphicMap, organization);
     }
 
 
