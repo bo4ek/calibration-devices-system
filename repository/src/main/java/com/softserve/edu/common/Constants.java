@@ -144,4 +144,6 @@ public interface Constants {
 
     String ERROR_FOR_TERMAL = "3";
     String ERROR_FOR_WATER = "2";
+
+    String ERROR_PATTERN = "Відносна похибка лічильника води перевищує границі нормованих значень та складає:";
 }
