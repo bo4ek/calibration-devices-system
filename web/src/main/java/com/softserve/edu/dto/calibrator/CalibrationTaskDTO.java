@@ -61,7 +61,8 @@ public class CalibrationTaskDTO {
     private Integer countNumberOfTestedVerification(Set<Verification> verifications) {
         Integer count = 0;
         for (Verification verification : verifications) {
-            if (verification.getStatus().equals(Status.TEST_COMPLETED)) {
+            if (verification.getStatus().equals(Status.TEST_COMPLETED) || verification.getStatus().equals(Status.SENT_TO_VERIFICATOR)
+                    || verification.getStatus().equals(Status.TEST_OK) || verification.getStatus().equals(Status.TEST_NOK)) {
                 count++;
             }
         }
