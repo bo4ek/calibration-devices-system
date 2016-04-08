@@ -42,7 +42,7 @@ public enum DocxToPdf implements Operation {
     public FileObject perform(FileObject sourceFile,
                               FileParameters fileParameters) throws IOException {
         FileObject filePdf = FileUtils.createFile(fileParameters.getFileSystem(),
-                fileParameters.getFileName() + "_pdf");
+                fileParameters.getFileName());
 
         createPdfFile(sourceFile, filePdf);
         return filePdf;

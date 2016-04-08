@@ -1,5 +1,6 @@
 package com.softserve.edu.service.tool.impl;
 
+import com.softserve.edu.common.Constants;
 import com.softserve.edu.documents.DocumentFactory;
 import com.softserve.edu.documents.FileFactory;
 import com.softserve.edu.documents.document.Document;
@@ -171,22 +172,26 @@ public class DocumentsServiceImpl implements DocumentService {
     @Override
     public FileObject getSignedDocument(String verificationCode, FileFormat fileFormat, DocumentType documentType) throws IOException {
         Verification verification = verificationRepository.findOne(verificationCode);
+        CalibrationTest test = calibrationTestRepository.findTestByVerificationId(verification.getId());
         byte[] file = verification.getSignedDocument();
         FileParameters fileParameters = new FileParameters(documentType,
                 fileFormat);
         fileParameters.setFileSystem(FileSystem.RAM);
-        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd:MM:yyyy");
-        fileParameters.setFileName(String.format("%s-%s", fileParameters.getDocumentType().toString(), DATE_FORMAT.format(new Date())));
-        FileObject fileDocx = FileUtils.createFile(fileParameters.getFileSystem(),
-                fileParameters.getFileName() + "_docx");
-
-        fileDocx.getContent().getOutputStream().write(file);
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("ddMMyyyy");
+        fileParameters.setFileName(String.format("%s-%s%s", verification.getCalibrationModule().getModuleNumber(),
+                DATE_FORMAT.format(new Date()), test.getName().substring(Constants.PROTOCOL_NUMBER_START_INDEX, Constants.PROTOCOL_NUMBER_END_INDEX)));
 
         switch (fileFormat) {
             case PDF: {
+                FileObject fileDocx = FileUtils.createFile(fileParameters.getFileSystem(),
+                        Constants.TEMPORARY_DOC_NAME);
+                fileDocx.getContent().getOutputStream().write(file);
                 return FileFactory.convertFile(fileDocx, fileParameters);
             }
             case DOCX: {
+                FileObject fileDocx = FileUtils.createFile(fileParameters.getFileSystem(),
+                        fileParameters.getFileName());
+                fileDocx.getContent().getOutputStream().write(file);
                 return fileDocx;
             }
             default: {
