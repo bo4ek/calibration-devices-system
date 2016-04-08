@@ -40,7 +40,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("batteryCharge", readLongValueReversed(Constants.FOUR_BYTES)); //0x800018 + 0x04
         resultMap.put("bbiWritten", readLongValueReversed(Constants.FOUR_BYTES)); //0x80001c + 0x04
         resultMap.put("bbiAvailableToWrite", readLongValueReversed(Constants.FOUR_BYTES)); //0x800020 + 0x04
-        resultMap.put("fileName", readLongValueReversed(Constants.FOUR_BYTES)); //0x800024 + 0x04
+        resultMap.put("fileName", performFileName(readLongValueReversed(Constants.FOUR_BYTES))); //0x800024 + 0x04
         count = reader.skip(Constants.TWELVE_BYTES); //0x800028 + 0x0c
         resultMap.put("integrationTime", readLongValueReversed(Constants.FOUR_BYTES)); //0x800034 + 0x04
         resultMap.put("testCounter", readLongValueReversed(Constants.FOUR_BYTES)); //0x800038 + 0x04
@@ -136,6 +136,14 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
             result += reader.read() << 8 * i;
         }
         return result;
+    }
+
+    private String performFileName(Long fileName) {
+        String name = fileName.toString();
+        if(name.length() == Constants.SHORT_FILE_NAME_LENGTH) {
+            name = "0" + name;
+        }
+        return name;
     }
 
     private void readTest(int testIndex) throws IOException {

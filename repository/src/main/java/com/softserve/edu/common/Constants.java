@@ -146,4 +146,6 @@ public interface Constants {
     String ERROR_FOR_WATER = "2";
 
     String ERROR_PATTERN = "Відносна похибка лічильника води перевищує границі нормованих значень та складає:";
+
+    int SHORT_FILE_NAME_LENGTH = "dmmyynn".length(); //d - date; mm - month; yy-year; nn - number
 }
