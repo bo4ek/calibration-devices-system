@@ -3,7 +3,6 @@ package com.softserve.edu.service.calibrator.impl;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.Address;
-import com.softserve.edu.entity.catalogue.Locality;
 import com.softserve.edu.entity.catalogue.Street;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
@@ -214,6 +213,10 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verification.setStatus(Status.CREATED_BY_CALIBRATOR);
                     verificationService.saveVerification(verification);
                 } else {
+                    Verification verification = verificationService.findById(correspondingVerification);
+                    if(!verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
+                        throw new IncorrectOrganizationException();
+                    }
                     updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 }
@@ -243,6 +246,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 logger.error("Incorrect city id");
             } catch (IncorrectStreetIdException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_STREET_ID;
+                logger.error("Incorrect street id");
+            } catch (IncorrectOrganizationException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_ORGANIZATION;
                 logger.error("Incorrect street id");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;

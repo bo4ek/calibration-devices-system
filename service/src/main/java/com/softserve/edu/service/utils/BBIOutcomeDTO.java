@@ -17,7 +17,8 @@ public class BBIOutcomeDTO {
         INVALID_DEVICE_TYPE_ID,
         UNKNOWN_REASON_OF_REJECTION,
         INCORRECT_CITY_ID,
-        INCORRECT_STREET_ID
+        INCORRECT_STREET_ID,
+        INCORRECT_ORGANIZATION
     }
 
     private String verificationID;
