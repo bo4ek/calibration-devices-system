@@ -68,8 +68,10 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("fullInstallmentNumber", readConsecutiveBytesAsUTF8(Constants.THIRTY_TWO_BYTES)); //0x0x80064c+32
         count = reader.skip(Constants.SKIP_TO_IMAGES); //go to images
 
+        count = reader.skip(Constants.TWO_BYTES);
         resultMap.put("testPhoto", readImageBase64());
         for (int i = 0; i < Constants.TWELVE_BYTES; ++i) {
+            count = reader.skip(Constants.TWO_BYTES);
             String imageKey = "test" + (i / 2 + 1) + (i % 2 == 0 ? "begin" : "end") + "Photo";
             resultMap.put(imageKey, readImageBase64());
         }
@@ -180,7 +182,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         String encodedHexB64;
 
         try {
-            int imageSize = (int) readLongValue(Constants.FOUR_BYTES);
+            int imageSize = (int) readLongValue(Constants.TWO_BYTES);
             if (imageSize > Constants.ALLOCATED_IMAGE_SIZE) {
                 throw new IOException();
             }
