@@ -1,12 +1,11 @@
 package com.softserve.edu.service.provider.buildGraphic;
 
+import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -56,6 +55,9 @@ public class GraphicBuilderMainPanelTest {
         Organization petroOrganization = mock(Organization.class);
         String organizationName = "Petro Organization";
         when(petroOrganization.getName()).thenReturn("Petro Organization");
+        Set<OrganizationType> organizationTypes = new HashSet<>();
+        organizationTypes.add(OrganizationType.STATE_VERIFICATOR);
+        when(petroOrganization.getOrganizationTypes()).thenReturn(organizationTypes);
 
 
         List<Verification> verifications = new ArrayList<>();

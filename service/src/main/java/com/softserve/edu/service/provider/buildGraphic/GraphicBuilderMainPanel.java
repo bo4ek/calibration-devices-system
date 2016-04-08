@@ -1,5 +1,6 @@
 package com.softserve.edu.service.provider.buildGraphic;
 
+import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 
@@ -48,7 +49,11 @@ public class GraphicBuilderMainPanel {
                 graphicItem.name = organization.getName();
                 employeeGraphicMap.put(organization.getName(), graphicItem);
             }
-            expirDate.setTime(verification.getSentToVerificatorDate());
+            if(organization.getOrganizationTypes().contains(OrganizationType.STATE_VERIFICATOR)) {
+                expirDate.setTime(verification.getSentToVerificatorDate());
+            } else {
+                expirDate.setTime(verification.getInitialDate());
+            }
             MonthOfYear item = new MonthOfYear(expirDate.get(Calendar.MONTH), expirDate.get(Calendar.YEAR));
             int indexOfMonth = months.indexOf(item);
             graphicItem.data[indexOfMonth]++;
