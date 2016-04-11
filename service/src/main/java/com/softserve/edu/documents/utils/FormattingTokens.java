@@ -11,7 +11,9 @@ public enum FormattingTokens {
     /**
      * The text after this token is a column's name.
      */
-    COLUMN("$");
+    COLUMN("$"),
+
+    BOLD("@");
 
     private String token;
 

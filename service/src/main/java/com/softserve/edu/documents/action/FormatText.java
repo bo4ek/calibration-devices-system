@@ -15,10 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBody;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageSz;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,6 +60,29 @@ public enum FormatText implements Operation {
 
         XWPFDocument newDocument =
                 new XWPFDocument(templateDocument.getPackage());
+
+        CTDocument1 document = newDocument.getDocument();
+        CTBody body = document.getBody();
+
+        if (!body.isSetSectPr()) {
+            body.addNewSectPr();
+        }
+        CTSectPr section = body.getSectPr();
+
+        CTPageMar pageMar = section.addNewPgMar();
+        pageMar.setLeft(BigInteger.valueOf(500L));
+        pageMar.setTop(BigInteger.valueOf(500L));
+        pageMar.setRight(BigInteger.valueOf(500L));
+        pageMar.setBottom(BigInteger.valueOf(500L));
+
+        if(!section.isSetPgSz()) {
+            section.addNewPgSz();
+        }
+        CTPageSz pageSize = section.isSetPgSz()? section.getPgSz() : section.addNewPgSz();
+        pageSize.setOrient(STPageOrientation.PORTRAIT);
+        pageSize.setW(BigInteger.valueOf(420 * 20));
+        pageSize.setH(BigInteger.valueOf(595 * 20));
+
 
         List<XWPFParagraph> paragraphs = newDocument.getParagraphs();
 
@@ -111,6 +131,7 @@ public enum FormatText implements Operation {
 
         int indexOfRight;
         int notFound = -1;
+        int indexOfSize;
 
         for (XWPFRun sourceRun : runs) {
             String textInRun = sourceRun.getText(textPosition);
@@ -126,6 +147,12 @@ public enum FormatText implements Operation {
                 font.setSize(sourceRun.getFontSize());
                 textInRun = align(new StringBuilder(textInRun), font,
                         contentWidth);
+            }
+
+            indexOfSize = textInRun.lastIndexOf(FormattingTokens.BOLD.toString());
+            if (indexOfSize != notFound) {
+                sourceRun.setFontSize(12);
+                textInRun = textInRun.substring(0, indexOfSize) + textInRun.substring(indexOfSize + 1, textInRun.length());
             }
 
             sourceRun.setText(textInRun, textPosition);

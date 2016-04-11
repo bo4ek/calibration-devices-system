@@ -261,7 +261,7 @@ public abstract class BaseCertificate implements Document {
     public String getVerificationCertificateEffectiveUntilDate() {
         try {
             return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
-                    .format(verification.getExpirationDate());
+                    .format(verification.getExpirationDate()) + " р.";
         } catch (Exception e) {
             logger.error("Calibration interval for this counter type has not been specified ", e);
             return Constants.NOT_SPECIFIED;
@@ -275,7 +275,7 @@ public abstract class BaseCertificate implements Document {
     public String getCalibrationTestDate() {
         try {
             return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
-                    .format(verification.getSignProtocolDate());
+                    .format(verification.getSignProtocolDate()) + " p.";
         } catch (Exception e) {
             logger.error("Date for calibration test has not been specified ", e);
             return Constants.NOT_SPECIFIED;
