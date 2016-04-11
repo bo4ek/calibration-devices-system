@@ -253,6 +253,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (IncorrectOrganizationException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_ORGANIZATION;
                 logger.error("Incorrect street id");
+            } catch (InvalidSymbolAndStandardSizeException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_SYMBOL_AND_STANDARD_SIZE;
+                logger.error("Incorrect symbol and standard size");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
                 logger.error("Unknown reason of rejection");
@@ -356,7 +359,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     }
 
     private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData)
-            throws ParseException, InvalidDeviceTypeIdException, IncorrectCityIdException, IncorrectStreetIdException {
+            throws ParseException, InvalidDeviceTypeIdException, IncorrectCityIdException, IncorrectStreetIdException, InvalidSymbolAndStandardSizeException {
 
         String regionName = null;
         String districtName = null;
@@ -419,8 +422,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
 
-    private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData)
-            throws Exception {
+    private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
         Long deviceId;
         Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
         if( deviceTypeId != null) {
@@ -457,7 +459,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return deviceService.getByDeviceTypeAndDefaultDevice(deviceType, Constants.DEFAULT_DEVICE).getId();
     }
 
-    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) throws InvalidDeviceTypeIdException {
+    private Counter getCounterFromVerificationData(Map<String, String> verificationData, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
         String sizeAndSymbol = verificationData.get(Constants.COUNTER_SIZE_AND_SYMBOL);
         String[] parts = sizeAndSymbol.split(" ");
         String standardSize = parts[0] + " " + parts[1];
@@ -470,6 +472,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(symbol, standardSize);
         CounterType resultCounterType;
         switch (counterTypes.size()) {
+            case 0: {
+                throw new InvalidSymbolAndStandardSizeException();
+            }
             case 1: {
                 resultCounterType = counterTypes.get(0);
                 break;

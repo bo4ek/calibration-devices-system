@@ -18,7 +18,8 @@ public class BBIOutcomeDTO {
         UNKNOWN_REASON_OF_REJECTION,
         INCORRECT_CITY_ID,
         INCORRECT_STREET_ID,
-        INCORRECT_ORGANIZATION
+        INCORRECT_ORGANIZATION,
+        INCORRECT_SYMBOL_AND_STANDARD_SIZE
     }
 
     private String verificationID;
