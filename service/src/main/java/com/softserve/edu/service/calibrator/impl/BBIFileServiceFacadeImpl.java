@@ -214,10 +214,13 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verificationService.saveVerification(verification);
                 } else {
                     Verification verification = verificationService.findById(correspondingVerification);
+                    if (verification == null) {
+                        throw new InvalidVerificationCodeException();
+                    }
                     if(!verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
                         throw new IncorrectOrganizationException();
                     }
-                    updateVerificationFromMap(correspondingVerificationMap, correspondingVerification, deviceTestData);
+                    updateVerificationFromMap(correspondingVerificationMap, verification, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 }
             } catch (MismatchBbiFilesNamesException e) {
@@ -416,13 +419,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
 
-    private void updateVerificationFromMap(Map<String, String> verificationData, String verificationId, DeviceTestData deviceTestData)
+    private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData)
             throws Exception {
-
-        Verification verification = verificationService.findById(verificationId);
-        if (verification == null) {
-            throw new InvalidVerificationCodeException();
-        }
         Long deviceId;
         Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
         if( deviceTypeId != null) {
