@@ -199,5 +199,5 @@ public interface VerificationService {
 
     List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType);
 
-
+    boolean hasVerificationGroup(String verificationId);
 }

@@ -43,6 +43,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -113,7 +114,7 @@ public class CalibratorVerificationController {
             throw new RuntimeException();
         }
 
-        List<Verification> verifications = verificationService.getTaskGroupVerifications(verification,updateAll);
+        List<Verification> verifications = verificationService.getTaskGroupVerifications(verification, updateAll);
 
         for (Verification v : verifications) {
             updateVerificationData(v, verificationDTO, calibrator, updateAll);
@@ -126,6 +127,12 @@ public class CalibratorVerificationController {
             }
         }
         return new ResponseEntity(httpStatus);
+    }
+
+    @RequestMapping(value = "groups/{verificationID}", method = RequestMethod.GET)
+    public boolean checkVerificationGroup(@PathVariable String verificationID) {
+        boolean result = verificationService.hasVerificationGroup(verificationID);
+        return result;
     }
 
     /**
@@ -715,9 +722,11 @@ public class CalibratorVerificationController {
         verification.setDevice(device);
         verification.setCalibrator(calibrator);
         verification.setInfo(info);
-        verification.setCounterStatus(verificationDTO.getDismantled());
-        verification.setComment(verificationDTO.getComment());
-        verification.setSealPresence(verificationDTO.getSealPresence());
-        verification.setVerificationWithDismantle(verificationDTO.getVerificationWithDismantle());
+        if (!updateAll) {
+            verification.setCounterStatus(verificationDTO.getDismantled());
+            verification.setComment(verificationDTO.getComment());
+            verification.setSealPresence(verificationDTO.getSealPresence());
+            verification.setVerificationWithDismantle(verificationDTO.getVerificationWithDismantle());
+        }
     }
 }

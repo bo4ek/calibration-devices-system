@@ -3,10 +3,11 @@ angular
     .controller(
         'EditAllUserVerificationsInTaskControllerCalibrator',
         ['$scope', '$log', '$modalInstance',  '$rootScope', '$modal', 'ngTableParams',
-            'CalibrationTaskServiceCalibrator',
-        function ($scope, $log, $modalInstance, $rootScope, $modal,ngTableParams, CalibrationTaskServiceCalibrator) {
+            'CalibrationTaskServiceCalibrator','$translate','$filter', 'toaster',
+        function ($scope, $log, $modalInstance, $rootScope, $modal,ngTableParams, CalibrationTaskServiceCalibrator, $translate, $filter, toaster) {
 
-               // $scope.selectedData.verificationWithDismantle = true;
+            $scope.editAll = true;
+            $scope.verificationId = $rootScope.verifIDforEditing;
 
                 $rootScope.$on('$locationChangeStart', function () {
                     $modalInstance.close();
@@ -16,9 +17,8 @@ angular
                     $modalInstance.close();
                 };
 
-                $scope.openEditVerificationModal = function (verificationId) {
-                    $rootScope.verifIDforEditing = verificationId;
-                    $rootScope.editAll = $scope.selectedData.verificationWithDismantle;
+                $scope.openEditVerificationModal = function () {
+                    $rootScope.editAll = $scope.editAll;
                     var editVerificationModal = $modal.open({
                         animation: true,
                         controller: 'AddingVerificationsControllerCalibrator',
@@ -26,6 +26,7 @@ angular
                         size: 'lg'
                     });
                     editVerificationModal.result.then(function() {
+                        $scope.cancel();
                         $scope.tableParams.reload();
                     });
                 };

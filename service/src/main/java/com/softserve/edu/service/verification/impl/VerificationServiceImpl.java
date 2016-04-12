@@ -760,15 +760,27 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Transactional
     public List<Verification> getTaskGroupVerifications(Verification verification, boolean all) {
-        List<Verification> verifications = null;
-        if (all) {
+        List<Verification> verifications;
+        VerificationGroup group = verification.getGroup();
+        if (all && group != null) {
+            Long groupId = group.getId();
             Long taskId = verification.getTask().getId();
-            Long groupId = verification.getGroup().getId();
             verifications = verificationRepository.findByTaskIdAndGroupId(taskId, groupId);
-        }else{
+        } else {
             verifications = Arrays.asList(verification);
         }
         return verifications;
+    }
+
+    @Transactional
+    public boolean hasVerificationGroup(String verificationId) {
+        Verification verification = verificationRepository.findOne(verificationId);
+        if (verification == null) {
+            logger.error("verification wasn't found");
+            throw new IllegalArgumentException();
+        }
+        VerificationGroup group = verification.getGroup();
+        return group != null?true:false;
     }
 
 

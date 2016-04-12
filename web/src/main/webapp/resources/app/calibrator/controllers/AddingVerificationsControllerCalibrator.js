@@ -2,8 +2,7 @@ angular.module('employeeModule')
     .controller('AddingVerificationsControllerCalibrator', ['$scope', '$modal', '$state',
         '$http', '$log', '$stateParams', '$rootScope', '$location', '$window', '$modalInstance', 'DataReceivingServiceCalibrator',
         'VerificationServiceCalibrator', '$filter', '$translate', 'toaster',
-        function ($scope, $modal, $state, $http, $log, $stateParams, $rootScope, $location, $window, $modalInstance,
-                  dataReceivingService, verificationServiceCalibrator, $filter, $translate, toaster) {
+        function ($scope, $modal, $state, $http, $log, $stateParams, $rootScope, $location, $window, $modalInstance, dataReceivingService, verificationServiceCalibrator, $filter, $translate, toaster) {
 
             $scope.isShownForm = true;
             $scope.isProvider = -1;
@@ -39,6 +38,7 @@ angular.module('employeeModule')
             $scope.selectedData.dismantled = false;
             $scope.selectedData.sealPresence = true;
             $scope.selectedData.verificationWithDismantle = false;
+            $scope.selectedData.editAll = $scope.editAllUserVerifications;
 
             $scope.applicationCodes = [];
             $scope.codes = [];
