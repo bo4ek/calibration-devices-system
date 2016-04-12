@@ -140,6 +140,12 @@ public enum FormatText implements Operation {
                 continue;
             }
 
+            indexOfSize = textInRun.lastIndexOf(FormattingTokens.BOLD.toString());
+            if (indexOfSize != notFound) {
+                sourceRun.setFontSize(11);
+                textInRun = textInRun.substring(0, indexOfSize) + textInRun.substring(indexOfSize + 1, textInRun.length());
+            }
+
             indexOfRight = textInRun.lastIndexOf(
                     FormattingTokens.RIGHT_SIDE.toString());
 
@@ -147,12 +153,6 @@ public enum FormatText implements Operation {
                 font.setSize(sourceRun.getFontSize());
                 textInRun = align(new StringBuilder(textInRun), font,
                         contentWidth);
-            }
-
-            indexOfSize = textInRun.lastIndexOf(FormattingTokens.BOLD.toString());
-            if (indexOfSize != notFound) {
-                sourceRun.setFontSize(12);
-                textInRun = textInRun.substring(0, indexOfSize) + textInRun.substring(indexOfSize + 1, textInRun.length());
             }
 
             sourceRun.setText(textInRun, textPosition);
