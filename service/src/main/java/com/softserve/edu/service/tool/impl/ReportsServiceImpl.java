@@ -6,6 +6,7 @@ import com.softserve.edu.documents.parameter.FileFormat;
 import com.softserve.edu.documents.parameter.FileParameters;
 import com.softserve.edu.documents.parameter.FileSystem;
 import com.softserve.edu.documents.resources.DocumentType;
+import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.enumeration.verification.Status;
@@ -148,131 +149,99 @@ public class ReportsServiceImpl implements ReportsService {
         List<Verification> verifications = verificationRepository.findByProvider(provider);
         // TODO: findByProviderAndInitialDateBetween
 
-        // region Define lists
-
-        // № з/п
         List<String> number = new ArrayList<>();
-        // ПІБ замовника
-        List<String> customerFullName = new ArrayList<>();
-        // Адреса замовника (індекс вулиця, будинок, квартира)
-        List<String> customerAddress = new ArrayList<>();
-        // Тип приладу, рік випуску
-        List<String> deviceTypeYear = new ArrayList<>();
-        // Діаметр
-        List<String> diameter = new ArrayList<>();
-        // Назва вимірювальної лабораторії
-        List<String> measuringLab = new ArrayList<>();
-        // Результат (придатний, непридатний)
-        List<String> verificationResult = new ArrayList<>();
-        // Дата документа
+        List<String> customerSurname = new ArrayList<>();
+        List<String> customerName = new ArrayList<>();
+        List<String> customerMiddleName = new ArrayList<>();
+        List<String> cities = new ArrayList<>();
+        List<String> regions = new ArrayList<>();
+        List<String> streets = new ArrayList<>();
+        List<String> buildings = new ArrayList<>();
+        List<String> flats = new ArrayList<>();
+        List<String> phones = new ArrayList<>();
+        List<String> stamps = new ArrayList<>();
+        List<String> dateSignatures = new ArrayList<>();
+        List<String> deviceNumbers = new ArrayList<>();
+        List<String> counterNumbers = new ArrayList<>();
+        List<String> counterTypes = new ArrayList<>();
+        List<String> counterTypeSizes = new ArrayList<>();
+        List<String> years = new ArrayList<>();
+        List<String> accumulatedVolumes = new ArrayList<>();
+        List<String> temperatures = new ArrayList<>();
+        List<String> verificationStatus = new ArrayList<>();
+        List<String> verificationNumbers = new ArrayList<>();
         List<String> documentDate = new ArrayList<>();
-        // № документа
         List<String> documentNumber = new ArrayList<>();
-        // Придатний до
         List<String> validUntil = new ArrayList<>();
 
-        // endregion
-
-        // region Fill lists
 
         Integer i = 1;
         for (Verification verification : verifications) {
             number.add(String.valueOf(i));
-            try {
-                customerFullName.add(verification.getClientData().getFullName());
-            } catch (Exception ex) {
-                customerFullName.add(" ");
-                logger.error(ex);
+            String empty = " ";
+
+            if (verification.getClientData() != null) {
+                customerSurname.add(verification.getClientData().getLastName() != null ? verification.getClientData().getLastName() : empty);
+                customerName.add(verification.getClientData().getFirstName() != null ? verification.getClientData().getFirstName() : empty);
+                customerMiddleName.add(verification.getClientData().getMiddleName() != null ? verification.getClientData().getMiddleName() : empty);
+                phones.add(verification.getClientData().getPhone() != null ? verification.getClientData().getPhone() : empty);
+
+                if (verification.getClientData().getClientAddress() != null) {
+                    cities.add(getCitiesFromAddress(verification.getClientData().getClientAddress()));
+                    regions.add(getRegionsFromAddress(verification.getClientData().getClientAddress()));
+                    streets.add(getStreetFromAddress(verification.getClientData().getClientAddress()));
+                    buildings.add(getBuildingFromAddress(verification.getClientData().getClientAddress()));
+                    flats.add(getFlatFromAddress(verification.getClientData().getClientAddress()));
+                } else {
+                    cities.add(empty);
+                    regions.add(empty);
+                    streets.add(empty);
+                    buildings.add(empty);
+                    flats.add(empty);
+                }
             }
 
-            String address;
-            try {
-                address = verification.getClientData().getClientAddress().getStreet();
-            } catch (Exception ex) {
-                address = " ";
-                logger.error(ex);
-            }
-            try {
-                address += ", " + verification.getClientData().getClientAddress().getBuilding();
-            } catch (Exception ex) {
-                logger.error(ex);
-            }
-            try {
-                address += ", " + verification.getClientData().getClientAddress().getFlat();
-            } catch (Exception ex) {
-                logger.error(ex);
-            }
-            customerAddress.add(address);
-
-            try {
-                // TODO: Year - should be added
-                deviceTypeYear.add(verification.getDevice().getDeviceSign());
-            } catch (Exception ex) {
-                deviceTypeYear.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                // TODO: Should be added
-                diameter.add(" ");
-            } catch (Exception ex) {
-                diameter.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                measuringLab.add(verification.getStateVerificator().getName());
-            } catch (Exception ex) {
-                measuringLab.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                // TODO: Check ?
-                verificationResult.add(verification.getStatus().toString());
-            } catch (Exception ex) {
-                verificationResult.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                SimpleDateFormat docDate = new SimpleDateFormat("dd-MM-yyyy");
-                documentDate.add(docDate.format(verification.getStateVerificator().getAdditionInfoOrganization().getCertificateDate()));
-            } catch (Exception ex) {
-                documentDate.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                documentNumber.add(verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization());
-            } catch (Exception ex) {
-                documentDate.add(" ");
-                logger.error(ex);
-            }
-
-            try {
-                SimpleDateFormat validDate = new SimpleDateFormat("dd-MM-yyyy");
-                validUntil.add(validDate.format(verification.getExpirationDate()));
-            } catch (Exception ex) {
-                validUntil.add(" ");
-                logger.error(ex);
-            }
-
+            stamps.add(getStampsFromCounter(verification));
+            dateSignatures.add(getSignDateInString(verification));
+            deviceNumbers.add(getDeviceNumberFromVerification(verification));
+            counterNumbers.add(getCounterNumberFromVerification(verification));
+            counterTypes.add(getCounterTypeFromVerification(verification));
+            counterTypeSizes.add(getCounterTypeSizeFromVerification(verification));
+            years.add(getRealiseYearFromVerification(verification));
+            accumulatedVolumes.add(getAccumulatedVolumeFromVerification(verification));
+            temperatures.add(getTemperaturesFromVerification(verification));
+            verificationNumbers.add(verification.getId());
+            verificationStatus.add(getStatusFromVerification(verification));
+            documentDate.add(getDocumentDateInString(verification));
+            documentNumber.add(getDocumentNuberFromVerification(verification));
+            validUntil.add(getValidDateInString(verification));
             ++i;
         }
-
-        // endregion
 
         // region Fill map
 
         List<TableExportColumn> data = new ArrayList<>();
         data.add(new TableExportColumn(Constants.NUMBER_IN_SEQUENCE_SHORT, number));
-        data.add(new TableExportColumn(Constants.FULL_NAME_CUSTOMER, customerFullName));
-        data.add(new TableExportColumn(Constants.CUSTOMER_ADDRESS, customerAddress));
-        data.add(new TableExportColumn(Constants.DEVICE_TYPE_YEAR, deviceTypeYear));
-        data.add(new TableExportColumn(Constants.DIAMETER, diameter));
-        data.add(new TableExportColumn(Constants.MEASURING_LAB_NAME, measuringLab));
-        data.add(new TableExportColumn(Constants.RESULT, verificationResult));
+        data.add(new TableExportColumn(Constants.CUSTOMER_SURNAME, customerSurname));
+        data.add(new TableExportColumn(Constants.CUSTOMER_NAME, customerName));
+        data.add(new TableExportColumn(Constants.CUSTOMER_MIDDLE_NAME, customerMiddleName));
+        data.add(new TableExportColumn(Constants.CITY, cities));
+        data.add(new TableExportColumn(Constants.REGION, regions));
+        data.add(new TableExportColumn(Constants.STREET, streets));
+        data.add(new TableExportColumn(Constants.BUILDING, buildings));
+        data.add(new TableExportColumn(Constants.FLAT, flats));
+        data.add(new TableExportColumn(Constants.PHONE_NUMBER, phones));
+        data.add(new TableExportColumn(Constants.STAMP, stamps));
+        data.add(new TableExportColumn(Constants.DATE_SIGNATURE, dateSignatures));
+        data.add(new TableExportColumn(Constants.DEVICE_NUMBER, deviceNumbers));
+        data.add(new TableExportColumn(Constants.COUNTERS_NUMBER, counterNumbers));
+        data.add(new TableExportColumn(Constants.COUNTER_TYPE, counterTypes));
+        data.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, counterTypeSizes));
+        data.add(new TableExportColumn(Constants.YEAR, years));
+        data.add(new TableExportColumn(Constants.COUNTER_ACCUMULATED_VOLUME, accumulatedVolumes));
+        data.add(new TableExportColumn(Constants.TEMPERATURE, temperatures));
+        data.add(new TableExportColumn(Constants.VERIFICATION_NUMBER, verificationNumbers));
+        data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, verificationStatus));
         data.add(new TableExportColumn(Constants.DOCUMENT_DATE, documentDate));
         data.add(new TableExportColumn(Constants.DOCUMENT_NUMBER, documentNumber));
         data.add(new TableExportColumn(Constants.VALID_UNTIL, validUntil));
@@ -281,4 +250,117 @@ public class ReportsServiceImpl implements ReportsService {
 
         return data;
     }
+
+    public String getCitiesFromAddress(Address address) {
+        if (address.getRegion() != null & address.getDistrict() != null) {
+            if (address.getRegion().equals(Constants.KYIV_CITY_NAME.substring(2))) {
+                return Constants.KYIV_CITY_NAME;
+            } else {
+                return address.getDistrict();
+            }
+        }
+        return " ";
+    }
+
+    public String getRegionsFromAddress(Address address) {
+        return (address.getRegion() != null ? address.getRegion() : " ");
+    }
+
+    public String getStreetFromAddress(Address address) {
+        return (address.getStreet() != null ? address.getStreet() : " ");
+    }
+
+    public String getBuildingFromAddress(Address address) {
+        return (address.getBuilding() != null ? address.getBuilding() : " ");
+    }
+
+    public String getFlatFromAddress(Address address) {
+        return (address.getFlat() != null ? address.getFlat() : " ");
+    }
+
+    public String getStampsFromCounter(Verification verification) {
+        return (verification.getCounter() != null && verification.getCounter().getStamp() != null ? verification.getCounter().getStamp() : " ");
+    }
+
+    public String getSignDateInString(Verification verification) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            return dateFormat.format(verification.getSignProtocolDate());
+        } catch (Exception e) {
+            logger.error("Wrong date format in database, verification Id: " + verification.getId(), e);
+            return " ";
+        }
+    }
+
+    public String getDeviceNumberFromVerification(Verification verification) {
+        return (verification.getDevice() != null && verification.getDevice().getNumber() != null ? verification.getDevice().getNumber() : " ");
+    }
+
+    public String getCounterNumberFromVerification(Verification verification) {
+        return (verification.getCounter() != null && verification.getCounter().getNumberCounter() != null ? verification.getCounter().getNumberCounter() : " ");
+    }
+
+    public String getCounterTypeFromVerification(Verification verification) {
+        return (verification.getCounter() != null && verification.getCounter().getCounterType() != null &&
+                verification.getCounter().getCounterType().getStandardSize() != null ? verification.getCounter().getCounterType().getStandardSize() : " ");
+    }
+
+    public String getCounterTypeSizeFromVerification(Verification verification) {
+        return (verification.getCounter() != null && verification.getCounter().getCounterType() != null &&
+                verification.getCounter().getCounterType().getSymbol() != null ? verification.getCounter().getCounterType().getSymbol() : " ");
+    }
+
+    public String getRealiseYearFromVerification(Verification verification) {
+        return (verification.getCounter() != null && verification.getCounter().getReleaseYear() != null ? verification.getCounter().getReleaseYear() : " ");
+    }
+
+    public String getAccumulatedVolumeFromVerification(Verification verification) {
+        return (verification.getCounter() != null && verification.getCounter().getAccumulatedVolume() != null ? verification.getCounter().getAccumulatedVolume() : " ");
+    }
+
+    public String getTemperaturesFromVerification(Verification verification) {
+        return " ";
+    }
+
+    public String getStatusFromVerification(Verification verification) {
+        return (verification.getStatus().equals(Status.TEST_NOK) ? Constants.STATUS_TEST_OK : Constants.STATUS_ELSE);
+    }
+
+    public String getDocumentDateInString(Verification verification) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        if (verification.getStateVerificator() != null && verification.getStateVerificator().getAdditionInfoOrganization() != null &&
+                verification.getStateVerificator().getAdditionInfoOrganization().getCertificateDate() != null) {
+            try {
+                return dateFormat.format(verification.getStateVerificator().getAdditionInfoOrganization().getCertificateDate());
+            } catch (IllegalArgumentException e) {
+                logger.error("Wrong date format of certificate date in database, verification Id: " + verification.getId(), e);
+                return " ";
+            }
+        } else {
+            return " ";
+        }
+    }
+
+    public String getDocumentNuberFromVerification(Verification verification) {
+        return (verification.getStateVerificator() != null && verification.getStateVerificator().getAdditionInfoOrganization() != null &&
+                verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization() != null ?
+                verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization() : " ");
+    }
+
+    public String getValidDateInString(Verification verification) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        if (verification.getExpirationDate() != null) {
+            try {
+                return dateFormat.format(verification.getExpirationDate());
+            } catch (IllegalArgumentException e) {
+                logger.error("Wrong date format of validate date in database, verification Id: " + verification.getId(), e);
+                return " ";
+            }
+        } else {
+            return " ";
+        }
+    }
+
 }

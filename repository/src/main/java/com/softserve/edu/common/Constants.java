@@ -69,8 +69,16 @@ public interface Constants {
     String COUNTER_NUMBER = "Номер лічильника";
     String COUNTER_TYPE = "Тип лічильника";
     String COUNTER_SIZE_AND_SYMBOL = "Розмір і символ лічильника";
+    String COUNTER_TYPE_SIZE = "Типорозмір";
+    String COUNTER_YEAR = "Рік виробництва";
+    String COUNTER_ACCUMULATED_VOLUME = "Накопичений об'єм";
+    String TEMPERATURE = "t, °C";
     String YEAR = "Рік випуску лічильника";
     String STAMP = "Номер пломби";
+    String DATE_SIGNATURE = "Дата повірки";
+    String DEVICE_NUMBER = "№ установки";
+    String VERIFICATION_NUMBER = "№ заявки";
+    String VERIFICATION_STATUS = "Статус";
     String DEFAULT_DB_TABLE_NAME = "Subscribers";
     String WATER_DEVICE_MAIL = "лічильника холодної води";
     String THERMAL_DEVICE_MAIL = "лічильника гарячої води";
@@ -84,6 +92,10 @@ public interface Constants {
     int FIRST_TEST_RESULT = 0;
     int SECOND_TEST_RESULT = 1;
     int THIRD_TEST_RESULT = 2;
+
+    // counter status for reports
+    String STATUS_TEST_OK = "Придатний";
+    String STATUS_ELSE = "Не придатний";
 
     // region Address details
     String CITY = "Місто";
@@ -105,6 +117,9 @@ public interface Constants {
 
     String CUSTOMER_ID = "Id замовника";
     String FULL_NAME_SHORT = "ПІБ";
+    String CUSTOMER_SURNAME = "Прізвище";
+    String CUSTOMER_NAME = "Імя";
+    String CUSTOMER_MIDDLE_NAME = "По-батькові";
     String PHONE_NUMBER = "Телефон";
     String FULL_NAME_CUSTOMER = "ПІБ замовника";
     String FULL_NAME = "ПІБ працівника";
