@@ -106,6 +106,10 @@ public class Verification implements Comparable {
     @JoinColumn(name = "taskId")
     private CalibrationTask task;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "groupId")
+    private VerificationGroup group;
+
     @Deprecated
     @Column(columnDefinition = "boolean default false")
     private boolean isAddInfoExists;

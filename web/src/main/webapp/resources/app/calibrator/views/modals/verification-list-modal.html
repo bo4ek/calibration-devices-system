@@ -82,9 +82,14 @@
                                         <td data-title="'ACTIONS' | translate" class="text-center">
                                             <div class="btn-group-vertical">
                                                 <button type="button" class="btn btn-warning"
+<<<<<<< HEAD
+                                                        ng-hide="verification.status == 'TEST_COMPLETED' "
+                                                        ng-click="openCheckGroupVerificationModal(verification.verificationId)">
+=======
                                                         ng-hide="verification.status == 'TEST_COMPLETED' || verification.status == 'TEST_OK'
                                                          || verification.status == 'TEST_NOK' || verification.status == 'SENT_TO_VERIFICATOR'"
                                                         ng-click="openEditVerificationModal(verification.verificationId)">
+>>>>>>> origin/master
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </button>
                                                 <button type="button" class="btn btn-danger"

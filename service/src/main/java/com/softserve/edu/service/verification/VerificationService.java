@@ -8,6 +8,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.utils.*;
 
 import org.springframework.data.domain.Page;
@@ -145,6 +146,10 @@ public interface VerificationService {
 
     Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable);
 
+    List<Verification> getVerificationsByTaskID(Long taskID);
+
+    List<Verification> getTaskGroupVerifications(Verification verification, boolean all);
+
     void removeVerificationFromTask(String verificationId);
 
     List<Verification> findPageOfVerificationsByCalibratorEmployeeAndStatus(User employee, int pageNumber,
@@ -193,4 +198,6 @@ public interface VerificationService {
     Set<String> findAllStandardSizes();
 
     List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType);
+
+    boolean hasVerificationGroup(String verificationId);
 }

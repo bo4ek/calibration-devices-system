@@ -104,21 +104,35 @@ public class CalibratorVerificationController {
                                            @PathVariable String verificationID,
                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
+
+        boolean updateAll = verificationDTO.getEditAll();//get value from page
+
         Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
         Verification verification = verificationService.findById(verificationID);
 
         if (calibrator == null || verification == null) {
             throw new RuntimeException();
         }
-        updateVerificationData(verification, verificationDTO, calibrator);
-        try {
-            verificationService.saveVerification(verification);
-            logger.info("Verification was saved with parameters: "+verification);
-        } catch (Exception e) {
-            logger.error("GOT EXCEPTION WHILE UPDATING VERIFICATION", e);
-            httpStatus = HttpStatus.CONFLICT;
+
+        List<Verification> verifications = verificationService.getTaskGroupVerifications(verification, updateAll);
+
+        for (Verification v : verifications) {
+            updateVerificationData(v, verificationDTO, calibrator, updateAll);
+            try {
+                verificationService.saveVerification(v);
+                logger.info("Verification was saved with parameters: " + verification);
+            } catch (Exception e) {
+                logger.error("GOT EXCEPTION WHILE UPDATING VERIFICATION", e);
+                httpStatus = HttpStatus.CONFLICT;
+            }
         }
         return new ResponseEntity(httpStatus);
+    }
+
+    @RequestMapping(value = "groups/{verificationID}", method = RequestMethod.GET)
+    public boolean checkVerificationGroup(@PathVariable String verificationID) {
+        boolean result = verificationService.hasVerificationGroup(verificationID);
+        return result;
     }
 
     /**
@@ -533,7 +547,7 @@ public class CalibratorVerificationController {
     public void assignCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
                                          @PathVariable String verificationId) {
         User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
-        if(user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
+        if (user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
             calibratorService.assignCalibratorEmployee(verificationId, user);
         }
     }
@@ -644,7 +658,7 @@ public class CalibratorVerificationController {
     }
 
     private void updateVerificationData(Verification verification, OrganizationStageVerificationDTO verificationDTO,
-                                        Organization calibrator) {
+                                        Organization calibrator, boolean updateAll) {
         // updating client data
         ClientData clientData = new ClientData(
                 verificationDTO.getFirstName(),
@@ -665,19 +679,20 @@ public class CalibratorVerificationController {
         );
 
         // updating counter information
-        CounterType counterType = calibratorService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
-                verificationDTO.getStandardSize());
-        Counter counter = verification.getCounter();
-        if (counter == null) {
-            counter = new Counter();
+        if (!updateAll) {
+            CounterType counterType = calibratorService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize());
+            Counter counter = verification.getCounter();
+            if (counter == null) {
+                counter = new Counter();
+            }
+            counter.setReleaseYear(verificationDTO.getReleaseYear());
+            counter.setDateOfDismantled(verificationDTO.getDateOfDismantled());
+            counter.setDateOfMounted(verificationDTO.getDateOfMounted());
+            counter.setNumberCounter(verificationDTO.getNumberCounter());
+            counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
+            counter.setCounterType(counterType);
         }
-        counter.setReleaseYear(verificationDTO.getReleaseYear());
-        counter.setDateOfDismantled(verificationDTO.getDateOfDismantled());
-        counter.setDateOfMounted(verificationDTO.getDateOfMounted());
-        counter.setNumberCounter(verificationDTO.getNumberCounter());
-        counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
-        counter.setCounterType(counterType);
-
         // updating addition info
         AdditionalInfo info = verification.getInfo();
         if (info == null) {
@@ -707,9 +722,11 @@ public class CalibratorVerificationController {
         verification.setDevice(device);
         verification.setCalibrator(calibrator);
         verification.setInfo(info);
-        verification.setCounterStatus(verificationDTO.getDismantled());
-        verification.setComment(verificationDTO.getComment());
-        verification.setSealPresence(verificationDTO.getSealPresence());
-        verification.setVerificationWithDismantle(verificationDTO.getVerificationWithDismantle());
+        if (!updateAll) {
+            verification.setCounterStatus(verificationDTO.getDismantled());
+            verification.setComment(verificationDTO.getComment());
+            verification.setSealPresence(verificationDTO.getSealPresence());
+            verification.setVerificationWithDismantle(verificationDTO.getVerificationWithDismantle());
+        }
     }
 }

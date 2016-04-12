@@ -24,7 +24,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Page<Verification> findByTaskId(Long taskID, Pageable pageable);
 
-    Verification[] findByTaskId(Long taskID);
+    List<Verification> findByTaskId(Long taskID);
 
     Verification[] findByTaskIdOrderByQueueAsc(Long id);
 
@@ -193,6 +193,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
             "d.deviceType= :deviceType AND u.initialDate = :initialDate")
     List<Verification> findVerificationByDateAndDeviceType(@Param("initialDate") Date initialDate,
                                                            @Param("deviceType") Device.DeviceType deviceType);
+
+    List<Verification> findByTaskIdAndGroupId(Long taskId, Long groupId);
 
     @Query("SELECT COUNT(u.id) FROM Verification u INNER JOIN u.device d WHERE d.id = u.device.id AND " +
             "d.deviceType= :deviceType AND u.initialDate = :initialDate")

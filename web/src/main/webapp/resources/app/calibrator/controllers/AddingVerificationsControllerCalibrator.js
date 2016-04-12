@@ -2,13 +2,13 @@ angular.module('employeeModule')
     .controller('AddingVerificationsControllerCalibrator', ['$scope', '$modal', '$state',
         '$http', '$log', '$stateParams', '$rootScope', '$location', '$window', '$modalInstance', 'DataReceivingServiceCalibrator',
         'VerificationServiceCalibrator', '$filter', '$translate', 'toaster',
-        function ($scope, $modal, $state, $http, $log, $stateParams, $rootScope, $location, $window, $modalInstance,
-                  dataReceivingService, verificationServiceCalibrator, $filter, $translate, toaster) {
+        function ($scope, $modal, $state, $http, $log, $stateParams, $rootScope, $location, $window, $modalInstance, dataReceivingService, verificationServiceCalibrator, $filter, $translate, toaster) {
 
             $scope.isShownForm = true;
             $scope.isProvider = -1;
             $scope.providerDefined = false;
             $scope.verificationID = $rootScope.verifIDforEditing;
+            $scope.editAllUserVerifications = $rootScope.editAll;
 
             /**
              * to open first block "General Information" when the modal form is loaded
@@ -38,6 +38,7 @@ angular.module('employeeModule')
             $scope.selectedData.dismantled = false;
             $scope.selectedData.sealPresence = true;
             $scope.selectedData.verificationWithDismantle = false;
+            $scope.selectedData.editAll = $scope.editAllUserVerifications;
 
             $scope.applicationCodes = [];
             $scope.codes = [];
@@ -350,6 +351,7 @@ angular.module('employeeModule')
             $scope.fillFormData = function () {
 
                 $scope.selectDevice();
+                $scope.formData.editAll = $scope.editAllUserVerifications;
                 //LOCATION
                 $scope.formData.region = $scope.selectedData.region.designation;
                 $scope.formData.district = $scope.selectedData.district.designation;

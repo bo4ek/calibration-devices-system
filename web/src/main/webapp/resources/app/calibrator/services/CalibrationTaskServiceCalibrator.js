@@ -18,6 +18,10 @@ angular
             changeTaskDate: function (taskID, dateOfTask) {
                 return sendData('changeTaskDate/' + taskID, dateOfTask);
             },
+            hasVerificationGroup: function(verificationId) {
+                var res = isGroupForVerification('groups/' + verificationId);
+                return res;
+            },
 
             sendVerificationWithQueue: function (newLightVerification) {
                 return $http.put('task/saveQueue', newLightVerification).then(function (result) {
@@ -25,6 +29,16 @@ angular
                 })
             }
         };
+
+        function isGroupForVerification(url) {
+            return $http.get('calibrator/verifications/' + url)
+                .success(function (data) {
+                    return data;
+                })
+                .error(function (err) {
+                    return err;
+                });
+        }
 
         function sendData(url, data) {
             return $http.post('task/' + url, data)

@@ -345,6 +345,7 @@
         'calibrator/services/NotStandardVerificationCalibratorService',
         'calibrator/controllers/NotStandardVerificationSendingControllerCalibrator',
         'calibrator/controllers/VerificationsForProviderNotificationController',
+        'calibrator/controllers/EditAllUserVerificationsInTaskControllerCalibrator',
 
         'verificator/controllers/TopNavBarControllerVerificator',
         'verificator/controllers/MainPanelControllerVerificator',

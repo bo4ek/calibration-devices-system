@@ -5,6 +5,7 @@ import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.user.UserRole;
+import com.softserve.edu.entity.verification.VerificationGroup;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.ClientData;
@@ -32,7 +33,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.sql.*;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,6 +46,9 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Autowired
     private CalibrationPlanningTaskRepository taskRepository;
+
+    @Autowired
+    private VerificationGroupRepository groupRepository;
 
     @Autowired
     private VerificationRepository verificationRepository;
@@ -750,9 +753,35 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Transactional
-    public Verification[] getVerificationsByTaskID(Long taskID) {
+    public List<Verification> getVerificationsByTaskID(Long taskID) {
         return verificationRepository.findByTaskId(taskID);
     }
+
+    @Transactional
+    public List<Verification> getTaskGroupVerifications(Verification verification, boolean all) {
+        List<Verification> verifications;
+        VerificationGroup group = verification.getGroup();
+        if (all && group != null) {
+            Long groupId = group.getId();
+            Long taskId = verification.getTask().getId();
+            verifications = verificationRepository.findByTaskIdAndGroupId(taskId, groupId);
+        } else {
+            verifications = Arrays.asList(verification);
+        }
+        return verifications;
+    }
+
+    @Transactional
+    public boolean hasVerificationGroup(String verificationId) {
+        Verification verification = verificationRepository.findOne(verificationId);
+        if (verification == null) {
+            logger.error("verification wasn't found");
+            throw new IllegalArgumentException();
+        }
+        VerificationGroup group = verification.getGroup();
+        return group != null?true:false;
+    }
+
 
     @Override
     @Transactional
@@ -933,15 +962,21 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public synchronized List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType) {
         List<String> verificationIds = new ArrayList<>();
+        Set<Verification> verifications = new HashSet<>();
         String id;
         String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
         long count = verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(verification.getInitialDate(), deviceType);
 
+        VerificationGroup group = new VerificationGroup();
+        groupRepository.save(group);
+
         for (byte i = 0; i < quantity; i++) {
             id = datePart + String.format("%04d", count += 1);
             verification.setId(id);
+            verification.setGroup(group);
             verificationRepository.save(verification);
             verificationIds.add(id);
+            verifications.add(verification);
         }
         return verificationIds;
     }
