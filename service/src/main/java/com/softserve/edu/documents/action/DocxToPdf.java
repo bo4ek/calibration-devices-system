@@ -60,7 +60,8 @@ public enum DocxToPdf implements Operation {
         Document resultPdfDocument;
         PdfWriter writer;
 
-        resultPdfDocument = new Document();
+        Rectangle pageSize = new Rectangle(PageSize.A5);
+        resultPdfDocument = new Document(pageSize);
         //System.err.println("pdfFile is null" + pdfFile == null);
         OutputStream outputStream = pdfFile.getContent().getOutputStream();
 
@@ -73,6 +74,7 @@ public enum DocxToPdf implements Operation {
             throw new IOException("The output file couldn't be reached.");
         }
 
+        resultPdfDocument.setMargins(15, 15, 0, 0);
         resultPdfDocument.open();
         writer.setPageEmpty(true);
         resultPdfDocument.newPage();
