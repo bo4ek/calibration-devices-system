@@ -1,0 +1,22 @@
+<div class="modal-header">
+<h3 class="modal-title">{{'ALERT' | translate}}</h3>
+</div>
+
+
+<div class="text-center" layout="row">
+    <input type="checkbox" ng-model="editAll"
+           id="editAll" name="editAll" class="form-control-checkbox"/>
+    <label for="editAll" class="control-label">
+        {{ 'EDIT_ALL_VERIFICATIONS_TASKS' | translate}}
+    </label>
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-success pull-left" type="button" ng-click="openEditVerificationModal()">
+{{'EDIT' | translate}}
+</button>
+
+<button class="btn btn-danger pull-right" type="button" ng-click="cancel()">
+{{'CANCEL' | translate}}
+</button>
+</div>
