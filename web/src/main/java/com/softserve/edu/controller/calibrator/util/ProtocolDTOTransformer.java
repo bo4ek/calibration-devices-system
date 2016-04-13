@@ -31,7 +31,7 @@ public class ProtocolDTOTransformer {
                                 .getCalibrationTestManual().getCalibrationModule().getModuleNumber() : verification.getCalibrationModule().getModuleNumber(),
                         Integer.parseInt(verification.getCounter().getReleaseYear()),
                         verification.getCounter().getNumberCounter(),
-                        verification.getInitialDate().toString(), verification.getReadStatus(),
+                        verification.getVerificationTime(), verification.getReadStatus(),
                         verification.getCalibrationModule().getSerialNumber(),
                         verification.getNumberOfProtocol(),
                         verification.getProviderEmployee(), verification.getStateVerificatorEmployee(),

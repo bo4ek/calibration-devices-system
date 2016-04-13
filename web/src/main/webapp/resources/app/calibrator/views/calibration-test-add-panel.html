@@ -175,9 +175,15 @@
                     >{{'EDIT_CHANGES' | translate}}
             </button>
             <button id="signButton" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)"
-                    ng-show="isVerification" type="submit"
+                    ng-show="isVerification && false" type="submit"
                     class="btn btn-warning btn-md"
                     ng-click="signCalibrationTest()">
+                {{'SIGN_PROTOCOL' | translate}}
+            </button>
+            <button id="signButtonWithoutEDS" ng-disabled="(!hasProtocol && !fileLoaded) || (TestForm.signed)"
+                    ng-show="isVerification" type="submit"
+                    class="btn btn-warning btn-md"
+                    ng-click="signCalibrationTestWithoutEDS()">
                 {{'SIGN_PROTOCOL' | translate}}
             </button>
             <button ng-if="!hasProtocol" class="btn btn-primary btn-sm" type="button" style="margin-left: 20px"
@@ -240,7 +246,16 @@
             </span>
         </div>
     </div>
-
+    <!--<div class="row">
+        <div class="form-group col-sm-offset-3 col-sm-6" style="text-align:center">
+            <button ng-click="previous()" class="btn btn-info" type="button">
+                <i class="fa fa-arrow-left"></i>
+            </button>
+            <button ng-click="next()" class="btn btn-info" type="button">
+                <i class="fa fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>-->
     <div class="row">
         <div class="form-group col-sm-offset-2 col-sm-8" style="text-align:center">
             <button ng-click="rotateLeft()" class="btn btn-info" type="button">

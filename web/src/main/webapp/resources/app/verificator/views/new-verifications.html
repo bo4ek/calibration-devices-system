@@ -97,28 +97,28 @@
 
                                                     <div class="left menu" style="right:0;left:auto;">
                                                         <div class="item" ng-show="verification.status == 'TEST_OK'"
-                                                             ng-click="downloadDocument('VERIFICATION_CERTIFICATE', verification.id, 'docx')">
+                                                             ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', verification.id, 'docx')">
                                                             <a class="ng-binding">
                                                                 <i class="fa fa-file-word-o"></i>
                                                                 {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_DOCX' | translate}}
                                                             </a>
                                                         </div>
                                                         <div class="item" ng-show="verification.status == 'TEST_NOK'"
-                                                             ng-click="downloadDocument('UNFITNESS_CERTIFICATE', verification.id, 'docx')">
+                                                             ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', verification.id, 'docx')">
                                                             <a class="ng-binding">
                                                                 <i class="fa fa-file-word-o"></i>
                                                                 {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_DOCX' | translate}}
                                                             </a>
                                                         </div>
                                                         <div class="item" ng-show="verification.status == 'TEST_OK'"
-                                                             ng-click="downloadDocument('VERIFICATION_CERTIFICATE', verification.id, 'pdf')">
+                                                             ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', verification.id, 'pdf')">
                                                             <a class="ng-binding">
                                                                 <i class="fa fa-file-pdf-o"></i>
                                                                 {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_PDF' | translate}}
                                                             </a>
                                                         </div>
                                                         <div class="item" ng-show="verification.status == 'TEST_NOK'"
-                                                             ng-click="downloadDocument('UNFITNESS_CERTIFICATE', verification.id, 'pdf')">
+                                                             ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', verification.id, 'pdf')">
                                                             <a class="ng-binding">
                                                                 <i class="fa fa-file-pdf-o"></i>
                                                                 {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_PDF' | translate}}
