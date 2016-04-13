@@ -170,6 +170,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         List<File> listOfBBIfiles = new ArrayList<>(FileUtils.listFiles(directoryWithUnpackedFiles, bbiExtensions, true));
         List<BBIOutcomeDTO> resultsOfBBIProcessing = processListOfBBIFiles(bbiFileNamesToVerificationMap, listOfBBIfiles,
                 calibratorEmployee);
+
         FileUtils.forceDelete(directoryWithUnpackedFiles);
         return resultsOfBBIProcessing;
     }
@@ -185,17 +186,35 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             ParseException, IOException, InvalidImageInBbiException {
         List<BBIOutcomeDTO> resultsOfBBIProcessing = new ArrayList<>();
 
+        String archiveBbi = "../archiveBbi";
+        File dir = new File(archiveBbi);
+        if (!dir.exists()) dir.mkdir();
+
         for (File bbiFile : listOfBBIfiles) {
             Map<String, String> correspondingVerificationMap = verificationMapFromUnpackedFiles.get(bbiFile.getName());
             String correspondingVerification = null;
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
             DeviceTestData deviceTestData;
+            String calibrationModuleNumber;
             try {
                 if (correspondingVerificationMap == null) {
                     throw new MismatchBbiFilesNamesException();
                 }
                 deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
+                calibrationModuleNumber = deviceTestData.getInstallmentNumber();
+
+                String moduleDirectory = archiveBbi + "/" + calibrationModuleNumber;
+                File theDir = new File(moduleDirectory);
+                if (!theDir.exists()) theDir.mkdir();
+
+                File fileDir = new File(moduleDirectory + "/" + bbiFile.getName());
+                try {
+                    FileUtils.copyFile(bbiFile, fileDir);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(calibrationModuleNumber);
                 if (calibrationModule == null) {
                     throw new InvalidModuleIdException();
                 }
@@ -217,7 +236,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     if (verification == null) {
                         throw new InvalidVerificationCodeException();
                     }
-                    if(!verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
+                    if (!verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
                         throw new IncorrectOrganizationException();
                     }
                     updateVerificationFromMap(correspondingVerificationMap, verification, deviceTestData);
@@ -378,7 +397,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             Long streetIdLong = Long.parseLong(verificationData.get(Constants.STREET_ID));
             Street street = streetService.findStreetById(streetIdLong);
 
-            if(street == null) {
+            if (street == null) {
                 throw new IncorrectStreetIdException();
             }
             regionName = street.getLocality().getDistrict().getRegion().getDesignation();
@@ -425,7 +444,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
         Long deviceId;
         Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
-        if( deviceTypeId != null) {
+        if (deviceTypeId != null) {
             deviceId = getDeviceIdByDeviceTypeId(deviceTypeId);
             Device device = deviceService.getById(deviceId);
             verification.setDevice(device);
