@@ -133,44 +133,44 @@ angular
             };
 
             verificationServiceProvider.getNewVerificationEarliestDate().success(function (date) {
-                    //first we will try to receive date period
-                    // to populate ng-table filter
-                    // I did this to reduce reloading and flickering of the table
-                    $scope.initDatePicker(date);
-                    $scope.tableParams = new ngTableParams({
-                        page: 1,
-                        count: 10,
-                        sorting: {
-                            date: 'desc'
-                        }
-                    }, {
-                        total: 0,
-                        filterDelay: 1000,
-                        getData: function ($defer, params) {
+                //first we will try to receive date period
+                // to populate ng-table filter
+                // I did this to reduce reloading and flickering of the table
+                $scope.initDatePicker(date);
+                $scope.tableParams = new ngTableParams({
+                    page: 1,
+                    count: 10,
+                    sorting: {
+                        date: 'desc'
+                    }
+                }, {
+                    total: 0,
+                    filterDelay: 1000,
+                    getData: function ($defer, params) {
 
-                            var sortCriteria = Object.keys(params.sorting())[0];
-                            var sortOrder = params.sorting()[sortCriteria];
+                        var sortCriteria = Object.keys(params.sorting())[0];
+                        var sortOrder = params.sorting()[sortCriteria];
 
-                            params.filter().status = 'SENT';
+                        params.filter().status = 'SENT';
 
-                            params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
-                            params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
+                        params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
+                        params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
-                            verificationServiceProvider.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
-                                .success(function (result) {
+                        verificationServiceProvider.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+                            .success(function (result) {
 
-                                    $scope.resultsCount = result.totalItems;
-                                    $defer.resolve(result.content);
-                                    params.total(result.totalItems);
-                                    $scope.allVerifications = result.content;
-                                }, function (result) {
-                                    $log.debug('error fetching data:', result);
-                                });
-                        }
-                    });
+                                $scope.resultsCount = result.totalItems;
+                                $defer.resolve(result.content);
+                                params.total(result.totalItems);
+                                $scope.allVerifications = result.content;
+                            }, function (result) {
+                                $log.debug('error fetching data:', result);
+                            });
+                    }
                 });
+            });
 
-            $scope.$on('provider-save-verification', function(event, args) {
+            $scope.$on('provider-save-verification', function (event, args) {
                 $scope.tableParams.reload();
             });
 
@@ -244,9 +244,9 @@ angular
                                     providerEmploy: function () {
                                         return verificationServiceProvider.getProviders()
                                             .success(function (providers) {
-                                                return providers;
-                                            }
-                                        );
+                                                    return providers;
+                                                }
+                                            );
                                     }
                                 }
                             });
@@ -291,7 +291,7 @@ angular
                 return result;
             };
             var getAllSelected = function () {
-                if(!$scope.allVerifications) {
+                if (!$scope.allVerifications) {
                     return false;
                 }
 
@@ -305,7 +305,7 @@ angular
             var setAllSelected = function (value) {
                 angular.forEach($scope.allVerifications, function (verification) {
                     verification.selected = value;
-                    if(verification.providerEmployee) {
+                    if (verification.providerEmployee) {
                         $scope.resolveVerificationId(verification.id);
                     }
                 });
@@ -341,7 +341,7 @@ angular
             };
 
             $scope.resolveVerification = function (verification) {
-                if($scope.selectedSentVerification && $scope.selectedSentVerification !== verification) {
+                if ($scope.selectedSentVerification && $scope.selectedSentVerification !== verification) {
                     $scope.selectedSentVerification.selected = false;
                 }
                 $scope.selectedSentVerification = verification;

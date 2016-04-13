@@ -11,8 +11,20 @@
                 <li class="list-group-item-text" ng-click="downloadReport('PROVIDER_CALIBRATORS_REPORTS')">
                     <a><i class="fa fa-file-excel-o fa-fw"></i>{{'PROVIDER_CALIBRATORS_REPORTS' | translate}}</a>
                 </li>
-                <li class="list-group-item-text" ng-click="downloadReport('PROVIDER_VERIFICATION_RESULT_REPORTS')">
-                    <a><i class="fa fa-file-excel-o fa-fw"></i>{{'PROVIDER_VERIFICATION_RESULT_REPORTS' | translate}}</a>
+                <li class="list-group-item-text" ng-click="initDatePicker(); show=true">
+                    <a><i class="fa fa-file-excel-o fa-fw"></i>{{'PROVIDER_VERIFICATION_RESULT_REPORTS' |
+                        translate}}</a>
+                </li>
+                <li>
+                    <div class="input-group right-inner-addon" style="width: 20%; min-width: 320px" ng-show="show">
+                        <i id="calendar_icon" class="glyphicon glyphicon-calendar"
+                           ng-click="showPicker($event)"></i>
+                        <input date-range-picker="opts" class="form-control date-picker" type="text"
+                               ng-model="myDatePicker.pickerDate"
+                               ng-change="downloadReportProvider('PROVIDER_VERIFICATION_RESULT_REPORTS'); show=false"
+                               options="opts"
+                               id="datepickerfield" readonly/>
+                    </div>
                 </li>
             </ul>
         </div>

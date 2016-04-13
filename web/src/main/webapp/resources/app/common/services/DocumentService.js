@@ -17,9 +17,9 @@ angular
                 return $http.post(url, formData
                     , {
                         transformRequest: angular.identity,
-                        headers: { 'Content-Type': undefined}
+                        headers: {'Content-Type': undefined}
                     }
-                )
+                    )
                     .then(function (response) {
                         return response;
                     });

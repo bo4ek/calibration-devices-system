@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.apache.log4j.Logger;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -62,8 +63,21 @@ public class ReportsServiceImpl implements ReportsService {
             case PROVIDER_CALIBRATORS_REPORTS:
                 data = getDataForProviderCalibratorsReport(providerId);
                 break;
+            default:
+                throw new IllegalArgumentException(documentType.name() + "is not supported");
+        }
+        return FileFactory.buildReportFile(data, fileParameters);
+    }
+
+    public FileObject buildFileByDate(Long providerId, DocumentType documentType,
+                                FileFormat fileFormat, String startDate, String endDate) throws Exception {
+        FileParameters fileParameters = new FileParameters(documentType, fileFormat);
+        fileParameters.setFileSystem(FileSystem.RAM);
+        fileParameters.setFileName(documentType.toString());
+        List<TableExportColumn> data;
+        switch (documentType) {
             case PROVIDER_VERIFICATION_RESULT_REPORTS:
-                data = getDataForProviderVerificationResultReport(providerId);
+                data = getDataForProviderVerificationResultReport(providerId, startDate, endDate);
                 break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
@@ -144,11 +158,17 @@ public class ReportsServiceImpl implements ReportsService {
      * @param providerId id of the provider
      * @return Data to use with XlsTableExporter
      */
-    public List<TableExportColumn> getDataForProviderVerificationResultReport(Long providerId) {
+    public List<TableExportColumn> getDataForProviderVerificationResultReport(Long providerId, String startDate, String endDate) {
         Organization provider = organizationRepository.findOne(providerId);
-        List<Verification> verifications = verificationRepository.findByProvider(provider);
-        // TODO: findByProviderAndInitialDateBetween
 
+        Date fromDate = getDateForDocument(startDate);
+        Date toDate =  getDateForDocument(startDate);
+        List<Verification> verifications ;
+        if (fromDate != null && toDate != null) {
+            verifications = verificationRepository.findByProviderAndInitialDateBetween(provider, fromDate, toDate);
+        } else {
+            verifications = verificationRepository.findByProvider(provider);
+        }
         List<String> number = new ArrayList<>();
         List<String> customerSurname = new ArrayList<>();
         List<String> customerName = new ArrayList<>();
@@ -372,6 +392,16 @@ public class ReportsServiceImpl implements ReportsService {
         } else {
             return " ";
         }
+    }
+
+    public Date getDateForDocument(String strDate){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            return dateFormat.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

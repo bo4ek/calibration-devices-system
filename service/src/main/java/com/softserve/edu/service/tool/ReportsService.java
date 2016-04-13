@@ -10,7 +10,12 @@ import java.util.List;
 public interface ReportsService {
     FileObject buildFile(Long providerId, DocumentType documentType, FileFormat fileFormat) throws Exception;
 
+    FileObject buildFileByDate(Long providerId, DocumentType documentType,
+                               FileFormat fileFormat, String startDate, String endDate) throws Exception;
+
     List<TableExportColumn> getDataForProviderEmployeesReport(Long providerId);
+
     List<TableExportColumn> getDataForProviderCalibratorsReport(Long providerId);
-    List<TableExportColumn> getDataForProviderVerificationResultReport(Long providerId);
+
+    List<TableExportColumn> getDataForProviderVerificationResultReport(Long providerId, String startDate, String endDate);
 }

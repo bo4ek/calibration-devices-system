@@ -71,6 +71,20 @@ public class DocumentsController {
         sendFile(response, fileFormat, file);
     }
 
+    @RequestMapping(value = "report/{documentType}/{fileFormat}/{startDate}/{endDate}", method = RequestMethod.GET)
+    public void getReport(HttpServletResponse response,
+                          @PathVariable DocumentType documentType,
+                          @PathVariable FileFormat fileFormat,
+                          @PathVariable String startDate,
+                          @PathVariable String endDate,
+                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser)
+            throws Exception {
+        User providerEmployee = providerEmployeeService.oneProviderEmployee(employeeUser.getUsername());
+        Long providerId = providerEmployee.getOrganization().getId();
+        FileObject file = reportsService.buildFileByDate(providerId, documentType, fileFormat, startDate, endDate);
+        sendFile(response, fileFormat, file);
+    }
+
     /**
      * Returns a document with a specific fileFormat using verification and it's
      * most recent calibration test.

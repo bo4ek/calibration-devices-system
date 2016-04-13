@@ -11,8 +11,8 @@ angular
                                 if (!response.data) {
 
                                     if (!initializeLibForDigitalSign.isInitialized()) {
-                                        $http.get('resources/httpproxy.properties').then(function(response){
-                                        initializeLibForDigitalSign.initializeWithoutSelectCA(response);
+                                        $http.get('resources/httpproxy.properties').then(function (response) {
+                                            initializeLibForDigitalSign.initializeWithoutSelectCA(response);
                                         })
                                     }
                                     var fileFormatTemp = 'docx';
@@ -45,7 +45,7 @@ angular
             )
         };
 
-        $scope.downloadDocumentWithoutEDS = function(documentType, verificationId, fileFormat) {
+        $scope.downloadDocumentWithoutEDS = function (documentType, verificationId, fileFormat) {
             documentService.isSignedCertificate(verificationId).then(
                 function (result) {
                     if (result.data) {
@@ -57,10 +57,19 @@ angular
                 });
         };
 
+
         $scope.downloadReport = function (documentType) {
             var url = "doc/report/" + documentType + "/xls";
             location.href = url;
         };
+
+        $scope.downloadReportProvider = function (documentType) {
+            $scope.startDate = $scope.myDatePicker.pickerDate.startDate.format("DD-MM-YYYY");
+            $scope.endDate = $scope.myDatePicker.pickerDate.endDate.format("DD-MM-YYYY");
+            var url = "doc/report/" + documentType + "/xls/" + $scope.startDate + "/" + $scope.endDate;
+            location.href = url;
+        };
+
         $scope.printDocument = function (verificationId, verificationStatus) {
             documentService.isSignedCertificate(verificationId).then(
                 function (result) {
@@ -123,4 +132,52 @@ angular
                 });
             }
         }
+
+        $scope.myDatePicker = {};
+        $scope.myDatePicker.pickerDate = null;
+        $scope.defaultDate = null;
+
+        $scope.showPicker = function ($event) {
+            angular.element("#datepickerfield").trigger("click");
+        };
+
+
+        $scope.isDateDefault = function () {
+            var pickerDate = $scope.myDatePicker.pickerDate;
+
+            if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+                return true;
+            }
+            if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.initDatePicker = function () {
+
+            moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+            $scope.opts = {
+                format: 'DD-MM-YYYY',
+                showDropdowns: true,
+                locale: {
+                    firstDay: 1,
+                    fromLabel: 'Від',
+                    toLabel: 'До',
+                    applyLabel: "Прийняти",
+                    cancelLabel: "Зачинити",
+                    customRangeLabel: "Обрати самостійно",
+                },
+                ranges: {
+                    'Сьогодні': [moment(), moment()],
+                    'Вчора': [moment().subtract(1, 'day'), moment().subtract(1, 'day')],
+                    'Цього тижня': [moment().startOf('week'), moment().endOf('week')],
+                    'Цього місяця': [moment().startOf('month'), moment().endOf('month')],
+                    'Попереднього місяця': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                },
+                eventHandlers: {}
+            };
+        };
+        
     }]);
