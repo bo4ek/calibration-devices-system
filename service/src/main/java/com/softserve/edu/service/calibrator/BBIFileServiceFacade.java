@@ -2,6 +2,7 @@ package com.softserve.edu.service.calibrator;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.user.User;
+import com.softserve.edu.service.exceptions.DuplicateCalibrationTestException;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
 import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.utils.BBIOutcomeDTO;
@@ -31,7 +32,7 @@ public interface BBIFileServiceFacade {
      * @return Data from the parsed BBI file
      **/
     DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName) throws IOException,
-            DecoderException, ParseException, InvalidImageInBbiException, InvalidModuleIdException;
+            DecoderException, ParseException, InvalidImageInBbiException, InvalidModuleIdException, DuplicateCalibrationTestException;
 
     /**
      * Parses the bbi file and saves it in the system

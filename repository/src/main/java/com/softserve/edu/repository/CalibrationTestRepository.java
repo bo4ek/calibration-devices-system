@@ -20,6 +20,9 @@ public interface CalibrationTestRepository extends CrudRepository<CalibrationTes
     @Query("select c from CalibrationTest c where c.verification.id=:verificationId")
     CalibrationTest findTestByVerificationId(@Param("verificationId") String verificationId);
 
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM CalibrationTest c where c.verification.id=:verificationId")
+    boolean existByVerificationId(@Param("verificationId") String verificationId);
+
     List<CalibrationTest> findByName(String name);
 
     CalibrationTest findById(Long id);

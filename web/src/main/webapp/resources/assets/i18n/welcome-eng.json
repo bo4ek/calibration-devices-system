@@ -823,5 +823,6 @@
     "FILL_IN_INFORMATION_ABOUT_COUNTER_TYPE": "Fill in information about counter type",
     "INCORRECT_ORGANIZATION": "The application does not belong to the organization",
     "EDIT_ALL_VERIFICATIONS_TASKS": "Edit all applications of a given user in this task?",
-    "INCORRECT_SYMBOL_AND_STANDARD_SIZE": "Incorrect symbol and standard size"
+    "INCORRECT_SYMBOL_AND_STANDARD_SIZE": "Incorrect symbol and standard size",
+    "DUPLICATE_CALIBRATION_TEST": "Duplicate calibration test"
 }

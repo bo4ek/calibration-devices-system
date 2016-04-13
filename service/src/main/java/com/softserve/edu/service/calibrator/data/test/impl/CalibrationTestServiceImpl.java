@@ -13,6 +13,7 @@ import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
+import com.softserve.edu.service.exceptions.DuplicateCalibrationTestException;
 import com.softserve.edu.service.exceptions.InvalidModuleIdException;
 import com.softserve.edu.service.exceptions.NotAvailableException;
 import com.softserve.edu.service.tool.MailService;
@@ -57,11 +58,14 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
 
     @Override
     @Transactional
-    public long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException, InvalidModuleIdException {
+    public long createNewTest(DeviceTestData deviceTestData, String verificationId) throws IOException, InvalidModuleIdException, DuplicateCalibrationTestException {
         Verification verification = verificationRepository.findOne(verificationId);
         CalibrationModule moduleId = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
         if (moduleId == null) {
             throw new InvalidModuleIdException();
+        }
+        if(calibrationTestRepository.existByVerificationId(verificationId)) {
+            throw new DuplicateCalibrationTestException();
         }
         CalibrationTest calibrationTest = new CalibrationTest(deviceTestData.getFileName(),
                 deviceTestData.getLatitude(), deviceTestData.getLongitude(), deviceTestData.getUnixTime(), verification,
@@ -82,7 +86,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         calibrationTestRepository.save(calibrationTest);
 
         for (int testDataId = 1; testDataId <= Constants.TEST_COUNT; testDataId++) {
-            if (!deviceTestData.getBeginPhoto(testDataId).equals("")) { // if there is no photo there is now test data
+            if (deviceTestData.getTestNumber(testDataId) != 0) { // if there is no photo there is now test data
                 CalibrationTestData сalibrationTestData = testDataService.createNewTestData(calibrationTest.getId(),
                         deviceTestData, testDataId);
                 if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {

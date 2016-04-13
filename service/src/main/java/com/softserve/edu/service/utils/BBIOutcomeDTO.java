@@ -19,7 +19,8 @@ public class BBIOutcomeDTO {
         INCORRECT_CITY_ID,
         INCORRECT_STREET_ID,
         INCORRECT_ORGANIZATION,
-        INCORRECT_SYMBOL_AND_STANDARD_SIZE
+        INCORRECT_SYMBOL_AND_STANDARD_SIZE,
+        DUPLICATE_CALIBRATION_TEST
     }
 
     private String verificationID;

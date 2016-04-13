@@ -104,7 +104,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return deviceTestData;
     }
 
-    public void saveBBIFile(DeviceTestData deviceTestData, String verificationID, String originalFileName) throws IOException, InvalidModuleIdException {
+    public void saveBBIFile(DeviceTestData deviceTestData, String verificationID, String originalFileName) throws IOException, InvalidModuleIdException, DuplicateCalibrationTestException {
         calibratorService.uploadBbi(bufferedInputStream, verificationID, originalFileName);
         calibrationTestService.createNewTest(deviceTestData, verificationID);
         bufferedInputStream.close();
@@ -113,7 +113,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Override
     public DeviceTestData parseAndSaveBBIFile(File BBIfile, String verificationID, String originalFileName)
-            throws IOException, DecoderException, InvalidImageInBbiException, InvalidModuleIdException {
+            throws IOException, DecoderException, InvalidImageInBbiException, InvalidModuleIdException, DuplicateCalibrationTestException {
         DeviceTestData deviceTestData;
         try (InputStream inputStream = FileUtils.openInputStream(BBIfile)) {
             deviceTestData = parseAndSaveBBIFile(inputStream, verificationID, originalFileName);
@@ -275,6 +275,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (InvalidSymbolAndStandardSizeException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_SYMBOL_AND_STANDARD_SIZE;
                 logger.error("Incorrect symbol and standard size");
+            } catch (DuplicateCalibrationTestException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.DUPLICATE_CALIBRATION_TEST;
+                logger.error("Duplicate calibration test");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
                 logger.error("Unknown reason of rejection");
