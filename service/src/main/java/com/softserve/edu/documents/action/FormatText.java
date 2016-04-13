@@ -175,7 +175,7 @@ public enum FormatText implements Operation {
         int index = textInRun.lastIndexOf(FormattingTokens.RIGHT_SIDE.toString());
 
         double epsilon = 0.0001;
-        while ((paragraphWidth - contentWidth - 52) < epsilon) {
+        while ((paragraphWidth - contentWidth - 65) < epsilon) {
             textInRun.insert(index, ' ');
             paragraphWidth = getStringWidth(textInRun.toString(), font);
         }
