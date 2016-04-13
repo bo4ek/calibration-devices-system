@@ -76,9 +76,10 @@ public interface Constants {
     String YEAR = "Рік випуску лічильника";
     String STAMP = "Номер пломби";
     String DATE_SIGNATURE = "Дата повірки";
-    String DEVICE_NUMBER = "№ установки";
+    String MODULE_NUMBER = "№ установки";
     String VERIFICATION_NUMBER = "№ заявки";
     String VERIFICATION_STATUS = "Статус";
+    String PROTOCOL_NUMBER = "№ протоколу";
     String DEFAULT_DB_TABLE_NAME = "Subscribers";
     String WATER_DEVICE_MAIL = "лічильника холодної води";
     String THERMAL_DEVICE_MAIL = "лічильника гарячої води";
@@ -95,7 +96,7 @@ public interface Constants {
 
     // counter status for reports
     String STATUS_TEST_OK = "Придатний";
-    String STATUS_ELSE = "Не придатний";
+    String STATUS_TEST_NOK = "Не придатний";
 
     // region Address details
     String CITY = "Місто";

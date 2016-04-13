@@ -161,7 +161,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> phones = new ArrayList<>();
         List<String> stamps = new ArrayList<>();
         List<String> dateSignatures = new ArrayList<>();
-        List<String> deviceNumbers = new ArrayList<>();
+        List<String> moduleNumbers = new ArrayList<>();
         List<String> counterNumbers = new ArrayList<>();
         List<String> counterTypes = new ArrayList<>();
         List<String> counterTypeSizes = new ArrayList<>();
@@ -173,6 +173,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> documentDate = new ArrayList<>();
         List<String> documentNumber = new ArrayList<>();
         List<String> validUntil = new ArrayList<>();
+        List<String> protocolsNumber = new ArrayList<>();
 
 
         Integer i = 1;
@@ -201,9 +202,11 @@ public class ReportsServiceImpl implements ReportsService {
                 }
             }
 
+            protocolsNumber.add(verification.getNumberOfProtocol() != null ? verification.getNumberOfProtocol() : empty);
+
             stamps.add(getStampsFromCounter(verification));
             dateSignatures.add(getSignDateInString(verification));
-            deviceNumbers.add(getDeviceNumberFromVerification(verification));
+            moduleNumbers.add(getModuleNumberFromVerification(verification));
             counterNumbers.add(getCounterNumberFromVerification(verification));
             counterTypes.add(getCounterTypeFromVerification(verification));
             counterTypeSizes.add(getCounterTypeSizeFromVerification(verification));
@@ -215,6 +218,7 @@ public class ReportsServiceImpl implements ReportsService {
             documentDate.add(getDocumentDateInString(verification));
             documentNumber.add(getDocumentNuberFromVerification(verification));
             validUntil.add(getValidDateInString(verification));
+
             ++i;
         }
 
@@ -222,6 +226,11 @@ public class ReportsServiceImpl implements ReportsService {
 
         List<TableExportColumn> data = new ArrayList<>();
         data.add(new TableExportColumn(Constants.NUMBER_IN_SEQUENCE_SHORT, number));
+        data.add(new TableExportColumn(Constants.DATE_SIGNATURE, dateSignatures));
+        data.add(new TableExportColumn(Constants.DOCUMENT_DATE, documentDate));
+        data.add(new TableExportColumn(Constants.DOCUMENT_NUMBER, documentNumber));
+        data.add(new TableExportColumn(Constants.MODULE_NUMBER, moduleNumbers));
+        data.add(new TableExportColumn(Constants.PROTOCOL_NUMBER, protocolsNumber));
         data.add(new TableExportColumn(Constants.CUSTOMER_SURNAME, customerSurname));
         data.add(new TableExportColumn(Constants.CUSTOMER_NAME, customerName));
         data.add(new TableExportColumn(Constants.CUSTOMER_MIDDLE_NAME, customerMiddleName));
@@ -232,9 +241,7 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.FLAT, flats));
         data.add(new TableExportColumn(Constants.PHONE_NUMBER, phones));
         data.add(new TableExportColumn(Constants.STAMP, stamps));
-        data.add(new TableExportColumn(Constants.DATE_SIGNATURE, dateSignatures));
-        data.add(new TableExportColumn(Constants.DEVICE_NUMBER, deviceNumbers));
-        data.add(new TableExportColumn(Constants.COUNTERS_NUMBER, counterNumbers));
+        data.add(new TableExportColumn(Constants.COUNTER_NUMBER, counterNumbers));
         data.add(new TableExportColumn(Constants.COUNTER_TYPE, counterTypes));
         data.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, counterTypeSizes));
         data.add(new TableExportColumn(Constants.YEAR, years));
@@ -242,8 +249,6 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.TEMPERATURE, temperatures));
         data.add(new TableExportColumn(Constants.VERIFICATION_NUMBER, verificationNumbers));
         data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, verificationStatus));
-        data.add(new TableExportColumn(Constants.DOCUMENT_DATE, documentDate));
-        data.add(new TableExportColumn(Constants.DOCUMENT_NUMBER, documentNumber));
         data.add(new TableExportColumn(Constants.VALID_UNTIL, validUntil));
 
         // endregion
@@ -292,8 +297,8 @@ public class ReportsServiceImpl implements ReportsService {
         }
     }
 
-    public String getDeviceNumberFromVerification(Verification verification) {
-        return (verification.getDevice() != null && verification.getDevice().getNumber() != null ? verification.getDevice().getNumber() : " ");
+    public String getModuleNumberFromVerification(Verification verification) {
+        return (verification.getCalibrationModule() != null && verification.getCalibrationModule().getModuleNumber() != null ? verification.getCalibrationModule().getModuleNumber() : " ");
     }
 
     public String getCounterNumberFromVerification(Verification verification) {
@@ -323,7 +328,13 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getStatusFromVerification(Verification verification) {
-        return (verification.getStatus().equals(Status.TEST_NOK) ? Constants.STATUS_TEST_OK : Constants.STATUS_ELSE);
+        if (verification.getStatus().equals(Status.TEST_OK)) {
+            return Constants.STATUS_TEST_OK;
+        } else if (verification.getStatus().equals(Status.TEST_NOK)) {
+            return Constants.STATUS_TEST_NOK;
+        } else {
+            return " ";
+        }
     }
 
     public String getDocumentDateInString(Verification verification) {
