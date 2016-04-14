@@ -52,7 +52,7 @@ public class GraphicBuilderMainPanel {
             if(organization.getOrganizationTypes().contains(OrganizationType.STATE_VERIFICATOR)) {
                 expirDate.setTime(verification.getSentToVerificatorDate());
             } else {
-                expirDate.setTime(verification.getInitialDate());
+                expirDate.setTime(verification.getSentToCalibratorDate());
             }
             MonthOfYear item = new MonthOfYear(expirDate.get(Calendar.MONTH), expirDate.get(Calendar.YEAR));
             int indexOfMonth = months.indexOf(item);

@@ -75,7 +75,7 @@ public interface Constants {
     String TEMPERATURE = "t, °C";
     String YEAR = "Рік випуску лічильника";
     String STAMP = "Номер пломби";
-    String DATE_SIGNATURE = "Дата повірки";
+    String VERIFICATION_TIME = "Дата повірки";
     String MODULE_NUMBER = "№ установки";
     String VERIFICATION_NUMBER = "№ заявки";
     String VERIFICATION_STATUS = "Статус";

@@ -96,10 +96,12 @@ public class CalibratorEmployeeServiceImpl implements CalibratorEmployeeService{
     @Transactional
     public List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization) {    	
         Organization organization = organizationRepository.findOne(idOrganization);
+
         List<Verification> verifications = verificationRepository.
-        		findByCalibratorAndInitialDateBetween
+                findByCalibratorAndSentToCalibratorDateBetween
                         (organization, from, to);
         List<ProviderEmployeeGraphic> graficData = null;
+
         try {
             List<MonthOfYear> monthList = GraphicBuilder.listOfMonths(from, to);
             graficData = GraphicBuilderMainPanel.builderData(verifications, monthList, organization);
