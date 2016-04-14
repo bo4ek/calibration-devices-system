@@ -96,7 +96,7 @@ public class CalibratorEmployeeServiceImplTest {
         when(userSet.stream()).thenReturn(userStream);
         // when(EmployeeDTO.giveListOfEmployeeDTOs(userList)).thenReturn(calibratorListEmployee);
         when(organizationRepository.findOne(organizationId)).thenReturn(organization);
-        when(verificationRepository.findByCalibratorAndInitialDateBetween(organization, from, to))
+        when(verificationRepository.findByCalibratorAndSentToCalibratorDateBetween(organization, from, to))
                 .thenReturn(verifications);
         try {
             when(GraphicBuilder.listOfMonths(from, to)).thenReturn(monthList);
@@ -152,7 +152,7 @@ public class CalibratorEmployeeServiceImplTest {
     public void testBuildGraphicMainPanel() {
         calibratorEmployeeService.buidGraphicMainPanel(from, to, organizationId);
         verify(organizationRepository).findOne(organizationId);
-        verify(verificationRepository).findByCalibratorAndInitialDateBetween(organization, from, to);
+        verify(verificationRepository).findByCalibratorAndSentToCalibratorDateBetween(organization, from, to);
         try {
             PowerMockito.verifyStatic();
             GraphicBuilder.listOfMonths(from, to);
