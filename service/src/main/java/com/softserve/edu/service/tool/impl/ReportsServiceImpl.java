@@ -166,8 +166,6 @@ public class ReportsServiceImpl implements ReportsService {
 
         List<Verification> verifications ;
         if (fromDate != null && toDate != null) {
-            System.out.println(providerId);
-            /*verifications = verificationRepository.findByProvider(provider);*/
             verifications = verificationRepository.findByProviderAndSentToVerificatorDateBetween(provider, fromDate, toDate);
         } else {
             verifications = verificationRepository.findByProvider(provider);
@@ -282,7 +280,6 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getCitiesFromAddress(Address address) {
-        /*return address.getLocality().substring(0,3);*/
         return (address.getLocality() != null && address.getLocality().substring(0, 4).equals(Constants.KYIV_CITY_NAME.substring(3)) ? address.getLocality().substring(0, 4) : address.getLocality());
     }
 
