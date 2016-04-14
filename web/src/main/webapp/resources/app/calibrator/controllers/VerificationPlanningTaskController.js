@@ -194,7 +194,7 @@ angular
 
                 $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 10
+                    count: 50
                 }, {
                     total: 0,
                     filterDelay: 1500,

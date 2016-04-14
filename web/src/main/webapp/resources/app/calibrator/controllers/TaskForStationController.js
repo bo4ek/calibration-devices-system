@@ -252,7 +252,7 @@ angular
 
             $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 5,
+                    count: 50,
                     sorting: {
                         dateOfTask: 'asc'
                     }

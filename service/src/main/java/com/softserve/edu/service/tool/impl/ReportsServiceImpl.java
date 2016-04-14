@@ -162,14 +162,18 @@ public class ReportsServiceImpl implements ReportsService {
         Organization provider = organizationRepository.findOne(providerId);
 
         Date fromDate = getDateForDocument(startDate);
-        Date toDate =  getDateForDocument(startDate);
+        Date toDate = getDateForDocument(endDate);
+
         List<Verification> verifications ;
         if (fromDate != null && toDate != null) {
-            verifications = verificationRepository.findByProviderAndInitialDateBetween(provider, fromDate, toDate);
+            System.out.println(providerId);
+            /*verifications = verificationRepository.findByProvider(provider);*/
+            verifications = verificationRepository.findByProviderAndSentToVerificatorDateBetween(provider, fromDate, toDate);
         } else {
             verifications = verificationRepository.findByProvider(provider);
         }
         List<String> number = new ArrayList<>();
+        List<String> calibrators = new ArrayList();
         List<String> customerSurname = new ArrayList<>();
         List<String> customerName = new ArrayList<>();
         List<String> customerMiddleName = new ArrayList<>();
@@ -209,7 +213,7 @@ public class ReportsServiceImpl implements ReportsService {
 
                 if (verification.getClientData().getClientAddress() != null) {
                     cities.add(getCitiesFromAddress(verification.getClientData().getClientAddress()));
-                    regions.add(getRegionsFromAddress(verification.getClientData().getClientAddress()));
+                    regions.add(getDistrictFromAddress(verification.getClientData().getClientAddress()));
                     streets.add(getStreetFromAddress(verification.getClientData().getClientAddress()));
                     buildings.add(getBuildingFromAddress(verification.getClientData().getClientAddress()));
                     flats.add(getFlatFromAddress(verification.getClientData().getClientAddress()));
@@ -238,7 +242,7 @@ public class ReportsServiceImpl implements ReportsService {
             documentDate.add(getDocumentDateInString(verification));
             documentNumber.add(getDocumentNuberFromVerification(verification));
             validUntil.add(getValidDateInString(verification));
-
+            calibrators.add(getCalibratorFromVerification(verification));
             ++i;
         }
 
@@ -246,6 +250,7 @@ public class ReportsServiceImpl implements ReportsService {
 
         List<TableExportColumn> data = new ArrayList<>();
         data.add(new TableExportColumn(Constants.NUMBER_IN_SEQUENCE_SHORT, number));
+        data.add(new TableExportColumn(Constants.LAB_NAME, calibrators));
         data.add(new TableExportColumn(Constants.DATE_SIGNATURE, dateSignatures));
         data.add(new TableExportColumn(Constants.DOCUMENT_DATE, documentDate));
         data.add(new TableExportColumn(Constants.DOCUMENT_NUMBER, documentNumber));
@@ -277,18 +282,12 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getCitiesFromAddress(Address address) {
-        if (address.getRegion() != null & address.getDistrict() != null) {
-            if (address.getRegion().equals(Constants.KYIV_CITY_NAME.substring(2))) {
-                return Constants.KYIV_CITY_NAME;
-            } else {
-                return address.getDistrict();
-            }
-        }
-        return " ";
+        /*return address.getLocality().substring(0,3);*/
+        return (address.getLocality() != null && address.getLocality().substring(0, 4).equals(Constants.KYIV_CITY_NAME.substring(3)) ? address.getLocality().substring(0, 4) : address.getLocality());
     }
 
-    public String getRegionsFromAddress(Address address) {
-        return (address.getRegion() != null ? address.getRegion() : " ");
+    public String getDistrictFromAddress(Address address) {
+        return (address.getDistrict() != null ? address.getDistrict() : " ");
     }
 
     public String getStreetFromAddress(Address address) {
@@ -357,6 +356,10 @@ public class ReportsServiceImpl implements ReportsService {
         }
     }
 
+    public String getCalibratorFromVerification(Verification verification) {
+        return (verification.getCalibrator() != null && verification.getCalibrator().getName() != null ? verification.getCalibrator().getName() : " ");
+    }
+
     public String getDocumentDateInString(Verification verification) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -395,7 +398,7 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public Date getDateForDocument(String strDate){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         try {
             return dateFormat.parse(strDate);
         } catch (ParseException e) {

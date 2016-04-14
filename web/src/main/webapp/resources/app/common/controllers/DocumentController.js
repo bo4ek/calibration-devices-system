@@ -64,9 +64,9 @@ angular
         };
 
         $scope.downloadReportProvider = function (documentType) {
-            $scope.startDate = $scope.myDatePicker.pickerDate.startDate.format("DD-MM-YYYY");
-            $scope.endDate = $scope.myDatePicker.pickerDate.endDate.format("DD-MM-YYYY");
-            var url = "doc/report/" + documentType + "/xls/" + $scope.startDate + "/" + $scope.endDate;
+            $scope.startDate = $scope.myDatePicker.pickerDate.startDate.format("DD.MM.YYYY");
+            $scope.endDate = $scope.myDatePicker.pickerDate.endDate.format("DD.MM.YYYY");
+            var url = "doc/report/" + documentType + "/" + $scope.startDate + "/" + $scope.endDate + "/xls";
             location.href = url;
         };
 

@@ -215,7 +215,7 @@ angular
                 $scope.initDatePicker(date);
                 $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 10,
+                    count: 50,
                     sorting: {
                         date: 'desc'
                     }

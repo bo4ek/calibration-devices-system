@@ -71,12 +71,12 @@ public class DocumentsController {
         sendFile(response, fileFormat, file);
     }
 
-    @RequestMapping(value = "report/{documentType}/{fileFormat}/{startDate}/{endDate}", method = RequestMethod.GET)
+    @RequestMapping(value = "report/{documentType}/{startDate}/{endDate}/{fileFormat}", method = RequestMethod.GET)
     public void getReport(HttpServletResponse response,
                           @PathVariable DocumentType documentType,
-                          @PathVariable FileFormat fileFormat,
                           @PathVariable String startDate,
                           @PathVariable String endDate,
+                          @PathVariable FileFormat fileFormat,
                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser)
             throws Exception {
         User providerEmployee = providerEmployeeService.oneProviderEmployee(employeeUser.getUsername());

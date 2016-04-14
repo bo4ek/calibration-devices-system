@@ -58,7 +58,7 @@ public interface Constants {
     String CUSTOMER_ADDRESS = "Адреса замовника";
     String DEVICE_TYPE_YEAR = "Тип приладу, рік випуску";
     String DIAMETER = "Діаметр";
-    String MEASURING_LAB_NAME = "Назва вимірювальної лабораторії";
+    String LAB_NAME = "Вимірювальна лабораторія";
     String RESULT = "Результат";
     String DOCUMENT_DATE = "Дата документа";
     String DOCUMENT_NUMBER = "№ документа";
