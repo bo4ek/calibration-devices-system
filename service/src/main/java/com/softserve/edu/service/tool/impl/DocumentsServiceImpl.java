@@ -177,7 +177,7 @@ public class DocumentsServiceImpl implements DocumentService {
         FileParameters fileParameters = new FileParameters(documentType,
                 fileFormat);
         fileParameters.setFileSystem(FileSystem.RAM);
-        fileParameters.setFileName(String.format("%s-%s", verification.getCalibrationModule().getModuleNumber(), test.getName().substring(0, Constants.PROTOCOL_NUMBER_END_INDEX)));
+        fileParameters.setFileName(String.format("%s-%s", verification.getCalibrationModule().getModuleNumber(), verification.getId()));
 
         switch (fileFormat) {
             case PDF: {

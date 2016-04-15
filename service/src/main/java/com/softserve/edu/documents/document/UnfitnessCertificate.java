@@ -70,15 +70,15 @@ public class UnfitnessCertificate extends BaseCertificate {
             }
 
             if (firstResult.equals(failed) ) {
-                reasons.add(String.format("δQn%s%%", getErrorTest1()));
+                reasons.add(String.format("δQn%s%%", getErrorTest1().replace('.', ',')));
             }
             if (secondResult.equals(failed)) {
-                reasons.add(String.format("δQt%s%%", getErrorTest2()));
+                reasons.add(String.format("δQt%s%%", getErrorTest2().replace('.', ',')));
             }
             if (thirdResult.equals(failed)) {
-                reasons.add(String.format("δQmin%s%%", getErrorTest3()));
+                reasons.add(String.format("δQmin%s%%", getErrorTest3().replace('.', ',')));
             }
-            return Constants.ERROR_PATTERN + " " + String.join(", ", reasons);
+            return Constants.ERROR_PATTERN + " " + String.join("; ", reasons);
         } catch (Exception e) {
             logger.error("Test results for this verification are corrupted ", e);
             return Constants.NOT_SPECIFIED;

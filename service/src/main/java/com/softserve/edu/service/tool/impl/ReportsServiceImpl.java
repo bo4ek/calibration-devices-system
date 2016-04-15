@@ -79,7 +79,7 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public FileObject buildFileByDate(Long providerId, DocumentType documentType,
-                                FileFormat fileFormat, String startDate, String endDate) throws Exception {
+                                      FileFormat fileFormat, String startDate, String endDate) throws Exception {
         FileParameters fileParameters = new FileParameters(documentType, fileFormat);
         fileParameters.setFileSystem(FileSystem.RAM);
         fileParameters.setFileName(documentType.toString());
@@ -173,7 +173,7 @@ public class ReportsServiceImpl implements ReportsService {
         Date fromDate = getDateForDocument(startDate);
         Date toDate = getDateForDocument(endDate);
 
-        List<Verification> verifications ;
+        List<Verification> verifications;
         if (fromDate != null && toDate != null) {
             verifications = verificationRepository.findByProviderAndSentToVerificatorDateBetween(provider, fromDate, toDate);
         } else {
@@ -233,8 +233,20 @@ public class ReportsServiceImpl implements ReportsService {
                 }
             }
 
-            protocolsNumber.add(verification.getNumberOfProtocol() != null ? verification.getNumberOfProtocol() : empty);
+            String verificationStatusStr = getStatusFromVerification(verification);
+            verificationStatus.add(verificationStatusStr);
+            if (verificationStatusStr.equals(empty)) {
+                validUntil.add(empty);
+                documentNumber.add(empty);
+                signProtocolDate.add(empty);
 
+            } else {
+                validUntil.add(getValidDateInString(verification));
+                documentNumber.add(getDocumentNumberFromVerification(verification));
+                signProtocolDate.add(getSignProtocolDateInString(verification));
+            }
+
+            protocolsNumber.add(verification.getNumberOfProtocol() != null ? verification.getNumberOfProtocol() : empty);
             stamps.add(getStampsFromCounter(verification));
             verificationTime.add(getVerificationTimeInString(verification));
             moduleNumbers.add(getModuleNumberFromVerification(verification));
@@ -245,10 +257,6 @@ public class ReportsServiceImpl implements ReportsService {
             counterCapacity.add(getCounterCapacityFromVerification(verification));
             temperatures.add(getTemperaturesFromVerification(verification));
             verificationNumbers.add(verification.getId());
-            verificationStatus.add(getStatusFromVerification(verification));
-            signProtocolDate.add(getSignProtocolDateInString(verification));
-            documentNumber.add(getDocumentNumberFromVerification(verification));
-            validUntil.add(getValidDateInString(verification));
             calibrators.add(getCalibratorFromVerification(verification));
             ++i;
         }
@@ -388,7 +396,7 @@ public class ReportsServiceImpl implements ReportsService {
         }
 
         return userRepository.findByUsername(verification.getStateVerificatorEmployee() != null ? verification.getStateVerificatorEmployee().getUsername() : " ")
-                .getVerificatorSubdivision().getName() + "-" + verification.getId() + suffix;
+                .getVerificatorSubdivision().getId() + "-" + verification.getId() + suffix;
     }
 
     public String getValidDateInString(Verification verification) {
@@ -406,7 +414,7 @@ public class ReportsServiceImpl implements ReportsService {
         }
     }
 
-    public Date getDateForDocument(String strDate){
+    public Date getDateForDocument(String strDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         try {
             return dateFormat.parse(strDate);
