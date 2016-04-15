@@ -318,7 +318,7 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "SIGNATURE")
     public String getSignature() {
         try {
-            return verification.getSignature();
+            return "";
         } catch (Exception e) {
             logger.error("Signature for this document has not been specified ", e);
             return Constants.NOT_SPECIFIED;
