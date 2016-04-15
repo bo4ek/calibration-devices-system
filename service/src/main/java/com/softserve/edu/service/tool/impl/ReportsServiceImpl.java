@@ -13,7 +13,9 @@ import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.OrganizationRepository;
+import com.softserve.edu.repository.UserRepository;
 import com.softserve.edu.repository.VerificationRepository;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
@@ -47,6 +49,13 @@ public class ReportsServiceImpl implements ReportsService {
 
     @Autowired
     private VerificationRepository verificationRepository;
+
+    @Autowired
+    private CalibrationTestRepository calibrationTestRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     private Logger logger = Logger.getLogger(ReportsServiceImpl.class);
 
@@ -188,7 +197,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> counterTypes = new ArrayList<>();
         List<String> counterTypeSizes = new ArrayList<>();
         List<String> years = new ArrayList<>();
-        List<String> accumulatedVolumes = new ArrayList<>();
+        List<String> counterCapacity = new ArrayList<>();
         List<String> temperatures = new ArrayList<>();
         List<String> verificationStatus = new ArrayList<>();
         List<String> verificationNumbers = new ArrayList<>();
@@ -233,12 +242,12 @@ public class ReportsServiceImpl implements ReportsService {
             counterTypes.add(getCounterTypeFromVerification(verification));
             counterTypeSizes.add(getCounterTypeSizeFromVerification(verification));
             years.add(getRealiseYearFromVerification(verification));
-            accumulatedVolumes.add(getAccumulatedVolumeFromVerification(verification));
+            counterCapacity.add(getCounterCapacityFromVerification(verification));
             temperatures.add(getTemperaturesFromVerification(verification));
             verificationNumbers.add(verification.getId());
             verificationStatus.add(getStatusFromVerification(verification));
             signProtocolDate.add(getSignProtocolDateInString(verification));
-            documentNumber.add(getDocumentNuberFromVerification(verification));
+            documentNumber.add(getDocumentNumberFromVerification(verification));
             validUntil.add(getValidDateInString(verification));
             calibrators.add(getCalibratorFromVerification(verification));
             ++i;
@@ -268,7 +277,7 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.COUNTER_TYPE, counterTypes));
         data.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, counterTypeSizes));
         data.add(new TableExportColumn(Constants.YEAR, years));
-        data.add(new TableExportColumn(Constants.COUNTER_ACCUMULATED_VOLUME, accumulatedVolumes));
+        data.add(new TableExportColumn(Constants.COUNTER_CAPACITY, counterCapacity));
         data.add(new TableExportColumn(Constants.TEMPERATURE, temperatures));
         data.add(new TableExportColumn(Constants.VERIFICATION_NUMBER, verificationNumbers));
         data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, verificationStatus));
@@ -329,8 +338,9 @@ public class ReportsServiceImpl implements ReportsService {
         return (verification.getCounter() != null && verification.getCounter().getReleaseYear() != null ? verification.getCounter().getReleaseYear() : " ");
     }
 
-    public String getAccumulatedVolumeFromVerification(Verification verification) {
-        return (verification.getCounter() != null && verification.getCounter().getAccumulatedVolume() != null ? verification.getCounter().getAccumulatedVolume() : " ");
+    public String getCounterCapacityFromVerification(Verification verification) {
+        String capacity = calibrationTestRepository.findByVerification(verification).getCapacity();
+        return (capacity != null ? capacity : " ");
     }
 
     public String getTemperaturesFromVerification(Verification verification) {
@@ -365,10 +375,20 @@ public class ReportsServiceImpl implements ReportsService {
         }
     }
 
-    public String getDocumentNuberFromVerification(Verification verification) {
-        return (verification.getStateVerificator() != null && verification.getStateVerificator().getAdditionInfoOrganization() != null &&
-                verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization() != null ?
-                verification.getStateVerificator().getAdditionInfoOrganization().getCertificateNumberAuthorization() : " ");
+    public String getDocumentNumberFromVerification(Verification verification) {
+
+        if (verification.getStateVerificatorEmployee().getUsername() == null) {
+            return " ";
+        }
+        String suffix;
+        if (verification.getStatus().equals(Status.TEST_OK)) {
+            suffix = "";
+        } else {
+            suffix = Constants.DOCUMEN_SUFIX_TEST_NOK;
+        }
+
+        return userRepository.findByUsername(verification.getStateVerificatorEmployee() != null ? verification.getStateVerificatorEmployee().getUsername() : " ")
+                .getVerificatorSubdivision().getName() + "-" + verification.getId() + suffix;
     }
 
     public String getValidDateInString(Verification verification) {

@@ -71,7 +71,7 @@ public interface Constants {
     String COUNTER_SIZE_AND_SYMBOL = "Розмір і символ лічильника";
     String COUNTER_TYPE_SIZE = "Типорозмір";
     String COUNTER_YEAR = "Рік виробництва";
-    String COUNTER_ACCUMULATED_VOLUME = "Накопичений об'єм";
+    String COUNTER_CAPACITY = "Накопичений об'єм";
     String TEMPERATURE = "t, °C";
     String YEAR = "Рік випуску лічильника";
     String STAMP = "Номер пломби";
@@ -97,6 +97,7 @@ public interface Constants {
     // counter status for reports
     String STATUS_TEST_OK = "Придатний";
     String STATUS_TEST_NOK = "Не придатний";
+    String DOCUMEN_SUFIX_TEST_NOK = "-Д";
 
     // region Address details
     String CITY = "Місто";
