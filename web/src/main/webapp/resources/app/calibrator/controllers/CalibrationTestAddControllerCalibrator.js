@@ -174,6 +174,9 @@ angular
                             photoId: function () {
                                 return id;
                             },
+                            testNumber: function() {
+                                return undefined; //fix this
+                            },
                             parentScope: function () {
                                 return $scope;
                             }
