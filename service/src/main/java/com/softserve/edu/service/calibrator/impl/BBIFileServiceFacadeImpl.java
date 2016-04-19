@@ -196,6 +196,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
             DeviceTestData deviceTestData;
             String calibrationModuleNumber;
+
             try {
                 if (correspondingVerificationMap == null) {
                     throw new MismatchBbiFilesNamesException();
