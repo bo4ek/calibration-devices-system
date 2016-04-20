@@ -2,9 +2,6 @@ package com.softserve.edu.device.test.data;
 
 import java.util.Map;
 
-/**
- * Created by Taras on 15.09.2015.
- */
 public class BbiDeviceTestData implements DeviceTestData {
     private Map<String, Object> testData;
 
@@ -51,6 +48,11 @@ public class BbiDeviceTestData implements DeviceTestData {
     @Override
     public int getMinute() {
         return getIntegerValue("minute");
+    }
+
+    @Override
+    public int getHour() {
+        return getIntegerValue("hour");
     }
 
     @Override

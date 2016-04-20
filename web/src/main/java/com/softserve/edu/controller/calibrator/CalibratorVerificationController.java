@@ -364,6 +364,33 @@ public class CalibratorVerificationController {
     }
 
     /**
+     * Receives archive with BBI files, calls appropriate services
+     * and returns the outcomes of parsing back to the client.
+     *
+     * @param file Archive with BBIs
+     * @return List of DTOs containing BBI filename, verification id, outcome of parsing (true/false)
+     */
+    @RequestMapping(value = "new/upload-archive-for-station", method = RequestMethod.POST)
+    public List<BBIOutcomeDTO> uploadFileArchiveForStation(@RequestBody MultipartFile file,
+                                                 @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
+
+        List<BBIOutcomeDTO> bbiOutcomeDTOList = null;
+        try {
+            String originalFileFullName = file.getOriginalFilename();
+            String fileType = originalFileFullName.substring(originalFileFullName.lastIndexOf('.'));
+            if (Pattern.compile(archiveExtensionPattern, Pattern.CASE_INSENSITIVE).matcher(fileType).matches()) {
+                bbiOutcomeDTOList = bbiFileServiceFacade.parseAndSaveArchiveOfBBIfilesForStation(file, originalFileFullName,
+                        calibratorEmployee);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to load file " + e.getMessage());
+            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+        }
+        return bbiOutcomeDTOList;
+    }
+
+    /**
      * Receives archive with BBI files and DB file, calls appropriate services
      * and returns the outcomes of parsing back to the client.
      *

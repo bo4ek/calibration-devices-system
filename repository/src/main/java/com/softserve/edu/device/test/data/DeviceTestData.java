@@ -1,8 +1,5 @@
 package com.softserve.edu.device.test.data;
 
-/**
- * Created by Taras on 15.09.2015.
- */
 public interface DeviceTestData {
     String getStringValue(String key);
     long getLongValue(String key);
@@ -13,6 +10,7 @@ public interface DeviceTestData {
     int getMonth();
     int getYear();
     int getMinute();
+    int getHour();
     int getSecond();
     int getDayOfWeek();
     long getUnixTime();

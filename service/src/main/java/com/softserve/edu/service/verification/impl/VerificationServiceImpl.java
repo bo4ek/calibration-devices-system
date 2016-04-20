@@ -392,6 +392,13 @@ public class VerificationServiceImpl implements VerificationService {
         return result;
     }
 
+    
+
+    @Override
+    public List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId) {
+        return verificationRepository.findByCounterNumberAndCalibratorId(numberCounter, calibratorId);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorId(Long organizationId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String fullNameToSearch,

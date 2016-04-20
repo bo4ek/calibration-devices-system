@@ -152,12 +152,29 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             return parseAndSaveArchiveOfBBIfiles(inputStream, originalFileName, calibratorEmployee);
         }
     }
+    public List<BBIOutcomeDTO>  parseAndSaveArchiveOfBBIfilesForStation(MultipartFile archiveFile, String originalFileName,
+                                                              User calibratorEmployee) throws IOException, ZipException,
+            SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
+        return parseAndSaveArchiveOfBBIfilesForStation(archiveFile.getInputStream(), originalFileName, calibratorEmployee);
+    }
 
 
     public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(MultipartFile archiveFile, String originalFileName,
                                                              User calibratorEmployee) throws IOException, ZipException,
             SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
         return parseAndSaveArchiveOfBBIfiles(archiveFile.getInputStream(), originalFileName, calibratorEmployee);
+    }
+
+    @Transactional
+    public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfilesForStation(InputStream archiveStream, String originalFileName,
+                                                             User calibratorEmployee) throws IOException,
+            ZipException, SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
+        File directoryWithUnpackedFiles = unpackArchive(archiveStream, originalFileName);
+        List<File> listOfBBIfiles = new ArrayList<>(FileUtils.listFiles(directoryWithUnpackedFiles, bbiExtensions, true));
+        List<BBIOutcomeDTO> resultsOfBBIProcessing = processListOfBBIFilesForStation(listOfBBIfiles,
+                calibratorEmployee);
+        FileUtils.forceDelete(directoryWithUnpackedFiles);
+        return resultsOfBBIProcessing;
     }
 
     @Transactional
@@ -279,6 +296,90 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (DuplicateCalibrationTestException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.DUPLICATE_CALIBRATION_TEST;
                 logger.error("Duplicate calibration test");
+            } catch (Exception e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
+                logger.error("Unknown reason of rejection");
+            } finally {
+                if (inStream != null) {
+                    bufferedInputStream.close();
+                    inStream.close();
+                }
+            }
+            if (reasonOfRejection == null) {
+                resultsOfBBIProcessing.add(BBIOutcomeDTO.accept(bbiFile.getName(), correspondingVerification));
+            } else {
+                resultsOfBBIProcessing.add(BBIOutcomeDTO.reject(bbiFile.getName(), correspondingVerification,
+                        reasonOfRejection));
+            }
+        }
+        return resultsOfBBIProcessing;
+    }
+
+
+    private Verification findVerificationByDeviceTestData(DeviceTestData deviceTestData, User calibratorEmployee) throws InvalidVerificationCodeException {
+        List<Verification> verifications = verificationService.findByCounterNumberAndCalibratorId(deviceTestData.getCurrentCounterNumber(), calibratorEmployee.getOrganization().getId());
+        if(verifications.size() == 0) {
+            throw new InvalidVerificationCodeException();
+        }
+        return verifications.get(0);
+    }
+
+    private List<BBIOutcomeDTO> processListOfBBIFilesForStation(List<File> listOfBBIfiles, User calibratorEmployee) throws
+            ParseException, IOException, InvalidImageInBbiException {
+        List<BBIOutcomeDTO> resultsOfBBIProcessing = new ArrayList<>();
+
+        for (File bbiFile : listOfBBIfiles) {
+            String correspondingVerification = null;
+            BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
+            DeviceTestData deviceTestData;
+            try {
+                deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                Date date = new Date(deviceTestData.getYear(), deviceTestData.getMonth(), deviceTestData.getDay(), deviceTestData.getHour(),
+                        deviceTestData.getMinute(), deviceTestData.getSecond());
+                DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+                String formattedDate = dateFormat.format(date);
+
+                CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
+                if (calibrationModule == null) {
+                    throw new InvalidModuleIdException();
+                }
+                if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), formattedDate, calibrationModule.getModuleNumber())) {
+                    throw new FileAlreadyExistsException(bbiFile.getName());
+                }
+                Verification verification = findVerificationByDeviceTestData(deviceTestData, calibratorEmployee);
+                if (verification == null) {
+                    throw new InvalidVerificationCodeException();
+                }
+                if (!verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
+                    throw new IncorrectOrganizationException();
+                }
+                correspondingVerification = verification.getId();
+                updateVerificationFromMapForStation(formattedDate, verification, deviceTestData);
+                saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
+            }  catch (FileAlreadyExistsException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
+                logger.error("BBI file is already in database");
+            } catch (IOException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_IS_NOT_VALID;
+                logger.error("BBI is not valid");
+            } catch (InvalidImageInBbiException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_IMAGE_IN_BBI;
+                logger.error("Wrong image in BBI file");
+            } catch (InvalidModuleIdException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
+                logger.error("Wrong module serial number in BBI file");
+            }  catch (InvalidVerificationCodeException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
+                logger.error("Invalid verification code");
+            } catch (DuplicateCalibrationTestException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.DUPLICATE_CALIBRATION_TEST;
+                logger.error("Duplicate calibration test");
+            } catch (IncorrectOrganizationException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_ORGANIZATION;
+                logger.error("Incorrect street id");
+            } catch (InvalidSymbolAndStandardSizeException e) {
+                reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INCORRECT_SYMBOL_AND_STANDARD_SIZE;
+                logger.error("Incorrect symbol and standard size");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
                 logger.error("Unknown reason of rejection");
@@ -460,6 +561,20 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     }
 
+    private void updateVerificationFromMapForStation(String date, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
+        Long deviceId;
+        Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
+        if (deviceTypeId != null) {
+            deviceId = getDeviceIdByDeviceTypeId(deviceTypeId);
+            Device device = deviceService.getById(deviceId);
+            verification.setDevice(device);
+        }
+        verification.setVerificationTime(date);
+        updateCounterFromDeviceTestData(verification.getCounter(), deviceTestData);
+        verificationService.saveVerification(verification);
+
+    }
+
     private Integer getDeviceTypeIdByTemperature(int temperature) {
         if (temperature >= 0 && temperature <= 30) {
             return Constants.WATER_ID;
@@ -514,6 +629,41 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         }
         return new Counter(verificationData.get(Constants.YEAR),
                 verificationData.get(Constants.COUNTER_NUMBER), resultCounterType, verificationData.get(Constants.STAMP));
+    }
+
+    private void updateCounterFromDeviceTestData(Counter counter, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
+        String sizeAndSymbol = deviceTestData.getCounterType1() + deviceTestData.getCounterType2();
+        String[] parts = sizeAndSymbol.split(" ");
+        String standardSize = parts[0] + " " + parts[1];
+        String symbol = parts[2];
+        if (parts.length > Constants.MIN_LENGTH) {
+            for (int i = Constants.MIN_LENGTH; i < parts.length; i++) {
+                symbol += " " + parts[i];
+            }
+        }
+        List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(symbol, standardSize);
+        CounterType resultCounterType;
+        switch (counterTypes.size()) {
+            case 0: {
+                throw new InvalidSymbolAndStandardSizeException();
+            }
+            case 1: {
+                resultCounterType = counterTypes.get(0);
+                break;
+            }
+            case 2: {
+                Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
+                Device.DeviceType deviceType = deviceService.getDeviceTypeById(deviceId);
+                resultCounterType = getCounterTypeByDeviceType(counterTypes, deviceType);
+                break;
+            }
+            default: {
+                resultCounterType = counterTypes.get(0);
+            }
+        }
+        counter.setReleaseYear(String.valueOf(deviceTestData.getYear()));
+        counter.setAccumulatedVolume(deviceTestData.getInitialCapacity());
+        counter.setCounterType(resultCounterType);
     }
 
     private CounterType getCounterTypeByDeviceType(List<CounterType> counterType, Device.DeviceType deviceType) {

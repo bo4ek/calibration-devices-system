@@ -65,7 +65,7 @@ angular
                             toLabel: $filter('translate')('TO_LABEL'),
                             applyLabel: $filter('translate')('APPLY_LABEL'),
                             cancelLabel: $filter('translate')('CANCEL_LABEL'),
-                            customRangeLabel: $filter('translate')('CUSTOM_RANGE_LABEL'),
+                            customRangeLabel: $filter('translate')('CUSTOM_RANGE_LABEL')
                         },
                         ranges: {},
                         eventHandlers: {}
@@ -297,7 +297,12 @@ angular
                     animation: true,
                     templateUrl: 'resources/app/calibrator/views/modals/upload-archive.html',
                     controller: 'UploadArchiveController',
-                    size: 'lg'
+                    size: 'lg',
+                    resolve: {
+                        uploadForStation: function () {
+                            return true;
+                        }
+                    }
                 });
                 modalInstance.result.then(function () {
                     $scope.tableParams.reload();

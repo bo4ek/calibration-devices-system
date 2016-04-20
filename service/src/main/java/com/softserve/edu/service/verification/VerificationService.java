@@ -79,6 +79,8 @@ public interface VerificationService {
                                                                                                 String sortCriteria, String sortOrder, User verificatorEmployee);
 
 
+    Verification findNextVerificationByVerificationIdAndVerificationIndex(Long verificatorId, int verificationIndex, String sortCriteria, String sortOrder, User employee);
+
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorId(Long organizationId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String fullNameToSearch,
                                                                                       String streetToSearch, String status, String employeeName, String sortCriteria, String sortOrder, User verificatorEmployee);
 
@@ -200,4 +202,6 @@ public interface VerificationService {
     List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType);
 
     boolean hasVerificationGroup(String verificationId);
+
+    List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId);
 }

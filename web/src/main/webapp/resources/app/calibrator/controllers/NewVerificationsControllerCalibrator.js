@@ -663,7 +663,12 @@ angular
                     animation: true,
                     templateUrl: 'resources/app/calibrator/views/modals/upload-archive.html',
                     controller: 'UploadArchiveController',
-                    size: 'lg'
+                    size: 'lg',
+                    resolve: {
+                        uploadForStation: function () {
+                            return false;
+                        }
+                    }
                 });
                 modalInstance.result.then(function () {
                     $scope.tableParams.reload();

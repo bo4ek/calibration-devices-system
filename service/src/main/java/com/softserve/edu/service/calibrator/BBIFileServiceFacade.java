@@ -71,6 +71,18 @@ public interface BBIFileServiceFacade {
     /**
      * Parses the bbi files from the archive and saves them in the system
      *
+     * @param archiveFile      MultipartFile representing archive with BBIs
+     * @param originalFileName Original name of the archive file
+     * @return List of DTOs containing BBI filename, verification id, outcome of parsing (true/false)
+     * @throws IOException If the archive doesn't contain DBF file
+     **/
+    List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfilesForStation(MultipartFile archiveFile, String originalFileName,
+                                                      User calibratorEmployee) throws IOException, ZipException,
+            SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException;
+
+    /**
+     * Parses the bbi files from the archive and saves them in the system
+     *
      * @param archive          File representing archive with BBIs and DBF
      * @param originalFileName Original name of the archive file
      * @return List of DTOs containing BBI filename, verification id, outcome of parsing (true/false)
@@ -88,6 +100,18 @@ public interface BBIFileServiceFacade {
      * @throws IOException If the archive doesn't contain DBF file
      **/
     List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfiles(InputStream archiveStream, String originalFileName,
+                                                      User calibratorEmployee) throws IOException, ZipException,
+            SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException;
+
+    /**
+     * Parses the bbi files from the archive and saves them in the system
+     *
+     * @param archiveStream    InputStream representing archive with BBIs
+     * @param originalFileName Original name of the archive file
+     * @return List of DTOs containing BBI filename, verification id, outcome of parsing (true/false)
+     * @throws IOException If the archive doesn't contain DBF file
+     **/
+    List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfilesForStation(InputStream archiveStream, String originalFileName,
                                                       User calibratorEmployee) throws IOException, ZipException,
             SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException;
 }

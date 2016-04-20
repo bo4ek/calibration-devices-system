@@ -5,8 +5,8 @@ angular
     .module('employeeModule')
 
     .controller('UploadArchiveController', ['$scope', '$rootScope', '$route', '$filter', '$log', '$modalInstance',
-        'Upload', '$timeout',
-        function ($scope, $rootScope, $route, $filter, $log, $modalInstance, Upload, $timeout) {
+        'Upload', '$timeout', 'uploadForStation',
+        function ($scope, $rootScope, $route, $filter, $log, $modalInstance, Upload, $timeout, uploadForStation) {
 
             /**
              * Closes modal window on browser's back/forward button click.
@@ -36,10 +36,16 @@ angular
 
             $scope.upload = function (files) {
                 if (files && files.length) {
+                    var pathUrl;
+                    if(uploadForStation) {
+                        pathUrl = 'calibrator/verifications/new/upload-archive-for-station';
+                    } else {
+                        pathUrl = 'calibrator/verifications/new/upload-archive';
+                    }
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
                         Upload.upload({
-                            url: 'calibrator/verifications/new/upload-archive',
+                            url: pathUrl,
                             file: file
                         }).progress(function (evt) {
                             $scope.uploaded = true;
