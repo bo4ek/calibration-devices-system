@@ -108,8 +108,12 @@ public class ProviderApplicationController {
                             verificationDTO.getMailIndex()
                     )
             );
-            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
-                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
+
+            List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize());
+
+            CounterType counterType = getCounterTypeByDeviceType(counterTypes, verificationDTO.getDeviceType());
+
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
                     verificationDTO.getDateOfDismantled(),
@@ -178,8 +182,12 @@ public class ProviderApplicationController {
                             verificationDTO.getFlat()
                     )
             );
-            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
-                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
+
+            List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize());
+
+            CounterType counterType = getCounterTypeByDeviceType(counterTypes, verificationDTO.getDeviceType());
+
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
                     verificationDTO.getDateOfDismantled(),
@@ -385,5 +393,12 @@ public class ProviderApplicationController {
         }
         mail.sendRejectMail(sendTo, name, reject.getVerifID(), reject.getMsg(), verification.getDevice().getDeviceType().toString());
         return reject.getVerifID();
+    }
+
+    private CounterType getCounterTypeByDeviceType(List<CounterType> counterTypes, Device.DeviceType deviceType) {
+        for (CounterType counterType : counterTypes) {
+            if (counterType.getDevice().getDeviceType().equals(deviceType)) return counterType;
+        }
+        return null;
     }
 }

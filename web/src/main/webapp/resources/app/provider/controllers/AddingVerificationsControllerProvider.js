@@ -157,11 +157,13 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
         /**
          * select device by deviceType (isn't very usefull. only not to broke another functionality)
+         * this method gets all devices and set wrong deviceId
          */
         $scope.selectDevice = function() {
             angular.forEach($scope.devices, function(value){
                 if (value.deviceType === $scope.selectedData.firstSelectedDeviceType) {
                     $scope.selectedData.selectedDevice = value;
+                    $scope.formData.deviceType = value.deviceType;
                 }
             });
 
