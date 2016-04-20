@@ -85,19 +85,23 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
 
         calibrationTestRepository.save(calibrationTest);
 
+        List<CalibrationTestData> calibrationTests = new ArrayList<>();
         for (int testDataId = 1; testDataId <= Constants.TEST_COUNT; testDataId++) {
             if (deviceTestData.getTestNumber(testDataId) != 0) { // if there is no photo there is now test data
                 CalibrationTestData сalibrationTestData = testDataService.createNewTestData(calibrationTest.getId(),
                         deviceTestData, testDataId);
-                if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
-                    calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
-                }
-                if (сalibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.NOT_PROCESSED)) {
-                    calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
-                }
+                calibrationTests.add(сalibrationTestData);
                 if (сalibrationTestData.getConsumptionStatus().equals(Verification.ConsumptionStatus.NOT_IN_THE_AREA)) {
                     calibrationTest.setConsumptionStatus(Verification.ConsumptionStatus.NOT_IN_THE_AREA);
                 }
+            }
+        }
+        for(CalibrationTestData calibrationTestData : getLatestTests(calibrationTests)) {
+            if (calibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
+                calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
+            }
+            if (calibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.NOT_PROCESSED)) {
+                calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
             }
         }
         calibrationTestRepository.save(calibrationTest);
