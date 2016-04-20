@@ -32,8 +32,8 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Transactional(readOnly = true)
-    public CounterType findOneBySymbolAndStandardSize(String symbol, String standardSize) {
-        return counterTypeRepository.findOneBySymbolAndStandardSize(symbol, standardSize);
+    public CounterType findOneBySymbolAndStandardSizeAndDeviceId(String symbol, String standardSize, Long deviceId) {
+        return counterTypeRepository.findOneBySymbolAndStandardSizeAndDeviceId(symbol, standardSize, deviceId);
     }
 
 }

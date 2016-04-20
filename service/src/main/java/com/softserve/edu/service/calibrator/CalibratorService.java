@@ -14,7 +14,7 @@ public interface CalibratorService {
 
     Organization findById(Long id);
 
-    CounterType findOneBySymbolAndStandardSize(String symbol, String standardSize);
+    CounterType findOneBySymbolAndStandardSizeAndDeviceId(String symbol, String standardSize, Long deviceId);
 
     void uploadBbi(InputStream fileStream, String verificationId,
                    String originalFileFullName) throws IOException;

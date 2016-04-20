@@ -112,8 +112,8 @@ public class CalibratorApplicationController {
                             verificationDTO.getMailIndex()
                     )
             );
-            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
-                    verificationDTO.getStandardSize());
+            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
                     verificationDTO.getDateOfDismantled(),

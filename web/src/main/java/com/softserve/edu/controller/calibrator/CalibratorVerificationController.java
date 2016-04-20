@@ -680,8 +680,8 @@ public class CalibratorVerificationController {
 
         // updating counter information
         if (!updateAll) {
-            CounterType counterType = calibratorService.findOneBySymbolAndStandardSize(verificationDTO.getSymbol(),
-                    verificationDTO.getStandardSize());
+            CounterType counterType = calibratorService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
             Counter counter = verification.getCounter();
             if (counter == null) {
                 counter = new Counter();

@@ -108,8 +108,8 @@ public class ProviderApplicationController {
                             verificationDTO.getMailIndex()
                     )
             );
-            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(
-                    verificationDTO.getSymbol(), verificationDTO.getStandardSize());
+            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
                     verificationDTO.getDateOfDismantled(),
@@ -178,8 +178,8 @@ public class ProviderApplicationController {
                             verificationDTO.getFlat()
                     )
             );
-            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSize(
-                    verificationDTO.getSymbol(), verificationDTO.getStandardSize());
+            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
                     verificationDTO.getDateOfDismantled(),

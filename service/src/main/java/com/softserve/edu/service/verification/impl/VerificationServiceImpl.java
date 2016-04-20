@@ -827,7 +827,7 @@ public class VerificationServiceImpl implements VerificationService {
         verification.setComment(comment);
 
         Counter counter = verification.getCounter();
-        CounterType counterType = counterTypeRepository.findOneBySymbolAndStandardSize(symbol, standardSize);
+        CounterType counterType = counterTypeRepository.findOneBySymbolAndStandardSizeAndDeviceId(symbol, standardSize, deviceId);
 
         if (counter != null) {
             counter.setDateOfDismantled(dateOfDismantled);

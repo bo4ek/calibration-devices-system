@@ -74,9 +74,10 @@ public interface CounterTypeService {
      * Find counter type by symbol and standardSize
      * @param symbol
      * @param standardSize
+     * @param deviceId
      * @return CounterType
      */
-    CounterType findOneBySymbolAndStandardSize(String symbol, String standardSize);
+    CounterType findOneBySymbolAndStandardSizeAndDeviceId(String symbol, String standardSize, Long deviceId);
 
     List<CounterType> findBySymbolAndStandardSize(String symbol, String standardSize);
 
