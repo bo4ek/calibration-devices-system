@@ -93,7 +93,9 @@ public class CalibratorApplicationController {
     public ResponseEntity getInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
                                                 @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         List<String> verificationIds = new ArrayList<>();
+
         HttpStatus httpStatus = HttpStatus.CREATED;
+
         try {
             ClientData clientData = new ClientData(
                     verificationDTO.getFirstName(),
@@ -112,8 +114,12 @@ public class CalibratorApplicationController {
                             verificationDTO.getMailIndex()
                     )
             );
-            CounterType counterType = counterTypeService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
-                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
+
+            List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(verificationDTO.getSymbol(),
+                    verificationDTO.getStandardSize());
+
+            CounterType counterType = getCounterTypeByDeviceType(counterTypes, verificationDTO.getDeviceType());
+
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
                     verificationDTO.getDateOfDismantled(),
@@ -139,9 +145,9 @@ public class CalibratorApplicationController {
             Organization provider = providerService.findById(verificationDTO.getProviderId());
             Device device = deviceService.getById(verificationDTO.getDeviceId());
 
-            /**
-             * Creating Verification without ID
-             */
+
+              /*Creating Verification without ID*/
+
             Verification verification = new Verification(new Date(), clientData, provider, device,
                     Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info,
                     verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
@@ -345,5 +351,12 @@ public class CalibratorApplicationController {
             }
         }
         return (long) -1;
+    }
+
+    private CounterType getCounterTypeByDeviceType(List<CounterType> counterTypes, Device.DeviceType deviceType) {
+        for (CounterType counterType : counterTypes) {
+            if (counterType.getDevice().getDeviceType().equals(deviceType)) return counterType;
+        }
+        return null;
     }
 }
