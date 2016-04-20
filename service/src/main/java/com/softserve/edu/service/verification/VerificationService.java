@@ -79,7 +79,7 @@ public interface VerificationService {
                                                                                                 String sortCriteria, String sortOrder, User verificatorEmployee);
 
 
-    Verification findNextVerificationByVerificationIdAndVerificationIndex(Long verificatorId, int verificationIndex, String sortCriteria, String sortOrder, User employee);
+
 
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorId(Long organizationId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String fullNameToSearch,
                                                                                       String streetToSearch, String status, String employeeName, String sortCriteria, String sortOrder, User verificatorEmployee);
