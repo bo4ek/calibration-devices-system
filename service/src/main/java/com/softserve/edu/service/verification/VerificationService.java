@@ -8,12 +8,10 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
-import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.utils.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -166,7 +164,7 @@ public interface VerificationService {
     
     void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence, Long dateOfDismantled,
                      Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol, String standardSize,
-                     String comment, Long deviceId, Boolean verificationWithDismantle);
+                     String comment, Long deviceId, Boolean verificationWithDismantle, Device.DeviceType deviceType);
 
     void editAddInfo(int entrance, int doorCode, int floor, Long dateOfVerif, String timeFrom, String timeTo, Boolean serviceability,
                      Long noWaterToDate, String notes, String verificationId);

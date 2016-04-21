@@ -392,7 +392,6 @@ public class VerificationServiceImpl implements VerificationService {
         return result;
     }
 
-    
 
     @Override
     public List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId) {
@@ -786,7 +785,7 @@ public class VerificationServiceImpl implements VerificationService {
             throw new IllegalArgumentException();
         }
         VerificationGroup group = verification.getGroup();
-        return group != null?true:false;
+        return group != null ? true : false;
     }
 
 
@@ -825,17 +824,16 @@ public class VerificationServiceImpl implements VerificationService {
     public void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence,
                             Long dateOfDismantled, Long dateOfMounted, String numberCounter, String releaseYear,
                             String accumulatedVolume, String symbol, String standardSize, String comment, Long deviceId,
-                            Boolean verificationWithDismantle) {
+                            Boolean verificationWithDismantle, Device.DeviceType deviceType) {
         Verification verification = verificationRepository.findOne(verificationId);
-
         verification.setCounterStatus(dismantled);
         verification.setSealPresence(sealPresence);
         verification.setVerificationWithDismantle(verificationWithDismantle);
         verification.setComment(comment);
 
         Counter counter = verification.getCounter();
-        CounterType counterType = counterTypeRepository.findOneBySymbolAndStandardSizeAndDeviceId(symbol, standardSize, deviceId);
-
+        List<CounterType> counterTypes = counterTypeRepository.findBySymbolAndStandardSize(symbol, standardSize);
+        CounterType counterType = getCounterTypeByDeviceType(counterTypes, deviceType);
         if (counter != null) {
             counter.setDateOfDismantled(dateOfDismantled);
             counter.setDateOfMounted(dateOfMounted);
@@ -1116,5 +1114,12 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public Set<String> findAllStandardSizes() {
         return counterTypeRepository.findAllStandardSizes();
+    }
+
+    private CounterType getCounterTypeByDeviceType(List<CounterType> counterTypes, Device.DeviceType deviceType) {
+        for (CounterType counterType : counterTypes) {
+            if (counterType.getDevice().getDeviceType().equals(deviceType)) return counterType;
+        }
+        return null;
     }
 }

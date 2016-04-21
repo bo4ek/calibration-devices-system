@@ -16,7 +16,7 @@ public class AdditionalInfoDTO {
     private String notes;
     private String verificationId;
 
-    public AdditionalInfoDTO(){
+    public AdditionalInfoDTO() {
 
     }
 

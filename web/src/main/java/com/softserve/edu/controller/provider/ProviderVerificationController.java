@@ -236,6 +236,7 @@ public class ProviderVerificationController {
 
     /**
      * Find count of accepted verifications
+     *
      * @param user
      * @return
      */
@@ -320,7 +321,7 @@ public class ProviderVerificationController {
     public void assignCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
                                          @PathVariable String verificationId) {
         User user = verificationProviderEmployeeService.oneProviderEmployee(userDetails.getUsername());
-        if(user != null && user.getUserRoles().contains(UserRole.PROVIDER_EMPLOYEE)) {
+        if (user != null && user.getUserRoles().contains(UserRole.PROVIDER_EMPLOYEE)) {
             verificationProviderEmployeeService.assignProviderEmployee(verificationId, user);
         }
     }
@@ -375,6 +376,7 @@ public class ProviderVerificationController {
 
     /**
      * method for updating counter info
+     *
      * @param counterInfo
      * @return
      */
@@ -386,7 +388,7 @@ public class ProviderVerificationController {
             verificationService.editCounter(counterInfo.getVerificationId(), counterInfo.getDeviceName(), counterInfo.getDismantled(),
                     counterInfo.getSealPresence(), counterInfo.getDateOfDismantled(), counterInfo.getDateOfMounted(),
                     counterInfo.getNumberCounter(), counterInfo.getReleaseYear(), counterInfo.getAccumulatedVolume(), counterInfo.getSymbol(),
-                    counterInfo.getStandardSize(), counterInfo.getComment(), counterInfo.getDeviceId(), counterInfo.getVerificationWithDismantle());
+                    counterInfo.getStandardSize(), counterInfo.getComment(), counterInfo.getDeviceId(), counterInfo.getVerificationWithDismantle(), counterInfo.getDeviceType());
         } catch (Exception e) {
             logger.error("GOT EXCEPTION " + e);
             httpStatus = HttpStatus.CONFLICT;
@@ -396,6 +398,7 @@ public class ProviderVerificationController {
 
     /**
      * method for updating addition info
+     *
      * @param infoDTO
      * @return
      */
@@ -416,6 +419,7 @@ public class ProviderVerificationController {
 
     /**
      * method for updating clientInfo
+     *
      * @param clientDTO
      * @return
      */
