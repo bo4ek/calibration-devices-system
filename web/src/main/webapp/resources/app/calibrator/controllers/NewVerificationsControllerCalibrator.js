@@ -21,6 +21,7 @@ angular
                         'PLANNING_TASK',
                         'TASK_PLANED',
                         'TEST_PLACE_DETERMINED',
+                        'SENT_TO_DISMANTLING_TEAM',
                         'SENT_TO_TEST_DEVICE',
                         'TEST_COMPLETED',
                         'SENT_TO_VERIFICATOR',
@@ -104,7 +105,8 @@ angular
                 {id: 'IN_PROGRESS', label: null},
                 {id: 'TEST_PLACE_DETERMINED', label: null},
                 {id: 'SENT_TO_TEST_DEVICE', label: null},
-                {id: 'TEST_COMPLETED', label: null}
+                {id: 'TEST_COMPLETED', label: null},
+                {id: 'SENT_TO_DISMANTLING_TEAM', label: null}
             ];
 
             $scope.setTypeDataLanguage = function () {
@@ -114,11 +116,13 @@ angular
                     $scope.statusData[1].label = 'Визначено спосіб повірки';
                     $scope.statusData[2].label = 'Відправлено на установку';
                     $scope.statusData[3].label = 'Проведено вимірювання';
+                    $scope.statusData[4].label = 'Відправлено на демонтажну бригаду';
                 } else if (lang === 'eng') {
                     $scope.statusData[0].label = 'In progress';
                     $scope.statusData[1].label = 'Test place determined';
                     $scope.statusData[2].label = 'Sent to test device';
                     $scope.statusData[3].label = 'Test completed';
+                    $scope.statusData[4].label = 'Sent to dismantling team';
 
                 }
             };
