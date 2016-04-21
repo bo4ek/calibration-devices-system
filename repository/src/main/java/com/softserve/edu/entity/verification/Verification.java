@@ -1,6 +1,7 @@
 package com.softserve.edu.entity.verification;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
@@ -11,6 +12,8 @@ import com.softserve.edu.entity.verification.calibration.*;
 import lombok.*;
 
 import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -160,6 +163,9 @@ public class Verification implements Comparable {
 
     @Column(name = "verificationTime")
     private String verificationTime;
+
+    @Temporal(TemporalType.DATE)
+    private Date verificationDate;
 
     @Column
     private String signature;
@@ -320,6 +326,12 @@ public class Verification implements Comparable {
         this.counterStatus = false;
         this.comment = comment;
         this.verificationTime = verificationTime;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        try {
+            this.verificationDate = formatter.parse(verificationTime);
+        } catch (ParseException e) {
+            /*Ignore*/
+        }
     }
 
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,

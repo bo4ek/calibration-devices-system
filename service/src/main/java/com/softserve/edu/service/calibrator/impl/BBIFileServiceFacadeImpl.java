@@ -354,7 +354,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     throw new IncorrectOrganizationException();
                 }
                 correspondingVerification = verification.getId();
-                updateVerificationFromMapForStation(formattedDate, verification, deviceTestData);
+                updateVerificationFromMapForStation(date, formattedDate, verification, deviceTestData);
                 saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
             }  catch (FileAlreadyExistsException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
@@ -546,7 +546,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
 
-    private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
+    private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException, ParseException {
         Long deviceId;
         Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
         if (deviceTypeId != null) {
@@ -554,14 +554,15 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             Device device = deviceService.getById(deviceId);
             verification.setDevice(device);
         }
-        verification.setVerificationTime(verificationData.get(Constants.DATE));
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        verification.setVerificationDate(formatter.parse(verificationData.get(Constants.DATE)));
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);
         verificationService.saveVerification(verification);
 
     }
 
-    private void updateVerificationFromMapForStation(String date, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
+    private void updateVerificationFromMapForStation(Date verificationDate, String date, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
         Long deviceId;
         Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
         if (deviceTypeId != null) {
@@ -570,6 +571,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             verification.setDevice(device);
         }
         verification.setVerificationTime(date);
+        verification.setVerificationDate(verificationDate);
         updateCounterFromDeviceTestData(verification.getCounter(), deviceTestData);
         verificationService.saveVerification(verification);
 
