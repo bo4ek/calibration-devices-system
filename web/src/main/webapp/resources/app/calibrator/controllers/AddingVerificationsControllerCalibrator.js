@@ -152,7 +152,7 @@ angular.module('employeeModule')
 
             /**
              * select device by deviceType (isn't very usefull. only not to broke another functionality)
-             * this method gets all devices and set wrong deviceId, 
+             * this method gets all devices and set wrong deviceId, right deviceId chooses on server side
              */
             $scope.selectDevice = function () {
                 angular.forEach($scope.devices, function (value) {

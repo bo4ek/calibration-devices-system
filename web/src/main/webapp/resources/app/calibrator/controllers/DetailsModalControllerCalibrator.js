@@ -148,12 +148,13 @@ angular
 
             /**
              * select device by deviceType (isn't very usefull. only not to broke another functionality)
+             * this method gets all devices and set wrong deviceId, right deviceId chooses on server side
              */
             $scope.selectDevice = function() {
-
                 angular.forEach($scope.devices, function(value){
                     if(value.deviceType ===  $scope.counterData.deviceType){
                         $scope.counterData.selectedDevice = value;
+                        $scope.counterData.deviceType = value.deviceType;
                     }
                 });
 
@@ -280,7 +281,7 @@ angular
                 $scope.counterInfo.counterSymbol = $scope.verificationInfo.symbol;
                 $scope.counterInfo.counterStandardSize = $scope.verificationInfo.standardSize;
                 $scope.counterInfo.releaseYear = $scope.verificationInfo.releaseYear;
-                $scope.counterInfo.accumulatedVolume =  $scope.verificationInfo.accumulatedVolume;
+                $scope.counterInfo.accumulatedVolume = $scope.verificationInfo.accumulatedVolume;
             };
 
             $scope.convertInfoForView = function() {
