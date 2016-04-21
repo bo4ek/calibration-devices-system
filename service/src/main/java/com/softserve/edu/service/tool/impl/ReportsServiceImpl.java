@@ -175,7 +175,7 @@ public class ReportsServiceImpl implements ReportsService {
 
         List<Verification> verifications;
         if (fromDate != null && toDate != null) {
-            verifications = verificationRepository.findByProviderAndSentToVerificatorDateBetween(provider, fromDate, toDate);
+            verifications = verificationRepository.findByProviderAndVerificationDateBetween(provider, fromDate, toDate);
         } else {
             verifications = verificationRepository.findByProvider(provider);
         }

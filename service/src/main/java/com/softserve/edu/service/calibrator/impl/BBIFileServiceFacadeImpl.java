@@ -554,6 +554,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             Device device = deviceService.getById(deviceId);
             verification.setDevice(device);
         }
+        verification.setVerificationTime(verificationData.get(Constants.DATE));
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         verification.setVerificationDate(formatter.parse(verificationData.get(Constants.DATE)));
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
