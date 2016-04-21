@@ -91,9 +91,6 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
                 CalibrationTestData сalibrationTestData = testDataService.createNewTestData(calibrationTest.getId(),
                         deviceTestData, testDataId);
                 calibrationTests.add(сalibrationTestData);
-                if (сalibrationTestData.getConsumptionStatus().equals(Verification.ConsumptionStatus.NOT_IN_THE_AREA)) {
-                    calibrationTest.setConsumptionStatus(Verification.ConsumptionStatus.NOT_IN_THE_AREA);
-                }
             }
         }
         for(CalibrationTestData calibrationTestData : getLatestTests(calibrationTests)) {
@@ -102,6 +99,9 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
             }
             if (calibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.NOT_PROCESSED)) {
                 calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
+            }
+            if (calibrationTestData.getConsumptionStatus().equals(Verification.ConsumptionStatus.NOT_IN_THE_AREA)) {
+                calibrationTest.setConsumptionStatus(Verification.ConsumptionStatus.NOT_IN_THE_AREA);
             }
         }
         calibrationTestRepository.save(calibrationTest);
