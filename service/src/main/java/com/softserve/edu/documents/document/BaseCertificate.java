@@ -72,7 +72,8 @@ public abstract class BaseCertificate implements Document {
     public String getCalibratorCompanyAddress() {
         try {
             Address address = verification.getStateVerificator().getAddress();
-            return String.join(", ", Constants.KYIV_CITY_NAME, address.getStreet(), address.getBuilding());
+            return String.join(", ", (address.getLocality() != null && address.getLocality().substring(0, 4).equals(Constants.KYIV_CITY_NAME.substring(3)) ?
+                    address.getLocality().substring(0, 4) : address.getLocality()), address.getStreet(), address.getBuilding());
         } catch (Exception e) {
             logger.error("Vereficator's address has not been specified " + e);
             return Constants.NOT_SPECIFIED;
