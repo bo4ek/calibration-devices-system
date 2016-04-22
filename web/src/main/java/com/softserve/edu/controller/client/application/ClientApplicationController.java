@@ -97,6 +97,7 @@ public class ClientApplicationController {
             Verification verification = new Verification(new Date(), new Date(), clientData, provider, device,
                     Status.SENT, Verification.ReadStatus.UNREAD, info);
             verification.setCounter(new Counter());
+            verification.setTaskStatus(Status.PLANNING_TASK);
             verification.setSealPresence(true);
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
 

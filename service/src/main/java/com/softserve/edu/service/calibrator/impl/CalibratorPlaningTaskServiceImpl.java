@@ -395,7 +395,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 break;
         }
 
-        return verificationRepository.findByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, id, pageRequest);
+        return verificationRepository.findByTaskStatusAndCalibratorIdAndCounterStatusAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, id, false, pageRequest);
     }
 
 
