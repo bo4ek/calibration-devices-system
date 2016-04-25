@@ -13,6 +13,7 @@ import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.repository.CalibrationTestRepository;
 import com.softserve.edu.repository.OrganizationRepository;
 import com.softserve.edu.repository.UserRepository;
@@ -347,8 +348,8 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getCounterCapacityFromVerification(Verification verification) {
-        String capacity = calibrationTestRepository.findByVerification(verification).getCapacity();
-        return (capacity != null ? capacity : " ");
+        CalibrationTest calibrationTest = calibrationTestRepository.findByVerification(verification);
+        return (calibrationTest != null && calibrationTest.getCapacity() != null ? calibrationTest.getCapacity() : " ");
     }
 
     public String getTemperaturesFromVerification(Verification verification) {
@@ -385,7 +386,7 @@ public class ReportsServiceImpl implements ReportsService {
 
     public String getDocumentNumberFromVerification(Verification verification) {
 
-        if (verification.getStateVerificatorEmployee().getUsername() == null) {
+        if (verification.getStateVerificatorEmployee() == null) {
             return " ";
         }
         String suffix;
@@ -395,7 +396,7 @@ public class ReportsServiceImpl implements ReportsService {
             suffix = Constants.DOCUMEN_SUFIX_TEST_NOK;
         }
 
-        return userRepository.findByUsername(verification.getStateVerificatorEmployee() != null ? verification.getStateVerificatorEmployee().getUsername() : " ")
+        return userRepository.findByUsername(verification.getStateVerificatorEmployee().getUsername() != null ? verification.getStateVerificatorEmployee().getUsername() : " ")
                 .getVerificatorSubdivision().getId() + "-" + verification.getId() + suffix;
     }
 
