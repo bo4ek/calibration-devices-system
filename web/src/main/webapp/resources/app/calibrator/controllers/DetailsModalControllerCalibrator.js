@@ -741,7 +741,8 @@ angular
                     "symbol": $scope.counterData.counterSymbol,
                     "standardSize": $scope.counterData.counterStandardSize,
                     "releaseYear": $scope.counterData.releaseYear,
-                    "accumulatedVolume": $scope.counterData.accumulatedVolume
+                    "accumulatedVolume": $scope.counterData.accumulatedVolume,
+                    "deviceType": $scope.counterData.deviceType
                 };
                 verificationService.editCounterInfo(counter)
                     .then(function(response) {
