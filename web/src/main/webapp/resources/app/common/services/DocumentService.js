@@ -4,7 +4,10 @@ angular
         return {
             getDocument: function (documentType, verificationId, fileFormat) {
                 var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
-                return $http.get(url, {responseType: 'arraybuffer'})
+                return $http.get(url, {
+                        responseType: 'arraybuffer',
+                        timeout: 10000
+                    })
                     .then(function (response) {
                         return response;
 
