@@ -104,7 +104,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private String readConsecutiveBytesAsUTF8(int bytesAmount) throws IOException {
         byte[] byteArray = new byte[bytesAmount];
         reader.read(byteArray, Constants.START_OFFSET_IN_ARRAY, bytesAmount);
-        return new String(byteArray, Constants.UTF8_ENCODING).replaceAll(Constants.HEX_OF_EMPTY_SYMBOL, "");
+        return new String(byteArray, "windows-1251").replaceAll(Constants.HEX_OF_EMPTY_SYMBOL, "");
     }
 
     /**
