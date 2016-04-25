@@ -6,7 +6,7 @@ angular
                 var url = "doc/" + documentType + "/" + verificationId + "/" + fileFormat;
                 return $http.get(url, {
                         responseType: 'arraybuffer',
-                        timeout: 10000
+                        timeout: 100000
                     })
                     .then(function (response) {
                         return response;
