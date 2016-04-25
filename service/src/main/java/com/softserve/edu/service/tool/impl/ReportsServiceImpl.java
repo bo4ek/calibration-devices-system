@@ -179,32 +179,33 @@ public class ReportsServiceImpl implements ReportsService {
         } else {
             verifications = verificationRepository.findByProvider(provider);
         }
-        List<String> number = new ArrayList<>();
-        List<String> calibrators = new ArrayList();
-        List<String> customerSurname = new ArrayList<>();
-        List<String> customerName = new ArrayList<>();
-        List<String> customerMiddleName = new ArrayList<>();
-        List<String> cities = new ArrayList<>();
-        List<String> regions = new ArrayList<>();
-        List<String> streets = new ArrayList<>();
-        List<String> buildings = new ArrayList<>();
-        List<String> flats = new ArrayList<>();
-        List<String> phones = new ArrayList<>();
-        List<String> stamps = new ArrayList<>();
-        List<String> verificationTime = new ArrayList<>();
-        List<String> moduleNumbers = new ArrayList<>();
-        List<String> counterNumbers = new ArrayList<>();
-        List<String> counterTypes = new ArrayList<>();
-        List<String> counterTypeSizes = new ArrayList<>();
-        List<String> years = new ArrayList<>();
-        List<String> counterCapacity = new ArrayList<>();
-        List<String> temperatures = new ArrayList<>();
-        List<String> verificationStatus = new ArrayList<>();
-        List<String> verificationNumbers = new ArrayList<>();
-        List<String> signProtocolDate = new ArrayList<>();
-        List<String> documentNumber = new ArrayList<>();
-        List<String> validUntil = new ArrayList<>();
-        List<String> protocolsNumber = new ArrayList<>();
+        int initializedCapacity = verifications.size();
+        List<String> number = new ArrayList<>(initializedCapacity);
+        List<String> calibrators = new ArrayList(initializedCapacity);
+        List<String> customerSurname = new ArrayList<>(initializedCapacity);
+        List<String> customerName = new ArrayList<>(initializedCapacity);
+        List<String> customerMiddleName = new ArrayList<>(initializedCapacity);
+        List<String> cities = new ArrayList<>(initializedCapacity);
+        List<String> regions = new ArrayList<>(initializedCapacity);
+        List<String> streets = new ArrayList<>(initializedCapacity);
+        List<String> buildings = new ArrayList<>(initializedCapacity);
+        List<String> flats = new ArrayList<>(initializedCapacity);
+        List<String> phones = new ArrayList<>(initializedCapacity);
+        List<String> stamps = new ArrayList<>(initializedCapacity);
+        List<String> verificationTime = new ArrayList<>(initializedCapacity);
+        List<String> moduleNumbers = new ArrayList<>(initializedCapacity);
+        List<String> counterNumbers = new ArrayList<>(initializedCapacity);
+        List<String> counterTypes = new ArrayList<>(initializedCapacity);
+        List<String> counterTypeSizes = new ArrayList<>(initializedCapacity);
+        List<String> years = new ArrayList<>(initializedCapacity);
+        List<String> counterCapacity = new ArrayList<>(initializedCapacity);
+        List<String> temperatures = new ArrayList<>(initializedCapacity);
+        List<String> verificationStatus = new ArrayList<>(initializedCapacity);
+        List<String> verificationNumbers = new ArrayList<>(initializedCapacity);
+        List<String> signProtocolDate = new ArrayList<>(initializedCapacity);
+        List<String> documentNumber = new ArrayList<>(initializedCapacity);
+        List<String> validUntil = new ArrayList<>(initializedCapacity);
+        List<String> protocolsNumber = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -262,8 +263,7 @@ public class ReportsServiceImpl implements ReportsService {
         }
 
         // region Fill map
-
-        List<TableExportColumn> data = new ArrayList<>();
+        List<TableExportColumn> data = new ArrayList<>(initializedCapacity);
         data.add(new TableExportColumn(Constants.NUMBER_IN_SEQUENCE_SHORT, number));
         data.add(new TableExportColumn(Constants.LAB_NAME, calibrators));
         data.add(new TableExportColumn(Constants.VERIFICATION_TIME, verificationTime));
