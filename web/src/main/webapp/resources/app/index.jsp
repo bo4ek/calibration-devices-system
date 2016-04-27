@@ -316,6 +316,10 @@
                     </sec:authorize>
                     <sec:authorize url="/calibrator">
                         <li ui-sref-active="active">
+                            <a ui-sref="verifications-reject-calibrator"><i class="fa fa-archive fa-fw"></i> <span
+                                    translate="REJECTED_VERIFICATIONS"></span></a>
+                        </li>
+                        <li ui-sref-active="active">
                             <a ui-sref="verifications-archive-calibrator"><i class="fa fa-archive fa-fw"></i> <span
                                     translate="VERIFICATIONS_ARCHIVE"></span></a>
                         </li>
