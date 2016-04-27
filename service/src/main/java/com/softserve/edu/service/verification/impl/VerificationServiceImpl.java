@@ -13,6 +13,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.verification.calibration.RejectedInfo;
 import com.softserve.edu.repository.*;
 import com.softserve.edu.repository.CalibrationPlanningTaskRepository;
 import com.softserve.edu.repository.CalibrationTestRepository;
@@ -576,6 +577,16 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional
+    public void rejectVerification(Verification verification, RejectedInfo rejectedInfo) {
+        verification.setStatus(Status.REJECTED);
+        verification.setRejectedCalibratorDate(new Date());
+        verification.setRejectedInfo(rejectedInfo);
+        verificationRepository.save(verification);
+
+    }
+
+    @Override
+    @Transactional
     public boolean updateVerificationQueue(List<Verification> verifications, Long calibratorId) {
 
         List<String> listId = new ArrayList<>();
@@ -837,6 +848,7 @@ public class VerificationServiceImpl implements VerificationService {
                             String accumulatedVolume, String symbol, String standardSize, String comment, Long deviceId,
                             Boolean verificationWithDismantle, Device.DeviceType deviceType) {
         Verification verification = verificationRepository.findOne(verificationId);
+
         verification.setCounterStatus(dismantled);
         verification.setSealPresence(sealPresence);
         verification.setVerificationWithDismantle(verificationWithDismantle);

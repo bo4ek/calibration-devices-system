@@ -8,6 +8,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.verification.calibration.RejectedInfo;
 import com.softserve.edu.service.utils.*;
 
 import org.springframework.data.domain.Page;
@@ -207,4 +208,6 @@ public interface VerificationService {
     boolean hasVerificationGroup(String verificationId);
 
     List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId);
+
+    public void rejectVerification(Verification verification, RejectedInfo rejectedInfo);
 }
