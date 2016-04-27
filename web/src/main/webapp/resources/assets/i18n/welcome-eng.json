@@ -830,4 +830,7 @@
     "PROTOCOL_REJECTED": "Protocol rejected",
     "REASON_PROTOCOL_REJECTION": "Reason of protocol rejection",
     "DELETE_PROTOCOL": "Delete protocol"
+    "SENT_TO_DISMANTLING_TEAM": "Sent to dismantling team",
+    "REJECT_VERIFICATION": "Reject verification",
+    "REJECTED_VERIFICATIONS": "Rejected verifications"
 }

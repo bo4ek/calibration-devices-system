@@ -782,6 +782,16 @@ button:focus {
     cursor: pointer;
 }
 
+.reject_icon:hover {
+    color: #3F52D1;
+}
+
+.reject_icon {
+    color: #A0A8D9;
+    cursor: pointer;
+}
+
+
 .remove_attached_user_icon:hover {
     color: #e38d13;
 }
