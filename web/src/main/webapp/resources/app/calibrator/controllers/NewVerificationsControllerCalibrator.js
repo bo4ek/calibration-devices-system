@@ -5,16 +5,16 @@ angular
         '$rootScope', 'ngTableParams', '$timeout', '$filter', '$window', '$location', '$translate', 'toaster',
         'CalibrationTestServiceCalibrator', 'ProfileService',
         function ($scope, $log, $modal, verificationServiceCalibrator, $rootScope, ngTableParams,
-                  $timeout, $filter, $window, $location, $translate, toaster, calibrationTestServiceCalibrator, profileService ) {
+                  $timeout, $filter, $window, $location, $translate, toaster, calibrationTestServiceCalibrator, profileService) {
 
             $scope.resultsCount = 0;
 
             $scope.searchParameters = [
                 {
                     name: 'TASK_STATUS',
-                    key:'taskStatus',
+                    key: 'taskStatus',
                     type: 'Enumerated',
-                    options:['SENT',
+                    options: ['SENT',
                         'ACCEPTED',
                         'REJECTED',
                         'IN_PROGRESS',
@@ -32,52 +32,52 @@ angular
                     name: 'READ_STATUS',
                     key: 'readStatus',
                     type: 'Enumerated',
-                    options:['READ','UNREAD']
+                    options: ['READ', 'UNREAD']
                 },
                 {
                     name: 'REJECTED_MESSAGE',
-                    key:'rejectedMessage',
-                    type:'String'
+                    key: 'rejectedMessage',
+                    type: 'String'
                 },
                 {
-                    name:'COMMENT',
-                    key:'comment',
-                    type:'String'
+                    name: 'COMMENT',
+                    key: 'comment',
+                    type: 'String'
                 },
                 {
-                    name:'PROVIDER_NAME',
-                    key:'providerEmployee',
-                    type:'User'
+                    name: 'PROVIDER_NAME',
+                    key: 'providerEmployee',
+                    type: 'User'
                 },
                 {
-                    name:"INITIAL_DATE",
-                    key:"initialDate",
-                    type:"Date"
+                    name: "INITIAL_DATE",
+                    key: "initialDate",
+                    type: "Date"
                 },
                 {
-                    name:"CLIENT_FULL_NAME",
-                    key:"clientData",
-                    type:"clientData"
+                    name: "CLIENT_FULL_NAME",
+                    key: "clientData",
+                    type: "clientData"
                 }
             ];
-            $scope.globalSearchParams=[];
-            $scope.showGlobalSearch=false;
+            $scope.globalSearchParams = [];
+            $scope.showGlobalSearch = false;
 
 
             $scope.isCalibratorEmployee = function () {
-                verificationServiceCalibrator.getIfEmployeeCalibrator().success(function(data){
-                    $scope.isEmployee =  data;
+                verificationServiceCalibrator.getIfEmployeeCalibrator().success(function (data) {
+                    $scope.isEmployee = data;
                 });
 
             };
 
             $scope.isCalibratorEmployee();
 
-            $scope.$watch('globalSearchParams',function(newParam,oldParam){
-                if($scope.hasOwnProperty("tableParams")) {
+            $scope.$watch('globalSearchParams', function (newParam, oldParam) {
+                if ($scope.hasOwnProperty("tableParams")) {
                     $scope.tableParams.reload();
                 }
-            },true);
+            }, true);
             $scope.clearAll = function () {
                 $scope.selectedStatus.name = null;
                 $scope.tableParams.filter({});
@@ -134,7 +134,7 @@ angular
                 {id: 'False', label: null}
             ];
 
-            $scope.selectedDismantled  = {
+            $scope.selectedDismantled = {
                 name: null
             };
 
@@ -225,7 +225,8 @@ angular
                     }
                 }, {
                     total: 0,
-                    filterDelay: 1500,
+                    filterOptions: {filterDelay: 15000},
+                    filterDelay: 5000,
                     getData: function ($defer, params) {
                         $scope.idsOfVerifications = [];
                         var sortCriteria = Object.keys(params.sorting())[0];
@@ -246,10 +247,10 @@ angular
                         params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                         params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
                         //var globalSearchParamsString=JSON.stringify($scope.globalSearchParams)+"";
-                        var searchParams={};
-                        searchParams.globalSearchParams=$scope.globalSearchParams;
-                        searchParams.newVerificationsFilterSearch=params.filter();
-                        verificationServiceCalibrator.getNewVerifications(params.page(), params.count() ,searchParams, sortCriteria, sortOrder)
+                        var searchParams = {};
+                        searchParams.globalSearchParams = $scope.globalSearchParams;
+                        searchParams.newVerificationsFilterSearch = params.filter();
+                        verificationServiceCalibrator.getNewVerifications(params.page(), params.count(), searchParams, sortCriteria, sortOrder)
                             .success(function (result) {
                                 $scope.resultsCount = result.totalItems;
                                 $defer.resolve(result.content);
@@ -258,9 +259,10 @@ angular
                                 $log.debug('error fetching data:', result);
                             });
                     }
-                })});
+                })
+            });
 
-            $scope.$on('calibrator-save-verification', function(event, args) {
+            $scope.$on('calibrator-save-verification', function (event, args) {
                 $scope.tableParams.reload();
             });
 
@@ -327,7 +329,7 @@ angular
                 });
             };
 
-            $scope.openTask = function() {
+            $scope.openTask = function () {
                 if ($scope.idsOfVerifications.length === 0) {
                     toaster.pop('error', $filter('translate')('INFORMATION'),
                         $filter('translate')('NO_VERIFICATIONS_CHECKED'));
@@ -340,7 +342,7 @@ angular
                             verificationIDs: function () {
                                 return $scope.idsOfVerifications;
                             },
-                            moduleType: function() {
+                            moduleType: function () {
                                 return 'INSTALLATION_FIX';
                             }
                         }
@@ -355,8 +357,8 @@ angular
             /**
              * check whether standardSize of counters is identic
              */
-            $scope.checkStandardSize = function (map){
-                var setOfStandardSize =  new Set();
+            $scope.checkStandardSize = function (map) {
+                var setOfStandardSize = new Set();
                 map.forEach(function (value, key) {
                     setOfStandardSize.add(value.standardSize);
                 }, map);
@@ -413,12 +415,12 @@ angular
             }
 
             $scope.openAddTest = function (verification) {
-                if(!verification.isManual) {
+                if (!verification.isManual) {
                     $location.path('/calibrator/verifications/calibration-test-add/').search({
                         'param': verification.id,
                         'loadProtocol': 1
                     });
-                }else{
+                } else {
                     $scope.openTests(verification);
                 }
             };
@@ -426,7 +428,6 @@ angular
             $scope.idsOfVerifications = [];
             $scope.allIsEmpty = true;
             $scope.dataToManualTest = new Map();
-
 
 
             /**
@@ -449,8 +450,8 @@ angular
                     realiseYear: verification.realiseYear,
                     numberCounter: verification.numberCounter,
                     counterId: verification.counterId,
-                    status:verification.status,
-                    measurementDeviceType : verification.measurementDeviceType
+                    status: verification.status,
+                    measurementDeviceType: verification.measurementDeviceType
                 };
                 $scope.dataToManualTest.set(verification.id, manualTest);
             };
@@ -534,36 +535,36 @@ angular
 
             $scope.cancelTest = function (verification) {
                 var idVerification = verification.id;
-            if(!verification.isManual) {
-                var modalInstance = $modal.open({
-                    animation: true,
-                    templateUrl: 'resources/app/calibrator/views/modals/cancel-bbiFile.html',
-                    controller: 'CancelBbiProtocolCalibrator',
-                    size: 'md',
-                    resolve: {
-                        verificationId: function () {
-                            return verificationServiceCalibrator.cancelUploadFile(idVerification)
-                                .success(function (bbiName) {
-                                    return bbiName;
-                                }
-                            );
+                if (!verification.isManual) {
+                    var modalInstance = $modal.open({
+                        animation: true,
+                        templateUrl: 'resources/app/calibrator/views/modals/cancel-bbiFile.html',
+                        controller: 'CancelBbiProtocolCalibrator',
+                        size: 'md',
+                        resolve: {
+                            verificationId: function () {
+                                return verificationServiceCalibrator.cancelUploadFile(idVerification)
+                                    .success(function (bbiName) {
+                                            return bbiName;
+                                        }
+                                    );
+                            }
                         }
-                    }
-                });
-                modalInstance.result.then(function () {
-                    $scope.tableParams.reload();
-                });
-            } else if (verification.status == 'TEST_COMPLETED') {
-                calibrationTestServiceCalibrator.deleteTestManual(verification.id)
-                    .then(function (status) {
-                        if (status == 201) {
-                            $rootScope.onTableHandling();
-                        }
-                        if (status == 200) {
-                            $scope.tableParams.reload();
-                        }
-                    })
-            }
+                    });
+                    modalInstance.result.then(function () {
+                        $scope.tableParams.reload();
+                    });
+                } else if (verification.status == 'TEST_COMPLETED') {
+                    calibrationTestServiceCalibrator.deleteTestManual(verification.id)
+                        .then(function (status) {
+                            if (status == 201) {
+                                $rootScope.onTableHandling();
+                            }
+                            if (status == 200) {
+                                $scope.tableParams.reload();
+                            }
+                        })
+                }
             };
 
 
@@ -629,9 +630,9 @@ angular
                                     calibratorEmploy: function () {
                                         return verificationServiceCalibrator.getCalibrators()
                                             .success(function (calibrators) {
-                                                return calibrators;
-                                            }
-                                        );
+                                                    return calibrators;
+                                                }
+                                            );
                                     }
                                 }
                             });
@@ -661,7 +662,7 @@ angular
                     });
             };
 
-            $scope.uploadArchive = function() {
+            $scope.uploadArchive = function () {
                 console.log("Entered upload archive function");
                 var modalInstance = $modal.open({
                     animation: true,
@@ -679,4 +680,31 @@ angular
                 });
             }
 
+
+            $scope.openRejectVerificationModal = function (verificationId) {
+                console.log("Open rejected info modal window");
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
+                    controller: 'RejectVerificationCalibratorController',
+                    size: 'md',
+                    windowClass: 'xx-dialog',
+                    resolve: {
+                        rejectVerification: function () {
+                            return verificationServiceCalibrator.receiveAllReasons()
+                                .success(function (reasons) {
+                                        return reasons;
+                                    }
+                                );
+                        }
+                    }
+                });
+                modalInstance.result.then(function (reason) {
+                    $log.info(verificationId, reason.name.id);
+                    verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id)
+                        .success(function () {
+                            $scope.tableParams.reload();
+                        });
+                });
+            }
         }]);

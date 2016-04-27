@@ -1,6 +1,4 @@
-/**
- * Created by Konyk on 11.08.2015.
- */
+
 angular
     .module('employeeModule')
     .controller('CalibrationTestAddControllerCalibrator', ['$rootScope', '$translate', '$scope', '$modal', '$http', '$log',
@@ -46,8 +44,7 @@ angular
                 var enable = (event.target.files.length == 1);
                 setPointerEvents(document.getElementById('PKeyReadButton'), enable);
                 document.getElementById('PKeyPassword').disabled = enable ? '' : 'disabled';
-                document.getElementById('PKeyFileName').value = enable ? event.target.files[0].name
-                    : '';
+                document.getElementById('PKeyFileName').value = enable ? event.target.files[0].name : '';
                 document.getElementById('PKeyPassword').value = '';
             };
 

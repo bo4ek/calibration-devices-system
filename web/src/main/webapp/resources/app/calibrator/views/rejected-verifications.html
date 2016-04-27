@@ -1,0 +1,270 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header">{{'VERIFICATIONS_ARCHIVE' | translate}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="">
+                <div class="row">
+                    <div class="clearfix col-md-offset-10">
+                        <button type="button" class="btn btn-danger" ng-click="clearAll()" ng-show="checkFilters()">
+                            {{'CLEAR_ALL' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br/>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>{{'RECENT_DATA' | translate}}</span>
+                    <span class="pull-right">{{'VERIFS_FOUND' | translate }}: {{resultsCount}}</span>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table show-filter="true" ng-table="tableParams" template-pagination="custom/pager"
+                                       class="table table-bordered table-hover users_table" id="info_table">
+                                    <tbody>
+                                    <tr ng-repeat="verification in $data">
+                                        <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'date'"
+                                            filter="{ 'date': 'daterange' }">{{ verification.initialDate | date :
+                                            'dd-MM-yyyy'}}
+                                            <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
+                                                translate}} {{verification.processTimeExceeding}} {{'DAYS' |
+                                                translate}}</b>
+                                            </div>
+                                        </td>
+                                        <td data-title="'VERIFICATION_ID' | translate" sortable="'id'"
+                                            filter="{ 'id': 'text' }" ng-model="filters.id">{{ verification.id }}
+                                        </td>
+
+                                        <td data-title="'ACTIONS' | translate" class="control_buttons"
+                                            style="width: 30%">
+
+
+                                            <div class="ui simple dropdown icon item">
+                                                <i class="fa fa-wrench"></i>
+
+                                                <div class="menu">
+                                                    <div class="ui simple dropdown icon item">
+                                                        <span>{{ 'VERIFICATION_DROPDOWN' | translate }}</span>
+
+                                                        <div class="menu">
+                                                            <div class="item"
+                                                                 ng-click="openDetails(verification.id, verification.initialDate)">
+                                                                <a>
+                                                                    <i class="fa fa-info-circle"></i>
+                                                                    {{ 'DETAIL' | translate }}
+                                                                </a>
+                                                            </div>
+                                                            <div class="item">
+                                                                <a
+                                                                        target="_blank"
+                                                                        href="{{'/doc/info/' + verification.id + '/docx'}}">
+                                                                    <i class="fa fa-file-word-o"></i>
+                                                                    {{ 'DOWNLOAD_DOC' | translate }}
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ui simple dropdown icon item"
+                                                         ng-show="verification.status === 'TEST_OK' || verification.status === 'TEST_NOK'">
+
+                                                        <span>{{ 'PROTOCOL_DROPDOWN' | translate }}</span>
+
+                                                        <div class="menu" ng-controller="DocumentController">
+                                                            <div class="item" ng-click="openAddTest(verification)">
+                                                                <a>
+                                                                    <i class="fa fa-external-link"></i>
+                                                                    {{ 'DETAIL' | translate }}
+                                                                </a>
+                                                            </div>
+                                                            <div class="item" ng-show="verification.status == 'TEST_OK'"
+                                                                 ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', verification.id, 'docx')">
+                                                                <a class="ng-binding">
+                                                                    <i class="fa fa-file-word-o"></i>
+                                                                    {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_DOCX' |
+                                                                    translate}}
+                                                                </a>
+                                                            </div>
+                                                            <div class="item"
+                                                                 ng-show="verification.status == 'TEST_NOK'"
+                                                                 ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', verification.id, 'docx')">
+                                                                <a class="ng-binding" download>
+                                                                    <i class="fa fa-file-word-o"></i>
+                                                                    {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_DOCX' |
+                                                                    translate}}
+                                                                </a>
+                                                            </div>
+                                                            <div class="item" ng-show="verification.status == 'TEST_OK'"
+                                                                 ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', verification.id, 'pdf')">
+                                                                <a class="ng-binding">
+                                                                    <i class="fa fa-file-pdf-o"></i>
+                                                                    {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_PDF' |
+                                                                    translate}}
+                                                                </a>
+                                                            </div>
+                                                            <div class="item"
+                                                                 ng-show="verification.status == 'TEST_NOK'"
+                                                                 ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', verification.id, 'pdf')">
+                                                                <a class="ng-binding">
+                                                                    <i class="fa fa-file-pdf-o"></i>
+                                                                    {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_PDF' |
+                                                                    translate}}
+                                                                </a>
+                                                            </div>
+                                                            <div class="item"
+                                                                 ng-click="printDocument(verification.id, verification.status)">
+                                                                <a class="ng-binding">
+                                                                    <i class="print fa fa-print"></i>
+                                                                    {{'PRINT_DOCUMENT' | translate}}
+                                                                </a>
+                                                                <iframe id="pdf"
+                                                                        style="width:0px;height:0px;visibility:hidden;"></iframe>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td data-title="'CLIENT_FULL_NAME' | translate" sortable="'client_last_name'"
+                                            filter="{ 'client_full_name': 'text' }">{{ verification.fullName }}
+                                        </td>
+                                        <td data-title="'CLIENT_STREET' | translate" sortable="'street'"
+                                            filter="{ 'street': 'text' }">{{ verification.street }}
+                                        </td>
+                                        <td data-title="'STATUS' | translate" sortable="'status'"
+                                            filter="{ 'status': 'status' }">{{ verification.status | translate }}
+                                        </td>
+                                        <td data-title="'EMPLOYEE_SINGLE' | translate"
+                                            sortable="'calibrator_employee_last_name'"
+                                            filter="{ 'employee_last_name': 'text' }">{{ verification.calibratorEmployee
+                                            }}
+                                        </td>
+                                        <td data-title="'PROTOCOL_ID' | translate " sortable="'protocol_id'"
+                                            filter="{ protocol_id : 'text' }">{{verification.protocolId}}
+                                        </td>
+                                        <td data-title="'PROTOCOL_STATUS' | translate" sortable="'protocol_status'"
+                                            filter="{ protocol_status : 'protocolStatus'}">{{
+                                            verification.protocolStatus | translate}}
+                                        </td>
+                                        <td data-title="'MEASUREMENT_DEVICE_ID' | translate"
+                                            sortable="'NUMBER_OF_COUNTER'"
+                                            filter="{ numberCounter : 'text' }">
+                                            {{verification.numberCounter}}
+                                        </td>
+                                        <td data-title="'MEASUREMENT_DEVICE_TYPE' | translate"
+                                            sortable="'measurement_device_type'"
+                                            filter="{ measurement_device_type : 'deviceType' }">
+                                            {{verification.measurementDeviceType | translate}}
+                                        </td>
+                                        <td data-title="'DOCUMENT_TYPE' | translate" sortable="'protocol_status'"
+                                            filter="{ protocol_status : 'protocolStatus'}">{{
+                                            verification.documentTypeName }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <script type="text/ng-template" id="custom/pager">
+                                <div>
+                                    <ul class="pager ng-cloak">
+                                        <li ng-repeat="page in pages"
+                                            ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                            ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;
+                                                Previous</a>
+                                            <a ng-switch-when="next" ng-click="params.page(page.number)"
+                                               href="">Next &raquo;</a>
+                                        </li>
+                                        <li>
+                                            <div class="btn-group">
+                                                <button type="button" ng-class="{'active':params.count() == 5}"
+                                                        ng-click="params.count(5)" class="btn btn-default">5
+                                                </button>
+                                                <button type="button" ng-class="{'active':params.count() == 10}"
+                                                        ng-click="params.count(10)" class="btn btn-default">10
+                                                </button>
+                                                <button type="button" ng-class="{'active':params.count() == 25}"
+                                                        ng-click="params.count(25)" class="btn btn-default">25
+                                                </button>
+                                                <button type="button" ng-class="{'active':params.count() == 50}"
+                                                        ng-click="params.count(50)" class="btn btn-default">50
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </script>
+                            <script type="text/ng-template" id="ng-table/filters/daterange.html">
+                                <div class="input-group right-inner-addon" style="width: 100%">
+                                    <i id="calendar_icon" class="glyphicon glyphicon-calendar"
+                                       ng-click="showPicker($event)"></i>
+                                    <input date-range-picker="opts" class="form-control date-picker" type="text"
+                                           ng-model="myDatePicker.pickerDate" ng-change="doSearch()" options="opts"
+                                           id="datepickerfield" readonly/>
+
+                                        <span class="input-group-btn">
+                                                  <button type="button" class="btn btn-default myGroupBtn"
+                                                          ng-show="!isDateDefault()"
+                                                          ng-click="clearDate()">
+                                                      <i class="glyphicon glyphicon-remove"></i>
+                                                  </button>
+                                        </span>
+                                </div>
+                            </script>
+                            <script type="text/ng-template" id="ng-table/filters/status.html">
+                                <ui-select ng-model="selectedStatus.name" theme="select2" on-select='doSearch()'
+                                           search-enabled="false"
+                                           name="filter-status">
+                                    <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                                     allow-clear="true">
+                                        {{$select.selected.label}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="status in statusData">
+                                        <span ng-bind-html="status.label"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </script>
+                            <script type="text/ng-template" id="ng-table/filters/deviceType.html">
+                                <ui-select ng-model="selectedDeviceType.name" theme="select2" on-select='doSearch()'
+                                           search-enabled="false"
+                                           name="filter-deviceType">
+                                    <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                                     allow-clear="true">
+                                        {{$select.selected.label}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="deviceType in deviceTypeData">
+                                        <span ng-bind-html="deviceType.label"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </script>
+                            <script type="text/ng-template" id="ng-table/filters/protocolStatus.html">
+                                <ui-select ng-model="selectedProtocolStatus.name" theme="select2" on-select='doSearch()'
+                                           search-enabled="false"
+                                           name="filter-protocolStatus">
+                                    <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
+                                                     allow-clear="true">
+                                        {{$select.selected.label}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="protocolStatus in protocolStatusData">
+                                        <span ng-bind-html="protocolStatus.label"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

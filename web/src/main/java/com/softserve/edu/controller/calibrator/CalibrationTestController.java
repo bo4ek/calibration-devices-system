@@ -521,22 +521,7 @@ public class CalibrationTestController {
     }
 
     private byte[] getDocument(Verification verification, CalibrationTest calibrationTest) throws IOException {
-        if (verification.getStatus() == Status.TEST_OK) {
-            Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
-                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                    getDeviceType(verification), getYearIntroduction(verification));
-
-            Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
-                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                    getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
-
-            Calendar validityOfCertificate = Calendar.getInstance();
-            validityOfCertificate.setTime(new Date());
-            validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
-
-            verification.setExpirationDate(validityOfCertificate.getTime());
-            verification.setCalibrationInterval(calibrationInterval);
-        }
+        calculateCalibationInterval(verification);
         verification.setSignProtocolDate(new Date());
 
         DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
@@ -553,23 +538,7 @@ public class CalibrationTestController {
         try {
             Verification verification = verificationService.findById(verificationId);
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
-
-            if (verification.getStatus() == Status.TEST_OK) {
-                Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
-                        getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                        getDeviceType(verification), getYearIntroduction(verification));
-
-                Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
-                        getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
-                        getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
-
-                Calendar validityOfCertificate = Calendar.getInstance();
-                validityOfCertificate.setTime(new Date());
-                validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
-
-                verification.setExpirationDate(validityOfCertificate.getTime());
-                verification.setCalibrationInterval(calibrationInterval);
-            }
+            calculateCalibationInterval(verification);
             verification.setSignProtocolDate(new Date());
 
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
@@ -629,5 +598,24 @@ public class CalibrationTestController {
 
     private Integer getYearIntroduction(Verification verification) {
         return Integer.parseInt(verification.getCounter().getReleaseYear());
+    }
+
+    private void calculateCalibationInterval(Verification verification) {
+        if (verification.getStatus() == Status.TEST_OK) {
+            Integer maxOfYearIntroduction = counterTypeRepository.findMaximumYearIntroduction(
+                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                    getDeviceType(verification), getYearIntroduction(verification));
+
+            Integer calibrationInterval = counterTypeRepository.findCalibrationInterval(
+                    getStandardSize(verification), getSymbol(verification), getManufacturer(verification),
+                    getDeviceType(verification), getYearIntroduction(verification), maxOfYearIntroduction);
+
+            Calendar validityOfCertificate = Calendar.getInstance();
+            validityOfCertificate.setTime(new Date());
+            validityOfCertificate.add(Calendar.YEAR, calibrationInterval);
+
+            verification.setExpirationDate(validityOfCertificate.getTime());
+            verification.setCalibrationInterval(calibrationInterval);
+        }
     }
 }

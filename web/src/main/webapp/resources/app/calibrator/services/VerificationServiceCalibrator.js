@@ -97,6 +97,12 @@ angular
             },
             getCountOfNewVerificationsForProvider: function () {
                 return getData('not-standard-verifications/new/count/verificationsForProvider');
+            },
+            rejectVerificationByIdAndReason: function (verificationId, reasonId) {
+                return updateData('rejectVerification/' + verificationId + '/' + reasonId);
+            },
+            receiveAllReasons: function () {
+                return getData('verifications/receiveAllReasons/')
             }
         };
 

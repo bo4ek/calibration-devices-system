@@ -1,6 +1,6 @@
 angular
     .module('employeeModule')
-    .controller('RejectedVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
+    .controller('ArchivalVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
         'VerificationServiceCalibrator', 'CalibrationTestServiceCalibrator', 'ngTableParams', '$location', '$filter', '$rootScope', '$timeout', '$translate',
 
         function ($scope, $modal, $log, verificationServiceCalibrator, calibrationTestServiceCalibrator, ngTableParams, $location, $filter, $rootScope,
@@ -40,7 +40,6 @@ angular
             $scope.selectedProtocolStatus = {
                 name: null
             };
-
 
 
             $scope.statusData = [
@@ -97,7 +96,6 @@ angular
             };
 
 
-
             $scope.setTypeDataLanguage();
             $scope.myDatePicker = {};
             $scope.myDatePicker.pickerDate = null;
@@ -109,8 +107,7 @@ angular
                  *
                  */
 
-
-                /*TODO: i18n*/
+                
                 $scope.myDatePicker.pickerDate = {
                     startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
                     //earliest day of  all the verifications available in table
@@ -304,3 +301,4 @@ angular
             };
 
         }]);
+

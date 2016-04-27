@@ -20,6 +20,7 @@ import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
+import com.softserve.edu.entity.verification.calibration.RejectedInfo;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.BBIFileServiceFacade;
@@ -28,6 +29,7 @@ import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
+import com.softserve.edu.service.catalogue.RejectedInfoService;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.state.verificator.StateVerificatorService;
 import com.softserve.edu.service.tool.DeviceService;
@@ -65,6 +67,9 @@ public class CalibratorVerificationController {
 
     @Autowired
     ProviderService providerService;
+
+    @Autowired
+    RejectedInfoService rejectedInfoService;
 
     @Autowired
     private DeviceService deviceService;
@@ -644,6 +649,42 @@ public class CalibratorVerificationController {
             httpStatus = HttpStatus.CONFLICT;
         }
         return new ResponseEntity<>(httpStatus);
+    }
+
+    /**
+     * method for rejecting verification by calibrator
+     *
+     * @param verificationId
+     * @param reasonId
+     * @return
+     */
+    @RequestMapping(value = "/rejectVerification/{verificationId}/{reasonId}", method = RequestMethod.PUT)
+    public ResponseEntity rejectVerification(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user,
+                                             @PathVariable String verificationId, @PathVariable Long reasonId) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        Verification verification = verificationService.findById(verificationId);
+        RejectedInfo rejectedInfo = rejectedInfoService.findOneById(reasonId);
+        if (verification.getCalibratorEmployee().getUsername().equals(user.getUsername())) {
+            verificationService.rejectVerification(verification, rejectedInfo);
+        } else {
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+        return new ResponseEntity<>(httpStatus);
+    }
+
+    /**
+     * receive all reasons for rejecting by calibrator
+     *
+     * @return
+     */
+    @RequestMapping(value = "/receiveAllReasons", method = RequestMethod.GET)
+    public List<RejectedInfoDTO> rejectVerification() {
+        List<RejectedInfo> list = rejectedInfoService.getAllReasons();
+        List<RejectedInfoDTO> rejectedInfoDTOs = new ArrayList<>();
+        for (RejectedInfo rejectedInfo : list) {
+            rejectedInfoDTOs.add(new RejectedInfoDTO(rejectedInfo.getId(), rejectedInfo.getName()));
+        }
+        return rejectedInfoDTOs;
     }
 
     /**

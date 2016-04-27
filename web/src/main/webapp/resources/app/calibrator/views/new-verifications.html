@@ -114,7 +114,7 @@
                             </i>
                             <i class="fa fa-edit protocol_edit_user_icon"
                                ng-show="verification.status=='TEST_COMPLETED'"
-                               popover="Редагувати протокол"
+                               popover="{{'EDIT_PROTOCOL' | translate}}"
                                popover-trigger="mouseenter"
                                ng-click="openAddTest(verification)">
                             </i>
@@ -135,6 +135,13 @@
                                href="{{'/doc/info/' + verification.id + '/docx'}}">
                                 <i class="fa fa-file-word-o"></i>
                             </a>
+                            <i class="fa fa-ban cancel_icon"
+                               type="button"
+                               ng-hide="verification.status=='TEST_COMPLETED'"
+                               popover="{{'REJECT_VERIFICATION' | translate}}"
+                               popover-trigger="mouseenter"
+                               ng-click="openRejectVerificationModal(verification.id)">
+                            </i>
                         </td>
                     </tr>
                     </tbody>
