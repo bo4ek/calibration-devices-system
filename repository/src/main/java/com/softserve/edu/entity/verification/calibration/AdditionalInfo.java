@@ -10,9 +10,7 @@ import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Date;
 
-/**
- * Created by Vasyl on 20.10.2015.
- */
+
 @Entity
 @Table(name = "ADDITIONAL_INFO")
 @Getter

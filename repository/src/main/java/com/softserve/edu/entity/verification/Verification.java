@@ -1,5 +1,6 @@
 package com.softserve.edu.entity.verification;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.device.CalibrationModule;
@@ -93,6 +94,9 @@ public class Verification implements Comparable {
     @Temporal(TemporalType.DATE)
     private Date sentToCalibratorDate;
 
+    @Temporal(TemporalType.DATE)
+    private Date rejectedCalibratorDate;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date sentToVerificatorDate;
 
@@ -172,6 +176,10 @@ public class Verification implements Comparable {
 
     @Column(columnDefinition = "boolean default false")
     private boolean verificationWithDismantle;
+
+    @ManyToOne
+    @JoinColumn(name = "rejectedInfoId")
+    private RejectedInfo rejectedInfo;
 
     public Verification(String verificationId, int queue) {
         this.id = verificationId;

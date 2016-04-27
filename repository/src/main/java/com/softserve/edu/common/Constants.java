@@ -91,9 +91,9 @@ public interface Constants {
     String TRANSIENT_FLAW = "перехідною витратою";
     String MINIMAL_FLAW = "мінімальною витратою";
     String NOT_SPECIFIED = "не вказано";
-    int FIRST_TEST_RESULT = 0;
-    int SECOND_TEST_RESULT = 1;
-    int THIRD_TEST_RESULT = 2;
+    byte FIRST_TEST_RESULT = 0;
+    byte SECOND_TEST_RESULT = 1;
+    byte THIRD_TEST_RESULT = 2;
 
     // counter status for reports
     String STATUS_TEST_OK = "Придатний";
