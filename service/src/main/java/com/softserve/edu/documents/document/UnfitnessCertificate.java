@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,9 +23,6 @@ import static com.softserve.edu.entity.verification.Verification.CalibrationTest
 @com.softserve.edu.documents.document.meta.Document
 public class UnfitnessCertificate extends BaseCertificate {
     private Logger logger = Logger.getLogger(UnfitnessCertificate.class.getSimpleName());
-
-    @Autowired
-    private CalibrationTestServiceImpl calibrationTestService;
 
     /**
      * Constructor for UnfitnessCertificate
@@ -72,7 +70,7 @@ public class UnfitnessCertificate extends BaseCertificate {
             } else {
 
                 List<CalibrationTestData> calibrationTestDatas = calibrationTest.getCalibrationTestDataList();
-                for (CalibrationTestData calibration : calibrationTestDatas) {
+                for (CalibrationTestData calibration : getLatestTests(calibrationTestDatas)) {
                     switch (calibration.getTestPosition()) {
                         case 10:
                         case 11:
@@ -118,6 +116,23 @@ public class UnfitnessCertificate extends BaseCertificate {
             logger.error("Test results for this verification are corrupted ", e);
             return Constants.NOT_SPECIFIED;
         }
+    }
+
+    public Set<CalibrationTestData> getLatestTests(List<CalibrationTestData> rawListOfCalibrationTestData) {
+        Set<CalibrationTestData> setOfCalibrationTestData = new LinkedHashSet<>();
+        Integer position;
+        for (CalibrationTestData calibrationTestData : rawListOfCalibrationTestData) {
+            position = calibrationTestData.getTestPosition();
+            position++;
+            for (CalibrationTestData calibrationTestDataSearch : rawListOfCalibrationTestData) {
+                if (calibrationTestDataSearch.getTestPosition().equals(position)) {
+                    calibrationTestData = calibrationTestDataSearch;
+                    position++;
+                }
+            }
+            setOfCalibrationTestData.add(calibrationTestData);
+        }
+        return setOfCalibrationTestData;
     }
 
     private String prepareAcceptableError(Double error) {
