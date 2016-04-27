@@ -100,6 +100,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Long countByStateVerificatorIdAndStatusAndReadStatus(Long stateVerificatorId, Status status, Verification.ReadStatus readStatus);
 
+    Long countByStateVerificatorIdAndStatus(Long stateVerificatorId, Status status);
+
     Long countByCalibratorId(Long calibratorId);
 
     Long countByCalibratorIdAndStatus(Long calibratorId, Status status);
@@ -193,7 +195,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Page<Verification> findByTaskStatusAndCalibratorIdAndCounterStatusAndProviderEmployeeUsernameIsNotNull(Status status, Long id, Boolean counterStatus, Pageable pageable);
 
-    Page<Verification> findByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status status, String calibratorEmployeeUsername, Pageable pageable);
+    Page<Verification> findByTaskStatusAndCounterStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status status, Boolean counterStatus, String calibratorEmployeeUsername, Pageable pageable);
 
     Page<Verification> findByCalibratorEmployeeUsernameAndTaskStatus(String userName, Status status, Pageable pageable);
 

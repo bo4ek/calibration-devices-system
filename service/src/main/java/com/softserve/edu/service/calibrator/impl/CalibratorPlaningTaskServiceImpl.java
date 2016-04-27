@@ -431,7 +431,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         }
         Pageable pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
                 "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
-        return verificationRepository.findByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, user.getUsername(), pageRequest);
+        return verificationRepository.findByTaskStatusAndCounterStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, false, user.getUsername(), pageRequest);
     }
 
     /**
