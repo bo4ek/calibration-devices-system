@@ -94,6 +94,11 @@
                         templateUrl: 'resources/app/calibrator/views/archival-verifications.html',
                         controller: 'ArchivalVerificationsControllerCalibrator'
                     })
+                    .state("verifications-reject-calibrator", {
+                        url: '/calibrator/verifications/rejected-archive',
+                        templateUrl: 'resources/app/calibrator/views/rejected-verifications.html',
+                        controller: 'RejectedVerificationsControllerCalibrator'
+                    })
                     .state("disassembly-team-calibrator", {
                         url: 'calibrator/disassemblyTeam/',
                         templateUrl: 'resources/app/calibrator/views/disassembly-team.html',
@@ -188,7 +193,14 @@
                         url: '/calibrator/protocols',
                         templateUrl: 'resources/app/calibrator/views/show-verification-protocols.html',
                         controller: 'DigitalVerificationProtocolsControllerCalibrator'
-                    });
+
+                    })
+                    .state("rejected-modal-calibrator", {
+                        url: '/calibrator/verifications/receiveAllReasons/',
+                        templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
+                        controller: 'RejectVerificationCalibratorController'
+                    })
+                ;
 
                 /*
                  Extended ui-select-choices: added watch for ng-translate event called translateChangeEnd
@@ -356,6 +368,8 @@
         'calibrator/controllers/NotStandardVerificationSendingControllerCalibrator',
         'calibrator/controllers/VerificationsForProviderNotificationController',
         'calibrator/controllers/EditAllUserVerificationsInTaskControllerCalibrator',
+        'calibrator/controllers/catalogue/RejectVerificationCalibratorController',
+        'calibrator/controllers/RejectedVerificationsControllerCalibrator',
 
         'verificator/controllers/TopNavBarControllerVerificator',
         'verificator/controllers/MainPanelControllerVerificator',
