@@ -338,13 +338,21 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional(readOnly = true)
     public ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndCriteriaSearch(Long calibratorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                                      String streetToSearch, String region, String district, String locality, String status, String employeeName, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String sortCriteria, String sortOrder, User calibratorEmployee, ArrayList<Map<String, Object>> globalSearchParams) {
+                                                                                                      String streetToSearch, String region, String district, String locality, String status, String employeeName, String standardSize, String symbol,
+
+                                                                                                      String nameProvider, String realiseYear, String dismantled, String building, String flat, String sortCriteria, String sortOrder, User calibratorEmployee, ArrayList<Map<String, Object>> globalSearchParams) {
 
 
-        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorCalibrator.buildSearchQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, sortCriteria, sortOrder, employeeName, em, globalSearchParams);
+        if (!calibratorEmployee.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN)) {
+            employeeName = calibratorEmployee.getLastName();
+        }
+
+        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorCalibrator.buildSearchQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status,
+                calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, sortCriteria, sortOrder, employeeName, em, globalSearchParams);
 
 
-        Long count = em.createQuery(NewVerificationsQueryConstructorCalibrator.buildCountQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, employeeName, em)).getSingleResult();
+        Long count = em.createQuery(NewVerificationsQueryConstructorCalibrator.buildCountQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status,
+                calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, employeeName, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
@@ -355,6 +363,7 @@ public class VerificationServiceImpl implements VerificationService {
         result.setTotalItems(count);
         return result;
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -577,12 +586,11 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional
-    public void rejectVerification(Verification verification, RejectedInfo rejectedInfo) {
-        verification.setStatus(Status.REJECTED);
+    public void rejectVerification(Verification verification, RejectedInfo rejectedInfo, Status status) {
+        verification.setStatus(status);
         verification.setRejectedCalibratorDate(new Date());
         verification.setRejectedInfo(rejectedInfo);
         verificationRepository.save(verification);
-
     }
 
     @Override

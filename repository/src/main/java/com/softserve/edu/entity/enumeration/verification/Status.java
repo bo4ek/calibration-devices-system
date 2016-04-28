@@ -24,6 +24,8 @@ public enum Status {
     SENT_TO_VERIFICATOR,
     TEST_OK,
     TEST_NOK,
+    REJECTED_BY_CALIBRATOR,
+    REJECTED_BY_PROVIDER,
     NOT_VALID;
 
     public Predicate getQueryPredicate(Root<Verification> root, CriteriaBuilder cb) {

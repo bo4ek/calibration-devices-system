@@ -209,5 +209,5 @@ public interface VerificationService {
 
     List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId);
 
-    public void rejectVerification(Verification verification, RejectedInfo rejectedInfo);
+    public void rejectVerification(Verification verification, RejectedInfo rejectedInfo, Status status);
 }

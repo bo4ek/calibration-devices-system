@@ -659,13 +659,16 @@ public class CalibratorVerificationController {
      * @return
      */
     @RequestMapping(value = "/rejectVerification/{verificationId}/{reasonId}", method = RequestMethod.PUT)
-    public ResponseEntity rejectVerification(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user,
-                                             @PathVariable String verificationId, @PathVariable Long reasonId) {
+    public ResponseEntity rejectVerification(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                             @PathVariable String verificationId, @PathVariable String reasonId) {
         HttpStatus httpStatus = HttpStatus.OK;
         Verification verification = verificationService.findById(verificationId);
-        RejectedInfo rejectedInfo = rejectedInfoService.findOneById(reasonId);
-        if (verification.getCalibratorEmployee().getUsername().equals(user.getUsername())) {
-            verificationService.rejectVerification(verification, rejectedInfo);
+        RejectedInfo rejectedInfo = rejectedInfoService.findOneById(Long.valueOf(reasonId));
+        if (verification.getCalibratorEmployee() != null && verification.getCalibratorEmployee().getUsername().equals(userDetails.getUsername())) {
+            verificationService.rejectVerification(verification, rejectedInfo, Status.REJECTED_BY_CALIBRATOR);
+        } else if (verification.getCalibratorEmployee() == null && verification.getCalibrator().getId().equals(userDetails.getOrganizationId())) {
+            verification.setCalibratorEmployee(userService.findOne(userDetails.getUsername()));
+            verificationService.rejectVerification(verification, rejectedInfo, Status.REJECTED_BY_CALIBRATOR);
         } else {
             httpStatus = HttpStatus.FORBIDDEN;
         }

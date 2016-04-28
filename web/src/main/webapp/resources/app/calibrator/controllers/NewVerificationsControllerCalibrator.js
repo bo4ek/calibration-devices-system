@@ -701,10 +701,28 @@ angular
                 });
                 modalInstance.result.then(function (reason) {
                     $log.info(verificationId, reason.name.id);
-                    verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id)
-                        .success(function () {
-                            $scope.tableParams.reload();
-                        });
+                    verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id).then(function (data) {
+                        switch (data.status) {
+                            case 200:
+                            {
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('REJECTED'));
+                                $scope.tableParams.reload();
+                                break;
+                            }
+                            case 403:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_ACCESS'));
+                                break;
+                            }
+                            default:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('SAVE_VERIF_ERROR'));
+                            }
+                        }
+                    });
                 });
             }
         }]);
