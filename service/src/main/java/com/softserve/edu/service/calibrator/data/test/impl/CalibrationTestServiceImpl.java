@@ -106,6 +106,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         }
         calibrationTestRepository.save(calibrationTest);
         verification.setStatus(Status.TEST_COMPLETED);
+        verification.setTaskStatus(Status.TEST_PLACE_DETERMINED);
 
 
         verification.setCalibrationModule(moduleId);
