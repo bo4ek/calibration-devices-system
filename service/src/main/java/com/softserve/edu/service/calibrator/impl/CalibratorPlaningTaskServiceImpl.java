@@ -1,13 +1,17 @@
 package com.softserve.edu.service.calibrator.impl;
 
 import com.softserve.edu.common.Constants;
+import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.CalibrationModule;
+import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.user.User;
+import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.repository.*;
 import com.softserve.edu.repository.catalogue.DistrictRepository;
@@ -60,15 +64,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
     @Autowired
     private MailService mailService;
-
-    @Autowired
-    private LocalityRepository localityRepository;
-
-    @Autowired
-    private DistrictRepository districtRepository;
-
-    @Autowired
-    private StreetRepository streetRepository;
 
     @Autowired
     CalibratorEmployeeService calibratorEmployeeService;
@@ -481,30 +476,197 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         dbFile.setReadable(true);
         dbFile.setExecutable(true);
 
-        try {
-            XlsTableExporter xls = new XlsTableExporter();
-            List<TableExportColumn> dataForXls = getDataForXls(calibrationTask, verifications);
-            xls.exportToFile(dataForXls, xlsFile);
+        ArrayList lists = getData(calibrationTask, verifications);
+        List<TableExportColumn> dataForXls = (List<TableExportColumn>) lists.get(0);
+        List<TableExportColumn> dataForDb = (List<TableExportColumn>) lists.get(1);
 
-            DbTableExporter db = new DbTableExporter(Constants.DEFAULT_DB_TABLE_NAME);
-            List<TableExportColumn> dataForDb = getDataForDb(calibrationTask, verifications);
-            db.exportToFile(dataForDb, dbFile);
+        XlsTableExporter xls = new XlsTableExporter();
+        xls.exportToFile(dataForXls, xlsFile);
 
-            String email = calibrationTask.getModule().getEmail();
-            User user = calibratorEmployeeService.oneCalibratorEmployee(senderUsername);
+        DbTableExporter db = new DbTableExporter(Constants.DEFAULT_DB_TABLE_NAME);
+        db.exportToFile(dataForDb, dbFile);
 
-            mailService.sendMailToStationWithAttachments(user, calibrationTask.getModule().getSerialNumber(), dateFormat.format(calibrationTask.getDateOfTask()).toString(), email, Constants.TASK + " " + calibrationTask.getId(), xlsFile, dbFile);
-            calibrationTask.setStatus(Status.SENT_TO_TEST_DEVICE);
-            for (Verification verification : verifications) {
-                verification.setStatus(Status.SENT_TO_TEST_DEVICE);
-                verification.setTaskStatus(Status.SENT_TO_TEST_DEVICE);
-            }
-            taskRepository.save(calibrationTask);
-            verificationRepository.save(Arrays.asList(verifications));
-        } catch (Exception ex) {
-            logger.error(ex);
-            throw new RuntimeException(ex);
+        String email = calibrationTask.getModule().getEmail();
+        User user = calibratorEmployeeService.oneCalibratorEmployee(senderUsername);
+
+        mailService.sendMailToStationWithAttachments(user, calibrationTask.getModule().getSerialNumber(), dateFormat.format(calibrationTask.getDateOfTask()).toString(), email, Constants.TASK + " " + calibrationTask.getId(), xlsFile, dbFile);
+        calibrationTask.setStatus(Status.SENT_TO_TEST_DEVICE);
+        for (Verification verification : verifications) {
+            verification.setStatus(Status.SENT_TO_TEST_DEVICE);
+            verification.setTaskStatus(Status.SENT_TO_TEST_DEVICE);
         }
+        taskRepository.save(calibrationTask);
+        verificationRepository.save(Arrays.asList(verifications));
+
+    }
+
+    private ArrayList getData(CalibrationTask calibrationTask, Verification[] verifications) {
+
+        List<TableExportColumn> dataDb = new ArrayList<>();
+        List<TableExportColumn> dataXls = new ArrayList<>();
+
+        List<String> id = new ArrayList<>();
+        List<String> surname = new ArrayList<>();
+        List<String> name = new ArrayList<>();
+        List<String> middlename = new ArrayList<>();
+        List<String> city = new ArrayList<>();
+        List<String> district = new ArrayList<>();
+        List<String> region = new ArrayList<>();
+        List<String> building = new ArrayList<>();
+        List<String> flat = new ArrayList<>();
+        List<String> street = new ArrayList<>();
+        List<String> telephone = new ArrayList<>();
+        List<String> datetime = new ArrayList<>();
+        List<String> counterNumber = new ArrayList<>();
+        List<String> comment = new ArrayList<>();
+        List<String> customer = new ArrayList<>();
+        List<String> taskDate = new ArrayList<>();
+        List<String> provider = new ArrayList<>();
+        List<String> address = new ArrayList<>();
+        List<String> entrance = new ArrayList<>();
+        List<String> floor = new ArrayList<>();
+        List<String> countersNumber = new ArrayList<>();
+        List<String> fullName = new ArrayList<>();
+        List<String> times = new ArrayList<>();
+        List<String> symbols = new ArrayList<>();
+        List<String> standartSize = new ArrayList<>();
+        List<String> realiseYear = new ArrayList<>();
+        List<String> acumulatedVolume = new ArrayList<>();
+
+        String empty = " ";
+
+        for (Verification verification : verifications) {
+            SimpleDateFormat simpleTaskDate = new SimpleDateFormat("dd.MM.yyyy");
+            try {
+                taskDate.add(simpleTaskDate.format(calibrationTask.getDateOfTask()));
+                String date = simpleTaskDate.format(calibrationTask.getDateOfTask());
+                String time = getTime(verification);
+                datetime.add(date + " " + time);
+            } catch (IllegalArgumentException e) {
+                taskDate.add(empty);
+                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:" + calibrationTask.getId(), e);
+            }
+
+            provider.add(getProvider(verification));
+            id.add(verification.getId());
+            countersNumber.add(String.valueOf(1));
+            counterNumber.add(getCounterNumber(verification.getCounter()));
+            comment.add(getComent(verification));
+            customer.add(getCustomer(verification));
+
+            Counter counter = verification.getCounter();
+
+            symbols.add(getCounterSymbol(counter));
+            standartSize.add(getCounterStandarSize(counter));
+            realiseYear.add(getCounterReliasYear(counter));
+            acumulatedVolume.add(getCounterAccumulatedVolume(counter));
+
+            ClientData clientData = verification.getClientData();
+            if (clientData != null) {
+                fullName.add(getFullName(clientData));
+                telephone.add(getPhoneNumber(clientData));
+                name.add(getName(clientData));
+                surname.add(getSurname(clientData));
+                middlename.add(getMiddleName(clientData));
+
+                Address clientAddress = verification.getClientData().getClientAddress();
+                if (clientAddress != null) {
+                    district.add(getDistrict(clientAddress));
+                    address.add(getAddress(clientAddress));
+                    building.add(getBuilding(clientAddress));
+                    flat.add(getFlat(clientAddress));
+                    city.add(getCity(clientAddress));
+                    region.add(getRegion(clientAddress));
+                    street.add(getStreet(clientAddress));
+                } else {
+                    district.add(empty);
+                    address.add(empty);
+                    building.add(empty);
+                    flat.add(empty);
+                    city.add(empty);
+                    region.add(empty);
+                    street.add(empty);
+                }
+            } else {
+                fullName.add(empty);
+                telephone.add(empty);
+                district.add(empty);
+                address.add(empty);
+                building.add(empty);
+                flat.add(empty);
+                city.add(empty);
+                name.add(empty);
+                surname.add(empty);
+                middlename.add(empty);
+                region.add(empty);
+                street.add(empty);
+            }
+
+            AdditionalInfo info = verification.getInfo();
+            if (info != null) {
+                entrance.add(getEntrance(info));
+                floor.add(getFloor(info));
+                times.add(getTime(info));
+            } else {
+                entrance.add(empty);
+                floor.add(empty);
+                times.add(empty);
+            }
+        }
+
+        if (verifications[0].getCalibrationModule() != null && verifications[0].getCalibrationModule().getModuleType().equals(CalibrationModule.ModuleType.INSTALLATION_PORT)) {
+            dataXls.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
+            dataXls.add(new TableExportColumn(Constants.PROVIDER, provider));
+            dataXls.add(new TableExportColumn(Constants.REGION, district));
+            dataXls.add(new TableExportColumn(Constants.ADDRESS, address));
+            dataXls.add(new TableExportColumn(Constants.BUILDING, building));
+            dataXls.add(new TableExportColumn(Constants.FLAT, flat));
+            dataXls.add(new TableExportColumn(Constants.ENTRANCE, entrance));
+            dataXls.add(new TableExportColumn(Constants.FLOOR, floor));
+            dataXls.add(new TableExportColumn(Constants.COUNTERS_NUMBER, countersNumber));
+            dataXls.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
+            dataXls.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
+            dataXls.add(new TableExportColumn(Constants.DESIRABLE_TIME, times));
+            dataXls.add(new TableExportColumn(Constants.COMMENT, comment));
+        } else {
+            dataXls.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
+            dataXls.add(new TableExportColumn(Constants.PROVIDER, provider));
+            dataXls.add(new TableExportColumn(Constants.REGION, district));
+            dataXls.add(new TableExportColumn(Constants.ADDRESS, address));
+            dataXls.add(new TableExportColumn(Constants.BUILDING, building));
+            dataXls.add(new TableExportColumn(Constants.FLAT, flat));
+            dataXls.add(new TableExportColumn(Constants.COUNTERS_NUMBER, countersNumber));
+            dataXls.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
+            dataXls.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
+            dataXls.add(new TableExportColumn(Constants.COMMENT, comment));
+            dataXls.add(new TableExportColumn(Constants.COUNTER_SYMBOL, symbols));
+            dataXls.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, standartSize));
+            dataXls.add(new TableExportColumn(Constants.COUNTER_NUMBER, counterNumber));
+            dataXls.add(new TableExportColumn(Constants.COUNTER_YEAR, realiseYear));
+            dataXls.add(new TableExportColumn(Constants.COUNTER_CAPACITY, acumulatedVolume));
+
+        }
+
+        dataDb.add(new TableExportColumn("id_pc", "INTEGER", id));
+        dataDb.add(new TableExportColumn("surname", "TEXT", surname));
+        dataDb.add(new TableExportColumn("name", "TEXT", name));
+        dataDb.add(new TableExportColumn("middlename", "TEXT", middlename));
+        dataDb.add(new TableExportColumn("city", "TEXT", city));
+        dataDb.add(new TableExportColumn("district", "TEXT", district));
+        dataDb.add(new TableExportColumn("bush", "TEXT", region));
+        dataDb.add(new TableExportColumn("street", "TEXT", street));
+        dataDb.add(new TableExportColumn("Building", "TEXT", building));
+        dataDb.add(new TableExportColumn("Apartment", "TEXT", flat));
+        dataDb.add(new TableExportColumn("Tel", "TEXT", telephone));
+        dataDb.add(new TableExportColumn("Date_visit", "TEXT", datetime));
+        dataDb.add(new TableExportColumn("Counter_number", "TEXT", counterNumber));
+        dataDb.add(new TableExportColumn("Note", "TEXT", comment));
+        dataDb.add(new TableExportColumn("Customer", "TEXT", customer));
+
+        ArrayList arrayList = new ArrayList(2);
+        arrayList.add(dataXls);
+        arrayList.add(dataDb);
+        return arrayList;
     }
 
     private List<TableExportColumn> getDataForXls(CalibrationTask calibrationTask, Verification[] verifications) {
@@ -522,7 +684,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> countersNumber = new ArrayList<>();
         List<String> fullName = new ArrayList<>();
         List<String> telephone = new ArrayList<>();
-        List<String> time = new ArrayList<>();
+        List<String> times = new ArrayList<>();
         List<String> comment = new ArrayList<>();
 
         // endregion
@@ -540,24 +702,39 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 logger.debug("The date of calibration task is absent or having wrong format, id of this task is:" + calibrationTask.getId(), e);
             }
 
-            provider.add(verification.getProvider() != null && verification.getProvider().getName() != null ? verification.getProvider().getName() : empty);
+            provider.add(getProvider(verification));
+            countersNumber.add(String.valueOf(1));
+            comment.add(getComent(verification));
 
-            if (verification.getClientData() != null) {
-                fullName.add(verification.getClientData().getFullName() != null ? verification.getClientData().getFullName() : empty);
-                telephone.add(verification.getClientData().getPhone() != null ? verification.getClientData().getPhone() : empty);
+            AdditionalInfo info = verification.getInfo();
+            if (info != null) {
+                entrance.add(getEntrance(info));
+                floor.add(getFloor(info));
+                times.add(getTime(info));
+            } else {
+                entrance.add(empty);
+                floor.add(empty);
+                times.add(empty);
+            }
 
-                if (verification.getClientData().getClientAddress() != null) {
-                    district.add(verification.getClientData().getClientAddress().getDistrict() != null ? verification.getClientData().getClientAddress().getDistrict() : empty);
-                    address.add(verification.getClientData().getClientAddress().getAddress() != null ? verification.getClientData().getClientAddress().getAddress() : empty);
-                    building.add(verification.getClientData().getClientAddress().getBuilding() != null ? verification.getClientData().getClientAddress().getBuilding() : empty);
-                    flat.add(verification.getClientData().getClientAddress().getFlat() != null ? verification.getClientData().getClientAddress().getFlat() : empty);
+            ClientData clientData = verification.getClientData();
+            if (clientData != null) {
+                fullName.add(getFullName(clientData));
+                telephone.add(getPhoneNumber(clientData));
+
+                Address clientAddress = verification.getClientData().getClientAddress();
+                if (clientAddress != null) {
+                    district.add(getDistrict(clientAddress));
+                    address.add(getAddress(clientAddress));
+                    building.add(getBuilding(clientAddress));
+                    flat.add(getFlat(clientAddress));
+
                 } else {
                     district.add(empty);
                     address.add(empty);
                     building.add(empty);
                     flat.add(empty);
                 }
-
             } else {
                 fullName.add(empty);
                 telephone.add(empty);
@@ -567,18 +744,8 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 flat.add(empty);
             }
 
-            if (verification.getInfo() != null) {
-                entrance.add(verification.getInfo().getEntrance() != 0 ? String.valueOf(verification.getInfo().getEntrance()) : empty);
-                floor.add(verification.getInfo().getFloor() != 0 ? String.valueOf(verification.getInfo().getFloor()) : empty);
-                time.add(verification.getInfo().getTimeFrom() != null && verification.getInfo().getTimeTo() != null ? verification.getInfo().getTimeFrom() + "-" + verification.getInfo().getTimeTo() : empty);
-            } else {
-                entrance.add(empty);
-                floor.add(empty);
-                time.add(empty);
-            }
-
             countersNumber.add(String.valueOf(1));
-            comment.add(verification.getComment() != null ? verification.getComment().toString() : empty);
+            comment.add(getComent(verification));
         }
 
         // endregion
@@ -596,7 +763,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         data.add(new TableExportColumn(Constants.COUNTERS_NUMBER, countersNumber));
         data.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
         data.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
-        data.add(new TableExportColumn(Constants.DESIRABLE_TIME, time));
+        data.add(new TableExportColumn(Constants.DESIRABLE_TIME, times));
         data.add(new TableExportColumn(Constants.COMMENT, comment));
 
         // endregion
@@ -604,103 +771,99 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         return data;
     }
 
-    private List<TableExportColumn> getDataForDb(CalibrationTask calibrationTask, Verification[] verifications) {
-        List<TableExportColumn> data = new ArrayList<>();
+    private String getTime(AdditionalInfo info) {
+        return info.getTimeFrom() != null && info.getTimeTo() != null ? info.getTimeFrom() + "-" + info.getTimeTo() : " ";
+    }
 
-        // region Define lists
-        List<String> id = new ArrayList<>();
-        List<String> surname = new ArrayList<>();
-        List<String> name = new ArrayList<>();
-        List<String> middlename = new ArrayList<>();
-        List<String> city = new ArrayList<>();
-        List<String> district = new ArrayList<>();
-        List<String> sector = new ArrayList<>();
-        List<String> street = new ArrayList<>();
-        List<String> building = new ArrayList<>();
-        List<String> flat = new ArrayList<>();
-        List<String> telephone = new ArrayList<>();
-        List<String> datetime = new ArrayList<>();
-        List<String> counterNumber = new ArrayList<>();
-        List<String> comments = new ArrayList<>();
-        List<String> customer = new ArrayList<>();
-        // endregion
+    private String getFloor(AdditionalInfo info) {
+        return info.getFloor() != 0 ? String.valueOf(info.getFloor()) : " ";
+    }
 
-        // region Fill lists
+    private String getEntrance(AdditionalInfo info) {
+        return info.getEntrance() != 0 ? String.valueOf(info.getEntrance()) : " ";
+    }
 
-        for (Verification verification : verifications) {
-            String empty = " ";
+    public String getCounterAccumulatedVolume(Counter counter) {
+        return counter != null && counter.getAccumulatedVolume() != null ? counter.getAccumulatedVolume() : "-";
+    }
 
-            id.add(verification.getId() != null ? verification.getId() : empty);
+    public String getCounterReliasYear(Counter counter) {
+        return counter != null && counter.getReleaseYear() != null ? counter.getReleaseYear() : "-";
+    }
 
-            if (verification.getClientData() != null) {
-                surname.add(verification.getClientData().getLastName() != null ? verification.getClientData().getLastName() : empty);
-                name.add(verification.getClientData().getFirstName() != null ? verification.getClientData().getFirstName() : empty);
-                middlename.add(verification.getClientData().getMiddleName() != null ? verification.getClientData().getMiddleName() : empty);
-                telephone.add(verification.getClientData().getPhone() != null ? verification.getClientData().getPhone() : empty);
+    public String getCounterStandarSize(Counter counter) {
+        return counter != null && counter.getCounterType() != null && counter.getCounterType().getStandardSize() != null ? counter.getCounterType().getStandardSize() : "-";
+    }
 
-                if (verification.getClientData().getClientAddress() != null) {
-                    city.add(verification.getClientData().getClientAddress().getLocality() != null ? verification.getClientData().getClientAddress().getLocality() : empty);
-                    district.add(verification.getClientData().getClientAddress().getDistrict() != null ? verification.getClientData().getClientAddress().getDistrict() : empty);
-                    sector.add(verification.getClientData().getClientAddress().getRegion() != null ? verification.getClientData().getClientAddress().getRegion() : empty);
-                    street.add(verification.getClientData().getClientAddress().getStreet() != null ? verification.getClientData().getClientAddress().getStreet() : empty);
-                    building.add(verification.getClientData().getClientAddress().getBuilding() != null ? verification.getClientData().getClientAddress().getBuilding() : empty);
-                    flat.add(verification.getClientData().getClientAddress().getFlat() != null ? verification.getClientData().getClientAddress().getFlat() : empty);
-                } else {
-                    city.add(empty);
-                    district.add(empty);
-                    sector.add(empty);
-                    street.add(empty);
-                    building.add(empty);
-                    flat.add(empty);
-                }
+    public String getCounterSymbol(Counter counter) {
+        return counter != null && counter.getCounterType() != null && counter.getCounterType().getSymbol() != null ? counter.getCounterType().getSymbol() : "-";
+    }
 
-            } else {
-                surname.add(empty);
-                name.add(empty);
-                middlename.add(empty);
-                city.add(empty);
-                district.add(empty);
-                sector.add(empty);
-                street.add(empty);
-                building.add(empty);
-                flat.add(empty);
-            }
+    public String getCounterNumber(Counter counter) {
+        return counter != null && counter.getNumberCounter() != null ? counter.getNumberCounter() : "-";
+    }
 
-            try {
-                SimpleDateFormat simpleTaskDate = new SimpleDateFormat("dd.MM.yyyy");
-                String date = simpleTaskDate.format(calibrationTask.getDateOfTask());
-                String time = (verification.getInfo() != null && verification.getInfo().getTimeFrom() != null && verification.getInfo().getTimeTo() != null ? verification.getInfo().getTimeFrom() + "" : empty);
-                datetime.add(date + " " + time);
-            } catch (IllegalArgumentException e) {
-                datetime.add(empty);
-                logger.debug("The date of calibration task is absent or having wrong format, id of this task is:" + calibrationTask.getId(), e);
-            }
+    public String getCustomer(Verification verification) {
+        return verification.getCalibratorEmployee() != null && verification.getCalibratorEmployee().getUsername() != null ? verification.getCalibratorEmployee().getUsername() : " ";
+    }
 
-            counterNumber.add(verification.getCounter() != null && verification.getCounter().getNumberCounter() != null ? verification.getCounter().getNumberCounter() : "-");
-            comments.add(verification.getComment() != null ? verification.getComment() : empty);
-            customer.add(verification.getCalibratorEmployee() != null && verification.getCalibratorEmployee().getUsername() != null ? verification.getCalibratorEmployee().getUsername() : empty);
-        }
+    public String getComent(Verification verification) {
+        return verification.getComment() != null ? verification.getComment().toString() : " ";
+    }
 
-        // endregion
+    public String getTime(Verification verification) {
+        return verification.getInfo() != null && verification.getInfo().getTimeFrom() != null && verification.getInfo().getTimeTo() != null ? verification.getInfo().getTimeFrom() + "" : " ";
+    }
 
-        // region Fill List<TableExportColumn>
-        data.add(new TableExportColumn("id_pc", "INTEGER", id));
-        data.add(new TableExportColumn("surname", "TEXT", surname));
-        data.add(new TableExportColumn("name", "TEXT", name));
-        data.add(new TableExportColumn("middlename", "TEXT", middlename));
-        data.add(new TableExportColumn("city", "TEXT", city));
-        data.add(new TableExportColumn("district", "TEXT", district));
-        data.add(new TableExportColumn("bush", "TEXT", sector));
-        data.add(new TableExportColumn("street", "TEXT", street));
-        data.add(new TableExportColumn("Building", "TEXT", building));
-        data.add(new TableExportColumn("Apartment", "TEXT", flat));
-        data.add(new TableExportColumn("Tel", "TEXT", telephone));
-        data.add(new TableExportColumn("Date_visit", "TEXT", datetime));
-        data.add(new TableExportColumn("Counter_number", "TEXT", counterNumber));
-        data.add(new TableExportColumn("Note", "TEXT", comments));
-        data.add(new TableExportColumn("Customer", "TEXT", customer));
-        // endregion
+    public String getStreet(Address clientAddress) {
+        return clientAddress.getStreet() != null ? clientAddress.getStreet() : " ";
+    }
 
-        return data;
+    public String getRegion(Address clientAddress) {
+        return clientAddress.getRegion() != null ? clientAddress.getRegion() : " ";
+    }
+
+    public String getName(ClientData clientData) {
+        return clientData.getFirstName() != null ? clientData.getFirstName() : " ";
+    }
+
+    public String getSurname(ClientData clientData) {
+        return clientData.getLastName() != null ? clientData.getLastName() : " ";
+    }
+
+    public String getCity(Address clientAddress) {
+        return clientAddress.getLocality() != null ? clientAddress.getLocality() : " ";
+    }
+
+    public String getMiddleName(ClientData clientData) {
+        return clientData.getMiddleName() != null ? clientData.getMiddleName() : " ";
+    }
+
+    public String getProvider(Verification verification) {
+        return verification.getProvider() != null && verification.getProvider().getName() != null ? verification.getProvider().getName() : " ";
+    }
+
+    public String getFlat(Address clientAddress) {
+        return clientAddress.getFlat() != null ? clientAddress.getFlat() : " ";
+    }
+
+    public String getBuilding(Address clientAddress) {
+        return clientAddress.getBuilding() != null ? clientAddress.getBuilding() : " ";
+    }
+
+    public String getAddress(Address clientAddress) {
+        return clientAddress.getAddress() != null ? clientAddress.getAddress() : " ";
+    }
+
+    public String getDistrict(Address clientAddress) {
+        return clientAddress.getDistrict() != null ? clientAddress.getDistrict() : " ";
+    }
+
+    public String getPhoneNumber(ClientData clientData) {
+        return clientData.getPhone() != null ? clientData.getPhone() : " ";
+    }
+
+    public String getFullName(ClientData clientData) {
+        return clientData.getFullName() != null ? clientData.getFullName() : " ";
     }
 }

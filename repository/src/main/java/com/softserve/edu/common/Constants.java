@@ -83,6 +83,7 @@ public interface Constants {
     String DEFAULT_DB_TABLE_NAME = "Subscribers";
     String WATER_DEVICE_MAIL = "лічильника холодної води";
     String THERMAL_DEVICE_MAIL = "лічильника гарячої води";
+    String COUNTER_SYMBOL = "Умовне позначення лічильника";
 
     //reasons o counter unsuitability
     String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
