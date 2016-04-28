@@ -334,7 +334,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             DeviceTestData deviceTestData;
             try {
                 deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
-                Date date = new Date(deviceTestData.getYear(), deviceTestData.getMonth(), deviceTestData.getDay(), deviceTestData.getHour(),
+                Date date = new Date(deviceTestData.getYear() - 1900, deviceTestData.getMonth(), deviceTestData.getDay(), deviceTestData.getHour(),
                         deviceTestData.getMinute(), deviceTestData.getSecond());
                 DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
                 String formattedDate = dateFormat.format(date);
