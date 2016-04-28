@@ -113,9 +113,10 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "VERIFICATION_CERTIFICATE_NUMBER")
     public String getVerificationCertificateNumber() {
         try {
-            String verificationId = verification.getId();
             String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
-            return String.format("%s-%s", subdivisionId, verificationId);
+            String moduleNumber = verification.getCalibrationModule().getModuleNumber();
+            String bbiProtocol = verification.getBbiProtocols().iterator().next().getFileName();
+            return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
         } catch (Exception e) {
             logger.error("Subdivision for this verification has not been specified ", e);
             return Constants.NOT_SPECIFIED;
