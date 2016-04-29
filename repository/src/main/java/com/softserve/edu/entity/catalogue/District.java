@@ -19,11 +19,11 @@ public class District extends AbstractCatalogue {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String designation;
 
     @ManyToOne
-    @JoinColumn(name = "regionId", nullable = false)
+    @JoinColumn(name = "regionId")
     private Region region;
 
     public District(String name, Region region) {

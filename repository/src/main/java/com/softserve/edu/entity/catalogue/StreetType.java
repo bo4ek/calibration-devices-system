@@ -19,7 +19,7 @@ public class StreetType extends AbstractCatalogue {
     @Setter(AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String designation;
 
     public StreetType(String designation) {

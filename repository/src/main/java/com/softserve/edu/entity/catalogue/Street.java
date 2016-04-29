@@ -17,11 +17,11 @@ public class Street extends AbstractCatalogue {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String designation;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "localityId", nullable = false)
+    @JoinColumn(name = "localityId")
     private Locality locality;
 
     @ManyToOne

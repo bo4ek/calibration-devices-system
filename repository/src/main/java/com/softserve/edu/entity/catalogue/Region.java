@@ -18,7 +18,7 @@ public class Region extends AbstractCatalogue {
     @Setter(AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String designation;
 
     public Region(String name) {

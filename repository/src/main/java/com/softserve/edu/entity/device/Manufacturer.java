@@ -18,7 +18,7 @@ public class Manufacturer {
     @Setter(AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
     @OneToMany(mappedBy = "manufacturer")

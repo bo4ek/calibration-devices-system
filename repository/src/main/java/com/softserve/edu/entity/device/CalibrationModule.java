@@ -48,7 +48,7 @@ public class CalibrationModule {
 
     private String moduleNumber; // generates
 
-    @Column(nullable = false, columnDefinition = "bit(1) default 1")
+    @Column(columnDefinition = "bit(1) default 1")
     private Boolean isActive = true;
 
     @Temporal(TemporalType.DATE)

@@ -19,11 +19,11 @@ public class Building extends AbstractCatalogue {
     @Setter(value = AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String designation;
 
     @ManyToOne
-    @JoinColumn(name = "streetId", nullable = false)
+    @JoinColumn(name = "streetId")
     private Street street;
 
 

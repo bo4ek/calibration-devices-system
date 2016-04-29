@@ -22,11 +22,11 @@ public class Locality extends AbstractCatalogue {
     @Setter(AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String designation;
 
     @ManyToOne
-    @JoinColumn(name = "districtId", nullable = false)
+    @JoinColumn(name = "districtId")
     private District district;
 
     @Setter

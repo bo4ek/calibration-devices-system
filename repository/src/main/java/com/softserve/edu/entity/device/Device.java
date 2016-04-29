@@ -25,7 +25,7 @@ public class Device {
     @Setter(AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String deviceName;
 
     @Enumerated(EnumType.STRING)
