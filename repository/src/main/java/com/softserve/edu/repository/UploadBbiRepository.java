@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by MAX on 25.07.2015.
  */
@@ -21,7 +23,7 @@ public interface UploadBbiRepository extends CrudRepository<BbiProtocol, Long> {
 
     @Query("SELECT b FROM BbiProtocol b INNER JOIN b.verification v INNER join v.calibrationModule m WHERE b.fileName = :fileName " +
             "AND v.id = b.verification.id AND v.verificationTime = :date AND m.id = v.calibrationModule.id AND m.moduleNumber = :moduleNumber")
-    BbiProtocol findBBIProtocolByFileNameAndDateAndModuleNumber(@Param("fileName") String fileName, @Param("date") String date,
+    List<BbiProtocol> findBBIProtocolByFileNameAndDateAndModuleNumber(@Param("fileName") String fileName, @Param("date") String date,
                                                                 @Param("moduleNumber") String moduleNumber);
 
     @Query("SELECT b FROM BbiProtocol b WHERE b.verification=:verification")

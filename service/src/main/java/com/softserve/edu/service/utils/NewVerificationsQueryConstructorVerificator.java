@@ -127,17 +127,17 @@ public class NewVerificationsQueryConstructorVerificator {
                 Predicate searchPredicateByUsername =cb.equal(joinVerificatorEmployee.get("username"), userName);
                 Predicate searchPredicateByEmptyField = cb.isNull(joinVerificatorEmployee.get("username"));
                 Predicate searchByVerificatorEmployee=cb.or(searchPredicateByUsername,searchPredicateByEmptyField);
-                queryPredicate=cb.and(searchByVerificatorEmployee);
+                queryPredicate=cb.and(searchByVerificatorEmployee, queryPredicate);
             }
         }
 
         if (status != null) {
             queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(status.trim())), queryPredicate);
         } else {
-            queryPredicate = cb.and(cb.or(Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb)));
+            queryPredicate = cb.and(cb.or(Status.SENT_TO_VERIFICATOR.getQueryPredicate(root, cb)), queryPredicate);
         }
 
-        queryPredicate = cb.and(cb.isFalse(root.get("signed")));
+        queryPredicate = cb.and(cb.isFalse(root.get("signed")), queryPredicate);
         queryPredicate = cb.and(cb.equal(joinSearch.get("id"), verificatorId), queryPredicate);
 
         if (startDateToSearch != null && endDateToSearch != null) {

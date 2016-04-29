@@ -107,6 +107,14 @@ public class StateVerificatorController {
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
+    @RequestMapping(value = "rejected/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    public PageDTO<ProtocolDTO> getPageOfAllrejectedVerificationsByStateVerificatorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
+                                                                                           NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        searchData.setStatus(Status.PROTOCOL_REJECTED.toString());
+        return getPageOfAllSentVerificationsByStateVerificatorIdAndSearch(pageNumber, itemsPerPage, sortCriteria,
+                sortOrder, searchData, employeeUser);
+    }
+
     /**
      * Find page of verifications by specific criterias on main panel
      *
@@ -167,6 +175,15 @@ public class StateVerificatorController {
         }
     }
 
+    @RequestMapping(value = "rejected/count/verificator", method = RequestMethod.GET)
+    public Long getCountOfRejectedProtocolsByStateVerificatorId(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if (user != null) {
+            return verificationService.findCountOfRejectedProtocolsByStateVerificatorId(user.getOrganizationId());
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Updates verifications UNREAD status to READ
      * @param verificationDto
@@ -214,7 +231,7 @@ public class StateVerificatorController {
                 verification.setRejectedMessage(verificationUpdateDTO.getMessage());
                 verificationService.saveVerification(verification);
                 Organization calibrator = calibratorService.findById(verification.getCalibrator().getId());
-                verificationService.sendVerificationTo(verificationId, calibrator, Status.IN_PROGRESS);
+                verificationService.sendVerificationTo(verificationId, calibrator, Status.PROTOCOL_REJECTED);
             }
         }
     }

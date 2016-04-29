@@ -5,19 +5,16 @@
 	import com.softserve.edu.entity.organization.Organization;
 	import com.softserve.edu.entity.user.User;
 	import com.softserve.edu.entity.verification.Verification;
-	import com.softserve.edu.service.utils.filter.Filter;
 	import org.apache.log4j.Logger;
 
-	import javax.persistence.EntityManager;
+    import javax.persistence.EntityManager;
 	import javax.persistence.criteria.*;
-	import java.time.LocalDate;
-	import java.time.format.DateTimeFormatter;
-	import java.util.ArrayList;
-	import java.util.List;
-	import java.util.Map;
-	import java.util.Set;
+    import java.text.ParseException;
+    import java.time.LocalDate;
+    import java.time.format.DateTimeFormatter;
+    import java.util.*;
 
-	/**
+    /**
      * @deprecated this class have a lot of repeated code <br/>
      * {need to be replaced and removed}<br/>
      * use {@link com.softserve.edu.specification.SpecificationBuilder} instead
@@ -45,7 +42,7 @@
 		 */
         public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                           User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
-                                                          String numberOfProtocol, String moduleNumber, EntityManager em) {
+                                                          String numberOfProtocol, String moduleNumber, EntityManager em) throws ParseException {
 
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
@@ -76,7 +73,7 @@
 		 */
         public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                                    User verificatorEmployee,  String nameProvider,String nameCalibrator, String numberOfCounter,
-                                                                   String numberOfProtocol, String moduleNumber, String sortCriteria, String sortOrder, EntityManager em) {
+                                                                   String numberOfProtocol, String moduleNumber, String sortCriteria, String sortOrder, EntityManager em) throws ParseException {
 
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
@@ -88,7 +85,7 @@
 					numberOfProtocol, moduleNumber);
 
             if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
-                criteriaQuery.orderBy(cb.desc(root.get("initialDate")), cb.asc((root.get("calibrationModule").get("moduleNumber"))),
+                criteriaQuery.orderBy(cb.desc(root.get("verificationTime")), cb.asc((root.get("calibrationModule").get("moduleNumber"))),
                         cb.asc(root.get("numberOfProtocol")));
             } else if ((sortCriteria != null) && (sortOrder != null)) {
                 criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
@@ -104,7 +101,7 @@
 		 */
         private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long verificatorId,
                                                 String startDateToSearch, String endDateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
-                                                String numberOfCounter, String numberOfProtocol, String moduleNumber) {
+                                                String numberOfCounter, String numberOfProtocol, String moduleNumber) throws ParseException {
 
             String userName = verificatorEmployee.getUsername();
             Predicate queryPredicate = cb.conjunction();
@@ -116,7 +113,7 @@
                     Predicate searchPredicateByUsername = cb.equal(joinCalibratorEmployee.get("username"), userName);
                     Predicate searchPredicateByEmptyField = cb.isNull(joinCalibratorEmployee.get("username"));
                     Predicate searchByCalibratorEmployee = cb.or(searchPredicateByUsername, searchPredicateByEmptyField);
-                    queryPredicate = cb.and(searchByCalibratorEmployee);
+                    queryPredicate = cb.and(searchByCalibratorEmployee, queryPredicate);
                 }
             }
 

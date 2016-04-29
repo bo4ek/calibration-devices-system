@@ -225,6 +225,12 @@
                                 <span translate="DIGITAL_PROTOCOLS"></span>
                             </a>
                         </li>
+                        <li ui-sref-active="active" ng-controller="DigitalVerificationProtocolsControllerCalibrator">
+                            <a ui-sref="rejected-verifications-protocols-calibrator" ng-click="onTableHandling()">
+                                <i class="fa fa-file-powerpoint-o"></i>
+                                <span translate="REJECTED_PROTOCOLS"></span>
+                            </a>
+                        </li>
 
                         <li ui-sref-active="active" ng-controller="PlaningTaskNotificationsControllerCalibrator">
                             <a ui-sref="planning-task-calibrator" ng-click="reloadTasks()"><i class="fa fa-tasks"></i>
@@ -252,6 +258,14 @@
                         <li ui-sref-active="active" ng-controller="NotificationsControllerVerificator">
                             <a ui-sref="new-verifications-verificator" ng-click="reloadVerifications()"><i
                                     class="fa fa-list-alt fa-fw"></i> <span translate="DIGITAL_PROTOCOLS"></span>
+                                <span class="ui teal label" ng-bind="countOfUnreadVerifications"
+                                      ng-show="countOfUnreadVerifications>0" ng-cloak>
+                              	</span>
+                            </a>
+                        </li>
+                        <li ui-sref-active="active" ng-controller="NotificationsRejectedProtocolsController">
+                            <a ui-sref="rejected-verifications-verificator" ng-click="reloadVerifications()"><i
+                                    class="fa fa-list-alt fa-fw"></i> <span translate="REJECTED_PROTOCOLS"></span>
                                 <span class="ui teal label" ng-bind="countOfUnreadVerifications"
                                       ng-show="countOfUnreadVerifications>0" ng-cloak>
                               	</span>

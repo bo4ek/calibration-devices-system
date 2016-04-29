@@ -172,6 +172,12 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
+    public Long findCountOfRejectedProtocolsByStateVerificatorId(Long stateVerificatorId) {
+        return verificationRepository.countByStateVerificatorIdAndStatus(stateVerificatorId, Status.PROTOCOL_REJECTED);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<Verification> findPageOfSentVerificationsByProviderId(Long providerId, int pageNumber,
                                                                       int itemsPerPage) {
         Pageable pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);
@@ -722,6 +728,11 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByCalibrator(Organization organization) {
         return verificationRepository.getEarliestDateOfDigitalVerificationProtocolsByCalibrator(organization);
+    }
+
+    @Override
+    public java.sql.Date getEarliestDateOfRejectingVerificationProtocolsByCalibrator(Organization organization) {
+        return verificationRepository.getEarliestDateOfRejectingVerificationProtocolsByCalibrator(organization);
     }
 
     @Override

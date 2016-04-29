@@ -35,7 +35,8 @@ public class ProtocolDTOTransformer {
                         verification.getCalibrationModule().getSerialNumber(),
                         verification.getNumberOfProtocol(),
                         verification.getProviderEmployee(), verification.getStateVerificatorEmployee(),
-                        isVerificator ? dateFormat.format(verification.getSentToVerificatorDate()) : null
+                        isVerificator ? dateFormat.format(verification.getSentToVerificatorDate()) : null,
+                        verification.getRejectedMessage()
                 ));
         }
         return resultList;

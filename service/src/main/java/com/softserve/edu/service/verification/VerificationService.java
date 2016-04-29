@@ -12,6 +12,7 @@ import com.softserve.edu.service.utils.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public interface VerificationService {
     Long findCountOfAcceptedVerificationsByProviderEmployeeUsername(String employeeUsername);
 
     Long findCountOfNewVerificationsByStateVerificatorId(Long stateVerificatorId);
+
+    @Transactional(readOnly = true)
+    Long findCountOfRejectedProtocolsByStateVerificatorId(Long stateVerificatorId);
 
     Page<Verification> findPageOfSentVerificationsByProviderId(Long providerId, int pageNumber, int itemsPerPage);
 
@@ -75,7 +79,6 @@ public interface VerificationService {
                                                                                                 String numberOfCounter, String numberOfProtocol,
                                                                                                 String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber,
                                                                                                 String sortCriteria, String sortOrder, User verificatorEmployee);
-
 
 
 
@@ -133,6 +136,8 @@ public interface VerificationService {
     java.sql.Date getNewVerificationEarliestDateByCalibrator(Organization organization);
 
     java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByCalibrator(Organization organization);
+
+    java.sql.Date getEarliestDateOfRejectingVerificationProtocolsByCalibrator(Organization organization);
 
     java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByVerificator(Organization organization);
 

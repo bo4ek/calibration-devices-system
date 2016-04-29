@@ -9,6 +9,9 @@ angular
             getNewVerifications: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
                 return getDataWithParams('verificator/verifications/new/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
             },
+            geRejectedVerifications: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
+                return getDataWithParams('verificator/verifications/rejected/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
+            },
             getNewVerificationsForMainPanel: function (currentPage, itemsPerPage) {
                 return getDataWithParams('verificator/verifications/new/mainpanel/' + currentPage + '/' + itemsPerPage);
             },
@@ -56,9 +59,12 @@ angular
             },
             getBuildingsCorrespondingStreet:function(selectedBuilding){
                     return getData("applications/buildings/" + selectedBuilding.id);
-                },
+            },
             getCountOfNewVerifications: function(url) {
             	return getData('verifications/new/count/verificator');
+            },
+            getCountOfRejectedVerifications: function(url) {
+                return getData('verifications/rejected/count/verificator');
             },
             markVerificationAsRead : function(data) {
             	return updateData('new/read', data);

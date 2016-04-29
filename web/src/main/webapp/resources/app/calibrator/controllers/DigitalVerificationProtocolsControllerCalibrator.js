@@ -10,6 +10,8 @@ angular
             $scope.itemsPerPage = 5;
             $scope.pageContent = [];
             $scope.checked = false;
+            $scope.path = $location.path();
+            $scope.rejected = $scope.path == "/calibrator/protocols/rejected";
 
             $scope.$watch('globalSearchParams',function(newParam,oldParam){
                 if($scope.hasOwnProperty("tableParams")) {
@@ -124,40 +126,62 @@ angular
                 {id: 'TEST_COMPLETED', label: $filter('translate')('TEST_COMPLETED')}
             ];
 
-            digitalVerificationProtocolsServiceCalibrator.getNewVerificationEarliestDate().success(function (date) {
-                $scope.initDatePicker(date);
-            $scope.tableParams = new ngTableParams({
-                page: 1,
-                count: 10,
-                sorting: {
-                    default: 'default'
+            $scope.cancelTest = function (verification) {
+                var idVerification = verification.id;
+                if (!verification.isManual) {
+                    digitalVerificationProtocolsServiceCalibrator.cancelProtocol(idVerification)
+                        .then(function (response) {
+                            switch (response.status) {
+                                case 200: {
+                                    $scope.tableParams.reload();
+                                    break;
+                                }
+
+                            }
+                        }
+                    );
                 }
-            }, {
-                total: 0,
-                filterDelay: 1500,
-                getData: function ($defer, params) {
-                    var sortCriteria = Object.keys(params.sorting())[0];
-                    var sortOrder = params.sorting()[sortCriteria];
+            };
 
-                    params.filter().date = $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD");
-                    params.filter().endDate = $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD");
 
-                    if ($scope.selectedStatus.name != null) {
-                        params.filter().status = $scope.selectedStatus.name.id;
+            var dateRequest = $scope.rejected ? digitalVerificationProtocolsServiceCalibrator.getRejectedVerificationEarliestDate()
+                : digitalVerificationProtocolsServiceCalibrator.getNewVerificationEarliestDate();
+            dateRequest.success(function (date) {
+                $scope.initDatePicker(date);
+                $scope.tableParams = new ngTableParams({
+                    page: 1,
+                    count: 10,
+                    sorting: {
+                        default: 'default'
                     }
-                    else {
-                        params.filter().status = null;
-                    }
-                    digitalVerificationProtocolsServiceCalibrator.getProtocols(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
-                        .success(function (result) {
+                }, {
+                    total: 0,
+                    filterDelay: 1500,
+                    getData: function ($defer, params) {
+                        var sortCriteria = Object.keys(params.sorting())[0];
+                        var sortOrder = params.sorting()[sortCriteria];
+
+                        params.filter().date = $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD");
+                        params.filter().endDate = $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD");
+
+                        if ($scope.selectedStatus.name != null) {
+                            params.filter().status = $scope.selectedStatus.name.id;
+                        }
+                        else {
+                            params.filter().status = null;
+                        }
+                        var request = $scope.rejected ? digitalVerificationProtocolsServiceCalibrator.getRejectedProtocols(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+                            : digitalVerificationProtocolsServiceCalibrator.getProtocols(params.page(), params.count(), params.filter(), sortCriteria, sortOrder);
+                        request.success(function (result) {
                             $scope.totalItems = result.totalItems;
                             $defer.resolve(result.content);
                             params.total(result.totalItems);
                         }, function (result) {
                             $log.debug('error fetching data:', result);
                         });
-                }
-            })});
+                    }
+                })
+            });
             $scope.idsOfVerifications = [];
             $scope.checkedItems = [];
             $scope.allIsEmpty = true;
@@ -168,7 +192,6 @@ angular
             /**
              * push verification id to array
              */
-
             $scope.resolveVerificationId = function (id) {
                 var index = $scope.idsOfVerifications.indexOf(id);
                 if (index === -1) {

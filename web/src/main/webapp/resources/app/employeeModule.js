@@ -144,6 +144,11 @@
                         templateUrl: 'resources/app/verificator/views/new-verifications.html',
                         controller: 'NewVerificationsControllerVerificator'
                     })
+                    .state("rejected-verifications-verificator", {
+                        url: '/verifications/rejected',
+                        templateUrl: 'resources/app/verificator/views/new-verifications.html',
+                        controller: 'NewVerificationsControllerVerificator'
+                    })
                     .state("employee-show-verificator", {
                         url: '/verificator/employee-show',
                         templateUrl: 'resources/app/verificator/views/employee/show-employee.html',
@@ -173,6 +178,11 @@
                         url: 'provider/not-standard-verifications',
                         templateUrl: 'resources/app/provider/views/not-standard-verifications.html',
                         controller: 'NotStandardVerificationControllerProvider'
+                    })
+                    .state("rejected-verifications-protocols-calibrator", {
+                        url: '/calibrator/protocols/rejected',
+                        templateUrl: 'resources/app/calibrator/views/show-verification-protocols.html',
+                        controller: 'DigitalVerificationProtocolsControllerCalibrator'
                     })
                     .state("verifications-protocols-calibrator", {
                         url: '/calibrator/protocols',
@@ -374,6 +384,7 @@
         'verificator/services/VerificationServiceVerificator',
         'provider/filters/unique',
         'common/controllers/ProfileInfoController',
+        'common/controllers/NotificationsRejectedProtocolsController',
         'common/controllers/EditProfileInfoController',
         'common/controllers/CommonController',
         'common/controllers/DocumentController',

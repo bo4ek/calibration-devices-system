@@ -19,6 +19,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,12 +74,17 @@ public class CalibratorDigitalProtocolsServiceImpl implements CalibratorDigitalP
                                                                                               String numberOfProtocol, String moduleNumber, String sortCriteria,
                                                                                               String sortOrder, User verificatorEmployee) {
 
-        CriteriaQuery<Verification> criteriaQuery = DigitalProtocolQueryConstructorCalibrator.buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
-                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, moduleNumber, sortCriteria, sortOrder, em);
-
-        Long count = em.createQuery(DigitalProtocolQueryConstructorCalibrator.buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
-                nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, moduleNumber, em)).getSingleResult();
+        CriteriaQuery<Verification> criteriaQuery;
+        Long count;
+        try {
+            criteriaQuery = DigitalProtocolQueryConstructorCalibrator.buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
+                    nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, moduleNumber, sortCriteria, sortOrder, em);
+            count = em.createQuery(DigitalProtocolQueryConstructorCalibrator.buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
+                    nameProvider, nameCalibrator, numberOfCounter,
+                    numberOfProtocol, moduleNumber, em)).getSingleResult();
+        } catch (ParseException e) {
+            return null;
+        }
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);

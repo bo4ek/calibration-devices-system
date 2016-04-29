@@ -46,13 +46,15 @@
                                     <td data-title="'NUMBER_OF_VERIFICATION' | translate" sortable="'id'"
                                         filter="{ 'id': 'text' }">{{ verification.id }}
                                     </td>
-                                    <td data-title="'STATUS' | translate" sortable="'status'"
+                                    <td ng-show="!rejected" data-title="'STATUS' | translate" sortable="'status'"
                                         filter="{ 'status': 'status' }">{{ verification.status | translate }}
                                     </td>
                                     <td data-title="'NUMBER_OF_COUNTER' | translate" sortable="'number_of_counter'"
                                         filter="{ 'numberOfCounter': 'text' }">{{ verification.numberOfCounter | translate }}
                                     </td>
-                                    <td data-title="'COMMENT' | translate" sortable="'comment'">{{ verification.comment}}
+                                    <td ng-show="!rejected" data-title="'COMMENT' | translate" sortable="'comment'">{{ verification.comment}}
+                                    </td>
+                                    <td ng-show="rejected" data-title="'REASON_PROTOCOL_REJECTION' | translate" sortable="'rejected_message'">{{ verification.rejectedMessage}}
                                     </td>
                                     <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
                                         <i class="fa fa-info-circle info_icon"
@@ -61,10 +63,16 @@
                                            ng-click="openDetails(verification.id)">
                                         </i>
                                         <i class="fa fa-edit protocol_edit_user_icon"
-                                           ng-show="verification.status=='TEST_COMPLETED'"
+                                           ng-show="verification.status=='TEST_COMPLETED' || verification.status=='PROTOCOL_REJECTED'"
                                            popover="{{'EDIT_PROTOCOL' | translate}}"
                                            popover-trigger="mouseenter"
                                            ng-click="openTest(verification)">
+                                        </i>
+                                        <i class="fa fa-times-circle cancel_icon"
+                                           ng-show="verification.status=='PROTOCOL_REJECTED'" type="button"
+                                           popover="{{'DELETE_PROTOCOL' | translate}}"
+                                           popover-trigger="mouseenter"
+                                           ng-click="cancelTest(verification)">
                                         </i>
                                     </td>
                                 </tr>

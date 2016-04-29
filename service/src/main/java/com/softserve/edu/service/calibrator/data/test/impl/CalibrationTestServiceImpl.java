@@ -124,6 +124,12 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
 
     @Override
     @Transactional
+    public CalibrationTest save(CalibrationTest calibrationTest) {
+        return calibrationTestRepository.save(calibrationTest);
+    }
+
+    @Override
+    @Transactional
     public CalibrationTest findByVerificationId(String verifId) {
         return calibrationTestRepository.findByVerificationId(verifId);
     }

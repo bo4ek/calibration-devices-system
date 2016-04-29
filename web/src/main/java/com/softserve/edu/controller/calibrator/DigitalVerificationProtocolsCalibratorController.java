@@ -19,9 +19,12 @@ import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.state.verificator.StateVerificatorService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +55,9 @@ public class DigitalVerificationProtocolsCalibratorController {
 
     @Autowired
     StateVerificatorService stateVerificatorService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     CalibrationTestService calibrationTestService;
@@ -106,6 +112,32 @@ public class DigitalVerificationProtocolsCalibratorController {
 
     }
 
+    @RequestMapping(value = "rejected/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    public PageDTO<ProtocolDTO> getPageOfAllRejectedVerificationsByStateCalibratorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
+                                                                                          NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+
+        searchData.setStatus(Status.PROTOCOL_REJECTED.toString());
+        return getPageOfAllSentVerificationsByStateCalibratorIdAndSearch(pageNumber, itemsPerPage, sortCriteria,
+                sortOrder, searchData, employeeUser);
+
+    }
+
+    @RequestMapping(value = "cancel-protocol/{verificationId}", method = RequestMethod.GET)
+    public ResponseEntity cancelVerificationProtocol(@PathVariable String verificationId, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails) {
+        Verification verification = verificationService.findById(verificationId);
+        User user = userService.findOne(userDetails.getUsername());
+        if(verification != null && ((user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE) && verification.getCalibratorEmployee().getUsername().equals(user.getUsername()))
+                                      || (user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN) && verification.getCalibrator().getId().equals(user.getOrganization().getId())))) {
+            verification.setStatus(Status.IN_PROGRESS);
+            verification.setTaskStatus(Status.PLANNING_TASK);
+            verification.setCalibrationTests(null);
+            verificationService.saveVerification(verification);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
     /**
      * Get verificators that has agreement with this calibrator
      *
@@ -127,6 +159,21 @@ public class DigitalVerificationProtocolsCalibratorController {
         if (user != null) {
             Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
             Date earliestDate = verificationService.getEarliestDateOfDigitalVerificationProtocolsByCalibrator(organization);
+            if (earliestDate != null) {
+                return earliestDate.toString();
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "earliestDate/rejectingProtocol", method = RequestMethod.GET)
+    public String getEarliestDateOfRejectingProtocolsByCalibrator(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if (user != null) {
+            Organization organization = organizationService.getOrganizationById(user.getOrganizationId());
+            Date earliestDate = verificationService.getEarliestDateOfRejectingVerificationProtocolsByCalibrator(organization);
             if (earliestDate != null) {
                 return earliestDate.toString();
             } else {

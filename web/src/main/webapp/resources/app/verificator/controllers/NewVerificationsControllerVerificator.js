@@ -6,6 +6,7 @@ angular
                   $translate ) {
 
             $scope.resultsCount = 0;
+            $scope.path = $location.path();
 
             $scope.dataToManualTest = new Map();
 
@@ -32,7 +33,7 @@ angular
             };
 
 
-            $scope.openAddTest = function (verification) {
+            $scope.openAddTest = function (verification, index) {
                 if (!verification.manual) {
                     $location.path('/calibrator/verifications/calibration-test-add/').search({
                         'param': verification.id,
@@ -198,8 +199,10 @@ angular
                             params.filter().sentToVerificatorDateFrom = $scope.datePicker.sentToVerificatorDate.startDate.format("YYYY-MM-DD");
                             params.filter().sentToVerificatorDateTo = $scope.datePicker.sentToVerificatorDate.endDate.format("YYYY-MM-DD");
 
-                            verificationServiceVerificator.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
-                                .success(function (result) {
+                            var request = $scope.path ==  "/verifications/rejected" ?  verificationServiceVerificator.geRejectedVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+                                                                                    :  verificationServiceVerificator.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+
+                            request.success(function (result) {
                                     $scope.resultsCount = result.totalItems;
                                     $defer.resolve(result.content);
                                     params.total(result.totalItems);

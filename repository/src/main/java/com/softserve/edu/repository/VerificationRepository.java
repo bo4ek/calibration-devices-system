@@ -167,6 +167,9 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status = 'TEST_COMPLETED' and u.calibrator = :calibrator")
     java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByCalibrator(@Param("calibrator") Organization calibrator);
 
+    @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status = 'PROTOCOL_REJECTED' and u.calibrator = :calibrator")
+    java.sql.Date getEarliestDateOfRejectingVerificationProtocolsByCalibrator(@Param("calibrator") Organization calibrator);
+
     @Query("SELECT MIN(u.initialDate) FROM Verification u WHERE u.status IN ('SENT_TO_VERIFICATOR', 'TEST_NOK', 'TEST_OK') and u.stateVerificator = :verificator")
     java.sql.Date getEarliestDateOfDigitalVerificationProtocolsByVerificator(@Param("verificator") Organization verificator);
 

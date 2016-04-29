@@ -20,6 +20,9 @@ public interface CalibrationTestService {
 
     CalibrationTest findTestById(Long testId);
 
+    @Transactional
+    CalibrationTest save(CalibrationTest calibrationTest);
+
     CalibrationTest findByVerificationId(String verifId);
 
     CalibrationTestList findAllCalibrationTests();
