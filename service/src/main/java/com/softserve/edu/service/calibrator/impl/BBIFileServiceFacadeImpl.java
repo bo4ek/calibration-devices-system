@@ -352,9 +352,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Date date = new Date(deviceTestData.getYear() - 1900, deviceTestData.getMonth(), deviceTestData.getDay(), deviceTestData.getHour(),
+                Date date = new Date(deviceTestData.getYear() - 1900, deviceTestData.getMonth() - 1, deviceTestData.getDay(), deviceTestData.getHour(),
                         deviceTestData.getMinute(), deviceTestData.getSecond());
-                DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+                DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
                 String formattedDate = dateFormat.format(date);
 
                 CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(deviceTestData.getInstallmentNumber());
