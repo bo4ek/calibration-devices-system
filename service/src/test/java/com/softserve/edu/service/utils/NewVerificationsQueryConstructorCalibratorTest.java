@@ -86,6 +86,7 @@ public class NewVerificationsQueryConstructorCalibratorTest {
     private String dismantled = null;
     private String building =null;
     private String flat =null;
+    private String numberCounter = null;
 
     // endregion
 
@@ -123,7 +124,7 @@ public class NewVerificationsQueryConstructorCalibratorTest {
         CriteriaQuery<Verification> actual = NewVerificationsQueryConstructorCalibrator.buildSearchQuery(
                 providerId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch,
                 streetToSearch, region, district, locality, status,
-                calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled,  building, flat, sortCriteria, sortOrder, employeeSearchName, em, null);
+                calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, sortCriteria, sortOrder, employeeSearchName, em, null);
 
 
         verify(em.getCriteriaBuilder().createQuery(Verification.class)).from(Verification.class);
@@ -144,7 +145,7 @@ public class NewVerificationsQueryConstructorCalibratorTest {
         CriteriaQuery<Verification> actual = NewVerificationsQueryConstructorCalibrator.buildSearchQuery(
                 providerId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch,
                 streetToSearch, region, district, locality, status,
-                calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled,  building, flat, sortCriteria, sortOrder, employeeSearchName, em,null);
+                calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, sortCriteria, sortOrder, employeeSearchName, em, null);
 
         verify(em.getCriteriaBuilder().createQuery(Verification.class)).from(Verification.class);
         verify(criteriaQuery).from(Verification.class);
@@ -167,7 +168,7 @@ public class NewVerificationsQueryConstructorCalibratorTest {
         CriteriaQuery<Long> actual = NewVerificationsQueryConstructorCalibrator.buildCountQuery(
                 calibratorId, startDateToSearch, endDateToSearch, idToSearch,
                 fullNameToSearch, streetToSearch, region, district,
-                locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, employeeSearchName, em);
+                locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, employeeSearchName, em);
 
         verify(em.getCriteriaBuilder().createQuery(Long.class), atLeastOnce()).from(Verification.class);
         verify(cb, atLeastOnce()).createQuery(Long.class);

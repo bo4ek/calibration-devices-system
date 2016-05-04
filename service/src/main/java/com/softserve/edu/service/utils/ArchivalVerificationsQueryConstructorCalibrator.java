@@ -2,11 +2,13 @@ package com.softserve.edu.service.utils;
 
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
+import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.verification.calibration.RejectedInfo;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
@@ -55,7 +57,6 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
                                                       String streetToSearch, String status, String employeeName,
                                                       Long protocolId, String protocolStatus, String numberCounter, String measurementDeviceType,
                                                       User calibratorEmployee, EntityManager em) {
-
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Verification> root = countQuery.from(Verification.class);
@@ -142,12 +143,87 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
             queryPredicate = cb.and(cb.equal(joinCalibratorTest.get("testResult"),
                     Verification.CalibrationTestResult.valueOf(protocolStatus.trim())), queryPredicate);
         }
-        
-        if(employee == null) {
-        	queryPredicate = cb.and(root.get("calibratorEmployee").isNull(), queryPredicate);
-        }         	
+
+        if (employee == null) {
+            queryPredicate = cb.and(root.get("calibratorEmployee").isNull(), queryPredicate);
+        }
 
         return queryPredicate;
+    }
+
+    public static CriteriaQuery<Verification> buildSearchRejectedQuery(Long employeeId, String startDateToSearch,
+                                                                       String endDateToSearch, String rejectedReason, String employeeRejected,
+                                                                       String sortCriteria, String sortOrder, User calibratorEmployee, EntityManager em) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
+        Root<Verification> root = criteriaQuery.from(Verification.class);
+
+        Join<Verification, Organization> calibratorJoin = root.join("calibrator");
+        Join<Verification, RejectedInfo> rejectedInfoJoin = root.join("rejectedInfo");
+
+        Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicateRejected(root, cb, employeeId, startDateToSearch, endDateToSearch,
+                rejectedReason, employeeRejected, calibratorEmployee, calibratorJoin, rejectedInfoJoin);
+
+        if ((sortCriteria != null) && (sortOrder != null)) {
+            criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
+        } else {
+            criteriaQuery.orderBy(cb.desc(root.get("rejectedCalibratorDate")));
+        }
+
+        if (predicate == null) System.out.println("Predicate have not been initialized");
+        criteriaQuery.select(root);
+        criteriaQuery.where(predicate);
+        return criteriaQuery;
+    }
+
+    private static Predicate buildPredicateRejected(Root<Verification> root, CriteriaBuilder cb, Long employeeId, String startDateToSearch, String endDateToSearch,
+                                                    String rejectedReason, String employeeRejected, User calibratorEmployee, Join<Verification,
+            Organization> calibratorJoin, Join<Verification, RejectedInfo> rejectedJoin) {
+
+        Predicate queryPredicate = cb.equal(calibratorJoin.get("id"), employeeId);
+
+
+        if (startDateToSearch != null && endDateToSearch != null) {
+            DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+            LocalDate startDate = null;
+            LocalDate endDate = null;
+            try {
+                startDate = LocalDate.parse(startDateToSearch, dbDateTimeFormatter);
+                endDate = LocalDate.parse(endDateToSearch, dbDateTimeFormatter);
+            } catch (Exception pe) {
+                logger.error("Cannot parse date", pe);
+            }
+            queryPredicate = cb.and(cb.between(root.get("rejectedCalibratorDate"), java.sql.Date.valueOf(startDate), java.sql.Date.valueOf(endDate)), queryPredicate);
+        }
+
+        if ((rejectedReason != null) && (rejectedReason.length() > 0)) {
+            queryPredicate = cb.and(cb.like(rejectedJoin.get("name"), "%" + rejectedReason + "%"), queryPredicate);
+        }
+
+        if ((employeeRejected != null) && (employeeRejected.length() > 0)) {
+            Join<Verification, User> joinCalibratorEmployee = root.join("calibratorEmployee");
+            Predicate searchPredicateByCalibratorEmployeeName = cb.or(cb.like(joinCalibratorEmployee.get("lastName"),
+                    "%" + employeeRejected + "%"));
+            queryPredicate = cb.and(searchPredicateByCalibratorEmployeeName, queryPredicate);
+        }
+        return queryPredicate;
+    }
+
+    public static CriteriaQuery<Long> buildCountRejectedQuery(Long employeeId, String startDateToSearch,
+                                                              String endDateToSearch, String rejectedReason, String employeeRejected,
+                                                              String sortCriteria, String sortOrder, User calibratorEmployee, EntityManager em) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<Verification> root = countQuery.from(Verification.class);
+        Join<Verification, Organization> calibratorJoin = root.join("calibrator");
+        Join<Verification, RejectedInfo> rejectedInfoJoin = root.join("rejectedInfo");
+        Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicateRejected(root, cb, employeeId, startDateToSearch, endDateToSearch,
+                rejectedReason, employeeRejected, calibratorEmployee, calibratorJoin, rejectedInfoJoin);
+        countQuery.select(cb.count(root));
+        countQuery.where(predicate);
+        return countQuery;
     }
 }
 

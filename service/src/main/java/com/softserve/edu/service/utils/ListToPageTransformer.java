@@ -3,6 +3,7 @@ package com.softserve.edu.service.utils;
 import java.util.List;
 
 public class ListToPageTransformer<T> {
+
     private Long totalItems;
     private List<T> content;
 

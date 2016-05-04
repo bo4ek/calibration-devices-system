@@ -1,6 +1,6 @@
 angular
     .module('employeeModule')
-    .controller('ArchivalVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
+    .controller('RejectedVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
         'VerificationServiceCalibrator', 'CalibrationTestServiceCalibrator', 'ngTableParams', '$location', '$filter', '$rootScope', '$timeout', '$translate',
 
         function ($scope, $modal, $log, verificationServiceCalibrator, calibrationTestServiceCalibrator, ngTableParams, $location, $filter, $rootScope,
@@ -9,9 +9,6 @@ angular
             $scope.resultsCount = 0;
 
             $scope.clearAll = function () {
-                $scope.selectedStatus.name = null;
-                $scope.selectedDeviceType.name = null;
-                $scope.selectedProtocolStatus.name = null;
                 $scope.tableParams.filter({});
                 $scope.clearDate(); // sets 'all time' timerange
             };
@@ -21,7 +18,7 @@ angular
                 //daterangepicker doesn't support null dates
                 $scope.myDatePicker.pickerDate = $scope.defaultDate;
                 //setting corresponding filters with 'all time' range
-                $scope.tableParams.filter()['date'] = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
+                $scope.tableParams.filter()['starDate'] = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                 $scope.tableParams.filter()['endDate'] = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
             };
@@ -30,73 +27,6 @@ angular
                 $scope.tableParams.reload();
             };
 
-            $scope.selectedStatus = {
-                name: null
-            };
-            //for measurement device type
-            $scope.selectedDeviceType = {
-                name: null
-            };
-            $scope.selectedProtocolStatus = {
-                name: null
-            };
-
-
-            $scope.statusData = [
-                {id: 'TEST_OK', label: null},
-                {id: 'TEST_NOK', label: null},
-                {id: 'SENT_TO_VERIFICATOR', label: null}
-            ];
-
-            //new select measurementDeviceType for search
-            $scope.deviceTypeData = [
-//                {id: 'ELECTRICAL', label: null},
-//                {id: 'GASEOUS', label: null},
-                {id: 'WATER', label: null},
-                {id: 'THERMAL', label: null}
-            ];
-
-
-            $scope.protocolStatusData = [
-                {id: 'SUCCESS', label: null},
-                {id: 'FAILED', label: null}
-            ];
-
-            $scope.setTypeDataLanguage = function () {
-                var lang = $translate.use();
-                if (lang === 'ukr') {
-                    $scope.statusData[0].label = 'Перевірено придатний';
-                    $scope.statusData[1].label = 'Перевірено непридатний';
-                    $scope.statusData[2].label = 'Пред\'явлено повірнику';
-
-                    $scope.deviceTypeData[0].label = 'Холодна вода';
-                    $scope.deviceTypeData[1].label = 'Гаряча вода';
-//                    $scope.deviceTypeData[2].label = 'Електричний';
-//                    $scope.deviceTypeData[3].label = 'Газовий';
-
-                    $scope.protocolStatusData[0].label = 'Придатний';
-                    $scope.protocolStatusData[1].label = 'Не придатний';
-
-                } else if (lang === 'eng') {
-                    $scope.statusData[0].label = 'Tested OK';
-                    $scope.statusData[1].label = 'Tested NOK';
-                    $scope.statusData[2].label = 'Sent to verificator';
-
-                    $scope.deviceTypeData[0].label = 'Cold water';
-                    $scope.deviceTypeData[1].label = 'Hot water';
-//                    $scope.deviceTypeData[2].label = 'Electrical';
-//                    $scope.deviceTypeData[3].label = 'Gaseous';
-
-                    $scope.protocolStatusData[0].label = 'SUCCESS';
-                    $scope.protocolStatusData[1].label = 'FAILED';
-
-                } else {
-                    $log.debug(lang);
-                }
-            };
-
-
-            $scope.setTypeDataLanguage();
             $scope.myDatePicker = {};
             $scope.myDatePicker.pickerDate = null;
             $scope.defaultDate = null;
@@ -162,9 +92,7 @@ angular
             };
 
             verificationServiceCalibrator.getArchivalVerificationEarliestDate().success(function (date) {
-                //first we will try to receive date period
-                // to populate ng-table filter
-                // I did this to reduce reloading and flickering of the table
+
                 $scope.initDatePicker(date);
                 $scope.tableParams = new ngTableParams({
                     page: 1,
@@ -180,30 +108,10 @@ angular
                         var sortCriteria = Object.keys(params.sorting())[0];
                         var sortOrder = params.sorting()[sortCriteria];
 
-                        if ($scope.selectedStatus.name != null) {
-                            params.filter().status = $scope.selectedStatus.name.id;
-                        }
-                        else {
-                            params.filter().status = null; //case when the filter is cleared with a button on the select
-                        }
-
-                        if ($scope.selectedDeviceType.name != null) {
-                            params.filter().measurement_device_type = $scope.selectedDeviceType.name.id;
-                        }
-                        else {
-                            params.filter().measurement_device_type = null; //case when the filter is cleared with a button on the select
-                        }
-
-                        if ($scope.selectedProtocolStatus.name != null) {
-                            params.filter().protocol_status = $scope.selectedProtocolStatus.name.id;
-                        } else {
-                            params.filter().protocol_status = null;
-                        }
-
-                        params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
+                        params.filter().starDate = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                         params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
-                        verificationServiceCalibrator.getArchiveVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder).success(function (result) {
+                        verificationServiceCalibrator.getRejectedVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder).success(function (result) {
                             $scope.resultsCount = result.totalItems;
                             $defer.resolve(result.content);
                             params.total(result.totalItems);
@@ -213,6 +121,7 @@ angular
                     }
                 })
             });
+
 
             $scope.checkFilters = function () {
                 if ($scope.tableParams == null) return false; //table not yet initialized
@@ -241,24 +150,6 @@ angular
                 return false;
             };
 
-            $scope.openDetails = function (verifId, verifDate) {
-                $modal.open({
-                    animation: true,
-                    templateUrl: 'resources/app/provider/views/modals/archival-verification-details.html',
-                    controller: 'ArchivalDetailsModalController',
-                    size: 'lg',
-                    resolve: {
-                        response: function () {
-                            return verificationServiceCalibrator.getArchivalVerificationDetails(verifId)
-                                .success(function (verification) {
-                                    verification.id = verifId;
-                                    verification.initialDate = verifDate;
-                                    return verification;
-                                });
-                        }
-                    }
-                });
-            };
 
             /**
              *  Date picker and formatter setup
@@ -283,22 +174,6 @@ angular
             $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
             $scope.format = $scope.formats[2];
 
-
-            $scope.openAddTest = function (verification) {
-                if (!verification.manual) {
-                    $location.path('/calibrator/verifications/calibration-test-add/').search({
-                        'param': verification.id,
-                        'loadProtocol': 1
-                    });
-                } else {
-                    $scope.createManualTest(verification);
-                    calibrationTestServiceCalibrator.dataOfVerifications().setIdsOfVerifications($scope.dataToManualTest);
-                    $location.path('/calibrator/verifications/calibration-test/').search({
-                        'param': verification.id,
-                        'loadProtocol': 1
-                    });
-                }
-            };
 
         }]);
 

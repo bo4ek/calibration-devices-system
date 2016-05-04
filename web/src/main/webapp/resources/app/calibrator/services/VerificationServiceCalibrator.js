@@ -15,6 +15,9 @@ angular
             getArchiveVerifications: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
                 return getDataWithParams('calibrator/verifications/archive/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
             },
+            getRejectedVerifications: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
+                return getDataWithParams('calibrator/verifications/rejected/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
+            },
             getNewVerificationDetails: function (verificationId) {
                 return getData('verifications/new/' + verificationId);
             },

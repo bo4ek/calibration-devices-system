@@ -69,7 +69,7 @@ public interface VerificationService {
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorIdOnMainPanel(Long organizationId, int pageNumber, int itemsPerPage);
 
     ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndCriteriaSearch(Long calibratorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                                String streetToSearch, String region, String district, String locality, String status, String employeeName, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String sortCriteria, String sortOrder, User calibratorEmployee, ArrayList<Map<String, Object>> globalSearchParams);
+                                                                                               String streetToSearch, String region, String district, String locality, String status, String employeeName, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String sortCriteria, String sortOrder, User calibratorEmployee, ArrayList<Map<String, Object>> globalSearchParams);
 
 
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByCalibratorId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch,
@@ -89,6 +89,9 @@ public interface VerificationService {
     ListToPageTransformer<CalibrationTest> findPageOfCalibrationTestsByVerificationId(int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String name, String region, String district, String locality, String streetToSearch, String idToSearch, String fullNameToSearch, Integer settingNumber, String consumptionStatus,
                                                                                       Long protocolId, String testResult, Long measurementDeviceId, String measurementDeviceType, String sortCriteria, String sortOrder);
 
+
+    ListToPageTransformer<Verification> findPageOfRejectedVerificationsByCalibratorId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch,
+                                                                                      String rejectedReason, String rejectedEmployee, String sortCriteria, String sortOrder, User calibratorEmployee);
 
     Verification findByIdAndProviderId(String id, Long providerId);
 
@@ -210,4 +213,6 @@ public interface VerificationService {
     List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId);
 
     public void rejectVerification(Verification verification, RejectedInfo rejectedInfo, Status status);
+
+
 }

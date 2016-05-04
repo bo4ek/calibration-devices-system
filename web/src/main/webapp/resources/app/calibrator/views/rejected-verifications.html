@@ -1,7 +1,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="page-header">{{'VERIFICATIONS_ARCHIVE' | translate}}</h1>
+            <h1 class="page-header">{{'REJECTED_VERIFICATIONS' | translate}}</h1>
         </div>
     </div>
     <div class="row">
@@ -30,143 +30,21 @@
                                        class="table table-bordered table-hover users_table" id="info_table">
                                     <tbody>
                                     <tr ng-repeat="verification in $data">
-                                        <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'date'"
-                                            filter="{ 'date': 'daterange' }">{{ verification.initialDate | date :
+                                        <td data-title="'REJECTED_DATE' | translate" class="datecolumn"
+                                            sortable="'date'"
+                                            filter="{ 'date': 'daterange' }">{{ verification.rejectedCalibratorDate |
+                                            date :
                                             'dd-MM-yyyy'}}
                                             <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
                                                 translate}} {{verification.processTimeExceeding}} {{'DAYS' |
                                                 translate}}</b>
                                             </div>
                                         </td>
-                                        <td data-title="'VERIFICATION_ID' | translate" sortable="'id'"
-                                            filter="{ 'id': 'text' }" ng-model="filters.id">{{ verification.id }}
+                                        <td data-title="'REJECTED_REASON' | translate" sortable="'rejected_reason'"
+                                            filter="{ 'rejectedReason': 'text' }">{{verification.rejectedReason}}
                                         </td>
-
-                                        <td data-title="'ACTIONS' | translate" class="control_buttons"
-                                            style="width: 30%">
-
-
-                                            <div class="ui simple dropdown icon item">
-                                                <i class="fa fa-wrench"></i>
-
-                                                <div class="menu">
-                                                    <div class="ui simple dropdown icon item">
-                                                        <span>{{ 'VERIFICATION_DROPDOWN' | translate }}</span>
-
-                                                        <div class="menu">
-                                                            <div class="item"
-                                                                 ng-click="openDetails(verification.id, verification.initialDate)">
-                                                                <a>
-                                                                    <i class="fa fa-info-circle"></i>
-                                                                    {{ 'DETAIL' | translate }}
-                                                                </a>
-                                                            </div>
-                                                            <div class="item">
-                                                                <a
-                                                                        target="_blank"
-                                                                        href="{{'/doc/info/' + verification.id + '/docx'}}">
-                                                                    <i class="fa fa-file-word-o"></i>
-                                                                    {{ 'DOWNLOAD_DOC' | translate }}
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="ui simple dropdown icon item"
-                                                         ng-show="verification.status === 'TEST_OK' || verification.status === 'TEST_NOK'">
-
-                                                        <span>{{ 'PROTOCOL_DROPDOWN' | translate }}</span>
-
-                                                        <div class="menu" ng-controller="DocumentController">
-                                                            <div class="item" ng-click="openAddTest(verification)">
-                                                                <a>
-                                                                    <i class="fa fa-external-link"></i>
-                                                                    {{ 'DETAIL' | translate }}
-                                                                </a>
-                                                            </div>
-                                                            <div class="item" ng-show="verification.status == 'TEST_OK'"
-                                                                 ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', verification.id, 'docx')">
-                                                                <a class="ng-binding">
-                                                                    <i class="fa fa-file-word-o"></i>
-                                                                    {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_DOCX' |
-                                                                    translate}}
-                                                                </a>
-                                                            </div>
-                                                            <div class="item"
-                                                                 ng-show="verification.status == 'TEST_NOK'"
-                                                                 ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', verification.id, 'docx')">
-                                                                <a class="ng-binding" download>
-                                                                    <i class="fa fa-file-word-o"></i>
-                                                                    {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_DOCX' |
-                                                                    translate}}
-                                                                </a>
-                                                            </div>
-                                                            <div class="item" ng-show="verification.status == 'TEST_OK'"
-                                                                 ng-click="downloadDocumentWithoutEDS('VERIFICATION_CERTIFICATE', verification.id, 'pdf')">
-                                                                <a class="ng-binding">
-                                                                    <i class="fa fa-file-pdf-o"></i>
-                                                                    {{'DOWNLOAD_VERIFICATION_CERTIFICATE_IN_PDF' |
-                                                                    translate}}
-                                                                </a>
-                                                            </div>
-                                                            <div class="item"
-                                                                 ng-show="verification.status == 'TEST_NOK'"
-                                                                 ng-click="downloadDocumentWithoutEDS('UNFITNESS_CERTIFICATE', verification.id, 'pdf')">
-                                                                <a class="ng-binding">
-                                                                    <i class="fa fa-file-pdf-o"></i>
-                                                                    {{'DOWNLOAD_UNFITNESS_CERTIFICATE_IN_PDF' |
-                                                                    translate}}
-                                                                </a>
-                                                            </div>
-                                                            <div class="item"
-                                                                 ng-click="printDocument(verification.id, verification.status)">
-                                                                <a class="ng-binding">
-                                                                    <i class="print fa fa-print"></i>
-                                                                    {{'PRINT_DOCUMENT' | translate}}
-                                                                </a>
-                                                                <iframe id="pdf"
-                                                                        style="width:0px;height:0px;visibility:hidden;"></iframe>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td data-title="'CLIENT_FULL_NAME' | translate" sortable="'client_last_name'"
-                                            filter="{ 'client_full_name': 'text' }">{{ verification.fullName }}
-                                        </td>
-                                        <td data-title="'CLIENT_STREET' | translate" sortable="'street'"
-                                            filter="{ 'street': 'text' }">{{ verification.street }}
-                                        </td>
-                                        <td data-title="'STATUS' | translate" sortable="'status'"
-                                            filter="{ 'status': 'status' }">{{ verification.status | translate }}
-                                        </td>
-                                        <td data-title="'EMPLOYEE_SINGLE' | translate"
-                                            sortable="'calibrator_employee_last_name'"
-                                            filter="{ 'employee_last_name': 'text' }">{{ verification.calibratorEmployee
-                                            }}
-                                        </td>
-                                        <td data-title="'PROTOCOL_ID' | translate " sortable="'protocol_id'"
-                                            filter="{ protocol_id : 'text' }">{{verification.protocolId}}
-                                        </td>
-                                        <td data-title="'PROTOCOL_STATUS' | translate" sortable="'protocol_status'"
-                                            filter="{ protocol_status : 'protocolStatus'}">{{
-                                            verification.protocolStatus | translate}}
-                                        </td>
-                                        <td data-title="'MEASUREMENT_DEVICE_ID' | translate"
-                                            sortable="'NUMBER_OF_COUNTER'"
-                                            filter="{ numberCounter : 'text' }">
-                                            {{verification.numberCounter}}
-                                        </td>
-                                        <td data-title="'MEASUREMENT_DEVICE_TYPE' | translate"
-                                            sortable="'measurement_device_type'"
-                                            filter="{ measurement_device_type : 'deviceType' }">
-                                            {{verification.measurementDeviceType | translate}}
-                                        </td>
-                                        <td data-title="'DOCUMENT_TYPE' | translate" sortable="'protocol_status'"
-                                            filter="{ protocol_status : 'protocolStatus'}">{{
-                                            verification.documentTypeName }}
+                                        <td data-title="'EMPLOYEE_REJECTED' | translate" sortable="'employee_rejected'"
+                                            filter="{ 'employeeRejected': 'text' }">{{verification.employeeRejected}}
                                         </td>
                                     </tr>
                                     </tbody>

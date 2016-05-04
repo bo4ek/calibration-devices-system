@@ -18,6 +18,7 @@ public class ArchiveVerificationsFilterAndSort {
 	private String status;
 	private String employee_last_name;
 
+
 	private Long protocol_id;
 	private String protocol_status;
 

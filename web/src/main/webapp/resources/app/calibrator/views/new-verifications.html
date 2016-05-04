@@ -77,6 +77,10 @@
                         <td data-title="'SYMBOL' | translate" sortable="'symbol'"
                             filter="{ 'symbol': 'text' }">{{ verification.symbol }}
                         </td>
+                        </td>
+                        <td data-title="'COUNTER_NUMBER' | translate" sortable="'numberCounter'"
+                            filter="{ 'numberCounter': 'text' }">{{ verification.numberCounter }}
+                        </td>
                         <td data-title="'STANDART_SIZE_OF_COUNTER' | translate" sortable="'standardSize'"
                             filter="{ 'standardSize': 'text' }">{{ verification.standardSize }}
                         </td>
@@ -138,7 +142,6 @@
                             <i class="fa fa-ban cancel_icon"
                                type="button"
                                ng-hide="verification.status=='TEST_COMPLETED'"
-                               ng-show="verification.calibratorEmployee == $scope.loginForm.username"
                                popover="{{'REJECT_VERIFICATION' | translate}}"
                                popover-trigger="mouseenter"
                                ng-click="openRejectVerificationModal(verification.id)">

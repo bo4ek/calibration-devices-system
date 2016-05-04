@@ -1,6 +1,6 @@
 angular
     .module('employeeModule')
-    .controller('RejectedVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
+    .controller('ArchivalVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
         'VerificationServiceCalibrator', 'CalibrationTestServiceCalibrator', 'ngTableParams', '$location', '$filter', '$rootScope', '$timeout', '$translate',
 
         function ($scope, $modal, $log, verificationServiceCalibrator, calibrationTestServiceCalibrator, ngTableParams, $location, $filter, $rootScope,

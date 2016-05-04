@@ -6,7 +6,9 @@ import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.dto.*;
 import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
+import com.softserve.edu.dto.calibrator.RejecteVerificationPageDTO;
 import com.softserve.edu.dto.provider.*;
+import com.softserve.edu.dto.verificator.RejectedInfoFilterSearch;
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
@@ -201,6 +203,7 @@ public class CalibratorVerificationController {
                 searchData.getDismantled(),
                 searchData.getBuilding(),
                 searchData.getFlat(),
+                searchData.getSerialNumber(),
                 sortCriteria, sortOrder, calibratorEmployee, arrayList);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
@@ -234,6 +237,7 @@ public class CalibratorVerificationController {
                 searchData.get("dismantled"),
                 searchData.get("building"),
                 searchData.get("flat"),
+                searchData.get("numberCounter"),
                 sortCriteria, sortOrder, calibratorEmployee, globalSearchParams);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
@@ -450,6 +454,36 @@ public class CalibratorVerificationController {
                         sortOrder, calibratorEmployee);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<VerificationPageDTO>(queryResult.getTotalItems(), content);
+    }
+
+    @RequestMapping(value = "rejected/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    public PageDTO<RejecteVerificationPageDTO> getPageOfRejectedVerificationsByOrganizationId(@PathVariable Integer itemsPerPage,
+                                                                                              @PathVariable String sortCriteria,
+                                                                                              @PathVariable String sortOrder,
+                                                                                              RejectedInfoFilterSearch searchData,
+                                                                                              @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser,
+                                                                                              @PathVariable Integer pageNumber) {
+        User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
+
+        ListToPageTransformer<Verification> queryResult = verificationService
+                .findPageOfRejectedVerificationsByCalibratorId(
+                        employeeUser.getOrganizationId(),
+                        pageNumber,
+                        itemsPerPage,
+                        searchData.getStarDate(),
+                        searchData.getEndDate(),
+                        searchData.getRejectedReason(),
+                        searchData.getEmployeeRejected(),
+                        sortCriteria,
+                        sortOrder, calibratorEmployee);
+        List<RejecteVerificationPageDTO> list = new ArrayList<RejecteVerificationPageDTO>();
+        for (Verification verification : queryResult.getContent()) {
+            RejecteVerificationPageDTO dto = new RejecteVerificationPageDTO(verification.getRejectedCalibratorDate(), verification.getRejectedInfo().getName(),
+                    verification.getCalibratorEmployee().getLastName() + " " + verification.getCalibratorEmployee().getFirstName() + " " + verification.getCalibratorEmployee().getMiddleName());
+            list.add(dto);
+        }
+
+        return new PageDTO<RejecteVerificationPageDTO>(queryResult.getTotalItems(), list);
     }
 
     @RequestMapping(value = "archive/{verificationId}", method = RequestMethod.GET)

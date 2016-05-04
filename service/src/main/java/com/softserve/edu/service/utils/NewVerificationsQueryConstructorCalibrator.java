@@ -40,7 +40,7 @@
 		public static CriteriaQuery<Verification> buildSearchQuery(Long providerId, String startDateToSearch,
 																   String endDateToSearch, String idToSearch, String fullNameToSearch, String streetToSearch, String region,
 																   String district, String locality, String status,
-																   User calibratorEmployee, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String sortCriteria, String sortOrder, String employeeSearchName, EntityManager em, ArrayList<Map<String, Object>> globalSearchParams) {
+																   User calibratorEmployee, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberConter, String sortCriteria, String sortOrder, String employeeSearchName, EntityManager em, ArrayList<Map<String, Object>> globalSearchParams) {
 
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
@@ -48,8 +48,8 @@
             Join<Verification, Organization> calibratorJoin = root.join("calibrator");
 
             Predicate predicate = NewVerificationsQueryConstructorCalibrator.buildPredicate(root, cb, calibratorJoin, providerId, startDateToSearch, endDateToSearch,
-                    idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, employeeSearchName);
-            if((sortCriteria != null)&&(sortOrder != null)) {
+					idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberConter, employeeSearchName);
+			if((sortCriteria != null)&&(sortOrder != null)) {
                 criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
             } else {
                 criteriaQuery.orderBy(cb.desc(root.get("sentToCalibratorDate")));
@@ -77,14 +77,14 @@
 		 */
 		public static CriteriaQuery<Long> buildCountQuery(Long calibratorId, String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch, String streetToSearch, String region,
 														  String district, String locality, String status,
-														  User calibratorEmployee,String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String employeeSearchName, EntityManager em) {
+														  User calibratorEmployee, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String employeeSearchName, EntityManager em) {
 			
 				CriteriaBuilder cb = em.getCriteriaBuilder();
 				CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
 				Root<Verification> root = countQuery.from(Verification.class);
 				Join<Verification, Organization> calibratorJoin = root.join("calibrator");
 				Predicate predicate = NewVerificationsQueryConstructorCalibrator.buildPredicate(root, cb, calibratorJoin, calibratorId, startDateToSearch, endDateToSearch,
-						idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled,  building, flat, employeeSearchName);
+						idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, employeeSearchName);
 				countQuery.select(cb.count(root));
 				countQuery.where(predicate);
 				return countQuery;
@@ -103,7 +103,7 @@
 		 * @param streetToSearch  @return Predicate
 		 */
 	private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long calibratorId, String startDateToSearch, String endDateToSearch, String idToSearch,
-											String fullNameToSearch, String streetToSearch, String region, String district, String locality, String status, User calibratorEmployee, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String employeeSearchName) {
+											String fullNameToSearch, String streetToSearch, String region, String district, String locality, String status, User calibratorEmployee, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String employeeSearchName) {
 
 		String userName = calibratorEmployee.getUsername();
 		Predicate queryPredicate = cb.conjunction();
@@ -193,7 +193,12 @@
                     cb.like(root.get("counter").get("counterType").get("symbol"), "%" + symbol + "%"),
                     queryPredicate);
         }
-        if ((nameProvider != null) && (nameProvider.length() > 0)) {
+		if ((numberCounter != null) && (numberCounter.length() > 0)) {
+			queryPredicate = cb.and(
+					cb.like(root.get("counter").get("numberCounter"), "%" + numberCounter + "%"),
+					queryPredicate);
+		}
+		if ((nameProvider != null) && (nameProvider.length() > 0)) {
             queryPredicate = cb.and(
                     cb.like(root.get("provider").get("name"), "%" + nameProvider + "%"),
                     queryPredicate);
