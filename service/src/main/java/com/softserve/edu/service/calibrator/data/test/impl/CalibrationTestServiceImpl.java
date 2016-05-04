@@ -281,8 +281,10 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         if (statusReceived.equals(Status.TEST_OK) || statusReceived.equals(Status.TEST_NOK)) {
             String statusToSend = statusReceived.equals(Status.TEST_OK) ? Constants.TEST_OK : Constants.TEST_NOK;
             verification.setStatus(statusReceived);
-            mailService.sendPassedTestMail(verification.getClientData().getEmail(), verification.getId(), statusToSend);
-            if (verification.getProviderEmployee() != null) {
+            if (verification.getClientData().getEmail() != null) {
+                mailService.sendPassedTestMail(verification.getClientData().getEmail(), verification.getId(), statusToSend);
+            }
+            if (verification.getProviderEmployee() != null && verification.getProviderEmployee().getEmail() != null) {
                 mailService.sendPassedTestMail(verification.getProviderEmployee().getEmail(), verification.getId(), statusToSend);
             }
             verificationRepository.save(verification);
