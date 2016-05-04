@@ -328,12 +328,30 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             ParseException, IOException, InvalidImageInBbiException {
         List<BBIOutcomeDTO> resultsOfBBIProcessing = new ArrayList<>();
 
+        String archiveBbi = "../archiveBbi";
+        File dir = new File(archiveBbi);
+        if (!dir.exists()) dir.mkdir();
+
         for (File bbiFile : listOfBBIfiles) {
             String correspondingVerification = null;
             BBIOutcomeDTO.ReasonOfRejection reasonOfRejection = null;
             DeviceTestData deviceTestData;
+            String calibrationModuleNumber;
+
             try {
                 deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                calibrationModuleNumber = deviceTestData.getInstallmentNumber();
+
+                String moduleDirectory = archiveBbi + "/" + calibrationModuleNumber;
+                File theDir = new File(moduleDirectory);
+                if (!theDir.exists()) theDir.mkdir();
+
+                File fileDir = new File(moduleDirectory + "/" + bbiFile.getName());
+                try {
+                    FileUtils.copyFile(bbiFile, fileDir);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Date date = new Date(deviceTestData.getYear() - 1900, deviceTestData.getMonth(), deviceTestData.getDay(), deviceTestData.getHour(),
                         deviceTestData.getMinute(), deviceTestData.getSecond());
                 DateFormat dateFormat = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
