@@ -14,9 +14,6 @@ import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.repository.*;
-import com.softserve.edu.repository.catalogue.DistrictRepository;
-import com.softserve.edu.repository.catalogue.LocalityRepository;
-import com.softserve.edu.repository.catalogue.StreetRepository;
 import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
 import com.softserve.edu.service.exceptions.InvalidModuleSerialNumberException;
@@ -492,12 +489,13 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         mailService.sendMailToStationWithAttachments(user, calibrationTask.getModule().getSerialNumber(), dateFormat.format(calibrationTask.getDateOfTask()).toString(), email, Constants.TASK + " " + calibrationTask.getId(), xlsFile, dbFile);
         calibrationTask.setStatus(Status.SENT_TO_TEST_DEVICE);
         for (Verification verification : verifications) {
-            verification.setStatus(Status.SENT_TO_TEST_DEVICE);
-            verification.setTaskStatus(Status.SENT_TO_TEST_DEVICE);
+            if (!verification.getStatus().equals(Status.TEST_COMPLETED)) {
+                verification.setStatus(Status.SENT_TO_TEST_DEVICE);
+                verification.setTaskStatus(Status.SENT_TO_TEST_DEVICE);
+            }
         }
         taskRepository.save(calibrationTask);
         verificationRepository.save(Arrays.asList(verifications));
-
     }
 
     private ArrayList getData(CalibrationTask calibrationTask, Verification[] verifications) {
