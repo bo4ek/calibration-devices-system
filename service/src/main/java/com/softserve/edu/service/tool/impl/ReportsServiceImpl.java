@@ -291,7 +291,6 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.VERIFICATION_NUMBER, verificationNumbers));
         data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, verificationStatus));
         data.add(new TableExportColumn(Constants.VALID_UNTIL, validUntil));
-
         // endregion
 
         return data;

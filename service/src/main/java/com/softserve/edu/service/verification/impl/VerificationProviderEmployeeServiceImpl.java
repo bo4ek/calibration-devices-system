@@ -43,7 +43,9 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
         if (verification != null && verification.getProvider().getId().equals(providerEmployee.getOrganization().getId())) {
             verification.setProviderEmployee(providerEmployee);
             verification.setStatus(Status.ACCEPTED);
-            mailService.sendAcceptMail(verification.getClientData().getEmail(), verificationId, verification.getDevice().getDeviceType().name());
+            if (verification.getClientData() != null && verification.getClientData().getEmail() != null) {
+                mailService.sendAcceptMail(verification.getClientData().getEmail(), verificationId, verification.getDevice().getDeviceType().name());
+            }
             verification.setReadStatus(Verification.ReadStatus.READ);
             verification.setExpirationDate(null);
             verificationRepository.save(verification);

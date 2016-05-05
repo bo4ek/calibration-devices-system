@@ -159,7 +159,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Async
-    public void sendOrganizationNewPasswordMail(Organization organization, User admin , String newPassword){// String organizationMail, String organizationName, String username, String password) {
+    public void sendOrganizationNewPasswordMail(Organization organization, User admin, String newPassword) {// String organizationMail, String organizationName, String username, String password) {
 
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
             public void prepare(MimeMessage mimeMessage) throws UnsupportedEncodingException, MessagingException {
