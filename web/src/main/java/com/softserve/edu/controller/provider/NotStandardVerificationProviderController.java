@@ -93,9 +93,7 @@ public class NotStandardVerificationProviderController {
     @RequestMapping(value = "new/count", method = RequestMethod.GET)
     public Long getCountOfNewVerificationsByProviderId(
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
-
         return verificationService.findCountOfNotStandardNewVerificationsByProviderId(user.getOrganizationId());
-
     }
 
 

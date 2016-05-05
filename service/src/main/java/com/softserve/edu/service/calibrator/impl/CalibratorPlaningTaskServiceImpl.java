@@ -522,7 +522,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> customer = new ArrayList<>();
         List<String> taskDate = new ArrayList<>();
         List<String> provider = new ArrayList<>();
-        List<String> address = new ArrayList<>();
         List<String> entrance = new ArrayList<>();
         List<String> floor = new ArrayList<>();
         List<String> countersNumber = new ArrayList<>();
@@ -572,7 +571,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 Address clientAddress = verification.getClientData().getClientAddress();
                 if (clientAddress != null) {
                     district.add(getDistrict(clientAddress));
-                    address.add(getAddress(clientAddress));
                     building.add(getBuilding(clientAddress));
                     flat.add(getFlat(clientAddress));
                     city.add(getCity(clientAddress));
@@ -580,7 +578,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                     street.add(getStreet(clientAddress));
                 } else {
                     district.add(empty);
-                    address.add(empty);
                     building.add(empty);
                     flat.add(empty);
                     city.add(empty);
@@ -591,7 +588,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 fullName.add(empty);
                 telephone.add(empty);
                 district.add(empty);
-                address.add(empty);
                 building.add(empty);
                 flat.add(empty);
                 city.add(empty);
@@ -618,7 +614,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             dataXls.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
             dataXls.add(new TableExportColumn(Constants.PROVIDER, provider));
             dataXls.add(new TableExportColumn(Constants.REGION, district));
-            dataXls.add(new TableExportColumn(Constants.ADDRESS, address));
+            dataXls.add(new TableExportColumn(Constants.STREET, street));
             dataXls.add(new TableExportColumn(Constants.BUILDING, building));
             dataXls.add(new TableExportColumn(Constants.FLAT, flat));
             dataXls.add(new TableExportColumn(Constants.ENTRANCE, entrance));
@@ -632,7 +628,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             dataXls.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
             dataXls.add(new TableExportColumn(Constants.PROVIDER, provider));
             dataXls.add(new TableExportColumn(Constants.REGION, district));
-            dataXls.add(new TableExportColumn(Constants.ADDRESS, address));
+            dataXls.add(new TableExportColumn(Constants.STREET, street));
             dataXls.add(new TableExportColumn(Constants.BUILDING, building));
             dataXls.add(new TableExportColumn(Constants.FLAT, flat));
             dataXls.add(new TableExportColumn(Constants.COUNTERS_NUMBER, countersNumber));
@@ -676,7 +672,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> taskDate = new ArrayList<>();
         List<String> provider = new ArrayList<>();
         List<String> district = new ArrayList<>();
-        List<String> address = new ArrayList<>();
+        List<String> street = new ArrayList<>();
         List<String> building = new ArrayList<>();
         List<String> flat = new ArrayList<>();
         List<String> entrance = new ArrayList<>();
@@ -725,13 +721,13 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 Address clientAddress = verification.getClientData().getClientAddress();
                 if (clientAddress != null) {
                     district.add(getDistrict(clientAddress));
-                    address.add(getAddress(clientAddress));
+                    street.add(getStreet(clientAddress));
                     building.add(getBuilding(clientAddress));
                     flat.add(getFlat(clientAddress));
 
                 } else {
                     district.add(empty);
-                    address.add(empty);
+                    street.add(empty);
                     building.add(empty);
                     flat.add(empty);
                 }
@@ -739,7 +735,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 fullName.add(empty);
                 telephone.add(empty);
                 district.add(empty);
-                address.add(empty);
+                street.add(empty);
                 building.add(empty);
                 flat.add(empty);
             }
@@ -755,7 +751,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         data.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
         data.add(new TableExportColumn(Constants.PROVIDER, provider));
         data.add(new TableExportColumn(Constants.REGION, district));
-        data.add(new TableExportColumn(Constants.ADDRESS, address));
+        data.add(new TableExportColumn(Constants.STREET, street));
         data.add(new TableExportColumn(Constants.BUILDING, building));
         data.add(new TableExportColumn(Constants.FLAT, flat));
         data.add(new TableExportColumn(Constants.ENTRANCE, entrance));
