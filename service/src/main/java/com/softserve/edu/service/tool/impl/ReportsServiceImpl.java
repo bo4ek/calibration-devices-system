@@ -384,19 +384,15 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getDocumentNumberFromVerification(Verification verification) {
-
-        if (verification.getStateVerificatorEmployee() == null) {
+        if (verification.getStateVerificatorEmployee() != null && verification.getStateVerificatorEmployee().getVerificatorSubdivision() != null
+                && verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId() != null) {
+            String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
+            String moduleNumber = verification.getCalibrationModule().getModuleNumber();
+            String bbiProtocol = verification.getBbiProtocols().iterator().next().getFileName();
+            return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+        } else {
             return " ";
         }
-        String suffix;
-        if (verification.getStatus().equals(Status.TEST_OK)) {
-            suffix = "";
-        } else {
-            suffix = Constants.DOCUMEN_SUFIX_TEST_NOK;
-        }
-
-        return userRepository.findByUsername(verification.getStateVerificatorEmployee().getUsername() != null ? verification.getStateVerificatorEmployee().getUsername() : " ")
-                .getVerificatorSubdivision().getId() + "-" + verification.getId() + suffix;
     }
 
     public String getValidDateInString(Verification verification) {
