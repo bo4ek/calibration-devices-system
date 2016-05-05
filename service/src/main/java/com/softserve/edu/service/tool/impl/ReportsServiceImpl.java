@@ -389,10 +389,13 @@ public class ReportsServiceImpl implements ReportsService {
             String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
             String moduleNumber = verification.getCalibrationModule().getModuleNumber();
             String bbiProtocol = verification.getBbiProtocols().iterator().next().getFileName();
-            return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
-        } else {
-            return " ";
+            if (verification.getStatus().equals(Status.TEST_OK)) {
+                return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+            } else if (verification.getStatus().equals(Status.TEST_NOK)) {
+                return String.format("%s-%s%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
+            }
         }
+        return " ";
     }
 
     public String getValidDateInString(Verification verification) {
