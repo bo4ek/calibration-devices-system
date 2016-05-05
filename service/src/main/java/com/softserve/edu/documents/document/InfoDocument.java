@@ -179,7 +179,7 @@ public class InfoDocument implements Document {
     public String getProviderEmployeePhone() {
 
         User providerEmployee = getVerification().getProviderEmployee();
-        if (providerEmployee != null) {
+        if (providerEmployee != null && providerEmployee.getPhone() != null) {
             return providerEmployee.getPhone();
         }
         return "None";
@@ -188,7 +188,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "PROVIDER_EMPLOYEE_MAIL")
     public String getProviderEmployeeMail() {
         User providerEmployee = getVerification().getProviderEmployee();
-        if (providerEmployee != null) {
+        if (providerEmployee != null && providerEmployee.getEmail() != null) {
             return providerEmployee.getEmail();
         }
         return "None";
@@ -225,7 +225,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "CALIBRATOR_MAIL")
     public String getCalibratorMail() {
         Organization calibrator = getVerification().getCalibrator();
-        if (calibrator != null) {
+        if (calibrator != null && calibrator.getEmail() != null) {
             return calibrator.getEmail();
         }
         return "None";
@@ -234,7 +234,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "CALIBRATOR_ADDRESS")
     public String getCalibratorAddress() {
         Organization calibrator = getVerification().getCalibrator();
-        if (calibrator != null) {
+        if (calibrator != null && calibrator.getAddress() != null) {
             Address address = calibrator.getAddress();
             StringBuilder sb = new StringBuilder();
             sb.append("обл.").append(address.getRegion()).append("; район ").append(address.getDistrict()).append("; місто ").append(address.getLocality())
@@ -256,7 +256,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "CALIBRATOR_EMPLOYEE_PHONE")
     public String getCalibratorEmployeePhone() {
         User calibratorEmployee = getVerification().getCalibratorEmployee();
-        if (calibratorEmployee != null) {
+        if (calibratorEmployee != null && calibratorEmployee.getPhone() != null) {
             return calibratorEmployee.getPhone();
         }
         return "None";
@@ -265,7 +265,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "CALIBRATOR_EMPLOYEE_MAIL")
     public String getCalibratorEmployeeMail() {
         User calibratorEmployee = getVerification().getCalibratorEmployee();
-        if (calibratorEmployee != null) {
+        if (calibratorEmployee != null && calibratorEmployee.getEmail() != null) {
             return calibratorEmployee.getEmail();
         }
         return "None";
@@ -293,7 +293,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "VERIFICATOR_PHONE")
     public String getVerificatorPhone() {
         Organization verificator = getVerification().getStateVerificator();
-        if (verificator != null) {
+        if (verificator != null && verificator.getPhone() != null) {
             return verificator.getPhone();
         }
         return "None";
@@ -302,7 +302,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "VERIFICATOR_MAIL")
     public String getVerificatorMail() {
         Organization verificator = getVerification().getStateVerificator();
-        if (verificator != null) {
+        if (verificator != null && verificator.getEmail() != null) {
             return verificator.getEmail();
         }
         return "None";
@@ -332,7 +332,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "VERIFICATOR_EMPLOYEE_PHONE")
     public String getVerificatorEmployeePhone() {
         User verificatorEmployee = getVerification().getStateVerificatorEmployee();
-        if (verificatorEmployee != null) {
+        if (verificatorEmployee != null && verificatorEmployee.getPhone() != null) {
             return verificatorEmployee.getPhone();
         }
         return "None";
@@ -341,7 +341,7 @@ public class InfoDocument implements Document {
     @Placeholder(name = "VERIFICATOR_EMPLOYEE_MAIL")
     public String getVerificatorEmployeeMail() {
         User verificatorEmployee = getVerification().getStateVerificatorEmployee();
-        if (verificatorEmployee != null) {
+        if (verificatorEmployee != null && verificatorEmployee.getEmail() != null) {
             return verificatorEmployee.getEmail();
         }
         return "None";
