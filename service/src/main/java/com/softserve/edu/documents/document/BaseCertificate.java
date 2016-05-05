@@ -262,6 +262,9 @@ public abstract class BaseCertificate implements Document {
     @Placeholder(name = "EFF_DATE")
     public String getVerificationCertificateEffectiveUntilDate() {
         try {
+            if (verification.getExpirationDate() == null) {
+                return Constants.NOT_SPECIFIED;
+            }
             return new SimpleDateFormat(Constants.DAY_FULL_MONTH_YEAR, new Locale("uk", "UA"))
                     .format(verification.getExpirationDate()) + " р.";
         } catch (Exception e) {
