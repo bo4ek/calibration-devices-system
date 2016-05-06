@@ -682,7 +682,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 resultCounterType = counterTypes.get(0);
             }
         }
-        counter.setReleaseYear(String.valueOf(deviceTestData.getYear()));
+        counter.setReleaseYear(String.valueOf(deviceTestData.getCounterProductionYear()));
         counter.setAccumulatedVolume(deviceTestData.getInitialCapacity());
         counter.setCounterType(resultCounterType);
     }
