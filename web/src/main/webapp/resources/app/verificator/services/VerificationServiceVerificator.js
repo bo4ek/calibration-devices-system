@@ -93,7 +93,7 @@ angular
 
             $log.info(url);
 
-            return $http.get('verificator/' + url)
+            return $http.get('verificator/' + url, {timeout: 10000})
                 .success(function (data) {
                     return data;
                 })
@@ -122,9 +122,10 @@ angular
                 });
         }
 
-        function getDataWithParams(url, params) {
+        function getDataWithParams(url, params,) {
             return $http.get(url, {
-                params : params
+                params: params,
+                timeout: 10000
             }).success(function (data) {
                 return data;
             }).error(function (err) {

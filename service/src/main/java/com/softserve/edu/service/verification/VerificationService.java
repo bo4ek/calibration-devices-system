@@ -90,8 +90,9 @@ public interface VerificationService {
                                                                                       Long protocolId, String testResult, Long measurementDeviceId, String measurementDeviceType, String sortCriteria, String sortOrder);
 
 
-    ListToPageTransformer<Verification> findPageOfRejectedVerificationsByCalibratorId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch,
-                                                                                      String rejectedReason, String rejectedEmployee, String sortCriteria, String sortOrder, User calibratorEmployee);
+    ListToPageTransformer<Verification> findPageOfRejectedVerificationsByCalibratorId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String rejectedReason,
+                                                                                      String rejectedEmployee, String providerName, String customerName, String district, String street, String building, String flat,
+                                                                                      String verificationId, String sortCriteria, String sortOrder, User calibratorEmployee);
 
     Verification findByIdAndProviderId(String id, Long providerId);
 

@@ -489,7 +489,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         mailService.sendMailToStationWithAttachments(user, calibrationTask.getModule().getSerialNumber(), dateFormat.format(calibrationTask.getDateOfTask()).toString(), email, Constants.TASK + " " + calibrationTask.getId(), xlsFile, dbFile);
         calibrationTask.setStatus(Status.SENT_TO_TEST_DEVICE);
         for (Verification verification : verifications) {
-            if (!verification.getStatus().equals(Status.TEST_COMPLETED)) {
+            if (verification.getStatus().equals(Status.PLANNING_TASK)) {
                 verification.setStatus(Status.SENT_TO_TEST_DEVICE);
                 verification.setTaskStatus(Status.SENT_TO_TEST_DEVICE);
             }

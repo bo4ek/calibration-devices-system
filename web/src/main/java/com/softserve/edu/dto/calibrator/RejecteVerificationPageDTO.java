@@ -14,6 +14,14 @@ public class RejecteVerificationPageDTO {
     private Date rejectedCalibratorDate;
     private String rejectedReason;
     private String employeeRejected;
+    private String providerName;
+    private String customerName;
+    private String district;
+    private String street;
+    private String building;
+    private String flat;
+    private String verificationId;
+
 
     public RejecteVerificationPageDTO() {
     }
@@ -22,6 +30,20 @@ public class RejecteVerificationPageDTO {
         this.rejectedCalibratorDate = rejectedCalibratorDate;
         this.rejectedReason = rejectedReason;
         this.employeeRejected = employeeRejected;
+    }
+
+    public RejecteVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, String employeeRejected, String providerName, String customerName,
+                                      String district, String street, String building, String flat, String verificationId) {
+        this.rejectedCalibratorDate = rejectedCalibratorDate;
+        this.rejectedReason = rejectedReason;
+        this.employeeRejected = employeeRejected;
+        this.providerName = providerName;
+        this.customerName = customerName;
+        this.district = district;
+        this.street = street;
+        this.building = building;
+        this.flat = flat;
+        this.verificationId = verificationId;
     }
 
 }

@@ -103,7 +103,8 @@
 		 * @param streetToSearch  @return Predicate
 		 */
 	private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long calibratorId, String startDateToSearch, String endDateToSearch, String idToSearch,
-											String fullNameToSearch, String streetToSearch, String region, String district, String locality, String status, User calibratorEmployee, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String employeeSearchName) {
+											String fullNameToSearch, String streetToSearch, String region, String district, String locality, String status, User calibratorEmployee, String standardSize, String symbol,
+											String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String employeeSearchName) {
 
 		String userName = calibratorEmployee.getUsername();
 		Predicate queryPredicate = cb.conjunction();

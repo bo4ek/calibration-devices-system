@@ -152,8 +152,8 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
     }
 
     public static CriteriaQuery<Verification> buildSearchRejectedQuery(Long employeeId, String startDateToSearch,
-                                                                       String endDateToSearch, String rejectedReason, String employeeRejected,
-                                                                       String sortCriteria, String sortOrder, User calibratorEmployee, EntityManager em) {
+                                                                       String endDateToSearch, String rejectedReason, String employeeRejected, String providerName, String customerName, String district,
+                                                                       String street, String building, String flat, String verificationId, String sortCriteria, String sortOrder, User calibratorEmployee, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
@@ -163,7 +163,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         Join<Verification, RejectedInfo> rejectedInfoJoin = root.join("rejectedInfo");
 
         Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicateRejected(root, cb, employeeId, startDateToSearch, endDateToSearch,
-                rejectedReason, employeeRejected, calibratorEmployee, calibratorJoin, rejectedInfoJoin);
+                rejectedReason, employeeRejected, calibratorEmployee, calibratorJoin, rejectedInfoJoin, providerName, customerName, district, street, building, flat, verificationId);
 
         if ((sortCriteria != null) && (sortOrder != null)) {
             criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
@@ -179,10 +179,10 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
     private static Predicate buildPredicateRejected(Root<Verification> root, CriteriaBuilder cb, Long employeeId, String startDateToSearch, String endDateToSearch,
                                                     String rejectedReason, String employeeRejected, User calibratorEmployee, Join<Verification,
-            Organization> calibratorJoin, Join<Verification, RejectedInfo> rejectedJoin) {
+            Organization> calibratorJoin, Join<Verification, RejectedInfo> rejectedJoin, String providerName, String customerName, String district,
+                                                    String street, String building, String flat, String verificationId) {
 
         Predicate queryPredicate = cb.equal(calibratorJoin.get("id"), employeeId);
-
 
         if (startDateToSearch != null && endDateToSearch != null) {
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -208,19 +208,60 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
                     "%" + employeeRejected + "%"));
             queryPredicate = cb.and(searchPredicateByCalibratorEmployeeName, queryPredicate);
         }
+
+        if ((providerName != null) && (providerName.length() > 0)) {
+            Join<Verification, Organization> joinProviderName = root.join("providerId");
+            Predicate searchPredicateByCalibratorEmployeeName = cb.and(cb.like(joinProviderName.get("name"),
+                    "%" + providerName + "%"));
+            queryPredicate = cb.and(searchPredicateByCalibratorEmployeeName, queryPredicate);
+        }
+
+        if ((verificationId != null) && (verificationId.length() > 0)) {
+            queryPredicate = cb.and(cb.like(root.get("id"), "%" + verificationId + "%"), queryPredicate);
+        }
+
+        if ((customerName != null) && (customerName.length() > 0)) {
+            Predicate searchPredicateByClientFullName = cb.or(cb.like(root.get("clientData").get("lastName"), "%" + customerName + "%"));
+            queryPredicate = cb.and(searchPredicateByClientFullName, queryPredicate);
+        }
+
+        if ((street != null) && (street.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("clientData").get("clientAddress").get("street"), "%" + street + "%"),
+                    queryPredicate);
+        }
+
+        if ((district != null) && (district.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("clientData").get("clientAddress").get("district"), "%" + district + "%"),
+                    queryPredicate);
+        }
+
+        if ((building != null) && (building.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"),
+                    queryPredicate);
+        }
+
+        if ((flat != null) && (flat.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("clientData").get("clientAddress").get("flat"), "%" + flat + "%"),
+                    queryPredicate);
+        }
+
         return queryPredicate;
     }
 
     public static CriteriaQuery<Long> buildCountRejectedQuery(Long employeeId, String startDateToSearch,
-                                                              String endDateToSearch, String rejectedReason, String employeeRejected,
-                                                              String sortCriteria, String sortOrder, User calibratorEmployee, EntityManager em) {
+                                                              String endDateToSearch, String rejectedReason, String employeeRejected, String providerName, String customerName, String district,
+                                                              String street, String building, String flat, String verificationId, String sortCriteria, String sortOrder, User calibratorEmployee, EntityManager em) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Verification> root = countQuery.from(Verification.class);
         Join<Verification, Organization> calibratorJoin = root.join("calibrator");
         Join<Verification, RejectedInfo> rejectedInfoJoin = root.join("rejectedInfo");
         Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicateRejected(root, cb, employeeId, startDateToSearch, endDateToSearch,
-                rejectedReason, employeeRejected, calibratorEmployee, calibratorJoin, rejectedInfoJoin);
+                rejectedReason, employeeRejected, calibratorEmployee, calibratorJoin, rejectedInfoJoin, providerName, customerName, district, street, building, flat, verificationId);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
         return countQuery;

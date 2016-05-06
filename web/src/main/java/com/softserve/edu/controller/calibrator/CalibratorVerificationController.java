@@ -474,12 +474,28 @@ public class CalibratorVerificationController {
                         searchData.getEndDate(),
                         searchData.getRejectedReason(),
                         searchData.getEmployeeRejected(),
+                        searchData.getProviderName(),
+                        searchData.getCustomerName(),
+                        searchData.getDistrict(),
+                        searchData.getStreet(),
+                        searchData.getBuilding(),
+                        searchData.getFlat(),
+                        searchData.getVerificationId(),
                         sortCriteria,
                         sortOrder, calibratorEmployee);
         List<RejecteVerificationPageDTO> list = new ArrayList<RejecteVerificationPageDTO>();
         for (Verification verification : queryResult.getContent()) {
-            RejecteVerificationPageDTO dto = new RejecteVerificationPageDTO(verification.getRejectedCalibratorDate(), verification.getRejectedInfo().getName(),
-                    verification.getCalibratorEmployee().getLastName() + " " + verification.getCalibratorEmployee().getFirstName() + " " + verification.getCalibratorEmployee().getMiddleName());
+            RejecteVerificationPageDTO dto = new RejecteVerificationPageDTO(
+                    verification.getRejectedCalibratorDate(),
+                    verification.getRejectedInfo().getName(),
+                    verification.getCalibratorEmployee().getLastName() + " " + verification.getCalibratorEmployee().getFirstName() + " " + verification.getCalibratorEmployee().getMiddleName(),
+                    verification.getProvider().getName(),
+                    verification.getClientData().getFullName(),
+                    verification.getClientData().getClientAddress().getDistrict(),
+                    verification.getClientData().getClientAddress().getStreet(),
+                    verification.getClientData().getClientAddress().getBuilding(),
+                    verification.getClientData().getClientAddress().getFlat(),
+                    verification.getId());
             list.add(dto);
         }
 

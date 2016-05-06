@@ -15,4 +15,11 @@ public class RejectedInfoFilterSearch {
     private String endDate;
     private String rejectedReason;
     private String employeeRejected;
+    private String providerName;
+    private String customerName;
+    private String district;
+    private String street;
+    private String building;
+    private String flat;
+    private String verificationId;
 }
