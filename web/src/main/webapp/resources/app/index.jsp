@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -49,6 +51,8 @@
     </style>
 
 </head>
+
+
 
 <body id="employeeModule">
 
@@ -375,6 +379,9 @@
 <script type="text/javascript" src="resources/eusign/euutils.js"></script>
 <script type="text/javascript" src="resources/eusign/euscpt.js"></script>
 <script type="text/javascript" src="resources/eusign/euscpm.js"></script>
-<script async type="text/javascript" src="resources/eusign/euscp.js"></script>
+
+<script  type="text/ng-template" id="ng-table/filters/textWithDelayedUpdate.html">
+    <input type="text" delayed-model="params.filter()[name]" data-delay="3500" name="textWithDelayedUpdate"  data-ng-if="filter == 'textWithDelayedUpdate'" class="input-filter form-control ng-pristine ng-untouched ng-valid ng-scope"/>
+</script>
 
 </body>
