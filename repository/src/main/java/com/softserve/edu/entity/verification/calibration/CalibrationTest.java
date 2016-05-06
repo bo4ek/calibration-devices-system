@@ -63,7 +63,7 @@ public class CalibrationTest {
 
     public CalibrationTest(String name, Double latitude,
                            Double longitude, Long unixTime,
-                           Verification verification, String capacity) {
+                           Verification verification, String capacity, Integer temperature) {
         this.name = name;
         this.dateTest = new Date(unixTime);
         this.capacity = capacity;
@@ -72,5 +72,6 @@ public class CalibrationTest {
         this.consumptionStatus = Verification.ConsumptionStatus.IN_THE_AREA;
         this.testResult = Verification.CalibrationTestResult.SUCCESS;
         this.verification = verification;
+        this.temperature = temperature;
     }
 }

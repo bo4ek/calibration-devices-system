@@ -6,6 +6,10 @@ angular
                   $translate ) {
 
             $scope.resultsCount = 0;
+            $scope.pageNumber = 1;
+            $scope.itemsPerPage = 10;
+            $scope.sortCriteria = 'default';
+            $scope.sortOrder = 'default';
             $scope.path = $location.path();
 
             $scope.dataToManualTest = new Map();
@@ -37,6 +41,9 @@ angular
                 if (!verification.manual) {
                     $location.path('/calibrator/verifications/calibration-test-add/').search({
                         'param': verification.id,
+                        'index': (($scope.pageNumber - 1) * $scope.itemsPerPage) + index,
+                        'sortCriteria': $scope.sortCriteria,
+                        'sortOrder': $scope.sortOrder,
                         'loadProtocol': 1,
                         'ver': 1
                     });
@@ -180,8 +187,8 @@ angular
                 verificationServiceVerificator.getEarliestDateOfSentToVerificator().success(function (sentToVerificatorDate) {
                     $scope.initDatePicker(date, sentToVerificatorDate);
                     $scope.tableParams = new ngTableParams({
-                        page: 1,
-                        count: 10,
+                        page: $scope.pageNumber,
+                        count: $scope.itemsPerPage,
                         sorting: {
                             default: 'default'
                         }
@@ -206,6 +213,11 @@ angular
                                     $scope.resultsCount = result.totalItems;
                                     $defer.resolve(result.content);
                                     params.total(result.totalItems);
+                                    $scope.pageNumber = params.page();
+                                    $scope.itemsPerPage = params.count();
+                                    $scope.sortCriteria = sortCriteria;
+                                    $scope.sortOrder = sortOrder;
+
                                 }, function (result) {
                                     $log.debug('error fetching data:', result);
                                 });
