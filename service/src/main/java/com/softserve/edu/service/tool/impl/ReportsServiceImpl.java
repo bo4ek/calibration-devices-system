@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -389,10 +390,19 @@ public class ReportsServiceImpl implements ReportsService {
             String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
             String moduleNumber = verification.getCalibrationModule().getModuleNumber();
             String bbiProtocol = verification.getBbiProtocols().iterator().next().getFileName();
-            if (verification.getStatus().equals(Status.TEST_OK)) {
-                return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
-            } else if (verification.getStatus().equals(Status.TEST_NOK)) {
-                return String.format("%s-%s%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
+
+            Calendar changeDate = Calendar.getInstance();
+            changeDate.set(2016,04,29);
+            Date signProtocolDate = verification.getSignProtocolDate();
+
+            if (changeDate.before(signProtocolDate)){
+                if (verification.getStatus().equals(Status.TEST_OK)) {
+                    return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+                } else if (verification.getStatus().equals(Status.TEST_NOK)) {
+                    return String.format("%s-%s%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
+                }
+            } else {
+               return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
             }
         }
         return " ";
