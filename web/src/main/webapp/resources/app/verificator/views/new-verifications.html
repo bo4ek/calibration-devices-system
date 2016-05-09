@@ -2,7 +2,10 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h1 class="page-header"><span translate="VERIFICATION_PROTOCOLS"></span></h1>
+            <h1 class="page-header">
+                <span ng-if="!rejectedPage" translate="VERIFICATION_PROTOCOLS"></span>
+                <span ng-if="rejectedPage" translate="REJECTED_PROTOCOLS_TITLE"></span>
+            </h1>
         </div>
     </div>
     <div id="demo"></div>

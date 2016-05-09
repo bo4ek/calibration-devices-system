@@ -13,6 +13,7 @@ angular
             $scope.path = $location.path();
 
             $scope.dataToManualTest = new Map();
+            $scope.rejectedPage = $scope.path ==  "/verifications/rejected";
 
             /**
              * this function return true if is StateVerificatorEmployee

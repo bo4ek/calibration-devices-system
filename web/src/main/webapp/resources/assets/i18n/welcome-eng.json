@@ -836,5 +836,6 @@
     "PLEASE_DESCRIBE_REJECT_REASON": "Please explain why verification is being rejected",
     "REJECTED_REASON": "Rejected reason",
     "REJECTED_ORGANIZATION": "Name of organization",
-    "EMPLOYEE_REJECTED": "Name employee who refused verification"
+    "EMPLOYEE_REJECTED": "Name employee who refused verification",
+    "REJECTED_PROTOCOLS_TITLE":"Rejected protocols"
 }

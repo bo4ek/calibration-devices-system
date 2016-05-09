@@ -122,7 +122,7 @@ angular
                 });
         }
 
-        function getDataWithParams(url, params,) {
+        function getDataWithParams(url, params) {
             return $http.get(url, {
                 params: params,
                 timeout: 10000
