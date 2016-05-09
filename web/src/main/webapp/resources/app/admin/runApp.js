@@ -24,7 +24,7 @@ require
             checklistModel: '../../assets/bower_components/checklist-model/checklist-model',
             bootstrapDateRangePicker: "../../assets/bower_components/bootstrap-daterangepicker/daterangepicker",
             angularDateRangePicker: "../../assets/bower_components/angular-daterangepicker/js/angular-daterangepicker.min",
-            delayModule: '../common/directives/delayModule'
+            delayModule: 'directives/delayModule'
         },
         shim: {
             angular: {
