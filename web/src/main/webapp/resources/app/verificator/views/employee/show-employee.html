@@ -58,23 +58,23 @@
                                     <tbody>
                                     <tr ng-repeat="user in $data" ng-class="{incorrect : !user.isAvailable}">
                                         <td data-title="'USERNAME'|translate " sortable="'username'"
-                                            filter="{ 'username': 'text' }">{{
+                                            filter="{ 'username': 'textWithDelayedUpdate' }">{{
                                             user.username }}
                                         </td>
                                         <td data-title="'FIRST_NAME'|translate" sortable="'firstName'"
-                                            filter="{ 'firstName': 'text' }">{{
+                                            filter="{ 'firstName': 'textWithDelayedUpdate' }">{{
                                             user.firstName }}
                                         </td>
                                         <td data-title="'LAST_NAME'|translate" sortable="'lastName'"
-                                            filter="{ 'lastName': 'text' }">{{
+                                            filter="{ 'lastName': 'textWithDelayedUpdate' }">{{
                                             user.lastName }}
                                         </td>
                                         <td data-title="'PHONE_NUMBER'|translate" sortable="'phone'"
-                                            filter="{ 'phone': 'text' }">{{
+                                            filter="{ 'phone': 'textWithDelayedUpdate' }">{{
                                             user.phone }}
                                         </td>
                                         <td data-title="'SECOND_PHONE'|translate" sortable="'secondPhone'"
-                                            filter="{ 'secondPhone': 'text' }">{{
+                                            filter="{ 'secondPhone': 'textWithDelayedUpdate' }">{{
                                             user.secondPhone }}
                                         </td>
                                         <td data-title="'EMPLOYEE_CAPACITY'|translate">

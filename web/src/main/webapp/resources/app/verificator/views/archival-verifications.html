@@ -40,26 +40,26 @@
                                         filter="{ 'date': 'date' }">{{ verification.initialDate }}
                                     </td>
                                     <td data-title="'VERIFICATION_ID' | translate" sortable="'id'"
-                                        filter="{ 'id': 'text' }" ng-model="filters.id">{{ verification.id }}
+                                        filter="{ 'id': 'textWithDelayedUpdate' }" ng-model="filters.id">{{ verification.id }}
                                     </td>
                                     <td data-title="'CLIENT_LAST_NAME' | translate" sortable="'client_last_name'"
-                                        filter="{ 'client_last_name': 'text' }">{{ verification.surname }}
+                                        filter="{ 'client_last_name': 'textWithDelayedUpdate' }">{{ verification.surname }}
                                     </td>
 
                                     <!-- here should add information about name-->
                                     <td data-title="'CLIENT_FIRST_NAME' | translate" sortable="'client_first_name'"
-                                        filter="{ 'client_first_name': 'text' }">{{ verification.name }}
+                                        filter="{ 'client_first_name': 'textWithDelayedUpdate' }">{{ verification.name }}
                                     </td>
 
                                     <td data-title="'CLIENT_STREET' | translate" sortable="'street'"
-                                        filter="{ 'street': 'text' }">{{ verification.street }}
+                                        filter="{ 'street': 'textWithDelayedUpdate' }">{{ verification.street }}
                                     </td>
                                     <td data-title="'STATUS' | translate" sortable="'status'"
                                         filter="{ 'status': 'status' }">{{ verification.status | translate }}
                                     </td>
                                     <td data-title="'EMPLOYEE_LAST_NAME' | translate"
                                         sortable="'verificator_employee_last_name'"
-                                        filter="{ 'employee_last_name': 'text' }">{{
+                                        filter="{ 'employee_last_name': 'textWithDelayedUpdate' }">{{
                                         verification.stateVerificatorEmployee }}
                                     </td>
                                     <td data-title="'ACTIONS' | translate" style="width: 7%">

@@ -52,19 +52,19 @@
                                             filter="{ 'date': 'protocolDate' }">{{ verification.initialDate }}
                                         </td>
                                         <td data-title="'SETTING_NUMBER' | translate" sortable="'module_number'"
-                                            filter="{ 'moduleNumber': 'text' }">{{ verification.moduleNumber }}
+                                            filter="{ 'moduleNumber': 'textWithDelayedUpdate' }">{{ verification.moduleNumber }}
                                         </td>
                                         <td data-title="'NUMBER_OF_PROTOCOL' | translate" sortable="'number_of_protocol'"
-                                            filter="{ 'numberOfProtocol': 'text' }">{{ verification.numberOfProtocol }}
+                                            filter="{ 'numberOfProtocol': 'textWithDelayedUpdate' }">{{ verification.numberOfProtocol }}
                                         </td>
                                         <td data-title="'CALIBRATOR_NAME' | translate" sortable="'nameCalibrator'"
-                                            filter="{ 'nameCalibrator': 'text' }">{{ verification.nameCalibrator }}
+                                            filter="{ 'nameCalibrator': 'textWithDelayedUpdate' }">{{ verification.nameCalibrator }}
                                         </td>
                                         <td data-title="'NUMBER_OF_VERIFICATION' | translate" sortable="'id'"
-                                            filter="{ 'id': 'text' }">{{ verification.id }}
+                                            filter="{ 'id': 'textWithDelayedUpdate' }">{{ verification.id }}
                                         </td>
                                         <td data-title="'NUMBER_OF_COUNTER' | translate" sortable="'number_of_counter'"
-                                            filter="{ 'numberOfCounter': 'text' }">{{ verification.numberOfCounter | translate }}
+                                            filter="{ 'numberOfCounter': 'textWithDelayedUpdate' }">{{ verification.numberOfCounter | translate }}
                                         </td>
                                         <td data-title="'ACTIONS' | translate" style="width: 7%">
 
@@ -73,7 +73,7 @@
                                                    popover="{{'EDIT_PROTOCOL' | translate}}"
                                                    popover-trigger="mouseenter"
                                                    ng-show="verification.stateVerificatorEmployee"
-                                                   ng-click="openAddTest(verification)">
+                                                   ng-click="openAddTest(verification, $index)">
                                                 </i>
                                                 <i class="fa fa-user add_attached_user_icon"
                                                    ng-show="!verification.stateVerificatorEmployee"
