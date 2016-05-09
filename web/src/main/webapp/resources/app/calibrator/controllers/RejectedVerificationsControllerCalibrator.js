@@ -176,25 +176,5 @@ angular
             $scope.format = $scope.formats[2];
 
 
-        }])
-
-    .directive('delayedModel', function() {
-        return {
-            scope: {
-                model: '=delayedModel'
-            },
-            link: function(scope, element, attrs) {
-                element.val(scope.model);
-                var timeout;
-                element.on('keyup paste search', function() {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(function() {
-                        scope.model = element[0].value;
-                        element.val(scope.model);
-                        scope.$apply();
-                    }, attrs.delay || 5000);
-                });
-            }
-        };
-    });
+        }]);
 

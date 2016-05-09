@@ -30,6 +30,7 @@ require.config({
         semanticUI: "../assets/bower_components/semantic/dist/semantic.min",
         globalSearchModule:'globalSearch/globalSearchModule',
         focusModule: 'common/directives/focusModule',
+        delayModule: 'common/directives/delayModule',
         angularLocaleUk: '../assets/bower_components/angular-i18n/angular-locale_uk'
     },
     shim: {
@@ -126,12 +127,15 @@ require.config({
         focusModule:{
             deps:['angular']
         },
+        delayModule:{
+            deps:['angular']
+        },
         employeeModule: {
             deps: ['angular', 'csrfInterceptor', 'angularBootstrap', 'angularTranslate', 'angularCookie', 'angularTranslateStorageCookie',
                    'angularTranslateStorageLocal', 'angularTranslateLoaderStaticFiles', 'angularUIRouter', 'angularLocaleUk',
                 'showErrors', 'ngTable', 'highchartsAngular', 'chosen', 'upload', 'ngRoute', 'angularLoadingBar',
                 'moment', 'bootstrapDateRangePicker', 'angularDateRangePicker', 'angularUISelect', 'ngSanitize',
-                'angularAnimate', 'angularJsToaster', 'semanticUI','globalSearchModule', 'focusModule']
+                'angularAnimate', 'angularJsToaster', 'semanticUI','globalSearchModule', 'focusModule', 'delayModule']
         }
     }
 });
