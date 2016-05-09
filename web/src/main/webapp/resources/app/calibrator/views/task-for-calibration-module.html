@@ -68,16 +68,16 @@
                                             {{ moduleTask.moduleType | translate }}
                                         </td>
                                         <td data-title="'MODULE_NUMBER' | translate" sortable="'module.serialNumber'"
-                                            filter="{ moduleSerialNumber : 'text' }">
+                                            filter="{ moduleSerialNumber : 'textWithDelayedUpdate' }">
                                             {{ moduleTask.moduleSerialNumber }}
                                         </td>
                                         <td data-title="'CONTACT_PERSON_FULL_NAME' | translate"
                                             sortable="'module.employeeFullName'"
-                                            filter="{ employeeFullName: 'text' }">
+                                            filter="{ employeeFullName: 'textWithDelayedUpdate' }">
                                             {{ moduleTask.employeeFullName }}
                                         </td>
                                         <td data-title="'PHONE_NUMBER' | translate" sortable="'module.telephone'"
-                                            filter="{ phoneNumber : 'text' }">
+                                            filter="{ phoneNumber : 'textWithDelayedUpdate' }">
                                             +380{{ moduleTask.telephone }}
                                         </td>
                                         <td data-title="'COUNT_OF_VERIFICATION' | translate">

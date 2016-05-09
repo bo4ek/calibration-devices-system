@@ -39,7 +39,7 @@
                                             </div>
                                         </td>
                                         <td data-title="'VERIFICATION_ID' | translate" sortable="'id'"
-                                            filter="{ 'id': 'text' }" ng-model="filters.id">{{ verification.id }}
+                                            filter="{ 'id': 'textWithDelayedUpdate' }" ng-model="filters.id">{{ verification.id }}
                                         </td>
 
                                         <td data-title="'ACTIONS' | translate" class="control_buttons"
@@ -121,20 +121,20 @@
 
                                         </td>
                                         <td data-title="'CLIENT_FULL_NAME' | translate" sortable="'client_last_name'"
-                                            filter="{ 'client_full_name': 'text' }">{{ verification.fullName }}
+                                            filter="{ 'client_full_name': 'textWithDelayedUpdate' }">{{ verification.fullName }}
                                         </td>
                                         <td data-title="'CLIENT_STREET' | translate" sortable="'street'"
-                                            filter="{ 'street': 'text' }">{{ verification.street }}
+                                            filter="{ 'street': 'textWithDelayedUpdate' }">{{ verification.street }}
                                         </td>
                                         <td data-title="'STATUS' | translate" sortable="'status'"
                                             filter="{ 'status': 'status' }">{{ verification.status | translate }}
                                         </td>
                                         <td data-title="'EMPLOYEE_SINGLE' | translate" sortable="'calibrator_employee_last_name'"
-                                            filter="{ 'employee_last_name': 'text' }">{{ verification.calibratorEmployee
+                                            filter="{ 'employee_last_name': 'textWithDelayedUpdate' }">{{ verification.calibratorEmployee
                                             }}
                                         </td>
                                         <td data-title="'PROTOCOL_ID' | translate " sortable="'protocol_id'"
-                                            filter="{ protocol_id : 'text' }">{{verification.protocolId}}
+                                            filter="{ protocol_id : 'textWithDelayedUpdate' }">{{verification.protocolId}}
                                         </td>
                                         <!-- TODO: add protocol date-->
                                         <td data-title="'PROTOCOL_STATUS' | translate" sortable="'protocol_status'"
@@ -143,7 +143,7 @@
                                         </td>
                                         <td data-title="'MEASUREMENT_DEVICE_ID' | translate"
                                             sortable="'NUMBER_OF_COUNTER'"
-                                            filter="{ numberCounter : 'text' }">
+                                            filter="{ numberCounter : 'textWithDelayedUpdate' }">
                                             {{verification.numberCounter}}
                                         </td>
                                         <td data-title="'MEASUREMENT_DEVICE_TYPE' | translate"

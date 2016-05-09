@@ -38,19 +38,19 @@
                                         </div>
                                     </td>
                                     <td data-title="'SETTING_NUMBER' | translate" sortable="'module_number'"
-                                        filter="{ 'moduleNumber': 'text' }">{{ verification.moduleNumber }}
+                                        filter="{ 'moduleNumber': 'textWithDelayedUpdate' }">{{ verification.moduleNumber }}
                                     </td>
                                     <td data-title="'NUMBER_OF_PROTOCOL' | translate" sortable="'number_of_protocol'"
-                                        filter="{ 'numberOfProtocol': 'text' }">{{ verification.numberOfProtocol }}
+                                        filter="{ 'numberOfProtocol': 'textWithDelayedUpdate' }">{{ verification.numberOfProtocol }}
                                     </td>
                                     <td data-title="'NUMBER_OF_VERIFICATION' | translate" sortable="'id'"
-                                        filter="{ 'id': 'text' }">{{ verification.id }}
+                                        filter="{ 'id': 'textWithDelayedUpdate' }">{{ verification.id }}
                                     </td>
                                     <td ng-show="!rejected" data-title="'STATUS' | translate" sortable="'status'"
                                         filter="{ 'status': 'status' }">{{ verification.status | translate }}
                                     </td>
                                     <td data-title="'NUMBER_OF_COUNTER' | translate" sortable="'number_of_counter'"
-                                        filter="{ 'numberOfCounter': 'text' }">{{ verification.numberOfCounter | translate }}
+                                        filter="{ 'numberOfCounter': 'textWithDelayedUpdate' }">{{ verification.numberOfCounter | translate }}
                                     </td>
                                     <td ng-show="!rejected" data-title="'COMMENT' | translate" sortable="'comment'">{{ verification.comment}}
                                     </td>
