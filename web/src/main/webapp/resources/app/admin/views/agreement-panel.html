@@ -32,7 +32,7 @@
                     <tbody>
                     <tr ng-repeat="agreement in $data">
                         <td data-title="'NUMBER' | translate" sortable="'number'" 
-                            filter="{ 'number': 'text' }">
+                            filter="{ 'number': 'textWithDelayedUpdate' }">
                             {{ agreement.number }}
                         </td>
                         <td data-title="'DATE_TIME' | translate" class="datecolumn" sortable="'date'"
@@ -40,11 +40,11 @@
                             'dd-MM-yyyy'}}
                         </td>
                         <td data-title="'AGREEMENT_CUSTOMER' | translate" sortable="'customer_name'"
-                            filter="{ 'customerName': 'text' }">
+                            filter="{ 'customerName': 'textWithDelayedUpdate' }">
                             {{ agreement.customerName }}
                         </td>
                         <td data-title="'AGREEMENT_EXECUTOR' | translate" sortable="'executor_name'"
-                            filter="{ 'executorName': 'text' }">
+                            filter="{ 'executorName': 'textWithDelayedUpdate' }">
                             {{ agreement.executorName }}
                         </td>
                         <td data-title="'COUNTER_KIND' | translate"
@@ -53,7 +53,7 @@
                             {{ agreement.deviceType | translate }}
                         </td>
                         <td data-title="'AGREEMENT_COUNTER_COUNT' | translate " sortable="'device_Count'"
-                            filter="{ 'deviceCount': 'text' }">{{ agreement.deviceCount}}
+                            filter="{ 'deviceCount': 'textWithDelayedUpdate' }">{{ agreement.deviceCount}}
                         </td>
 
                         <td data-title="'ACTIONS' | translate" class="text-center">

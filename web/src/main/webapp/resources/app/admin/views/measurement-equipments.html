@@ -65,7 +65,7 @@
                                         ng-class="{'unreadClass' : calibrationModule.hasTask}">
                                         <td data-title="'MODULE_NUMBER' | translate"
                                             sortable="'moduleNumber'"
-                                            filter="{ moduleNumber: 'text' }">
+                                            filter="{ moduleNumber: 'textWithDelayedUpdate' }">
                                             {{ calibrationModule.moduleNumber }}
                                         </td>
                                         <td data-title="'SPHERE_OF_APPLICATION' | translate"
@@ -78,15 +78,15 @@
                                             'dd-MM-yyyy' }}
                                         </td>
                                         <td data-title="'SYMBOL' | translate" sortable="'condDesignation'"
-                                            filter="{ condDesignation: 'text' }">{{ calibrationModule.condDesignation}}
+                                            filter="{ condDesignation: 'textWithDelayedUpdate' }">{{ calibrationModule.condDesignation}}
                                         </td>
                                         <td data-title="'CONTACT_PERSON_FULL_NAME' | translate"
                                             sortable="'employeeFullName'"
-                                            filter="{ employeeFullName: 'text' }">{{ calibrationModule.employeeFullName
+                                            filter="{ employeeFullName: 'textWithDelayedUpdate' }">{{ calibrationModule.employeeFullName
                                             }}
                                         </td>
                                         <td data-title="'PHONE_NUMBER' | translate" sortable="'telephone'"
-                                            filter="{ telephone: 'text' }">+380{{ calibrationModule.telephone }}
+                                            filter="{ telephone: 'textWithDelayedUpdate' }">+380{{ calibrationModule.telephone }}
                                         </td>
                                         <td data-title="'INSTALLATION_TYPE' | translate" sortable="'moduleType'"
                                             filter="{ moduleType: 'moduleType' }">{{ calibrationModule.moduleType |

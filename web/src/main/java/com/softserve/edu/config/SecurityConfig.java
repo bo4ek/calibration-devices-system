@@ -45,7 +45,7 @@ public class
                         "/application/**", "/calibrationTests/**" /*Some one has to move these tests out to verificator page!*/
                         , "/calibrationTestData/**").permitAll()
 
-                .antMatchers("/resources/app/admin/**", "/admin").hasAnyAuthority("SYS_ADMIN", "SUPER_ADMIN")
+                .antMatchers("/resources/app/admin/**", "/resources/app/common/**", "/admin").hasAnyAuthority("SYS_ADMIN", "SUPER_ADMIN")
                 .antMatchers("/admin/sysadmins/**").hasAuthority("SUPER_ADMIN")
 
                 .antMatchers("/uploadFile/**").fullyAuthenticated()

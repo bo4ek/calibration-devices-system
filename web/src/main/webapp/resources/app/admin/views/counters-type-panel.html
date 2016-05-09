@@ -31,26 +31,26 @@
                     <tbody>
                     <tr ng-repeat="counterType in $data">
                         <td data-title="'COUNTER_NAME' | translate " sortable="'name'"
-                            filter="{ 'name': 'text' }">{{ counterType.name}} ({{counterType.typeWater | translate}})
+                            filter="{ 'name': 'textWithDelayedUpdate' }">{{ counterType.name}} ({{counterType.typeWater | translate}})
                         </td>
                         <td data-title="'SYMBOL' | translate " sortable="'symbol'"
-                            filter="{ 'symbol': 'text' }">{{ counterType.symbol}}
+                            filter="{ 'symbol': 'textWithDelayedUpdate' }">{{ counterType.symbol}}
                         </td>
                         <td data-title="'STANDARD_SIZE' | translate"
                             sortable="'standardSize'"
-                            filter="{ 'standardSize': 'text' }">{{ counterType.standardSize}}
+                            filter="{ 'standardSize': 'textWithDelayedUpdate' }">{{ counterType.standardSize}}
                         </td>
                         <td data-title="'MANUFACTURER' | translate " sortable="'manufacturer'"
-                            filter="{ 'manufacturer': 'text' }">{{ counterType.manufacturer}}
+                            filter="{ 'manufacturer': 'textWithDelayedUpdate' }">{{ counterType.manufacturer}}
                         </td>
                         <td data-title="'INSPECTION_INTERVAL' | translate " sortable="'calibrationInterval'"
-                            filter="{ 'calibrationInterval': 'text' }">{{ counterType.calibrationInterval}}
+                            filter="{ 'calibrationInterval': 'textWithDelayedUpdate' }">{{ counterType.calibrationInterval}}
                         </td>
                         <td data-title="'YEAR_INSPECTION_INTERVAL' | translate " sortable="'yearIntroduction'"
-                            filter="{ 'yearIntroduction': 'text' }">{{ counterType.yearIntroduction}}
+                            filter="{ 'yearIntroduction': 'textWithDelayedUpdate' }">{{ counterType.yearIntroduction}}
                         </td>
                         <td data-title="'GOST' | translate " sortable="'gost'"
-                            filter="{ 'gost': 'text' }">{{ counterType.gost}}
+                            filter="{ 'gost': 'textWithDelayedUpdate' }">{{ counterType.gost}}
                         </td>
                         <td data-title="'ACTIONS' | translate" class="text-center">
 

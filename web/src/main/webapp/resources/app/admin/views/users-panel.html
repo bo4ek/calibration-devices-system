@@ -30,24 +30,24 @@
                                 <tbody>
                                 <tr ng-repeat="user in $data" ng-class="{incorrect : !user.isAvailable}">
                                     <td data-title="'USERNAME'|translate " sortable="'username'"
-                                        filter="{ 'username': 'text' }">{{
+                                        filter="{ 'username': 'textWithDelayedUpdate' }">{{
                                         user.username }}
                                     </td>
                                     <td data-title="'ROLE' | translate"
                                          filter="{ 'role': 'userType' }">
                                         {{ user.role | translate}}
                                     </td>
-                                    <td data-title="'FIRST_NAME'|translate" sortable="'firstname'" filter="{ 'firstName': 'text' }">{{
+                                    <td data-title="'FIRST_NAME'|translate" sortable="'firstname'" filter="{ 'firstName': 'textWithDelayedUpdate' }">{{
                                         user.firstName }}
                                     </td>
-                                    <td data-title="'LAST_NAME'|translate" sortable="'lastname'" filter="{ 'lastName': 'text' }">{{
+                                    <td data-title="'LAST_NAME'|translate" sortable="'lastname'" filter="{ 'lastName': 'textWithDelayedUpdate' }">{{
                                         user.lastName }}
                                     </td>
-                                    <td data-title="'ORGANIZATION'|translate" sortable="'organization'" filter="{ 'organization': 'text' }">
+                                    <td data-title="'ORGANIZATION'|translate" sortable="'organization'" filter="{ 'organization': 'textWithDelayedUpdate' }">
                                         {{
                                         user.organization }}
                                     </td>
-                                    <td data-title="'PHONE_NUMBER'|translate" sortable="'phone'" filter="{ 'phone': 'text' }">+380{{
+                                    <td data-title="'PHONE_NUMBER'|translate" sortable="'phone'" filter="{ 'phone': 'textWithDelayedUpdate' }">+380{{
                                         user.phone }}
                                     </td>
 

@@ -4,7 +4,7 @@ angular
     ['spring-security-csrf-token-interceptor', 'ui.bootstrap',
         'ui.router', 'ui.bootstrap.showErrors', 'ngTable',
         'pascalprecht.translate', 'ngCookies', 'ui.select', 'ngSanitize', 'localytics.directives', 'daterangepicker', 'checklist-model', 'ngAnimate', 'toaster',
-        'angular-loading-bar'])
+        'angular-loading-bar', 'delayModule'])
 
     .config(
     [

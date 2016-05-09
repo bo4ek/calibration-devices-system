@@ -32,7 +32,7 @@
                     <tbody>
                     <tr ng-repeat="organization in $data">
                         <td data-title="'NAME_ORGANIZATION' | translate" sortable="'name'"
-                            filter="{ 'name': 'text' }">
+                            filter="{ 'name': 'textWithDelayedUpdate' }">
                             {{ organization.name }}
                         </td>
                         <td data-title="'TYPE_ADMIN' | translate "
@@ -40,20 +40,20 @@
                             {{ organization.types|translate }}
                         </td>
                         <td data-title="'REGION' | translate" sortable="'region'"
-                            filter="{ 'region': 'text' }">{{ organization.region}}
+                            filter="{ 'region': 'textWithDelayedUpdate' }">{{ organization.region}}
                         </td>
                         <td data-title="'DISTRICT' | translate" sortable="'district'"
-                            filter="{ 'district': 'text' }">{{ organization.district}}
+                            filter="{ 'district': 'textWithDelayedUpdate' }">{{ organization.district}}
                         </td>
                         <td data-title="'LOCALITY' | translate" sortable="'locality'"
-                            filter="{ 'locality': 'text' }">{{ organization.locality}}
+                            filter="{ 'locality': 'textWithDelayedUpdate' }">{{ organization.locality}}
                         </td>
 
                         <td data-title="'CLIENT_STREET' | translate" sortable="'street'"
-                            filter="{ 'street': 'text' }">{{ organization.street }}
+                            filter="{ 'street': 'textWithDelayedUpdate' }">{{ organization.street }}
                         </td>
                         <td data-title="'PHONE_NUMBER' | translate" sortable="'PHONE_NUMBER'"
-                            filter="{ 'phone_number': 'text' }">+380{{ organization.phone }}
+                            filter="{ 'phone_number': 'textWithDelayedUpdate' }">+380{{ organization.phone }}
                         </td>
                         <td data-title="'EDIT' | translate" class="control_buttons">
                             <i class="glyphicon glyphicon-edit verification_protocol_user_icon"

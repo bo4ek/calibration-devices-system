@@ -161,5 +161,8 @@
     });
 </script>
 <script src="resources/assets/js/loader-employee.js"></script>
+<script  type="text/ng-template" id="ng-table/filters/textWithDelayedUpdate.html">
+    <input type="text" delayed-model="params.filter()[name]" data-delay="3500" name="textWithDelayedUpdate"  data-ng-if="filter == 'textWithDelayedUpdate'" class="input-filter form-control ng-pristine ng-untouched ng-valid ng-scope"/>
+</script>
 </body>
 </html>
