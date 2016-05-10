@@ -76,7 +76,8 @@ static Logger logger = Logger.getLogger(ArchivalVerificationsQueryConstructorPro
             queryPredicate = cb.and(cb.not(cb.or(
                     Status.SENT.getQueryPredicate(root, cb),
                     Status.ACCEPTED.getQueryPredicate(root, cb),
-                    Status.SENT_TO_PROVIDER.getQueryPredicate(root, cb)
+                    Status.SENT_TO_PROVIDER.getQueryPredicate(root, cb),
+					Status.REJECTED_BY_CALIBRATOR.getQueryPredicate(root, cb)
             )), queryPredicate);
         }
 
