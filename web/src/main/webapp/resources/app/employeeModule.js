@@ -249,11 +249,11 @@
 
             for (var i = 0; i < role.length; i++) {
                 if (role[i] === 'PROVIDER_ADMIN' || role[i] === 'PROVIDER_EMPLOYEE')
-                    $state.transitionTo('main-panel-provider');
+                    $state.transitionTo('new-verifications-provider');
                 if (role[i] === 'CALIBRATOR_ADMIN' || role[i] === 'CALIBRATOR_EMPLOYEE')
-                    $state.transitionTo('main-panel-calibrator');
+                    $state.transitionTo('new-verifications-calibrator');
                 if (role[i] === 'STATE_VERIFICATOR_ADMIN' || role[i] === 'STATE_VERIFICATOR_EMPLOYEE')
-                    $state.transitionTo('main-panel-verificator');
+                    $state.transitionTo('new-verifications-verificator');
             }
 
         })
