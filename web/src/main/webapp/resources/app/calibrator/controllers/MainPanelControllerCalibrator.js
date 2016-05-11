@@ -207,7 +207,6 @@ angular
             }, {
                 total: 0,
                 getData: function ($defer, params) {
-
                     verificationServiceCalibrator.getNewVerificationsForMainPanel(params.page(), params.count(), $scope.search)
                         .success(function (result) {
                             $scope.resultsCount = result.totalItems;
@@ -230,9 +229,9 @@ angular
                         calibratorEmploy: function () {
                             return verificationServiceCalibrator.getCalibrators()
                                 .success(function (calibrators) {
-                                    return calibrators;
-                                }
-                            );
+                                        return calibrators;
+                                    }
+                                );
                         }
                     }
                 });

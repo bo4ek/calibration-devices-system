@@ -3,11 +3,11 @@
  */
 angular
     .module('employeeModule')
-    .controller('UsersControllerCalibrator', ['$scope','UserServiceCalibrator','UserService', '$modal', '$log',
-        'ngTableParams', '$timeout', '$filter','$rootScope','$translate',
-        function ($scope,UserServiceCalibrator,userService, $modal, $log, ngTableParams, $timeout, $filter, $rootScope,
-        $translate) {
-            $scope.totalEmployee=0;
+    .controller('UsersControllerCalibrator', ['$scope', 'UserServiceCalibrator', 'UserService', '$modal', '$log',
+        'ngTableParams', '$timeout', '$filter', '$rootScope', '$translate',
+        function ($scope, UserServiceCalibrator, userService, $modal, $log, ngTableParams, $timeout, $filter, $rootScope,
+                  $translate) {
+            $scope.totalEmployee = 0;
 
 
             $scope.clearAll = function () {
@@ -45,7 +45,6 @@ angular
             };
 
 
-
             $scope.setTypeDataLanguage();
 
             $scope.tableParams = new ngTableParams({
@@ -53,6 +52,8 @@ angular
                 count: 5,
                 sorting: {
                     lastName: 'asc'     // initial sorting
+                }, filter: {
+                    role: null
                 }
             }, {
                 total: 0,
@@ -64,9 +65,9 @@ angular
                     else {
                         params.filter().role = null;//case when the filter is cleared with a button on the select
                     }
-                    UserServiceCalibrator.getPage(params.page(), params.count(),params.filter(),params.sorting())
+                    UserServiceCalibrator.getPage(params.page(), params.count(), params.filter(), params.sorting())
                         .success(function (result) {
-                            $scope.totalEmployee=result.totalItems;
+                            $scope.totalEmployee = result.totalItems;
                             $defer.resolve(result.content);
                             params.total(result.totalItems);
 
@@ -113,33 +114,33 @@ angular
                         var roles = response + '';
                         var role = roles.split(',');
                         var thereIsAdmin = 0;
-                        for (var i = 0; i<role.length; i++){
-                            if(role[i]==='PROVIDER_ADMIN') {
+                        for (var i = 0; i < role.length; i++) {
+                            if (role[i] === 'PROVIDER_ADMIN') {
                                 thereIsAdmin++;
                             }
-                            if(role[i]==='CALIBRATOR_ADMIN') {
+                            if (role[i] === 'CALIBRATOR_ADMIN') {
                                 thereIsAdmin++;
                             }
-                            if(role[i]==='STATE_VERIFICATOR_ADMIN') {
+                            if (role[i] === 'STATE_VERIFICATOR_ADMIN') {
                                 thereIsAdmin++;
                             }
                         }
-                        if (thereIsAdmin > 0){
+                        if (thereIsAdmin > 0) {
                             $scope.verificator = true;
-                        }else{
+                        } else {
                             $scope.accessLable = true;
                         }
                     });
             };
 
 
-            $scope.openAddEmployeeModal = function() {
+            $scope.openAddEmployeeModal = function () {
                 var addEmployeeModal = $modal
                     .open({
-                        animation : true,
-                        controller : 'AddEmployeeController',
+                        animation: true,
+                        controller: 'AddEmployeeController',
                         size: 'lg',
-                        templateUrl : 'resources/app/provider/views/employee/employee-add-modal.html',
+                        templateUrl: 'resources/app/provider/views/employee/employee-add-modal.html',
                     });
             };
 
@@ -154,7 +155,7 @@ angular
                             controller: 'EditEmployeeController',
                             templateUrl: 'resources/app/provider/views/employee/employee-edit-modal.html',
                             resolve: {
-                                user: function() {
+                                user: function () {
                                     return data.data;
                                 }
                             }
@@ -165,7 +166,7 @@ angular
             /**
              * update table with employees after edit or add new employee
              */
-            $scope.$on('new-employee-added', function() {
+            $scope.$on('new-employee-added', function () {
                 $scope.tableParams.reload();
             });
 

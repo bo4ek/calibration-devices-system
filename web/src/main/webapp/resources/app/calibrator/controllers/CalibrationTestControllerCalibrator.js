@@ -1,7 +1,7 @@
 angular
     .module('employeeModule')
     .controller('CalibrationTestControllerCalibrator', ['$rootScope', '$scope', '$modal', '$http', '$log',
-        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout','ngTableParams', '$translate','VerificationServiceCalibrator', '$sce', '$filter', 'toaster', 'DataReceivingServiceCalibrator',
+        'CalibrationTestServiceCalibrator', '$location', 'Upload', '$timeout', 'ngTableParams', '$translate', 'VerificationServiceCalibrator', '$sce', '$filter', 'toaster', 'DataReceivingServiceCalibrator',
         function ($rootScope, $scope, $modal, $http, $log, calibrationTestServiceCalibrator, $location, Upload, $timeout, ngTableParams, $translate, verificationServiceCalibrator, $sce, $filter, toaster, dataReceivingService) {
 
             $scope.resultsCount = 0;
@@ -27,7 +27,7 @@ angular
              *  disable use upload single bbi but this functionality can
              *  be necessary in the future
              */
-            $scope.disableUseUploadSingleBBI=true;
+            $scope.disableUseUploadSingleBBI = true;
 
             $scope.myDatePicker = {};
             $scope.myDatePicker.pickerDate = null;
@@ -44,15 +44,14 @@ angular
                 }
             }, {
                 total: 0,
-                counts :[],
+                counts: [],
                 getData: function ($defer, params) {
-                            //$defer.resolve($scope.IdsOfVerifications);
                     var arr = [{
-                        ids:1,
-                        name:"my"
-                    },{
-                        ids:2,
-                        name:"my"
+                        ids: 1,
+                        name: "my"
+                    }, {
+                        ids: 2,
+                        name: "my"
                     }];
                     $defer.resolve(arr);
                     params.total(arr);
@@ -61,14 +60,14 @@ angular
             });
 
             $scope.selectedData = {
-                numberProtocol : null
+                numberProtocol: null
             };
 
 
             /**
              *  create entity for send to backend
              */
-            function retranslater(){
+            function retranslater() {
                 $scope.selectedData.dateOfManualTest = new Date($scope.myDatePicker.pickerDate.startDate);
                 $scope.selectedData.dateOfManualTest.setHours($scope.selectedData.timeFrom.getHours());
                 $scope.selectedData.dateOfManualTest.setMinutes($scope.selectedData.timeFrom.getMinutes());
@@ -79,7 +78,7 @@ angular
                     dateOfTest: $scope.convertDateToLong($scope.selectedData.dateOfManualTest),
                     pathToScanDoc: $scope.pathToScanDoc,
                     moduleId: $scope.selectedData.manufacturerNumber.moduleId,
-                    counterTypeId : $scope.counter.manufacturer.id
+                    counterTypeId: $scope.counter.manufacturer.id
                 }
             }
 
@@ -102,7 +101,7 @@ angular
             $scope.createAndUpdateTest = function () {
                 $scope.$broadcast('show-errors-check-validity');
                 $scope.checkIsEmptyDataOfCounter();
-                if($scope.handheldProtocolForm.$valid || !$scope.isEmptyField) {
+                if ($scope.handheldProtocolForm.$valid || !$scope.isEmptyField) {
                     retranslater();
                     if (!$scope.selectedData.numberProtocol) {
                         calibrationTestServiceCalibrator.createTestManual(testManualForSend)
@@ -115,7 +114,7 @@ angular
                                 }
                             })
                     } else {
-                        calibrationTestServiceCalibrator.editTestManual(testManualForSend, $scope.testId ,$scope.isVerificationEdit)
+                        calibrationTestServiceCalibrator.editTestManual(testManualForSend, $scope.testId, $scope.isVerificationEdit)
                             .then(function (status) {
                                 if (status == 201) {
                                     $rootScope.onTableHandling();
@@ -180,15 +179,15 @@ angular
             $scope.unsuitabilityReasons = [];
             $scope.symbols = [];
             $scope.verification = null;
-            $scope.selectedData.numberProtocol=null;
+            $scope.selectedData.numberProtocol = null;
             $scope.isUploadScanDoc = false;
             $scope.block = true;
             $scope.selectedData.timeFrom = new Date();
             $scope.pathToScanDoc = null;
             $scope.IsScanDoc = false;
-            $scope.selectedData.numberProtocolManual=null;
+            $scope.selectedData.numberProtocolManual = null;
             $scope.isNotProcessed = false;
-            $scope.isEmptyField= false;
+            $scope.isEmptyField = false;
             $scope.counterTypeId = null;
 
             /**
@@ -215,40 +214,40 @@ angular
              *  receive data of manual completed test for edit
              */
             function receiveDataForCompletedTest(map) {
-                    calibrationTestServiceCalibrator.getDataForCompletedTest($scope.testId)
-                        .then(function (result) {
-                            var dataCompletedTest = result.data;
-                            var dataOfCounter = map.get($scope.testId);
-                            var testManual = {
-                                verificationId: $scope.testId,
-                                numberCounter: dataOfCounter.numberCounter,
-                                statusTestFirst: dataCompletedTest.statusTestFirst,
-                                statusTestSecond: dataCompletedTest.statusTestSecond,
-                                statusTestThird: dataCompletedTest.statusTestThird,
-                                statusCommon: dataCompletedTest.statusCommon,
-                                status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
-                                typeWater : ['WATER', 'THERMAL'],
-                                unsuitabilityReason : dataCompletedTest.unsuitabilityReason,
-                                realiseYear : dataOfCounter.realiseYear
-                            };
-                            getCurrentManufacturer(dataCompletedTest.calibrationTestManualDTO.counterTypeId);
-                            $scope.setDataUseManufacturerNumber(findcalibrationModuleBySerialNumber(dataCompletedTest.calibrationTestManualDTO.serialNumber));
-                            $scope.selectedData.numberProtocolManual = dataCompletedTest.calibrationTestManualDTO.numberOfTest;
-                            $scope.selectedData.numberProtocol = dataCompletedTest.calibrationTestManualDTO.generateNumber;
-                            $scope.selectedData.dateOfManualTest = new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest);
-                            $scope.selectedData.isSignedDocument = dataCompletedTest.signed;
-                            $scope.idOfManualTest = dataCompletedTest.calibrationTestManualDTO.id;
-                            $scope.myDatePicker.pickerDate = {
-                                startDate: (new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest)),
-                                endDate: (new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest))
-                            };
+                calibrationTestServiceCalibrator.getDataForCompletedTest($scope.testId)
+                    .then(function (result) {
+                        var dataCompletedTest = result.data;
+                        var dataOfCounter = map.get($scope.testId);
+                        var testManual = {
+                            verificationId: $scope.testId,
+                            numberCounter: dataOfCounter.numberCounter,
+                            statusTestFirst: dataCompletedTest.statusTestFirst,
+                            statusTestSecond: dataCompletedTest.statusTestSecond,
+                            statusTestThird: dataCompletedTest.statusTestThird,
+                            statusCommon: dataCompletedTest.statusCommon,
+                            status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
+                            typeWater: ['WATER', 'THERMAL'],
+                            unsuitabilityReason: dataCompletedTest.unsuitabilityReason,
+                            realiseYear: dataOfCounter.realiseYear
+                        };
+                        getCurrentManufacturer(dataCompletedTest.calibrationTestManualDTO.counterTypeId);
+                        $scope.setDataUseManufacturerNumber(findcalibrationModuleBySerialNumber(dataCompletedTest.calibrationTestManualDTO.serialNumber));
+                        $scope.selectedData.numberProtocolManual = dataCompletedTest.calibrationTestManualDTO.numberOfTest;
+                        $scope.selectedData.numberProtocol = dataCompletedTest.calibrationTestManualDTO.generateNumber;
+                        $scope.selectedData.dateOfManualTest = new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest);
+                        $scope.selectedData.isSignedDocument = dataCompletedTest.signed;
+                        $scope.idOfManualTest = dataCompletedTest.calibrationTestManualDTO.id;
+                        $scope.myDatePicker.pickerDate = {
+                            startDate: (new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest)),
+                            endDate: (new Date(dataCompletedTest.calibrationTestManualDTO.dateOfTest))
+                        };
 
-                            $scope.selectedData.timeFrom = $scope.selectedData.dateOfManualTest;
-                            $scope.dataOfManualTests.push(testManual);
-                            $scope.pathToScanDoc = dataCompletedTest.calibrationTestManualDTO.pathToScanDoc;
-                            $scope.checkIsScanDoc();
-                            $scope.receiveTestsAndSetIsNotProcessed();
-                        });
+                        $scope.selectedData.timeFrom = $scope.selectedData.dateOfManualTest;
+                        $scope.dataOfManualTests.push(testManual);
+                        $scope.pathToScanDoc = dataCompletedTest.calibrationTestManualDTO.pathToScanDoc;
+                        $scope.checkIsScanDoc();
+                        $scope.receiveTestsAndSetIsNotProcessed();
+                    });
 
             }
 
@@ -287,24 +286,22 @@ angular
             }
 
 
-
             /**
              * entity of manual test
              */
             function creatorTestManual(value, key) {
                 calibrationTestServiceCalibrator.getCounterTypeId(key)
                     .then(function (result) {
-                        if (result.status == 200)
-                         {
-                         $scope.counterTypeId = result.data;
-                         getCurrentManufacturer($scope.counterTypeId);
-                         }
-                         else {
-                         $scope.counter.manufacturer = undefined;
-                         $scope.counter.standardSize = undefined;
-                         $scope.counter.typeWater = undefined;
-                         $scope.counter.symbol = undefined;
-                         }
+                        if (result.status == 200) {
+                            $scope.counterTypeId = result.data;
+                            getCurrentManufacturer($scope.counterTypeId);
+                        }
+                        else {
+                            $scope.counter.manufacturer = undefined;
+                            $scope.counter.standardSize = undefined;
+                            $scope.counter.typeWater = undefined;
+                            $scope.counter.symbol = undefined;
+                        }
                     });
 
                 var testManual = {
@@ -316,8 +313,8 @@ angular
                     statusTestThird: 'SUCCESS',
                     statusCommon: 'SUCCESS',
                     status: ['SUCCESS', 'FAILED', 'NOT_PROCESSED'],
-                    typeWater : ['WATER', 'THERMAL'],
-                    unsuitabilityReason : null
+                    typeWater: ['WATER', 'THERMAL'],
+                    unsuitabilityReason: null
                 };
                 return testManual
             }
@@ -570,16 +567,16 @@ angular
             $scope.signCalibrationManualTest = function () {
                 retranslater();
                 calibrationTestServiceCalibrator
-                    .editTestManual(testManualForSend, $scope.testId ,$scope.isVerificationEdit)
+                    .editTestManual(testManualForSend, $scope.testId, $scope.isVerificationEdit)
                     .then(function (status) {
                         if (status == 200) {
                             calibrationTestServiceCalibrator
                                 .signTestProtocol($scope.testId)
                                 .then(function (status) {
                                     if (status == 200) {
-                                    $scope.selectedData.isSignedDocument = true;
-                                    toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
-                                }
+                                        $scope.selectedData.isSignedDocument = true;
+                                        toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
+                                    }
                                 })
                         }
                     })
@@ -636,7 +633,7 @@ angular
             $scope.format = $scope.formats[0];
 
             $scope.clearDate = function () {
-                $scope.selectedData.dateOfManualTest= null;
+                $scope.selectedData.dateOfManualTest = null;
             };
 
             $scope.disabled = function (date, mode) {
@@ -655,7 +652,7 @@ angular
                 showWeeks: 'false'
             };
 
-            $scope.convertDateToLong = function(date) {
+            $scope.convertDateToLong = function (date) {
                 return (new Date(date)).getTime();
             };
 
@@ -663,7 +660,7 @@ angular
             /**
              *  upload scan document of manual Test
              */
-            $scope.uploadScanDoc = function(){
+            $scope.uploadScanDoc = function () {
                 $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/calibrator/views/modals/upload-scanDoc.html',
@@ -708,14 +705,12 @@ angular
              *  repeat scan document of manual Test
              */
             $scope.repeatUpload = function () {
-                deleteScanDoc(function(){
+                deleteScanDoc(function () {
                     if ($scope.resultDelete) {
                         $scope.uploadScanDoc();
                     }
                 });
             };
-
-
 
 
             /**
@@ -749,7 +744,6 @@ angular
                     window.history.back();
                 }, 2500);
             }
-
 
 
             $scope.openDetails = function (verifId, verifDate) {

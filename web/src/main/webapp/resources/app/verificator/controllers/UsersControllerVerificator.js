@@ -110,16 +110,16 @@ angular
                 userService.getUser(username)
                     .then(function (data) {
                         $modal.open({
-                                animation: true,
-                                size: 'lg',
-                                controller: 'EditEmployeeController',
-                                templateUrl: 'resources/app/provider/views/employee/employee-edit-modal.html',
-                                resolve: {
-                                    user: function() {
-                                        return data.data;
-                                    }
+                            animation: true,
+                            size: 'lg',
+                            controller: 'EditEmployeeController',
+                            templateUrl: 'resources/app/provider/views/employee/employee-edit-modal.html',
+                            resolve: {
+                                user: function () {
+                                    return data.data;
                                 }
-                            });
+                            }
+                        });
                     });
             };
 
@@ -129,10 +129,10 @@ angular
             $scope.cantAddNewEmployee = function () {
                 userService.getOrganizationEmployeeCapacity()
                     .success(function (data) {
-                        $scope.organizationEmployeesCapacity = data;
-                        $scope.cantAddEmployee = $scope.totalEmployee >= $scope.organizationEmployeesCapacity;
-                    }
-                );
+                            $scope.organizationEmployeesCapacity = data;
+                            $scope.cantAddEmployee = $scope.totalEmployee >= $scope.organizationEmployeesCapacity;
+                        }
+                    );
             };
 
             /**

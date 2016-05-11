@@ -128,6 +128,10 @@ angular
                     count: 10,
                     sorting: {
                         date: 'desc'
+                    }, filter: {
+                        status: 'ACCEPTED',
+                        date: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD")
                     }
                 }, {
                     total: 0,
@@ -138,7 +142,6 @@ angular
                         var sortOrder = params.sorting()[sortCriteria];
 
                         params.filter().status = 'ACCEPTED';
-
                         params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                         params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
@@ -156,7 +159,7 @@ angular
                 });
             });
 
-            $scope.$on('provider-save-verification', function(event, args) {
+            $scope.$on('provider-save-verification', function (event, args) {
                 $scope.tableParams.reload();
             });
 
@@ -213,7 +216,7 @@ angular
                 return result;
             };
             var getAllSelected = function () {
-                if(!$scope.allVerifications) {
+                if (!$scope.allVerifications) {
                     return false;
                 }
                 var checkedItems = $scope.allVerifications.filter(function (verification) {
@@ -226,7 +229,7 @@ angular
             var setAllSelected = function (value) {
                 angular.forEach($scope.allVerifications, function (verification) {
                     verification.selected = value;
-                    if(verification.providerEmployee) {
+                    if (verification.providerEmployee) {
                         $scope.resolveVerificationId(verification.id);
                     }
                 });
@@ -276,9 +279,9 @@ angular
                                 return verificationServiceProvider.getCalibrators()
                                     .success(function (calibrators) {
 
-                                        return calibrators;
-                                    }
-                                );
+                                            return calibrators;
+                                        }
+                                    );
                             }
                         }
                     });

@@ -194,7 +194,15 @@ angular
 
                 $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 50
+                    count: 50,
+                    filter: {
+                        status: null,
+                        sealPresence: null,
+                        serviceability: null,
+                        verificationWithDismantle: null,
+                        date: $scope.myDatePicker.pickerDate.startDate.format("x"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("x")
+                    }
                 }, {
                     total: 0,
                     filterDelay: 1500,

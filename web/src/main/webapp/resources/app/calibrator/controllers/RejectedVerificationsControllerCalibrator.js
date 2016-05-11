@@ -8,6 +8,7 @@ angular
 
             $scope.resultsCount = 0;
 
+
             $scope.clearAll = function () {
                 $scope.tableParams.filter({});
                 $scope.clearDate(); // sets 'all time' timerange
@@ -99,6 +100,9 @@ angular
                     count: 10,
                     sorting: {
                         date: 'desc'
+                    }, filter: {
+                        starDate: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD")
                     }
                 }, {
                     debugMode : true,

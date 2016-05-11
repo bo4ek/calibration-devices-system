@@ -29,9 +29,7 @@ angular
 
             $scope.initDatePicker = function () {
 
-                $scope.myDatePicker.pickerDate = {
-
-                };
+                $scope.myDatePicker.pickerDate = {};
 
                 if ($scope.defaultDate == null) {
                     //copy of original daterange
@@ -73,8 +71,8 @@ angular
             };
 
             $scope.statusData = [
-                { id: 'TEST_OK', label: null },
-                { id: 'TEST_NOK', label: null }
+                {id: 'TEST_OK', label: null},
+                {id: 'TEST_NOK', label: null}
             ];
 
             $scope.setTypeDataLanguage = function () {
@@ -98,6 +96,9 @@ angular
                 count: 10,
                 sorting: {
                     date: 'desc'
+                }, filter: {
+                    date: null,
+                    status: null
                 }
             }, {
                 total: 0,

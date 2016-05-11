@@ -42,7 +42,6 @@ angular
             };
 
 
-
             $scope.statusData = [
                 {id: 'TEST_OK', label: null},
                 {id: 'TEST_NOK', label: null},
@@ -95,7 +94,6 @@ angular
                     $log.debug(lang);
                 }
             };
-
 
 
             $scope.setTypeDataLanguage();
@@ -174,6 +172,12 @@ angular
                     count: 10,
                     sorting: {
                         date: 'desc'
+                    }, filter: {
+                        date: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD"),
+                        status: null,
+                        measurement_device_type: null,
+                        protocol_status: null
                     }
                 }, {
                     total: 0,

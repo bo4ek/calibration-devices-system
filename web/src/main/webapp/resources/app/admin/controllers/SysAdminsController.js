@@ -1,6 +1,6 @@
 angular
     .module('adminModule')
-    .controller('SysAdminsController', ['$scope', 'UsersService', 'AddressService', '$modal', '$log', 'ngTableParams', '$timeout', '$filter','$rootScope',
+    .controller('SysAdminsController', ['$scope', 'UsersService', 'AddressService', '$modal', '$log', 'ngTableParams', '$timeout', '$filter', '$rootScope',
         'toaster',
         function ($scope, userService, addressService, $modal, $log, ngTableParams, $timeout, $filter, $rootScope, toaster) {
 
@@ -25,7 +25,7 @@ angular
                     userService.getSysAdminsPage()
                         .success(function (result) {
                             console.log(result);
-                            $scope.totalEmployee=result.totalItems;
+                            $scope.totalEmployee = result.totalItems;
                             $defer.resolve(result.content);
                             params.total(result.totalItems);
                         }, function (result) {
@@ -51,12 +51,12 @@ angular
                 return false;
             };
 
-            $scope.openAddSysAdminModal = function() {
+            $scope.openAddSysAdminModal = function () {
                 var addEmployeeModal = $modal
                     .open({
-                        animation : true,
-                        controller : 'SysAdminAddModalController',
-                        templateUrl : 'resources/app/admin/views/modals/sys-admin-add-modal.html',
+                        animation: true,
+                        controller: 'SysAdminAddModalController',
+                        templateUrl: 'resources/app/admin/views/modals/sys-admin-add-modal.html',
                     });
 
                 /**
@@ -71,7 +71,8 @@ angular
                 $rootScope.username = username;
                 userService.getSysAdminByUsername(
                     $rootScope.username).then(
-                    function (result) {$rootScope.sysAdmin = result.data;
+                    function (result) {
+                        $rootScope.sysAdmin = result.data;
                         console.log($rootScope.sysAdmin);
 
                         var sysAdminDTOModal = $modal
@@ -95,7 +96,7 @@ angular
                     });
             };
 
-            $scope.openSubmitSysAdminDeleteModal = function (username){
+            $scope.openSubmitSysAdminDeleteModal = function (username) {
                 $rootScope.username = username;
                 //userService.deleteSysAdmin(username);
                 var sysAdminDTOModal = $modal
@@ -114,10 +115,9 @@ angular
             }
 
 
-
-            $scope.cantAddNewEmployee = function() {
+            $scope.cantAddNewEmployee = function () {
                 userService.getOrganizationEmployeeCapacity().success(
-                    function(data) {
+                    function (data) {
                         $scope.organizationEmployeesCapacity = data;
                         if ($scope.totalEmployee < $scope.organizationEmployeesCapacity) {
                             $scope.cantAddEmployee = false;

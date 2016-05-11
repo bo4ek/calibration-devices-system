@@ -384,4 +384,5 @@
     <input type="text" delayed-model="params.filter()[name]" data-delay="3500" name="textWithDelayedUpdate"  data-ng-if="filter == 'textWithDelayedUpdate'" class="input-filter form-control ng-pristine ng-untouched ng-valid ng-scope"/>
 </script>
 
+
 </body>

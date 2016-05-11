@@ -27,7 +27,11 @@ angular
 
                 $scope.tableParams = new ngTableParams({
                         page: 1,
-                        count: 10
+                        count: 10,
+                        filter: {
+                            region: null,
+                            city: null
+                        }
                     },
                     {
                         total: 0,

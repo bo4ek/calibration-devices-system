@@ -2,8 +2,8 @@ angular
     .module('employeeModule')
     .controller('NewVerificationsControllerVerificator', ['$scope', '$log', '$modal', '$location', 'CalibrationTestServiceCalibrator', 'VerificationServiceVerificator',
         '$rootScope', 'ngTableParams', '$filter', '$timeout', '$translate',
-        function ($scope, $log, $modal, $location, calibrationTestServiceCalibrator,  verificationServiceVerificator, $rootScope, ngTableParams, $filter, $timeout,
-                  $translate ) {
+        function ($scope, $log, $modal, $location, calibrationTestServiceCalibrator, verificationServiceVerificator, $rootScope, ngTableParams, $filter, $timeout,
+                  $translate) {
 
             $scope.resultsCount = 0;
             $scope.pageNumber = 1;
@@ -13,14 +13,14 @@ angular
             $scope.path = $location.path();
 
             $scope.dataToManualTest = new Map();
-            $scope.rejectedPage = $scope.path ==  "/verifications/rejected";
+            $scope.rejectedPage = $scope.path == "/verifications/rejected";
 
             /**
              * this function return true if is StateVerificatorEmployee
              */
             $scope.isStateVerificatorEmployee = function () {
-                verificationServiceVerificator.getIfEmployeeStateVerificator().success(function(data){
-                    $scope.isEmployee =  data;
+                verificationServiceVerificator.getIfEmployeeStateVerificator().success(function (data) {
+                    $scope.isEmployee = data;
                 });
 
             };
@@ -32,7 +32,7 @@ angular
                 var manualTest = {
                     realiseYear: verification.realiseYear,
                     numberCounter: verification.numberOfCounter,
-                    status:verification.status
+                    status: verification.status
                 };
                 $scope.dataToManualTest.set(verification.id, manualTest);
             };
@@ -192,6 +192,11 @@ angular
                         count: $scope.itemsPerPage,
                         sorting: {
                             default: 'default'
+                        }, filter: {
+                            date: $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD"),
+                            endDate: $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD"),
+                            sentToVerificatorDateFrom: $scope.datePicker.sentToVerificatorDate.startDate.format("YYYY-MM-DD"),
+                            sentToVerificatorDateTo: $scope.datePicker.sentToVerificatorDate.endDate.format("YYYY-MM-DD")
                         }
                     }, {
                         total: 0,
@@ -207,21 +212,21 @@ angular
                             params.filter().sentToVerificatorDateFrom = $scope.datePicker.sentToVerificatorDate.startDate.format("YYYY-MM-DD");
                             params.filter().sentToVerificatorDateTo = $scope.datePicker.sentToVerificatorDate.endDate.format("YYYY-MM-DD");
 
-                            var request = $scope.path ==  "/verifications/rejected" ?  verificationServiceVerificator.geRejectedVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
-                                                                                    :  verificationServiceVerificator.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+                            var request = $scope.path == "/verifications/rejected" ? verificationServiceVerificator.geRejectedVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+                                : verificationServiceVerificator.getNewVerifications(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
 
                             request.success(function (result) {
-                                    $scope.resultsCount = result.totalItems;
-                                    $defer.resolve(result.content);
-                                    params.total(result.totalItems);
-                                    $scope.pageNumber = params.page();
-                                    $scope.itemsPerPage = params.count();
-                                    $scope.sortCriteria = sortCriteria;
-                                    $scope.sortOrder = sortOrder;
+                                $scope.resultsCount = result.totalItems;
+                                $defer.resolve(result.content);
+                                params.total(result.totalItems);
+                                $scope.pageNumber = params.page();
+                                $scope.itemsPerPage = params.count();
+                                $scope.sortCriteria = sortCriteria;
+                                $scope.sortOrder = sortOrder;
 
-                                }, function (result) {
-                                    $log.debug('error fetching data:', result);
-                                });
+                            }, function (result) {
+                                $log.debug('error fetching data:', result);
+                            });
                         }
                     })
                 })
@@ -312,53 +317,53 @@ angular
             };
 
             $scope.openRejectTest = function (verificationId) {
-                    var modalInstance = $modal.open({
-                        animation: true,
-                        templateUrl: 'resources/app/verificator/views/modals/mailComment.html',
-                        controller: 'TestRejectControllerVerificator',
-                        size: 'md'
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/verificator/views/modals/mailComment.html',
+                    controller: 'TestRejectControllerVerificator',
+                    size: 'md'
 
-                    });
+                });
                 if ($scope.idsOfVerifications.length === 0) {
                     $scope.idsOfVerifications[0] = verificationId;
                 }
-                    /**
-                     * executes when modal closing
-                     */
-                    modalInstance.result.then(function (formData) {
-                        var dataToSend = {
-                            idsOfVerifications: $scope.idsOfVerifications,
-                            message: formData.message
-                        };
+                /**
+                 * executes when modal closing
+                 */
+                modalInstance.result.then(function (formData) {
+                    var dataToSend = {
+                        idsOfVerifications: $scope.idsOfVerifications,
+                        message: formData.message
+                    };
 
-                        verificationServiceVerificator
-                            .rejectTestToCalibrator(dataToSend)
-                            .then(function (status) {
-                                $log.debug('success sending');
-                                $scope.tableParams.reload();
-                                $rootScope.$broadcast('verification-sent-to-calibrator');
-                                if (status.status == 201) {
-                                    $rootScope.onTableHandling();
-                                }
-                                if(status.status==200){
-                                    $modal.open({
-                                        animation: true,
-                                        templateUrl: 'resources/app/verificator/views/modals/rejecting-success.html',
-                                        controller: function ($modalInstance) {
-                                            this.ok = function () {
-                                                $modalInstance.close();
-                                            }
-                                        },
-                                        controllerAs: 'successController',
-                                        size: 'md'
-                                    });
-                                }
-                            });
+                    verificationServiceVerificator
+                        .rejectTestToCalibrator(dataToSend)
+                        .then(function (status) {
+                            $log.debug('success sending');
+                            $scope.tableParams.reload();
+                            $rootScope.$broadcast('verification-sent-to-calibrator');
+                            if (status.status == 201) {
+                                $rootScope.onTableHandling();
+                            }
+                            if (status.status == 200) {
+                                $modal.open({
+                                    animation: true,
+                                    templateUrl: 'resources/app/verificator/views/modals/rejecting-success.html',
+                                    controller: function ($modalInstance) {
+                                        this.ok = function () {
+                                            $modalInstance.close();
+                                        }
+                                    },
+                                    controllerAs: 'successController',
+                                    size: 'md'
+                                });
+                            }
+                        });
 
-                        $scope.idsOfVerifications = [];
-                        $scope.checkedItems = [];
+                    $scope.idsOfVerifications = [];
+                    $scope.checkedItems = [];
 
-                    });
+                });
             };
 
             $scope.openSendingModal = function () {
@@ -375,7 +380,7 @@ angular
                                 if (status.status == 201) {
                                     $rootScope.onTableHandling();
                                 }
-                                if(status.status==200){
+                                if (status.status == 200) {
                                     $modal.open({
                                         animation: true,
                                         templateUrl: 'resources/app/verificator/views/modals/sending-success.html',
@@ -394,7 +399,8 @@ angular
 
                         $scope.idsOfVerifications = [];
                         $scope.checkedItems = [];
-                    };
+                    }
+                    ;
                 } else {
                     $scope.isClicked = true;
                 }
@@ -475,9 +481,9 @@ angular
                         verificatorEmployee: function () {
                             return verificationServiceVerificator.getVerificators()
                                 .success(function (verificators) {
-                                    return verificators;
-                                }
-                            );
+                                        return verificators;
+                                    }
+                                );
                         }
                     }
                 });

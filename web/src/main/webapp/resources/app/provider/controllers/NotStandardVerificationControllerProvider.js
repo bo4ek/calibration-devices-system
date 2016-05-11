@@ -54,9 +54,9 @@ angular
                                     providerEmploy: function () {
                                         return verificationServiceProvider.getProviders()
                                             .success(function (providers) {
-                                                return providers;
-                                            }
-                                        );
+                                                    return providers;
+                                                }
+                                            );
                                     }
                                 }
                             });

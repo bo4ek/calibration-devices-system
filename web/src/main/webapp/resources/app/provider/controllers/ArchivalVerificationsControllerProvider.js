@@ -1,6 +1,6 @@
 angular
     .module('employeeModule')
-    .controller('ArchivalVerificationsControllerProvider', ['$scope', '$modal', '$log', 'VerificationServiceProvider', 'CalibrationTestServiceCalibrator','ngTableParams', '$filter', '$rootScope', '$timeout', '$translate',
+    .controller('ArchivalVerificationsControllerProvider', ['$scope', '$modal', '$log', 'VerificationServiceProvider', 'CalibrationTestServiceCalibrator', 'ngTableParams', '$filter', '$rootScope', '$timeout', '$translate',
 
         function ($scope, $modal, $log, verificationServiceProvider, calibrationTestServiceCalibrator, ngTableParams, $filter, $rootScope, $timeout, $translate) {
 
@@ -89,7 +89,7 @@ angular
 
                 /*TODO: i18n*/
                 $scope.myDatePicker.pickerDate = {
-                    startDate: (date ? moment(date, "YYYY-MM-DD") :moment()),
+                    startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
                     //earliest day of  all the verifications available in table
                     //we should reformat it here, because backend currently gives date in format "YYYY-MM-DD"
                     endDate: moment() // current day
@@ -181,6 +181,10 @@ angular
                     count: 10,
                     sorting: {
                         date: 'desc'
+                    }, filter: {
+                        date: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD"),
+                        status: null
                     }
                 }, {
                     total: 0,
@@ -193,7 +197,7 @@ angular
                         if ($scope.selectedStatus.name != null) {
                             params.filter().status = $scope.selectedStatus.name.id;
                         }
-                        else{
+                        else {
                             params.filter().status = null; //case when the filter is cleared with a button on the select
                         }
 

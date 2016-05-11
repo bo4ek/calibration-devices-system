@@ -1,7 +1,7 @@
 angular
     .module('employeeModule')
     .controller('DigitalVerificationProtocolsControllerCalibrator', ['$scope', '$log', '$modal',
-        'DigitalVerificationProtocolsServiceCalibrator', 'CalibrationTestServiceCalibrator', 'VerificationServiceCalibrator', '$rootScope', 'ngTableParams','$filter', 'toaster', '$location', '$translate',
+        'DigitalVerificationProtocolsServiceCalibrator', 'CalibrationTestServiceCalibrator', 'VerificationServiceCalibrator', '$rootScope', 'ngTableParams', '$filter', 'toaster', '$location', '$translate',
 
         function ($scope, $log, $modal, digitalVerificationProtocolsServiceCalibrator, calibrationTestServiceCalibrator, verificationServiceCalibrator, $rootScope, ngTableParams,
                   $filter, toaster, $location, $translate) {
@@ -13,11 +13,11 @@ angular
             $scope.path = $location.path();
             $scope.rejected = $scope.path == "/calibrator/protocols/rejected";
 
-            $scope.$watch('globalSearchParams',function(newParam,oldParam){
-                if($scope.hasOwnProperty("tableParams")) {
+            $scope.$watch('globalSearchParams', function (newParam, oldParam) {
+                if ($scope.hasOwnProperty("tableParams")) {
                     $scope.tableParams.reload();
                 }
-            },true);
+            }, true);
             $scope.clearAll = function () {
                 $scope.selectedStatus.name = null;
                 $scope.tableParams.filter({});
@@ -132,14 +132,15 @@ angular
                     digitalVerificationProtocolsServiceCalibrator.cancelProtocol(idVerification)
                         .then(function (response) {
                             switch (response.status) {
-                                case 200: {
+                                case 200:
+                                {
                                     $scope.tableParams.reload();
                                     break;
                                 }
 
                             }
-                        }
-                    );
+                            }
+                        );
                 }
             };
 
@@ -153,6 +154,10 @@ angular
                     count: 10,
                     sorting: {
                         default: 'default'
+                    }, filter: {
+                        date: $scope.datePicker.initialDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.datePicker.initialDate.endDate.format("YYYY-MM-DD"),
+                        status: null
                     }
                 }, {
                     total: 0,
@@ -212,7 +217,7 @@ angular
                 if (!$scope.allIsEmpty) {
                     var modalInstance = $modal.open({
                         animation: true,
-                        backdrop : 'static',
+                        backdrop: 'static',
                         templateUrl: 'resources/app/calibrator/views/modals/protocols-sending.html',
                         controller: 'DigitalProtocolsSendingModalControllerCalibrator',
                         size: 'md',
@@ -221,9 +226,9 @@ angular
                                 return digitalVerificationProtocolsServiceCalibrator.getVerificators()
                                     .success(function (data) {
 
-                                        return data;
-                                    }
-                                );
+                                            return data;
+                                        }
+                                    );
                             }
                         }
                     });
@@ -262,12 +267,12 @@ angular
             };
 
             $scope.openTest = function (verification) {
-                if(!verification.manual) {
+                if (!verification.manual) {
                     $location.path('/calibrator/verifications/calibration-test-add/').search({
                         'param': verification.id,
                         'loadProtocol': 1
                     });
-                }else{
+                } else {
                     $scope.createManualTest(verification);
                     calibrationTestServiceCalibrator.dataOfVerifications().setIdsOfVerifications($scope.dataToManualTest);
                     $location.path('/calibrator/verifications/calibration-test/').search({
@@ -280,7 +285,7 @@ angular
                 var manualTest = {
                     realiseYear: verification.realiseYear,
                     numberCounter: verification.numberOfCounter,
-                    status:verification.status
+                    status: verification.status
                 };
                 $scope.dataToManualTest.set(verification.id, manualTest);
             };

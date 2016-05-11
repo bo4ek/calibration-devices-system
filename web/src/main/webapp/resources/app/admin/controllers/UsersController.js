@@ -1,7 +1,7 @@
 angular
     .module('adminModule')
-    .controller('UsersController', ['$scope', 'UsersService', '$log', 'ngTableParams', '$timeout', '$filter','$rootScope',
-        'toaster','$translate',
+    .controller('UsersController', ['$scope', 'UsersService', '$log', 'ngTableParams', '$timeout', '$filter', '$rootScope',
+        'toaster', '$translate',
         function ($scope, userService, $log, ngTableParams, $timeout, $filter, $rootScope, toaster, $translate) {
 
 
@@ -72,7 +72,7 @@ angular
 
                     userService.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
                         .success(function (result) {
-                            $scope.totalEmployee=result.totalItems;
+                            $scope.totalEmployee = result.totalItems;
                             $defer.resolve(result.content);
                             params.total(result.totalItems);
                         }, function (result) {

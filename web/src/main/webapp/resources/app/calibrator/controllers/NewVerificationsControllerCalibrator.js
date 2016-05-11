@@ -222,6 +222,11 @@ angular
                     count: 50,
                     sorting: {
                         date: 'desc'
+                    }, filter: {
+                        date: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD"),
+                        status: null,
+                        dismantled: null
                     }
                 }, {
                     total: 0,
