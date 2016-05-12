@@ -191,7 +191,6 @@ angular
         }
 
         function saveInfo(url, data) {
-            //console.log("from service" + data);
             return $http.post(url, data)
                 .success(function (response) {
                     console.log(response);

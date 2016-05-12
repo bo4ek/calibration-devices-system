@@ -44,7 +44,7 @@ angular
                 if (search) {
                     url += '/' + search;
                 }
-                return $http.get(url, {timeout: 10000})
+                return $http.get(url)
                     .then(function (result) {
                         return result.data;
                     });

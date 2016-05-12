@@ -37,8 +37,7 @@ angular
             };
             function getDataWithParams(url, params) {
                 return $http.get(url, {
-                    params: params,
-                    timeout: 10000
+                    params: params
                 }).success(function (data) {
                     return data;
                 }).error(function (err) {

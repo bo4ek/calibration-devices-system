@@ -22,7 +22,6 @@ angular
                 $scope.$broadcast('show-errors-check-validity');
                 if ($scope.mailSendingForm.$valid){
                     $modalInstance.close($scope.formData);
-
                 }
             }
         }]);

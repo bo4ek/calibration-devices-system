@@ -96,11 +96,16 @@ public class StateVerificatorServiceImpl implements StateVerificatorService {
      */
     @Override
     @Transactional
-    public void assignVerificatorEmployee(String verificationId, User verificatorEmployee) {
+    public boolean assignVerificatorEmployee(String verificationId, User verificatorEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
-        verification.setStateVerificatorEmployee(verificatorEmployee);
-        verification.setReadStatus(Verification.ReadStatus.READ);
-        verificationRepository.save(verification);
+        if (verification.getStateVerificatorEmployee() == null) {
+            verification.setStateVerificatorEmployee(verificatorEmployee);
+            verification.setReadStatus(Verification.ReadStatus.READ);
+            verificationRepository.save(verification);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

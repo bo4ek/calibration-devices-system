@@ -20,7 +20,7 @@ angular
         };
 
         function getData(url) {
-            return $http.get('application/' + url, {timeout: 10000})
+            return $http.get('application/' + url)
                 .success(function (data) {
                     return data;
                 })

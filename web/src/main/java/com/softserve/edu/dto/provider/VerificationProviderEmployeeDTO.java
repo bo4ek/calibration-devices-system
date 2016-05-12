@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.softserve.edu.service.utils.EmployeeDTO;
 
-/**
- * Created by MAX on 22.07.2015.
- */
 public class VerificationProviderEmployeeDTO {
     String idVerification;
     private List<String> idsOfVerifications;

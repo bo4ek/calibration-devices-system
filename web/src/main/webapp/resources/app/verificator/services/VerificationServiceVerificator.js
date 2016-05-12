@@ -93,7 +93,7 @@ angular
 
             $log.info(url);
 
-            return $http.get('verificator/' + url, {timeout: 10000})
+            return $http.get('verificator/' + url)
                 .success(function (data) {
                     return data;
                 })

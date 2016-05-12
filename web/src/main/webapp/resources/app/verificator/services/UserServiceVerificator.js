@@ -37,7 +37,7 @@ angular
         };
 
         function getData(url) {
-            return $http.get(url, {timeout: 10000})
+            return $http.get(url)
                 .success(function (result) {
                     return result;
                 });
@@ -45,8 +45,7 @@ angular
 
         function getData2(url, params) {
             return $http.get(url, {
-                params: params,
-                timeout: 10000
+                params: params
             }).success(function (data) {
                 return data;
             }).error(function (err) {

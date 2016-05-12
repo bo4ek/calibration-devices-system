@@ -16,7 +16,7 @@ public interface StateVerificatorService {
 
     List<EmployeeDTO> getAllVerificatorEmployee(List<String> role, User employee);
 
-    void assignVerificatorEmployee(String idVerification, User employeeCalibrator);
+    boolean assignVerificatorEmployee(String idVerification, User employeeCalibrator);
 
     List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization);
 

@@ -225,7 +225,6 @@ angular
                                 $scope.sortOrder = sortOrder;
 
                             }, function (result) {
-                                $log.debug('error fetching data:', result);
                             });
                         }
                     })
@@ -270,7 +269,6 @@ angular
             };
 
             $scope.testReview = function (verifId) {
-                $log.debug(verifId);
                 $modal.open({
 
                     animation: true,
@@ -281,13 +279,9 @@ angular
                         response: function () {
                             return verificationServiceVerificator.getCalibraionTestDetails(verifId)
                                 .success(function (calibrationTest) {
-                                    //calibrationTest.id = verifId;
-                                    $log.debug('CalibrationTest');
-                                    $log.debug(calibrationTest);
                                     return calibrationTest;
                                 })
                                 .error(function () {
-                                    console.log('ERROR');
                                 });
                         }
                     }
@@ -339,7 +333,6 @@ angular
                     verificationServiceVerificator
                         .rejectTestToCalibrator(dataToSend)
                         .then(function (status) {
-                            $log.debug('success sending');
                             $scope.tableParams.reload();
                             $rootScope.$broadcast('verification-sent-to-calibrator');
                             if (status.status == 201) {
@@ -372,8 +365,6 @@ angular
                         var dataToSend = {
                             idsOfVerifications: $scope.idsOfVerifications
                         };
-
-                        $log.info(dataToSend);
                         verificationServiceVerificator
                             .sendVerificationsToProvider(dataToSend)
                             .then(function (status) {
@@ -433,8 +424,6 @@ angular
                             idsOfVerifications: $scope.idsOfVerifications,
                             organizationId: formData.provider.id
                         };
-
-                        $log.info(dataToSend);
                         verificationServiceVerificator
                             .sendVerificationNotOkStatus(dataToSend)
                             .sendEmployeeVerificator(dataToSend)
@@ -459,7 +448,6 @@ angular
                 var dataToSend = {
                     idVerification: verificationId
                 };
-                $log.info(dataToSend);
                 verificationServiceVerificator.cleanVerificatorEmployeeField(dataToSend)
                     .success(function () {
                         $scope.tableParams.reload();
@@ -487,19 +475,21 @@ angular
                         }
                     }
                 });
+                if ($scope.idsOfVerifications.length === 0) {
+                    $scope.idsOfVerifications[0] = verificationId;
+                }
                 /**
                  * executes when modal closing
                  */
                 modalInstance.result.then(function (formData) {
-                    idVerification = 0;
                     var dataToSend = {
-                        idVerification: verificationId,
+                        idsOfVerifications: $scope.idsOfVerifications,
                         employeeVerificator: formData.provider
                     };
-                    $log.info(dataToSend);
                     verificationServiceVerificator
                         .sendEmployeeVerificator(dataToSend)
-                        .success(function () {
+                        .success(function (data) {
+                            alert($filter('translate')('COUNT_OF_SUCCESS_ASSIGN_VERIFICATOR_EMPLOYEE')+"  "+data);
                             $scope.tableParams.reload();
                         });
                 });
