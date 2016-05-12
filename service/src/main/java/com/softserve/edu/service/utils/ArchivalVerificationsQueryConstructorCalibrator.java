@@ -249,6 +249,8 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
                     queryPredicate);
         }
 
+        queryPredicate = cb.and(cb.equal(root.get("status"), Status.REJECTED_BY_CALIBRATOR), queryPredicate);
+
         return queryPredicate;
     }
 

@@ -41,7 +41,6 @@ public class VerificationGroup {
     public String toString() {
         return "VerificationGroup{" +
                 "id =" + id +
-                ", verifications =" + verifications +
                 '}';
     }
 }

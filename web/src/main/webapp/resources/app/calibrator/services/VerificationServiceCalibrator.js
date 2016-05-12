@@ -110,7 +110,7 @@ angular
         };
 
         function getData(url) {
-            return $http.get('calibrator/' + url, {timeout: 10000})
+            return $http.get('calibrator/' + url)
                 .success(function (data) {
                     return data;
                 })
@@ -132,8 +132,7 @@ angular
 
         function getDataWithParams(url, params) {
             return $http.get(url, {
-                params: params,
-                timeout: 10000
+                params: params
             }).success(function (data) {
                 return data;
             }).error(function (err) {

@@ -496,9 +496,10 @@ public class CalibratorVerificationController {
                     verification.getClientData().getClientAddress().getBuilding(),
                     verification.getClientData().getClientAddress().getFlat(),
                     verification.getId());
+
+            dto.setRejectedCalibratorDate(verification.getRejectedCalibratorDate());
             list.add(dto);
         }
-
         return new PageDTO<RejecteVerificationPageDTO>(queryResult.getTotalItems(), list);
     }
 

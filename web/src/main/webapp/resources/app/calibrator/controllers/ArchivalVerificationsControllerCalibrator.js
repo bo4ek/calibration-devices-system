@@ -173,11 +173,11 @@ angular
                     sorting: {
                         date: 'desc'
                     }, filter: {
-                        date: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
-                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD"),
                         status: null,
                         measurement_device_type: null,
-                        protocol_status: null
+                        protocol_status: null,
+                        date: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD")
                     }
                 }, {
                     total: 0,
