@@ -83,13 +83,13 @@ public class ProviderEmployeeServiceImpl implements ProviderEmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User oneProviderEmployee(String username) {
         return providerEmployeeRepository.findOne(username);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<EmployeeDTO> getAllProviders(List<String> role, User employee) {
         List<EmployeeDTO> providerListEmployee = new ArrayList<>();
         if (role.contains(UserRole.PROVIDER_ADMIN.name())) {
@@ -107,19 +107,19 @@ public class ProviderEmployeeServiceImpl implements ProviderEmployeeService {
     }
 
     @Override
-    @Transactional()
+    @Transactional(readOnly = true)
     public User findByUsername(String userName) {
         return providerEmployeeRepository.findOne(userName);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<String> getRoleByUserNam(String username) {
         return ConvertSetEnumsToListString.convertToListString(providerEmployeeRepository.getRolesByUserName(username));
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ListToPageTransformer<User>
     findPageOfAllProviderEmployeeAndCriteriaSearch(int pageNumber, int itemsPerPage, Long idOrganization, String userName,
                                                    String role, String firstName, String lastName, String organization,
@@ -195,7 +195,7 @@ public class ProviderEmployeeServiceImpl implements ProviderEmployeeService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> getAllProviderEmployee(Long idOrganization) {
         return userRepository.findByUserRoleAndOrganizationId(UserRole.PROVIDER_EMPLOYEE, idOrganization)
                 .stream()

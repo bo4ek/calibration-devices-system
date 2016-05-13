@@ -29,32 +29,32 @@ public class DeviceServiceImpl implements DeviceService {
 	private EntityManager entityManager;
 
     @Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public boolean existsWithDeviceId(Long id) {
 		return deviceRepository.findOne(id) != null;
 	}
 
     @Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public Device getById(Long id) {
 		return deviceRepository.findOne(id);
 	}
 
     @Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Device> getAll() {
 		return (List<Device>) deviceRepository.findAll(); 
 	}
 
     @Override
-	@Transactional
+	@Transactional(readOnly = true)
 	  public Page<Device> getDevicesBySearchAndPagination(int pageNumber, int itemsPerPage, String search) {
 	  PageRequest pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);
 	  return search == null ? deviceRepository.findAll(pageRequest) : deviceRepository.findByNumberLikeIgnoreCase("%" + search + "%", pageRequest);
 	 }
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public ListToPageTransformer<Device> getCategoryDevicesBySearchAndPagination(int pageNumber, int itemsPerPage, Long id, String deviceType, String deviceName, String sortCriteria, String sortOrder) {
 		CriteriaQuery<Device> criteriaQuery = ArchivalDevicesCategoryQueryConstructorAdmin
 				.buildSearchQuery(id, deviceType, deviceName, sortCriteria, sortOrder, entityManager);
@@ -74,7 +74,7 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Device> getAllByDeviceName(String device) {
 		return deviceRepository.findByDeviceName(device);
 	}

@@ -100,7 +100,7 @@ public class AgreementServiceImpl implements AgreementService {
      * @return list of agreements
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ListToPageTransformer<Agreement> getCategoryDevicesBySearchAndPagination(int pageNumber, int itemsPerPage,
                                                                                     Map<String, String> searchKeys,
                                                                                     String sortCriteria, String sortOrder) {

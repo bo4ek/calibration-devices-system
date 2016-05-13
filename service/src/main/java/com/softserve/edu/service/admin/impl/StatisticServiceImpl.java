@@ -60,7 +60,7 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User employeeExist(String username) {
         return userRepository.findOne(username);
     }

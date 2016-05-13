@@ -67,7 +67,7 @@ public class LocalityServiceImpl implements LocalityService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean existByIdAndDistrictId(Long id, Long districtId) {
         return localityRepository.existByIdAndDistrictId(id, districtId);
     }

@@ -59,7 +59,7 @@ public class CalibrationTestDataServiceImpl implements CalibrationTestDataServic
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CalibrationTestData findTestData(Long id) {
         return dataRepository.findOne(id);
     }

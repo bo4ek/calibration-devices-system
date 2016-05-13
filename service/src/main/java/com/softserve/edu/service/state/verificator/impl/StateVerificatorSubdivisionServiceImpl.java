@@ -46,7 +46,7 @@ public class StateVerificatorSubdivisionServiceImpl implements StateVerificatorS
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public VerificatorSubdivision findById(String subdivisionId) {
         return subdivisionRepository.findOne(subdivisionId);
     }
@@ -57,13 +57,13 @@ public class StateVerificatorSubdivisionServiceImpl implements StateVerificatorS
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean isIdAvailable(String id) {
         return subdivisionRepository.exists(id);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<VerificatorSubdivision> findByOrganizationAndSearchAndPagination(int pageNumber, int itemsPerPage,
                                                                                  Organization organization, String search) {
         PageRequest pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);

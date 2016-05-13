@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
      * @param username must not be non {@literal null}
      * @return {@literal true} if user with {@code username} doesn't exist in database, else {@literal false}
      */
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public boolean isExistsWithUsername(String username) {
         return userRepository.findOne(username) == null;
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
      * @return employee entity
      * @throws ClassCastException if username isn't a employee
      */
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public User getUser(String username) throws ClassCastException {
         return userRepository.findOne(username);
@@ -119,8 +119,8 @@ public class UserServiceImpl implements UserService {
         return isChanged;
     }
 
-    @Transactional
     @Override
+    @Transactional(readOnly = true)
     public List<User> findByRole(String role){
         return userRepository
                 .findByUserRoleAllIgnoreCase(UserRole.valueOf(role))
@@ -128,13 +128,13 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public User findOne(String username) {
         return userRepository.findOne(username);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<String> getRoles(String username) {
         return ConvertSetEnumsToListString.convertToListString(
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
      * @param subdivisionId id of subdivision
      * @return list of Users
      */
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<User> findBySubdivisionId(String subdivisionId) {
         return userRepository.findByVerificatorSubdivision(subdivisionId);

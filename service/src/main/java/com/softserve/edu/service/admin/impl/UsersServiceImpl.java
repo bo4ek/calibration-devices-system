@@ -53,7 +53,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<String> getRoles(String username){
         return ConvertSetEnumsToListString
                 .convertToListString(userRepository.getRolesByUserName(username));
@@ -75,7 +75,7 @@ public class UsersServiceImpl implements UsersService {
      * @return ListToPageTransformer<User> contains all required users
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ListToPageTransformer<User>
     findPageOfAllEmployees(int pageNumber, int itemsPerPage,  String username,
                            String role, String firstName, String lastName, String organization,
@@ -142,7 +142,7 @@ public class UsersServiceImpl implements UsersService {
      * @return ListToPageTransformer<User> contains all users with role SYS_ADMIN
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ListToPageTransformer<User> findAllSysAdmins() {
 
         Set<User> sysAdmins = userRepository.findByUserRoleAllIgnoreCase(UserRole.SYS_ADMIN);

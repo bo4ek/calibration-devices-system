@@ -43,7 +43,7 @@ public class CalibrationDisassemblyTeamServiceImpl implements CalibratorDisassem
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<DisassemblyTeam> findByOrganizationAndSearchAndPagination(int pageNumber, int itemsPerPage,
                                                                           Organization organization, String search) {
         PageRequest pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);
@@ -62,7 +62,7 @@ public class CalibrationDisassemblyTeamServiceImpl implements CalibratorDisassem
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public DisassemblyTeam findById(String teamId) {
         return teamRepository.findOne(teamId);
     }
@@ -95,7 +95,7 @@ public class CalibrationDisassemblyTeamServiceImpl implements CalibratorDisassem
      * else {@Literal false}
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean isTeamExist(String teamUsername) {
         return teamRepository.exists(teamUsername);
     }

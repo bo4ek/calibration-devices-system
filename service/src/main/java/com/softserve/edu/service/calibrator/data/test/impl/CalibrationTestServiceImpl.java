@@ -117,7 +117,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CalibrationTest findTestById(Long testId) {
         return calibrationTestRepository.findOne(testId);
     }
@@ -129,20 +129,20 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CalibrationTest findByVerificationId(String verifId) {
         return calibrationTestRepository.findByVerificationId(verifId);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CalibrationTestList findAllCalibrationTests() {
         List<CalibrationTest> list = (ArrayList<CalibrationTest>) calibrationTestRepository.findAll();
         return new CalibrationTestList(list);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<CalibrationTest> getCalibrationTestsBySearchAndPagination(int pageNumber,
                                                                           int itemsPerPage, String search) {
         PageRequest pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);
@@ -181,7 +181,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CalibrationTestDataList findAllTestDataAsociatedWithTest(Long calibrationTestId) {
         CalibrationTest calibrationTest = calibrationTestRepository.findOne(calibrationTestId);
         if (calibrationTest == null) {

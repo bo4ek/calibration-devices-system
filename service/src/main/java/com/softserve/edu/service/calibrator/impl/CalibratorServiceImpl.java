@@ -56,7 +56,7 @@ public class CalibratorServiceImpl implements CalibratorService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CounterType findOneBySymbolAndStandardSizeAndDeviceId(String symbol, String standardSize, Long deviceId) {
         return counterTypeRepository.findOneBySymbolAndStandardSizeAndDeviceId(symbol, standardSize, deviceId);
     }
@@ -90,13 +90,13 @@ public class CalibratorServiceImpl implements CalibratorService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User oneCalibratorEmployee(String username) {
         return userRepository.findOne(username);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<EmployeeDTO> getAllCalibratorEmployee(List<String> role, User employee) {
         List<EmployeeDTO> calibratorListEmployee = new ArrayList<>();
         if (role.contains(UserRole.CALIBRATOR_ADMIN.name())) {

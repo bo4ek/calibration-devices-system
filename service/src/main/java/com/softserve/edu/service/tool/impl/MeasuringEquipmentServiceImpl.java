@@ -18,13 +18,13 @@ public class MeasuringEquipmentServiceImpl implements MeasureEquipmentService {
     private MeasuringEquipmentRepository measuringEquipmentRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MeasuringEquipment> getAll() {
         return (List<MeasuringEquipment>) measuringEquipmentRepository.findAll();
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<MeasuringEquipment> getMeasuringEquipmentsBySearchAndPagination(int pageNumber,
                                                                                 int itemsPerPage, String search) {
         PageRequest pageRequest = new PageRequest(pageNumber - 1, itemsPerPage);
@@ -39,7 +39,7 @@ public class MeasuringEquipmentServiceImpl implements MeasureEquipmentService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public MeasuringEquipment getMeasuringEquipmentById(Long equipmentId) {
         return measuringEquipmentRepository.findOne(equipmentId);
     }

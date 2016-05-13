@@ -663,37 +663,37 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public int findCountOfAllSentVerifications(Organization organization) {
         return verificationRepository.getCountOfAllSentVerifications(organization);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public int findCountOfAllAcceptedVerification(Organization organization) {
         return verificationRepository.getCountOfAllAcceptedVerifications(organization);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public int findCountOfAllCalibratorVerificationWithoutEmployee(Organization organization) {
         return verificationRepository.findCountOfAllCalibratorVerificationWithoutEmployee(organization);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public int findCountOfAllCalibratorVerificationWithEmployee(Organization organization) {
         return verificationRepository.findCountOfAllCalibratorVerificationWithEmployee(organization);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public int findCountOfAllVerificatorVerificationWithoutEmployee(Organization organization) {
         return verificationRepository.findCountOfAllVerificatorVerificationWithoutEmployee(organization);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public int findCountOfAllVerificatorVerificationWithEmployee(Organization organization) {
         return verificationRepository.findCountOfAllVerificatorVerificationWithEmployee(organization);
     }
@@ -798,17 +798,17 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<Verification> getVerificationsByTaskID(Long taskID, Pageable pageable) {
         return verificationRepository.findByTaskId(taskID, pageable);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Verification> getVerificationsByTaskID(Long taskID) {
         return verificationRepository.findByTaskId(taskID);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Verification> getTaskGroupVerifications(Verification verification, boolean all) {
         List<Verification> verifications;
         VerificationGroup group = verification.getGroup();
@@ -822,7 +822,7 @@ public class VerificationServiceImpl implements VerificationService {
         return verifications;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean hasVerificationGroup(String verificationId) {
         Verification verification = verificationRepository.findOne(verificationId);
         if (verification == null) {
@@ -967,7 +967,7 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<String> findStandardSizesBySymbolAndDeviceId(String symbol, Long deviceId) {
         return counterTypeRepository.findBySymbolAndDeviceId(symbol, deviceId)
                 .stream()
@@ -982,13 +982,13 @@ public class VerificationServiceImpl implements VerificationService {
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<String> findSymbolsByDeviceType(String deviceType) {
         return counterTypeRepository.findSymbolsByDeviceType(deviceType);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<String> findStandardSizesBySymbolAndDeviceType(String symbol, String deviceType) {
         return counterTypeRepository.findStandardSizesBySymbolAndDeviceType(symbol, deviceType);
     }
@@ -1143,7 +1143,7 @@ public class VerificationServiceImpl implements VerificationService {
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<String> findSortedSymbolsByStandardSizeAndDeviceType(String standardSize, String deviceType) {
         Collator collator = Collator.getInstance(new Locale("uk", "UA"));
         List<String> listOfSymbols = counterTypeRepository.findSymbolsByStandardSizeAndDeviceType(standardSize, deviceType);
@@ -1157,7 +1157,7 @@ public class VerificationServiceImpl implements VerificationService {
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<String> findAllStandardSizes() {
         return counterTypeRepository.findAllStandardSizes();
     }

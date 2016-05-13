@@ -57,7 +57,7 @@ public class CalibrationTestDataManualServiceImpl implements CalibrationTestData
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public void createNewTestDataManual(String statusTestFirst, String statusTestSecond, String statusTestThird,
                                         String statusCommon, CalibrationTestManual calibrationTestManual, String verificationId,
                                         UnsuitabilityReason unsuitabilityReason, int realiseYear, String numberCounter, Long counterTypeId, Long moduleId) {

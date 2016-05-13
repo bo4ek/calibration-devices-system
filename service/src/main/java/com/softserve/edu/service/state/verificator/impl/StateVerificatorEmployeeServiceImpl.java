@@ -31,7 +31,7 @@ public class StateVerificatorEmployeeServiceImpl implements StateVerificatorEmpl
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User oneProviderEmployee(String username) {
         return stateVerificatorEmployeeRepository.findOne(username);
     }

@@ -99,7 +99,7 @@ public class CounterTypeServiceImpl implements CounterTypeService{
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public CounterType findById(Long id) {
         return counterTypeRepository.findOne(id);
     }
@@ -121,7 +121,7 @@ public class CounterTypeServiceImpl implements CounterTypeService{
      * @return
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ListToPageTransformer<CounterType> getCounterTypeBySearchAndPagination(int pageNumber, int itemsPerPage,
                                                                                   String name, String symbol, String standardSize,
                                                                                   String manufacturer, Integer calibrationInterval,

@@ -92,7 +92,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
     /**
      * @return Returns user (provider) assigned to the verification or null
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public User getProviderEmployeeById(String idVerification) {
         return verificationRepository.getProviderEmployeeById(idVerification);
     }
@@ -103,7 +103,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      * @param username
      * @return list of Verification
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Verification> getVerificationListByProviderEmployee(String username) {
         return verificationRepository.findByProviderEmployeeUsernameAndStatus(username, Status.ACCEPTED);
     }
@@ -114,7 +114,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      * @param username
      * @return list of Verification
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Verification> getVerificationListByCalibratorEmployee(String username) {
         return verificationRepository.findByCalibratorEmployeeUsernameAndStatus(username, Status.IN_PROGRESS);
     }
@@ -125,7 +125,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      * @param username
      * @return list of Verification
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Verification> getVerificationListByStateVerificatorEmployee(String username) {
         return verificationRepository.findByStateVerificatorEmployeeUsernameAndStatus(username, Status.SENT_TO_VERIFICATOR);
     }
@@ -169,7 +169,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      * @param username
      * @return user
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public User oneProviderEmployee(String username) {
         return userRepository.findOne(username);
     }

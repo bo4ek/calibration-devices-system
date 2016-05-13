@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-@Transactional
+
 public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskService {
 
     @Autowired
@@ -76,6 +76,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param pageable     parameters for pagination and sorting
      * @return filtered and sorted page of calibration tasks
      */
+    @Transactional(readOnly = true)
     public Page<CalibrationTask> getFilteredPageOfCalibrationTasks(Map<String, String> filterParams,
                                                                    Pageable pageable, String username) {
         User user = userRepository.findOne(username);
@@ -92,6 +93,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param pageable parameters for pagination and sorting
      * @return sorted page of calibration tasks
      */
+    @Transactional(readOnly = true)
     public Page<CalibrationTask> findAllCalibrationTasks(Pageable pageable) {
         return taskRepository.findAll(pageable);
     }
@@ -102,6 +104,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param taskID     ID of the calibration task the date of which is to be changed
      * @param dateOfTask new task date
      */
+    @Transactional
     public void changeTaskDate(Long taskID, Date dateOfTask) {
         CalibrationTask task = taskRepository.findOne(taskID);
         if (task == null || dateOfTask == null) {
@@ -128,6 +131,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @throws IllegalArgumentException().
      */
     @Override
+    @Transactional
     public Boolean addNewTaskForStation(Date taskDate, String moduleSerialNumber, List<String> verificationsId, String userName) throws PermissionDeniedException, InvalidModuleSerialNumberException {
         Boolean taskAlreadyExists = true;
         Boolean taskHasCompleteVerification = false;
@@ -181,6 +185,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      *                                     method @throws IllegalArgumentException().
      */
     @Override
+    @Transactional
     public void addNewTaskForTeam(Date taskDate, String serialNumber, List<String> verificationsId, String userId) {
         Set<Verification> verifications = new HashSet<>();
         DisassemblyTeam team = teamRepository.findOne(serialNumber);
@@ -241,6 +246,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @return count of verifications (int)
      */
     @Override
+    @Transactional(readOnly = true)
     public long findVerificationsByCalibratorEmployeeAndTaskStatusCount(String userName) {
         User user = userRepository.findOne(userName);
         if (user == null) {
@@ -270,6 +276,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @return Page<Verification>
      */
     @Override
+    @Transactional(readOnly = true)
     public Page<Verification> findByTaskStatusAndCalibratorId(Long id, int pageNumber, int itemsPerPage,
                                                               String sortCriteria, String sortOrder) {
         Pageable pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
@@ -406,6 +413,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @throws NullPointerException();
      */
     @Override
+    @Transactional(readOnly = true)
     public Page<Verification> findVerificationsByCalibratorEmployeeAndTaskStatus(String userName, int pageNumber,
                                                                                  int itemsPerPage, String sortCriteria,
                                                                                  String sortOrder) {
@@ -435,6 +443,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @throws NullPointerException();
      */
     @Override
+    @Transactional(readOnly = true)
     public List<CounterType> findSymbolsAndSizes(String verifId) {
         Verification verification = verificationRepository.findOne(verifId);
         if (verification == null) {
@@ -455,6 +464,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param id Task id
      * @throws Exception
      */
+    @Transactional
     public void sendTaskToStation(Long id, String senderUsername) throws Exception {
         CalibrationTask calibrationTask = taskRepository.findOne(id);
         Verification[] verifications = verificationRepository.findByTaskIdOrderByQueueAsc(id);
