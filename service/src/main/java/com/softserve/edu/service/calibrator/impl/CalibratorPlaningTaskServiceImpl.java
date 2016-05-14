@@ -38,7 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-
 public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskService {
 
     @Autowired
@@ -64,7 +63,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
     @Autowired
     CalibratorEmployeeService calibratorEmployeeService;
-
 
     private Logger logger = Logger.getLogger(CalibratorPlaningTaskServiceImpl.class);
 
@@ -395,43 +393,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         }
 
         return verificationRepository.findByTaskStatusAndCalibratorIdAndCounterStatusAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, id, false, pageRequest);
-    }
-
-
-    /**
-     * This method returns page of verifications with
-     * status planning task filtered by calibrator id,
-     * and sorted by client address. If user has role
-     * admin it calls method findByTaskStatusAndCalibratorId()
-     *
-     * @param userName
-     * @param pageNumber
-     * @param itemsPerPage
-     * @param sortCriteria
-     * @param sortOrder
-     * @return Page<Verification>
-     * @throws NullPointerException();
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Verification> findVerificationsByCalibratorEmployeeAndTaskStatus(String userName, int pageNumber,
-                                                                                 int itemsPerPage, String sortCriteria,
-                                                                                 String sortOrder) {
-        User user = userRepository.findOne(userName);
-        if (user == null) {
-            logger.error("Cannot found user with name " + userName);
-            throw new NullPointerException();
-        }
-        Set<UserRole> roles = user.getUserRoles();
-        for (UserRole role : roles) {
-            if (role.equals(UserRole.CALIBRATOR_ADMIN)) {
-                return findByTaskStatusAndCalibratorId(user.getOrganization().getId(), pageNumber, itemsPerPage
-                        , sortCriteria, sortOrder);
-            }
-        }
-        Pageable pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,
-                "clientData.clientAddress.district", "clientData.clientAddress.street", "clientData.clientAddress.building", "clientData.clientAddress.flat"));
-        return verificationRepository.findByTaskStatusAndCounterStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK, false, user.getUsername(), pageRequest);
     }
 
     /**

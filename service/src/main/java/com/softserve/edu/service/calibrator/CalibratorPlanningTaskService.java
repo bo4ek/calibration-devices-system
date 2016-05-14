@@ -29,8 +29,6 @@ public interface CalibratorPlanningTaskService {
     Page<Verification> findByTaskStatusAndCalibratorId(Long Id, int pageNumber,
                                                        int itemsPerPage, String sortCriteria, String sortOrder);
 
-    Page<Verification> findVerificationsByCalibratorEmployeeAndTaskStatus(String userName, int pageNumber,
-                                                            int itemsPerPage, String sortCriteria, String sortOrder);
     List<CounterType> findSymbolsAndSizes(String verifId);
 
     void sendTaskToStation(Long id, String senderUsername) throws Exception;

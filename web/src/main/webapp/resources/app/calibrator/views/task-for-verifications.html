@@ -26,77 +26,76 @@
                 <div class="panel-body">
 
 
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
-                            <table show-filter="true" ng-table="tableParams" template-pagination="custom/pager"
-                                   class="table table-bordered table-hover users_table">
+                                <table show-filter="true" ng-table="tableParams" template-pagination="custom/pager"
+                                       class="table table-bordered table-hover users_table">
 
-                                <tbody>
-                                <tr ng-repeat="verification in $data" >
-                                    <td data-title="''"><input type="checkbox" ng-click="resolveVerificationId(verification.verificationId)"/>
-                                    </td>
-                                    <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'date'"
-                                        filter="{ 'date': 'daterange' }">{{ verification.initialDate | date :
-                                        'dd-MM-yyyy'}}
-                                        <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
-                                            translate}} {{verification.processTimeExceeding}} {{'DAYS' |
-                                            translate}}</b>
-                                        </div>
-                                    </td>
-                                    <td data-title="'CLIENT_FULL_NAME' | translate" sortable="'client_last_name'"
-                                        filter="{ 'client_full_name': 'textWithDelayedUpdate' }">{{ verification.clientFullName }}
-                                    </td>
-                                    <td data-title="'PROVIDER_NAME' | translate" sortable="'providerName'"
-                                        filter="{ 'provider': 'textWithDelayedUpdate' }" ng-model="filters.id">{{ verification.providerName }}
-                                    </td>
-                                    <td data-title="'DISTRICT' | translate" sortable="'district'"
-                                        filter="{ 'district': 'textWithDelayedUpdate' }">{{ verification.district}}
-                                    </td>
-                                    <td data-title="'STREET' | translate" sortable="'street'"
-                                        filter="{ 'street': 'textWithDelayedUpdate' }">{{ verification.street }}
-                                    </td>
-                                    <td data-title="'BUILDING' | translate" sortable="'building'"
-                                        filter="{ 'building': 'textWithDelayedUpdate' }">{{ verification.building }}
-                                    </td>
-                                    <td data-title="'FLAT' | translate" sortable="'flat'"
-                                        filter="{ 'flat': 'textWithDelayedUpdate' }">{{ verification.flat }}
-                                    </td>
-                                    <td data-title="'DESIRED_VERIFICATION_BY_DATE' | translate" sortable="'dateOfVerif'"
-                                        filter="{ 'dateOfVerif': 'textWithDelayedUpdate' }">{{ verification.dateOfVerif }}
-                                    </td>
-                                    <td data-title="'DESIRED_VERIFICATION_BY_TIME' | translate" sortable="'timeOfVerif'"
-                                        filter="{ 'time': 'textWithDelayedUpdate' }">{{ verification.time }}
-                                    </td>
-                                    <td data-title="'DISMANTLING' | translate" sortable="'verificationWithDismantle'"
+                                    <tbody>
+                                    <tr ng-repeat="verification in $data">
+                                        <td data-title="''"><input type="checkbox" ng-click="resolveVerificationId(verification.verificationId)"/>
+                                        </td>
+                                        <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'date'"
+                                            filter="{ 'date': 'daterange' }">{{ verification.initialDate | date :
+                                            'dd-MM-yyyy'}}
+                                            <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
+                                                translate}} {{verification.processTimeExceeding}} {{'DAYS' |
+                                                translate}}</b>
+                                            </div>
+                                        </td>
+                                        <td data-title="'CLIENT_FULL_NAME' | translate" sortable="'client_last_name'"
+                                            filter="{ 'client_full_name': 'textWithDelayedUpdate' }">{{ verification.clientFullName }}
+                                        </td>
+                                        <td data-title="'PROVIDER_NAME' | translate" sortable="'providerName'"
+                                            filter="{ 'provider': 'textWithDelayedUpdate' }" ng-model="filters.id">{{ verification.providerName }}
+                                        </td>
+                                        <td data-title="'DISTRICT' | translate" sortable="'district'"
+                                            filter="{ 'district': 'textWithDelayedUpdate' }">{{ verification.district}}
+                                        </td>
+                                        <td data-title="'STREET' | translate" sortable="'street'"
+                                            filter="{ 'street': 'textWithDelayedUpdate' }">{{ verification.street }}
+                                        </td>
+                                        <td data-title="'BUILDING' | translate" sortable="'building'"
+                                            filter="{ 'building': 'textWithDelayedUpdate' }">{{ verification.building }}
+                                        </td>
+                                        <td data-title="'FLAT' | translate" sortable="'flat'"
+                                            filter="{ 'flat': 'textWithDelayedUpdate' }">{{ verification.flat }}
+                                        </td>
+                                        <td data-title="'DESIRED_VERIFICATION_BY_DATE' | translate" sortable="'dateOfVerif'"
+                                            filter="{ 'dateOfVerif': 'textWithDelayedUpdate' }">{{ verification.dateOfVerif}}
+                                        </td>
+                                        <td data-title="'DESIRED_VERIFICATION_BY_TIME' | translate">{{ verification.time }}
+                                        </td>
+                                        <td data-title="'DISMANTLING' | translate" sortable="'verificationWithDismantle'"
                                             filter="{'verificationWithDismantle': 'verificationWithDismantle'}">
-                                        {{ verification.verificationWithDismantle | translate}}
-                                    </td>
-                                    <td data-title="'PLUMBING_SERVICEABILITY' | translate" sortable="'serviceability'"
-                                        filter="{ 'serviceability': 'serviceability' }">{{ verification.serviceability  | translate}}
-                                    </td>
-                                    <td data-title="'NO_WATER_TO' | translate" sortable="'noWaterToDate'"
-                                        filter="{ 'noWaterToDate': 'textWithDelayedUpdate' }">{{ verification.noWaterToDate }}
-                                    </td>
-                                    <td data-title="'PRESENCE_OF_SEAL' | translate" sortable="'sealPresence'"
-                                        filter="{ 'sealPresence': 'sealPresence' }">{{ verification.sealPresence  | translate}}
-                                    </td>
-                                    <td data-title="'TELEPHONE' | translate" sortable="'telephone'"
-                                        filter="{ 'telephone': 'textWithDelayedUpdate' }">{{ verification.phone }}
-                                    </td>
-                                    <td data-title="'ACTIONS' | translate"
-                                        class="control_buttons">
-                                        <i class="fa fa-info-circle info_icon"
-                                           popover="{{'DETAIL_INFO' | translate}}"
-                                           popover-trigger="mouseenter"
-                                           ng-click="openDetails(verification.verificationId)">
-                                        </i>
-                                    </td>
-                                </tr>
-                                </tbody>
+                                            {{ verification.verificationWithDismantle | translate}}
+                                        </td>
+                                        <td data-title="'PLUMBING_SERVICEABILITY' | translate" sortable="'serviceability'"
+                                            filter="{ 'serviceability': 'serviceability' }">{{ verification.serviceability | translate}}
+                                        </td>
+                                        <td data-title="'NO_WATER_TO' | translate" sortable="'noWaterToDate'"
+                                            ng-pattern="DATE_REGEX_MY"
+                                            filter="{ 'noWaterToDate': 'textWithDelayedUpdate' }">{{ verification.noWaterToDate }}
+                                        </td>
+                                        <td data-title="'PRESENCE_OF_SEAL' | translate" sortable="'sealPresence'"
+                                            filter="{ 'sealPresence': 'sealPresence' }">{{ verification.sealPresence | translate}}
+                                        </td>
+                                        <td data-title="'TELEPHONE' | translate" sortable="'telephone'"
+                                            filter="{ 'telephone': 'textWithDelayedUpdate' }">{{ verification.phone }}
+                                        </td>
+                                        <td data-title="'ACTIONS' | translate"
+                                            class="control_buttons">
+                                            <i class="fa fa-info-circle info_icon"
+                                               popover="{{'DETAIL_INFO' | translate}}"
+                                               popover-trigger="mouseenter"
+                                               ng-click="openDetails(verification.verificationId)">
+                                            </i>
+                                        </td>
+                                    </tr>
+                                    </tbody>
 
-                            </table>
+                                </table>
                             </div>
                             <script type="text/ng-template" id="custom/pager">
                                 <div>
@@ -147,17 +146,17 @@
                             </script>
 
                             <script type="text/ng-template" id="ng-table/filters/sealPresence.html">
-                                    <ui-select ng-model="selectedSealPresence.name" theme="select2" on-select='doSearch()'
-                            search-enabled="false"
-                            name="filter-sealPresence">
+                                <ui-select ng-model="selectedSealPresence.name" theme="select2" on-select='doSearch()'
+                                           search-enabled="false"
+                                           name="filter-sealPresence">
                                     <ui-select-match placeholder="{{'STATUS_SELECT_PLACEHOLDER' | translate}}"
-                            allow-clear="true">
-                                    {{$select.selected.label}}
-                            </ui-select-match>
-                            <ui-select-choices  repeat="status in statusSealPresence">
-                                    <span ng-bind-html="status.label"></span>
+                                                     allow-clear="true">
+                                        {{$select.selected.label}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="status in statusSealPresence">
+                                        <span ng-bind-html="status.label"></span>
                                     </ui-select-choices>
-                                    </ui-select>
+                                </ui-select>
                             </script>
 
                             <script type="text/ng-template" id="ng-table/filters/verificationWithDismantle.html">
@@ -168,7 +167,7 @@
                                                      allow-clear="true">
                                         {{$select.selected.label}}
                                     </ui-select-match>
-                                    <ui-select-choices  repeat="status in statusVerificationWithDismantle">
+                                    <ui-select-choices repeat="status in statusVerificationWithDismantle">
                                         <span ng-bind-html="status.label"></span>
                                     </ui-select-choices>
                                 </ui-select>
@@ -182,7 +181,7 @@
                                                      allow-clear="true">
                                         {{$select.selected.label}}
                                     </ui-select-match>
-                                    <ui-select-choices  repeat="status in statusServiceability">
+                                    <ui-select-choices repeat="status in statusServiceability">
                                         <span ng-bind-html="status.label"></span>
                                     </ui-select-choices>
                                 </ui-select>
@@ -191,7 +190,7 @@
                             <div class="pull-left">
                                 <button type="button" class="btn btn-primary"
                                         ng-click="openTaskForStation()"><span class="glyphicon glyphicon-send"></span>
-                                        {{'CREATE_TASK_FOR_STATION' | translate}}
+                                    {{'CREATE_TASK_FOR_STATION' | translate}}
                                 </button>
                             </div>
 

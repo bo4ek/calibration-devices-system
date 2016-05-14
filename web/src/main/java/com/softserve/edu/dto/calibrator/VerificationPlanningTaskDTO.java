@@ -3,12 +3,14 @@ package com.softserve.edu.dto.calibrator;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
 @Setter
+@ToString
 public class VerificationPlanningTaskDTO implements Comparable {
 
     private Date sentToCalibrator;

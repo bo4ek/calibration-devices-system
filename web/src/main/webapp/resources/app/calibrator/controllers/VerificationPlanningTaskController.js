@@ -12,13 +12,11 @@ angular
             $scope.clearAll = function () {
                 $scope.selectedStatus.name = null;
                 $scope.tableParams.filter({});
-                $scope.clearDate(); // sets 'all time' timerange
+                $scope.clearDate();
             };
 
             $scope.clearDate = function () {
-                //daterangepicker doesn't support null dates
                 $scope.myDatePicker.pickerDate = $scope.defaultDate;
-                //setting corresponding filters with 'all time' range
                 $scope.tableParams.filter()['date'] = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                 $scope.tableParams.filter()['endDate'] = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
@@ -179,12 +177,11 @@ angular
                     return false;
                 else if (!moment(obj.date).isSame($scope.defaultDate.startDate)
                     || !moment(obj.endDate).isSame($scope.defaultDate.endDate)) {
-                    //filters are string,
-                    // so we are temporarily convertin them to momentjs objects
                     return true;
                 }
                 return false;
             };
+
 
             verificationPlanningTaskService.getEarliestPlanningTaskDate().success(function (date) {
                 /**
@@ -195,53 +192,44 @@ angular
                 $scope.tableParams = new ngTableParams({
                     page: 1,
                     count: 50,
-                    filter: {
+                    sorting: {
+                        date: 'desc'
+                    }, filter: {
                         status: null,
+                        noWaterToDate: null,
                         sealPresence: null,
                         serviceability: null,
                         verificationWithDismantle: null,
-                        date: $scope.myDatePicker.pickerDate.startDate.format("x"),
-                        endDate: $scope.myDatePicker.pickerDate.endDate.format("x")
+                        date: $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD"),
+                        endDate: $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD")
                     }
                 }, {
                     total: 0,
                     filterDelay: 1500,
                     getData: function ($defer, params) {
                         $scope.idsOfVerifications = [];
+
                         var sortCriteria = Object.keys(params.sorting())[0];
                         var sortOrder = params.sorting()[sortCriteria];
 
                         if ($scope.selectedStatus.name != null) {
                             params.filter().status = $scope.selectedStatus.name.id;
                         }
-                        else {
-                            params.filter().status = null; //case when the filter is cleared with a button on the select
-                        }
 
                         if ($scope.selectedSealPresence.name != null) {
                             params.filter().sealPresence = $scope.selectedSealPresence.name.id;
-                        }
-                        else {
-                            params.filter().sealPresence = null;
                         }
 
                         if ($scope.selectedServiceability.name != null) {
                             params.filter().serviceability = $scope.selectedServiceability.name.id;
                         }
-                        else {
-                            params.filter().serviceability = null;
-                        }
 
                         if ($scope.selectedVerificationWithDismantle.name != null) {
                             params.filter().verificationWithDismantle = $scope.selectedVerificationWithDismantle.name.id;
                         }
-                        else {
-                            params.filter().verificationWithDismantle = null;
-                        }
 
-
-                        params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("x");
-                        params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("x");
+                        params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
+                        params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
                         verificationPlanningTaskService.getVerificationsByCalibratorEmployeeAndTaskStatus(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
                             .success(function (result) {

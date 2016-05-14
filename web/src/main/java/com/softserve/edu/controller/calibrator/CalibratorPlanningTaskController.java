@@ -13,14 +13,17 @@ import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
+import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.calibrator.CalibratorDisassemblyTeamService;
+import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +60,9 @@ public class CalibratorPlanningTaskController {
     @Autowired
     VerificationService verificationService;
 
+    @Autowired
+    CalibratorEmployeeService calibratorEmployeeService;
+
     private Logger logger = Logger.getLogger(CalibratorPlanningTaskController.class);
 
     /**
@@ -77,11 +83,11 @@ public class CalibratorPlanningTaskController {
                                                                                   @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         Sort sort = new Sort(Sort.Direction.valueOf(sortOrder.toUpperCase()), sortCriteria);
         Pageable pageable = new PageRequest(pageNumber - 1, itemsPerPage, sort);
-        // fetching data from database, receiving a sorted and filtered page of calibration tasks
+
         Page<CalibrationTask> queryResult = taskService
                 .getFilteredPageOfCalibrationTasks(filterParams, pageable, employeeUser.getUsername());
         List<CalibrationTaskDTO> content = new ArrayList<CalibrationTaskDTO>();
-        // converting Page of CalibrationTasks to List of CalibrationTaskDTOs
+
         for (CalibrationTask task : queryResult) {
             content.add(new CalibrationTaskDTO(task.getId(), task.getModule().getSerialNumber(), task.getDateOfTask(),
                     task.getVerifications(), task.getModule().getModuleType(), task.getModule().getEmployeeFullName(),
@@ -107,10 +113,10 @@ public class CalibratorPlanningTaskController {
                                                                               @PathVariable String sortOrder, @PathVariable Long taskID) {
         Sort sort = new Sort(Sort.Direction.valueOf(sortOrder.toUpperCase()), sortCriteria);
         Pageable pageable = new PageRequest(pageNumber - 1, itemsPerPage, sort);
-        // fetching data from database, receiving a sorted page of task verifications
+
         Page<Verification> queryResult = verificationService.getVerificationsByTaskID(taskID, pageable);
         List<VerificationPlanningTaskDTO> content = new ArrayList<VerificationPlanningTaskDTO>();
-        // converting Page of Verifications to List of VerificationDTOs
+
         for (Verification verification : queryResult) {
             ClientData clientData = verification.getClientData();
             Address address = clientData.getClientAddress();
@@ -159,7 +165,7 @@ public class CalibratorPlanningTaskController {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             for (Long taskID : taskIDs) {
-                taskService.sendTaskToStation(taskID,employeeUser.getUsername());
+                taskService.sendTaskToStation(taskID, employeeUser.getUsername());
             }
         } catch (Exception e) {
             logger.error("User " + employeeUser.getUsername() + " was not able to send task to station", e);
@@ -184,9 +190,9 @@ public class CalibratorPlanningTaskController {
         try {
             Boolean taskAlreadyExist = taskService.addNewTaskForStation(taskDTO.getDateOfTask(),
                     taskDTO.getModuleSerialNumber(), taskDTO.getVerificationsId(), employeeUser.getUsername());
-            if(taskAlreadyExist == null) {
+            if (taskAlreadyExist == null) {
                 httpStatus = HttpStatus.BAD_REQUEST;
-            } else if(!taskAlreadyExist) {
+            } else if (!taskAlreadyExist) {
                 httpStatus = HttpStatus.CREATED;
             }
         } catch (Exception e) {
@@ -257,11 +263,30 @@ public class CalibratorPlanningTaskController {
                                                                                                @PathVariable String sortCriteria, @PathVariable String sortOrder,
                                                                                                VerificationPlanningTaskFilterSearch searchData,
                                                                                                @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
-        Page<Verification> verifications = taskService.findVerificationsByCalibratorEmployeeAndTaskStatus(employeeUser.getUsername(),
-                pageNumber, itemsPerPage, sortCriteria, sortOrder);
-        Long count = (long) taskService.findVerificationsByCalibratorEmployeeAndTaskStatusCount(employeeUser.getUsername());
-        List<VerificationPlanningTaskDTO> content = VerificationPageDTOTransformer.toDoFromPageContent(verifications.getContent(), searchData);
-        return new PageDTO<VerificationPlanningTaskDTO>(count, content);
+        ListToPageTransformer<Verification> queryResult = verificationService
+                .findPageOfPlaningTaskVerificationsByCalibratorId(
+                        employeeUser.getOrganizationId(),
+                        pageNumber,
+                        itemsPerPage,
+                        searchData.getDate(),
+                        searchData.getEndDate(),
+                        searchData.getClient_full_name(),
+                        searchData.getProvider(),
+                        searchData.getDistrict(),
+                        searchData.getStreet(),
+                        searchData.getBuilding(),
+                        searchData.getFlat(),
+                        searchData.getDateOfVerif(),
+                        searchData.getTime(),
+                        searchData.getServiceability(),
+                        searchData.getNoWaterToDate(),
+                        searchData.getSealPresence(),
+                        searchData.getTelephone(),
+                        searchData.getVerificationWithDismantle(),
+                        sortCriteria,
+                        sortOrder);
+        List<VerificationPlanningTaskDTO> content = VerificationPageDTOTransformer.toDoFromPageContent(queryResult.getContent());
+        return new PageDTO<VerificationPlanningTaskDTO>(queryResult.getTotalItems(), content);
     }
 
     /**

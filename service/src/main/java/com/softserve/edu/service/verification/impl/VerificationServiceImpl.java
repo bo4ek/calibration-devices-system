@@ -386,10 +386,34 @@ public class VerificationServiceImpl implements VerificationService {
 
         CriteriaQuery<Verification> criteriaQuery = ArchivalVerificationsQueryConstructorCalibrator.buildSearchRejectedQuery(organizationId, startDateToSearch, endDateToSearch, rejectedReason, rejectedEmployee, providerName,
                 customerName, district, street, building, flat, verificationId, sortCriteria, sortOrder, calibratorEmployee, em);
+
         Long count = em.createQuery(ArchivalVerificationsQueryConstructorCalibrator.buildCountRejectedQuery(organizationId, startDateToSearch, endDateToSearch, rejectedReason, rejectedEmployee, providerName,
                 customerName, district, street, building, flat, verificationId, sortCriteria, sortOrder, calibratorEmployee, em)).getSingleResult();
+
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
+        typedQuery.setMaxResults(itemsPerPage);
+        List<Verification> verificationList = typedQuery.getResultList();
+        ListToPageTransformer<Verification> result = new ListToPageTransformer<Verification>();
+        result.setContent(verificationList);
+        result.setTotalItems(count);
+        return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
+                                                                                                String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
+                                                                                                String telephone, String verificationWithDismantle, String sortCriteria, String sortOrder) {
+
+        CriteriaQuery<Verification> criteriaQuery = ArchivalVerificationsQueryConstructorCalibrator.buildSearchPlaningTaskQuery(organizationId, pageNumber, itemsPerPage, date, endDate, client_full_name, provider, district,
+                street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, sortCriteria, sortOrder, em);
+
+        Long count = em.createQuery(ArchivalVerificationsQueryConstructorCalibrator.buildCountPlaningTaskQuery(organizationId, pageNumber, itemsPerPage, date, endDate, client_full_name, provider, district,
+                street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, sortCriteria, sortOrder, em)).getSingleResult();
+        TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
+        typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
+        ;
         typedQuery.setMaxResults(itemsPerPage);
         List<Verification> verificationList = typedQuery.getResultList();
         ListToPageTransformer<Verification> result = new ListToPageTransformer<Verification>();
@@ -607,6 +631,7 @@ public class VerificationServiceImpl implements VerificationService {
         verification.setRejectedInfo(rejectedInfo);
         verificationRepository.save(verification);
     }
+
 
     @Override
     @Transactional
@@ -1168,4 +1193,5 @@ public class VerificationServiceImpl implements VerificationService {
         }
         return null;
     }
+
 }

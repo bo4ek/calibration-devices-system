@@ -82,7 +82,6 @@ public interface VerificationService {
                                                                                                 String sortCriteria, String sortOrder, User verificatorEmployee);
 
 
-
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByVerificatorId(Long organizationId, int pageNumber, int itemsPerPage, String dateToSearch, String idToSearch, String fullNameToSearch,
                                                                                       String streetToSearch, String status, String employeeName, String sortCriteria, String sortOrder, User verificatorEmployee);
 
@@ -164,14 +163,16 @@ public interface VerificationService {
 
     List<Verification> findPageOfVerificationsByCalibratorEmployeeAndStatus(User employee, int pageNumber,
                                                                             int itemsPerPage, Status status, String sortCriteria, String sortOrder);
+
     Long countByCalibratorEmployeeUsernameAndStatus(User calibratorEmployee, Status status);
 
     List<Verification> findPageOfVerificationsByProviderIdAndStatus(Organization provider, int pageNumber,
-                                                                  int itemsPerPage, Status status);
-    Long countByProviderAndStatus(Organization provider,Status status);
+                                                                    int itemsPerPage, Status status);
+
+    Long countByProviderAndStatus(Organization provider, Status status);
 
     void returnVerificationToCalibratorFromProvider(String verificationId, String rejectMessage);
-    
+
     void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence, Long dateOfDismantled,
                      Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol, String standardSize,
                      String comment, Long deviceId, Boolean verificationWithDismantle, Device.DeviceType deviceType);
@@ -199,7 +200,7 @@ public interface VerificationService {
 
     Long findCountOfNotStandardNewVerificationsByProviderId(Long providerId);
 
-    Set<String> findSymbolsByDeviceType (String deviceType);
+    Set<String> findSymbolsByDeviceType(String deviceType);
 
     Set<String> findStandardSizesBySymbolAndDeviceType(String symbol, String deviceType);
 
@@ -215,5 +216,7 @@ public interface VerificationService {
 
     public void rejectVerification(Verification verification, RejectedInfo rejectedInfo, Status status);
 
-
+    ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
+                                                                                         String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
+                                                                                         String telephone, String verificationWithDismantle, String sortCriteria, String sortOrder);
 }
