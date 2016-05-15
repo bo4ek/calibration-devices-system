@@ -14,6 +14,7 @@ angular
             $scope.isVerification = $location.search().ver || false;
             $scope.showReasons = false;
             $scope.rotateIndex = 0;
+            var index = -1;
 
             $scope.reasonsUnsuitability = [];
             $scope.fileLoaded = false;
@@ -118,6 +119,7 @@ angular
                 $scope.TestForm = data;
                 var date = $scope.TestForm.testDate;
                 $scope.TestForm.testDate = moment(date).utcOffset(0).format("DD.MM.YY");
+                $scope.TestForm.verificationDate = moment(date).utcOffset(0).format("YYYY-MM-DD");
                 $scope.TestForm.testTime = moment(date).utcOffset(0).format("HH:mm");
                 $scope.TestForm.testPN = $scope.getPNFromBBIName(data.fileName);
                 $scope.TestForm.testPhoto = "data:image/png;base64," + $scope.TestForm.testPhoto;
@@ -457,14 +459,32 @@ angular
             };
 
 
-            $scope.next = function() {
+            $scope.next = function () {
+                index += 1;
                 calibrationTestServiceCalibrator
-                    .getNextTestProtocol($scope.testId, $scope.index, $scope.sortCriteria, $scope.sortOrder)
-                    .then(function (data) {
-                        $scope.parseBbiFile(data);
-                    });
+                    .getTestProtocolByIndex(index, $scope.TestForm.moduleNumber, $scope.TestForm.verificationDate)
+                    .then(function (response) {
+                        if (response.status == 200) {
+                            $scope.parseBbiFile(response.data);
+                            index = response.data.index;
+                        } else {
+                            toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_ACCESS'));
+                        }
+                    })
             };
 
             $scope.previous = function() {
+                index -= 1;
+                calibrationTestServiceCalibrator
+                    .getTestProtocolByIndex(index, $scope.TestForm.moduleNumber, $scope.TestForm.verificationDate)
+                    .then(function (response) {
+                        if (response.status == 200) {
+                            $scope.parseBbiFile(response.data);
+                            index = response.data.index;
+                        } else {
+                            toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_ACCESS'));
+                        }
+                    })
             };
+
         }]);

@@ -27,7 +27,6 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity
-@ToString
 @Table(name = "VERIFICATION")
 public class Verification implements Comparable {
 

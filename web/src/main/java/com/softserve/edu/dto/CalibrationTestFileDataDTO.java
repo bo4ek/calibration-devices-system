@@ -76,6 +76,10 @@ public class CalibrationTestFileDataDTO {
 
     private Integer temperature;
 
+    private String moduleNumber;
+
+    private Integer index;
+
     public CalibrationTestFileDataDTO() {
     }
 
@@ -89,6 +93,7 @@ public class CalibrationTestFileDataDTO {
         this.counterProductionYear = Integer.valueOf(counter.getReleaseYear());
         this.installmentNumber = verification.getCalibrationModule().getModuleId();
         this.serialNumber = verification.getCalibrationModule().getSerialNumber();
+        this.moduleNumber = verification.getCalibrationModule().getModuleNumber();
         this.condDesignation = verification.getCalibrationModule().getCondDesignation();
         this.latitude = calibrationTest.getLatitude();
         this.longitude = calibrationTest.getLongitude();

@@ -446,6 +446,35 @@ public class VerificationServiceImpl implements VerificationService {
         return result;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Verification findNextVerificationByVerificationIndexAndModuleNumberAndTestDate(int verificationIndex, String moduleNumber, java.sql.Date testDate, User employee) {
+
+        CriteriaQuery<Verification> criteriaQuery = VerificationsQueryConstructor.buildSearchQuery(moduleNumber, testDate, employee, em);
+        TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
+        typedQuery.setFirstResult(verificationIndex);
+        typedQuery.setMaxResults(1);
+        List<Verification> verificationList = typedQuery.getResultList();
+        if(verificationList.isEmpty()) {
+            return null;
+        } else {
+            return verificationList.get(0);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long findCountByVerificationIndexAndModuleNumberAndTestDate(String moduleNumber, java.sql.Date testDate, User employee) {
+
+        CriteriaQuery<Long> criteriaQuery = VerificationsQueryConstructor.buildCountQuery(moduleNumber, testDate, employee, em);
+        return em.createQuery(criteriaQuery).getSingleResult();
+    }
+
+
+    @Override
+    public Long getPositionOfVerification(String verificationId, String moduleId, Date date) {
+        return verificationRepository.getNumberOfRowByVerificationIdAndModuleIdAndDate(verificationId, moduleId);
+    }
 
     @Override
     public List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId) {

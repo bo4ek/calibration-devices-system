@@ -187,6 +187,13 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
             "and u.calibrator = :calibrator")
     java.sql.Date getEarliestInitialDateForPlanningTask(@Param("calibrator") Organization calibrator);
 
+    @Query(value = "select t.row from" +
+            " (select @row /*'*/:=/*'*/ @row + 1  AS row, v.id" +
+            " from measurement_devices.verification v inner join measurement_devices.calibration_test test on v.id = test.verificationId," +
+            " (SELECT @row /*'*/:=/*'*/ 0) r where v.moduleId = :moduleId) as t" +
+            " where t.id = :id",
+            nativeQuery = true)
+    Long getNumberOfRowByVerificationIdAndModuleIdAndDate(@Param("id") String id, @Param("moduleId") String moduleId);
 
     List<Verification> findByCalibratorEmployeeUsernameAndTaskStatus(String userName, Status status);
 

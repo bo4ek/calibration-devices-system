@@ -44,6 +44,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -446,6 +448,7 @@ public class CalibrationTestController {
         try {
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
             Verification verification = verificationService.findById(verificationId);
+            Long position = verificationService.getPositionOfVerification(verification.getId(), verification.getCalibrationModule().getModuleNumber(), verification.getSentToVerificatorDate());
             responseEntity = new ResponseEntity((new CalibrationTestFileDataDTO(calibrationTest, testService, verification)), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("failed to get protocol", e);
@@ -454,7 +457,36 @@ public class CalibrationTestController {
         return responseEntity;
     }
 
+    @RequestMapping(value = "getTest/{verificationIndex}/{moduleNumber}/{testDate}", method = RequestMethod.GET)
+    public ResponseEntity getNextTestProtocol(@PathVariable Integer verificationIndex, @PathVariable String moduleNumber, @PathVariable String testDate,
+                                              @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        User user = usersService.findOne(employeeUser.getUsername());
+        return getTestProtocolByVerificationIndexAndModuleNumberAndTestDate(
+                verificationIndex, moduleNumber, testDate, user);
 
+    }
+
+    private ResponseEntity getTestProtocolByVerificationIndexAndModuleNumberAndTestDate(Integer verificationIndex, String moduleNumber, String testDate, User user) {
+        DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        LocalDate verificationDate = LocalDate.parse(testDate, dbDateTimeFormatter);
+
+        long count = verificationService.findCountByVerificationIndexAndModuleNumberAndTestDate(moduleNumber, java.sql.Date.valueOf(verificationDate), user);
+        if(verificationIndex >= count) {
+            verificationIndex = 0;
+        } else {
+            if (verificationIndex < 0) {
+                verificationIndex = (int)count - 1;
+            }
+        }
+        Verification verification = verificationService.findNextVerificationByVerificationIndexAndModuleNumberAndTestDate(verificationIndex, moduleNumber, java.sql.Date.valueOf(verificationDate), user);
+        if (verification == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        CalibrationTest calibrationTest = testService.findByVerificationId(verification.getId());
+        CalibrationTestFileDataDTO calibrationTestFileDataDTO = new CalibrationTestFileDataDTO(calibrationTest, testService, verification);
+        calibrationTestFileDataDTO.setIndex(verificationIndex);
+        return new ResponseEntity<>(calibrationTestFileDataDTO, HttpStatus.OK);
+    }
 
     /**
      * update test

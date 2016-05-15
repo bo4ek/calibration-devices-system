@@ -83,6 +83,13 @@ angular
                         return result.data;
                     });
             },
+            getTestProtocolByIndex: function (verificationIndex, moduleNumber, date) {
+                var url = 'calibrator/calibrationTests/getTest/' + verificationIndex + "/" + moduleNumber + "/" + date;
+                return $http.get(url)
+                    .then(function (result) {
+                        return result;
+                    });
+            },
             editCalibrationTest: function (formData, testId) {
                 var url = 'calibrator/calibrationTests/edit/' + testId;
                 return $http.put(url, formData)

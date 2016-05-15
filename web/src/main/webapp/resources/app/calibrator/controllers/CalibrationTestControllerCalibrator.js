@@ -571,9 +571,9 @@ angular
                     .then(function (status) {
                         if (status == 200) {
                             calibrationTestServiceCalibrator
-                                .signTestProtocol($scope.testId)
-                                .then(function (status) {
-                                    if (status == 200) {
+                                .signTestProtocolWithoutEDS($scope.testId)
+                                .then(function (response) {
+                                    if (response.status == 200) {
                                         $scope.selectedData.isSignedDocument = true;
                                         toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESS_SIGNED'));
                                     }
