@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode(of = "id")
 @Table(name = "BBI_PROTOCOL")
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BbiProtocol {
 

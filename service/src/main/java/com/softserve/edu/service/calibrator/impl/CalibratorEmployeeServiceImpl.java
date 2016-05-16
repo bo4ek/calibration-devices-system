@@ -68,13 +68,12 @@ public class CalibratorEmployeeServiceImpl implements CalibratorEmployeeService{
     }
 
     @Override
-    @Transactional
     public User oneCalibratorEmployee(String username) {
         return calibratorEmployeeRepository.findOne(username);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<EmployeeDTO> getAllCalibrators(List<String> role, User employee) {
         List<EmployeeDTO> calibratorListEmployee = new ArrayList<>();
         if (role.contains(UserRole.CALIBRATOR_ADMIN.name())) {

@@ -28,11 +28,8 @@ public class FileSearch {
     public static void searchDirectory(File directory, String fileNameToSearch) {
 
         setFileNameToSearch(fileNameToSearch);
-
         if (directory.isDirectory()) {
             searchFile(directory);
-        } else {
-            System.out.println(directory.getAbsoluteFile() + " is not a directory!");
         }
     }
 

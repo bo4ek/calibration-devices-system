@@ -85,7 +85,6 @@ public class StateVerificatorController {
     public PageDTO<ProtocolDTO> getPageOfAllSentVerificationsByStateVerificatorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
     		NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
-        long timer = -System.currentTimeMillis();
         User verificatorEmployee = stateVerificatorEmployeeService.oneProviderEmployee(employeeUser.getUsername());
         Set<UserRole> userRoles = verificatorEmployee.getUserRoles();
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfVerificationsByVerificatorIdAndCriteriaSearch(
@@ -105,8 +104,6 @@ public class StateVerificatorController {
                 sortOrder,
 	verificatorEmployee);
         List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(queryResult.getContent(), userRoles);
-        timer += System.currentTimeMillis();
-        logger.info("StateVerificatorController getPageOfAllSentVerificationsByStateVerificatorIdAndSearch Time"+timer + " Params " + searchData);
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
@@ -282,7 +279,6 @@ public class StateVerificatorController {
     public PageDTO<VerificationPageDTO> getPageOfArchivalVerificationsByOrganizationId(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
     		ArchiveVerificationsFilterAndSort searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
-        long timer = -System.currentTimeMillis();
         User verificatorEmployee = employeeService.oneProviderEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfArchiveVerificationsByVerificatorId(
                 employeeUser.getOrganizationId(), pageNumber, itemsPerPage,
@@ -296,8 +292,6 @@ public class StateVerificatorController {
                 sortOrder,
                 verificatorEmployee);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
-        timer += System.currentTimeMillis();
-        logger.info("StateVerificatorController getPageOfArchivalVerificationsByOrganizationId Time"+timer + " Params " + searchData);
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
