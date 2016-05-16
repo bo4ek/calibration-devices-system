@@ -58,7 +58,7 @@ public class CalibrationTest {
     @JoinColumn(name = "verificationId")
     private Verification verification;
 
-    @OneToMany(mappedBy = "calibrationTest", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "calibrationTest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CalibrationTestData> calibrationTestDataList;
 
     public CalibrationTest(String name, Double latitude,

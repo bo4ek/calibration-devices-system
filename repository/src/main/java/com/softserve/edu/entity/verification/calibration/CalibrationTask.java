@@ -47,7 +47,7 @@ public class CalibrationTask {
     @JoinColumn(name = "username")
     private User user;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Verification> verifications;
 
     public CalibrationTask(CalibrationModule module, DisassemblyTeam team, Date createTaskDate, Date dateOfTask, User user, Set<Verification> verifications) {

@@ -15,7 +15,6 @@ public class VerificationPageDTOTransformer {
     public static List<VerificationPageDTO> toDtoFromList(List<Verification> list) {
 
         List<VerificationPageDTO> resultList = new ArrayList<>();
-
         CalibrationTest calibrationTest;
         for (Verification verification : list) {
             boolean isCalibrationTests = verification.getCalibrationTests().iterator().hasNext();
@@ -51,6 +50,7 @@ public class VerificationPageDTOTransformer {
                     verification.getClientData().getClientAddress().getFlat(),
                     verification.getComment()
             );
+
             if (verification.getProvider() != null) {
                 verificationPageDTO.setNameProvider(verification.getProvider().getName());
             }
@@ -69,10 +69,6 @@ public class VerificationPageDTOTransformer {
                 verificationPageDTO.setNumberCounter(verification.getCounter().getNumberCounter());
                 verificationPageDTO.setCounterId(verification.getCounter().getId());
             } else if (set != null) {
-                List<CounterType> listCounterType = new ArrayList<>(set);
-
-                //Check this pls, ask for further requirements. Here's only the view on the page new-verifications.html
-                // no updates are made to DB. This part of the code calls only when user didn't enter counter details (symbol, size and year)
                 verificationPageDTO.setSymbol(null);
                 verificationPageDTO.setStandardSize(null);
                 verificationPageDTO.setRealiseYear(null);
@@ -113,4 +109,5 @@ public class VerificationPageDTOTransformer {
         }
         return taskDTOs;
     }
-}
+    }
+

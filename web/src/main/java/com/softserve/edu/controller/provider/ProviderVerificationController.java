@@ -76,7 +76,6 @@ public class ProviderVerificationController {
     public PageDTO<VerificationPageDTO> getPageOfArchivalVerificationsByOrganizationId(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
                                                                                        ArchiveVerificationsFilterAndSort searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
-        long timer = -System.currentTimeMillis();
         User providerEmployee = providerEmployeeService.oneProviderEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfArchiveVerificationsByProviderId(
                 employeeUser.getOrganizationId(),
@@ -97,8 +96,6 @@ public class ProviderVerificationController {
                 providerEmployee
         );
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
-        timer += System.currentTimeMillis();
-        logger.info("ProviderVerificationController getPageOfArchivalVerificationsByOrganizationId Time"+timer + " Params " + searchData);
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
@@ -151,7 +148,6 @@ public class ProviderVerificationController {
     public PageDTO<VerificationPageDTO> getPageOfAllSentVerificationsByProviderIdAndSearchOnMainPanel(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage,
                                                                                                       NewVerificationsSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
-        long timer = -System.currentTimeMillis();
         User providerEmployee = providerEmployeeService.oneProviderEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfArchiveVerificationsByProviderIdOnMainPanel(
                 employeeUser.getOrganizationId(),
@@ -168,8 +164,6 @@ public class ProviderVerificationController {
                 searchData.getEmployee(),
                 providerEmployee);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
-        timer += System.currentTimeMillis();
-        logger.info("ProviderVerificationController getPageOfAllSentVerificationsByProviderIdAndSearchOnMainPanel Time"+timer + " Params " + searchData);
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 

@@ -152,8 +152,6 @@ public class CalibratorVerificationController {
      */
     @RequestMapping(value = "new/upload", method = RequestMethod.POST)
     public ResponseEntity uploadFileBbi(@RequestBody MultipartFile file, @RequestParam String verificationId) {
-        long timer = -System.currentTimeMillis();
-        logger.info("CalibratorVerificationController загрузка файла под именем - "+file.getOriginalFilename());
         ResponseEntity responseEntity;
         try {
             String originalFileName = file.getOriginalFilename();
@@ -177,8 +175,6 @@ public class CalibratorVerificationController {
             logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        timer += System.currentTimeMillis();
-        logger.info("Время загрузки файла под именем - "+file.getOriginalFilename() + "Time:"+timer);
         return responseEntity;
     }
 
@@ -437,7 +433,7 @@ public class CalibratorVerificationController {
                                                                                        @PathVariable String sortOrder,
                                                                                        ArchiveVerificationsFilterAndSort searchData,
                                                                                        @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
-        long timer = -System.currentTimeMillis();
+
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService
                 .findPageOfArchiveVerificationsByCalibratorId(
@@ -458,8 +454,6 @@ public class CalibratorVerificationController {
                         sortCriteria,
                         sortOrder, calibratorEmployee);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
-        timer += System.currentTimeMillis();
-        logger.info("Calibrator - getPageOfArchivalVerificationsByOrganizationId Time:"+timer+" Parameters "+searchData);
         return new PageDTO<VerificationPageDTO>(queryResult.getTotalItems(), content);
     }
 
@@ -471,7 +465,6 @@ public class CalibratorVerificationController {
                                                                                               @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser,
                                                                                               @PathVariable Integer pageNumber) {
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
-
         ListToPageTransformer<Verification> queryResult = verificationService
                 .findPageOfRejectedVerificationsByCalibratorId(
                         employeeUser.getOrganizationId(),
@@ -503,7 +496,6 @@ public class CalibratorVerificationController {
                     verification.getClientData().getClientAddress().getBuilding(),
                     verification.getClientData().getClientAddress().getFlat(),
                     verification.getId());
-
             dto.setRejectedCalibratorDate(verification.getRejectedCalibratorDate());
             list.add(dto);
         }
