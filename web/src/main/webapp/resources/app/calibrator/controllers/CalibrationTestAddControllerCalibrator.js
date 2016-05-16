@@ -469,7 +469,7 @@ angular
                             $scope.testId = response.data.verificationId;
                             index = response.data.index;
                         } else {
-                            toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_ACCESS'));
+                            toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_NAVIGATION'));
                         }
                     })
             };
@@ -484,7 +484,7 @@ angular
                             $scope.testId = response.data.verificationId;
                             index = response.data.index;
                         } else {
-                            toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_ACCESS'));
+                            toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_NAVIGATION'));
                         }
                     })
             };

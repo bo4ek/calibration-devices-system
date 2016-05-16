@@ -838,5 +838,6 @@
     "REJECTED_ORGANIZATION": "Name of organization",
     "EMPLOYEE_REJECTED": "Name employee who refused verification",
     "REJECTED_PROTOCOLS_TITLE":"Rejected protocols",
-    "COUNT_OF_SUCCESS_ASSIGN_VERIFICATOR_EMPLOYEE" : "Count of successful assign verifications"
+    "COUNT_OF_SUCCESS_ASSIGN_VERIFICATOR_EMPLOYEE" : "Count of successful assign verifications",
+    "ERROR_NAVIGATION" : "All protocols signed"
 }
