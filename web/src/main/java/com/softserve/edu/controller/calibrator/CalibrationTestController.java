@@ -448,7 +448,7 @@ public class CalibrationTestController {
         try {
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationId);
             Verification verification = verificationService.findById(verificationId);
-            Long position = verificationService.getPositionOfVerification(verification.getId(), verification.getCalibrationModule().getModuleNumber(), verification.getSentToVerificatorDate());
+            //Long position = verificationService.getPositionOfVerification(verification.getId(), verification.getCalibrationModule().getModuleNumber(), verification.getSentToVerificatorDate());
             responseEntity = new ResponseEntity((new CalibrationTestFileDataDTO(calibrationTest, testService, verification)), HttpStatus.OK);
         } catch (Exception e) {
             logger.error("failed to get protocol", e);

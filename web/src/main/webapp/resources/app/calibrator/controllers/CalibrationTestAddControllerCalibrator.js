@@ -466,6 +466,7 @@ angular
                     .then(function (response) {
                         if (response.status == 200) {
                             $scope.parseBbiFile(response.data);
+                            $scope.testId = response.data.verificationId;
                             index = response.data.index;
                         } else {
                             toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_ACCESS'));
@@ -480,6 +481,7 @@ angular
                     .then(function (response) {
                         if (response.status == 200) {
                             $scope.parseBbiFile(response.data);
+                            $scope.testId = response.data.verificationId;
                             index = response.data.index;
                         } else {
                             toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_ACCESS'));
