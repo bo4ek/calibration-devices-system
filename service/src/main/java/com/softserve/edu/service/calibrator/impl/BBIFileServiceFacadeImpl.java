@@ -663,7 +663,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             }
         }
         List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(symbol, standardSize);
-        CounterType resultCounterType;
+        CounterType resultCounterType = null;
         switch (counterTypes.size()) {
             case 0: {
                 throw new InvalidSymbolAndStandardSizeException();
@@ -679,7 +679,17 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 break;
             }
             default: {
-                resultCounterType = counterTypes.get(0);
+                Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
+                Device.DeviceType deviceType = deviceService.getDeviceTypeById(deviceId);
+                for(CounterType counterType : counterTypes) {
+                    if(counterType.getDevice().getDeviceType().equals(deviceType)) {
+                        resultCounterType = counterType;
+                        break;
+                    }
+                }
+                if(resultCounterType == null) {
+                    resultCounterType = counterTypes.get(0);
+                }
             }
         }
         counter.setReleaseYear(String.valueOf(deviceTestData.getCounterProductionYear()));
