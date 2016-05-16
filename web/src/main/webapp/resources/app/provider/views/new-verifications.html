@@ -51,10 +51,13 @@
                                     <tr ng-repeat="verification in allVerifications"
                                         ng-class="{'unreadClass': verification.readStatus=='UNREAD'}">
                                         <script type="text/ng-template" id="ng-table/headers/checkbox.html">
-                                            <input type="checkbox" ng-model="allSelected" ng-model-options="{getterSetter: true}"
+                                            <input type="checkbox"
+                                                   ng-model="allSelected"
+                                                   ng-model-options="{getterSetter: true}"
+                                                   ng-click="allSelected(value)"
                                                    name="filter-checkbox" value=""/>
                                         </script>
-                                        <td ng-if="!isSentVerifications" header="'ng-table/headers/checkbox.html'"  ng-show="checkProviderEmployee()">
+                                        <td ng-if="!isSentVerifications" header="'ng-table/headers/checkbox.html'" ng-show="checkProviderEmployee()">
                                             <div>
                                                 <input type="checkbox" ng-model="verification.selected"
                                                        ng-click="resolveVerificationId(verification.id)"/>
