@@ -61,9 +61,7 @@ public class VerificationsQueryConstructor {
         if(roleList.contains(UserRole.STATE_VERIFICATOR_EMPLOYEE)) {
             Join<Verification, User> joinVerificatorEmployee = root.join("stateVerificatorEmployee", JoinType.LEFT);
             Predicate searchPredicateByUsername = cb.equal(joinVerificatorEmployee.get("username"), userName);
-            Predicate searchPredicateByEmptyField = cb.isNull(joinVerificatorEmployee.get("username"));
-            Predicate searchByVerificatorEmployee = cb.or(searchPredicateByUsername, searchPredicateByEmptyField);
-            queryPredicate = cb.and(searchByVerificatorEmployee, queryPredicate);
+            queryPredicate = cb.and(searchPredicateByUsername, queryPredicate);
         } else {
             Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
             Predicate searchPredicateByOrganizationId = cb.equal(verificatorJoin.get("id"), employee.getOrganization().getId());
