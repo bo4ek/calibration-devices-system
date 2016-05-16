@@ -184,6 +184,34 @@ angular
                 return false;
             };
 
+            var getAllSelected = function () {
+                if (!$scope.allVerifications) {
+                    return false;
+                }
+                var checkedItems = $scope.allVerifications.filter(function (verification) {
+                    return verification.selected;
+                });
+
+                return checkedItems.length === $scope.allVerifications.length;
+            };
+
+            var setAllSelected = function (value) {
+                angular.forEach($scope.allVerifications, function (verification) {
+                    verification.selected = value;
+                    if (verification.providerEmployee) {
+                        $scope.resolveVerificationId(verification.id);
+                    }
+                });
+            };
+
+            $scope.allSelected = function (value) {
+                if (value !== undefined) {
+                    return setAllSelected(value);
+                } else {
+                    return getAllSelected();
+                }
+            };
+
             verificationServiceVerificator.getEarliestDateOfCreatingProtocol().success(function (date) {
                 verificationServiceVerificator.getEarliestDateOfSentToVerificator().success(function (sentToVerificatorDate) {
                     $scope.initDatePicker(date, sentToVerificatorDate);
@@ -219,6 +247,7 @@ angular
                                 $scope.resultsCount = result.totalItems;
                                 $defer.resolve(result.content);
                                 params.total(result.totalItems);
+                                $scope.allVerifications = result.content;
                                 $scope.pageNumber = params.page();
                                 $scope.itemsPerPage = params.count();
                                 $scope.sortCriteria = sortCriteria;
@@ -489,7 +518,7 @@ angular
                     verificationServiceVerificator
                         .sendEmployeeVerificator(dataToSend)
                         .success(function (data) {
-                            alert($filter('translate')('COUNT_OF_SUCCESS_ASSIGN_VERIFICATOR_EMPLOYEE')+"  "+data);
+                            alert($filter('translate')('COUNT_OF_SUCCESS_ASSIGN_VERIFICATOR_EMPLOYEE') + "  " + data);
                             $scope.tableParams.reload();
                         });
                 });

@@ -39,11 +39,20 @@
                                        class="table table-bordered table-hover users_table">
 
                                     <tbody>
+                                    <script type="text/ng-template" id="getAllCheckbox">
+                                        <input type="checkbox"
+                                               ng-model="allSelected"
+                                               ng-model-options="{getterSetter: true}"
+                                               ng-click="allSelected(value)"
+                                               name="filter-checkbox" value=""/>
+                                    </script>
                                     <tr ng-repeat="verification in $data"
                                         ng-class="{'unreadClass': verification.readStatus=='UNREAD'}">
-                                        <td data-title="''"><input type="checkbox"
-                                                                   ng-show="verification.providerEmployee && (verification.status == 'SENT_TO_VERIFICATOR')"
-                                                                   ng-click="resolveVerificationId(verification.id)"/>
+                                        <td ng-show="!rejectedPage" header="'getAllCheckbox'">
+                                            <input type="checkbox"
+                                                   ng-model="verification.selected"
+                                                   ng-show="verification.providerEmployee && (verification.status == 'SENT_TO_VERIFICATOR')"
+                                                   ng-click="resolveVerificationId(verification.id)"/>
                                         </td>
                                         <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'sent_to_verificator_date'"
                                             filter="{ 'date': 'sentToVerificationDate' }">{{ verification.sentToVerificatorDate }}
