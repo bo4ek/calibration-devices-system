@@ -156,7 +156,8 @@ public class NotStandardVerificationCalibratorController {
                         verification.getProviderFromBBI(),
                         verification.getProvider(),
                         verification.getRejectedMessage(),
-                        verification.getComment()));
+                        verification.getComment(),
+                        verification.getStatus()));
             }
             return resultList;
         } catch (Exception e) {

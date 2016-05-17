@@ -1133,8 +1133,15 @@ public class VerificationServiceImpl implements VerificationService {
         } else {
             cq.orderBy(cb.desc(verifications.get("initialDate")));
         }
-        cq.where(cb.and(cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee),
-                cb.equal(verifications.get("status"), status)));
+        Predicate calibratorEmployeePredicate = cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee);
+        Predicate statusPredicate = cb.or(cb.equal(verifications.get("status"), status), cb.equal(verifications.get("status"), Status.SENT_TO_PROVIDER));
+        Predicate verificationPredicate;
+        if (status.equals(Status.CREATED_FOR_PROVIDER)) {
+            verificationPredicate = cb.isNull(verifications.get("verificationTime"));
+        } else {
+            verificationPredicate = cb.isNotNull(verifications.get("verificationTime"));
+        }
+        cq.where(calibratorEmployeePredicate, statusPredicate, verificationPredicate);
 
         TypedQuery<Verification> typedQuery = em.createQuery(cq);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);

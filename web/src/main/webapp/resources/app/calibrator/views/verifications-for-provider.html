@@ -27,9 +27,10 @@
                                     <table show-filter="false" ng-table="tableParams" template-pagination="custom/pager"
                                            class="table table-bordered table-hover users_table">
                                         <tbody>
-                                        <tr ng-repeat="verification in $data">
+                                        <tr ng-repeat="verification in $data"
+                                            ng-class="{'sent-to-provider': verification.status=='SENT_TO_PROVIDER'}">
                                             <td data-title="''">
-                                                <input type="checkbox"
+                                                <input ng-if="verification.status != 'SENT_TO_PROVIDER'" type="checkbox"
                                                        ng-click="resolveVerificationId(verification.id)"/>
                                             </td>
                                             <td data-title="'INITIAL_DATE' | translate" class="datecolumn">

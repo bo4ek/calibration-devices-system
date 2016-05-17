@@ -15,6 +15,11 @@ body {
     color: black;
 }
 
+.sent-to-provider {
+    background: rgba(255, 161, 132, 0.55);
+    color: black;
+}
+
 .preview-protocol-image .modal-dialog {
     width: 900px;
 
