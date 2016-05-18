@@ -58,14 +58,32 @@ public class VerificationsQueryConstructor {
         String userName = employee.getUsername();
         Predicate queryPredicate = cb.conjunction();
         Set<UserRole> roleList = employee.getUserRoles();
+        if(roleList.contains(UserRole.CALIBRATOR_EMPLOYEE)) {
+            Join<Verification, User> joinCalibratorEmployee = root.join("calibratorEmployee", JoinType.LEFT);
+            Predicate searchPredicateByUsername = cb.equal(joinCalibratorEmployee.get("username"), userName);
+            queryPredicate = cb.and(searchPredicateByUsername, queryPredicate);
+            queryPredicate = cb.and(cb.equal(root.get("status"), Status.TEST_COMPLETED), queryPredicate);
+        } else {
+            if (roleList.contains(UserRole.CALIBRATOR_ADMIN)) {
+                Join<Verification, Organization> calibratorJoin = root.join("calibrator");
+                Predicate searchPredicateByOrganizationId = cb.equal(calibratorJoin.get("id"), employee.getOrganization().getId());
+                queryPredicate = cb.and(searchPredicateByOrganizationId, queryPredicate);
+                queryPredicate = cb.and(cb.equal(root.get("status"), Status.TEST_COMPLETED), queryPredicate);
+            }
+        }
+
         if(roleList.contains(UserRole.STATE_VERIFICATOR_EMPLOYEE)) {
             Join<Verification, User> joinVerificatorEmployee = root.join("stateVerificatorEmployee", JoinType.LEFT);
             Predicate searchPredicateByUsername = cb.equal(joinVerificatorEmployee.get("username"), userName);
             queryPredicate = cb.and(searchPredicateByUsername, queryPredicate);
+            queryPredicate = cb.and(cb.equal(root.get("status"), Status.SENT_TO_VERIFICATOR), queryPredicate);
         } else {
-            Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
-            Predicate searchPredicateByOrganizationId = cb.equal(verificatorJoin.get("id"), employee.getOrganization().getId());
-            queryPredicate = cb.and(searchPredicateByOrganizationId, queryPredicate);
+            if (roleList.contains(UserRole.STATE_VERIFICATOR_ADMIN)) {
+                Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
+                Predicate searchPredicateByOrganizationId = cb.equal(verificatorJoin.get("id"), employee.getOrganization().getId());
+                queryPredicate = cb.and(searchPredicateByOrganizationId, queryPredicate);
+                queryPredicate = cb.and(cb.equal(root.get("status"), Status.SENT_TO_VERIFICATOR), queryPredicate);
+            }
         }
 
         Predicate serchPredicateByModuleNumber = cb.equal(moduleJoin.get("moduleNumber"), moduleNumber);
@@ -78,7 +96,6 @@ public class VerificationsQueryConstructor {
         Predicate searchPredicateByTestDate = cb.between(testJoin.<java.sql.Date>get("dateTest"), testDate, endTestDate);
         queryPredicate=cb.and(searchPredicateByTestDate, queryPredicate);
 
-        queryPredicate = cb.and(cb.equal(root.get("status"), Status.SENT_TO_VERIFICATOR), queryPredicate);
         queryPredicate = cb.and(cb.isFalse(root.get("signed")), queryPredicate);
 
         return queryPredicate;

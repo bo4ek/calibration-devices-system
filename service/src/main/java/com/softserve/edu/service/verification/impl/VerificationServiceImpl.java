@@ -1153,7 +1153,12 @@ public class VerificationServiceImpl implements VerificationService {
         } else {
             cq.orderBy(cb.desc(verifications.get("initialDate")));
         }
-        Predicate calibratorEmployeePredicate = cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee);
+        Predicate calibratorEmployeePredicate = null;
+        if(calibratorEmployee.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
+            calibratorEmployeePredicate = cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee);
+        } else {
+            calibratorEmployeePredicate = cb.equal(verifications.get("calibrator"), calibratorEmployee.getOrganization());
+        }
         Predicate statusPredicate = cb.or(cb.equal(verifications.get("status"), status), cb.equal(verifications.get("status"), Status.SENT_TO_PROVIDER));
         Predicate verificationPredicate;
         if (status.equals(Status.CREATED_FOR_PROVIDER)) {
