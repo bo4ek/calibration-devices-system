@@ -160,9 +160,6 @@ public class CalibratorApplicationController {
                 mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), verification.getProvider().getName(),
                         verification.getDevice().getDeviceType().toString());
             }
-
-            logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by calibrator " + calibrator.getName());
-
         } catch (Exception e) {
             logger.error("Exception while inserting calibrator's verifications into DB ", e);
             httpStatus = HttpStatus.CONFLICT;
