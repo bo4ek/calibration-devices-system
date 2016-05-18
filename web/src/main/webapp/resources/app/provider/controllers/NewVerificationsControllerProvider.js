@@ -1,8 +1,9 @@
 angular
     .module('employeeModule')
     .controller('NewVerificationsControllerProvider', ['$scope', '$log', '$modal', 'VerificationServiceProvider', '$rootScope',
-        'ngTableParams', '$filter', '$timeout', '$translate', 'ProfileService', 'toaster',
-        function ($scope, $log, $modal, verificationServiceProvider, $rootScope, ngTableParams, $filter, $timeout, $translate, profileService) {
+        'ngTableParams', '$filter', '$timeout', '$translate', 'ProfileService', '$window', '$location', 'toaster',
+        function ($scope, $log, $modal, verificationServiceProvider, $rootScope, ngTableParams, $filter,
+                  $timeout, $translate, profileService, $window, $location,  toaster ) {
 
             $scope.resultsCount = 0;
             $scope.isSentVerifications = true;
