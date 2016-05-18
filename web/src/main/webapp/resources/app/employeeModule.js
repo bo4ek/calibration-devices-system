@@ -1,7 +1,7 @@
 (function () {
     angular.module('employeeModule', ['spring-security-csrf-token-interceptor',
-        'ui.bootstrap', 'ui.bootstrap.datepicker', 'ui.router', 'ui.bootstrap.showErrors', 'ngTable', 'pascalprecht.translate', 'ngCookies', 'localytics.directives',
-        'highcharts-ng', 'ngFileUpload', 'ngRoute', 'angular-loading-bar', 'daterangepicker', 'ui.select', 'ngSanitize', 'ngAnimate', 'toaster','globalSearchModule', 'focusModule', 'delayModule'])
+            'ui.bootstrap', 'ui.bootstrap.datepicker', 'ui.router', 'ui.bootstrap.showErrors', 'ngTable', 'pascalprecht.translate', 'ngCookies', 'localytics.directives',
+            'highcharts-ng', 'ngFileUpload', 'ngRoute', 'angular-loading-bar', 'daterangepicker', 'ui.select', 'ngSanitize', 'ngAnimate', 'toaster', 'globalSearchModule', 'focusModule', 'delayModule'])
 
         .config(['$translateProvider', '$stateProvider', '$urlRouterProvider', 'showErrorsConfigProvider', 'cfpLoadingBarProvider', '$provide',
 
@@ -210,6 +210,11 @@
                         templateUrl: 'resources/app/provider/views/rejected-verifications.html',
                         controller: 'RejectedVerificationsControllerProvider'
                     })
+                    .state("reports-calibrator", {
+                        url: '/verifications/reports',
+                        templateUrl: 'resources/app/calibrator/views/reports-calibrator.html',
+                        controller: 'DocumentController'
+                    })
                 ;
 
                 /*
@@ -271,19 +276,19 @@
 
 
     angular.module('employeeModule').directive('chosen', function () {
-        return {
-            priority: 1,
-            restrict: 'A',
-            link: {
-                pre: function (scope, element, attr, ngModel) {
-                    var defaultText = attr.placeholder;
-                    angular.element(element[0]).attr('data-placeholder', defaultText);
+            return {
+                priority: 1,
+                restrict: 'A',
+                link: {
+                    pre: function (scope, element, attr, ngModel) {
+                        var defaultText = attr.placeholder;
+                        angular.element(element[0]).attr('data-placeholder', defaultText);
+                    }
                 }
             }
-        }
-    })
+        })
 
-    .run(function ($rootScope){
+        .run(function ($rootScope) {
             $rootScope.FIRST_LAST_NAME_REGEX = /^([A-Z][\u0027]?[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][\u0027]?[a-z]{1,20}[\u002d\u0020]?[A-Z][\u0027]?[a-z]{1,20}|[A-Z][\u0027]?[a-z]{1,20}[\u002d\u0020]?[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}[\u002d\u0020]?[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}[\u002d\u0020]?[A-Z][\u0027]?[a-z]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}[\u002d\u0020]?\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u002d\u0020]?[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
             $rootScope.MIDDLE_NAME_REGEX = /^([A-Z][\u0027]?[a-z]{1,20}|[A-Z][a-z]{1,20}[\u0027]?[a-z]{0,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,20}|[\u0410-\u042f\u0407\u0406\u0404][\u0430-\u044f\u0456\u0457\u0454]{1,10}[\u0027]?[\u0430-\u044f\u0456\u0457\u0454]{1,10})$/;
             $rootScope.PHONE_REGEX = /^[1-9]\d{8}$/;
@@ -291,7 +296,7 @@
             $rootScope.FLAT_REGEX = /^([1-9][0-9]{0,3}|0)$/;
             $rootScope.BUILDING_REGEX = /^[1-9]{1}[0-9]{0,3}([A-Za-z]|[\u0410-\u042f\u0407\u0406\u0430-\u044f\u0456\u0457]){0,1}$/;
             $rootScope.USERNAME_REGEX = /^[a-z0-9_-]{3,16}$/;
-    });
+        });
 
     define([
         'provider/controllers/InternationalizationController',

@@ -80,15 +80,20 @@ public class ReportsServiceImpl implements ReportsService {
         return FileFactory.buildReportFile(data, fileParameters);
     }
 
-    public FileObject buildFileByDate(Long providerId, DocumentType documentType,
+    public FileObject buildFileByDate(Long organisationId, DocumentType documentType,
                                       FileFormat fileFormat, String startDate, String endDate) throws Exception {
         FileParameters fileParameters = new FileParameters(documentType, fileFormat);
         fileParameters.setFileSystem(FileSystem.RAM);
         fileParameters.setFileName(documentType.toString());
         List<TableExportColumn> data;
+        Date fromDate = getDateForDocument(startDate);
+        Date toDate = getDateForDocument(endDate);
         switch (documentType) {
             case PROVIDER_VERIFICATION_RESULT_REPORTS:
-                data = getDataForProviderVerificationResultReport(providerId, startDate, endDate);
+                data = getDataForProviderVerificationResultReport(organisationId, fromDate, toDate);
+                break;
+            case CALIBRATOR_VERIFICATION_RESULT_REPORTS:
+                data = getDataForCalibratorVerificationResultReport(organisationId, fromDate, toDate);
                 break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
@@ -96,7 +101,7 @@ public class ReportsServiceImpl implements ReportsService {
         return FileFactory.buildReportFile(data, fileParameters);
     }
 
-    public List<TableExportColumn> getDataForProviderEmployeesReport(Long providerId) {
+    private List<TableExportColumn> getDataForProviderEmployeesReport(Long providerId) {
         List<User> users = providerEmployeeService.getAllProviderEmployee(providerId);
 
         List<TableExportColumn> data = new ArrayList<>();
@@ -132,7 +137,7 @@ public class ReportsServiceImpl implements ReportsService {
         return data;
     }
 
-    public List<TableExportColumn> getDataForProviderCalibratorsReport(Long providerId) {
+    private List<TableExportColumn> getDataForProviderCalibratorsReport(Long providerId) {
         List<TableExportColumn> data = new ArrayList<>();
 
         Set<Device.DeviceType> deviceTypes = organizationRepository.findOne(providerId).getDeviceTypes();
@@ -163,24 +168,35 @@ public class ReportsServiceImpl implements ReportsService {
         return data;
     }
 
-    /**
-     * Prepares data for report "Звіт 3".
-     *
-     * @param providerId id of the provider
-     * @return Data to use with XlsTableExporter
-     */
-    public List<TableExportColumn> getDataForProviderVerificationResultReport(Long providerId, String startDate, String endDate) {
-        Organization provider = organizationRepository.findOne(providerId);
-
-        Date fromDate = getDateForDocument(startDate);
-        Date toDate = getDateForDocument(endDate);
-
+    private List<TableExportColumn> getDataForProviderVerificationResultReport(Long organizationId, Date startDate, Date endDate) {
+        Organization provider = organizationRepository.findOne(organizationId);
         List<Verification> verifications;
-        if (fromDate != null && toDate != null) {
-            verifications = verificationRepository.findByProviderAndVerificationDateBetween(provider, fromDate, toDate);
+        if (startDate != null && endDate != null) {
+            verifications = verificationRepository.findByProviderAndVerificationDateBetween(provider, startDate, endDate);
         } else {
             verifications = verificationRepository.findByProvider(provider);
         }
+        return getDataForVerificationResultReport(verifications, OrganizationType.PROVIDER);
+    }
+
+    private List<TableExportColumn> getDataForCalibratorVerificationResultReport(Long organizationId, Date startDate, Date endDate) {
+        Organization calibrator = organizationRepository.findOne(organizationId);
+        List<Verification> verifications;
+        if (startDate != null && endDate != null) {
+            verifications = verificationRepository.findByCalibratorAndVerificationDateBetween(calibrator, startDate, endDate);
+        } else {
+            verifications = verificationRepository.findByCalibrator(calibrator);
+        }
+        return getDataForVerificationResultReport(verifications, OrganizationType.CALIBRATOR);
+    }
+
+    /**
+     * Prepares data for report "Звіт 3".
+     *
+     * @return Data to use with XlsTableExporter
+     */
+    private List<TableExportColumn> getDataForVerificationResultReport(List<Verification> verifications, OrganizationType organization) {
+
         int initializedCapacity = verifications.size();
         List<String> number = new ArrayList<>(initializedCapacity);
         List<String> calibrators = new ArrayList(initializedCapacity);
@@ -208,6 +224,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> documentNumber = new ArrayList<>(initializedCapacity);
         List<String> validUntil = new ArrayList<>(initializedCapacity);
         List<String> protocolsNumber = new ArrayList<>(initializedCapacity);
+        List<String> providers = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -261,13 +278,19 @@ public class ReportsServiceImpl implements ReportsService {
             temperatures.add(getTemperaturesFromVerification(verification));
             verificationNumbers.add(verification.getId());
             calibrators.add(getCalibratorFromVerification(verification));
+            providers.add(getProviderFromVerification(verification));
             ++i;
         }
 
         // region Fill map
+
         List<TableExportColumn> data = new ArrayList<>(initializedCapacity);
         data.add(new TableExportColumn(Constants.NUMBER_IN_SEQUENCE_SHORT, number));
-        data.add(new TableExportColumn(Constants.LAB_NAME, calibrators));
+        if (organization.equals(OrganizationType.PROVIDER)) {
+            data.add(new TableExportColumn(Constants.LAB_NAME, calibrators));
+        } else if (organization.equals(OrganizationType.CALIBRATOR)) {
+            data.add(new TableExportColumn(Constants.PROVIDER, providers));
+        }
         data.add(new TableExportColumn(Constants.VERIFICATION_TIME, verificationTime));
         data.add(new TableExportColumn(Constants.DOCUMENT_DATE, signProtocolDate));
         data.add(new TableExportColumn(Constants.DOCUMENT_NUMBER, documentNumber));
@@ -296,6 +319,7 @@ public class ReportsServiceImpl implements ReportsService {
 
         return data;
     }
+
 
     public String getCitiesFromAddress(Address address) {
         return (address.getLocality() != null && address.getLocality().substring(0, 4).equals(Constants.KYIV_CITY_NAME.substring(3)) ? address.getLocality().substring(0, 4) : address.getLocality());
@@ -370,6 +394,10 @@ public class ReportsServiceImpl implements ReportsService {
         return (verification.getCalibrator() != null && verification.getCalibrator().getName() != null ? verification.getCalibrator().getName() : " ");
     }
 
+    public String getProviderFromVerification(Verification verification) {
+        return (verification.getProvider() != null && verification.getProvider().getName() != null ? verification.getProvider().getName() : " ");
+    }
+
     public String getSignProtocolDateInString(Verification verification) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         if (verification.getSignProtocolDate() != null) {
@@ -392,17 +420,17 @@ public class ReportsServiceImpl implements ReportsService {
             String bbiProtocol = verification.getBbiProtocols().iterator().next().getFileName();
 
             Calendar changeDate = Calendar.getInstance();
-            changeDate.set(2016,04,29);
+            changeDate.set(2016, 04, 29);
             Date signProtocolDate = verification.getSignProtocolDate();
 
-            if (changeDate.before(signProtocolDate)){
+            if (changeDate.before(signProtocolDate)) {
                 if (verification.getStatus().equals(Status.TEST_OK)) {
                     return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
                 } else if (verification.getStatus().equals(Status.TEST_NOK)) {
                     return String.format("%s-%s%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
                 }
             } else {
-               return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+                return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
             }
         }
         return " ";

@@ -125,7 +125,11 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     List<Verification> findByProvider(Organization organization);
 
+    List<Verification> findByCalibrator(Organization organization);
+
     List<Verification> findByProviderAndInitialDateBetween(Organization organization, Date dateFrom, Date DateTo);
+
+    List<Verification> findByCalibratorAndVerificationDateBetween(Organization organization, Date dateFrom, Date DateTo);
 
     List<Verification> findByProviderAndVerificationTimeBetween(Organization organization, Date dateFrom, Date DateTo);
 
@@ -199,7 +203,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     List<Verification> findByTaskStatusAndCalibratorId(Status status, Long id);
 
-    List<Verification> findByIdIn( List<String> id);
+    List<Verification> findByIdIn(List<String> id);
 
     Page<Verification> findByTaskStatusAndCalibratorId(Status status, Long id, Pageable pageable);
 
@@ -223,7 +227,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     @Modifying
     @Query("UPDATE Verification u SET u.queue = :queue WHERE u.id = :id ")
-    void updateVerificationQueueById (@Param("queue") int queue , @Param("id") String id);
+    void updateVerificationQueueById(@Param("queue") int queue, @Param("id") String id);
 
     Long countByCalibratorIdAndStatusAndCalibratorEmployeeUsername(Long calibratorId, Status status, String calibratorEmployeeUsername);
 
@@ -233,7 +237,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     @Query("SELECT v FROM Verification v INNER JOIN v.counter c INNER JOIN v.calibrator o WHERE c.numberCounter = :numberCounter " +
             "AND o.id = :calibratorId")
-    List<Verification> findByCounterNumberAndCalibratorId (@Param("numberCounter") String numberCounter, @Param("calibratorId") Long calibratorId);
+    List<Verification> findByCounterNumberAndCalibratorId(@Param("numberCounter") String numberCounter, @Param("calibratorId") Long calibratorId);
 }
 
 

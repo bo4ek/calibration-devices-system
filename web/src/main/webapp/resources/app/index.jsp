@@ -2,7 +2,6 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -51,7 +50,6 @@
     </style>
 
 </head>
-
 
 
 <body id="employeeModule">
@@ -331,6 +329,11 @@
                             <a ui-sref="verifications-archive-calibrator"><i class="fa fa-archive fa-fw"></i> <span
                                     translate="VERIFICATIONS_ARCHIVE"></span></a>
                         </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="reports-calibrator"><i class="fa fa-file-excel-o"></i><span
+                                    translate="REPORTS">
+                           </span></a>
+                        </li>
                     </sec:authorize>
                     <sec:authorize url="/verificator">
                         <li ui-sref-active="active">
@@ -384,8 +387,9 @@
 <script type="text/javascript" src="resources/eusign/euscpt.js"></script>
 <script type="text/javascript" src="resources/eusign/euscpm.js"></script>
 
-<script  type="text/ng-template" id="ng-table/filters/textWithDelayedUpdate.html">
-    <input type="text" delayed-model="params.filter()[name]" data-delay="3500" name="textWithDelayedUpdate"  data-ng-if="filter == 'textWithDelayedUpdate'" class="input-filter form-control ng-pristine ng-untouched ng-valid ng-scope"/>
+<script type="text/ng-template" id="ng-table/filters/textWithDelayedUpdate.html">
+    <input type="text" delayed-model="params.filter()[name]" data-delay="3500" name="textWithDelayedUpdate" data-ng-if="filter == 'textWithDelayedUpdate'"
+           class="input-filter form-control ng-pristine ng-untouched ng-valid ng-scope"/>
 </script>
 
 

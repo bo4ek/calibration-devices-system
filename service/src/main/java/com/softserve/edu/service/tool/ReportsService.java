@@ -12,10 +12,4 @@ public interface ReportsService {
 
     FileObject buildFileByDate(Long providerId, DocumentType documentType,
                                FileFormat fileFormat, String startDate, String endDate) throws Exception;
-
-    List<TableExportColumn> getDataForProviderEmployeesReport(Long providerId);
-
-    List<TableExportColumn> getDataForProviderCalibratorsReport(Long providerId);
-
-    List<TableExportColumn> getDataForProviderVerificationResultReport(Long providerId, String startDate, String endDate);
 }

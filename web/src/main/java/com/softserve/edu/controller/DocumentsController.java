@@ -79,9 +79,7 @@ public class DocumentsController {
                           @PathVariable FileFormat fileFormat,
                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser)
             throws Exception {
-        User providerEmployee = providerEmployeeService.oneProviderEmployee(employeeUser.getUsername());
-        Long providerId = providerEmployee.getOrganization().getId();
-        FileObject file = reportsService.buildFileByDate(providerId, documentType, fileFormat, startDate, endDate);
+        FileObject file = reportsService.buildFileByDate(employeeUser.getOrganizationId(), documentType, fileFormat, startDate, endDate);
         sendFile(response, fileFormat, file);
     }
 
