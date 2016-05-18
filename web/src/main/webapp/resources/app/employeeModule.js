@@ -200,6 +200,16 @@
                         templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
                         controller: 'RejectVerificationCalibratorController'
                     })
+                    .state("rejected-modal-provider", {
+                        url: '/calibrator/verifications/receiveAllReasons/',
+                        templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
+                        controller: 'RejectVerificationProviderController'
+                    })
+                    .state("verifications-reject-provider", {
+                        url: '/calibrator/verifications/rejected-archive/',
+                        templateUrl: 'resources/app/provider/views/rejected-verifications.html',
+                        controller: 'RejectedVerificationsControllerProvider'
+                    })
                 ;
 
                 /*
@@ -316,6 +326,8 @@
         'provider/controllers/NotStandardVerificationControllerProvider',
         'provider/services/NotStandardVerificationServiceProvider',
         'provider/controllers/NotStandardNotificationsControllerProvider',
+        'provider/controllers/RejectVerificationProviderController',
+        'provider/controllers/RejectedVerificationsControllerProvider',
 
         'calibrator/controllers/TopNavBarControllerCalibrator',
         'calibrator/controllers/MainPanelControllerCalibrator',

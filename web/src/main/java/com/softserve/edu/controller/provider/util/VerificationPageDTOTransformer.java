@@ -1,7 +1,7 @@
 package com.softserve.edu.controller.provider.util;
 
-import com.softserve.edu.dto.VerificationPlanningTaskFilterSearch;
 import com.softserve.edu.dto.calibrator.VerificationPlanningTaskDTO;
+import com.softserve.edu.dto.provider.RejectedVerificationsProviderPageDTO;
 import com.softserve.edu.dto.provider.VerificationPageDTO;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
@@ -105,6 +105,28 @@ public class VerificationPageDTOTransformer {
             dto.setSealPresence(verification.isSealPresence());
             dto.setVerificationWithDismantle(verification.isVerificationWithDismantle());
             dto.setInitialDate(verification.getInitialDate());
+            taskDTOs.add(dto);
+        }
+        return taskDTOs;
+    }
+
+    public static List<RejectedVerificationsProviderPageDTO> toDoFromContent(List<Verification> verifications) {
+        List<RejectedVerificationsProviderPageDTO> taskDTOs = new ArrayList<>(verifications.size());
+        for (Verification verification : verifications) {
+            RejectedVerificationsProviderPageDTO dto = new RejectedVerificationsProviderPageDTO();
+            dto.setVerificationId(verification.getId());
+            dto.setCalibratorName(verification.getCalibrator() != null ? verification.getCalibrator().getName() : null);
+            if (verification.getClientData() != null && verification.getClientData().getClientAddress() != null) {
+                    dto.setDistrict(verification.getClientData().getClientAddress().getDistrict());
+                    dto.setStreet(verification.getClientData().getClientAddress().getStreet());
+                    dto.setBuilding(verification.getClientData().getClientAddress().getBuilding());
+                    dto.setFlat(verification.getClientData().getClientAddress().getFlat());
+            }
+            dto.setRejectedReason(verification.getRejectedInfo().getName());
+            dto.setEmployeeProvider(verification.getProviderEmployee().getLastName()+" "+verification.getProviderEmployee().getFirstName()+" "+verification.getProviderEmployee().getMiddleName());
+            dto.setRejectedCalibratorDate(verification.getRejectedCalibratorDate());
+            dto.setCustomerName(verification.getClientData().getFullName());
+            dto.setStatus(verification.getStatus().toString());
             taskDTOs.add(dto);
         }
         return taskDTOs;

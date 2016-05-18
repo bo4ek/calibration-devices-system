@@ -9,7 +9,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-public class RejecteVerificationPageDTO {
+public class RejectedVerificationPageDTO {
 
     private Date rejectedCalibratorDate;
     private String rejectedReason;
@@ -23,16 +23,16 @@ public class RejecteVerificationPageDTO {
     private String verificationId;
 
 
-    public RejecteVerificationPageDTO() {
+    public RejectedVerificationPageDTO() {
     }
 
-    public RejecteVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, String employeeRejected) {
+    public RejectedVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, String employeeRejected) {
         this.rejectedCalibratorDate = rejectedCalibratorDate;
         this.rejectedReason = rejectedReason;
         this.employeeRejected = employeeRejected;
     }
 
-    public RejecteVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, String employeeRejected, String providerName, String customerName,
+    public RejectedVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, String employeeRejected, String providerName, String customerName,
                                       String district, String street, String building, String flat, String verificationId) {
         this.rejectedCalibratorDate = rejectedCalibratorDate;
         this.rejectedReason = rejectedReason;

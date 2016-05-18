@@ -43,14 +43,14 @@
                                                 translate}}</b>
                                             </div>
                                         </td>
-                                        <td data-title="'REJECTED_REASON' | translate" sortable="'rejected_reason'"
+                                        <td data-title="'REJECTED_REASON' | translate" sortable="'rejectedReason'"
                                             filter="{ 'rejectedReason': 'textWithDelayedUpdate' }">{{verification.rejectedReason}}
                                         </td>
-                                        <td data-title="'EMPLOYEE_REJECTED' | translate" sortable="'employee_rejected'"
-                                            filter="{ 'employeeRejected': 'textWithDelayedUpdate' }">{{verification.employeeRejected}}
+                                        <td data-title="'EMPLOYEE_SINGLE' | translate" sortable="'employeeProvider'"
+                                            filter="{ 'employeeProvider': 'textWithDelayedUpdate' }">{{verification.employeeProvider}}
                                         </td>
-                                        <td data-title="'PROVIDER' | translate" sortable="'providerName'"
-                                            filter="{ 'providerName': 'textWithDelayedUpdate' }" >{{verification.providerName}}
+                                        <td data-title="'CALIBRATOR' | translate" sortable="'calibratorName'"
+                                            filter="{ 'calibratorName': 'textWithDelayedUpdate' }" >{{verification.calibratorName}}
                                         </td>
                                         <td data-title="'CLIENT_FULL_NAME' | translate" sortable="'customerName'"
                                             filter="{ 'customerName': 'textWithDelayedUpdate' }">{{verification.customerName}}
@@ -69,6 +69,9 @@
                                         </td>
                                         <td data-title="'VERIFICATION_ID' | translate" sortable="'verificationId'"
                                             filter="{ 'verificationId': 'textWithDelayedUpdate' }">{{verification.verificationId}}
+                                        </td>
+                                        <td data-title="'VERIFICATION_STATUS' | translate" sortable="'status'"
+                                            filter="{ 'status': 'status' }">{{verification.status | translate}}
                                         </td>
                                     </tr>
                                     </tbody>

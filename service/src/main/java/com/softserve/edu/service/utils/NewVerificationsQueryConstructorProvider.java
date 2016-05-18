@@ -126,7 +126,6 @@ public class NewVerificationsQueryConstructorProvider {
 				}
 			}
 
-
 		if (status != null) {
 			queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(status.trim())), queryPredicate);
 		} else {
@@ -134,6 +133,7 @@ public class NewVerificationsQueryConstructorProvider {
 		}
 
 		queryPredicate = cb.and(cb.equal(joinSearch.get("id"), providerId), queryPredicate);
+
 		if (startDateToSearch != null && endDateToSearch != null) {
 			DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 

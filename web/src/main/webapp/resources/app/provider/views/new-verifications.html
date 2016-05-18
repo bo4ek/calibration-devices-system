@@ -120,14 +120,14 @@
 
                                             <i class="fa fa-user-times remove_attached_user_icon" style="font-size: 24px"
                                                ng-show="!isSentVerifications && verification.providerEmployee && !isEmployee"
-                                               popover="Скасувати відповідальну особу"
+                                               popover="'CANCEL_RESPONSIBLE_PERSON' | translate"
                                                popover-trigger="mouseenter"
                                                ng-click="removeProviderEmployee(verification.id)">
                                             </i>
 
                                             <i class="fa fa-ban cancel_icon"
-                                               popover="{{'REJECT' | translate}}" popover-trigger="mouseenter"
-                                               ng-click="openMailModal(verification.id)">
+                                               popover="{{'REJECT_VERIFICATION' | translate}}" popover-trigger="mouseenter"
+                                               ng-click="openRejectVerificationModal(verification.id)">
                                             </i>
 
                                             <a popover="{{'DOWNLOAD_FILE_IN_DOC' | translate}}"

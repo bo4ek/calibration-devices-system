@@ -95,6 +95,10 @@ public interface VerificationService {
                                                                                       String rejectedEmployee, String providerName, String customerName, String district, String street, String building, String flat,
                                                                                       String verificationId, String sortCriteria, String sortOrder, User calibratorEmployee);
 
+    public ListToPageTransformer<Verification> findPageOfRejectedVerificationsByProviderId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String rejectedReason,
+                                                                                           String providerEmployee, String calibratorName, String customerName, String district, String street, String building, String flat,
+                                                                                           String verificationId,String status, String sortCriteria, String sortOrder);
+
     Verification findByIdAndProviderId(String id, Long providerId);
 
     Verification findByIdAndCalibratorId(String id, Long calibratorId);

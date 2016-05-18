@@ -704,6 +704,7 @@ angular
                         }
                     }
                 });
+                
                 modalInstance.result.then(function (reason) {
                     $log.info(verificationId, reason.name.id);
                     verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id).then(function (data) {

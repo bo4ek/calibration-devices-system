@@ -97,6 +97,11 @@ body {
     color: black;
 }
 
+.defaultClass {
+    background: rgb(220, 250, 240);
+    color: black;
+}
+
 #coloredBadge {
     background: #00FF00;
     color: black;

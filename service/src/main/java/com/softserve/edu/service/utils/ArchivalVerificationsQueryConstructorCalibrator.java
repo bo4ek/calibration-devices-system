@@ -329,6 +329,8 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         Predicate queryPredicate = cb.equal(calibratorJoin.get("id"), employeeId);
 
+
+
         if (startDateToSearch != null && endDateToSearch != null) {
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
@@ -343,6 +345,8 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
             queryPredicate = cb.and(cb.between(root.get("rejectedCalibratorDate"), java.sql.Date.valueOf(startDate), java.sql.Date.valueOf(endDate)), queryPredicate);
         }
 
+        queryPredicate = cb.and(cb.equal(root.get("status"), Status.REJECTED_BY_CALIBRATOR), queryPredicate);
+
         if ((rejectedReason != null) && (rejectedReason.length() > 0)) {
             queryPredicate = cb.and(cb.like(rejectedJoin.get("name"), "%" + rejectedReason + "%"), queryPredicate);
         }
@@ -353,7 +357,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
 
         if ((providerName != null) && (providerName.length() > 0)) {
-            Join<Verification, Organization> joinProviderName = root.join("providerId");
+            Join<Verification, Organization> joinProviderName = root.join("provider");
             queryPredicate = cb.and(cb.and(cb.like(joinProviderName.get("name"), "%" + providerName + "%")), queryPredicate);
         }
 
@@ -381,7 +385,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
             queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("flat"), "%" + flat + "%"), queryPredicate);
         }
 
-        queryPredicate = cb.and(cb.equal(root.get("status"), Status.REJECTED_BY_CALIBRATOR), queryPredicate);
+
 
         return queryPredicate;
     }

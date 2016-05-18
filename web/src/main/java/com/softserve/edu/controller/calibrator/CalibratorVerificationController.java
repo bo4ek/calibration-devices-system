@@ -6,7 +6,7 @@ import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.dto.*;
 import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
-import com.softserve.edu.dto.calibrator.RejecteVerificationPageDTO;
+import com.softserve.edu.dto.calibrator.RejectedVerificationPageDTO;
 import com.softserve.edu.dto.provider.*;
 import com.softserve.edu.dto.verificator.RejectedInfoFilterSearch;
 import com.softserve.edu.entity.Address;
@@ -433,7 +433,6 @@ public class CalibratorVerificationController {
                                                                                        @PathVariable String sortOrder,
                                                                                        ArchiveVerificationsFilterAndSort searchData,
                                                                                        @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
-
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService
                 .findPageOfArchiveVerificationsByCalibratorId(
@@ -458,13 +457,14 @@ public class CalibratorVerificationController {
     }
 
     @RequestMapping(value = "rejected/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
-    public PageDTO<RejecteVerificationPageDTO> getPageOfRejectedVerificationsByOrganizationId(@PathVariable Integer itemsPerPage,
-                                                                                              @PathVariable String sortCriteria,
-                                                                                              @PathVariable String sortOrder,
-                                                                                              RejectedInfoFilterSearch searchData,
-                                                                                              @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser,
-                                                                                              @PathVariable Integer pageNumber) {
+    public PageDTO<RejectedVerificationPageDTO> getPageOfRejectedVerificationsByOrganizationId(@PathVariable Integer itemsPerPage,
+                                                                                               @PathVariable String sortCriteria,
+                                                                                               @PathVariable String sortOrder,
+                                                                                               RejectedInfoFilterSearch searchData,
+                                                                                               @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser,
+                                                                                               @PathVariable Integer pageNumber) {
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
+
         ListToPageTransformer<Verification> queryResult = verificationService
                 .findPageOfRejectedVerificationsByCalibratorId(
                         employeeUser.getOrganizationId(),
@@ -483,9 +483,9 @@ public class CalibratorVerificationController {
                         searchData.getVerificationId(),
                         sortCriteria,
                         sortOrder, calibratorEmployee);
-        List<RejecteVerificationPageDTO> list = new ArrayList<RejecteVerificationPageDTO>();
+        List<RejectedVerificationPageDTO> list = new ArrayList<RejectedVerificationPageDTO>();
         for (Verification verification : queryResult.getContent()) {
-            RejecteVerificationPageDTO dto = new RejecteVerificationPageDTO(
+            RejectedVerificationPageDTO dto = new RejectedVerificationPageDTO(
                     verification.getRejectedCalibratorDate(),
                     verification.getRejectedInfo().getName(),
                     verification.getCalibratorEmployee().getLastName() + " " + verification.getCalibratorEmployee().getFirstName() + " " + verification.getCalibratorEmployee().getMiddleName(),
@@ -496,10 +496,10 @@ public class CalibratorVerificationController {
                     verification.getClientData().getClientAddress().getBuilding(),
                     verification.getClientData().getClientAddress().getFlat(),
                     verification.getId());
-            dto.setRejectedCalibratorDate(verification.getRejectedCalibratorDate());
             list.add(dto);
         }
-        return new PageDTO<RejecteVerificationPageDTO>(queryResult.getTotalItems(), list);
+
+        return new PageDTO<RejectedVerificationPageDTO>(queryResult.getTotalItems(), list);
     }
 
     @RequestMapping(value = "archive/{verificationId}", method = RequestMethod.GET)

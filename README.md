@@ -18,6 +18,19 @@ Run the following command on the root folder of the repository:
 
     bower install
 
+### Fix bugs in src of ng-table.src.js
+   line: 454
+   change original $scope.$watch on next code :
+
+   $scope.$watch('params.$params', function(newValues,oldValues) {
+           $scope.params.settings().$scope = $scope;
+           if ( !angular.equals(newValues,oldValues)){
+               $scope.params.reload();
+           }
+       }, true);
+
+   Save this and copy to ng-table.js
+
 ### Building and starting the server
 
 Before running the app, create a MySQL database called `measurement_devices` with charset encoding UTF-8 (more specifically with collation `utf8_unicode_ci`). 

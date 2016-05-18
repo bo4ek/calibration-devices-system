@@ -13,9 +13,11 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.RejectedInfo;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.CalibratorService;
+import com.softserve.edu.service.catalogue.RejectedInfoService;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.tool.MailService;
@@ -24,6 +26,7 @@ import com.softserve.edu.service.utils.EmployeeDTO;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationProviderEmployeeService;
 import com.softserve.edu.service.verification.VerificationService;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -57,6 +61,9 @@ public class ProviderVerificationController {
 
     @Autowired
     CalibratorService calibratorService;
+
+    @Autowired
+    RejectedInfoService rejectedInfoService;
 
     @Autowired
     VerificationProviderEmployeeService verificationProviderEmployeeService;
@@ -97,6 +104,76 @@ public class ProviderVerificationController {
         );
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
+    }
+
+    @RequestMapping(value = "rejected/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    public PageDTO<RejectedVerificationsProviderPageDTO> getPageOfRejectedVerificationsByOrganizationId(@PathVariable Integer pageNumber,
+                                                                                                        @PathVariable Integer itemsPerPage,
+                                                                                                        @PathVariable String sortCriteria,
+                                                                                                        @PathVariable String sortOrder,
+                                                                                                        RejectedVerificationsProviderPageDTO searchData,
+                                                                                                        @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+
+        ListToPageTransformer<Verification> queryResult = verificationService.findPageOfRejectedVerificationsByProviderId(
+                employeeUser.getOrganizationId(),
+                pageNumber,
+                itemsPerPage,
+                searchData.getRejectedDate(),
+                searchData.getRejectedDateEnd(),
+                searchData.getRejectedReason(),
+                searchData.getEmployeeProvider(),
+                searchData.getCalibratorName(),
+                searchData.getCustomerName(),
+                searchData.getDistrict(),
+                searchData.getStreet(),
+                searchData.getBuilding(),
+                searchData.getFlat(),
+                searchData.getVerificationId(),
+                searchData.getStatus(),
+                sortCriteria,
+                sortOrder
+        );
+        List<RejectedVerificationsProviderPageDTO> content = VerificationPageDTOTransformer.toDoFromContent(queryResult.getContent());
+        return new PageDTO<>(queryResult.getTotalItems(), content);
+    }
+
+    /**
+     * receive all reasons for rejecting by calibrator
+     *
+     * @return
+     */
+    @RequestMapping(value = "/receiveAllReasons", method = RequestMethod.GET)
+    public List<RejectedInfoDTO> rejectVerification() {
+        List<RejectedInfo> list = rejectedInfoService.getAllReasons();
+        List<RejectedInfoDTO> rejectedInfoDTOs = new ArrayList<>();
+        for (RejectedInfo rejectedInfo : list) {
+            rejectedInfoDTOs.add(new RejectedInfoDTO(rejectedInfo.getId(), rejectedInfo.getName()));
+        }
+        return rejectedInfoDTOs;
+    }
+
+    /**
+     * method for rejecting verification by calibrator
+     *
+     * @param verificationId
+     * @param reasonId
+     * @return
+     */
+    @RequestMapping(value = "/rejectVerification/{verificationId}/{reasonId}", method = RequestMethod.PUT)
+    public ResponseEntity rejectVerification(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                             @PathVariable String verificationId, @PathVariable String reasonId) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        Verification verification = verificationService.findById(verificationId);
+        RejectedInfo rejectedInfo = rejectedInfoService.findOneById(Long.valueOf(reasonId));
+        if (verification.getProviderEmployee() != null && verification.getProviderEmployee().getUsername().equals(userDetails.getUsername())) {
+            verificationService.rejectVerification(verification, rejectedInfo, Status.REJECTED_BY_PROVIDER);
+        } else if (verification.getProviderEmployee() == null && verification.getProvider().getId().equals(userDetails.getOrganizationId())) {
+            verification.setProviderEmployee(usersService.findOne(userDetails.getUsername()));
+            verificationService.rejectVerification(verification, rejectedInfo, Status.REJECTED_BY_PROVIDER);
+        } else {
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+        return new ResponseEntity<>(httpStatus);
     }
 
     /**

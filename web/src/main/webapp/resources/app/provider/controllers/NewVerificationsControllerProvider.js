@@ -1,7 +1,7 @@
 angular
     .module('employeeModule')
     .controller('NewVerificationsControllerProvider', ['$scope', '$log', '$modal', 'VerificationServiceProvider', '$rootScope',
-        'ngTableParams', '$filter', '$timeout', '$translate', 'ProfileService',
+        'ngTableParams', '$filter', '$timeout', '$translate', 'ProfileService', 'toaster',
         function ($scope, $log, $modal, verificationServiceProvider, $rootScope, ngTableParams, $filter, $timeout, $translate, profileService) {
 
             $scope.resultsCount = 0;
@@ -359,51 +359,7 @@ angular
             var checkForEmpty = function () {
                 $scope.allIsEmpty = $scope.idsOfVerifications.length === 0;
             };
-
-
-            /**
-             * Modal window used to explain the reason of verification rejection
-             */
-            $scope.openMailModal = function (ID) {
-                $log.debug('ID');
-                $log.debug(ID);
-                var modalInstance = $modal.open({
-                    animation: true,
-                    backdrop: 'static',
-                    templateUrl: 'resources/app/provider/views/modals/mailComment.html',
-                    controller: 'MailSendingModalControllerProvider',
-                    size: 'md'
-
-                });
-
-                /**
-                 * executes when modal closing
-                 */
-                modalInstance.result.then(function (formData) {
-
-                    var messageToSend = {
-                        verifID: ID,
-                        msg: formData.message
-                    };
-
-                    var dataToSend = {
-                        verificationId: ID,
-                        status: 'REJECTED'
-                    };
-                    verificationServiceProvider.rejectVerification(dataToSend).success(function () {
-                        verificationServiceProvider.sendMail(messageToSend)
-                            .success(function (responseVal) {
-                                $scope.tableParams.reload();
-                            });
-                    });
-                });
-            };
-
-            $scope.$on('verification_rejected', function (event, args) {
-
-                $scope.openMailModal(args.verifID);
-            });
-
+            
             $scope.initiateVerification = function () {
 
                 $rootScope.verifIDforTempl = $scope.idsOfVerifications[0];
@@ -418,6 +374,51 @@ angular
                     $scope.tableParams.reload();
                 });
             };
+
+            $scope.openRejectVerificationModal = function (verificationId) {
+                console.log("Open rejected info modal window");
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
+                    controller: 'RejectVerificationProviderController',
+                    size: 'md',
+                    windowClass: 'xx-dialog',
+                    resolve: {
+                        rejectVerification: function () {
+                            return verificationServiceProvider.receiveAllReasons()
+                                .success(function (reasons) {
+                                        return reasons;
+                                    }
+                                );
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (reason) {
+                    verificationServiceProvider.rejectVerificationByIdAndReason(verificationId, reason.name.id).then(function (data) {
+                        switch (data.status) {
+                            case 200:
+                            {
+                                $scope.tableParams.reload();
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('REJECTED'));
+                                break;
+                            }
+                            case 403:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_ACCESS'));
+                                break;
+                            }
+                            default:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('SAVE_VERIF_ERROR'));
+                            }
+                        }
+                    });
+                });
+            }
 
         }]);
 

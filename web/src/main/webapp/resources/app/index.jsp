@@ -178,6 +178,10 @@
                             </a>
                         </li>
                         <li ui-sref-active="active">
+                            <a ui-sref="verifications-reject-provider"><i class="fa fa-archive fa-fw"></i> <span
+                                    translate="REJECTED_VERIFICATIONS"></span></a>
+                        </li>
+                        <li ui-sref-active="active">
                             <a ui-sref="verifications-archive-provider"><i class="fa fa-archive fa-fw"></i><span
                                     translate="VERIFICATIONS_ARCHIVE">
                            </span></a>

@@ -278,6 +278,27 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
+    public ListToPageTransformer<Verification> findPageOfRejectedVerificationsByProviderId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String rejectedReason,
+                                                                                           String providerEmployee, String calibratorName, String customerName, String district, String street, String building, String flat,
+                                                                                           String verificationId, String status, String sortCriteria, String sortOrder) {
+
+        CriteriaQuery<Verification> criteriaQuery = ArchivalVerificationsQueryConstructorProvider.buildSearchRejectedProviderQuery(organizationId, startDateToSearch, endDateToSearch, rejectedReason, providerEmployee, calibratorName,
+                customerName, district, street, building, flat, verificationId,status, sortCriteria, sortOrder, em);
+        Long count = em.createQuery(ArchivalVerificationsQueryConstructorProvider.buildCountRejectedQuery(organizationId, startDateToSearch, endDateToSearch, rejectedReason, providerEmployee, calibratorName,
+                customerName, district, street, building, flat, verificationId,status, em)).getSingleResult();
+        TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
+        typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
+        typedQuery.setMaxResults(itemsPerPage);
+        List<Verification> verificationList = typedQuery.getResultList();
+        ListToPageTransformer<Verification> result = new ListToPageTransformer<Verification>();
+        result.setContent(verificationList);
+        result.setTotalItems(count);
+        return result;
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
     public ListToPageTransformer<Verification> findPageOfArchiveVerificationsByProviderIdOnMainPanel(Long organizationId, int pageNumber, int itemsPerPage, String initialDateToSearch, String idToSearch, String fullNameToSearch,
                                                                                                      String streetToSearch, String region, String district, String locality, String status, String employeeName, User providerEmployee) {
 
@@ -439,7 +460,6 @@ public class VerificationServiceImpl implements VerificationService {
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
         typedQuery.setMaxResults(itemsPerPage);
         List<Verification> verificationList = typedQuery.getResultList();
-
         ListToPageTransformer<Verification> result = new ListToPageTransformer<Verification>();
         result.setContent(verificationList);
         result.setTotalItems(count);

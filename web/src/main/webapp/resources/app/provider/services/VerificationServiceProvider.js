@@ -100,6 +100,15 @@ angular
             },
             getCountOfNewNotStandardVerifications : function(url) {
                 return getData('not-standard-verifications/new/count');
+            },
+            rejectVerificationByIdAndReason: function (verificationId, reasonId) {
+                return updateData('rejectVerification/' + verificationId + '/' + reasonId);
+            },
+            receiveAllReasons: function () {
+                return getData('verifications/receiveAllReasons/')
+            },
+            getRejectedVerifications: function (currentPage, itemsPerPage, search, sortCriteria, sortOrder) {
+                return getDataWithParams('provider/verifications/rejected/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search)
             }
         };
 
