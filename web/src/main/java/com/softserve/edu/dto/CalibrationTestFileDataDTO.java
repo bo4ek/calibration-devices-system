@@ -90,19 +90,26 @@ public class CalibrationTestFileDataDTO {
         this.counterNumber = counter.getNumberCounter();
         this.testDate = calibrationTest.getDateTest();
         this.accumulatedVolume = calibrationTest.getCapacity();
-        this.counterProductionYear = Integer.valueOf(counter.getReleaseYear());
-        this.installmentNumber = verification.getCalibrationModule().getModuleId();
-        this.serialNumber = verification.getCalibrationModule().getSerialNumber();
-        this.moduleNumber = verification.getCalibrationModule().getModuleNumber();
-        this.condDesignation = verification.getCalibrationModule().getCondDesignation();
+        this.counterProductionYear = counter.getReleaseYear() != null ? Integer.valueOf(counter.getReleaseYear()) : null;
+        if (verification.getCalibrationModule() != null) {
+            this.installmentNumber = verification.getCalibrationModule().getModuleId();
+            this.serialNumber = verification.getCalibrationModule().getSerialNumber();
+            this.moduleNumber = verification.getCalibrationModule().getModuleNumber();
+            this.condDesignation = verification.getCalibrationModule().getCondDesignation();
+        }
         this.latitude = calibrationTest.getLatitude();
         this.longitude = calibrationTest.getLongitude();
         this.testPhoto = testService.getPhotoAsString(calibrationTest.getPhotoPath(), calibrationTest);
         this.consumptionStatus = calibrationTest.getConsumptionStatus();
         this.testResult = calibrationTest.getTestResult();
         this.listTestData = new ArrayList();
-        this.typeWater = counter.getCounterType() == null ? null : counter.getCounterType().getDevice().getDeviceType().toString();
-        this.serviceType = verification.getDevice().getDeviceType().name();
+        if (counter.getCounterType() != null) {
+            this.typeWater = counter.getCounterType().getDevice() != null && counter.getCounterType().getDevice().getDeviceType() != null ? counter.getCounterType().getDevice().getDeviceType().toString() : null;
+            this.standardSize = counter.getCounterType().getStandardSize();
+            this.symbol = counter.getCounterType().getSymbol();
+            this.counterTypeId = counter.getCounterType().getId();
+        }
+        this.serviceType = verification.getDevice() != null && verification.getDevice().getDeviceType() != null ? verification.getDevice().getDeviceType().name() : null;
         this.temperature = calibrationTest.getTemperature();
         this.signed = verification.isSigned();
         this.reasonUnsuitabilityId = calibrationTest.getUnsuitabilityReason() == null ? null : calibrationTest.getUnsuitabilityReason().getId();
@@ -113,9 +120,7 @@ public class CalibrationTestFileDataDTO {
         CalibrationTestIMG calibrationTestIMG;
         this.status = calibrationTest.getVerification().getStatus().toString();
         this.counterId = counter.getId();
-        this.standardSize = counter.getCounterType() == null ? null : counter.getCounterType().getStandardSize();
-        this.symbol = counter.getCounterType() == null ? null : counter.getCounterType().getSymbol();
-        this.counterTypeId = counter.getCounterType() == null ? null : counter.getCounterType().getId();
+
         for (CalibrationTestData calibrationTestData : testService.getLatestTests(calibrationTest.getCalibrationTestDataList())) {
             CalibrationTestDataDTO testDataDTO = new CalibrationTestDataDTO();
             testDataDTO.setDataAvailable(true);
@@ -148,18 +153,6 @@ public class CalibrationTestFileDataDTO {
 
     private double round(double val, int scale) {
         return BigDecimal.valueOf(val).setScale(scale, RoundingMode.HALF_UP).doubleValue();
-    }
-
-    private double convertImpulsesPerSecToCubicMetersPerHour(double impulses, long impLitPrice) {
-        return round(3.6 * impulses / impLitPrice, 3);
-    }
-
-    private double countCalculationError(double counterVolume, double standardVolume) {
-        if (standardVolume < 0.0001) {
-            return 0.0;
-        }
-        double result = (counterVolume - standardVolume) / standardVolume * 100;
-        return round(result, 2);
     }
 
 }

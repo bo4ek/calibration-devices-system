@@ -5,10 +5,7 @@ import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +17,7 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
+@ToString
 public class CalibrationTask {
 
     @Id
@@ -66,19 +64,5 @@ public class CalibrationTask {
         this.dateOfTask = dateOfTask;
         this.user = user;
         this.status = Status.TEST_PLACE_DETERMINED;
-    }
-
-    @Override
-    public String toString() {
-        return "CalibrationTask{" +
-                "id=" + id +
-                ", module=" + module +
-                ", status=" + status +
-                ", team=" + team +
-                ", createTaskDate=" + createTaskDate +
-                ", dateOfTask=" + dateOfTask +
-                ", user=" + user +
-                ", verifications=" + verifications +
-                '}';
     }
 }
