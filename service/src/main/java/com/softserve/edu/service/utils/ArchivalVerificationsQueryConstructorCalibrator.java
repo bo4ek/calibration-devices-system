@@ -209,9 +209,11 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
         DateTimeFormatter baseDateTimeFormatter = DateTimeFormatter.BASIC_ISO_DATE;
 
+        queryPredicate = cb.and(cb.equal(root.get("status"), Status.PLANNING_TASK), queryPredicate);
+
         if (startDateToSearch != null && endDateToSearch != null) {
-            LocalDate startDate = null;
-            LocalDate endDate = null;
+            LocalDate startDate;
+            LocalDate endDate;
             try {
                 startDate = LocalDate.parse(startDateToSearch, dbDateTimeFormatter);
                 endDate = LocalDate.parse(endDateToSearch, dbDateTimeFormatter);
