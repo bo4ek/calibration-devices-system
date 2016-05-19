@@ -72,7 +72,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
             if (providerEmployee == null) {
                 verification.setStatus(Status.SENT_TO_PROVIDER);
             } else {
-                if (verification.getProviderFromBBI() == null) {
+                if (verification.getVerificationTime() == null) {
                     verification.setStatus(Status.IN_PROGRESS);
                 } else {
                     verification.setStatus(Status.TEST_COMPLETED);
