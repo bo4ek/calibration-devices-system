@@ -39,23 +39,23 @@ angular
 
             $scope.isChanged = false;
 
-            $scope.nextPhotoOnSpaceBarPress = function($event) {
+            $scope.nextPhotoOnSpaceBarPress = function ($event) {
                 $scope.saveTestPhoto();
                 var SPACE_BAR_CODE = 32;
-                if($event.keyCode === SPACE_BAR_CODE || $event.charCode === SPACE_BAR_CODE) {
+                if ($event.keyCode === SPACE_BAR_CODE || $event.charCode === SPACE_BAR_CODE) {
                     var idSplit = $scope.photoId.split("Photo");
                     var photoType = idSplit[0];
                     var photoIndex = parseInt(idSplit[1]);
-                    if(photoType === 'begin') {
+                    if (photoType === 'begin') {
                         photoType = 'end';
                     } else {
-                        if(photoType == 'end') {
+                        if (photoType == 'end') {
                             photoType = 'begin';
                             photoIndex = photoIndex + 1;
-                            if(photoIndex == 3) {
+                            if (photoIndex == 3) {
                                 photoIndex = 0;
                             }
-                            $scope.testNumber = 'Test' + (photoIndex  + 1);
+                            $scope.testNumber = 'Test' + (photoIndex + 1);
                         }
                     }
                     $scope.photoType = photoType;
@@ -70,7 +70,7 @@ angular
                 $scope.isChanged = true;
             };
 
-            $scope.isTestSuccess = function(tests) {
+            $scope.isTestSuccess = function (tests) {
                 for (var i = 0; i < tests.length; i++) {
                     if (tests[i].testResult != 'SUCCESS') {
                         return false;
@@ -79,20 +79,24 @@ angular
                 return true;
             };
 
-            $scope.zoom = function() {
-                $( ".counter-test-value" ).focus();
-                if($scope.imageSize.small) {
+            $scope.zoom = function () {
+                $(".counter-test-value").focus();
+                if ($scope.imageSize.small) {
                     if (photoId == "testMainPhoto") {
-                        $(".modal-dialog").css({ "width": "100%", "max-width": "1366px"});
+                        $(".modal-dialog").css({"width": "100%", "max-width": "1366px"});
                     } else {
-                        $(".modal-dialog").css({ "width": "1000px"});
+                        $(".modal-dialog").css({"width": "1000px"});
                     }
                     $scope.imageSize.small = false;
                 } else {
-                    $(".modal-dialog").css({ "width": "900px"});
+                    $(".modal-dialog").css({"width": "900px"});
                     $scope.imageSize.small = true;
                 }
             };
+
+            function equals(a, b, accurancy) {
+                return Math.abs(a - b) < accurancy;
+            }
 
             $scope.updateValues = function (index) {
                 var test = parentScope.TestDataFormData[index];
@@ -100,13 +104,16 @@ angular
                     test.testResult = 'NOT_PROCESSED';
                 } else if (test.initialValue == test.endValue) {
                     test.testResult = 'FAILED';
-                } else if (test.acceptableError >= Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))) {
-                    test.testResult = 'SUCCESS';
                 } else {
-                    test.testResult = 'FAILED';
+                    var calcError = Math.abs($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard));
+                    if (equals(test.acceptableError, calcError, Math.pow(0.1, $scope.ACCURACY_OF_CALCULATION)) || test.acceptableError >= calcError) {
+                        test.testResult = 'SUCCESS';
+                    } else {
+                        test.testResult = 'FAILED';
+                    }
                 }
 
-                parentScope.TestForm.testResult = $scope.isTestSuccess(parentScope.TestDataFormData) ? 'SUCCESS': 'FAILED';
+                parentScope.TestForm.testResult = $scope.isTestSuccess(parentScope.TestDataFormData) ? 'SUCCESS' : 'FAILED';
 
                 test.calculationError = (parseFloat($scope.calcError(test.initialValue, test.endValue, test.volumeOfStandard))).toFixed($scope.ACCURACY_OF_CALCULATION);
                 test.volumeInDevice = parseFloat((test.endValue - test.initialValue).toFixed(2));
@@ -114,7 +121,8 @@ angular
             };
 
             $scope.calcError = function (initialValue, endValue, volumeOfStandard) {
-                return parseFloat(((endValue - initialValue - volumeOfStandard) * 100 / (volumeOfStandard))).toFixed(5);
+                var value = parseFloat(((endValue - initialValue - volumeOfStandard) * 100 / (volumeOfStandard))).toFixed(5);
+                return value;
             };
 
             $scope.selectedTypeWater = {
@@ -208,7 +216,7 @@ angular
                 $scope.newValues.counterManufacturer = undefined;
             };
 
-            $scope.initialize = function() {
+            $scope.initialize = function () {
                 $scope.newValues.counterValue = $scope.photoType == 'begin'
                     ? parentScope.TestDataFormData[$scope.photoIndex].initialValue
                     : parentScope.TestDataFormData[$scope.photoIndex].endValue;
@@ -254,7 +262,7 @@ angular
                 }
             };
 
-            $scope.saveTestPhoto = function() {
+            $scope.saveTestPhoto = function () {
                 if ($scope.photoType == 'begin') {
                     parentScope.TestDataFormData[$scope.photoIndex].initialValue = $scope.newValues.counterValue;
                     $scope.updateValues($scope.photoIndex);
