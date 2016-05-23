@@ -676,6 +676,7 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public void rejectVerification(Verification verification, RejectedInfo rejectedInfo, Status status) {
         verification.setStatus(status);
+        verification.setTaskStatus(null);
         verification.setRejectedCalibratorDate(new Date());
         verification.setRejectedInfo(rejectedInfo);
         verificationRepository.save(verification);

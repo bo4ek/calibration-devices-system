@@ -59,7 +59,7 @@ public class UnfitnessCertificate extends BaseCertificate {
         String error3 = Constants.NOT_SPECIFIED;
 
         try {
-            if (verification.isManual()) {
+            if (verification.isManual() && verification.getCalibrationTestDataManualId() != null) {
                 firstResult = verification.getCalibrationTestDataManualId().getStatusTestFirst();
                 secondResult = verification.getCalibrationTestDataManualId().getStatusTestSecond();
                 thirdResult = verification.getCalibrationTestDataManualId().getStatusTestThird();
