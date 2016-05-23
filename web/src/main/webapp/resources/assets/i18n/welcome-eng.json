@@ -841,5 +841,6 @@
     "COUNT_OF_SUCCESS_ASSIGN_VERIFICATOR_EMPLOYEE" : "Count of successful assign verifications",
     "ERROR_NAVIGATION" : "All protocols signed",
     "REJECTED_BY_PROVIDER" : "Rejected by provider",
-    "REJECTED_BY_CALIBRATOR" : "Rejected by calibrator"
+    "REJECTED_BY_CALIBRATOR" : "Rejected by calibrator",
+    "MISSING_UNSUITABILITY_REASON": "Missing unsuitability reason"
 }
