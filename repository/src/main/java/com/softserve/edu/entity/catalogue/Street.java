@@ -20,11 +20,11 @@ public class Street extends AbstractCatalogue {
     @Column
     private String designation;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "localityId")
     private Locality locality;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "streetTypeId")
     @Setter
     private StreetType streetType;

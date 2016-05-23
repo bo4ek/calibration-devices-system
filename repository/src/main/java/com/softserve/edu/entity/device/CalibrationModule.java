@@ -54,7 +54,7 @@ public class CalibrationModule {
     @Temporal(TemporalType.DATE)
     private Date workDate;
 
-    @OneToMany(mappedBy = "module")
+    @OneToMany(mappedBy = "module", fetch = FetchType.LAZY)
     private Set<CalibrationTask> tasks;
 
     public CalibrationModule(Set<Device.DeviceType> deviceType, String organizationCode,

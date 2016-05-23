@@ -45,7 +45,7 @@ public class User {
      * @see <a href="http://vard-lokkur.blogspot.com/2010/10/json-jackson-to-rescue.html">
      * http://vard-lokkur.blogspot.com/2010/10/json-jackson-to-rescue.html</a>
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizationId")
     @JsonManagedReference
     private Organization organization;
@@ -56,15 +56,15 @@ public class User {
     @Column(name = "value", length = 30)
     private Set<UserRole> userRoles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<CalibrationTask> tasks = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<SavedFilter> savedFilters = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subdivisionId")
     @JsonManagedReference
     private VerificatorSubdivision verificatorSubdivision;

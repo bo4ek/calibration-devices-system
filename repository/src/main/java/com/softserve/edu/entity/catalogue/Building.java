@@ -22,7 +22,7 @@ public class Building extends AbstractCatalogue {
     @Column
     private String designation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "streetId")
     private Street street;
 

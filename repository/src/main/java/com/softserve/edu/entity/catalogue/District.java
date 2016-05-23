@@ -22,7 +22,7 @@ public class District extends AbstractCatalogue {
     @Column
     private String designation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "regionId")
     private Region region;
 

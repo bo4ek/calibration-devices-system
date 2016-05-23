@@ -38,11 +38,11 @@ public class Counter {
 
     private String accumulatedVolume;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "counterTypeId")
     private CounterType counterType;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Verification verification;
 
     public Counter(String releaseYear, Long dateOfDismantled, Long dateOfMounted, String numberCounter,

@@ -49,10 +49,10 @@ public class Organization {
     @Embedded
     private AdditionInfoOrganization additionInfoOrganization;
 
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<OrganizationEditHistory> organizationEditHistorySet = new HashSet<>();
 
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<User> users = new HashSet<>();
 
@@ -60,11 +60,11 @@ public class Organization {
     @JsonBackReference
     private Set<CalibrationModule> modules = new HashSet<>();*/
 
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<DisassemblyTeam> disassemblyTeams = new HashSet<>();
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Agreement> agreements = new HashSet<>();
 
@@ -80,7 +80,7 @@ public class Organization {
     @Enumerated(EnumType.STRING)
     private Set<Device.DeviceType> deviceTypes = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ORGANIZATION_LOCALITY", joinColumns = @JoinColumn(name = "organizationId"),
             inverseJoinColumns = @JoinColumn(name = "localityId"))
     private List<Locality> localities;

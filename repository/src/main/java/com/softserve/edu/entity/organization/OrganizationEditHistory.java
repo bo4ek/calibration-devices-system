@@ -37,7 +37,7 @@ public class OrganizationEditHistory {
     @Embedded
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizationId")
     private Organization organization;
 

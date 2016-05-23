@@ -34,7 +34,7 @@ public class CounterType {
 
     private String gost;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceId")
     private Device device;
 

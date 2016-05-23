@@ -35,7 +35,7 @@ public class VerificatorSubdivision {
     @JoinColumn(name = "organizationId")
     private Organization organization;
 
-    @OneToMany(mappedBy = "verificatorSubdivision", cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "verificatorSubdivision", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<User> users = new HashSet<>();
 

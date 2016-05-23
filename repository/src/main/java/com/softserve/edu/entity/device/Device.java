@@ -37,24 +37,24 @@ public class Device {
 
     private Boolean defaultDevice;
 
-    @OneToMany(mappedBy = "device")
+    @OneToMany(mappedBy = "device", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<Verification> verifications;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "providerId")
     @JsonManagedReference
     private Organization provider;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manufacturerId")
     private Manufacturer manufacturer;
 
-    @OneToMany(mappedBy = "device")
+    @OneToMany(mappedBy = "device", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<CounterType> counterTypeSet;
 
-    @OneToMany(mappedBy = "device")
+    @OneToMany(mappedBy = "device", fetch = FetchType.LAZY)
     @JsonBackReference
     private Set<UnsuitabilityReason> unsuitabilitySet;
 

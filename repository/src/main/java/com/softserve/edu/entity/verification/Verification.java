@@ -43,12 +43,12 @@ public class Verification implements Comparable {
     @Enumerated(EnumType.STRING)
     private Status taskStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceId")
     @JsonManagedReference
     private Device device;
 
-    @OneToMany(mappedBy = "verification")
+    @OneToMany(mappedBy = "verification", fetch = FetchType.LAZY)
     private Set<CalibrationTest> calibrationTests;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -75,7 +75,7 @@ public class Verification implements Comparable {
     @JoinColumn(name = "stateVerificatorId")
     private Organization stateVerificator;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stateVerificatorEmployeeUsername")
     private User stateVerificatorEmployee;
 
@@ -103,18 +103,18 @@ public class Verification implements Comparable {
     private String rejectedMessage;
     private String comment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moduleId")
     private CalibrationModule calibrationModule;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "verification")
     private Set<BbiProtocol> bbiProtocols;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
     private CalibrationTask task;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private VerificationGroup group;
 
@@ -128,14 +128,14 @@ public class Verification implements Comparable {
     @Column(columnDefinition = "boolean default true")
     private boolean sealPresence;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "infoId")
     private AdditionalInfo info;
 
     @Column(columnDefinition = "boolean default false")
     private boolean isManual;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "counterId")
     private Counter counter;
 
@@ -145,7 +145,7 @@ public class Verification implements Comparable {
     @Column
     private Integer processTimeExceeding;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "calibrationTestManualId")
     private CalibrationTestDataManual calibrationTestDataManualId;
 
@@ -177,7 +177,7 @@ public class Verification implements Comparable {
     @Column(columnDefinition = "boolean default false")
     private boolean verificationWithDismantle;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rejectedInfoId")
     private RejectedInfo rejectedInfo;
 

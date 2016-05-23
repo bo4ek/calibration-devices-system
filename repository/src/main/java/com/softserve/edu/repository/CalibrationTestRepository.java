@@ -34,4 +34,5 @@ public interface CalibrationTestRepository extends CrudRepository<CalibrationTes
     public Page<CalibrationTest> findAll(Pageable pageable);
 
     Page<CalibrationTest> findByNameLikeIgnoreCase(String name, Pageable pageable);
+
 }

@@ -5,6 +5,7 @@ import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -107,6 +108,11 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     Long countByCalibratorIdAndStatus(Long calibratorId, Status status);
 
     Long countByProviderAndStatus(Organization provider, Status status);
+
+    int countByTaskId(Long taskId);
+
+    @Query("SELECT COUNT(u.id) FROM Verification u WHERE u.status IN ('TEST_COMPLETED', 'SENT_TO_VERIFICATOR', 'TEST_OK', 'TEST_NOK') and u.task = :task")
+    int countCompletedByTaskId(@Param("task") CalibrationTask task);
 
     @Query("select u.providerEmployee from Verification u where u.id = :id")
     User getProviderEmployeeById(@Param("id") String id);

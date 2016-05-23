@@ -25,14 +25,14 @@ public class Locality extends AbstractCatalogue {
     @Column
     private String designation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "districtId")
     private District district;
 
     @Setter
     private String mailIndex;
 
-    @ManyToMany//(mappedBy = "localities")
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ORGANIZATION_LOCALITY", joinColumns = @JoinColumn(name = "localityId"),
             inverseJoinColumns = @JoinColumn(name = "organizationId"))
     private Set<Organization> organizations;

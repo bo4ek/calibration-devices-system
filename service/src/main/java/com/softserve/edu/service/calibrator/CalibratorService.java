@@ -4,6 +4,7 @@ import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.service.utils.EmployeeDTO;
 
 import java.io.IOException;
@@ -37,5 +38,9 @@ public interface CalibratorService {
     boolean checkIfAdditionalInfoExists(String verificationId);
 
     Set<String> getTypesById(Long id);
+
+    int getNumOfVerifications(Long taskID);
+
+    int getNumOfCompletedVerifications(CalibrationTask task);
 
 }

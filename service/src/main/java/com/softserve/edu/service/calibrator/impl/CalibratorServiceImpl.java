@@ -7,6 +7,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.BbiProtocol;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.repository.*;
 import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.storage.FileOperations;
@@ -163,6 +164,16 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Override
     public Set<String> getTypesById(Long id) {
         return TypeConverter.enumToString(calibratorRepository.findOrganizationTypesById(id));
+    }
+
+    @Override
+    public int getNumOfVerifications(Long taskID) {
+        return verificationRepository.countByTaskId(taskID);
+    }
+
+    @Override
+    public int getNumOfCompletedVerifications(CalibrationTask task) {
+        return verificationRepository.countCompletedByTaskId(task);
     }
 
 

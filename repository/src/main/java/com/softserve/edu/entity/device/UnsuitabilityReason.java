@@ -21,7 +21,7 @@ public class UnsuitabilityReason {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceId")
     private Device device;
 

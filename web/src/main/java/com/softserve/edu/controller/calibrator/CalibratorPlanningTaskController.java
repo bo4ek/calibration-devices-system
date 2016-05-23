@@ -22,6 +22,7 @@ import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.calibrator.CalibratorDisassemblyTeamService;
 import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
+import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationService;
@@ -63,6 +64,9 @@ public class CalibratorPlanningTaskController {
     @Autowired
     CalibratorEmployeeService calibratorEmployeeService;
 
+    @Autowired
+    CalibratorService calibratorService;
+
     private Logger logger = Logger.getLogger(CalibratorPlanningTaskController.class);
 
     /**
@@ -89,9 +93,10 @@ public class CalibratorPlanningTaskController {
         List<CalibrationTaskDTO> content = new ArrayList<CalibrationTaskDTO>();
 
         for (CalibrationTask task : queryResult) {
-            content.add(new CalibrationTaskDTO(task.getId(), task.getModule().getSerialNumber(), task.getDateOfTask(),
-                    task.getVerifications(), task.getModule().getModuleType(), task.getModule().getEmployeeFullName(),
-                    task.getModule().getTelephone(), task.getStatus()));
+            int numOfVerifications = calibratorService.getNumOfVerifications(task.getId());
+            int numOfCompletedVerifications = calibratorService.getNumOfCompletedVerifications(task);
+            content.add(new CalibrationTaskDTO(task.getId(), task.getModule().getSerialNumber(), task.getDateOfTask(), task.getModule().getModuleType(), task.getModule().getEmployeeFullName(),
+                    task.getModule().getTelephone(), task.getStatus(), numOfVerifications, numOfCompletedVerifications));
         }
         return new PageDTO<>(queryResult.getTotalElements(), content);
     }

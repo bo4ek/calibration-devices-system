@@ -42,11 +42,11 @@ public class DisassemblyTeam {
 
     private String leaderEmail;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "calibratorId")
     private Organization organization;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
     private Set<CalibrationTask> tasks;
 
     public DisassemblyTeam(String id, String name, Date effectiveTo, Set<Device.DeviceType> specialization, String leaderFullName,

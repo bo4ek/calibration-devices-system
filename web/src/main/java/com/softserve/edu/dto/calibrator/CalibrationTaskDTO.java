@@ -38,24 +38,18 @@ public class CalibrationTaskDTO {
     public CalibrationTaskDTO() {
     }
 
-    public CalibrationTaskDTO(String moduleNumber, Date dateOfTask, List<String> verificationsId) {
-        this.moduleNumber = moduleNumber;
-        this.dateOfTask = dateOfTask;
-        this.verificationsId = verificationsId;
-    }
-
-    public CalibrationTaskDTO(Long taskID, String moduleSerialNumber, Date dateOfTask, Set<Verification> verifications,
+    public CalibrationTaskDTO(Long taskID, String moduleSerialNumber, Date dateOfTask,
                               CalibrationModule.ModuleType moduleType, String employeeFullName, String telephone,
-                              Status status) {
+                              Status status, Integer numOfVerifications, Integer numOfCompletedVerifications) {
         this.taskID = taskID;
         this.moduleSerialNumber = moduleSerialNumber;
         this.dateOfTask = dateOfTask;
         this.moduleType = moduleType;
         this.employeeFullName = employeeFullName;
         this.telephone = telephone;
-        this.numOfVerifications = verifications.size();
+        this.numOfVerifications = numOfVerifications;
         this.status = status.toString();
-        this.numOfCompletedVerifications = countNumberOfTestedVerification(verifications);
+        this.numOfCompletedVerifications = numOfCompletedVerifications;
     }
 
     private Integer countNumberOfTestedVerification(Set<Verification> verifications) {

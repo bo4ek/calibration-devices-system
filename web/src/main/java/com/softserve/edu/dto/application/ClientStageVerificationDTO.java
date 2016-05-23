@@ -5,23 +5,48 @@ import com.softserve.edu.entity.verification.ClientData;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.*;
+
 @Setter
 @Getter
 public class ClientStageVerificationDTO {
+    @NotNull
+    @Size(max = 20, min = 2)
     private String firstName;
+    @NotNull
+    @Size(max = 20, min = 2)
     private String lastName;
+    @NotNull
+    @Size(max = 20, min = 2)
     private String middleName;
+    @NotNull
     private String email;
+    @NotNull
+    @Digits(integer = 9, fraction = 0)
+    @Size(min = 9, max = 9)
     private String phone;
+    @Digits(integer = 9, fraction = 0)
     private String secondPhone;
+    @NotNull
     private String region;
+    @NotNull
     private String locality;
+    @NotNull
     private String district;
+    @NotNull
     private String street;
+    @NotNull
     private String building;
+    @NotNull
     private String flat;
+    @NotNull
+    @Max(99999)
+    @Digits(integer = 5, fraction = 0)
     private String mailIndex;
+    @NotNull
     private Long providerId;
+    @NotNull
+    @Digits(integer = 9, fraction = 0)
     private Long deviceId;
     private String verificationId;
     private String comment;

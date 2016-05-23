@@ -21,7 +21,7 @@ public class Manufacturer {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "manufacturer")
+    @OneToMany(mappedBy = "manufacturer", fetch = FetchType.LAZY)
     private Set<Device> devices;
 
     public void setName(String name) {
