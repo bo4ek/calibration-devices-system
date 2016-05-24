@@ -21,7 +21,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private final Logger logger = Logger.getLogger(BbiDeviceTestDataParser.class);
 
     @Override
-    public DeviceTestData parse(InputStream deviceTestDataStream) throws IOException, DecoderException, InvalidImageInBbiException {
+    public DeviceTestData parse(InputStream deviceTestDataStream, boolean taskForStation) throws IOException, DecoderException, InvalidImageInBbiException {
         resultMap = new HashMap<>();
         reader = new BufferedInputStream(deviceTestDataStream);
         long count;
@@ -40,7 +40,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         resultMap.put("batteryCharge", readLongValueReversed(Constants.FOUR_BYTES)); //0x800018 + 0x04
         resultMap.put("bbiWritten", readLongValueReversed(Constants.FOUR_BYTES)); //0x80001c + 0x04
         resultMap.put("bbiAvailableToWrite", readLongValueReversed(Constants.FOUR_BYTES)); //0x800020 + 0x04
-        resultMap.put("fileName", performFileName(readLongValueReversed(Constants.FOUR_BYTES))); //0x800024 + 0x04
+        resultMap.put("fileName", performFileName(readLongValueReversed(Constants.FOUR_BYTES), taskForStation)); //0x800024 + 0x04
         count = reader.skip(Constants.TWELVE_BYTES); //0x800028 + 0x0c
         resultMap.put("integrationTime", readLongValueReversed(Constants.FOUR_BYTES)); //0x800034 + 0x04
         resultMap.put("testCounter", readLongValueReversed(Constants.FOUR_BYTES)); //0x800038 + 0x04
@@ -140,10 +140,16 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         return result;
     }
 
-    private String performFileName(Long fileName) {
+    private String performFileName(Long fileName, boolean taskForStation) {
         String name = fileName.toString();
-        if(name.length() == Constants.SHORT_FILE_NAME_LENGTH) {
-            name = "0" + name;
+        if(taskForStation) {
+            if(name.length() == Constants.SHORT_FILE_NAME_LENGTH_FOR_STATION) {
+                name = "0" + name;
+            }
+        } else {
+            if (name.length() == Constants.SHORT_FILE_NAME_LENGTH) {
+                name = "0" + name;
+            }
         }
         return name;
     }

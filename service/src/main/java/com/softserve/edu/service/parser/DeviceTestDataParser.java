@@ -10,6 +10,6 @@ import org.apache.commons.codec.DecoderException;
  * Created by Taras on 15.09.2015.
  */
 public interface DeviceTestDataParser {
-    DeviceTestData parse(InputStream deviceTestData) throws IOException, DecoderException, InvalidImageInBbiException;
+    DeviceTestData parse(InputStream deviceTestData, boolean taskForStation) throws IOException, DecoderException, InvalidImageInBbiException;
 
 }

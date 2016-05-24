@@ -95,11 +95,11 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private RegionService regionService;
 
     @Transactional
-    public DeviceTestData parseBBIFile(File BBIFile, String originalFileName) throws IOException, DecoderException, InvalidImageInBbiException {
+    public DeviceTestData parseBBIFile(File BBIFile, String originalFileName, boolean taskForStation) throws IOException, DecoderException, InvalidImageInBbiException {
         inStream = FileUtils.openInputStream(BBIFile);
         bufferedInputStream = new BufferedInputStream(inStream);
         bufferedInputStream.mark(inStream.available());
-        DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
+        DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName, taskForStation);
         bufferedInputStream.reset();
         return deviceTestData;
     }
@@ -139,7 +139,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             throws IOException, DecoderException, InvalidImageInBbiException {
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         bufferedInputStream.mark(inputStream.available());
-        DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName);
+        DeviceTestData deviceTestData = bbiFileService.parseBbiFile(bufferedInputStream, originalFileName, false);
         bufferedInputStream.reset();
         calibratorService.uploadBbi(bufferedInputStream, verificationID, originalFileName);
         return deviceTestData;
@@ -218,7 +218,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 if (correspondingVerificationMap == null) {
                     throw new MismatchBbiFilesNamesException();
                 }
-                deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                deviceTestData = parseBBIFile(bbiFile, bbiFile.getName(), false);
                 calibrationModuleNumber = deviceTestData.getInstallmentNumber();
 
                 String moduleDirectory = archiveBbi + "/" + calibrationModuleNumber;
@@ -339,7 +339,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             String calibrationModuleNumber;
 
             try {
-                deviceTestData = parseBBIFile(bbiFile, bbiFile.getName());
+                deviceTestData = parseBBIFile(bbiFile, bbiFile.getName(), true);
                 calibrationModuleNumber = deviceTestData.getInstallmentNumber();
 
                 String moduleDirectory = archiveBbi + "/" + calibrationModuleNumber;

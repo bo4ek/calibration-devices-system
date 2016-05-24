@@ -43,9 +43,9 @@ public class BbiFileServiceImpl implements BbiFileService {
 
 
     @Override
-    public DeviceTestData parseBbiFile(InputStream fileStream, String fileName) throws IOException, DecoderException,InvalidImageInBbiException {
+    public DeviceTestData parseBbiFile(InputStream fileStream, String fileName, boolean taskForStation) throws IOException, DecoderException,InvalidImageInBbiException {
         DeviceTestDataParser parser = testDataParserFactory.getParser(fileName);
-        return parser.parse(fileStream);
+        return parser.parse(fileStream, taskForStation);
     }
 
 }

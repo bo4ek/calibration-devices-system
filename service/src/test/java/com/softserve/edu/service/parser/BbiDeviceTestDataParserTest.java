@@ -33,7 +33,7 @@ public class BbiDeviceTestDataParserTest {
     @Test
     @Ignore
     public void testParse() throws Exception {
-        deviceTestData = bbiDeviceTestDataParser.parse(file);
+        deviceTestData = bbiDeviceTestDataParser.parse(file, false);
         assertEquals("fileName",deviceTestData.getFileName(),"15101400.bbi");
         assertTrue("year not correct",deviceTestData.getYear() == 2014);
         assertTrue("test1terminalCounterValue not correct", deviceTestData.getTestTerminalCounterValue(1) == 779.75);
