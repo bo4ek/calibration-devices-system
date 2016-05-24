@@ -110,6 +110,14 @@ public class StateVerificatorServiceImpl implements StateVerificatorService {
 
     @Override
     @Transactional
+    public void unassignVerificatorEmployee(String verificationId) {
+        Verification verification = verificationRepository.findOne(verificationId);
+        verification.setStateVerificatorEmployee(null);
+        verificationRepository.save(verification);
+    }
+
+    @Override
+    @Transactional
     public List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization) {
         Organization organization = organizationRepository.findOne(idOrganization);
         List<Verification> verifications = verificationRepository.

@@ -115,7 +115,7 @@ public class StateVerificatorEmployeeController {
 	@RequestMapping(value = "remove/verificatorEmployee", method = RequestMethod.PUT)
 	public void removeVerificatorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
 		String idVerification = verificationUpdatingDTO.getIdVerification();
-		stateVerificatorService.assignVerificatorEmployee(idVerification, null);
+		stateVerificatorService.unassignVerificatorEmployee(idVerification);
 	}
 
 	@RequestMapping(value = "graphicmainpanel", method = RequestMethod.GET)
