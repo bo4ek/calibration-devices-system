@@ -80,10 +80,11 @@ public class CalibratorPlanningTaskController {
      * @param employeeUser current user
      * @return sorted and filtered page of calibration tasks
      */
-    @RequestMapping(value = "/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}/{allTests}", method = RequestMethod.GET)
     public PageDTO<CalibrationTaskDTO> getSortedAndFilteredPageOfCalibrationTasks(@PathVariable Integer pageNumber,
                                                                                   @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
-                                                                                  @PathVariable String sortOrder, @RequestParam Map<String, String> filterParams,
+                                                                                  @PathVariable String sortOrder, @PathVariable Boolean allTests,
+                                                                                  @RequestParam Map<String, String> filterParams,
                                                                                   @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         Sort sort = new Sort(Sort.Direction.valueOf(sortOrder.toUpperCase()), sortCriteria);
         Pageable pageable = new PageRequest(pageNumber - 1, itemsPerPage, sort);
@@ -95,8 +96,10 @@ public class CalibratorPlanningTaskController {
         for (CalibrationTask task : queryResult) {
             int numOfVerifications = calibratorService.getNumOfVerifications(task.getId());
             int numOfCompletedVerifications = calibratorService.getNumOfCompletedVerifications(task);
-            content.add(new CalibrationTaskDTO(task.getId(), task.getModule().getSerialNumber(), task.getDateOfTask(), task.getModule().getModuleType(), task.getModule().getEmployeeFullName(),
-                    task.getModule().getTelephone(), task.getStatus(), numOfVerifications, numOfCompletedVerifications));
+            if (allTests || (numOfVerifications > 0 && numOfVerifications > numOfCompletedVerifications)) {
+                content.add(new CalibrationTaskDTO(task.getId(), task.getModule().getSerialNumber(), task.getDateOfTask(), task.getModule().getModuleType(), task.getModule().getEmployeeFullName(),
+                        task.getModule().getTelephone(), task.getStatus(), numOfVerifications, numOfCompletedVerifications));
+            }
         }
         return new PageDTO<>(queryResult.getTotalElements(), content);
     }

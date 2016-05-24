@@ -3,8 +3,8 @@ angular
     .factory('CalibrationTaskServiceCalibrator', ['$http', function ($http) {
 
         return {
-            getPage: function (pageNumber, itemsPerPage, search, sortCriteria, sortOrder) {
-                return getDataWithParams(pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, search);
+            getPage: function (pageNumber, itemsPerPage, search, sortCriteria, sortOrder, allTests) {
+                return getDataWithParams(pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder + '/' + allTests, search);
             },
             getVerificationsByTask: function (pageNumber, itemsPerPage, sortCriteria, sortOrder, taskID) {
                 return getData('verifications/' + pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder + '/' + taskID);

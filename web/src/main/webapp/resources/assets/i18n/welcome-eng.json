@@ -842,5 +842,6 @@
     "ERROR_NAVIGATION" : "All protocols signed",
     "REJECTED_BY_PROVIDER" : "Rejected by provider",
     "REJECTED_BY_CALIBRATOR" : "Rejected by calibrator",
-    "MISSING_UNSUITABILITY_REASON": "Missing unsuitability reason"
+    "MISSING_UNSUITABILITY_REASON": "Missing unsuitability reason",
+    "SHOW_ALL_TASKS": "Show all tasks"
 }

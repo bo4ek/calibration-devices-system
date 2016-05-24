@@ -837,3 +837,13 @@ form[name='CalibrationTestForm'] #testPN {
 #missing-errors-title {
     font-size: 16px;
 }
+
+#all-tasks {
+    font-size: 24px;
+}
+
+#all-tasks-checkbox {
+    width: 15px;
+    height: 15px;
+    margin-bottom: 5px;
+}

@@ -19,6 +19,7 @@ angular
 
                 $scope.pageContent = [];
                 $scope.taskIDs = [];
+                $scope.allTests = false;
 
                 /**
                  * Date-range picker
@@ -251,6 +252,10 @@ angular
                     });
                 };
 
+                $scope.refreshTable = function() {
+                    $scope.tableParams.reload();
+                };
+
                 $scope.tableParams = new ngTableParams({
                         page: 1,
                         count: 50,
@@ -276,7 +281,7 @@ angular
                                 params.filter().startDateToSearch = null;
                                 params.filter().endDateToSearch = null;
                             }
-                            CalibrationTaskServiceCalibrator.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)
+                            CalibrationTaskServiceCalibrator.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder, $scope.allTests)
                                 .success(function (result) {
                                     $scope.resultsCount = result.totalItems;
                                     $defer.resolve(result.content);
