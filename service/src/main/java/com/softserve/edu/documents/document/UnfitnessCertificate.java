@@ -74,21 +74,24 @@ public class UnfitnessCertificate extends BaseCertificate {
                     switch (calibration.getTestPosition()) {
                         case 10:
                         case 11:
-                        case 12: {
+                        case 12:
+                        case 13: {
                             firstResult = calibration.getTestResult();
                             error1 = getErrorFromTest(calibration);
                             break;
                         }
                         case 20:
                         case 21:
-                        case 22: {
+                        case 22:
+                        case 23: {
                             secondResult = calibration.getTestResult();
                             error2 = getErrorFromTest(calibration);
                             break;
                         }
                         case 30:
                         case 31:
-                        case 32: {
+                        case 32:
+                        case 33: {
                             thirdResult = calibration.getTestResult();
                             error3 = getErrorFromTest(calibration);
                             break;
