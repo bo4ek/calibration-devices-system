@@ -32,10 +32,6 @@ public enum DocumentTemplateFactory {
         FileObject template = documentTemplateMap.get(documentType);
 
         if (template == null) {
-//            template = FileUtils.createFile(FileSystem.RES,
-//                    ResourcesFolder.DOCUMENTS_TEMPLATES + File.separator +
-//                            documentType.toString());
-        	
             template = FileUtils.createFile(FileSystem.RES,
                     ResourcesFolder.DOCUMENTS_TEMPLATES + "/" + 
                             documentType.toString() + ".docx");
