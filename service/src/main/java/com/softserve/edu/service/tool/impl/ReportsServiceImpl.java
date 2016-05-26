@@ -241,6 +241,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> providers = new ArrayList<>(initializedCapacity);
         List<String> notes = new ArrayList<>(initializedCapacity);
         List<String> counterNotes = new ArrayList<>(initializedCapacity);
+        List<String> typeOfSupply = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -291,12 +292,15 @@ public class ReportsServiceImpl implements ReportsService {
             counterTypeSizes.add(getCounterTypeSizeFromVerification(verification));
             years.add(getRealiseYearFromVerification(verification));
             counterCapacity.add(getCounterCapacityFromVerification(verification));
-            temperatures.add(getTemperaturesFromVerification(verification));
             verificationNumbers.add(verification.getId());
             calibrators.add(getCalibratorFromVerification(verification));
             providers.add(getProviderFromVerification(verification));
             notes.add(getNotes(verification));
             counterNotes.add(getCounterNotes(verification));
+
+            Integer temperature = getTemperaturesFromVerification(verification);
+            temperatures.add(temperature == -1 ? " " : temperature.toString());
+            typeOfSupply.add(getTypeOfSupplyFromTemperature(temperature, verification));
             ++i;
         }
 
@@ -341,6 +345,7 @@ public class ReportsServiceImpl implements ReportsService {
             data.add(new TableExportColumn(Constants.COUNTERNOTES, counterNotes));
         }
         data.add(new TableExportColumn(Constants.TEMPERATURE, temperatures));
+        data.add(new TableExportColumn(Constants.TYPE_OF_SUPPLY, typeOfSupply));
         data.add(new TableExportColumn(Constants.VERIFICATION_NUMBER, verificationNumbers));
         data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, verificationStatus));
         data.add(new TableExportColumn(Constants.VALID_UNTIL, validUntil));
@@ -348,6 +353,16 @@ public class ReportsServiceImpl implements ReportsService {
         return data;
     }
 
+
+    public String getTypeOfSupplyFromTemperature(Integer temperature, Verification verification) {
+        if (temperature == -1 && verification.getCounter() != null && verification.getCounter().getCounterType().getDevice() != null) {
+            return verification.getCounter().getCounterType().getDevice().getDeviceType().equals(Device.DeviceType.WATER) ? Constants.WATER : Constants.THERMAL;
+        } else if (temperature > 30) {
+            return Constants.THERMAL;
+        } else if (temperature <= 30 && temperature >= 0) {
+            return Constants.WATER;
+        } else return " ";
+    }
 
     public String getCounterNotes(Verification verification) {
         return verification.getComment() != null ? verification.getComment() : " ";
@@ -422,8 +437,9 @@ public class ReportsServiceImpl implements ReportsService {
         return (calibrationTest != null && calibrationTest.getCapacity() != null ? calibrationTest.getCapacity() : " ");
     }
 
-    public String getTemperaturesFromVerification(Verification verification) {
-        return " ";
+    public Integer getTemperaturesFromVerification(Verification verification) {
+        CalibrationTest calibrationTest = calibrationTestRepository.findTestByVerificationId(verification.getId());
+        return calibrationTest != null && calibrationTest.getTemperature() != null ? calibrationTest.getTemperature() : -1;
     }
 
     public String getStatusFromVerification(Verification verification) {

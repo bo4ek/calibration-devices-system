@@ -84,6 +84,9 @@ public interface Constants {
     String WATER_DEVICE_MAIL = "лічильника холодної води";
     String THERMAL_DEVICE_MAIL = "лічильника гарячої води";
     String COUNTER_SYMBOL = "Умовне позначення лічильника";
+    String TYPE_OF_SUPPLY = "Тип послуги";
+    String WATER = "Холодна вода";
+    String THERMAL = "Гаряча вода";
 
     //reasons o counter unsuitability
     String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
