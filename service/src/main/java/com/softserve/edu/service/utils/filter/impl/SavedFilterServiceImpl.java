@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Created by Pavlo on 11.12.2015.
- */
 @Service
 public class SavedFilterServiceImpl implements SavedFilterService {
     @Autowired

@@ -19,11 +19,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Roman on 21.10.15.
- *
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class VerificationPhotoServiceImplTest {
 

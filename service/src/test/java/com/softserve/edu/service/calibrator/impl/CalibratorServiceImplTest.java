@@ -24,9 +24,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Misha on 10/18/2015.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class CalibratorServiceImplTest {
 

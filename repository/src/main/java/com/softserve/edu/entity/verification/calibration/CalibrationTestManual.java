@@ -7,13 +7,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
-/**
- * Created by Misha on 12/11/2015.
- * Calibration Test  Manual entity.
- * Contains data about manual calibration test
- */
-
 @Entity
 @Getter
 @Setter

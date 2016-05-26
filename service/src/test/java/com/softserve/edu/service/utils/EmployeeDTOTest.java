@@ -12,9 +12,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-/**
- * Created by Misha on 10/20/2015.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class EmployeeDTOTest {
 

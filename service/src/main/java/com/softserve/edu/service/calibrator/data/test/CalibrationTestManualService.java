@@ -8,10 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-
-/**
- * Created by Misha on 12/13/2015.
- */
 public interface CalibrationTestManualService {
 
     CalibrationTestManual findTestManual(Long id);

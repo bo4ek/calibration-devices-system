@@ -4,9 +4,6 @@ import com.softserve.edu.entity.verification.Verification;
 
 import java.util.Date;
 
-/**
- * Created by Konyk on 29.07.2015.
- */
 public class CalibrationTestPageItem {
     private Long id;
     private String name;
@@ -17,23 +14,6 @@ public class CalibrationTestPageItem {
     private Double longitude;
     private String consumptionStatus;
     private Verification.CalibrationTestResult testResult;
-
-    private String fullName;
-    private String region;
-    private String district;
-    private String locality;
-    private String street;
-
-    private Long protocolId;
-    private String protocolDate;
-    private String protocolStatus;
-
-    private String measurementDeviceId;
-    private String measurementDeviceType;
-
-    private String documentType;
-    private String documentTypeName;
-    private String documentDate;
 
     public CalibrationTestPageItem() {
     }

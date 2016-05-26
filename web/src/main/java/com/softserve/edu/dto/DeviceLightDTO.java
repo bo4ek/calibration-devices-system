@@ -1,8 +1,5 @@
 package com.softserve.edu.dto;
 
-/**
- * Created by Назік on 10/2/2015.
- */
 public class DeviceLightDTO {
     private Long id;
     private String designation;

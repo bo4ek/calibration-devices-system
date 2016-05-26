@@ -7,9 +7,6 @@ import lombok.Setter;
 import java.util.List;
 import java.util.Date;
 
-/**
- * Created by Misha on 12/13/2015.
- */
 @Getter
 @Setter
 public class CalibrationTestManualDTO {

@@ -6,9 +6,6 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.when;
 
-/**
- * Created by lyubomyr on 21.10.2015.
- */
 public class OrganizationAdminDTOTest extends TestCase {
     private String username;
     private String firstName;

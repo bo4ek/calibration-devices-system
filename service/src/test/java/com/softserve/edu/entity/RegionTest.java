@@ -2,9 +2,6 @@ package com.softserve.edu.entity;
 
 import config.DBUnitConfig;
 
-/**
- * Created by Loc on 17.08.2015.
- */
 public class RegionTest extends DBUnitConfig{
 
 	public RegionTest(String name) {

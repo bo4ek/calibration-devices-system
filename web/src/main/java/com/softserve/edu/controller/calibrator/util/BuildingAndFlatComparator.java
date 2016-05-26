@@ -4,9 +4,6 @@ import com.softserve.edu.entity.verification.Verification;
 
 import java.util.Comparator;
 
-/**
- * Created by Vasyl on 07.10.2015.
- */
 public class BuildingAndFlatComparator implements Comparator<Verification> {
 
     @Override

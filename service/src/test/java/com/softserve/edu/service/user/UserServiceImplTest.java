@@ -18,9 +18,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by Pavlo on 18.10.2015.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
     @Mock

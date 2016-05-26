@@ -6,10 +6,6 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-/**
- * Project system-calibration-devices
- * Created by bo4ek on 27.01.2016.
- */
 public interface StateVerificatorSubdivisionService {
 
     void addSubdivision(VerificatorSubdivision subdivision);

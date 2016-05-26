@@ -12,10 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Project system-calibration-devices
- * Created by bo4ek on 27.01.2016.
- */
 @Service
 public class StateVerificatorSubdivisionServiceImpl implements StateVerificatorSubdivisionService {
 

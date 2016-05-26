@@ -5,11 +5,6 @@ import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestDataManual;
 import com.softserve.edu.entity.verification.calibration.CalibrationTestManual;
 
-
-
-/**
- * Created by Misha on 12/13/2015.
- */
     public interface CalibrationTestDataManualService {
 
     CalibrationTestDataManual findTestDataManual(Long id);

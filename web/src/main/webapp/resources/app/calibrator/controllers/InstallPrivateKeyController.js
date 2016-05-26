@@ -1,6 +1,4 @@
-/**
- * Created by Lidiya on 23.01.2016.
- */
+
 angular
     .module('employeeModule')
     .controller('InstallPrivateKeyController', ['$scope', '$window', '$rootScope', '$route', '$log', '$modalInstance',

@@ -17,11 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-
-/**
- * Created by Misha on 12/13/2015.
- */
-
 @Service
 public class CalibrationTestDataManualServiceImpl implements CalibrationTestDataManualService {
 

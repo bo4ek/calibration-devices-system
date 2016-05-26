@@ -1,6 +1,4 @@
-/**
- * Created by MAX on 20.07.2015.
- */
+
 angular
     .module('employeeModule')
     .controller('CalendarEmployeeProvider', ['$rootScope', '$scope', '$controller', 'UserService', '$modal', '$log', 'ngTableParams', '$timeout', '$filter', '$translate',

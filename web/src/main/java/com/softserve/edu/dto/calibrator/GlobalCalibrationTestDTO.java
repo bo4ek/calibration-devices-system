@@ -4,9 +4,6 @@ import com.softserve.edu.entity.verification.Verification;
 
 import java.util.Date;
 
-/**
- * Created by Konyk on 21.08.2015.
- */
 public class GlobalCalibrationTestDTO {
     private String name;
     private Date dateTest;

@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 
-/**
- *
- * Created by Vasyl on 09.09.2015.
- */
 @Repository
 public interface CalibrationPlanningTaskRepository extends
         PagingAndSortingRepository<CalibrationTask, Long>, JpaSpecificationExecutor {

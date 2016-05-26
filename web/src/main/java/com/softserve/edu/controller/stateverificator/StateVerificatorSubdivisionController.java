@@ -20,11 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Project system-calibration-devices
- * Created by bo4ek on 27.01.2016.
- */
-
 @RestController
 @RequestMapping(value = "/verificator/subdivision/", produces = "application/json")
 public class StateVerificatorSubdivisionController {

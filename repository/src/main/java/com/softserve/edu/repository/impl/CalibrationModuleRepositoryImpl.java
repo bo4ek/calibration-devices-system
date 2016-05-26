@@ -10,10 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-/**
- * Created by roman on 13.11.15.
- */
-
 @Repository
 public class CalibrationModuleRepositoryImpl implements CalibrationModuleRepositoryCustom {
 

@@ -6,9 +6,6 @@ import com.softserve.edu.entity.device.CalibrationModule;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Misha on 12/6/2015.
- */
 public class CalibrationModuleDTOTransformer {
 
     public static List<CalibrationModuleDTOLight> toDtofromList(List<CalibrationModule> list) {

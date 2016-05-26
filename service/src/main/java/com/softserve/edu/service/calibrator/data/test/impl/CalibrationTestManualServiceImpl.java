@@ -22,10 +22,6 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
-/**
- * Created by Misha on 12/13/2015.
- */
-
 @Setter
 @Service
 public class CalibrationTestManualServiceImpl implements CalibrationTestManualService {

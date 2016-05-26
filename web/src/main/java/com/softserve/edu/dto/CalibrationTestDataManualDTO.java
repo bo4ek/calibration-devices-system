@@ -6,9 +6,6 @@ import com.softserve.edu.entity.device.UnsuitabilityReason;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Created by Misha on 12/14/2015.
- */
 @Getter
 @Setter
 public class CalibrationTestDataManualDTO {

@@ -7,9 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.criteria.*;
 import java.util.Date;
 
-/**
- * Created by Pavlo on 02.11.2015.
- */
 public class CalibrationModuleSpecification {
 
     public static Specification<CalibrationModule> moduleDeviceType(String applicationFiled) {

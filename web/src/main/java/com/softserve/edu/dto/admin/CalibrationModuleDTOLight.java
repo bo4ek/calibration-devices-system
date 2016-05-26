@@ -4,10 +4,6 @@ import com.softserve.edu.entity.device.CalibrationModule;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Created by Misha on 12/12/2015.
- */
-
 @Setter
 @Getter
 public class CalibrationModuleDTOLight {

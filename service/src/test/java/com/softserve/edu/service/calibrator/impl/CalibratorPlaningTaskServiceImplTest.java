@@ -11,9 +11,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 
-/**
- * Created by Yurij Dvornyk on 20.10.2015.
- */
 @RunWith(MockitoJUnitRunner.class)
 @PrepareForTest(CalibratorPlaningTaskServiceImpl.class)
 public class CalibratorPlaningTaskServiceImplTest {

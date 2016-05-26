@@ -9,9 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Created by MAX on 25.07.2015.
- */
 @Repository
 public interface UploadBbiRepository extends CrudRepository<BbiProtocol, Long> {
 

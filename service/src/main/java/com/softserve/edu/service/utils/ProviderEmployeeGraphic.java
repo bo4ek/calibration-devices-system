@@ -2,9 +2,6 @@ package com.softserve.edu.service.utils;
 
 import java.util.List;
 
-/**
- * Created by MAX on 18.07.2015.
- */
 public class ProviderEmployeeGraphic {
 
     private String name;

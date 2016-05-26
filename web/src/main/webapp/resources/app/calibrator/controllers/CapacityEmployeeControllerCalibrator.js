@@ -1,6 +1,4 @@
-/**
- * Created by MAX on 30.07.2015.
- */
+
 angular
     .module('employeeModule')
 

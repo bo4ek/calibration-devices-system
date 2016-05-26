@@ -1,8 +1,5 @@
 package com.softserve.edu.service.admin;
 
-/**
- * Created by Dmytro on 8/20/2015.
- */
 public class UsersServiceTest {
 
  /*   @InjectMocks

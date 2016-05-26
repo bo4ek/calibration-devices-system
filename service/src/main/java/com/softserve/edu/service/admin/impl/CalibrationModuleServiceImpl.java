@@ -18,10 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-
-/**
- * Created by Pavlo on 02.11.2015.
- */
 @Service
 public class CalibrationModuleServiceImpl implements CalibrationModuleService {
     @Autowired

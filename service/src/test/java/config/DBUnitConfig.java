@@ -12,9 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Properties;
 
-/**
- * Created by Loc on 17.08.2015.
- */
 public class DBUnitConfig {//extends DBTestCase {
    /* protected IDatabaseTester tester;
     private Properties prop;

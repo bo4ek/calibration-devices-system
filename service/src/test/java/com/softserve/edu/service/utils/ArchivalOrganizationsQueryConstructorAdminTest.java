@@ -20,10 +20,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Misha on 10/26/2015.
- */
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ArchivalOrganizationsQueryConstructorAdmin.class)
 public class ArchivalOrganizationsQueryConstructorAdminTest {

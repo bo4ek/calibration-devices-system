@@ -9,11 +9,6 @@ import com.softserve.edu.entity.verification.Verification;
 import lombok.*;
 import com.softserve.edu.entity.verification.Verification.CalibrationTestResult;
 
-/**
- * Created by Misha on 12/11/2015.
- * Calibration Test Data Manual entity.
- * Contains detailed information about manual calibration test
- */
 @Entity
 @Getter
 @Setter

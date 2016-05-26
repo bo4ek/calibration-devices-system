@@ -1,8 +1,5 @@
 package com.softserve.edu.service.utils;
 
-/**
- * Created by Vasyl on 21.10.2015.
- */
 public class ExcelFileDTO {
 
     private String verificationId;

@@ -9,10 +9,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Project system-calibration-devices
- * Created by bo4ek on 27.01.2016.
- */
+
 @Entity
 @Getter
 @Setter

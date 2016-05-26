@@ -14,9 +14,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by lyubomyr on 21.10.2015.
- */
 public class DistrictServiceImplTest extends TestCase {
 
     @Mock

@@ -17,9 +17,6 @@ import javax.persistence.criteria.*;
 
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by vova on 20.08.15.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class NewVerificationsQueryConstructorProviderTest {
 

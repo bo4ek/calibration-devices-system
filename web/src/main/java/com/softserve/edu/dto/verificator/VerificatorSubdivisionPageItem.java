@@ -5,10 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Project system-calibration-devices
- * Created by bo4ek on 29.01.2016.
- */
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

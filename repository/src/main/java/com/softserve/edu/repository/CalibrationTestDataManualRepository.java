@@ -6,10 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by Misha on 12/13/2015.
- */
-
 @Repository
 public interface CalibrationTestDataManualRepository extends CrudRepository<CalibrationTestDataManual, Long> {
 

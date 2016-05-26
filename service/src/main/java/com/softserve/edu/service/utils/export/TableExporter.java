@@ -6,9 +6,6 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Yurko on 27.11.2015.
- */
 public abstract class TableExporter {
     void exportToStream(List<TableExportColumn> data, OutputStream output) throws Exception { }
 

@@ -1,8 +1,5 @@
 package com.softserve.edu.dto.admin;
 
-/**
- * Created by vova on 21.10.15.
- */
 public class UserFilterSearch {
 
     private String username;

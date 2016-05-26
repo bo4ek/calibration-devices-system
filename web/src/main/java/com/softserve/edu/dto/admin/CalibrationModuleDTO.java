@@ -8,11 +8,6 @@ import lombok.Setter;
 
 import java.util.*;
 
-/**
- * Created by roman on 07.11.15.
- *
- */
-
 @Setter
 @Getter
 public class CalibrationModuleDTO {

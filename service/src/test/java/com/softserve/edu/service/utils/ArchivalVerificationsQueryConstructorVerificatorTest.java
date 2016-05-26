@@ -26,9 +26,6 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Lyubomyr on 28.10.2015.
- */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ArchivalVerificationsQueryConstructorVerificator.class})
 public class ArchivalVerificationsQueryConstructorVerificatorTest {

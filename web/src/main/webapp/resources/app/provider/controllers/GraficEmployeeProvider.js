@@ -1,6 +1,4 @@
-/**
- * Created by MAX on 18.07.2015.
- */
+
 angular
     .module('employeeModule')
     .controller('GraficEmployeeProvider', ['$translate', '$scope', '$log', '$filter',

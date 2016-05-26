@@ -27,10 +27,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Created by roman on 08.11.15.
- */
-
 @RestController
 @RequestMapping(value = "/admin/calibration-module/")
 public class CalibrationModuleController {

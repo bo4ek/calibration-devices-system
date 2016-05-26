@@ -21,9 +21,6 @@ import java.util.TreeSet;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by Yurko on 25.10.2015.
- */
 @RunWith(MockitoJUnitRunner.class)
 @PrepareForTest(NewVerificationsQueryConstructorCalibrator.class)
 public class NewVerificationsQueryConstructorCalibratorTest {

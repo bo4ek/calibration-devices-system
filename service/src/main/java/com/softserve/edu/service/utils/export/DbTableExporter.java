@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Yurko on 18.12.2015.
- */
 public class DbTableExporter extends TableExporter {
     private String tableName;
 

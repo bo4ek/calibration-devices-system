@@ -8,9 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by vova on 23.09.15.
- */
 public class OrganizationEditPageDTOTransformer {
     public static List<OrganizationEditHistoryPageDTO> toDtoFromList(List<OrganizationEditHistory> list){
 

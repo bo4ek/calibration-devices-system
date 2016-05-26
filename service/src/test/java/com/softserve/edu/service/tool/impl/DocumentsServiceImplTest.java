@@ -30,10 +30,6 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-
-/**
- * Created by Pavlo on 21.10.2015.
- */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({FileParameters.class, FileFactory.class, DocumentFactory.class, DocumentsServiceImpl.class})
 

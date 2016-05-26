@@ -14,9 +14,6 @@ import java.net.URI;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Yurij Dvornyk on 21.10.2015.
- */
 public class FileOperationsImplTest {
 
     private FileOperationsImpl fileOperationsImpl = new FileOperationsImpl();

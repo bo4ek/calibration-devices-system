@@ -15,9 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Pavlo on 16.12.2015.
- */
 @RestController
 @RequestMapping(value = "/globalSearch")
 public class SavedFilterController {

@@ -11,9 +11,6 @@ import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Назік on 10/5/2015.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ServiceTestingConfig.class})
 public class RegionServiceTest {

@@ -1,6 +1,4 @@
-/**
- * Created by Lidiya on 09.02.2016.
- */
+
 angular
     .module('employeeModule')
     .factory('InitializeLibForDigitalSign', function () {

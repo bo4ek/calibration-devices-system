@@ -1,8 +1,5 @@
 package com.softserve.edu.service.utils;
 
-/**
- * Created by vova on 15.09.15.
- */
 public class OrganizationAdminDTO {
 
     private String username;

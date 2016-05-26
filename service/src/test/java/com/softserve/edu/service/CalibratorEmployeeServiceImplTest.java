@@ -35,11 +35,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Roman on 18.10.2015.
- *
- */
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({EmployeeDTO.class, CalibratorEmployeeServiceImpl.class, GraphicBuilder.class,
         GraphicBuilderMainPanel.class})

@@ -6,9 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/**
- * Created by Konyk on 30.07.2015.
- */
+
 @Repository
 public interface CalibrationTestIMGRepository extends CrudRepository<CalibrationTestIMG, Long>{
 

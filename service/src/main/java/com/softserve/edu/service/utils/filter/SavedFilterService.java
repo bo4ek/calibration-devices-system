@@ -6,9 +6,6 @@ import com.softserve.edu.entity.util.SavedFilter;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Pavlo on 11.12.2015.
- */
 public interface SavedFilterService {
     void addFilter(User user,String locationUrl,String filter,String name);
     void saveFilter(SavedFilter filter);

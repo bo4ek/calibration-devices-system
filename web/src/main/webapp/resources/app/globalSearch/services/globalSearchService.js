@@ -1,6 +1,4 @@
-/**
- * Created by Pavlo on 16.12.2015.
- */
+
 (function () {
         'use strict';
         angular.module('globalSearchModule')

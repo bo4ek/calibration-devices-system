@@ -9,9 +9,6 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * Created by Yurko on 28.11.2015.
- */
 public class ZipArchiver {
     static Logger logger = Logger.getLogger(ZipArchiver.class);
 

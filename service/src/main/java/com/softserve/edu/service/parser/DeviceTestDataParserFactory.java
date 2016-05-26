@@ -2,9 +2,6 @@ package com.softserve.edu.service.parser;
 
 import java.io.File;
 
-/**
- * Created by Taras on 15.09.2015.
- */
 public class DeviceTestDataParserFactory {
     public DeviceTestDataParser getParser(File f) {
         return getParser(f.getName());

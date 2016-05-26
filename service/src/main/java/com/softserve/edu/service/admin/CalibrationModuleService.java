@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by Pavlo on 02.11.2015.
- */
 public interface CalibrationModuleService {
     CalibrationModule addCalibrationModule(CalibrationModule calibrationModule);
 

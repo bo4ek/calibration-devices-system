@@ -17,10 +17,6 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 
-/**
- * Created by lyubomyr on 22.10.2015.
- */
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ProcessTimeChecker.class)
 public class ProcessTimeCheckerTest extends TestCase {

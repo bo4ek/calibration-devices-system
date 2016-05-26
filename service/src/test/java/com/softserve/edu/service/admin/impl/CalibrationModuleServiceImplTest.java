@@ -31,9 +31,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-/**
- * Created by Pavlo on 12.11.2015.
- */
 
 //@RunWith(PowerMockRunner.class)
 //@PrepareForTest({CalibrationModuleServiceImpl.class, Filter.class, CalibrationModuleRepository.class})

@@ -5,9 +5,6 @@ import com.softserve.edu.entity.user.User;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by MAX on 29.06.2015.
- */
 public class EmployeeDTO {
 
     private String username;

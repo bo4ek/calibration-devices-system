@@ -1,6 +1,4 @@
-/**
- * Created by Konyk on 10.08.2015.
- */
+
 angular
     .module('employeeModule')
     .controller('TestRejectControllerVerificator', ['$scope', '$log', '$modalInstance', '$rootScope',

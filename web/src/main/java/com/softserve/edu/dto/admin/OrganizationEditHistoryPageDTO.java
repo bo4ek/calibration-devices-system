@@ -3,9 +3,6 @@ package com.softserve.edu.dto.admin;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by vova on 23.09.15.
- */
 public class OrganizationEditHistoryPageDTO {
     private String date;
     private String name;

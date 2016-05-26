@@ -10,10 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Project system-calibration-devices
- * Created by bo4ek on 27.01.2016.
- */
 @Repository
 public interface VerificatorSubdivisionRepository extends PagingAndSortingRepository<VerificatorSubdivision, String>, JpaSpecificationExecutor {
 

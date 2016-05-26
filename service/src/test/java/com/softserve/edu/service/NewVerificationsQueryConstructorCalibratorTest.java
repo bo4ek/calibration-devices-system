@@ -27,11 +27,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.junit.Assert.*;
 
-/**
- * Created by Roman on 25.10.2015.
- *
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class NewVerificationsQueryConstructorCalibratorTest {
 

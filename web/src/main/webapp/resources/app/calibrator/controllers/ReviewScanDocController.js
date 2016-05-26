@@ -1,7 +1,3 @@
-/**
- * Created by Misha on 12/15/2015.
- */
-
 angular
     .module('employeeModule')
 

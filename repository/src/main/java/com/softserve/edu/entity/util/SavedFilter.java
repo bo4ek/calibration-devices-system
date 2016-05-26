@@ -6,9 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-/**
- * Created by Pavlo on 11.12.2015.
- */
 @Entity
 @Table(name = "SAVED_FILTER")
 @Getter

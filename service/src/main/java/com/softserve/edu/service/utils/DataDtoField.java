@@ -1,8 +1,5 @@
 package com.softserve.edu.service.utils;
 
-/**
- * Created by MAX on 20.07.2015.
- */
 public class DataDtoField {
     private String fromDate;
     private String toDate;

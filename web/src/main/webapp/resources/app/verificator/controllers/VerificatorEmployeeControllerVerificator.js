@@ -1,6 +1,4 @@
-/**
- * Created by Volodya NT on 05.10.2015.
- */
+
 angular
     .module('employeeModule')
 
