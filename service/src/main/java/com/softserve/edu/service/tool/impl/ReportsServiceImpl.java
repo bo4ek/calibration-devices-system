@@ -355,7 +355,7 @@ public class ReportsServiceImpl implements ReportsService {
 
 
     public String getTypeOfSupplyFromTemperature(Integer temperature, Verification verification) {
-        if (temperature == -1 && verification.getCounter() != null && verification.getCounter().getCounterType().getDevice() != null) {
+        if (temperature == -1 && verification.getCounter() != null && verification.getCounter().getCounterType() != null && verification.getCounter().getCounterType().getDevice() != null) {
             return verification.getCounter().getCounterType().getDevice().getDeviceType().equals(Device.DeviceType.WATER) ? Constants.WATER : Constants.THERMAL;
         } else if (temperature > 30) {
             return Constants.THERMAL;
