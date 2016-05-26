@@ -74,6 +74,12 @@
                                                popover-trigger="mouseenter"
                                                ng-click="openAddTest(verification)">
                                             </i>
+                                            <i class="fa fa-times-circle cancel_icon"
+                                               ng-show="hasPermissionToUnsing" type="button"
+                                               popover="{{'UNSIGN_PROTOCOL' | translate}}"
+                                               popover-trigger="mouseenter"
+                                               ng-click="unsignProtocol(verification.id)">
+                                            </i>
                                             <div class="ui simple icon dropdown fa-lg"
                                                  ng-controller="DocumentController"
                                                  ng-show="(verification.status == 'TEST_OK') || (verification.status == 'TEST_NOK')">

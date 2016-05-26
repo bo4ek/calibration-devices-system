@@ -239,6 +239,11 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     @Query("UPDATE Verification u SET u.queue = :queue WHERE u.id = :id ")
     void updateVerificationQueueById(@Param("queue") int queue, @Param("id") String id);
 
+    @Modifying
+    @Query("UPDATE Verification v SET v.signed = false, v.signedDocument = null, v.status = 'SENT_TO_VERIFICATOR', v.signProtocolDate = null " +
+            "where v.id = :id")
+    void unsignProtocol(@Param("id") String verificationId);
+
     Long countByCalibratorIdAndStatusAndCalibratorEmployeeUsername(Long calibratorId, Status status, String calibratorEmployeeUsername);
 
     Long countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status status, String calibratorEmployeeUsername);

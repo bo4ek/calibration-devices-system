@@ -490,6 +490,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verificationMap.put(Constants.CUSTOMER_ID, resultSet.getString("CustomerID"));
 
                     verificationMap.put(Constants.COMMENT, resultSet.getString("Note"));
+                    verificationMap.put(Constants.SERVICE_TYPE, resultSet.getString("serviceType"));
                 } catch (SQLException e) {
                     logger.warn("User was trying to upload old archive format ");
                 }
@@ -551,7 +552,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
         Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
-        Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
+        Long deviceId = getDeviceIdByDeviceTypeId(Integer.parseInt(verificationData.get(Constants.SERVICE_TYPE)));
         Device device = deviceService.getById(deviceId);
 
         Verification verification = new Verification(date, clientData, Status.CREATED_BY_CALIBRATOR, calibrator,
@@ -628,40 +629,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 symbol += " " + parts[i];
             }
         }
-        List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(symbol, standardSize);
-        CounterType resultCounterType;
-        switch (counterTypes.size()) {
-            case 0: {
-                throw new InvalidSymbolAndStandardSizeException();
-            }
-            case 1: {
-                resultCounterType = counterTypes.get(0);
-                break;
-            }
-            case 2: {
-                Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
-                Device.DeviceType deviceType = deviceService.getDeviceTypeById(deviceId);
-                resultCounterType = getCounterTypeByDeviceType(counterTypes, deviceType);
-                break;
-            }
-            default: {
-                resultCounterType = counterTypes.get(0);
-            }
-        }
+        CounterType resultCounterType = getCounterTypeBySymbolAndStandardSize(symbol, standardSize, deviceTestData);
         return new Counter(verificationData.get(Constants.YEAR),
                 verificationData.get(Constants.COUNTER_NUMBER), resultCounterType, verificationData.get(Constants.STAMP));
     }
 
-    private void updateCounterFromDeviceTestData(Counter counter, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
-        String sizeAndSymbol = deviceTestData.getCounterType1() + deviceTestData.getCounterType2();
-        String[] parts = sizeAndSymbol.split(" ");
-        String standardSize = parts[0] + " " + parts[1];
-        String symbol = parts[2];
-        if (parts.length > Constants.MIN_LENGTH) {
-            for (int i = Constants.MIN_LENGTH; i < parts.length; i++) {
-                symbol += " " + parts[i];
-            }
-        }
+    private CounterType getCounterTypeBySymbolAndStandardSize(String symbol, String standardSize, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
         List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(symbol, standardSize);
         CounterType resultCounterType = null;
         switch (counterTypes.size()) {
@@ -692,6 +665,21 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
             }
         }
+        return resultCounterType;
+    }
+
+    private void updateCounterFromDeviceTestData(Counter counter, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException {
+        String sizeAndSymbol = deviceTestData.getCounterType1() + deviceTestData.getCounterType2();
+        String[] parts = sizeAndSymbol.split(" ");
+        String standardSize = parts[0] + " " + parts[1];
+        String symbol = parts[2];
+        if (parts.length > Constants.MIN_LENGTH) {
+            for (int i = Constants.MIN_LENGTH; i < parts.length; i++) {
+                symbol += " " + parts[i];
+            }
+        }
+
+        CounterType resultCounterType = getCounterTypeBySymbolAndStandardSize(symbol, standardSize, deviceTestData);
         counter.setReleaseYear(String.valueOf(deviceTestData.getCounterProductionYear()));
         counter.setAccumulatedVolume(deviceTestData.getInitialCapacity());
         counter.setCounterType(resultCounterType);

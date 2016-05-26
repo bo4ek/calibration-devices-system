@@ -162,6 +162,8 @@ public interface Constants {
 
     // endregion
 
+    String SERVICE_TYPE = "Тип водопостачання";
+
     String HEX_OF_EMPTY_SYMBOL = "\u0000";
     String KYIV_CITY_NAME = "м. Київ";
 

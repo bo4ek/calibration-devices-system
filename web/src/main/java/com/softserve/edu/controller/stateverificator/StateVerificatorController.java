@@ -28,6 +28,8 @@ import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -253,6 +255,18 @@ public class StateVerificatorController {
         } else {
             return null;
         }
+    }
+
+    @RequestMapping(value = "unsign", method = RequestMethod.PUT)
+    public ResponseEntity unsignVerification(@RequestBody String verificationId, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        if(user != null) {
+            User loginedUser = userService.findOne(user.getUsername());
+            if (loginedUser.getUserRoles().contains(UserRole.STATE_VERIFICATOR_ADMIN)) {
+                stateVerificatorService.unsignProtocol(verificationId);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     /**

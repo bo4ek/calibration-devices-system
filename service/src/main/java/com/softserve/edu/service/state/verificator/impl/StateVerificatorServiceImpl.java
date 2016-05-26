@@ -117,6 +117,11 @@ public class StateVerificatorServiceImpl implements StateVerificatorService {
     }
 
     @Override
+    public void unsignProtocol(String verificationId) {
+        verificationRepository.unsignProtocol(verificationId);
+    }
+
+    @Override
     @Transactional
     public List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization) {
         Organization organization = organizationRepository.findOne(idOrganization);

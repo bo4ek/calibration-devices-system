@@ -843,5 +843,7 @@
     "REJECTED_BY_PROVIDER" : "Rejected by provider",
     "REJECTED_BY_CALIBRATOR" : "Rejected by calibrator",
     "MISSING_UNSUITABILITY_REASON": "Missing unsuitability reason",
-    "SHOW_ALL_TASKS": "Show all tasks"
+    "SHOW_ALL_TASKS": "Show all tasks",
+    "UNSIGN_PROTOCOL": "Unsign protocol",
+    "PROTOKOL_SUCCESSFULLY_UNSIGNED": "Protocol successfully unsigned"
 }

@@ -22,6 +22,8 @@ public interface StateVerificatorService {
     @Transactional
     void unassignVerificatorEmployee(String verificationId);
 
+    void unsignProtocol(String verificationId);
+
     List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization);
 
     Date convertToDate(String date);

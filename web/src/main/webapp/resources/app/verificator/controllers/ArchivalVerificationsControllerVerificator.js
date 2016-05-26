@@ -1,12 +1,22 @@
 angular
     .module('employeeModule')
     .controller('ArchivalVerificationsControllerVerificator', ['$scope', '$modal', '$log', 'VerificationServiceVerificator',
-        'ngTableParams', '$filter', '$rootScope', '$timeout', '$translate', '$location',
+        'ngTableParams', '$filter', '$rootScope', '$timeout', '$translate', '$location', 'toaster',
 
         function ($scope, $modal, $log, verificationServiceVerificator, ngTableParams, $filter, $rootScope, $timeout,
-                  $translate, $location) {
+                  $translate, $location, toaster) {
 
             $scope.resultsCount = 0;
+            $scope.hasPermissionToUnsing = false;
+
+            function checkPermissionToUnSing() {
+                verificationServiceVerificator.getIfEmployeeStateVerificator()
+                    .then(function(response) {
+                       $scope.hasPermissionToUnsing = !response.data;
+                    });
+            }
+
+            checkPermissionToUnSing();
 
             $scope.clearAll = function () {
                 $scope.selectedStatus.name = null;
@@ -175,5 +185,15 @@ angular
                     });
                 }
             };
+
+            $scope.unsignProtocol = function (verificationId) {
+                verificationServiceVerificator.unsignProtocol(verificationId)
+                    .then(function (response) {
+                        if (response.status == 200) {
+                            toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('PROTOKOL_SUCCESSFULLY_UNSIGNED'));
+                            $scope.tableParams.reload();
+                        }
+                    });
+            }
 
         }]);
