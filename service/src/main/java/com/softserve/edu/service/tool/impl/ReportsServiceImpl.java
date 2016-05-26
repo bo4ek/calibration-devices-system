@@ -95,6 +95,9 @@ public class ReportsServiceImpl implements ReportsService {
             case CALIBRATOR_VERIFICATION_RESULT_REPORTS:
                 data = getDataForCalibratorVerificationResultReport(organisationId, fromDate, toDate);
                 break;
+            case VERIFICATOR_VERIFICATION_RESULT_REPORTS:
+                data = getDataForVerificatorVerificationResultReport(organisationId, fromDate, toDate);
+                break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
         }
@@ -190,6 +193,17 @@ public class ReportsServiceImpl implements ReportsService {
         return getDataForVerificationResultReport(verifications, OrganizationType.CALIBRATOR);
     }
 
+    private List<TableExportColumn> getDataForVerificatorVerificationResultReport(Long organizationId, Date startDate, Date endDate) {
+        Organization verificator = organizationRepository.findOne(organizationId);
+        List<Verification> verifications;
+        if (startDate != null && endDate != null) {
+            verifications = verificationRepository.findByStateVerificatorAndVerificationDateBetween(verificator, startDate, endDate);
+        } else {
+            verifications = verificationRepository.findByStateVerificator(verificator);
+        }
+        return getDataForVerificationResultReport(verifications, OrganizationType.STATE_VERIFICATOR);
+    }
+
     /**
      * Prepares data for report "Звіт 3".
      *
@@ -225,6 +239,8 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> validUntil = new ArrayList<>(initializedCapacity);
         List<String> protocolsNumber = new ArrayList<>(initializedCapacity);
         List<String> providers = new ArrayList<>(initializedCapacity);
+        List<String> notes = new ArrayList<>(initializedCapacity);
+        List<String> counterNotes = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -236,7 +252,7 @@ public class ReportsServiceImpl implements ReportsService {
                 customerSurname.add(verification.getClientData().getLastName() != null ? verification.getClientData().getLastName() : empty);
                 customerName.add(verification.getClientData().getFirstName() != null ? verification.getClientData().getFirstName() : empty);
                 customerMiddleName.add(verification.getClientData().getMiddleName() != null ? verification.getClientData().getMiddleName() : empty);
-                phones.add(verification.getClientData().getPhone() != null ? verification.getClientData().getPhone() : empty);
+                phones.add(getPhones(verification));
 
                 if (verification.getClientData().getClientAddress() != null) {
                     cities.add(getCitiesFromAddress(verification.getClientData().getClientAddress()));
@@ -279,17 +295,20 @@ public class ReportsServiceImpl implements ReportsService {
             verificationNumbers.add(verification.getId());
             calibrators.add(getCalibratorFromVerification(verification));
             providers.add(getProviderFromVerification(verification));
+            notes.add(getNotes(verification));
+            counterNotes.add(getCounterNotes(verification));
             ++i;
         }
 
         // region Fill map
-
         List<TableExportColumn> data = new ArrayList<>(initializedCapacity);
         data.add(new TableExportColumn(Constants.NUMBER_IN_SEQUENCE_SHORT, number));
         if (organization.equals(OrganizationType.PROVIDER)) {
             data.add(new TableExportColumn(Constants.LAB_NAME, calibrators));
         } else if (organization.equals(OrganizationType.CALIBRATOR)) {
             data.add(new TableExportColumn(Constants.PROVIDER, providers));
+        } else if (organization.equals(OrganizationType.STATE_VERIFICATOR)) {
+            data.add(new TableExportColumn(Constants.LAB_NAME, calibrators));
         }
         data.add(new TableExportColumn(Constants.VERIFICATION_TIME, verificationTime));
         data.add(new TableExportColumn(Constants.DOCUMENT_DATE, signProtocolDate));
@@ -304,22 +323,49 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.STREET, streets));
         data.add(new TableExportColumn(Constants.BUILDING, buildings));
         data.add(new TableExportColumn(Constants.FLAT, flats));
-        data.add(new TableExportColumn(Constants.PHONE_NUMBER, phones));
-        data.add(new TableExportColumn(Constants.STAMP, stamps));
+        if (organization.equals(OrganizationType.CALIBRATOR) | organization.equals(OrganizationType.PROVIDER)) {
+            data.add(new TableExportColumn(Constants.PHONE_NUMBER, phones));
+            data.add(new TableExportColumn(Constants.STAMP, stamps));
+        }
+        if (organization.equals(OrganizationType.CALIBRATOR)) {
+            data.add(new TableExportColumn(Constants.NOTES, notes));
+        }
         data.add(new TableExportColumn(Constants.COUNTER_NUMBER, counterNumbers));
         data.add(new TableExportColumn(Constants.COUNTER_TYPE, counterTypes));
         data.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, counterTypeSizes));
         data.add(new TableExportColumn(Constants.YEAR, years));
-        data.add(new TableExportColumn(Constants.COUNTER_CAPACITY, counterCapacity));
+        if (organization.equals(OrganizationType.CALIBRATOR) | organization.equals(OrganizationType.PROVIDER)) {
+            data.add(new TableExportColumn(Constants.COUNTER_CAPACITY, counterCapacity));
+        }
+        if (organization.equals(OrganizationType.CALIBRATOR)) {
+            data.add(new TableExportColumn(Constants.COUNTERNOTES, counterNotes));
+        }
         data.add(new TableExportColumn(Constants.TEMPERATURE, temperatures));
         data.add(new TableExportColumn(Constants.VERIFICATION_NUMBER, verificationNumbers));
         data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, verificationStatus));
         data.add(new TableExportColumn(Constants.VALID_UNTIL, validUntil));
         // endregion
-
         return data;
     }
 
+
+    public String getCounterNotes(Verification verification) {
+        return verification.getComment() != null ? verification.getComment() : " ";
+    }
+
+    public String getNotes(Verification verification) {
+        return verification.getInfo() != null && verification.getInfo().getNotes() != null ? verification.getInfo().getNotes() : " ";
+    }
+
+    public String getPhones(Verification verification) {
+        if (verification.getClientData().getPhone() != null) {
+            if (verification.getClientData().getSecondPhone() != null) {
+                return verification.getClientData().getPhone() + ", " + verification.getClientData().getSecondPhone();
+            }
+            return verification.getClientData().getPhone();
+        }
+        return " ";
+    }
 
     public String getCitiesFromAddress(Address address) {
         return (address.getLocality() != null && address.getLocality().substring(0, 4).equals(Constants.KYIV_CITY_NAME.substring(3)) ? address.getLocality().substring(0, 4) : address.getLocality());

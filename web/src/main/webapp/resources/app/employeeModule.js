@@ -215,6 +215,11 @@
                         templateUrl: 'resources/app/calibrator/views/reports-calibrator.html',
                         controller: 'DocumentController'
                     })
+                    .state("reports-verificator", {
+                        url: '/verifications/reports',
+                        templateUrl: 'resources/app/verificator/views/reports-verificator.html',
+                        controller: 'DocumentController'
+                    })
                 ;
 
                 /*

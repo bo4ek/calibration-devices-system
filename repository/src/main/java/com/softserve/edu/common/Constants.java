@@ -113,6 +113,8 @@ public interface Constants {
     String STREET = "Вулиця";
     String STREET_ID = "Id вулиці";
     String COMMENT = "Примітка";
+    String NOTES = "Коментар";
+    String COUNTERNOTES = "Стан лічильника";
 
     // endregion
 

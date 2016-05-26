@@ -310,6 +310,11 @@
                                 <i class="fa fa-desktop"></i><span translate="VERIFICATION_TEAMS_LISTING"></span>
                             </a>
                         </li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="reports-verificator"><i class="fa fa-file-excel-o"></i><span
+                                    translate="REPORTS">
+                           </span></a>
+                        </li>
                     </sec:authorize>
 
                     <sec:authorize url="/provider">
