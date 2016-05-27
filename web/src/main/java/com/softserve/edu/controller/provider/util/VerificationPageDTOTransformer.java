@@ -101,6 +101,7 @@ public class VerificationPageDTOTransformer {
                 dto.setTime(verification.getInfo().getTimeFrom() + "-" + verification.getInfo().getTimeTo());
                 dto.setServiceability(verification.getInfo().getServiceability());
                 dto.setNoWaterToDate(verification.getInfo().getNoWaterToDate());
+                dto.setNotes(verification.getInfo().getNotes());
             }
             dto.setSealPresence(verification.isSealPresence());
             dto.setVerificationWithDismantle(verification.isVerificationWithDismantle());

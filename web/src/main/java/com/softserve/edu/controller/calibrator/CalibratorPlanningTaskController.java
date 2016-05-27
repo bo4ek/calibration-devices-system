@@ -271,6 +271,7 @@ public class CalibratorPlanningTaskController {
                                                                                                @PathVariable String sortCriteria, @PathVariable String sortOrder,
                                                                                                VerificationPlanningTaskFilterSearch searchData,
                                                                                                @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+
         ListToPageTransformer<Verification> queryResult = verificationService
                 .findPageOfPlaningTaskVerificationsByCalibratorId(
                         employeeUser.getOrganizationId(),
@@ -291,6 +292,7 @@ public class CalibratorPlanningTaskController {
                         searchData.getSealPresence(),
                         searchData.getTelephone(),
                         searchData.getVerificationWithDismantle(),
+                        searchData.getNotes(),
                         sortCriteria,
                         sortOrder);
         List<VerificationPlanningTaskDTO> content = VerificationPageDTOTransformer.toDoFromPageContent(queryResult.getContent());

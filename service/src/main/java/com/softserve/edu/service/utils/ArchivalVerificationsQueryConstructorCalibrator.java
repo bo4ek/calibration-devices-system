@@ -179,7 +179,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
     public static CriteriaQuery<Verification> buildSearchPlaningTaskQuery(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
                                                                           String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
-                                                                          String telephone, String verificationWithDismantle, String sortCriteria, String sortOrder, EntityManager em) {
+                                                                          String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
@@ -189,7 +189,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         Join<Verification, AdditionalInfo> additionalInfoJoin = root.join("info");
 
         Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicatePlannedTask(root, cb, organizationId, date, endDate, client_full_name, provider, district,
-                street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, additionalInfoJoin);
+                street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, notes, additionalInfoJoin);
 
         if ((sortCriteria != null) && (sortOrder != null)) {
             criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
@@ -203,7 +203,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
     private static Predicate buildPredicatePlannedTask(Root<Verification> root, CriteriaBuilder cb, Long organizationId, String startDateToSearch, String endDateToSearch, String client_full_name,
                                                        String provider, String district, String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate,
-                                                       String sealPresence, String telephone, String verificationWithDismantle, Join<Verification, AdditionalInfo> additionalInfoJoin) {
+                                                       String sealPresence, String phone, String verificationWithDismantle, String notes, Join<Verification, AdditionalInfo> additionalInfoJoin) {
 
         Predicate queryPredicate = cb.equal(root.get("calibrator"), organizationId);
         DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -252,7 +252,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
 
         if (dateOfVerif != null && checkString(dateOfVerif) && dateOfVerif.length() == 8) {
-            LocalDate date = null;
+            LocalDate date;
             try {
                 date = LocalDate.parse(dateOfVerif, baseDateTimeFormatter);
                 queryPredicate = cb.and(cb.equal(additionalInfoJoin.get("dateOfVerif"), java.sql.Date.valueOf(date)), queryPredicate);
@@ -263,7 +263,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         if (dateOfVerif != null && checkString(dateOfVerif) && dateOfVerif.length() == 4) {
             LocalDateTime timePoint = LocalDateTime.now();
-            LocalDate date = null;
+            LocalDate date;
             try {
                 date = LocalDate.parse(timePoint.getYear() + dateOfVerif, baseDateTimeFormatter);
                 queryPredicate = cb.and(cb.equal(additionalInfoJoin.get("dateOfVerif"), java.sql.Date.valueOf(date)), queryPredicate);
@@ -273,7 +273,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
 
         if (noWaterToDate != null && noWaterToDate.length() == 8 && checkString(noWaterToDate)) {
-            LocalDate date = null;
+            LocalDate date;
             try {
                 date = LocalDate.parse(noWaterToDate, baseDateTimeFormatter);
                 queryPredicate = cb.and(cb.equal(additionalInfoJoin.get("noWaterToDate"), java.sql.Date.valueOf(date)), queryPredicate);
@@ -283,7 +283,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
 
         if (noWaterToDate != null && noWaterToDate.length() == 4 && checkString(noWaterToDate)) {
-            LocalDate date = null;
+            LocalDate date;
             LocalDateTime timePoint = LocalDateTime.now();
             try {
                 date = LocalDate.parse(timePoint.getYear() + noWaterToDate, baseDateTimeFormatter);
@@ -291,6 +291,10 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
             } catch (Exception pe) {
                 logger.error("Cannot parse date", pe);
             }
+        }
+
+        if (notes != null && notes.length() > 0) {
+            queryPredicate = cb.and(cb.like(additionalInfoJoin.get("notes"), "%" + notes + "%"), queryPredicate);
         }
 
         if ((client_full_name != null) && (client_full_name.length() > 0)) {
@@ -318,8 +322,8 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
             queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("flat"), "%" + flat + "%"), queryPredicate);
         }
 
-        if ((telephone != null) && (telephone.length() > 0)) {
-            queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("phone"), "%" + telephone + "%"), queryPredicate);
+        if ((phone != null) && (phone.length() > 0)) {
+            queryPredicate = cb.and(cb.like(root.get("clientData").get("phone"), "%" + phone + "%"), queryPredicate);
         }
 
         return queryPredicate;
@@ -331,7 +335,6 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
                                                     String street, String building, String flat, String verificationId) {
 
         Predicate queryPredicate = cb.equal(calibratorJoin.get("id"), employeeId);
-
 
 
         if (startDateToSearch != null && endDateToSearch != null) {
@@ -389,7 +392,6 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         }
 
 
-
         return queryPredicate;
     }
 
@@ -411,14 +413,14 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
     public static CriteriaQuery<Long> buildCountPlaningTaskQuery(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
                                                                  String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
-                                                                 String telephone, String verificationWithDismantle, String sortCriteria, String sortOrder, EntityManager em) {
+                                                                 String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder, EntityManager em) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         ;
         Root<Verification> root = countQuery.from(Verification.class);
         Join<Verification, AdditionalInfo> additionalInfoJoin = root.join("info");
         Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicatePlannedTask(root, cb, organizationId, date, endDate, client_full_name, provider, district,
-                street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, additionalInfoJoin);
+                street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, notes, additionalInfoJoin);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
         return countQuery;
