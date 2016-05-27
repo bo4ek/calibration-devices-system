@@ -9,12 +9,16 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Setter
 @Getter
+@ToString
+@NoArgsConstructor
 public class VerificationDTO extends ClientStageVerificationDTO {
 
     private String id;
@@ -24,6 +28,10 @@ public class VerificationDTO extends ClientStageVerificationDTO {
     private String device;
     private String deviceNumber;
     private String counterNumber;
+    private String counterSymbol;
+    private String counterStandartSize;
+    private String counterRealiseYear;
+    private String counterManufacturer;
     private String provider;
     private String providerEmployee;
     private String calibrator;
@@ -34,9 +42,6 @@ public class VerificationDTO extends ClientStageVerificationDTO {
     private Address calibratorAddress;
     private String rejectedMessage;
     //private String comment;
-
-    public VerificationDTO() {
-    }
 
     public VerificationDTO(ClientData clientData, String id, Date initialDate, Date expirationDate, Status status,
                            Organization calibrator, User calibratorEmployee, Device device, Organization provider,
@@ -50,20 +55,11 @@ public class VerificationDTO extends ClientStageVerificationDTO {
         this.device = device == null ? "" : device.getDeviceType().name();
         this.deviceNumber = device == null ? "" : " : " + device.getNumber();
         this.provider = provider == null ? "" : provider.getName();
-        if (providerEmployee != null) {
-            if (providerEmployee.getMiddleName() != null) {
-                this.providerEmployee = providerEmployee.getLastName() + " " + providerEmployee.getFirstName() +
-                        " " + providerEmployee.getMiddleName();
-            } else {
-                this.providerEmployee = providerEmployee.getLastName() + " " + providerEmployee.getFirstName();
-            }
-        }
+        this.providerEmployee = providerEmployee == null ? "" : providerEmployee.getLastName() + " " + providerEmployee.getFirstName() + " " + providerEmployee.getMiddleName();
         this.calibrator = calibrator == null ? "" : calibrator.getName();
-        this.calibratorEmployee = calibratorEmployee == null ? "" : calibratorEmployee.getFirstName() + " "
-                + calibratorEmployee.getLastName() + " " + calibratorEmployee.getMiddleName();
+        this.calibratorEmployee = calibratorEmployee == null ? "" : calibratorEmployee.getLastName() + " " + calibratorEmployee.getFirstName() + " " + calibratorEmployee.getMiddleName();
         this.stateVerificator = stateVerificator == null ? "" : stateVerificator.getName();
-        this.stateVerificatorEmployee = stateVerificatorEmployee == null ? "" : stateVerificatorEmployee.getFirstName() + " "
-                + stateVerificatorEmployee.getLastName();
+        this.stateVerificatorEmployee = stateVerificatorEmployee == null ? "" : stateVerificatorEmployee.getLastName() + " " + stateVerificatorEmployee.getFirstName() + " " + stateVerificatorEmployee.getMiddleName();
         this.providerAddress = (provider == null) ? null : provider.getAddress();
         this.calibratorAddress = (calibrator == null) ? null : calibrator.getAddress();
     }
@@ -85,6 +81,12 @@ public class VerificationDTO extends ClientStageVerificationDTO {
         this(clientData, id, initialDate, expirationDate, status, calibrator, calibratorEmployee, device, provider,
                 providerEmployee, stateVerificator, stateVerificatorEmployee, rejectedMessage);
         this.counterNumber = counter.getNumberCounter();
+        if (counter.getCounterType() != null) {
+            this.counterSymbol = counter.getCounterType().getSymbol();
+            this.counterStandartSize = counter.getCounterType().getStandardSize();
+            this.counterRealiseYear = counter.getReleaseYear();
+            this.counterManufacturer = counter.getCounterType().getManufacturer();
+        }
     }
 
     /**
@@ -98,22 +100,5 @@ public class VerificationDTO extends ClientStageVerificationDTO {
         this(clientData, id, initialDate, expirationDate, status, calibrator, calibratorEmployee, device,
                 provider, providerEmployee, stateVerificator, stateVerificatorEmployee, rejectedMessage);
         super.setComment(comment);
-    }
-
-    @Override
-    public String toString() {
-        return "VerificationDTO{" +
-                "id='" + id + '\'' +
-                ", status=" + status +
-                ", initialDate=" + initialDate +
-                ", expirationDate=" + expirationDate +
-                ", device='" + device + '\'' +
-                ", provider='" + provider + '\'' +
-                ", providerEmployee='" + providerEmployee + '\'' +
-                ", calibrator='" + calibrator + '\'' +
-                ", calibratorEmployee='" + calibratorEmployee + '\'' +
-                ", stateVerificator='" + stateVerificator + '\'' +
-                ", stateVerificatorEmployee='" + stateVerificatorEmployee + '\'' +
-                '}';
     }
 }

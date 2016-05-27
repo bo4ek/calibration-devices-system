@@ -16,12 +16,14 @@
 
         <tr>
             <th>{{'COUNTER_' | translate}}</th>
-            <th>{{verificationData.device | translate}}{{verificationData.counterNumber}}</th>
+            <th>{{verificationData.device | translate}}, {{verificationData.counterSymbol}}, {{verificationData.counterStandartSize}}, {{verificationData.counterNumber}},
+                {{verificationData.counterRealiseYear}}, {{verificationData.counterManufacturer}}
+            </th>
         </tr>
 
         <tr>
             <th>{{'VERIFICATION_EXPIRATION_DATE' | translate}}</th>
-            <th>{{verificationData.expirationDate}}</th>
+            <th>{{verificationData.expirationDate | date: 'dd-MM-yyyy'}}</th>
         </tr>
 
         <tr>
