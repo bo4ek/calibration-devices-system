@@ -120,7 +120,7 @@
             if (status != null) {
                 queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(status.trim())), queryPredicate);
             } else {
-                queryPredicate = cb.and(Status.TEST_COMPLETED.getQueryPredicate(root, cb), queryPredicate);
+                queryPredicate = cb.and(root.get("status").in(Arrays.asList(Status.TEST_COMPLETED, Status.SENT_TO_VERIFICATOR)), queryPredicate);
             }
 
             queryPredicate = cb.and(cb.equal(joinSearch.get("id"), verificatorId), queryPredicate);

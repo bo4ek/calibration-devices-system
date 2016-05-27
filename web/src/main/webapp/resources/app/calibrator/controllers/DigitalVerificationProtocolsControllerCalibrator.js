@@ -120,9 +120,7 @@ angular
             };
 
             $scope.statusData = [
-                {id: 'IN_PROGRESS', label: $filter('translate')('IN_PROGRESS')},
-                {id: 'TEST_PLACE_DETERMINED', label: $filter('translate')('TEST_PLACE_DETERMINED')},
-                {id: 'SENT_TO_TEST_DEVICE', label: $filter('translate')('SENT_TO_TEST_DEVICE')},
+                {id: 'SENT_TO_VERIFICATOR', label: $filter('translate')('SENT_TO_VERIFICATOR')},
                 {id: 'TEST_COMPLETED', label: $filter('translate')('TEST_COMPLETED')}
             ];
 

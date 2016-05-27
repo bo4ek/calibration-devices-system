@@ -24,8 +24,8 @@
                                    class="table table-bordered table-hover users_table">
 
                                 <tbody>
-                                <tr ng-repeat="verification in $data">
-                                    <td data-title="''"><input type="checkbox" ng-model="checked"
+                                <tr ng-repeat="verification in $data" ng-class="{'sent-to-provider': verification.status=='SENT_TO_VERIFICATOR'}">
+                                    <td data-title="''"><input ng-if="verification.status=='TEST_COMPLETED'" type="checkbox" ng-model="checked"
                                                                ng-click="resolveVerificationId(verification.id)"
                                     />
                                     </td>
@@ -58,6 +58,7 @@
                                     </td>
                                     <td data-title="'ACTIONS' | translate" style="width: 12%" class="control_buttons">
                                         <i class="fa fa-info-circle info_icon"
+                                           ng-show="verification.status=='TEST_COMPLETED'"
                                            popover="{{'DETAIL_INFO' | translate}}"
                                            popover-trigger="mouseenter"
                                            ng-click="openDetails(verification.id)">
