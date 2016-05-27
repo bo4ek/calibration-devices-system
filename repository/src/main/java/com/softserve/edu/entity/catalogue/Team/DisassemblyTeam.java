@@ -19,6 +19,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "DISASSEMBLY_TEAM")
+@ToString
 public class DisassemblyTeam {
 
     @Setter(AccessLevel.PRIVATE)
@@ -70,18 +71,5 @@ public class DisassemblyTeam {
         this.leaderPhone = leaderPhone;
         this.leaderEmail = leaderEmail;
         this.organization = organization;
-    }
-
-    @Override
-    public String toString() {
-        return "DisassemblyTeam{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", effectiveTo=" + effectiveTo +
-                ", specialization=" + specialization +
-                ", leaderFullName='" + leaderFullName + '\'' +
-                ", leaderPhone='" + leaderPhone + '\'' +
-                ", leaderEmail='" + leaderEmail + '\'' +
-                '}';
     }
 }
