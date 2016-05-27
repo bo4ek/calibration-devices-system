@@ -123,7 +123,6 @@ angular
                     $scope.statusData[2].label = 'Sent to test device';
                     $scope.statusData[3].label = 'Test completed';
                     $scope.statusData[4].label = 'Sent to dismantling team';
-
                 }
             };
 
@@ -251,7 +250,6 @@ angular
                         }
                         params.filter().date = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                         params.filter().endDate = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
-                        //var globalSearchParamsString=JSON.stringify($scope.globalSearchParams)+"";
                         var searchParams = {};
                         searchParams.globalSearchParams = $scope.globalSearchParams;
                         searchParams.newVerificationsFilterSearch = params.filter();
@@ -704,7 +702,7 @@ angular
                         }
                     }
                 });
-                
+
                 modalInstance.result.then(function (reason) {
                     $log.info(verificationId, reason.name.id);
                     verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id).then(function (data) {

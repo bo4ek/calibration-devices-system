@@ -24,4 +24,5 @@ public class VerificationPlanningTaskFilterSearch {
     private String sealPresence;
     private String telephone;
     private String verificationWithDismantle;
+    private String notes;
 }

@@ -27,14 +27,11 @@ public interface VerificationService {
 
     Verification findById(String code);
 
-    Page<Verification> findPageOfAllVerificationsByProviderId(Long providerId, int pageNumber,
-                                                              int itemsPerPage);
+    Page<Verification> findPageOfAllVerificationsByProviderId(Long providerId, int pageNumber, int itemsPerPage);
 
-    Page<Verification> findPageOfAllVerificationsByCalibratorId(Long calibratorId, int pageNumber,
-                                                                int itemsPerPage);
+    Page<Verification> findPageOfAllVerificationsByCalibratorId(Long calibratorId, int pageNumber, int itemsPerPage);
 
-    Page<Verification> findPageOfAllVerificationsByStateVerificatorId(Long stateVerificatorId, int pageNumber,
-                                                                      int itemsPerPage);
+    Page<Verification> findPageOfAllVerificationsByStateVerificatorId(Long stateVerificatorId, int pageNumber, int itemsPerPage);
 
     Long findCountOfNewVerificationsByCalibratorId(Long calibratorId);
 
@@ -229,5 +226,5 @@ public interface VerificationService {
 
     ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
                                                                                          String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
-                                                                                         String telephone, String verificationWithDismantle, String sortCriteria, String sortOrder);
+                                                                                         String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder);
 }

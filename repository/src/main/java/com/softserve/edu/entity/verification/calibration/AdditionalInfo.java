@@ -1,10 +1,7 @@
 package com.softserve.edu.entity.verification.calibration;
 
 import com.softserve.edu.entity.verification.Verification;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -15,6 +12,7 @@ import java.util.Date;
 @Table(name = "ADDITIONAL_INFO")
 @Getter
 @Setter
+@ToString
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 public class AdditionalInfo {
@@ -31,7 +29,6 @@ public class AdditionalInfo {
     private Date dateOfVerif;
 
     private LocalTime timeFrom;
-
     private LocalTime timeTo;
 
     private boolean serviceability;
@@ -51,12 +48,11 @@ public class AdditionalInfo {
         this.doorCode = doorCode;
         this.floor = floor;
         this.dateOfVerif = dateOfVerif;
-        this.timeFrom = timeFrom;
-        this.timeTo = timeTo;
         this.serviceability = serviceability == null ? false : serviceability;
         this.noWaterToDate = noWaterToDate;
         this.notes = notes;
         this.verification = verification;
+        setTimeIfDateOfVerifIsnotNullWithouParsing(timeFrom, timeTo);
     }
 
     public AdditionalInfo(String entrance,String doorCode, String floor, Long dateOfVerif, Boolean serviceability,
@@ -69,8 +65,7 @@ public class AdditionalInfo {
         this.serviceability = serviceability == null ? false : serviceability;
         this.noWaterToDate = (noWaterToDate != null) ? new Date(noWaterToDate) : null;
         this.notes = notes;
-        this.timeFrom = (timeFrom != null) ? LocalTime.parse(timeFrom) : null;
-        this.timeTo = (timeTo != null) ? LocalTime.parse(timeTo) : null;
+        setTimeIfDateOfVerifIsnotNull(timeFrom, timeTo);
     }
 
     public AdditionalInfo(int entrance,int doorCode, int floor, Long dateOfVerif, Boolean serviceability,
@@ -82,8 +77,7 @@ public class AdditionalInfo {
         this.serviceability = serviceability == null ? false : serviceability;
         this.noWaterToDate = (noWaterToDate != null) ? new Date(noWaterToDate) : null;
         this.notes = notes;
-        this.timeFrom = (timeFrom != null) ? LocalTime.parse(timeFrom) : null;
-        this.timeTo = (timeTo != null) ? LocalTime.parse(timeTo) : null;
+        setTimeIfDateOfVerifIsnotNull(timeFrom, timeTo);
     }
 
     public Boolean getServiceability() {
@@ -140,20 +134,17 @@ public class AdditionalInfo {
         }
     }
 
-    @Override
-    public String toString() {
-        return "AdditionalInfo{" +
-                "id=" + id +
-                ", entrance=" + entrance +
-                ", doorCode=" + doorCode +
-                ", floor=" + floor +
-                ", dateOfVerif=" + dateOfVerif +
-                ", timeFrom=" + timeFrom +
-                ", timeTo=" + timeTo +
-                ", serviceability=" + serviceability +
-                ", noWaterToDate=" + noWaterToDate +
-                ", notes='" + notes + '\'' +
-                ", verification=" + verification +
-                '}';
+    private void setTimeIfDateOfVerifIsnotNull(String timeFrom, String timeTo) {
+        if (this.dateOfVerif != null) {
+            this.timeFrom = (timeFrom != null) ? LocalTime.parse(timeFrom) : null;
+            this.timeTo = (timeTo != null) ? LocalTime.parse(timeTo) : null;
+        }
+    }
+
+    private void setTimeIfDateOfVerifIsnotNullWithouParsing(LocalTime timeFrom, LocalTime timeTo) {
+        if (this.dateOfVerif != null) {
+            this.timeFrom = timeFrom;
+            this.timeTo = timeTo;
+        }
     }
 }
