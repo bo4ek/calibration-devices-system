@@ -11,7 +11,7 @@ import java.util.Date;
 @Entity
 @Table(name = "ADDITIONAL_INFO")
 @Getter
-@Setter
+
 @ToString
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
@@ -65,7 +65,7 @@ public class AdditionalInfo {
         this.serviceability = serviceability == null ? false : serviceability;
         this.noWaterToDate = (noWaterToDate != null) ? new Date(noWaterToDate) : null;
         this.notes = notes;
-        setTimeIfDateOfVerifIsnotNull(timeFrom, timeTo);
+        setTimeIfDateOfVerifIsnotNull(dateOfVerif, timeFrom, timeTo);
     }
 
     public AdditionalInfo(int entrance,int doorCode, int floor, Long dateOfVerif, Boolean serviceability,
@@ -77,7 +77,7 @@ public class AdditionalInfo {
         this.serviceability = serviceability == null ? false : serviceability;
         this.noWaterToDate = (noWaterToDate != null) ? new Date(noWaterToDate) : null;
         this.notes = notes;
-        setTimeIfDateOfVerifIsnotNull(timeFrom, timeTo);
+
     }
 
     public Boolean getServiceability() {
@@ -128,14 +128,18 @@ public class AdditionalInfo {
         this.timeTo = (timeTo != null) ? LocalTime.parse(timeTo) : null;
     }
 
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public void setServiceability(Boolean serviceability) {
         if (serviceability != null) {
             this.serviceability = serviceability;
         }
     }
 
-    private void setTimeIfDateOfVerifIsnotNull(String timeFrom, String timeTo) {
-        if (this.dateOfVerif != null && timeFrom != null && timeTo != null) {
+    private void setTimeIfDateOfVerifIsnotNull(Long dateOfVerif, String timeFrom, String timeTo) {
+        if (dateOfVerif != null && timeFrom != null && timeTo != null) {
             this.timeFrom = LocalTime.parse(timeFrom);
             this.timeTo = LocalTime.parse(timeTo);
         }

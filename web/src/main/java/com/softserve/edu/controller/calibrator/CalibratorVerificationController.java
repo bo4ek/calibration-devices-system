@@ -127,7 +127,6 @@ public class CalibratorVerificationController {
             updateVerificationData(v, verificationDTO, calibrator, updateAll);
             try {
                 verificationService.saveVerification(v);
-                logger.info("Verification was saved with parameters: " + verification);
             } catch (Exception e) {
                 logger.error("GOT EXCEPTION WHILE UPDATING VERIFICATION", e);
                 httpStatus = HttpStatus.CONFLICT;
@@ -689,7 +688,6 @@ public class CalibratorVerificationController {
     @RequestMapping(value = "saveInfo", method = RequestMethod.PUT)
     public ResponseEntity editAddInfo(@RequestBody AdditionalInfoDTO infoDTO) {
         HttpStatus httpStatus = HttpStatus.OK;
-
         try {
             verificationService.editAddInfo(infoDTO.getEntrance(), infoDTO.getDoorCode(), infoDTO.getFloor(),
                     infoDTO.getDateOfVerif(), infoDTO.getTimeFrom(), infoDTO.getTimeTo(), infoDTO.isServiceability(), infoDTO.getNoWaterToDate(),
@@ -826,7 +824,7 @@ public class CalibratorVerificationController {
         info.setServiceability(verificationDTO.getServiceability());
         info.setNoWaterToDate(verificationDTO.getNoWaterToDate());
         info.setNotes(verificationDTO.getNotes());
-        if (verificationDTO.getTimeFrom() != null) {
+        if (verificationDTO.getTimeFrom() != null && verificationDTO.getDateOfVerif() != null) {
             info.setTimeFrom(verificationDTO.getTimeFrom());
             info.setTimeTo(verificationDTO.getTimeTo());
         }

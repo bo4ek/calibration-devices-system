@@ -24,7 +24,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "task")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity

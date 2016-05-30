@@ -17,7 +17,6 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-@ToString
 public class CalibrationTask {
 
     @Id
