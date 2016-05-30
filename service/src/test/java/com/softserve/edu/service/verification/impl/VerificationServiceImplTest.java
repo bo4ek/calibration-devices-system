@@ -291,11 +291,14 @@ public class VerificationServiceImplTest {
         String employeeName = "employeeName";
         String sortCriteria = "sortCriteria";
         String sortOrder = "sortOrded";
+        String building = "building";
+        String flat = "flat";
+        String calibratorName = "calibratorName";
         User providerEmployee = mock(User.class);
 
         PowerMockito.mockStatic(ArchivalVerificationsQueryConstructorProvider.class);
-        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildSearchQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, employeeName, sortCriteria, sortOrder, providerEmployee, mockEntityManager)).thenReturn(criteriaQuery);
-        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildCountQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, employeeName, providerEmployee, mockEntityManager)).thenReturn(longCriteriaQuery);
+        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildSearchQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, employeeName, building, flat, calibratorName, sortCriteria, sortOrder, providerEmployee, mockEntityManager)).thenReturn(criteriaQuery);
+        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildCountQuery(organizationId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, employeeName, building, flat, calibratorName, providerEmployee, mockEntityManager)).thenReturn(longCriteriaQuery);
 
         stub(mockEntityManager.createQuery(criteriaQuery)).toReturn(verificationTypedQuery);
         stub(mockEntityManager.createQuery(longCriteriaQuery)).toReturn(longTypedQuery);
@@ -305,7 +308,7 @@ public class VerificationServiceImplTest {
         Long count = mockEntityManager.createQuery(longCriteriaQuery).getSingleResult();
 
         ListToPageTransformer<Verification> actual = verificationService.findPageOfArchiveVerificationsByProviderId(organizationId, pageNumber, itemsPerPage, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch,
-                streetToSearch, region, district, locality, status, employeeName, sortCriteria, sortOrder, providerEmployee);
+                streetToSearch, region, district, locality, status, employeeName, building, flat, calibratorName, sortCriteria, sortOrder, providerEmployee);
 
         assertEquals(verificationList, actual.getContent());
         assertEquals(count, actual.getTotalItems());
@@ -325,11 +328,14 @@ public class VerificationServiceImplTest {
         String locality = "locality";
         String status = "status";
         String employeeName = "employeeName";
+        String building = "building";
+        String flat = "flat";
+        String calibratorName = "calibratorName";
         User providerEmployee = mock(User.class);
 
         PowerMockito.mockStatic(ArchivalVerificationsQueryConstructorProvider.class);
-        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildSearchQuery(organizationId, initialDateToSearch, null, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, "SENT", employeeName, null, null, providerEmployee, mockEntityManager)).thenReturn(criteriaQuery);
-        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildCountQuery(organizationId, initialDateToSearch, null, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, "SENT", employeeName, providerEmployee, mockEntityManager)).thenReturn(longCriteriaQuery);
+        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildSearchQuery(organizationId, initialDateToSearch, null, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, "SENT", employeeName, building, flat, calibratorName, null, null, providerEmployee, mockEntityManager)).thenReturn(criteriaQuery);
+        PowerMockito.when(ArchivalVerificationsQueryConstructorProvider.buildCountQuery(organizationId, initialDateToSearch, null, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, "SENT", employeeName, building, flat, calibratorName, providerEmployee, mockEntityManager)).thenReturn(longCriteriaQuery);
 
         stub(mockEntityManager.createQuery(criteriaQuery)).toReturn(verificationTypedQuery);
         stub(mockEntityManager.createQuery(longCriteriaQuery)).toReturn(longTypedQuery);
@@ -339,7 +345,7 @@ public class VerificationServiceImplTest {
         Long count = mockEntityManager.createQuery(longCriteriaQuery).getSingleResult();
 
         ListToPageTransformer<Verification> actual = verificationService.findPageOfArchiveVerificationsByProviderIdOnMainPanel(organizationId, pageNumber, itemsPerPage, initialDateToSearch, idToSearch, fullNameToSearch,
-                streetToSearch, region, district, locality, status, employeeName, providerEmployee);
+                streetToSearch, region, district, locality, status, employeeName, building, flat, calibratorName, providerEmployee);
 
         assertEquals(verificationList, actual.getContent());
         assertEquals(count, actual.getTotalItems());
@@ -693,7 +699,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testUpdateVerification(){
+    public void testUpdateVerification() {
         Organization mockStateVerificator = mock(Organization.class);
         String verificationId = "id";
         when(mockVerificationRepository.findOne(verificationId)).thenReturn(null);
@@ -707,7 +713,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testUpdateVerificationData(){
+    public void testUpdateVerificationData() {
         Organization mockProvider = mock(Organization.class);
         String id = "id";
         ClientData mockClientData = mock(ClientData.class);
@@ -722,7 +728,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testCreateCalibrationTestException(){
+    public void testCreateCalibrationTestException() {
         String verificationId = "id";
         CalibrationTest mockCalibrationTest = mock(CalibrationTest.class);
         when(mockVerificationRepository.findOne(verificationId)).thenReturn(null);
@@ -732,7 +738,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testCreateCalibrationTest(){
+    public void testCreateCalibrationTest() {
         String verificationId = "id";
         CalibrationTest mockCalibrationTest = mock(CalibrationTest.class);
         CalibrationTest spyCalibrationTest = spy(new CalibrationTest());
@@ -743,7 +749,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testFindByCalibrationTestIdException(){
+    public void testFindByCalibrationTestIdException() {
         long id = 1;
         exception.expect(AccessDeniedException.class);
         exception.expectMessage("You have not permission to get this data");
@@ -751,7 +757,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testFindByCalibrationTestId(){
+    public void testFindByCalibrationTestId() {
         long id = 1;
         CalibrationTest expected = mock(CalibrationTest.class);
         when(mockCalibrationTestRepository.findById(id)).thenReturn(expected);
@@ -760,7 +766,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testFindCountOfAllSentVerifications(){
+    public void testFindCountOfAllSentVerifications() {
         int expected = 0;
         Organization mockOrganization = mock(Organization.class);
         when(mockVerificationRepository.getCountOfAllSentVerifications(mockOrganization)).thenReturn(expected);
@@ -769,7 +775,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testFindCountOfAllAcceptedVerification(){
+    public void testFindCountOfAllAcceptedVerification() {
         int expected = 0;
         Organization mockOrganization = mock(Organization.class);
         when(mockVerificationRepository.getCountOfAllAcceptedVerifications(mockOrganization)).thenReturn(expected);
@@ -778,7 +784,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testFindCountOfAllCalibratorVerificationWithoutEmployee (){
+    public void testFindCountOfAllCalibratorVerificationWithoutEmployee() {
         int expected = 0;
         Organization mockOrganization = mock(Organization.class);
         when(mockVerificationRepository.findCountOfAllCalibratorVerificationWithoutEmployee(organization)).thenReturn(expected);
@@ -787,7 +793,7 @@ public class VerificationServiceImplTest {
     }
 
     @Test
-    public void testFindCountOfAllCalibratorVerificationWithEmployee (){
+    public void testFindCountOfAllCalibratorVerificationWithEmployee() {
         int expected = 0;
         Organization mockOrganization = mock(Organization.class);
         when(mockVerificationRepository.findCountOfAllCalibratorVerificationWithEmployee(organization)).thenReturn(expected);

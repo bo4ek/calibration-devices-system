@@ -135,9 +135,9 @@ public class AdditionalInfo {
     }
 
     private void setTimeIfDateOfVerifIsnotNull(String timeFrom, String timeTo) {
-        if (this.dateOfVerif != null) {
-            this.timeFrom = (timeFrom != null) ? LocalTime.parse(timeFrom) : null;
-            this.timeTo = (timeTo != null) ? LocalTime.parse(timeTo) : null;
+        if (this.dateOfVerif != null && timeFrom != null && timeTo != null) {
+            this.timeFrom = LocalTime.parse(timeFrom);
+            this.timeTo = LocalTime.parse(timeTo);
         }
     }
 

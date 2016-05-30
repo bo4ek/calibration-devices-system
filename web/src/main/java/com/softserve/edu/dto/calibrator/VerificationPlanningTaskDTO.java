@@ -91,7 +91,7 @@ public class VerificationPlanningTaskDTO implements Comparable {
             if (additionalInfo.getFloor() > 0) {
                 this.floor = Integer.toString(additionalInfo.getFloor());
             }
-            if ((additionalInfo.getTimeFrom() != null) && (additionalInfo.getTimeTo() != null)) {
+            if (additionalInfo.getTimeFrom() != null && additionalInfo.getTimeTo() != null) {
                 this.time = additionalInfo.getTimeFrom().toString() + " - " + additionalInfo.getTimeTo().toString();
             } else {
                 this.time = null;

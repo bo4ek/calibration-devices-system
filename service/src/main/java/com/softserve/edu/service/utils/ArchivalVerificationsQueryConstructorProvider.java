@@ -25,7 +25,7 @@ public class ArchivalVerificationsQueryConstructorProvider {
     public static CriteriaQuery<Verification> buildSearchQuery(Long employeeId, String initialDateToSearch,
                                                                String endDateToSearch, String idToSearch, String fullNameToSearch,
                                                                String streetToSearch, String region, String district, String locality, String status,
-                                                               String employeeName, String sortCriteria, String sortOrder,
+                                                               String employeeName, String building, String flat, String calibratorName, String sortCriteria, String sortOrder,
                                                                User providerEmployee, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -33,7 +33,7 @@ public class ArchivalVerificationsQueryConstructorProvider {
         Root<Verification> root = criteriaQuery.from(Verification.class);
         Join<Verification, Organization> providerJoin = root.join("provider");
         Predicate predicate = ArchivalVerificationsQueryConstructorProvider.buildPredicate(root, cb, employeeId, initialDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality,
-                status, employeeName, providerEmployee, providerJoin);
+                status, employeeName, building, flat, calibratorName, providerEmployee, providerJoin);
 
         if ((sortCriteria != null) && (sortOrder != null)) {
             criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
@@ -48,14 +48,14 @@ public class ArchivalVerificationsQueryConstructorProvider {
 
     public static CriteriaQuery<Long> buildCountQuery(Long employeeId, String initialDateToSearch,
                                                       String endDateToSeach, String idToSearch, String fullNameToSearch, String streetToSearch, String region, String district, String locality, String status, String employeeName,
-                                                      User providerEmployee, EntityManager em) {
+                                                      String building, String flat, String calibratorName, User providerEmployee, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
         Root<Verification> root = countQuery.from(Verification.class);
         Join<Verification, Organization> providerJoin = root.join("provider");
         Predicate predicate = ArchivalVerificationsQueryConstructorProvider.buildPredicate(root, cb, employeeId, initialDateToSearch, endDateToSeach, idToSearch,
-                fullNameToSearch, streetToSearch, region, district, locality, status, employeeName,
+                fullNameToSearch, streetToSearch, region, district, locality, status, employeeName, building, flat, calibratorName,
                 providerEmployee, providerJoin);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
@@ -64,7 +64,7 @@ public class ArchivalVerificationsQueryConstructorProvider {
 
     private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Long providerId,
                                             String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch,
-                                            String streetToSearch, String region, String district, String locality, String searchStatus, String employeeName, User employee,
+                                            String streetToSearch, String region, String district, String locality, String searchStatus, String employeeName, String building, String flat, String calibratorName, User employee,
                                             Join<Verification, Organization> providerJoin) {
 
         Predicate queryPredicate = cb.conjunction();
@@ -126,6 +126,23 @@ public class ArchivalVerificationsQueryConstructorProvider {
             queryPredicate = cb.and(
                     cb.like(root.get("clientData").get("clientAddress").get("locality"), "%" + locality + "%"),
                     queryPredicate);
+        }
+
+        if ((flat != null) && (flat.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("clientData").get("clientAddress").get("flat"), "%" + flat + "%"),
+                    queryPredicate);
+        }
+
+        if ((building != null) && (building.length() > 0)) {
+            queryPredicate = cb.and(
+                    cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"),
+                    queryPredicate);
+        }
+
+        if ((calibratorName != null) && (calibratorName.length() > 0)) {
+            Join<Verification, Organization> joinCalibratorName = root.join("calibrator");
+            queryPredicate = cb.and(cb.and(cb.like(joinCalibratorName.get("name"), "%" + calibratorName + "%")), queryPredicate);
         }
 
         if ((employeeName != null) && (employeeName.length() > 0)) {

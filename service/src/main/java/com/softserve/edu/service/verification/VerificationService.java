@@ -54,10 +54,10 @@ public interface VerificationService {
                                                                                                  String streetToSearch, String region, String district, String locality, String status, String employeeName, String sortCriteria, String sortOrder, User providerEmployee);
 
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByProviderId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                   String streetToSearch, String region, String district, String locality, String status, String employeeName, String sortCriteria, String sortOrder, User providerEmployee);
+                                                                                   String streetToSearch, String region, String district, String locality, String status, String employeeName, String building, String flat, String calibratorName, String sortCriteria, String sortOrder, User providerEmployee);
 
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByProviderIdOnMainPanel(Long organizationId, int pageNumber, int itemsPerPage, String initialDateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                              String streetToSearch, String region, String district, String locality, String status, String employeeName, User providerEmployee);
+                                                                                              String streetToSearch, String region, String district, String locality, String status, String employeeName, String building, String flat, String calibratorName, User providerEmployee);
 
     ListToPageTransformer<Verification> findPageOfArchiveVerificationsByCalibratorIdOnMainPanel(Long organizationId, int pageNumber, int itemsPerPage, String initialDateToSearch, String idToSearch, String fullNameToSearch,
                                                                                                 String streetToSearch, String region, String district, String locality, String status, String employeeName, User providerEmployee);
@@ -94,7 +94,7 @@ public interface VerificationService {
 
     public ListToPageTransformer<Verification> findPageOfRejectedVerificationsByProviderId(Long organizationId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String rejectedReason,
                                                                                            String providerEmployee, String calibratorName, String customerName, String district, String street, String building, String flat,
-                                                                                           String verificationId,String status, String sortCriteria, String sortOrder);
+                                                                                           String verificationId, String status, String sortCriteria, String sortOrder);
 
     Verification findByIdAndProviderId(String id, Long providerId);
 

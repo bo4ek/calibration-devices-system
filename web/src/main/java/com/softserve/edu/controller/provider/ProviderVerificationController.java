@@ -91,13 +91,16 @@ public class ProviderVerificationController {
                 searchData.getDate(),
                 searchData.getEndDate(),
                 searchData.getId(),
-                searchData.getClient_full_name(), //TODO: WHY????!!!
+                searchData.getClient_full_name(),
                 searchData.getStreet(),
                 searchData.getRegion(),
                 searchData.getDistrict(),
                 searchData.getLocality(),
                 searchData.getStatus(),
-                searchData.getEmployee_last_name(), //TODO: WHY????!!!
+                searchData.getEmployee_last_name(),
+                searchData.getBuilding(),
+                searchData.getFlat(),
+                searchData.getCalibratorName(),
                 sortCriteria,
                 sortOrder,
                 providerEmployee
@@ -239,6 +242,9 @@ public class ProviderVerificationController {
                 searchData.getLocality(),
                 searchData.getStatus(),
                 searchData.getEmployee(),
+                null,
+                null,
+                null,
                 providerEmployee);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);

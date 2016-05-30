@@ -16,14 +16,14 @@ public class ArchiveVerificationsFilterAndSort {
 	private String street;
 	private String region;
 	private String district;
+	private String building;
+	private String flat;
+	private String calibratorName;
 	private String locality;
 	private String status;
 	private String employee_last_name;
-
-
 	private Long protocol_id;
 	private String protocol_status;
-
 	private Long measurement_device_id;
 	private String measurement_device_type;
     private String numberCounter;
