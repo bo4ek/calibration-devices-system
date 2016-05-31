@@ -42,8 +42,11 @@ public class CalibrationTestIMGServiceImpl implements CalibrationTestIMGService 
 
         bufferedImage = ImageIO.read(new ByteArrayInputStream(Base64.decodeBase64(
                 deviceTestData.getEndPhoto(testDataId))));
-        String photoEnd = Constants.END_PHOTO + folder;
-        ImageIO.write(bufferedImage, Constants.IMAGE_TYPE, new File(absolutePath + photoEnd));
+        String photoEnd = null;
+        if (bufferedImage != null) {
+            photoEnd = Constants.END_PHOTO + folder;
+            ImageIO.write(bufferedImage, Constants.IMAGE_TYPE, new File(absolutePath + photoEnd));
+        }
         CalibrationTestIMG calibrationTestIMGEnd = new CalibrationTestIMG(calibrationTestData, photoEnd);
 
         testIMGRepository.save(calibrationTestIMGEnd);
