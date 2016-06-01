@@ -25,6 +25,7 @@ public interface MailConstant {
     String MAIL_SUBJECT = "Important notification";
 
     String APPLICATION_ID = "applicationId";
+    String ID = "Id";
     String PROVIDER_NAME = "providerName";
     String DATE = "date";
     String DEVICE_TYPE = "deviceType";
