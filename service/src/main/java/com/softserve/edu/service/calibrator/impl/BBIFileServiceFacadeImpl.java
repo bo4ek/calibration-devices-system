@@ -241,9 +241,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
-                    correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap,
-                            calibratorEmployee, deviceTestData);
 
+                    correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap, calibratorEmployee, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                     Verification verification = verificationService.findById(correspondingVerification);
                     verification.setCalibrationModule(calibrationModule);
@@ -511,13 +510,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         ClientData clientData;
 
         try {
-            /*Long districtIdLong = Long.parseLong(verificationData.get(Constants.DISTRICT_ID));
-
-            Long cityIdLong = Long.parseLong(verificationData.get(Constants.CITY_ID));
-            boolean isExistLocality = localityService.existByIdAndDistrictId(cityIdLong, districtIdLong);
-            if(!isExistLocality) {
-                throw new IncorrectCityIdException();
-            }*/
             Long streetIdLong = Long.parseLong(verificationData.get(Constants.STREET_ID));
             Street street = streetService.findStreetById(streetIdLong);
 
@@ -555,7 +547,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Long deviceId = getDeviceIdByDeviceTypeId(Integer.parseInt(verificationData.get(Constants.SERVICE_TYPE)));
         Device device = deviceService.getById(deviceId);
 
-        Verification verification = new Verification(date, clientData, Status.CREATED_BY_CALIBRATOR, calibrator,
+        Verification verification = new Verification(date, clientData, Status.NOT_VALID, calibrator,
                 providerFromBBI, calibratorEmployee, counter, null, verificationData.get(Constants.COMMENT),
                 verificationData.get(Constants.DATE), device);
 

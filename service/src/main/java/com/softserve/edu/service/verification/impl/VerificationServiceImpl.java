@@ -1097,7 +1097,7 @@ public class VerificationServiceImpl implements VerificationService {
         groupRepository.save(group);
 
         for (byte i = 0; i < quantity; i++) {
-            id = datePart + String.format("%04d", count += 1);
+            id = datePart + String.format("%05d", count += 1);
             verification.setId(id);
             verification.setGroup(group);
             verificationRepository.save(verification);
