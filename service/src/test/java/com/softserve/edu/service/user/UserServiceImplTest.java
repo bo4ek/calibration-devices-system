@@ -37,7 +37,7 @@ public class UserServiceImplTest {
     @Before
     public void setUp() throws Exception {
         user = new User(username, password);
-        when(userRepository.findOne(username)).thenReturn(user);
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(user);
         when(bCryptPasswordEncoder.matches(password, user.getPassword())).thenReturn(true);
     }
 
@@ -69,7 +69,7 @@ public class UserServiceImplTest {
 
         when(mockUser.getPassword()).thenReturn(hash_of_password);
         when(mockUser.getUsername()).thenReturn(username);
-        when(userRepository.findOne(username)).thenReturn(mockUser);
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(mockUser);
 
         boolean isChanged = userService.changePassword(mockUser.getUsername(), oldPassword, newPassword);
         assertTrue(isChanged);
@@ -102,7 +102,7 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUser() {
-        User expected = userRepository.findOne("username");
+        User expected = userRepository.findByUsernameIgnoreCase("username");
         User actual = userService.getUser("username");
         assertEquals(expected, actual);
     }

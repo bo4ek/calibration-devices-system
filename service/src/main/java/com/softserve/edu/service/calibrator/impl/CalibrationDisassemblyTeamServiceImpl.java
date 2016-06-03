@@ -116,7 +116,7 @@ public class CalibrationDisassemblyTeamServiceImpl implements CalibratorDisassem
     @Transactional(readOnly = true)
     @SuppressWarnings("all")
     public List<DisassemblyTeam> findAllAvaliableTeams(Date workDate, String applicationFiled, String userId) {
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findByUsernameIgnoreCase(userId);
         if (user == null) {
             logger.error("Cannot found user!");
         }

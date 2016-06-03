@@ -211,7 +211,7 @@ public class OrganizationServiceImplTest {
         User employeeAdmin = mock(User.class);
 
         stub(organizationRepository.findOne(organizationId)).toReturn(organization);
-        stub(userRepository.findOne(username)).toReturn(employeeAdmin);
+        stub(userRepository.findByUsernameIgnoreCase(username)).toReturn(employeeAdmin);
         stub(localityService.findById(anyLong())).toReturn(locality);
         stub(employeeAdmin.getPassword()).toReturn(password);
 

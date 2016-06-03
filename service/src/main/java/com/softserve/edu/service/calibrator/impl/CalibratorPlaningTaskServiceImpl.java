@@ -77,7 +77,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     @Transactional(readOnly = true)
     public Page<CalibrationTask> getFilteredPageOfCalibrationTasks(Map<String, String> filterParams,
                                                                    Pageable pageable, String username) {
-        User user = userRepository.findOne(username);
+        User user = userRepository.findByUsernameIgnoreCase(username);
         filterParams.put("organizationCode", user.getOrganization().getAdditionInfoOrganization().getCodeEDRPOU());
         CalibrationTaskSpecificationBuilder specificationBuilder = new CalibrationTaskSpecificationBuilder(filterParams);
         Specification<CalibrationTask> searchSpec = specificationBuilder.buildPredicate();
@@ -136,7 +136,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         CalibrationTask task = taskRepository.findByDateOfTaskAndModule_SerialNumber(taskDate, moduleSerialNumber);
         Iterable<Verification> verifications = verificationRepository.findAll(verificationsId);
 
-        User user = userRepository.findOne(userName);
+        User user = userRepository.findByUsernameIgnoreCase(userName);
         if (user == null) {
             logger.error("User with name:" + userName + "was trying to create task for user with name: " + userName + " wasn't found");
             throw new PermissionDeniedException();
@@ -215,7 +215,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             }
         }
         teamRepository.save(team);
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findByUsernameIgnoreCase(userId);
         CalibrationTask calibrationTask = taskRepository.save(new CalibrationTask(null, team, new Date(), taskDate, user, verifications));
         SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DAY_MONTH_YEAR);
         String filename = calibrationTask.getTeam().getId() + "-" +
@@ -246,7 +246,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     @Override
     @Transactional(readOnly = true)
     public long findVerificationsByCalibratorEmployeeAndTaskStatusCount(String userName) {
-        User user = userRepository.findOne(userName);
+        User user = userRepository.findByUsernameIgnoreCase(userName);
         if (user == null) {
             logger.error("Cannot found user!");
         }

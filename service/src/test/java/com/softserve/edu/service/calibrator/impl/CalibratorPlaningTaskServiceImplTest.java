@@ -58,7 +58,7 @@ public class CalibratorPlaningTaskServiceImplTest {
                     throw new IllegalArgumentException();
                 }*//*
         }
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findByUsernameIgnoreCase(userId);
         CalibrationTask task = new CalibrationTask(module, null, new Date(), taskDate, user, verifications);
         taskRepository.save(task);
         sendTaskToStation(task);*/
@@ -97,14 +97,14 @@ public class CalibratorPlaningTaskServiceImplTest {
             }
         }
         teamRepository.save(team);
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findByUsernameIgnoreCase(userId);
         taskRepository.save(new CalibrationTask(null, team, new Date(), taskDate, user, verifications));*/
     }
 
     @Test
     public void testFindVerificationsByCalibratorEmployeeAndTaskStatusCount() {
         // returns int ::::: String userName
-        /*User user = userRepository.findOne(userName);
+        /*User user = userRepository.findByUsernameIgnoreCase(userName);
         if (user == null) {
             logger.error("Cannot found user!");
         }
@@ -130,7 +130,7 @@ public class CalibratorPlaningTaskServiceImplTest {
     @Test
     public void findVerificationsByCalibratorEmployeeAndTaskStatus() {
         // returns Page<Verification> ::::: String userName, int pageNumber, int itemsPerPage
-        /*User user = userRepository.findOne(userName);
+        /*User user = userRepository.findByUsernameIgnoreCase(userName);
         if (user == null) {
             logger.error("Cannot found user!");
             throw new NullPointerException();

@@ -77,7 +77,7 @@ public class StatisticServiceImplTest {
 
     @Test
     public void testEmployeeExist()  {
-        when(userRepository.findOne(anyString())).thenReturn(userExpected);
+        when(userRepository.findByUsernameIgnoreCase(anyString())).thenReturn(userExpected);
         User factual = statisticServiceImpl.employeeExist("Anton");
         assertEquals(factual, userExpected);
     }

@@ -82,7 +82,7 @@ public class CalibrationModuleServiceImpl implements CalibrationModuleService {
                                              String userName) {
         Filter filter = new Filter();
         List<Condition> conditions = new ArrayList<>();
-        String organizationCode = userRepository.findOne(userName)
+        String organizationCode = userRepository.findByUsernameIgnoreCase(userName)
                 .getOrganization().getAdditionInfoOrganization().getCodeEDRPOU();
         List<String> NumbersList = new ArrayList<>();
         conditions.add(new Condition.Builder()

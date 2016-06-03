@@ -171,6 +171,6 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
      */
     @Transactional(readOnly = true)
     public User oneProviderEmployee(String username) {
-        return userRepository.findOne(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 }

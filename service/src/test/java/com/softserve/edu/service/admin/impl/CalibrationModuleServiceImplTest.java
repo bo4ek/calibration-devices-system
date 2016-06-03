@@ -158,7 +158,7 @@ public class CalibrationModuleServiceImplTest {
                 .build());
         filter.addConditionList(conditions);
         calibrationModulesList.add(calibrationModule);
-        when(userRepository.findOne(username)).thenReturn(user);
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(user);
         PowerMockito.whenNew(Filter.class).withNoArguments().thenReturn(filter);
         when(calibrationModuleRepository.findAll(filter)).thenReturn(modules);
         when(calibrationModule.getSerialNumber()).thenReturn(moduleNumber);
@@ -181,7 +181,7 @@ public class CalibrationModuleServiceImplTest {
         Device.DeviceType deviceType = Device.DeviceType.THERMAL;
         String username = "username";
         String serialNumber = "serialNumber";
-        when(userRepository.findOne(username)).thenReturn(null);
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(null);
         calibrationModuleService.findAllSerialNumbers(moduleType, workDate, deviceType, username);
         verify(logger).error("Cannot found user!");
     }
@@ -196,7 +196,7 @@ public class CalibrationModuleServiceImplTest {
         Long organizationId = 100L;
         when(user.getOrganization()).thenReturn(organization);
         when(user.getOrganization().getId()).thenReturn(organizationId);
-        when(userRepository.findOne(username)).thenReturn(user);
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(user);
         PowerMockito.whenNew(Filter.class).withNoArguments().thenReturn(filter);
         when(calibrationModuleRepository.findAll(filter)).thenReturn(null);
         calibrationModuleService.findAllSerialNumbers(moduleType, workDate, deviceType, username);

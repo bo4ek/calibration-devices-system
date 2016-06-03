@@ -221,7 +221,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         organization.setLocalities(localityService.findByLocalityIdIn(serviceAreas));
 
-        User employeeAdmin = userRepository.findOne(username);
+        User employeeAdmin = userRepository.findByUsernameIgnoreCase(username);
         employeeAdmin.setFirstName(firstName);
         employeeAdmin.setLastName(lastName);
         employeeAdmin.setMiddleName(middleName);

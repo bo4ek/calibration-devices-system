@@ -93,7 +93,7 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Override
     @Transactional(readOnly = true)
     public User oneCalibratorEmployee(String username) {
-        return userRepository.findOne(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 
     @Override

@@ -152,7 +152,7 @@ public class VerificationProviderEmployeeServiceImplTest {
     @Test
     public void testOneProviderEmployee() {
         User expectedUser = mock(User.class);
-        when(userRepository.findOne(anyString())).thenReturn(expectedUser);
+        when(userRepository.findByUsernameIgnoreCase(anyString())).thenReturn(expectedUser);
 
         Assert.assertEquals(expectedUser, verificationProviderEmployeeService.oneProviderEmployee(anyString()));
     }

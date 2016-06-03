@@ -62,6 +62,8 @@ public interface UserRepository extends PagingAndSortingRepository<User, String>
 
     User findByUsername(String name);
 
+    User findByUsernameIgnoreCase(String s);
+
     @Modifying
     @Query("UPDATE User u SET u.verificatorSubdivision = null WHERE u.verificatorSubdivision.id = :subdivisionId")
     int setSubdivisionIdNull(@Param("subdivisionId")String id);

@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public boolean isExistsWithUsername(String username) {
-        return userRepository.findOne(username) == null;
+        return userRepository.findByUsernameIgnoreCase(username) == null;
     }
 
 
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     public boolean changeField(String username, String newValue, String typeOfField) {
         boolean isChanged = false;
         if (typeOfField != null && username != null && newValue != null) {
-            User user = userRepository.findOne(username);
+            User user = userRepository.findByUsernameIgnoreCase(username);
             if (user != null) {
                 switch (typeOfField) {
                     case "firstName":
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public User getUser(String username) throws ClassCastException {
-        return userRepository.findOne(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 
     /**
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     public boolean changePassword(String username, String oldPassword, String newPassword) {
         boolean isChanged = false;
         if (username != null && oldPassword != null && newPassword != null) {
-            User user = userRepository.findOne(username);
+            User user = userRepository.findByUsernameIgnoreCase(username);
             if (user != null) {
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 isChanged = passwordEncoder.matches(oldPassword, user.getPassword());
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public User findOne(String username) {
-        return userRepository.findOne(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 
     @Transactional(readOnly = true)

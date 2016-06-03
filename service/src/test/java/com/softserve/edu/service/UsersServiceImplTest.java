@@ -38,7 +38,7 @@ public class UsersServiceImplTest {
 
         when(user.getPassword()).thenReturn(hash_of_password);
         when(user.getUsername()).thenReturn(username);
-        when(userRepository.findOne(username)).thenReturn(user);
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(user);
 
 
         boolean isChanged =  userService.changePassword(user.getUsername(), old_pasword, new_pasword);
@@ -53,7 +53,7 @@ public class UsersServiceImplTest {
         String newFieldValue = "some";
         String type = "abba";
 
-        when(userRepository.findOne(anyString())).thenReturn(user);
+        when(userRepository.findByUsernameIgnoreCase(anyString())).thenReturn(user);
         boolean isChanged = userService.changeField(username, newFieldValue, type);
         assertFalse(isChanged);
         verify(userRepository, never()).save(any(User.class));

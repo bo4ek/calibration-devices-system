@@ -62,6 +62,6 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     @Transactional(readOnly = true)
     public User employeeExist(String username) {
-        return userRepository.findOne(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 }

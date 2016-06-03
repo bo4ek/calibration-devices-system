@@ -49,7 +49,7 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public boolean isExistsWithUsername(String username) {
-        return userRepository.findOne(username) == null;
+        return userRepository.findByUsernameIgnoreCase(username) == null;
     }
 
     @Override
@@ -187,7 +187,7 @@ public class UsersServiceImpl implements UsersService {
     @Transactional
     public void editSysAdmin( String  username, String password, String firstName, String lastName, String middleName, String phone,
                               String email,  Address address)  throws MessagingException, UnsupportedEncodingException{
-        User sysAdmin = userRepository.findOne(username);
+        User sysAdmin = userRepository.findByUsernameIgnoreCase(username);
 
         sysAdmin.setAddress(address);
         sysAdmin.setEmail(email);
@@ -230,6 +230,6 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User findOne(String username) {
-        return userRepository.findOne(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 }
