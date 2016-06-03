@@ -187,7 +187,10 @@ angular
             };
 
             $scope.unsignProtocol = function (verificationId) {
-                verificationServiceVerificator.unsignProtocol(verificationId)
+                var data = {
+                    data : verificationId
+                };
+                verificationServiceVerificator.unsignProtocol(data)
                     .then(function (response) {
                         if (response.status == 200) {
                             toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('PROTOKOL_SUCCESSFULLY_UNSIGNED'));

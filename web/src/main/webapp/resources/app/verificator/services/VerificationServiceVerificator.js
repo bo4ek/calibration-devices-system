@@ -86,8 +86,8 @@ angular
             getEarliestDateOfSentToVerificator: function () {
                 return getData('verifications/earliestDate/sentToVerificator');
             },
-            unsignProtocol: function (verificationId) {
-                return $http.put('verificator/verifications/unsign', verificationId)
+            unsignProtocol: function (data) {
+                return $http.put('verificator/verifications/unsign', data)
                     .then(function (response) {
                         return response;
                     });

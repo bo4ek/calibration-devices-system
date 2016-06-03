@@ -258,11 +258,11 @@ public class StateVerificatorController {
     }
 
     @RequestMapping(value = "unsign", method = RequestMethod.PUT)
-    public ResponseEntity unsignVerification(@RequestBody String verificationId, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+    public ResponseEntity unsignVerification(@RequestBody SearchDTO searchDTO, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         if(user != null) {
             User loginedUser = userService.findOne(user.getUsername());
             if (loginedUser.getUserRoles().contains(UserRole.STATE_VERIFICATOR_ADMIN)) {
-                stateVerificatorService.unsignProtocol(verificationId);
+                stateVerificatorService.unsignProtocol(searchDTO.getData());
                 return new ResponseEntity(HttpStatus.OK);
             }
         }
