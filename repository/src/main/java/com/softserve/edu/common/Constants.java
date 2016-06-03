@@ -133,6 +133,7 @@ public interface Constants {
     String PHONE_NUMBER = "Телефон";
     String FULL_NAME_CUSTOMER = "ПІБ замовника";
     String FULL_NAME = "ПІБ працівника";
+    String VERIFICATOR_NAME = "Підписант";
     String FIRST_NAME = "Ім'я";
     String LAST_NAME = "Прізвище";
     String MIDDLE_NAME = "По батькові";

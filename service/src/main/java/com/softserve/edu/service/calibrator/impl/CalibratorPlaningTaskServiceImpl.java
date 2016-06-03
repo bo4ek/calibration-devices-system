@@ -282,35 +282,36 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         switch (sortCriteria) {
             case "date":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"sentToCalibratorDate"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "sentToCalibratorDate"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"sentToCalibratorDate"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "sentToCalibratorDate"));
                 }
                 break;
             case "client_last_name":
-                if (sortOrder.equals("asc")) {pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"clientData.lastName", "clientData.firstName"));
+                if (sortOrder.equals("asc")) {
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "clientData.lastName", "clientData.firstName"));
                 } else {
                     pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "clientData.lastName", "clientData.firstName"));
                 }
                 break;
             case "providerName":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"provider.name"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "provider.name"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"provider.name"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "provider.name"));
                 }
                 break;
             case "dateOfVerif":
             case "timeOfVerif":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"info.dateOfVerif", "info.timeFrom"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "info.dateOfVerif", "info.timeFrom"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"info.dateOfVerif", "info.timeFrom"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "info.dateOfVerif", "info.timeFrom"));
                 }
                 break;
             case "noWaterToDate":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"info.noWaterToDate"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "info.noWaterToDate"));
                 } else {
                     pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,
                             "info.noWaterToDate"));
@@ -328,44 +329,44 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 break;
             case "building":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"clientData.clientAddress.building"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "clientData.clientAddress.building"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"clientData.clientAddress.building"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "clientData.clientAddress.building"));
                 }
                 break;
             case "flat":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"clientData.clientAddress.flat"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "clientData.clientAddress.flat"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"clientData.clientAddress.flat"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "clientData.clientAddress.flat"));
                 }
                 break;
             case "serviceability":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"info.serviceability"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "info.serviceability"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"info.serviceability"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "info.serviceability"));
                 }
                 break;
             case "sealPresence":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"sealPresence"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "sealPresence"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"sealPresence"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "sealPresence"));
                 }
                 break;
             case "verificationWithDismantle":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"verificationWithDismantle"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "verificationWithDismantle"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"verificationWithDismantle"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "verificationWithDismantle"));
                 }
                 break;
             case "telephone":
                 if (sortOrder.equals("asc")) {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC,"clientData.phone"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.ASC, "clientData.phone"));
                 } else {
-                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC,"clientData.phone"));
+                    pageRequest = new PageRequest(pageNumber - 1, itemsPerPage, new Sort(Sort.Direction.DESC, "clientData.phone"));
                 }
                 break;
         }
@@ -501,7 +502,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             customer.add(getCustomer(verification));
 
             Counter counter = verification.getCounter();
-
             symbols.add(getCounterSymbol(counter));
             standartSize.add(getCounterStandarSize(counter));
             realiseYear.add(getCounterReliasYear(counter));
@@ -509,52 +509,13 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
             ClientData clientData = verification.getClientData();
             if (clientData != null) {
-                fullName.add(getFullName(clientData));
-                telephone.add(getPhoneNumber(clientData));
-                name.add(getName(clientData));
-                surname.add(getSurname(clientData));
-                middlename.add(getMiddleName(clientData));
-
-                Address clientAddress = verification.getClientData().getClientAddress();
-                if (clientAddress != null) {
-                    district.add(getDistrict(clientAddress));
-                    building.add(getBuilding(clientAddress));
-                    flat.add(getFlat(clientAddress));
-                    city.add(getCity(clientAddress));
-                    region.add(getRegion(clientAddress));
-                    street.add(getStreet(clientAddress));
-                } else {
-                    district.add(empty);
-                    building.add(empty);
-                    flat.add(empty);
-                    city.add(empty);
-                    region.add(empty);
-                    street.add(empty);
-                }
+                setClientDataCard(clientData, fullName, surname, name, middlename, telephone);
+                setClientAddress(verification.getClientData().getClientAddress(), region, district, city, street, building, flat);
             } else {
-                fullName.add(empty);
-                telephone.add(empty);
-                district.add(empty);
-                building.add(empty);
-                flat.add(empty);
-                city.add(empty);
-                name.add(empty);
-                surname.add(empty);
-                middlename.add(empty);
-                region.add(empty);
-                street.add(empty);
+                setClientDataCard(null, fullName, surname, name, middlename, telephone);
+                setClientAddress(null, region, district, city, street, building, flat);
             }
-
-            AdditionalInfo info = verification.getInfo();
-            if (info != null) {
-                entrance.add(getEntrance(info));
-                floor.add(getFloor(info));
-                times.add(getTime(info));
-            } else {
-                entrance.add(empty);
-                floor.add(empty);
-                times.add(empty);
-            }
+            setAdditionalInfo(verification.getInfo(), entrance, floor, times);
         }
 
         if (verifications[0].getCalibrationModule() != null && verifications[0].getCalibrationModule().getModuleType().equals(CalibrationModule.ModuleType.INSTALLATION_PORT)) {
@@ -570,6 +531,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             dataXls.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
             dataXls.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
             dataXls.add(new TableExportColumn(Constants.DESIRABLE_TIME, times));
+            dataXls.add(new TableExportColumn(Constants.VERIFICATION_ID, id));
             dataXls.add(new TableExportColumn(Constants.COMMENT, comment));
         } else {
             dataXls.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
@@ -587,7 +549,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             dataXls.add(new TableExportColumn(Constants.COUNTER_NUMBER, counterNumber));
             dataXls.add(new TableExportColumn(Constants.COUNTER_YEAR, realiseYear));
             dataXls.add(new TableExportColumn(Constants.COUNTER_CAPACITY, acumulatedVolume));
-
         }
 
         dataDb.add(new TableExportColumn("id_pc", "INTEGER", id));
@@ -630,10 +591,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> times = new ArrayList<>();
         List<String> comment = new ArrayList<>();
 
-        // endregion
-
-        // region Fill lists
-
         for (Verification verification : verifications) {
             SimpleDateFormat simpleTaskDate = new SimpleDateFormat("dd.MM.yyyy");
             String empty = " ";
@@ -648,52 +605,20 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             provider.add(getProvider(verification));
             countersNumber.add(String.valueOf(1));
             comment.add(getComent(verification));
-
-            AdditionalInfo info = verification.getInfo();
-            if (info != null) {
-                entrance.add(getEntrance(info));
-                floor.add(getFloor(info));
-                times.add(getTime(info));
-            } else {
-                entrance.add(empty);
-                floor.add(empty);
-                times.add(empty);
-            }
+            setAdditionalInfo(verification.getInfo(), entrance, floor, times);
 
             ClientData clientData = verification.getClientData();
             if (clientData != null) {
-                fullName.add(getFullName(clientData));
-                telephone.add(getPhoneNumber(clientData));
-
-                Address clientAddress = verification.getClientData().getClientAddress();
-                if (clientAddress != null) {
-                    district.add(getDistrict(clientAddress));
-                    street.add(getStreet(clientAddress));
-                    building.add(getBuilding(clientAddress));
-                    flat.add(getFlat(clientAddress));
-
-                } else {
-                    district.add(empty);
-                    street.add(empty);
-                    building.add(empty);
-                    flat.add(empty);
-                }
+                setClientDataCard(clientData, fullName, null, null, null, telephone);
+                setClientAddress(verification.getClientData().getClientAddress(), null, district, null, street, building, flat);
             } else {
-                fullName.add(empty);
-                telephone.add(empty);
-                district.add(empty);
-                street.add(empty);
-                building.add(empty);
-                flat.add(empty);
+                setClientDataCard(null, fullName, null, null, null, telephone);
+                setClientAddress(null, null, district, null, street, building, flat);
             }
 
             countersNumber.add(String.valueOf(1));
             comment.add(getComent(verification));
         }
-
-        // endregion
-
-        // region Fill map
 
         data.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
         data.add(new TableExportColumn(Constants.PROVIDER, provider));
@@ -709,9 +634,57 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         data.add(new TableExportColumn(Constants.DESIRABLE_TIME, times));
         data.add(new TableExportColumn(Constants.COMMENT, comment));
 
-        // endregion
-
         return data;
+    }
+
+    private void setClientDataCard(ClientData clientData, List<String> fullName, List<String> surname, List<String> name, List<String> middlename, List<String> telephone) {
+        String empty = " ";
+        if (clientData != null) {
+            if (fullName != null) fullName.add(getFullName(clientData));
+            if (telephone != null) telephone.add(getPhoneNumber(clientData));
+            if (name != null) name.add(getName(clientData));
+            if (surname != null) surname.add(getSurname(clientData));
+            if (middlename != null) middlename.add(getMiddleName(clientData));
+        } else {
+            fullName.add(empty);
+            telephone.add(empty);
+            name.add(empty);
+            surname.add(empty);
+            middlename.add(empty);
+
+        }
+    }
+
+    private void setClientAddress(Address clientAddress, List<String> region, List<String> district, List<String> city, List<String> street, List<String> building, List<String> flat) {
+        String empty = " ";
+        if (clientAddress != null) {
+            if (district != null) district.add(getDistrict(clientAddress));
+            if (building != null) building.add(getBuilding(clientAddress));
+            if (flat != null) flat.add(getFlat(clientAddress));
+            if (city != null) city.add(getCity(clientAddress));
+            if (region != null) region.add(getRegion(clientAddress));
+            if (street != null) street.add(getStreet(clientAddress));
+        } else {
+            district.add(empty);
+            building.add(empty);
+            flat.add(empty);
+            city.add(empty);
+            region.add(empty);
+            street.add(empty);
+        }
+    }
+
+    private void setAdditionalInfo(AdditionalInfo info, List<String> entrance, List<String> floor, List<String> times) {
+        String empty = " ";
+        if (info != null) {
+            entrance.add(getEntrance(info));
+            floor.add(getFloor(info));
+            times.add(getTime(info));
+        } else {
+            entrance.add(empty);
+            floor.add(empty);
+            times.add(empty);
+        }
     }
 
     private String getTime(AdditionalInfo info) {

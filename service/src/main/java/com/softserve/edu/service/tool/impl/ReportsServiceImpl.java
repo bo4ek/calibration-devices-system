@@ -242,6 +242,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> notes = new ArrayList<>(initializedCapacity);
         List<String> counterNotes = new ArrayList<>(initializedCapacity);
         List<String> typeOfSupply = new ArrayList<>(initializedCapacity);
+        List<String> stateVerificatorName = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -301,6 +302,7 @@ public class ReportsServiceImpl implements ReportsService {
             Integer temperature = getTemperaturesFromVerification(verification);
             temperatures.add(temperature == -1 ? " " : temperature.toString());
             typeOfSupply.add(getTypeOfSupplyFromTemperature(temperature, verification));
+            stateVerificatorName.add(getStateVerificatorName(verification));
             ++i;
         }
 
@@ -349,10 +351,16 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.VERIFICATION_NUMBER, verificationNumbers));
         data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, verificationStatus));
         data.add(new TableExportColumn(Constants.VALID_UNTIL, validUntil));
+        if (organization.equals(OrganizationType.STATE_VERIFICATOR)) {
+            data.add(new TableExportColumn(Constants.VERIFICATOR_NAME, stateVerificatorName));
+        }
         // endregion
         return data;
     }
 
+    public String getStateVerificatorName(Verification verification) {
+        return verification.isSigned() && verification.getStateVerificatorEmployee() != null ? verification.getStateVerificatorEmployee().getFullNameShort() : " ";
+    }
 
     public String getTypeOfSupplyFromTemperature(Integer temperature, Verification verification) {
         if (temperature == -1 && verification.getCounter() != null && verification.getCounter().getCounterType() != null && verification.getCounter().getCounterType().getDevice() != null) {
