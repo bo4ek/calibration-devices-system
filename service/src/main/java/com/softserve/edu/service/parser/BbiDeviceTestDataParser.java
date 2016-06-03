@@ -143,7 +143,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
     private String performFileName(Long fileName, boolean taskForStation) {
         String name = fileName.toString();
         if(taskForStation) {
-            if(name.length() <= Constants.SHORT_FILE_NAME_LENGTH_FOR_STATION) {
+            if(name.length() == Constants.SHORT_FILE_NAME_LENGTH_FOR_STATION) {
                 name = "0" + name;
             }
         } else {
