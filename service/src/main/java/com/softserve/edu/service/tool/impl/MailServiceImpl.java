@@ -84,7 +84,7 @@ public class MailServiceImpl implements MailService {
                 templateVariables.put(MailConstant.PROTOCOL, protocol);
                 templateVariables.put(MailConstant.DOMAIN, domain);
                 templateVariables.put(MailConstant.APPLICATION_ID, clientCode);
-                templateVariables.put(MailConstant.ID, clientCode.substring(0, clientCode.indexOf(',')));
+                templateVariables.put(MailConstant.ID, clientCode.substring(0, Constants.LENGHT_ID_VERIFICATIONS));
                 templateVariables.put(MailConstant.PROVIDER_NAME, providerName);
                 if (deviceType.equals(Device.DeviceType.WATER.toString())) {
                     templateVariables.put(MailConstant.DEVICE_TYPE, Constants.WATER_DEVICE_MAIL);

@@ -41,7 +41,7 @@ public interface Constants {
 
     boolean DEFAULT_DEVICE = true;
 
-    int LENGHT_ID_VERIFICATIONS = 13;
+    int LENGHT_ID_VERIFICATIONS = 14;
 
     String UTF8_ENCODING = "UTF-8";
     String MAIN_PHOTO = "mainPhoto";
