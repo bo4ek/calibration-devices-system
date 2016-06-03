@@ -148,6 +148,14 @@ public class User {
         userRoles.clear();
     }
 
+    public String getFullNameShort() {
+        return getLastName() + " " + getFirstName().substring(0, 1) + ". " + getMiddleName().substring(0, 1) + ".";
+    }
+
+    public String getFullNames() {
+        return getLastName() + " " + getFirstName() + " " + getMiddleName();
+    }
+
     @Override
     public String toString() {
         return "User{" +
