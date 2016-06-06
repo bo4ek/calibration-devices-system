@@ -12,4 +12,7 @@ public interface ReportsService {
 
     FileObject buildFileByDate(Long providerId, DocumentType documentType,
                                FileFormat fileFormat, String startDate, String endDate) throws Exception;
+
+    FileObject buildFileByDateAndModuleId(Long providerId, String moduleId, DocumentType documentType,
+                                          FileFormat fileFormat, String startDate, String endDate) throws Exception;
 }

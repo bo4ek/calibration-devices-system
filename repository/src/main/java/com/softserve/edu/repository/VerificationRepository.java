@@ -1,5 +1,6 @@
 package com.softserve.edu.repository;
 
+import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
@@ -104,6 +105,16 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     Long countByStateVerificatorIdAndStatus(Long stateVerificatorId, Status status);
 
     Long countByCalibratorId(Long calibratorId);
+
+    @Query("SELECT COUNT(u.id) FROM Verification u  WHERE u.calibrationModule = :module AND " +
+            " u.verificationDate BETWEEN :dateFrom AND :dateTo ")
+    Long countByModuleIdAndVerificationDateBetween(@Param("module") CalibrationModule module, @Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+
+    @Query("SELECT COUNT(u.id) FROM Verification u  WHERE u.calibrationModule = :module AND " +
+            " u.verificationDate BETWEEN :dateFrom AND :dateTo AND u.signed = true ")
+    Long countByModuleIdAndVerificationDateBetweenAndSignedIsTrue(@Param("module") CalibrationModule module, @Param("dateFrom") Date dateFrom, @Param("dateTo") Date dateTo);
+
+    Long countByStatusAndCalibrationModuleAndVerificationDateBetween(Status status, CalibrationModule module, Date dateFrom, Date dateTo);
 
     Long countByCalibratorIdAndStatus(Long calibratorId, Status status);
 

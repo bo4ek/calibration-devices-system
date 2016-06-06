@@ -56,6 +56,9 @@ public interface Constants {
     String COUNT_OK_VERIFICATIONS = "Кількість виконаних заявок з результатом «придатний»";
     String COUNT_NOK_VERIFICATIONS = "Кількість виконаних заявок з результатом «не придатний»";
     String CALIBRATOR_ORGANIZATION_NAME = "Назва вимірювальної лабораторії";
+    String AMOUNT_OF_PROTOCOLS = "К-сть протоколів, всього";
+    String AMOUNT_OF_SIGNED_PROTOCOL = "К-сть протоколів, підписаних";
+    String AMOUNT_OF_REJECTED_PROTOCOLS = "К-сть відхилених, верифікатором";
     String NUMBER_IN_SEQUENCE_SHORT = "№ з/п";
     String CUSTOMER_ADDRESS = "Адреса замовника";
     String DEVICE_TYPE_YEAR = "Тип приладу, рік випуску";

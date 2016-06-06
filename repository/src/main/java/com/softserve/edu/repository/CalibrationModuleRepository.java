@@ -30,4 +30,7 @@ public interface CalibrationModuleRepository
 
     @Query("SELECT CM FROM CalibrationModule CM WHERE :deviceType in elements(CM.deviceType)")
     List<CalibrationModule> findCalibrationModulesByDeviceType(@Param("deviceType") Device.DeviceType deviceType);
+
+    List<CalibrationModule> findByOrganizationCode(String code);
+
 }

@@ -7,6 +7,7 @@ import com.softserve.edu.documents.parameter.FileParameters;
 import com.softserve.edu.documents.parameter.FileSystem;
 import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.enumeration.verification.Status;
@@ -14,10 +15,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
-import com.softserve.edu.repository.CalibrationTestRepository;
-import com.softserve.edu.repository.OrganizationRepository;
-import com.softserve.edu.repository.UserRepository;
-import com.softserve.edu.repository.VerificationRepository;
+import com.softserve.edu.repository.*;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
 import com.softserve.edu.service.tool.ReportsService;
@@ -58,6 +56,9 @@ public class ReportsServiceImpl implements ReportsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CalibrationModuleRepository calibrationModuleRepository;
+
 
     private Logger logger = Logger.getLogger(ReportsServiceImpl.class);
 
@@ -97,6 +98,23 @@ public class ReportsServiceImpl implements ReportsService {
                 break;
             case VERIFICATOR_VERIFICATION_RESULT_REPORTS:
                 data = getDataForVerificatorVerificationResultReport(organisationId, fromDate, toDate);
+                break;
+            default:
+                throw new IllegalArgumentException(documentType.name() + "is not supported");
+        }
+        return FileFactory.buildReportFile(data, fileParameters);
+    }
+
+    public FileObject buildFileByDateAndModuleId(Long organisationId, String calibratorId, DocumentType documentType,
+                                                 FileFormat fileFormat, String startDate, String endDate) throws Exception {
+        Organization organization = organizationRepository.findOne(Long.valueOf(calibratorId));
+        FileParameters fileParameters = new FileParameters(documentType, fileFormat);
+        fileParameters.setFileSystem(FileSystem.RAM);
+        fileParameters.setFileName(documentType.toString());
+        List<TableExportColumn> data;
+        switch (documentType) {
+            case ADMIN_REPORT_BY_CALIBRATORS_MODULE:
+                data = getDataForAdminReportByCalibratorsModule(organization, startDate, endDate);
                 break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
@@ -202,6 +220,38 @@ public class ReportsServiceImpl implements ReportsService {
             verifications = verificationRepository.findByStateVerificator(verificator);
         }
         return getDataForVerificationResultReport(verifications, OrganizationType.STATE_VERIFICATOR);
+    }
+
+    private List<TableExportColumn> getDataForAdminReportByCalibratorsModule(Organization calibrator, String startDate, String endDate) {
+        List<CalibrationModule> list = calibrationModuleRepository.findByOrganizationCode(calibrator.getAdditionInfoOrganization().getCodeEDRPOU());
+        return getDataForModulesResultReport(list, startDate, endDate);
+    }
+
+    private List<TableExportColumn> getDataForModulesResultReport(List<CalibrationModule> list, String startDate, String endDate) {
+        int initializedCapacity = list.size();
+        Date fromDate = getDateForDocument(startDate);
+        Date toDate = getDateForDocument(endDate);
+        List<String> number = new ArrayList<>(initializedCapacity);
+        List<String> amountOfProtocols = new ArrayList<>(initializedCapacity);
+        List<String> amountOfSignedProtocols = new ArrayList<>(initializedCapacity);
+        List<String> amountOfRejectedProtocols = new ArrayList<>(initializedCapacity);
+        List<String> date = new ArrayList<>(initializedCapacity);
+
+        for (CalibrationModule module : list) {
+            number.add(String.valueOf(module.getModuleNumber()));
+            date.add(startDate + "-" + endDate);
+            amountOfProtocols.add(String.valueOf(verificationRepository.countByModuleIdAndVerificationDateBetween(module, fromDate, toDate)));
+            amountOfSignedProtocols.add(String.valueOf(verificationRepository.countByModuleIdAndVerificationDateBetweenAndSignedIsTrue(module, fromDate, toDate)));
+            amountOfRejectedProtocols.add(String.valueOf(verificationRepository.countByStatusAndCalibrationModuleAndVerificationDateBetween(Status.PROTOCOL_REJECTED, module, fromDate, toDate)));
+        }
+
+        List<TableExportColumn> data = new ArrayList<>(initializedCapacity);
+        data.add(new TableExportColumn(Constants.MODULE_NUMBER, number));
+        data.add(new TableExportColumn(Constants.DATE, date));
+        data.add(new TableExportColumn(Constants.AMOUNT_OF_PROTOCOLS, amountOfProtocols));
+        data.add(new TableExportColumn(Constants.AMOUNT_OF_SIGNED_PROTOCOL, amountOfSignedProtocols));
+        data.add(new TableExportColumn(Constants.AMOUNT_OF_REJECTED_PROTOCOLS, amountOfRejectedProtocols));
+        return data;
     }
 
     /**

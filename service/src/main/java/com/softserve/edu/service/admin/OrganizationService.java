@@ -64,6 +64,8 @@ public interface OrganizationService {
      */
     List<Organization> findByOrganizationTypeAndDeviceType(OrganizationType organizationType, Device.DeviceType deviceType);
 
+    List<Organization> findByOrganizationType(OrganizationType organizationType);
+
     Set<Organization> findByIdAndTypeAndActiveAgreementDeviceType(Long customerId, OrganizationType organizationType, Device.DeviceType deviceType);
 
     Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceType(Long executorId, OrganizationType organizationType, String deviceType);

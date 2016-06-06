@@ -78,6 +78,15 @@ public interface OrganizationRepository extends CrudRepository<Organization, Lon
                                                            @Param("deviceType") Device.DeviceType deviceType);
 
     /**
+     * Find all organizations by organization types
+     * @param organizationType type of organization
+     * @return list of organization
+     */
+    @Query("SELECT org FROM Organization org " +
+            "WHERE ( :organizationType in elements(org.organizationTypes))")
+    List<Organization> findByOrganizationType(@Param("organizationType") OrganizationType organizationType);
+
+    /**
      * Find all organizations in selected locality, organization type and device type
      *
      * @param localityId id of locality

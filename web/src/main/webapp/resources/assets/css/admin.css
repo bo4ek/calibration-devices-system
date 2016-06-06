@@ -39,29 +39,30 @@ body {
     padding-right: 5px;
 }
 
-.header_row{
+.header_row {
     margin-bottom: 20px;
 }
 
 @media (min-width: 992px) {
-    .menu_column{
+    .menu_column {
         width: 20%;
     }
-    .main_column{
+
+    .main_column {
         width: 80%;
     }
 }
 
-.toggle_button{
+.toggle_button {
     width: 100% !important;
     min-width: 100% !important;
 }
 
-.ui.sidebar{
+.ui.sidebar {
     width: 100% !important;
 }
 
-.ui.vertical.menu{
+.ui.vertical.menu {
     width: 100% !important;
 }
 
@@ -267,21 +268,20 @@ body {
     clear: both;
 }
 
- td.center {
+td.center {
     text-align: center;
 }
 
-.cleared
-{
-    display:block;
+.cleared {
+    display: block;
     clear: both;
     float: none;
     margin: 0;
     padding: 0;
     border: none;
     font-size: 0;
-    height:0;
-    overflow:hidden;
+    height: 0;
+    overflow: hidden;
 }
 
 table.dataTable thead .sorting,
@@ -450,7 +450,6 @@ table.dataTable thead .sorting:after {
     color: red;
 }
 
-
 .form-control-feedback {
     top: 0;
     right: 15px;
@@ -481,7 +480,7 @@ div.chosen-container {
     width: 100% !important;
 }
 
-#loading-bar .bar{
+#loading-bar .bar {
     background: #FF0000 !important;;
     height: 4px !important;;
 }
@@ -490,7 +489,7 @@ div.chosen-container {
     display: none;
 }
 
-.usernameNotAvailable{
+.usernameNotAvailable {
     border: red;
     color: red;
 }
@@ -498,7 +497,6 @@ div.chosen-container {
 th {
     text-align: center;
 }
-
 
 .userlabel {
     display: block;
@@ -510,7 +508,7 @@ th {
     margin-bottom: 0 !important;
 }
 
-#sidemenu{
+#sidemenu {
     border-radius: 0;
 }
 
@@ -551,23 +549,23 @@ th {
 }
 
 .submit {
-    font:  18px/22px italic;
+    font: 18px/22px italic;
     color: #008c86;
 }
 
 .row-centered {
-    text-align:center;
+    text-align: center;
 }
 
 hr {
-    margin:10px 0px;
+    margin: 10px 0px;
 }
-
 
 .row-buttons {
     margin: 5px 2px;
 }
-.acord-align{
+
+.acord-align {
     text-align: left !important;
 }
 
@@ -576,6 +574,7 @@ hr {
     margin-left: 1px;
 
 }
+
 .row-fields {
     margin-top: 5px;
     margin-bottom: 10px;
@@ -589,13 +588,13 @@ hr {
 }
 
 .col-centered {
-    display:inline-block;
-    float:none;
-    text-align:left;
-    margin-right:-4px;
+    display: inline-block;
+    float: none;
+    text-align: left;
+    margin-right: -4px;
 }
 
-.center-block{
+.center-block {
     display: block;
     margin-top: 5%;
     margin-left: auto;
@@ -622,15 +621,14 @@ hr {
     z-index: 1002;
 }
 
-.navbar-btn{
+.navbar-btn {
     color: rgba(250, 250, 250, 1);
     background-color: #333333;
     border: 0;
 }
 
 .navbar-btn:hover,
-.navbar-btn:focus
-{
+.navbar-btn:focus {
     color: rgb(218, 218, 218);
     background-color: #333333;
 }
@@ -639,46 +637,58 @@ hr {
     padding-left: 0;
 }
 
-#menubuttonelem li{
+#menubuttonelem li {
     padding-left: 5px;
 }
 
 #dark.navbar-default .navbar-brand {
     color: honeydew;
 }
+
 #dark.navbar-default {
     font-size: 16px;
     background-color: rgba(51, 51, 51, 1);
     border: 0;
 }
-#dark.navbar-default .navbar-nav>li>a {
+
+#dark.navbar-default .navbar-nav > li > a {
     color: rgba(250, 250, 250, 1);
     background-color: rgba(51, 51, 51, 1);
 }
-#dark.navbar-default .navbar-nav>li>a:hover,
-#dark.navbar-default .navbar-nav>li>a:focus {
+
+#dark.navbar-default .navbar-nav > li > a:hover,
+#dark.navbar-default .navbar-nav > li > a:focus {
     color: rgba(148, 145, 145, 1);
     background-color: rgba(51, 51, 51, 1);
 }
-#dark.navbar-default .navbar-nav>.active>a,
-#dark.navbar-default .navbar-nav>.active>a:hover,
-#dark.navbar-default .navbar-nav>.active>a:focus {
+
+#dark.navbar-default .navbar-nav > .active > a,
+#dark.navbar-default .navbar-nav > .active > a:hover,
+#dark.navbar-default .navbar-nav > .active > a:focus {
     color: rgba(85, 85, 85, 1);
     background-color: rgba(231, 231, 231, 1);
 }
+
 #dark.navbar-default .navbar-toggle {
     border-color: #ddd;
 }
+
 #dark.navbar-default .navbar-toggle:hover,
 #dark.navbar-default .navbar-toggle:focus {
     background-color: #ddd;
 }
+
 #dark.navbar-default .navbar-toggle .icon-bar {
     background-color: #888;
 }
+
 #dark.navbar-default .navbar-toggle:hover .icon-bar,
 #dark.navbar-default .navbar-toggle:focus .icon-bar {
     background-color: #333333;
+}
+
+#select_calibrators {
+    width: 800px;
 }
 
 .table-responsive > .ng-scope .pagination {

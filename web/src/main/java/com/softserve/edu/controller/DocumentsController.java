@@ -83,6 +83,19 @@ public class DocumentsController {
         sendFile(response, fileFormat, file);
     }
 
+    @RequestMapping(value = "report/{calibratorId}/{documentType}/{startDate}/{endDate}/{fileFormat}", method = RequestMethod.GET)
+    public void getReport(HttpServletResponse response,
+                          @PathVariable DocumentType documentType,
+                          @PathVariable String startDate,
+                          @PathVariable String endDate,
+                          @PathVariable FileFormat fileFormat,
+                          @PathVariable String calibratorId,
+                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser)
+            throws Exception {
+        FileObject file = reportsService.buildFileByDateAndModuleId(employeeUser.getOrganizationId(), calibratorId, documentType, fileFormat, startDate, endDate);
+        sendFile(response, fileFormat, file);
+    }
+
     /**
      * Returns a document with a specific fileFormat using verification and it's
      * most recent calibration test.

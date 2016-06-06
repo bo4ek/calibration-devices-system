@@ -277,7 +277,7 @@ public class OrganizationController {
             httpStatus = HttpStatus.CONFLICT;
         }
 
-        if (organization.getPassword()==null || !organization.getPassword().equals("generate")) {
+        if (organization.getPassword() == null || !organization.getPassword().equals("generate")) {
             Organization org = organizationService.getOrganizationById(id);
             User admin = userService.findOne(organization.getUsername());
             organizationService.sendOrganizationChanges(org, admin);
@@ -370,5 +370,22 @@ public class OrganizationController {
                 Device.DeviceType.valueOf(deviceType.toUpperCase())).stream()
                 .map(organization -> new ApplicationFieldDTO(organization.getId(), organization.getName()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Find all organizations by organization types
+     *
+     * @param organizationType type of organization
+     * @return list of organization wraped in ApplicationFieldDTO
+     */
+    @RequestMapping(value = "getOrganization/{organizationType}", method = RequestMethod.GET)
+    public List<ApplicationFieldDTO> getOrganizationByOrganizationType(@PathVariable("organizationType") String organizationType) {
+
+        List<Organization> organizations = organizationService.findByOrganizationType(OrganizationType.valueOf(organizationType));
+        List<ApplicationFieldDTO> result = new ArrayList<>(organizations.size());
+        for (Organization organization : organizations) {
+            result.add(new ApplicationFieldDTO(organization.getId(), organization.getName()));
+        }
+        return result;
     }
 }

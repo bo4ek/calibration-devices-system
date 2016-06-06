@@ -43,6 +43,9 @@ angular
             },
             getOrganizationByOrganizationTypeAndDeviceType: function (organizationType, deviceType) {
                 return getData('getOrganization/' + organizationType + '/' + deviceType);
+            },
+            getAllCalibrators: function () {
+                return getData('getOrganization/CALIBRATOR/');
             }
 
         };
