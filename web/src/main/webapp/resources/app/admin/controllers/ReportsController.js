@@ -15,7 +15,6 @@ angular
                 .success(function (calibrators) {
                         $scope.calibrators = calibrators;
                         $scope.selectedValues.calibrator = undefined;
-                        debugger;
                     }
                 );
         };
