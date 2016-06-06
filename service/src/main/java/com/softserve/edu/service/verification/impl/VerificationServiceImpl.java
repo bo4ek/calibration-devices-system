@@ -423,14 +423,14 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
+    public ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, User user, String date, String endDate, String client_full_name, String provider, String district,
                                                                                                 String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
                                                                                                 String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder) {
 
-        CriteriaQuery<Verification> criteriaQuery = ArchivalVerificationsQueryConstructorCalibrator.buildSearchPlaningTaskQuery(organizationId, pageNumber, itemsPerPage, date, endDate, client_full_name, provider, district,
+        CriteriaQuery<Verification> criteriaQuery = ArchivalVerificationsQueryConstructorCalibrator.buildSearchPlaningTaskQuery(organizationId, pageNumber, itemsPerPage, user, date, endDate, client_full_name, provider, district,
                 street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, notes, sortCriteria, sortOrder, em);
 
-        Long count = em.createQuery(ArchivalVerificationsQueryConstructorCalibrator.buildCountPlaningTaskQuery(organizationId, pageNumber, itemsPerPage, date, endDate, client_full_name, provider, district,
+        Long count = em.createQuery(ArchivalVerificationsQueryConstructorCalibrator.buildCountPlaningTaskQuery(organizationId, pageNumber, itemsPerPage, user, date, endDate, client_full_name, provider, district,
                 street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, notes, sortCriteria, sortOrder, em)).getSingleResult();
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);

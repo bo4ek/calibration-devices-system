@@ -224,7 +224,7 @@ public interface VerificationService {
 
     public void rejectVerification(Verification verification, RejectedInfo rejectedInfo, Status status);
 
-    ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
+    ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, User user, String date, String endDate, String client_full_name, String provider, String district,
                                                                                          String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
                                                                                          String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder);
 }

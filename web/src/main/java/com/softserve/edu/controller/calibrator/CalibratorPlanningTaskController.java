@@ -12,6 +12,7 @@ import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
+import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
@@ -24,6 +25,7 @@ import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
 import com.softserve.edu.service.calibrator.CalibratorService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
+import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
@@ -66,6 +68,9 @@ public class CalibratorPlanningTaskController {
 
     @Autowired
     CalibratorService calibratorService;
+
+    @Autowired
+    UserService userService;
 
     private Logger logger = Logger.getLogger(CalibratorPlanningTaskController.class);
 
@@ -272,11 +277,18 @@ public class CalibratorPlanningTaskController {
                                                                                                VerificationPlanningTaskFilterSearch searchData,
                                                                                                @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
+
+        User user = userService.findOne(employeeUser.getUsername());
+        if (!user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
+            user = null;
+        }
+
         ListToPageTransformer<Verification> queryResult = verificationService
                 .findPageOfPlaningTaskVerificationsByCalibratorId(
                         employeeUser.getOrganizationId(),
                         pageNumber,
                         itemsPerPage,
+                        user,
                         searchData.getDate(),
                         searchData.getEndDate(),
                         searchData.getClient_full_name(),

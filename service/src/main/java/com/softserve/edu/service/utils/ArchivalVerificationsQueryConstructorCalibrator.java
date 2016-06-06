@@ -177,7 +177,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         return criteriaQuery;
     }
 
-    public static CriteriaQuery<Verification> buildSearchPlaningTaskQuery(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
+    public static CriteriaQuery<Verification> buildSearchPlaningTaskQuery(Long organizationId, Integer pageNumber, Integer itemsPerPage, User user, String date, String endDate, String client_full_name, String provider, String district,
                                                                           String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
                                                                           String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder, EntityManager em) {
 
@@ -188,7 +188,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         Join<Verification, AdditionalInfo> additionalInfoJoin = root.join("info");
 
-        Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicatePlannedTask(root, cb, organizationId, date, endDate, client_full_name, provider, district,
+        Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicatePlannedTask(root, cb, organizationId, user, date, endDate, client_full_name, provider, district,
                 street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, notes, additionalInfoJoin);
 
         if ((sortCriteria != null) && (sortOrder != null)) {
@@ -201,7 +201,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         return criteriaQuery;
     }
 
-    private static Predicate buildPredicatePlannedTask(Root<Verification> root, CriteriaBuilder cb, Long organizationId, String startDateToSearch, String endDateToSearch, String client_full_name,
+    private static Predicate buildPredicatePlannedTask(Root<Verification> root, CriteriaBuilder cb, Long organizationId, User user, String startDateToSearch, String endDateToSearch, String client_full_name,
                                                        String provider, String district, String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate,
                                                        String sealPresence, String phone, String verificationWithDismantle, String notes, Join<Verification, AdditionalInfo> additionalInfoJoin) {
 
@@ -211,6 +211,10 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         queryPredicate = cb.and(cb.equal(root.get("taskStatus"), Status.PLANNING_TASK), queryPredicate);
         queryPredicate = cb.and(cb.equal(root.get("status"), Status.IN_PROGRESS), queryPredicate);
+
+        if (user != null) {
+            queryPredicate = cb.and(cb.equal(root.get("calibratorEmployee"), user), queryPredicate);
+        }
 
         if (startDateToSearch != null && endDateToSearch != null) {
             LocalDate startDate;
@@ -411,7 +415,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
     }
 
 
-    public static CriteriaQuery<Long> buildCountPlaningTaskQuery(Long organizationId, Integer pageNumber, Integer itemsPerPage, String date, String endDate, String client_full_name, String provider, String district,
+    public static CriteriaQuery<Long> buildCountPlaningTaskQuery(Long organizationId, Integer pageNumber, Integer itemsPerPage, User user, String date, String endDate, String client_full_name, String provider, String district,
                                                                  String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
                                                                  String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder, EntityManager em) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -419,7 +423,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
         ;
         Root<Verification> root = countQuery.from(Verification.class);
         Join<Verification, AdditionalInfo> additionalInfoJoin = root.join("info");
-        Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicatePlannedTask(root, cb, organizationId, date, endDate, client_full_name, provider, district,
+        Predicate predicate = ArchivalVerificationsQueryConstructorCalibrator.buildPredicatePlannedTask(root, cb, organizationId, user, date, endDate, client_full_name, provider, district,
                 street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, notes, additionalInfoJoin);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
