@@ -135,9 +135,12 @@ public class ArchivalVerificationsQueryConstructorProvider {
         }
 
         if ((building != null) && (building.length() > 0)) {
-            queryPredicate = cb.and(
-                    cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"),
-                    queryPredicate);
+            if (building.endsWith("%")) {
+                queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"), queryPredicate);
+            } else {
+                queryPredicate = cb.and(cb.equal(root.get("clientData").get("clientAddress").get("building"), building), queryPredicate);
+            }
+
         }
 
         if ((calibratorName != null) && (calibratorName.length() > 0)) {
@@ -248,7 +251,12 @@ public class ArchivalVerificationsQueryConstructorProvider {
         }
 
         if ((building != null) && (building.length() > 0)) {
-            queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"), queryPredicate);
+            if (building.endsWith("%")) {
+                queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"), queryPredicate);
+            } else {
+                queryPredicate = cb.and(cb.equal(root.get("clientData").get("clientAddress").get("building"), building), queryPredicate);
+            }
+
         }
 
         if ((flat != null) && (flat.length() > 0)) {

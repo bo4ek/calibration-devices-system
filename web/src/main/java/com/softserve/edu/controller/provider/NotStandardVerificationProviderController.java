@@ -61,16 +61,22 @@ public class NotStandardVerificationProviderController {
     @RequestMapping(value = "assign/providerEmployee", method = RequestMethod.PUT)
     public void assignProviderEmployee(@RequestBody VerificationProviderEmployeeDTO verificationProviderEmployeeDTO) {
 
-        String userNameProvider = verificationProviderEmployeeDTO.getEmployeeProvider().getUsername();
-        String idVerification = verificationProviderEmployeeDTO.getIdVerification();
-        User employeeProvider = verificationProviderEmployeeService.oneProviderEmployee(userNameProvider);
-        verificationProviderEmployeeService.assignProviderEmployeeForNotStandardVerification(idVerification,
-                employeeProvider);
+        User employeeProvider = verificationProviderEmployeeService.oneProviderEmployee(verificationProviderEmployeeDTO.getEmployeeProvider().getUsername());
+        if (verificationProviderEmployeeDTO.getIdVerification() != null) {
+            String idVerification = verificationProviderEmployeeDTO.getIdVerification();
+            verificationProviderEmployeeService.assignProviderEmployeeForNotStandardVerification(idVerification,
+                    employeeProvider);
+        } else {
+            for (String id : verificationProviderEmployeeDTO.getIdsOfVerifications()) {
+                verificationProviderEmployeeService.assignProviderEmployeeForNotStandardVerification(id,
+                        employeeProvider);
+            }
+        }
     }
 
     @RequestMapping(value = "assign/providerEmployee/{verificationId}", method = RequestMethod.PUT)
-    public void assignCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
-                                         @PathVariable String verificationId) {
+    public void assignVerificationProviderEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                                   @PathVariable String verificationId) {
         User user = verificationProviderEmployeeService.oneProviderEmployee(userDetails.getUsername());
         if(user != null && user.getUserRoles().contains(UserRole.PROVIDER_EMPLOYEE)) {
             verificationProviderEmployeeService.assignProviderEmployeeForNotStandardVerification(verificationId, user);
@@ -108,7 +114,8 @@ public class NotStandardVerificationProviderController {
                     verification.getClientData().getClientAddress(),
                     verification.getClientData().getFirstName(),
                     verification.getClientData().getLastName(),
-                    verification.getClientData().getMiddleName()));
+                    verification.getClientData().getMiddleName(),
+                    verification.getCalibrator().getName()));
         }
         return resultList;
     }

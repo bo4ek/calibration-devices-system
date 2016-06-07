@@ -219,11 +219,15 @@
                         cb.isFalse(root.get("counterStatus")), queryPredicate);
             }
         }
-        if ((building != null) && (building.length() > 0)) {
-            queryPredicate = cb.and(
-                    cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"),
-                    queryPredicate);
-        }
+
+		if ((building != null) && (building.length() > 0)) {
+			if (building.endsWith("%")) {
+				queryPredicate = cb.and(cb.like(root.get("clientData").get("clientAddress").get("building"), "%" + building + "%"), queryPredicate);
+			} else {
+				queryPredicate = cb.and(cb.equal(root.get("clientData").get("clientAddress").get("building"), building), queryPredicate);
+			}
+
+		}
 
         if ((flat != null) && (flat.length() > 0)) {
             queryPredicate = cb.and(

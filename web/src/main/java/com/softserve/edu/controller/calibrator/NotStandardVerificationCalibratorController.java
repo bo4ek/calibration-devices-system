@@ -59,7 +59,6 @@ public class NotStandardVerificationCalibratorController {
     public PageDTO<NotStandardVerificationDTO> getPageOfVerificationsCreatedByCalibrator(@PathVariable String verificationStatus,
                                                                                          @PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
                                                                                          @PathVariable String sortOrder, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
-
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
         Status status = Status.valueOf(verificationStatus);
         List<Verification> verifications = verificationService.findPageOfVerificationsByCalibratorEmployeeAndStatus(
@@ -158,6 +157,7 @@ public class NotStandardVerificationCalibratorController {
                         verification.getRejectedMessage(),
                         verification.getComment(),
                         verification.getStatus()));
+                System.out.println(verification.getCalibrator().getName());
             }
             return resultList;
         } catch (Exception e) {

@@ -67,7 +67,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
     @Transactional
     public void assignProviderEmployeeForNotStandardVerification(String verificationId, User providerEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
-        if (verification != null && verification.getProvider().getId().equals(providerEmployee.getOrganization().getId())) {
+        if (verification != null && verification.getProviderEmployee() == null && verification.getProvider().getId().equals(providerEmployee.getOrganization().getId())) {
             verification.setProviderEmployee(providerEmployee);
             if (providerEmployee == null) {
                 verification.setStatus(Status.SENT_TO_PROVIDER);

@@ -30,7 +30,19 @@
 
                                         <tbody>
                                         <tr ng-repeat="verification in $data">
-
+                                            <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+                                                <input type="checkbox"
+                                                       ng-model="allSelected"
+                                                       ng-model-options="{getterSetter: true}"
+                                                       ng-click="allSelected(value)"
+                                                       name="filter-checkbox" value=""/>
+                                            </script>
+                                            <td header="'ng-table/headers/checkbox.html'">
+                                                <div>
+                                                    <input type="checkbox" ng-model="verification.selected"
+                                                           ng-click="resolveVerificationId(verification.id)"/>
+                                                </div>
+                                            </td>
                                             <td data-title="'INITIAL_DATE' | translate" class="datecolumn">
                                                 {{ verification.initialDate | date : 'dd-MM-yyyy'}}
                                             </td>
@@ -42,8 +54,9 @@
                                             </td>
                                             <td data-title="'LOCALITY' | translate">{{ verification.locality}}
                                             </td>
-
-                                            <td data-title="'CLIENT_STREET' | translate">{{ verification.street }}
+                                            <td data-title="'CLIENT_STREET' | translate">{{ verification.street}}
+                                            </td>
+                                            <td data-title="'CALIBRATOR' | translate">{{ verification.calibrator}}
                                             </td>
                                             <td data-title="'ACTIONS' | translate" style="width: 12%"
                                                 class="control_buttons">

@@ -43,27 +43,21 @@ public class NotStandardVerificationDTO {
     private String rejectMessage;
     private String comment;
     private Status status;
+    private String calibrator;
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address, String firstName, String lastName,
                                       String middleName, Counter counter, Set<CalibrationTest> tests,
                                       Organization providerFromBBI, Organization nameProvider, String rejectMessage, String comment,
                                       Status status) {
-        this.id = id;
-        this.initialDate = initialDate;
-        this.fullName = lastName + " " + firstName + " " + middleName;
-        this.street = address.getStreet();
-        this.district = address.getDistrict();
-        this.locality = address.getLocality();
-        this.building = address.getBuilding();
+        this(id, initialDate, address, firstName, lastName, middleName);
         this.flat = address.getFlat();
-         this.symbol = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getSymbol() : null;
-
+        this.symbol = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getSymbol() : null;
         this.standardSize = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getStandardSize() : null;
-        this.realiseYear = (counter != null ) ? counter.getReleaseYear() : null;
+        this.realiseYear = (counter != null) ? counter.getReleaseYear() : null;
         this.stamp = (counter != null) ? counter.getStamp() : null;
         this.rejectMessage = rejectMessage;
         this.comment = comment;
-        this.providerFromBBI = (providerFromBBI != null) ? providerFromBBI.getName(): null;
+        this.providerFromBBI = (providerFromBBI != null) ? providerFromBBI.getName() : null;
         this.nameProvider = (nameProvider != null) ? nameProvider.getName() : null;
         // In case of Not Standard Verifications one verification has only one test
         this.fileName = (tests != null && tests.size() != 0) ? tests.iterator().next().getName() : null;
@@ -79,7 +73,11 @@ public class NotStandardVerificationDTO {
         this.street = address.getStreet();
         this.district = address.getDistrict();
         this.locality = address.getLocality();
-
     }
 
+    public NotStandardVerificationDTO(String id, Date initialDate, Address address,
+                                      String firstName, String lastName, String middleName, String calibrator) {
+        this(id, initialDate, address, firstName, lastName, middleName);
+        this.calibrator = calibrator;
+    }
 }
