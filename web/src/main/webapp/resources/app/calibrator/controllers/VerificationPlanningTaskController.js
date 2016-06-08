@@ -235,6 +235,7 @@ angular
                             .success(function (result) {
                                 $scope.resultsCount = result.totalItems;
                                 $defer.resolve(result.content);
+                                $scope.allVerifications = result.content;
                                 params.total(result.totalItems);
                             });
                     }
@@ -244,6 +245,7 @@ angular
 
             $scope.idsOfVerifications = [];
             $scope.checkedItems = [];
+            $scope.allIsEmpty = true;
 
             /**
              * adds selected verificationId to the array
@@ -297,23 +299,27 @@ angular
              * table data
              */
             $scope.openTaskForTeam = function () {
-                $rootScope.verifIds = [];
-                for (var i = 0; i < $scope.idsOfVerifications.length; i++) {
-                    $rootScope.verifIds[i] = $scope.idsOfVerifications[i];
+
+                if ($scope.idsOfVerifications.length === 0) {
+                    toaster.pop('error', $filter('translate')('INFORMATION'),
+                        $filter('translate')('NO_VERIFICATIONS_CHECKED'));
+                } else {
+                    $rootScope.verifIds = [];
+                    for (var i = 0; i < $scope.idsOfVerifications.length; i++) {
+                        $rootScope.verifIds[i] = $scope.idsOfVerifications[i];
+                    }
+                    $scope.$modalInstance = $modal.open({
+                        animation: true,
+                        controller: 'TaskForTeamModalControllerCalibrator',
+                        templateUrl: 'resources/app/calibrator/views/modals/addTaskForTeamModal.html'
+                    });
+                    $scope.$modalInstance.result.then(function () {
+                        $scope.tableParams.reload();
+                        $scope.checkedItems = [];
+                        $scope.idsOfVerifications = [];
+                        $rootScope.$broadcast('verification-sent-to-team');
+                    });
                 }
-                // $rootScope.emptyStatus = $scope.allIsEmpty;
-                $scope.$modalInstance = $modal.open({
-                    animation: true,
-                    controller: 'TaskForTeamModalControllerCalibrator',
-                    templateUrl: 'resources/app/calibrator/views/modals/addTaskForTeamModal.html'
-                });
-                $scope.$modalInstance.result.then(function () {
-                    $scope.tableParams.reload();
-                    $scope.checkedItems = [];
-                    $scope.idsOfVerifications = [];
-                    $rootScope.$broadcast('verification-sent-to-team');
-                    // $scope.allIsEmpty = true;
-                });
             };
 
             /**
@@ -324,7 +330,6 @@ angular
             $rootScope.verificationId = null;
             $scope.openCounterInfoModal = function (id) {
                 $rootScope.verificationId = id;
-                $log.debug($rootScope.verificationId);
                 $scope.$modalInstance = $modal.open({
                     animation: true,
                     controller: 'CounterStatusControllerCalibrator',
@@ -354,6 +359,80 @@ angular
                     $scope.tableParams.reload();
 
                 });
+            };
+
+            $scope.checkProviderEmployee = function () {
+                var result = false;
+                angular.forEach($scope.allVerifications, function (verification) {
+                    if (verification.providerEmployee) {
+                        result = true;
+                    }
+                });
+                return result;
+            };
+
+            var getAllSelected = function () {
+                if (!$scope.allVerifications) {
+                    return false;
+                }
+                var checkedItems = $scope.allVerifications.filter(function (verification) {
+                    return verification.selected;
+                });
+
+                return checkedItems.length === $scope.allVerifications.length;
+            };
+
+            var setAllSelected = function (value) {
+                angular.forEach($scope.allVerifications, function (verification) {
+                    verification.selected = value;
+                    $scope.resolveVerificationId(verification.verificationId);
+                });
+
+            };
+
+            $scope.allSelected = function (value) {
+                if (value !== undefined) {
+                    return setAllSelected(value);
+                } else {
+                    return getAllSelected();
+                }
+            };
+
+            /**
+             * push verification id to array
+             */
+
+            $scope.resolveVerificationId = function (id) {
+                var index = $scope.idsOfVerifications.indexOf(id);
+                if (index === -1) {
+                    $scope.idsOfVerifications.push(id);
+                    index = $scope.idsOfVerifications.indexOf(id);
+                }
+
+                if (!$scope.checkedItems[index]) {
+                    $scope.idsOfVerifications.splice(index, 1, id);
+                    $scope.checkedItems.splice(index, 1, true);
+                } else {
+                    $scope.idsOfVerifications.splice(index, 1);
+                    $scope.checkedItems.splice(index, 1);
+                }
+                checkForEmpty();
+            };
+
+            $scope.resolveVerification = function (verification) {
+                if ($scope.selectedSentVerification && $scope.selectedSentVerification !== verification) {
+                    $scope.selectedSentVerification.selected = false;
+                }
+                $scope.selectedSentVerification = verification;
+                $scope.idsOfVerifications[0] = verification.id;
+
+            };
+
+            /**
+             * check if idsOfVerifications array is empty
+             */
+            var checkForEmpty = function () {
+                $scope.allIsEmpty = $scope.idsOfVerifications.length === 0;
             };
 
         }]);

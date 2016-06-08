@@ -13,11 +13,17 @@
             <button class="btn btn-primary btn-sm" type="button" ng-click="initiateVerification()">
                 <span class="glyphicon glyphicon-plus"></span>{{ 'CREATE_NEW' | translate }}
             </button>
-
             <button class="btn btn-primary btn-sm" type="button" ng-click="uploadArchive()">
                 <i class="fa fa-file-archive-o"></i> {{ 'UPLOAD_ARCHIVE' | translate }}
             </button>
             <cds-global-search params="searchParameters" model="globalSearchParams"></cds-global-search>
+            <button class="btn btn-success btn-sm pull-right"
+                    type="button"
+                    popover="{{'ASSIGN_EMPLOYEE_FOR_ALL_FILTERED' | translate}}"
+                    popover-trigger="mouseenter"
+                    ng-click="assignEmployeeCalibratorForAll()">
+                <i class="fa fa-user "></i> {{ 'ASSIGN_RESPONSIBLE_PERSON' | translate }}
+            </button>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -43,6 +49,7 @@
                                             ng-class="{'unreadClass': verification.readStatus=='UNREAD'}">
                                             <td data-title="''">
                                                 <input type="checkbox"
+                                                       header="'ng-table/headers/checkbox.html'"
                                                        ng-show="verification.calibratorEmployee"
                                                        ng-hide="verification.status != 'IN_PROGRESS'"
                                                        ng-click="resolveVerificationId(verification)"/>

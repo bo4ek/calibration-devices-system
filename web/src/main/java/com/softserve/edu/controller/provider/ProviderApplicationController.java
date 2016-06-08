@@ -13,8 +13,10 @@ import com.softserve.edu.dto.LocalityDTO;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
+import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.organization.Organization;
+import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
@@ -28,6 +30,7 @@ import com.softserve.edu.service.catalogue.DistrictService;
 import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
 import com.softserve.edu.service.provider.ProviderService;
+import com.softserve.edu.service.user.UserService;
 import com.softserve.edu.service.verification.VerificationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +79,9 @@ public class ProviderApplicationController {
     private OrganizationService organizationService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     private MailService mail;
 
     private final Logger logger = Logger.getLogger(ProviderApplicationController.class);
@@ -88,8 +94,10 @@ public class ProviderApplicationController {
     @RequestMapping(value = "send", method = RequestMethod.POST)
     public ResponseEntity getInitiateVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
                                                   @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+
         List<String> verificationIds = new ArrayList<>();
         HttpStatus httpStatus = HttpStatus.CREATED;
+        User user = userService.findOne(employeeUser.getUsername());
         try {
             ClientData clientData = new ClientData(
                     verificationDTO.getFirstName(),
@@ -141,7 +149,11 @@ public class ProviderApplicationController {
             Verification verification = new Verification(new Date(), clientData, provider, device, Status.SENT,
                     Verification.ReadStatus.UNREAD, calibrator, info, verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
                     verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK, verificationDTO.getVerificationWithDismantle());
-
+            if (user.getUserRoles().contains(UserRole.PROVIDER_EMPLOYEE)) {
+                verification.setReadStatus(Verification.ReadStatus.READ);
+                verification.setStatus(Status.ACCEPTED);
+                verification.setProviderEmployee(user);
+            }
             verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
             if (verificationDTO.getEmail() != null) {
                 String name = clientData.getFirstName() + " " + clientData.getLastName();

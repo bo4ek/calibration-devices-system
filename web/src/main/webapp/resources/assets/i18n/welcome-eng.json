@@ -847,5 +847,6 @@
     "UNSIGN_PROTOCOL": "Unsign protocol",
     "PROTOKOL_SUCCESSFULLY_UNSIGNED": "Protocol successfully unsigned",
     "REPORT_BY_CALIBRATOR_MODULE": "Report by calibration module",
-    "SELECT_CALIBRATOR": "Select calibrator"
+    "SELECT_CALIBRATOR": "Select calibrator",
+    "ASSIGN_EMPLOYEE_FOR_ALL_FILTERED": "Assign employee for all filtered verification where calibrator employee is not defined"
 }

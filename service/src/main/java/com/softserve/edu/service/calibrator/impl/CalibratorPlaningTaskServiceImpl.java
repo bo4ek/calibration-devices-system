@@ -615,9 +615,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
                 setClientDataCard(null, fullName, null, null, null, telephone);
                 setClientAddress(null, null, district, null, street, building, flat);
             }
-
-            countersNumber.add(String.valueOf(1));
-            comment.add(getComent(verification));
         }
 
         data.add(new TableExportColumn(Constants.TASK_DATE, taskDate));

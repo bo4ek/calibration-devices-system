@@ -380,7 +380,7 @@ public class CalibratorVerificationController {
      */
     @RequestMapping(value = "new/upload-archive-for-station", method = RequestMethod.POST)
     public List<BBIOutcomeDTO> uploadFileArchiveForStation(@RequestBody MultipartFile file,
-                                                 @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
 
         List<BBIOutcomeDTO> bbiOutcomeDTOList = null;
@@ -618,10 +618,16 @@ public class CalibratorVerificationController {
      */
     @RequestMapping(value = "assign/calibratorEmployee", method = RequestMethod.PUT)
     public void assignCalibratorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationProviderEmployeeDTO) {
-        String userNameCalibrator = verificationProviderEmployeeDTO.getEmployeeCalibrator().getUsername();
-        String idVerification = verificationProviderEmployeeDTO.getIdVerification();
-        User employeeCalibrator = calibratorService.oneCalibratorEmployee(userNameCalibrator);
-        calibratorService.assignCalibratorEmployee(idVerification, employeeCalibrator);
+
+        if (verificationProviderEmployeeDTO.getIdVerification() != null) {
+            calibratorService.assignCalibratorEmployee(verificationProviderEmployeeDTO.getIdVerification(),
+                    calibratorService.oneCalibratorEmployee(verificationProviderEmployeeDTO.getEmployeeCalibrator().getUsername()));
+        } else if (verificationProviderEmployeeDTO.getIdsOfVerifications() != null) {
+            for (String id : verificationProviderEmployeeDTO.getIdsOfVerifications()) {
+                calibratorService.assignCalibratorEmployee(id,
+                        calibratorService.oneCalibratorEmployee(verificationProviderEmployeeDTO.getEmployeeCalibrator().getUsername()));
+            }
+        }
     }
 
     @RequestMapping(value = "assign/calibratorEmployee/{verificationId}", method = RequestMethod.PUT)

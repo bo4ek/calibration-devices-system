@@ -229,8 +229,6 @@ angular
                     }
                 }, {
                     total: 0,
-                    filterOptions: {filterDelay: 15000},
-                    filterDelay: 5000,
                     getData: function ($defer, params) {
                         $scope.idsOfVerifications = [];
                         var sortCriteria = Object.keys(params.sorting())[0];
@@ -256,6 +254,7 @@ angular
                         verificationServiceCalibrator.getNewVerifications(params.page(), params.count(), searchParams, sortCriteria, sortOrder)
                             .success(function (result) {
                                 $scope.resultsCount = result.totalItems;
+                                $scope.allVerifications = result.content;
                                 $defer.resolve(result.content);
                                 params.total(result.totalItems);
                             }, function (result) {
@@ -661,6 +660,51 @@ angular
                                 .then(function () {
                                     $scope.tableParams.reload();
                                 });
+                        }
+                    });
+            };
+
+            $scope.assignEmployeeCalibratorForAll = function () {
+                profileService.havePermissionToAssignPerson()
+                    .then(function (response) {
+                        if (response.data) {
+                            var modalInstance = $modal.open({
+                                animation: true,
+                                templateUrl: 'resources/app/calibrator/views/employee/assigning-calibratorEmployee.html',
+                                controller: 'CalibratorEmployeeControllerCalibrator',
+                                size: 'md',
+                                windowClass: 'xx-dialog',
+                                resolve: {
+                                    calibratorEmploy: function () {
+                                        return verificationServiceCalibrator.getCalibrators()
+                                            .success(function (calibrators) {
+                                                    return calibrators;
+                                                }
+                                            );
+                                    }
+                                }
+                            });
+                            /**
+                             * executes when modal closing
+                             */
+                            modalInstance.result.then(function (formData) {
+                                var verificationIds = [];
+                                angular.forEach($scope.allVerifications, function (verification) {
+                                    if (verification.calibratorEmployee === null) {
+                                        verificationIds.push(verification.id);
+                                    }
+                                });
+                                var dataToSend = {
+                                    idsOfVerifications: verificationIds,
+                                    employeeCalibrator: formData.provider
+                                };
+                                $log.info(dataToSend);
+                                verificationServiceCalibrator
+                                    .sendEmployeeCalibrator(dataToSend)
+                                    .success(function () {
+                                        $scope.tableParams.reload();
+                                    });
+                            });
                         }
                     });
             };
