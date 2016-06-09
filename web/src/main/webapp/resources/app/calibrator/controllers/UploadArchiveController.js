@@ -34,7 +34,7 @@ angular
             $scope.upload = function (files) {
                 if (files && files.length) {
                     var pathUrl;
-                    if(uploadForStation) {
+                    if (uploadForStation) {
                         pathUrl = 'calibrator/verifications/new/upload-archive-for-station';
                     } else {
                         pathUrl = 'calibrator/verifications/new/upload-archive';
@@ -48,6 +48,7 @@ angular
                             $scope.uploaded = true;
                             $scope.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         }).success(function (data, status, headers, config) {
+
                                 $timeout(function () {
                                     if (status === 200) {
                                         $scope.messageError = null;
@@ -68,6 +69,43 @@ angular
                                         $scope.progressPercentage = parseInt(0);
                                         $scope.uploaded = false;
                                     }
+
+
+                                    var textFile = null,
+                                        makeTextFile = function (text) {
+                                            var result = "\r\n" + $filter('translate')('FILE_NAME') + ":" + config.file.name;
+                                            result = result.concat("\r\n" + $filter('translate')('TOTAL') + ":" + $scope.totalBBIs);
+                                            result = result.concat("\r\n" + $filter('translate')('DOWNLOAD_SUCCESS') + ":" + $scope.successfulBBIs);
+                                            result = result.concat("\r\n" + $filter('translate')('DOWNLOAD_FAIL') + ":" + $scope.unsuccessfulBBIs + "\r\n");
+
+                                            angular.forEach($scope.uploadedBBIOutcomes, function (obj) {
+                                                result = result.concat("\r\n" + $filter('translate')('FILE_NAME') + ":" + obj.bbiFileName);
+                                                if (obj.success == false) {
+                                                    result = result.concat("\r\n" + $filter('translate')('STATUS') + ":" + $filter('translate')('UPLOAD_FAIL'));
+                                                }
+                                                if (obj.success == true) {
+                                                    result = result.concat("\r\n" + $filter('translate')('STATUS') + ":" + $filter('translate')('UPLOAD_SUCCESS'));
+                                                }
+                                                if (obj.reasonOfRejection != null) {
+                                                    result = result.concat("\r\n" + $filter('translate')('REASON') + " : " + $filter('translate')(obj.reasonOfRejection));
+                                                }
+                                                result = result.concat("\r\n");
+                                            });
+
+                                            var data = new Blob([result], {type: 'text/plain'});
+                                            if (textFile !== null) {
+                                                window.URL.revokeObjectURL(textFile);
+                                            }
+                                            textFile = window.URL.createObjectURL(data);
+                                            return textFile;
+                                        };
+
+                                    var create = document.getElementById('create');
+                                    create.addEventListener('click', function () {
+                                        var link = document.getElementById('downloadlink');
+                                        link.href = makeTextFile(data);
+                                        link.style.display = 'block';
+                                    }, false);
                                 });
                             }
                             )

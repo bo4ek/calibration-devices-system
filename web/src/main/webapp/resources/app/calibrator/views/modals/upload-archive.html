@@ -67,13 +67,18 @@
                                 <i class="fa fa-check-circle text-success" ng-show="bbiFileOutcome.success == true"></i>
                             </div>
                         </div>
-
                         <div class="content">
                             <p class="transition hidden" ng-if="bbiFileOutcome.success == false">
                                 {{bbiFileOutcome.reasonOfRejection | translate}}</p>
 
                             <p class="transition hidden" ng-if="bbiFileOutcome.success == true">Успішно оброблено!</p>
                         </div>
+                    </div>
+                    <div>
+                        <a download="logfile.txt" id="downloadlink" style="display: none" class="btn btn-link btn-md pull-left">{{'DOWNLOAD_LOG_FILE' | translate}}</a>
+                        <button ng-model="button" type="button" class="btn btn-default btn-md" id="create">{{'CREATE_LOG_FILE' | translate}}</button>
+
+
                     </div>
                 </div>
             </div>
