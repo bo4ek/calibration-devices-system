@@ -98,7 +98,13 @@ public class VerificationPageDTOTransformer {
             }
             if (verification.getInfo() != null) {
                 dto.setDateOfVerif(verification.getInfo().getDateOfVerif());
-                dto.setTime(verification.getInfo().getTimeFrom() + "-" + verification.getInfo().getTimeTo());
+                String time;
+                if ((verification.getInfo().getTimeFrom() != null) || (verification.getInfo().getTimeTo() != null)) {
+                    time = verification.getInfo().getTimeFrom() + " - " + verification.getInfo().getTimeTo();
+                } else {
+                    time = "";
+                }
+                dto.setTime(time);
                 dto.setServiceability(verification.getInfo().getServiceability());
                 dto.setNoWaterToDate(verification.getInfo().getNoWaterToDate());
                 dto.setNotes(verification.getInfo().getNotes());

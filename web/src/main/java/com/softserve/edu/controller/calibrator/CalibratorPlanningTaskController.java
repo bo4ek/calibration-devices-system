@@ -1,12 +1,10 @@
 package com.softserve.edu.controller.calibrator;
 
 import com.softserve.edu.controller.provider.util.VerificationPageDTOTransformer;
+import com.softserve.edu.dto.CalibrationTaskFilterSearch;
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.dto.VerificationPlanningTaskFilterSearch;
-import com.softserve.edu.dto.calibrator.CalibrationTaskDTO;
-import com.softserve.edu.dto.calibrator.SymbolsAndSizesDTO;
-import com.softserve.edu.dto.calibrator.TeamDTO;
-import com.softserve.edu.dto.calibrator.VerificationPlanningTaskDTO;
+import com.softserve.edu.dto.calibrator.*;
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.catalogue.Team.DisassemblyTeam;
 import com.softserve.edu.entity.device.CalibrationModule;
@@ -96,7 +94,7 @@ public class CalibratorPlanningTaskController {
 
         Page<CalibrationTask> queryResult = taskService
                 .getFilteredPageOfCalibrationTasks(filterParams, pageable, employeeUser.getUsername());
-        List<CalibrationTaskDTO> content = new ArrayList<CalibrationTaskDTO>();
+        List<CalibrationTaskDTO> content = new ArrayList<>();
 
         for (CalibrationTask task : queryResult) {
             int numOfVerifications = calibratorService.getNumOfVerifications(task.getId());
@@ -107,6 +105,35 @@ public class CalibratorPlanningTaskController {
             }
         }
         return new PageDTO<>(queryResult.getTotalElements(), content);
+    }
+
+    @RequestMapping(value = "forTeam/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}/{allTests}", method = RequestMethod.GET)
+    public PageDTO<TaskForTeamDTO> getSortedAndFilteredPageOfCalibrationTasksForTeam(@PathVariable Integer pageNumber,
+                                                                                  @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
+                                                                                  @PathVariable String sortOrder, @PathVariable Boolean allTests,
+                                                                                  CalibrationTaskFilterSearch search,
+                                                                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
+
+        ListToPageTransformer<CalibrationTask> queryResult = taskService.findPageOfCalibrationTasks(pageNumber, itemsPerPage,
+                search.getStartDateToSearch(),
+                search.getEndDateToSearch(),
+                search.getName(),
+                search.getLeaderFullName(),
+                search.getLeaderFullName(),
+                sortCriteria,
+                sortOrder,
+                calibratorEmployee,
+                allTests);
+
+        List<TaskForTeamDTO> content = new ArrayList<>();
+        for (CalibrationTask task : queryResult.getContent()) {
+            int numOfVerifications = calibratorService.getNumOfVerifications(task.getId());
+            int numOfCompletedVerifications = calibratorService.getNumOfRemovedMeters(task);
+            content.add(new TaskForTeamDTO(task.getId(), task.getDateOfTask(), task.getTeam().getName(),
+                    task.getTeam().getLeaderFullName(), task.getTeam().getLeaderPhone(), task.getStatus(), numOfVerifications, numOfCompletedVerifications));
+        }
+        return  new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
     /**
@@ -139,7 +166,7 @@ public class CalibratorPlanningTaskController {
             content.add(new VerificationPlanningTaskDTO(verification.getSentToCalibratorDate(), verification.getId(),
                     verification.getProvider().getName(), address.getDistrict(), address.getStreet(),
                     address.getBuilding(), address.getFlat(), clientData.getFullName(),
-                    clientData.getPhone(), verification.getInfo(), verification.getQueue(), verification.getStatus().toString()));
+                    clientData.getPhone(), verification.getInfo(), verification.getQueue(), verification.getStatus().toString(), verification.isCounterStatus()));
         }
         Collections.sort(content);
         return new PageDTO<>(queryResult.getTotalElements(), content);
@@ -179,6 +206,21 @@ public class CalibratorPlanningTaskController {
         try {
             for (Long taskID : taskIDs) {
                 taskService.sendTaskToStation(taskID, employeeUser.getUsername());
+            }
+        } catch (Exception e) {
+            logger.error("User " + employeeUser.getUsername() + " was not able to send task to station", e);
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity(httpStatus);
+    }
+
+    @RequestMapping(value = "/sendTaskToTeam", method = RequestMethod.POST)
+    public ResponseEntity sendTaskToTeam(@RequestBody List<Long> taskIDs,
+                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        try {
+            for (Long taskID : taskIDs) {
+                taskService.sendTaskToTeam(taskID, employeeUser.getUsername());
             }
         } catch (Exception e) {
             logger.error("User " + employeeUser.getUsername() + " was not able to send task to station", e);
@@ -249,7 +291,10 @@ public class CalibratorPlanningTaskController {
                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
-            taskService.addNewTaskForTeam(taskDTO.getDateOfTask(), taskDTO.getModuleNumber(), taskDTO.getVerificationsId(), employeeUser.getUsername());
+            Boolean taskAlreadyExist = taskService.addNewTaskForTeam(taskDTO.getDateOfTask(), taskDTO.getModuleNumber(), taskDTO.getVerificationsId(), employeeUser.getUsername());
+            if (!taskAlreadyExist) {
+                httpStatus = HttpStatus.CREATED;
+            }
         } catch (Exception e) {
             logger.error("User " + employeeUser.getUsername() + " was not able to save for team", e);
             httpStatus = HttpStatus.CONFLICT;

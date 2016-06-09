@@ -6,6 +6,9 @@ angular
             getPage: function (pageNumber, itemsPerPage, search, sortCriteria, sortOrder, allTests) {
                 return getDataWithParams(pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder + '/' + allTests, search);
             },
+            getForTeam: function (pageNumber, itemsPerPage, search, sortCriteria, sortOrder, allTests) {
+                return getDataWithParams('forTeam/' + pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder + '/' + allTests, search);
+            },
             getVerificationsByTask: function (pageNumber, itemsPerPage, sortCriteria, sortOrder, taskID) {
                 return getData('verifications/' + pageNumber + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder + '/' + taskID);
             },
@@ -14,6 +17,9 @@ angular
             },
             sendTaskToStation: function (taskIDs) {
                 return sendData('sendTask', taskIDs);
+            },
+            sendTaskToTeam: function (taskIDs) {
+                return sendData('sendTaskToTeam', taskIDs);
             },
             changeTaskDate: function (taskID, dateOfTask) {
                 return sendData('changeTaskDate/' + taskID, dateOfTask);

@@ -1,0 +1,162 @@
+<div id="page-wrapper">
+    <div class="row" style="margin-top: 10px">
+        <div class="col-lg-10">
+            <h1 class="page-header">{{ 'TASKS_FOR_BRIGADES' | translate }}</h1>
+        </div>
+        <div class="col-lg-2">
+            <button ng-click="clearAll()" ng-show="isFilter()"
+                    class="btn btn-danger pull-right">
+                <span>{{'CLEAR_ALL' | translate }}</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <button type="button" class="btn btn-primary" ng-click="sendTaskToTeam()">
+                                <span class="glyphicon glyphicon-send" style="margin-right: 10px"></span>
+                                {{ 'SEND' | translate }}
+                            </button>
+
+                        </div>
+                        <div class="col-lg-4">
+                            <span class="pull-right"><span
+                                    translate="OVERALL_NUMBER_OF_CALIBRATION_TASKS"></span>: {{ resultsCount }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <span id="all-tasks">
+                                    {{'SHOW_ALL_TASKS' | translate }}:
+                                </span>
+                                <input type="checkbox" id="all-tasks-checkbox" ng-model="allTests" ng-click="refreshTable()" class="ng-scope">
+                                <table show-filter="true" ng-table="tableParams" template-pagination="custom/pager"
+                                       class="table table-bordered users_table">
+                                    <tbody>
+                                    <tr ng-repeat="teamTask in $data"
+                                        ng-class="{ 'info': teamTask.status === 'SENT_TO_DISMANTLING_TEAM' }">
+                                        <td data-title="''"><input type="checkbox"
+                                                                   ng-hide="teamTask.numOfVerifications > 0 && teamTask.numOfVerifications == teamTask.numOfCompletedVerifications "
+                                                                   ng-click="resolveTaskID(teamTask.taskID)"/>
+                                        </td>
+                                        <td data-title="'DATE_OF_TASK' | translate" sortable="'dateOfTask'"
+                                            filter="{ dateOfTask : 'daterange' }" class="require"
+                                            style="width: 22%; min-width: 260px">
+                                            <span ng-hide="teamTask.status === 'TEST_PLACE_DETERMINED'">
+                                                {{ teamTask.dateOfTask }}
+                                            </span>
+                                            <input type="text" class="form-control date-picker" datepicker-popup
+                                                   ng-model="teamTask.dateOfTask"
+                                                   ng-change="changeTaskDate(teamTask.taskID, teamTask.dateOfTask)"
+                                                   is-open="calendars[teamTask.taskID]" name="date"
+                                                   current-text="Сьогодні" clear-text="Очистити"
+                                                   close-text="Готово" ng-click="open($event, teamTask.taskID)"
+                                                   min-date="minDate" max-date="maxDate"
+                                                   datepicker-options="dateOptions"
+                                                   date-disabled="disabled(date, mode)"
+                                                   ng-show="teamTask.status === 'TEST_PLACE_DETERMINED'" readonly/>
+                                        </td>
+                                        <td data-title="'TEAM_NAME' | translate" sortable="'team.name'"
+                                            filter="{ name : 'textWithDelayedUpdate' }">
+                                            {{ teamTask.name }}
+                                        </td>
+                                        <td data-title="'CONTACT_PERSON_FULL_NAME' | translate"
+                                            sortable="'team.leaderFullName'"
+                                            filter="{ leaderFullName: 'textWithDelayedUpdate' }">
+                                            {{ teamTask.leaderFullName }}
+                                        </td>
+                                        <td data-title="'PHONE_NUMBER' | translate" sortable="'team.phone'"
+                                            filter="{ leaderPhone : 'textWithDelayedUpdate' }">
+                                            +380{{ teamTask.leaderPhone }}
+                                        </td>
+                                        <td data-title="'COUNT_OF_VERIFICATION' | translate">
+                                            {{ teamTask.numOfVerifications }}
+                                            ({{teamTask.numOfCompletedVerifications}})
+                                        </td>
+                                        <td data-title="'ACTIONS' | translate" style="width: 12%"
+                                            class="control_buttons">
+                                            <i class="fa fa-info-circle info_icon"
+                                               ng-click="openVerificationListModal(teamTask.taskID)">
+                                            </i>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <script type="text/ng-template" id="custom/pager">
+                                <div>
+                                    <ul class="pager ng-cloak">
+                                        <li ng-repeat="page in pages"
+                                            ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                                            ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                                            <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;
+                                                {{'PREVIOUS' | translate}}</a>
+                                            <a ng-switch-when="next" ng-click="params.page(page.number)"
+                                               href="">{{'NEXT' | translate}} &raquo;</a>
+                                        </li>
+                                        <li>
+                                            <div class="btn-group">
+                                                <button type="button" ng-class="{'active':params.count() == 5}"
+                                                        ng-click="params.count(5)" class="btn btn-default">5
+                                                </button>
+                                                <button type="button" ng-class="{'active':params.count() == 10}"
+                                                        ng-click="params.count(10)" class="btn btn-default">10
+                                                </button>
+                                                <button type="button" ng-class="{'active':params.count() == 25}"
+                                                        ng-click="params.count(25)" class="btn btn-default">25
+                                                </button>
+                                                <button type="button" ng-class="{'active':params.count() == 50}"
+                                                        ng-click="params.count(50)" class="btn btn-default">50
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </script>
+                            <script type="text/ng-template" id="ng-table/filters/moduleType.html">
+                                <ui-select ng-model="params.filter()[name]" theme="select2"
+                                           on-select='onTableHandling()'
+                                           search-enabled="false"
+                                           name="filter-moduleType">
+                                    <ui-select-match placeholder="{{'STATUS_SELECT_MODULE_TYPE' | translate}}"
+                                                     allow-clear="true">
+                                        {{$select.selected.label}}
+                                    </ui-select-match>
+                                    <ui-select-choices
+                                            repeat="moduleType.id as moduleType in moduleTypes">
+                                        <span ng-bind-html="moduleType.label"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </script>
+                            <script type="text/ng-template" id="ng-table/filters/daterange.html">
+                                <div class="input-group right-inner-addon" style="width: 100%">
+                                    <i id="calendar_icon" class="glyphicon glyphicon-calendar"
+                                       ng-click="showPicker($event)"></i>
+                                    <input date-range-picker="opts" class="form-control date-picker" type="text"
+                                           ng-model="myDatePicker.pickerDate" ng-change="onTableHandling()"
+                                           options="opts"
+                                           id="datepickerfield" readonly/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default myGroupBtn"
+                                                ng-show="!isDateDefault()"
+                                                ng-click="clearDate()">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
