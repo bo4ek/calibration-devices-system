@@ -1,7 +1,8 @@
 angular
     .module('employeeModule')
-    .controller('TaskForTeamModalControllerCalibrator', ['$rootScope', '$scope', '$modal', '$modalInstance', 'VerificationPlanningTaskService', '$log',
-        function ($rootScope, $scope, $modal, $modalInstance, verificationPlanningTaskService, $log) {
+    .controller('TaskForTeamModalControllerCalibrator', ['$rootScope', '$scope', '$modal', '$modalInstance',
+        'VerificationPlanningTaskService', '$log', 'toaster', '$filter',
+        function ($rootScope, $scope, $modal, $modalInstance, verificationPlanningTaskService, $log, toaster, $filter) {
 
             $scope.calibrationTask = {};
             $scope.incorrectValue = false;
@@ -113,7 +114,7 @@ angular
                     .then(function (result) {
                         createTeamArray(result.data);
                     });
-            }
+            };
 
             $scope.showSendingMessage = false;
 
@@ -133,28 +134,25 @@ angular
                         "verificationsId": $rootScope.verifIds
                     };
                     console.log(calibrationTask);
-                    verificationPlanningTaskService.saveTaskForTeam(calibrationTask).
-                        then(function (data) {
-                            if (data.status == 200) {
-                                $scope.closeModal();
-                                $rootScope.verifIds = [];
-                                $modal.open({
-                                    animation: true,
-                                    templateUrl: 'resources/app/calibrator/views/modals/task-add-success.html',
-                                    controllerAs: 'successController',
-                                    size: 'md'
-                                });
-                            } else if (data.status == 409) {
-                                $scope.incorrectValue = true;
-                                console.log($scope.incorrectValue);
-                                $scope.closeModal();
-                                $modal.open({
-                                    animation: true,
-                                    templateUrl: 'resources/app/calibrator/views/modals/task-adding-error.html',
-                                    size: 'md'
-                                });
+                    verificationPlanningTaskService.saveTaskForTeam(calibrationTask).then(function (data) {
+                        switch (data.status) {
+                            case 200: {
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('VERIFICATIONS_ADDED_TO_TASK'));
+                                break;
                             }
-                        });
+                            case 201: {
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('TASK_FOR_STATION_CREATED'));
+                                break;
+                            }
+                            default: {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_WHILE_CREATING_TASK'));
+                            }
+                        }
+                        $scope.closeModal(true);
+                    });
                 }
             }
         }]);

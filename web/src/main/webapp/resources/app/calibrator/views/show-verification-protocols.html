@@ -36,7 +36,7 @@
                                     <td header="'ng-table/headers/checkbox.html'">
                                         <div>
                                             <input type="checkbox"
-                                                   ng-if="verification.status=='TEST_COMPLETED'"
+                                                   ng-if="verification.status=='TEST_COMPLETED' || verification.status=='PROTOCOL_REJECTED'"
                                                    ng-model="verification.selected"
                                                    ng-click="resolveVerificationId(verification.id)"/>
                                         </div>

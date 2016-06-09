@@ -51,7 +51,7 @@
                                                 <input type="checkbox"
                                                        header="'ng-table/headers/checkbox.html'"
                                                        ng-show="verification.calibratorEmployee"
-                                                       ng-hide="verification.status != 'IN_PROGRESS'"
+                                                       ng-show="verification.status == 'IN_PROGRESS' || (verification.status == 'SENT_TO_DISMANTLING_TEAM' && verification.dismantled)"
                                                        ng-click="resolveVerificationId(verification)"/>
                                                 <input type="checkbox"
                                                        ng-show="verification.status == 'SENT_TO_DISMANTLING_TEAM' && verification.numberCounter"

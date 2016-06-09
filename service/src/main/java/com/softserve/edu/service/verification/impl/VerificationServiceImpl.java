@@ -434,7 +434,7 @@ public class VerificationServiceImpl implements VerificationService {
                 street, building, flat, dateOfVerif, time, serviceability, noWaterToDate, sealPresence, telephone, verificationWithDismantle, notes, sortCriteria, sortOrder, em)).getSingleResult();
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
-        ;
+
         typedQuery.setMaxResults(itemsPerPage);
         List<Verification> verificationList = typedQuery.getResultList();
         ListToPageTransformer<Verification> result = new ListToPageTransformer<Verification>();

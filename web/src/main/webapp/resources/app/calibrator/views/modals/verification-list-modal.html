@@ -83,13 +83,15 @@
                                             <div class="btn-group-vertical">
                                                 <button type="button" class="btn btn-warning"
                                                         ng-hide="verification.status == 'TEST_COMPLETED' || verification.status == 'TEST_OK'
-                                                         || verification.status == 'TEST_NOK' || verification.status == 'SENT_TO_VERIFICATOR'"
+                                                         || verification.status == 'TEST_NOK' || verification.status == 'SENT_TO_VERIFICATOR'
+                                                         || (verification.status == 'SENT_TO_DISMANTLING_TEAM' && verification.dismantled)"
                                                         ng-click="openCheckGroupVerificationModal(verification.verificationId)">
                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                 </button>
                                                 <button type="button" class="btn btn-danger"
                                                         ng-hide="verification.status == 'TEST_COMPLETED' || verification.status == 'TEST_OK'
-                                                         || verification.status == 'TEST_NOK' || verification.status == 'SENT_TO_VERIFICATOR'"
+                                                         || verification.status == 'TEST_NOK' || verification.status == 'SENT_TO_VERIFICATOR'
+                                                         || (verification.status == 'SENT_TO_DISMANTLING_TEAM' && verification.dismantled)"
                                                         ng-click="removeVerificationFromTask(verification.verificationId)">
                                                     <span class="glyphicon glyphicon-remove"></span>
                                                 </button>

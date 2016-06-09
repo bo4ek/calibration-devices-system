@@ -39,36 +39,17 @@ public class VerificationPlanningTaskDTO implements Comparable {
     private boolean sealPresence;
     private int queue;
     private boolean verificationWithDismantle;
+    private boolean dismantled;
 
     public VerificationPlanningTaskDTO() {
     }
 
     public VerificationPlanningTaskDTO(Date sentDate, String verificationId, String providerName, String district,
                                        String street, String building, String flat, String clientFullName,
-                                       String telephone, AdditionalInfo additionalInfo) {
-        this.sentToCalibrator = sentDate;
-        this.verificationId = verificationId;
-        this.providerName = providerName;
-        this.district = district;
-        this.street = street;
-        this.building = building;
-        this.flat = flat;
-        this.clientFullName = clientFullName;
-        this.telephone = telephone;
-        if (additionalInfo != null) {
-            if (additionalInfo.getEntrance() > 0) {
-                this.entrance = Integer.toString(additionalInfo.getEntrance());
-            }
-            if (additionalInfo.getFloor() > 0) {
-                this.floor = Integer.toString(additionalInfo.getFloor());
-            }
-            if ((additionalInfo.getTimeFrom() != null) && (additionalInfo.getTimeTo() != null)) {
-                this.time = additionalInfo.getTimeFrom().toString() + " - " + additionalInfo.getTimeTo().toString();
-            } else {
-                this.time = null;
-            }
-            this.notes = additionalInfo.getNotes();
-        }
+                                       String telephone, AdditionalInfo additionalInfo, int queue, String status, Boolean dismantled) {
+        this(sentDate, verificationId, providerName, district, street, building, flat, clientFullName, telephone,
+                additionalInfo, queue, status);
+        this.dismantled = dismantled;
     }
 
 

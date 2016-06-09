@@ -124,6 +124,11 @@
                         templateUrl: 'resources/app/calibrator/views/task-for-calibration-module.html',
                         controller: 'TaskForStationController'
                     })
+                    .state("task-for-brigades", {
+                        url: '/calibrator/task-for-brigades',
+                        templateUrl: 'resources/app/calibrator/views/task-for-disassembly-team.html',
+                        controller: 'TaskForStationController'
+                    })
                     .state("calibrator-task-station", {
                         url: '/calibrator/task/',
                         templateUrl: 'resources/app/calibrator/views/modals/addTaskForStationModal.html',

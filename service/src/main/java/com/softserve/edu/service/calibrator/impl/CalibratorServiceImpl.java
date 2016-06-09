@@ -176,5 +176,10 @@ public class CalibratorServiceImpl implements CalibratorService {
         return verificationRepository.countCompletedByTaskId(task);
     }
 
+    @Override
+    public int getNumOfRemovedMeters(CalibrationTask task) {
+        return verificationRepository.countRemovedByTaskId(task);
+    }
+
 
 }
