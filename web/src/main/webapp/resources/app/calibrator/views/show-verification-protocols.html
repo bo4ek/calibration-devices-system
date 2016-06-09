@@ -24,10 +24,23 @@
                                    class="table table-bordered table-hover users_table">
 
                                 <tbody>
+                                <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+                                    <input type="checkbox"
+                                           ng-model="allSelected"
+                                           ng-model-options="{getterSetter: true}"
+                                           ng-click="allSelected(value)"
+                                           name="filter-checkbox" value=""/>
+                                </script>
                                 <tr ng-repeat="verification in $data" ng-class="{'sent-to-provider': verification.status=='SENT_TO_VERIFICATOR'}">
-                                    <td data-title="''"><input ng-if="verification.status=='TEST_COMPLETED'" type="checkbox" ng-model="checked"
-                                                               ng-click="resolveVerificationId(verification.id)"
-                                    />
+
+                                    <td header="'ng-table/headers/checkbox.html'">
+                                        <div>
+                                            <input type="checkbox"
+                                                   ng-if="verification.status=='TEST_COMPLETED'"
+                                                   ng-model="verification.selected"
+                                                   ng-click="resolveVerificationId(verification.id)"/>
+                                        </div>
+                                    </td>
                                     </td>
                                     <td data-title="'PROTOCOL_DATE' | translate" class="datecolumn" sortable="'date'"
                                         filter="{ 'date': 'protocolDate' }">

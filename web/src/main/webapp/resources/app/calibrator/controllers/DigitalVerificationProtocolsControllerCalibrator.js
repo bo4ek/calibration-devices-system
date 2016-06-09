@@ -149,7 +149,7 @@ angular
                 $scope.initDatePicker(date);
                 $scope.tableParams = new ngTableParams({
                     page: 1,
-                    count: 10,
+                    count: 50,
                     sorting: {
                         default: 'default'
                     }, filter: {
@@ -178,6 +178,7 @@ angular
                         request.success(function (result) {
                             $scope.totalItems = result.totalItems;
                             $defer.resolve(result.content);
+                            $scope.allVerifications = result.content;
                             params.total(result.totalItems);
                         }, function (result) {
                             $log.debug('error fetching data:', result);
@@ -190,6 +191,35 @@ angular
             $scope.allIsEmpty = true;
             $scope.idsOfCalibrators = null;
             $scope.dataToManualTest = new Map();
+
+            var getAllSelected = function () {
+                if (!$scope.allVerifications) {
+                    return false;
+                }
+                var checkedItems = $scope.allVerifications.filter(function (verification) {
+                    return verification.selected;
+                });
+
+                return checkedItems.length === $scope.allVerifications.length;
+            };
+
+            var setAllSelected = function (value) {
+                angular.forEach($scope.allVerifications, function (verification) {
+                    verification.selected = value;
+                    if (verification.status === "TEST_COMPLETED") {
+                        $scope.resolveVerificationId(verification.id);
+                    }
+                });
+
+            };
+
+            $scope.allSelected = function (value) {
+                if (value !== undefined) {
+                    return setAllSelected(value);
+                } else {
+                    return getAllSelected();
+                }
+            };
 
 
             /**
@@ -240,7 +270,6 @@ angular
                             idsOfVerifications: $scope.idsOfVerifications,
                             organizationId: formData.verificator.id
                         };
-
                         digitalVerificationProtocolsServiceCalibrator.sendProtocols(dataToSend)
                             .success(function () {
                                 $log.debug('success sending');
