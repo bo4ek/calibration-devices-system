@@ -173,6 +173,7 @@ public class OrganizationController {
      */
     @RequestMapping(value = "getOrganization/{id}")
     public OrganizationDTO getOrganization(@PathVariable("id") Long id) {
+
         Organization organization = organizationService.getOrganizationById(id);
 
         List<String> types = new ArrayList<>();
@@ -193,26 +194,16 @@ public class OrganizationController {
                 organization.getAddress().getDistrict(), organization.getAddress().getLocality(),
                 organization.getAddress().getStreet(), organization.getAddress().getBuilding(),
                 organization.getAddress().getFlat(),
-                (organization.getAdditionInfoOrganization() != null)
-                        ? organization.getAdditionInfoOrganization().getCodeEDRPOU() : null,
-                (organization.getAdditionInfoOrganization() != null)
-                        ? organization.getAdditionInfoOrganization().getSubordination() : null,
-                (organization.getAdditionInfoOrganization() != null)
-                        ? organization.getAdditionInfoOrganization().getCertificateNumberAuthorization() : null,
-                (organization.getAdditionInfoOrganization() != null)
-                        ? organization.getAdditionInfoOrganization().getCertificateDate() : null,
-                (organization.getAddressRegistered() != null)
-                        ? organization.getAddressRegistered().getRegion() : null,
-                (organization.getAddressRegistered() != null)
-                        ? organization.getAddressRegistered().getDistrict() : null,
-                (organization.getAddressRegistered() != null)
-                        ? organization.getAddressRegistered().getLocality() : null,
-                (organization.getAddressRegistered() != null)
-                        ? organization.getAddressRegistered().getStreet() : null,
-                (organization.getAddressRegistered() != null)
-                        ? organization.getAddressRegistered().getBuilding() : null,
-                (organization.getAddressRegistered() != null)
-                        ? organization.getAddressRegistered().getFlat() : null);
+                (organization.getAdditionInfoOrganization() != null) ? organization.getAdditionInfoOrganization().getCodeEDRPOU() : null,
+                (organization.getAdditionInfoOrganization() != null) ? organization.getAdditionInfoOrganization().getSubordination() : null,
+                (organization.getAdditionInfoOrganization() != null) ? organization.getAdditionInfoOrganization().getCertificateNumberAuthorization() : null,
+                (organization.getAdditionInfoOrganization() != null) ? organization.getAdditionInfoOrganization().getCertificateDate() : null,
+                (organization.getAddressRegistered() != null) ? organization.getAddressRegistered().getRegion() : null,
+                (organization.getAddressRegistered() != null) ? organization.getAddressRegistered().getDistrict() : null,
+                (organization.getAddressRegistered() != null) ? organization.getAddressRegistered().getLocality() : null,
+                (organization.getAddressRegistered() != null) ? organization.getAddressRegistered().getStreet() : null,
+                (organization.getAddressRegistered() != null) ? organization.getAddressRegistered().getBuilding() : null,
+                (organization.getAddressRegistered() != null) ? organization.getAddressRegistered().getFlat() : null);
     }
 
     /**
@@ -378,7 +369,7 @@ public class OrganizationController {
      * @param organizationType type of organization
      * @return list of organization wraped in ApplicationFieldDTO
      */
-    @RequestMapping(value = "getOrganization/{organizationType}", method = RequestMethod.GET)
+    @RequestMapping(value = "getOrganizations/{organizationType}", method = RequestMethod.GET)
     public List<ApplicationFieldDTO> getOrganizationByOrganizationType(@PathVariable("organizationType") String organizationType) {
 
         List<Organization> organizations = organizationService.findByOrganizationType(OrganizationType.valueOf(organizationType));

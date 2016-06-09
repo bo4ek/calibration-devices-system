@@ -45,7 +45,7 @@ angular
                 return getData('getOrganization/' + organizationType + '/' + deviceType);
             },
             getAllCalibrators: function () {
-                return getData('getOrganization/CALIBRATOR/');
+                return getData('getOrganizations/CALIBRATOR/');
             }
 
         };
