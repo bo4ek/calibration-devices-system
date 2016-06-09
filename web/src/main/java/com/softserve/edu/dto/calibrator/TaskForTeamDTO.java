@@ -1,12 +1,10 @@
 package com.softserve.edu.dto.calibrator;
 
-import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.enumeration.verification.Status;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter

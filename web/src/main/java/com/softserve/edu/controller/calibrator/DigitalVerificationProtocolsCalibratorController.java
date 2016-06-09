@@ -12,7 +12,6 @@ import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
-import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.calibrator.CalibratorDigitalProtocolsService;
 import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
@@ -28,15 +27,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author Veronika 5.11.2015
- */
 @RestController
 @RequestMapping(value = "/calibrator/protocols/", produces = "application/json")
 public class DigitalVerificationProtocolsCalibratorController {

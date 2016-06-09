@@ -3,7 +3,6 @@ package com.softserve.edu.service.utils;
 import com.softserve.edu.entity.verification.Verification;
 
 import javax.persistence.criteria.*;
-import java.util.function.Predicate;
 
 /**
  * @deprecated this class have a lot of repeated code <br/>

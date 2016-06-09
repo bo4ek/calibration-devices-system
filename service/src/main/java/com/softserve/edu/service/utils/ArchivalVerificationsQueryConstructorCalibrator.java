@@ -2,7 +2,6 @@ package com.softserve.edu.service.utils;
 
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
-import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.organization.Organization;

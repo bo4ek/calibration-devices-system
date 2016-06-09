@@ -1,6 +1,5 @@
 package com.softserve.edu.service.utils;
 
-import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;

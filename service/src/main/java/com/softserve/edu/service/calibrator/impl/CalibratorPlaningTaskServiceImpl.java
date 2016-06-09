@@ -25,7 +25,6 @@ import com.softserve.edu.service.utils.export.DbTableExporter;
 import com.softserve.edu.service.utils.export.TableExportColumn;
 import com.softserve.edu.service.utils.export.XlsTableExporter;
 import com.softserve.edu.specification.CalibrationTaskSpecificationBuilder;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
