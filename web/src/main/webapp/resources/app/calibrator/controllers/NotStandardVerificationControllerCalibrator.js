@@ -17,7 +17,7 @@ angular
             $scope.pageContent = [];
             $scope.tableParams = new ngTableParams({
                 page: 1,
-                count: 10,
+                count: 50,
                 sorting: {
                     client_last_name: 'desc'
                 }
@@ -38,6 +38,7 @@ angular
                         .success(function (result) {
                             $scope.resultsCount = result.totalItems;
                             $defer.resolve(result.content);
+                            $scope.allVerifications = result.content;
                             params.total(result.totalItems);
                         }, function (result) {
                             $log.debug('error fetching data:', result);
@@ -48,28 +49,6 @@ angular
             $scope.checkedItems = [];
             $scope.allIsEmpty = true;
             $scope.idsOfCalibrators = null;
-
-
-            /**
-             * push verification id to array
-             */
-
-            $scope.resolveVerificationId = function (id) {
-                var index = $scope.idsOfVerifications.indexOf(id);
-                if (index === -1) {
-                    $scope.idsOfVerifications.push(id);
-                    index = $scope.idsOfVerifications.indexOf(id);
-                }
-
-                if (!$scope.checkedItems[index]) {
-                    $scope.idsOfVerifications.splice(index, 1, id);
-                    $scope.checkedItems.splice(index, 1, true);
-                } else {
-                    $scope.idsOfVerifications.splice(index, 1);
-                    $scope.checkedItems.splice(index, 1);
-                }
-                checkForEmpty();
-            };
 
             $scope.openDetails = function (verificationId, verificationReadStatus) {
                 var modalInstance = $modal.open({
@@ -136,6 +115,57 @@ angular
                 } else {
                     $scope.isClicked = true;
                 }
+                $scope.allIsEmpty = true;
+            };
+
+            var getAllSelected = function () {
+                if (!$scope.allVerifications) {
+                    return false;
+                }
+                var checkedItems = $scope.allVerifications.filter(function (verification) {
+                    return verification.selected;
+                });
+
+                return checkedItems.length === $scope.allVerifications.length;
+            };
+
+            var setAllSelected = function (value) {
+                angular.forEach($scope.allVerifications, function (verification) {
+                    verification.selected = value;
+                    if (verification.status !== "SENT_TO_PROVIDER") {
+                        $scope.resolveVerificationId(verification.id);
+                    }
+                });
+
+            };
+
+            $scope.allSelected = function (value) {
+                if (value !== undefined) {
+                    return setAllSelected(value);
+                } else {
+                    return getAllSelected();
+                }
+            };
+
+            /**
+             * push verification id to array
+             */
+
+            $scope.resolveVerificationId = function (id) {
+                var index = $scope.idsOfVerifications.indexOf(id);
+                if (index === -1) {
+                    $scope.idsOfVerifications.push(id);
+                    index = $scope.idsOfVerifications.indexOf(id);
+                }
+
+                if (!$scope.checkedItems[index]) {
+                    $scope.idsOfVerifications.splice(index, 1, id);
+                    $scope.checkedItems.splice(index, 1, true);
+                } else {
+                    $scope.idsOfVerifications.splice(index, 1);
+                    $scope.checkedItems.splice(index, 1);
+                }
+                checkForEmpty();
             };
 
             /**

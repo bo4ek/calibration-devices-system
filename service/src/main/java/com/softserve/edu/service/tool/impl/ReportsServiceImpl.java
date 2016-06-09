@@ -293,6 +293,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> counterNotes = new ArrayList<>(initializedCapacity);
         List<String> typeOfSupply = new ArrayList<>(initializedCapacity);
         List<String> stateVerificatorName = new ArrayList<>(initializedCapacity);
+        List<String> status = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -406,6 +407,35 @@ public class ReportsServiceImpl implements ReportsService {
         }
         // endregion
         return data;
+    }
+
+    public String getStatus(Verification verification) {
+        /*switch (verification.getStatus())
+
+        case (Status.SENT) :
+        return
+        break;
+                SENT,
+                ACCEPTED,
+                REJECTED,
+                CREATED_BY_CALIBRATOR,
+                CREATED_FOR_PROVIDER,
+                SENT_TO_PROVIDER,
+                IN_PROGRESS,
+                PLANNING_TASK,
+                TASK_PLANED,
+                TEST_PLACE_DETERMINED,
+                SENT_TO_TEST_DEVICE,
+                SENT_TO_DISMANTLING_TEAM,
+                TEST_COMPLETED,
+                PROTOCOL_REJECTED,
+                SENT_TO_VERIFICATOR,
+                TEST_OK,
+                TEST_NOK,
+                REJECTED_BY_CALIBRATOR,
+                REJECTED_BY_PROVIDER,
+                NOT_VALID;*/
+        return null;
     }
 
     public String getStateVerificatorName(Verification verification) {
