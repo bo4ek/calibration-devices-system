@@ -29,10 +29,23 @@
                                         <tbody>
                                         <tr ng-repeat="verification in $data"
                                             ng-class="{'sent-to-provider': verification.status=='SENT_TO_PROVIDER'}">
-                                            <td data-title="''">
-                                                <input ng-if="verification.status != 'SENT_TO_PROVIDER'" type="checkbox"
-                                                       ng-click="resolveVerificationId(verification.id)"/>
+
+                                            <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+                                                <input type="checkbox"
+                                                       ng-model="allSelected"
+                                                       ng-model-options="{getterSetter: true}"
+                                                       ng-click="allSelected(value)"
+                                                       name="filter-checkbox" value=""/>
+                                            </script>
+                                            <td header="'ng-table/headers/checkbox.html'">
+                                                <div>
+                                                    <input type="checkbox"
+                                                           ng-if="verification.status != 'SENT_TO_PROVIDER'"
+                                                           ng-model="verification.selected"
+                                                           ng-click="resolveVerificationId(verification.id)"/>
+                                                </div>
                                             </td>
+
                                             <td data-title="'INITIAL_DATE' | translate" class="datecolumn">
                                                 {{ verification.initialDate | date :'dd-MM-yyyy'}}
                                                 <div ng-show="verification.processTimeExceeding>0">
