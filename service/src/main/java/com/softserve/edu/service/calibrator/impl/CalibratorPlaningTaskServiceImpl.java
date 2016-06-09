@@ -19,13 +19,10 @@ import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
 import com.softserve.edu.service.exceptions.InvalidModuleSerialNumberException;
 import com.softserve.edu.service.exceptions.PermissionDeniedException;
 import com.softserve.edu.service.tool.MailService;
-import com.softserve.edu.service.utils.CalibrationTaskQueryConstructorCalibrator;
-import com.softserve.edu.service.utils.ListToPageTransformer;
 import com.softserve.edu.service.utils.export.DbTableExporter;
 import com.softserve.edu.service.utils.export.TableExportColumn;
 import com.softserve.edu.service.utils.export.XlsTableExporter;
 import com.softserve.edu.specification.CalibrationTaskSpecificationBuilder;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,15 +33,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.io.File;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -75,9 +64,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     @Autowired
     CalibratorEmployeeService calibratorEmployeeService;
 
-    @PersistenceContext
-    private EntityManager em;
-
     private Logger logger = Logger.getLogger(CalibratorPlaningTaskServiceImpl.class);
 
     /**
@@ -95,44 +81,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         filterParams.put("organizationCode", user.getOrganization().getAdditionInfoOrganization().getCodeEDRPOU());
         CalibrationTaskSpecificationBuilder specificationBuilder = new CalibrationTaskSpecificationBuilder(filterParams);
         Specification<CalibrationTask> searchSpec = specificationBuilder.buildPredicate();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<CalibrationTask> criteriaQuery = cb.createQuery(CalibrationTask.class);
-        Root<CalibrationTask> root = criteriaQuery.from(CalibrationTask.class);
-        Predicate predicate = searchSpec.toPredicate(root, criteriaQuery, cb);
-        criteriaQuery.select(root);
-        criteriaQuery.where(predicate);
-        TypedQuery<CalibrationTask> typedQuery = em.createQuery(criteriaQuery);
-        String s = typedQuery.unwrap(org.hibernate.Query.class).getQueryString();
         return taskRepository.findAll(searchSpec, pageable);
-    }
-
-    @Override
-    public ListToPageTransformer<CalibrationTask> findPageOfCalibrationTasks(int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch,
-                                                                             String name, String leaderFullName,
-                                                                             String leaderPhone, String sortCriteria,
-                                                                             String sortOrder, User calibratorEmployee, Boolean allTests) {
-
-        CriteriaQuery<CalibrationTask> criteriaQuery;
-        Long count;
-        try {
-            criteriaQuery = CalibrationTaskQueryConstructorCalibrator.buildSearchQuery(startDateToSearch, endDateToSearch,
-                    name, leaderFullName, leaderPhone, calibratorEmployee, sortCriteria, sortOrder, em, allTests);
-            count = em.createQuery(CalibrationTaskQueryConstructorCalibrator.buildCountQuery(startDateToSearch, endDateToSearch,
-                    name, leaderFullName, leaderPhone, calibratorEmployee, em, allTests)).getSingleResult();
-        } catch (ParseException e) {
-            return null;
-        }
-
-        TypedQuery<CalibrationTask> typedQuery = em.createQuery(criteriaQuery);
-        typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
-        typedQuery.setMaxResults(itemsPerPage);
-        String s = typedQuery.unwrap(org.hibernate.Query.class).getQueryString();
-        List<CalibrationTask> calibrationTaskList = typedQuery.getResultList();
-
-        ListToPageTransformer<CalibrationTask> result = new ListToPageTransformer<>();
-        result.setContent(calibrationTaskList);
-        result.setTotalItems(count);
-        return result;
     }
 
     /**
@@ -235,36 +184,54 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      */
     @Override
     @Transactional
-    public Boolean addNewTaskForTeam(Date taskDate, String serialNumber, List<String> verificationsId, String userId) throws PermissionDeniedException {
+    public void addNewTaskForTeam(Date taskDate, String serialNumber, List<String> verificationsId, String userId) {
         Set<Verification> verifications = new HashSet<>();
-        Boolean taskAlreadyExists = true;
         DisassemblyTeam team = teamRepository.findOne(serialNumber);
-        User user = userRepository.findByUsernameIgnoreCase(userId);
-        CalibrationTask calibrationTask = taskRepository.findByDateOfTaskAndTeam_Id(taskDate, team.getId());
-        for (String verificationId : verificationsId) {
-            Verification verification = verificationRepository.findOne(verificationId);
-            if (!verification.getCalibrator().getId().equals(user.getOrganization().getId())) {
-                logger.error("User with name: " + user.getUsername() + " was trying to change verification and task from other organization");
-                throw new PermissionDeniedException();
+        int i = 0;
+        boolean counterStatus = false;
+        for (String verifID : verificationsId) {
+            Verification verification = verificationRepository.findOne(verifID);
+            if (verification == null) {
+                logger.error("verification haven't found");
             } else {
-                if (team.getSpecialization().contains(verification.getDevice().getDeviceType())) {
-                    if (calibrationTask == null) {
-                        taskAlreadyExists = false;
-                        calibrationTask = new CalibrationTask(null, team, new Date(), taskDate, user);
-                        taskRepository.save(calibrationTask);
+                if (i == 0) {
+                    counterStatus = verification.isCounterStatus();
+                }
+                if (counterStatus == verification.isCounterStatus()) {
+                    if (team.getSpecialization().contains(verification.getDevice().getDeviceType())) {
+                        verification.setTaskStatus(Status.TASK_PLANED);
+                        verification.setStatus(Status.SENT_TO_DISMANTLING_TEAM);
+                        verificationRepository.save(verification);
+                        verifications.add(verification);
+                        i++;
+                    } else {
+                        logger.error("verification and module has different device types");
+                        throw new IllegalArgumentException();
                     }
-                    verification.setTaskStatus(Status.TASK_PLANED);
-                    verification.setStatus(Status.SENT_TO_DISMANTLING_TEAM);
-                    verification.setTask(calibrationTask);
-                    verifications.add(verification);
                 } else {
-                    logger.error("verification and module has different device types");
+                    logger.error("verifications has different counter status");
                     throw new IllegalArgumentException();
                 }
             }
         }
-        verificationRepository.save(verifications);
-        return taskAlreadyExists;
+        teamRepository.save(team);
+        User user = userRepository.findByUsernameIgnoreCase(userId);
+        CalibrationTask calibrationTask = taskRepository.save(new CalibrationTask(null, team, new Date(), taskDate, user, verifications));
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DAY_MONTH_YEAR);
+        String filename = calibrationTask.getTeam().getId() + "-" +
+                dateFormat.format(calibrationTask.getDateOfTask()) + "_";
+        File xlsFile;
+        try {
+            xlsFile = File.createTempFile(filename, "." + Constants.XLS_EXTENSION);
+            xlsFile.setWritable(true);
+            xlsFile.setReadable(true);
+            xlsFile.setExecutable(true);
+            XlsTableExporter xls = new XlsTableExporter();
+            Verification[] verif = verifications.toArray(new Verification[verifications.size()]);
+            List<TableExportColumn> dataForXls = getDataForXls(calibrationTask, verif);
+            xls.exportToFile(dataForXls, xlsFile);
+            mailService.sendMailWithAttachments(calibrationTask.getTeam().getLeaderEmail(), Constants.TASK + " " + calibrationTask.getId(), " ", xlsFile);
+        } catch (Exception ex) {/*Temporary try block*/}
     }
 
     /**
@@ -437,7 +404,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
      * @param id Task id
      * @throws Exception
      */
-    @Override
     @Transactional
     public void sendTaskToStation(Long id, String senderUsername) throws Exception {
         CalibrationTask calibrationTask = taskRepository.findOne(id);
@@ -475,38 +441,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         for (Verification verification : verifications) {
             if (verification.getStatus().equals(Status.PLANNING_TASK) || verification.getStatus().equals(Status.TEST_PLACE_DETERMINED)) {
                 verification.setStatus(Status.SENT_TO_TEST_DEVICE);
-                verification.setTaskStatus(Status.SENT_TO_TEST_DEVICE);
-            }
-        }
-        taskRepository.save(calibrationTask);
-        verificationRepository.save(Arrays.asList(verifications));
-    }
-
-    @Override
-    @Transactional
-    public void sendTaskToTeam(Long id, String senderUsername) throws Exception {
-        CalibrationTask calibrationTask = taskRepository.findOne(id);
-        Verification[] verifications = verificationRepository.findByTaskIdOrderByQueueAsc(id);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DAY_MONTH_YEAR);
-
-        String filename = calibrationTask.getTeam().getId() + "-" +
-                dateFormat.format(calibrationTask.getDateOfTask()) + "_";
-
-        File xlsFile = File.createTempFile(filename, "." + Constants.XLS_EXTENSION);
-        xlsFile.setWritable(true);
-        xlsFile.setReadable(true);
-        xlsFile.setExecutable(true);
-
-        XlsTableExporter xls = new XlsTableExporter();
-        List<TableExportColumn> dataForXls = getDataForXls(calibrationTask, verifications);
-        xls.exportToFile(dataForXls, xlsFile);
-
-        mailService.sendMailWithAttachments(calibrationTask.getTeam().getLeaderEmail(), Constants.TASK + " " + calibrationTask.getId(), " ", xlsFile);
-        calibrationTask.setStatus(Status.SENT_TO_DISMANTLING_TEAM);
-        for (Verification verification : verifications) {
-            if (verification.getStatus().equals(Status.PLANNING_TASK) || verification.getStatus().equals(Status.TEST_PLACE_DETERMINED)) {
-                verification.setStatus(Status.SENT_TO_DISMANTLING_TEAM);
                 verification.setTaskStatus(Status.SENT_TO_TEST_DEVICE);
             }
         }

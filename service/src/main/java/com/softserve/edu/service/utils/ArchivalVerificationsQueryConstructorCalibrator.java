@@ -211,7 +211,6 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         queryPredicate = cb.and(cb.equal(root.get("taskStatus"), Status.PLANNING_TASK), queryPredicate);
         queryPredicate = cb.and(cb.equal(root.get("status"), Status.IN_PROGRESS), queryPredicate);
-        queryPredicate = cb.and(cb.isFalse(root.get("counterStatus")), queryPredicate);
 
         if (user != null) {
             queryPredicate = cb.and(cb.equal(root.get("calibratorEmployee"), user), queryPredicate);
@@ -231,7 +230,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         if ((serviceability != null && (serviceability.length() > 0))) {
             Boolean serviceabilityReceived = Boolean.valueOf(serviceability);
-            if (serviceabilityReceived) {
+            if (serviceabilityReceived == true) {
                 queryPredicate = cb.and(cb.isTrue(additionalInfoJoin.get("serviceability")), queryPredicate);
             } else {
                 queryPredicate = cb.and(cb.isFalse(additionalInfoJoin.get("serviceability")), queryPredicate);
@@ -240,7 +239,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         if ((sealPresence != null && (sealPresence.length() > 0))) {
             Boolean sealPresenceReceived = Boolean.valueOf(sealPresence);
-            if (sealPresenceReceived) {
+            if (sealPresenceReceived == true) {
                 queryPredicate = cb.and(cb.isTrue(root.get("sealPresence")), queryPredicate);
             } else {
                 queryPredicate = cb.and(cb.isFalse(root.get("sealPresence")), queryPredicate);
@@ -249,7 +248,7 @@ public class ArchivalVerificationsQueryConstructorCalibrator {
 
         if ((verificationWithDismantle != null && (verificationWithDismantle.length() > 0))) {
             Boolean dismantledReceived = Boolean.valueOf(verificationWithDismantle);
-            if (dismantledReceived) {
+            if (dismantledReceived == true) {
                 queryPredicate = cb.and(cb.isTrue(root.get("verificationWithDismantle")), queryPredicate);
             } else {
                 queryPredicate = cb.and(cb.isFalse(root.get("verificationWithDismantle")), queryPredicate);

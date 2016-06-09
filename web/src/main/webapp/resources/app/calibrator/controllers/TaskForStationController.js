@@ -14,15 +14,12 @@ angular
             '$timeout',
             'toaster',
             'CalibrationTaskServiceCalibrator',
-            '$location',
             function ($rootScope, $scope, $modal, $http, $filter, $q,
-                      ngTableParams, $translate, $timeout, toaster, CalibrationTaskServiceCalibrator, $location) {
+                      ngTableParams, $translate, $timeout, toaster, CalibrationTaskServiceCalibrator) {
 
                 $scope.pageContent = [];
                 $scope.taskIDs = [];
                 $scope.allTests = false;
-                $scope.path = $location.path();
-                $scope.forBrigades = $scope.path == "/calibrator/task-for-brigades";
 
                 /**
                  * Date-range picker
@@ -185,25 +182,6 @@ angular
                     }
                 };
 
-                $scope.sendTaskToTeam = function () {
-                    if ($scope.taskIDs.length === 0) {
-                        toaster.pop('error', $filter('translate')('INFORMATION'),
-                            $filter('translate')('CHOOSE_CALIBRATION_TASK'));
-                    } else {
-                        CalibrationTaskServiceCalibrator.sendTaskToTeam($scope.taskIDs).then(function (result) {
-                            if (result.status == 200) {
-                                $scope.taskIDs = [];
-                                toaster.pop('success', $filter('translate')('INFORMATION'),
-                                    $filter('translate')('TASK_SENT'));
-                            } else {
-                                toaster.pop('error', $filter('translate')('INFORMATION'),
-                                    $filter('translate')('TASK_NOT_SENT'));
-                            }
-                            $rootScope.onTableHandling();
-                        });
-                    }
-                };
-
                 $scope.moduleTypes = [
                     {id: 'INSTALLATION_FIX', label: $filter('translate')('INSTALLATION_FIX')},
                     {id: 'INSTALLATION_PORT', label: $filter('translate')('INSTALLATION_PORT')}
@@ -303,11 +281,8 @@ angular
                                 params.filter().startDateToSearch = null;
                                 params.filter().endDateToSearch = null;
                             }
-
-                            var request = $scope.forBrigades ? CalibrationTaskServiceCalibrator.getForTeam(params.page(), params.count(), params.filter(), sortCriteria, sortOrder, $scope.allTests)
-                                : CalibrationTaskServiceCalibrator.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder, $scope.allTests);
-
-                            request.success(function (result) {
+                            CalibrationTaskServiceCalibrator.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder, $scope.allTests)
+                                .success(function (result) {
                                     $scope.resultsCount = result.totalItems;
                                     $defer.resolve(result.content);
                                     params.total(result.totalItems);
@@ -320,7 +295,8 @@ angular
                                 });
                         }
                     }
-                );
+                )
+                ;
 
                 $scope.popNotification = function (title, text) {
                     toaster.pop('success', title, text);

@@ -134,7 +134,8 @@ public class NotStandardVerificationCalibratorController {
     @RequestMapping(value = "new/count/verificationsForProvider", method = RequestMethod.GET)
     public Long findCountOfNewVerificationsForProviderByCalibratorId(
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
-        return verificationService.findCountOfNewVerificationsForProviderByCalibratorEmployeeUsername(user.getUsername());
+        Long value = verificationService.findCountOfNewVerificationsForProviderByCalibratorEmployeeUsername(user.getUsername());
+        return value;
     }
 
     private List<NotStandardVerificationDTO> toDTOFromList(List<Verification> verifications, Status status) {

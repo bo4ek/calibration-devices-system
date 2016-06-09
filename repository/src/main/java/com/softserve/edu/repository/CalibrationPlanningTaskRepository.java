@@ -12,8 +12,6 @@ import java.util.Date;
 public interface CalibrationPlanningTaskRepository extends
         PagingAndSortingRepository<CalibrationTask, Long>, JpaSpecificationExecutor {
 
-    CalibrationTask findByDateOfTaskAndModule_SerialNumber(Date dateOfTask, String moduleSerialNumber);
-
-    CalibrationTask findByDateOfTaskAndTeam_Id(Date dateOfTask, String teamId);
+        CalibrationTask findByDateOfTaskAndModule_SerialNumber(Date dateOfTask, String moduleSerialNumber);
 
 }

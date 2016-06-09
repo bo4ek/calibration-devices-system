@@ -252,7 +252,7 @@
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="task-for-brigades"><i class="fa fa-thumb-tack"></i></i> <span translate="TASKS_FOR_BRIGADES"></span>
+                            <a><i class="fa fa-thumb-tack"></i></i> <span translate="TASKS_FOR_BRIGADES"></span>
                             </a>
                         </li>
 
