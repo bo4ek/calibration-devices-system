@@ -50,7 +50,6 @@ public class NotStandardVerificationDTO {
                                       Organization providerFromBBI, Organization nameProvider, String rejectMessage, String comment,
                                       Status status) {
         this(id, initialDate, address, firstName, lastName, middleName);
-        this.flat = address.getFlat();
         this.symbol = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getSymbol() : null;
         this.standardSize = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getStandardSize() : null;
         this.realiseYear = (counter != null) ? counter.getReleaseYear() : null;
@@ -73,6 +72,8 @@ public class NotStandardVerificationDTO {
         this.street = address.getStreet();
         this.district = address.getDistrict();
         this.locality = address.getLocality();
+        this.flat = address.getFlat();
+        this.building = address.getBuilding();
     }
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address,

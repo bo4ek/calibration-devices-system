@@ -136,7 +136,7 @@ public interface Constants {
     String PHONE_NUMBER = "Телефон";
     String FULL_NAME_CUSTOMER = "ПІБ замовника";
     String FULL_NAME = "ПІБ працівника";
-    String VERIFICATOR_NAME = "Підписант";
+    String VERIFICATOR_NAME = "Відповідальна особа";
     String FIRST_NAME = "Ім'я";
     String LAST_NAME = "Прізвище";
     String MIDDLE_NAME = "По батькові";
@@ -165,6 +165,7 @@ public interface Constants {
     String DAY_FULL_MONTH_YEAR = "dd MMMMM yyyy";
     String FULL_DATE = "dd.MM.yyyy HH:mm:ss";
     String DATE = "Дата";
+    String SENT_TO_VERIFICATOR_DATE = "Дата надходження";
 
     // endregion
 

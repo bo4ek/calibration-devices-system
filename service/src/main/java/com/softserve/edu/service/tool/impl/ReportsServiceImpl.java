@@ -293,7 +293,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> counterNotes = new ArrayList<>(initializedCapacity);
         List<String> typeOfSupply = new ArrayList<>(initializedCapacity);
         List<String> stateVerificatorName = new ArrayList<>(initializedCapacity);
-        List<String> status = new ArrayList<>(initializedCapacity);
+        List<String> sentToVerificatorDate = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -354,6 +354,7 @@ public class ReportsServiceImpl implements ReportsService {
             temperatures.add(temperature == -1 ? " " : temperature.toString());
             typeOfSupply.add(getTypeOfSupplyFromTemperature(temperature, verification));
             stateVerificatorName.add(getStateVerificatorName(verification));
+            sentToVerificatorDate.add(getSentToVerificatorDate(verification));
             ++i;
         }
 
@@ -404,6 +405,7 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.VALID_UNTIL, validUntil));
         if (organization.equals(OrganizationType.STATE_VERIFICATOR)) {
             data.add(new TableExportColumn(Constants.VERIFICATOR_NAME, stateVerificatorName));
+            data.add(new TableExportColumn(Constants.SENT_TO_VERIFICATOR_DATE, sentToVerificatorDate));
         }
         // endregion
         return data;
@@ -436,6 +438,10 @@ public class ReportsServiceImpl implements ReportsService {
                 REJECTED_BY_PROVIDER,
                 NOT_VALID;*/
         return null;
+    }
+
+    public String getSentToVerificatorDate(Verification verification) {
+        return verification.getSentToVerificatorDate().toString().substring(0, 10);
     }
 
     public String getStateVerificatorName(Verification verification) {
@@ -549,17 +555,7 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getSignProtocolDateInString(Verification verification) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        if (verification.getSignProtocolDate() != null) {
-            try {
-                return dateFormat.format(verification.getSignProtocolDate());
-            } catch (IllegalArgumentException e) {
-                logger.error("Wrong date format of certificate date in database, verification Id: " + verification.getId(), e);
-                return " ";
-            }
-        } else {
-            return " ";
-        }
+        return verification.getSignProtocolDate() != null ? verification.getSignProtocolDate().toString().substring(0, 10) : " ";
     }
 
     public String getDocumentNumberFromVerification(Verification verification) {
@@ -587,18 +583,7 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getValidDateInString(Verification verification) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
-        if (verification.getExpirationDate() != null) {
-            try {
-                return dateFormat.format(verification.getExpirationDate());
-            } catch (IllegalArgumentException e) {
-                logger.error("Wrong date format of validate date in database, verification Id: " + verification.getId(), e);
-                return " ";
-            }
-        } else {
-            return " ";
-        }
+        return verification.getExpirationDate() != null ? verification.getExpirationDate().toString().substring(0, 10) : " ";
     }
 
     public Date getDateForDocument(String strDate) {
