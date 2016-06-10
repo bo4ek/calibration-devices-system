@@ -3,9 +3,9 @@ angular
     .controller('NewVerificationsControllerCalibrator', ['$scope', '$log',
         '$modal', 'VerificationServiceCalibrator',
         '$rootScope', 'ngTableParams', '$timeout', '$filter', '$window', '$location', '$translate', 'toaster',
-        'CalibrationTestServiceCalibrator', 'ProfileService',
+        'CalibrationTestServiceCalibrator', 'DigitalVerificationProtocolsServiceCalibrator', 'ProfileService',
         function ($scope, $log, $modal, verificationServiceCalibrator, $rootScope, ngTableParams,
-                  $timeout, $filter, $window, $location, $translate, toaster, calibrationTestServiceCalibrator, profileService) {
+                  $timeout, $filter, $window, $location, $translate, toaster, calibrationTestServiceCalibrator, digitalVerificationProtocolsServiceCalibrator, profileService) {
 
             $scope.resultsCount = 0;
 
@@ -538,24 +538,18 @@ angular
             $scope.cancelTest = function (verification) {
                 var idVerification = verification.id;
                 if (!verification.isManual) {
-                    var modalInstance = $modal.open({
-                        animation: true,
-                        templateUrl: 'resources/app/calibrator/views/modals/cancel-bbiFile.html',
-                        controller: 'CancelBbiProtocolCalibrator',
-                        size: 'md',
-                        resolve: {
-                            verificationId: function () {
-                                return verificationServiceCalibrator.cancelUploadFile(idVerification)
-                                    .success(function (bbiName) {
-                                            return bbiName;
-                                        }
-                                    );
+                    digitalVerificationProtocolsServiceCalibrator.cancelProtocol(idVerification)
+                        .then(function (response) {
+                            switch (response.status) {
+                                case 200:
+                                {
+                                    $scope.tableParams.reload();
+                                    break;
+                                }
+
                             }
-                        }
-                    });
-                    modalInstance.result.then(function () {
-                        $scope.tableParams.reload();
-                    });
+                            }
+                        );
                 } else if (verification.status == 'TEST_COMPLETED') {
                     calibrationTestServiceCalibrator.deleteTestManual(verification.id)
                         .then(function (status) {
