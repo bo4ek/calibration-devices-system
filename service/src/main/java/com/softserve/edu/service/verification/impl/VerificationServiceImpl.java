@@ -283,9 +283,9 @@ public class VerificationServiceImpl implements VerificationService {
                                                                                            String verificationId, String status, String sortCriteria, String sortOrder) {
 
         CriteriaQuery<Verification> criteriaQuery = ArchivalVerificationsQueryConstructorProvider.buildSearchRejectedProviderQuery(organizationId, startDateToSearch, endDateToSearch, rejectedReason, providerEmployee, calibratorName,
-                customerName, district, street, building, flat, verificationId,status, sortCriteria, sortOrder, em);
+                customerName, district, street, building, flat, verificationId, status, sortCriteria, sortOrder, em);
         Long count = em.createQuery(ArchivalVerificationsQueryConstructorProvider.buildCountRejectedQuery(organizationId, startDateToSearch, endDateToSearch, rejectedReason, providerEmployee, calibratorName,
-                customerName, district, street, building, flat, verificationId,status, em)).getSingleResult();
+                customerName, district, street, building, flat, verificationId, status, em)).getSingleResult();
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
         typedQuery.setMaxResults(itemsPerPage);
@@ -358,13 +358,13 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional(readOnly = true)
     public ListToPageTransformer<Verification> findPageOfVerificationsByCalibratorIdAndCriteriaSearch(Long calibratorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String fullNameToSearch,
-                                                                                                      String streetToSearch, String region, String district, String locality, String status, String employeeName, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String sortCriteria, String sortOrder, User calibratorEmployee, ArrayList<Map<String, Object>> globalSearchParams) {
+                                                                                                      String streetToSearch, String region, String district, String locality, String status, String employeeName, String standardSize, String symbol, String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String comment, String sortCriteria, String sortOrder, User calibratorEmployee, ArrayList<Map<String, Object>> globalSearchParams) {
 
 
-        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorCalibrator.buildSearchQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, sortCriteria, sortOrder, employeeName, em, globalSearchParams);
+        CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorCalibrator.buildSearchQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, comment, sortCriteria, sortOrder, employeeName, em, globalSearchParams);
 
 
-        Long count = em.createQuery(NewVerificationsQueryConstructorCalibrator.buildCountQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, employeeName, em)).getSingleResult();
+        Long count = em.createQuery(NewVerificationsQueryConstructorCalibrator.buildCountQuery(calibratorId, startDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, comment, employeeName, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
@@ -475,7 +475,7 @@ public class VerificationServiceImpl implements VerificationService {
         typedQuery.setFirstResult(verificationIndex);
         typedQuery.setMaxResults(1);
         List<Verification> verificationList = typedQuery.getResultList();
-        if(verificationList.isEmpty()) {
+        if (verificationList.isEmpty()) {
             return null;
         } else {
             return verificationList.get(0);
@@ -1155,7 +1155,7 @@ public class VerificationServiceImpl implements VerificationService {
             cq.orderBy(cb.desc(verifications.get("initialDate")));
         }
         Predicate calibratorEmployeePredicate = null;
-        if(calibratorEmployee.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
+        if (calibratorEmployee.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE)) {
             calibratorEmployeePredicate = cb.equal(verifications.get("calibratorEmployee"), calibratorEmployee);
         } else {
             calibratorEmployeePredicate = cb.equal(verifications.get("calibrator"), calibratorEmployee.getOrganization());

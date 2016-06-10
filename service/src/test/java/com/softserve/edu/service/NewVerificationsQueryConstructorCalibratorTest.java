@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.modules.junit4.PowerMockRunner;
+
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 
@@ -41,35 +42,47 @@ public class NewVerificationsQueryConstructorCalibratorTest {
     private final String district = null; //"district";
     private final String locality = null; //"locality";
     private final String status = null; //"SENT";
-    @Mock private User calibratorEmployee;
-    private final String standardSize =null;
+    @Mock
+    private User calibratorEmployee;
+    private final String standardSize = null;
     private final String symbol = null;
     private final String nameProvider = null;
     private final String realiseYear = null;
     private final String sortCriteria = null; //"sortCriteria";
     private final String sortOrder = null; //"sortOrder";
     private final String employeeSearchName = null; //"employeeSearchName";
-    @Mock private EntityManager em;
+    @Mock
+    private EntityManager em;
     private final String methodJoinArg = "calibrator";
-    private final String dismantled=null;
-    private final String building=null;
+    private final String dismantled = null;
+    private final String building = null;
     private final String flat = null;
     private final String numberCounter = null;
+    private final String comment = null;
 
 
     // .buildSearchQuery() local variables' mocks
-    @Mock private CriteriaBuilder cb;
-    @Mock private CriteriaQuery<Verification> criteriaQuery;
-    @Mock private Root<Verification> root;
-    @Mock private Join<Object, Object> calibratorJoin;
+    @Mock
+    private CriteriaBuilder cb;
+    @Mock
+    private CriteriaQuery<Verification> criteriaQuery;
+    @Mock
+    private Root<Verification> root;
+    @Mock
+    private Join<Object, Object> calibratorJoin;
     private final String userName = "userName";
-    @Mock private Predicate queryPredicate;
+    @Mock
+    private Predicate queryPredicate;
     private final UserRole userRole = UserRole.CALIBRATOR_EMPLOYEE;
     private Set<UserRole> roles = new HashSet<UserRole>();
-    @Mock private Join<Object, Object> joinCalibratorEmployee;
-    @Mock private Predicate searchPredicateByUsername;
-    @Mock private Predicate searchPredicateByEmptyField;
-    @Mock private Predicate searchByCalibratorEmployee;
+    @Mock
+    private Join<Object, Object> joinCalibratorEmployee;
+    @Mock
+    private Predicate searchPredicateByUsername;
+    @Mock
+    private Predicate searchPredicateByEmptyField;
+    @Mock
+    private Predicate searchByCalibratorEmployee;
 
     @Before
     public void setUp() throws Exception {
@@ -99,7 +112,7 @@ public class NewVerificationsQueryConstructorCalibratorTest {
     public void testBuildSearchQueryWithSortCriteriaAndOrderSetToNull() throws Exception {
         NewVerificationsQueryConstructorCalibrator.buildSearchQuery(providerId, startDateToSearch,
                 endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district,
-                locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, sortCriteria, sortOrder, employeeSearchName, em, null);
+                locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, comment, sortCriteria, sortOrder, employeeSearchName, em, null);
         verify(em).getCriteriaBuilder();
         verify(cb).createQuery(Verification.class);
         verify(criteriaQuery).from(Verification.class);
@@ -116,7 +129,7 @@ public class NewVerificationsQueryConstructorCalibratorTest {
     @Test
     public void testBuildPredicateWithArgumentsSetToNull() {
         NewVerificationsQueryConstructorCalibrator.buildSearchQuery(providerId, startDateToSearch,
-                endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, sortCriteria, sortOrder, employeeSearchName, em, null);
+                endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality, status, calibratorEmployee, standardSize, symbol, nameProvider, realiseYear, dismantled, building, flat, numberCounter, comment, sortCriteria, sortOrder, employeeSearchName, em, null);
         verify(calibratorEmployee).getUsername();
         verify(cb).conjunction();
         verify(calibratorEmployee).getUserRoles();

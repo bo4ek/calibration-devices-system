@@ -203,6 +203,7 @@ public class CalibratorVerificationController {
                 searchData.getBuilding(),
                 searchData.getFlat(),
                 searchData.getSerialNumber(),
+                searchData.getComment(),
                 sortCriteria, sortOrder, calibratorEmployee, arrayList);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
@@ -237,6 +238,7 @@ public class CalibratorVerificationController {
                 searchData.get("building"),
                 searchData.get("flat"),
                 searchData.get("numberCounter"),
+                searchData.get("comment"),
                 sortCriteria, sortOrder, calibratorEmployee, globalSearchParams);
         List<VerificationPageDTO> content = VerificationPageDTOTransformer.toDtoFromList(queryResult.getContent());
         return new PageDTO<>(queryResult.getTotalItems(), content);
