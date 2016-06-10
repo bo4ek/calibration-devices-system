@@ -539,7 +539,11 @@ public class CalibrationTestController {
             Verification verification = verificationService.findById(verificationResult.getId());
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationResult.getId());
 
-            verification.setStatus(Status.valueOf(verificationResult.getStatus()));
+            if (verificationResult.getStatus() != null) {
+                verification.setStatus(Status.valueOf(verificationResult.getStatus()));
+            } else {
+                verificationResult.setStatus(verification.getStatus().toString());
+            }
             byte[] documentByteArray = getDocument(verification, calibrationTest);
             verification.setSigned(true);
             verification.setSignedDocument(documentByteArray);

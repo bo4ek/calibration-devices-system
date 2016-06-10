@@ -570,8 +570,11 @@ angular
                     .editTestManual(testManualForSend, $scope.testId, $scope.isVerificationEdit)
                     .then(function (status) {
                         if (status == 200) {
+                            var verificationResult = {
+                                id: $scope.testId
+                            };
                             calibrationTestServiceCalibrator
-                                .signTestProtocolWithoutEDS($scope.testId)
+                                .signTestProtocolWithoutEDS(verificationResult)
                                 .then(function (response) {
                                     if (response.status == 200) {
                                         $scope.selectedData.isSignedDocument = true;
