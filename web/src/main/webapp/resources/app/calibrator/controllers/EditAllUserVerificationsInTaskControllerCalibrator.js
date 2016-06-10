@@ -4,7 +4,8 @@ angular
         'EditAllUserVerificationsInTaskControllerCalibrator',
         ['$scope', '$log', '$modalInstance', '$rootScope', '$modal', 'ngTableParams',
             'CalibrationTaskServiceCalibrator', '$translate', '$filter', 'toaster',
-            function ($scope, $log, $modalInstance, $rootScope, $modal, ngTableParams, CalibrationTaskServiceCalibrator, $translate, $filter, toaster) {
+            function ($scope, $log, $modalInstance, $rootScope, $modal, ngTableParams, CalibrationTaskServiceCalibrator,
+                      $translate, $filter, toaster) {
 
                 $scope.editAll = true;
                 $scope.verificationId = $rootScope.verifIDforEditing;

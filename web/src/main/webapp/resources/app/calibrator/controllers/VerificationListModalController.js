@@ -112,7 +112,7 @@ angular
                                 $filter('translate')('ERROR_UPDATE_QUEUE'));
                         }
                     });
-                }
+                };
 
 
                 $scope.removeVerificationFromTask = function (verificationId) {

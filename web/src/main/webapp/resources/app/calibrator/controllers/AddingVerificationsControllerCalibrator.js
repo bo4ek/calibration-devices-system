@@ -2,13 +2,15 @@ angular.module('employeeModule')
     .controller('AddingVerificationsControllerCalibrator', ['$scope', '$modal', '$state',
         '$http', '$log', '$stateParams', '$rootScope', '$location', '$window', '$modalInstance', 'DataReceivingServiceCalibrator',
         'VerificationServiceCalibrator', '$filter', '$translate', 'toaster',
-        function ($scope, $modal, $state, $http, $log, $stateParams, $rootScope, $location, $window, $modalInstance, dataReceivingService, verificationServiceCalibrator, $filter, $translate, toaster) {
+        function ($scope, $modal, $state, $http, $log, $stateParams, $rootScope, $location, $window, $modalInstance,
+                  dataReceivingService, verificationServiceCalibrator, $filter, $translate, toaster) {
 
             $scope.isShownForm = true;
             $scope.isProvider = -1;
             $scope.providerDefined = false;
             $scope.verificationID = $rootScope.verifIDforEditing;
             $scope.editAllUserVerifications = $rootScope.editAll;
+            $scope.taskForTeam = $rootScope.taskForTeam;
 
             /**
              * to open first block "General Information" when the modal form is loaded

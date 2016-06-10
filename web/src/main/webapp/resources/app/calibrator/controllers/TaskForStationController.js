@@ -255,6 +255,7 @@ angular
 
                 $scope.openVerificationListModal = function (calibrationTaskID) {
                     var verificationsModal;
+                    $rootScope.taskForTeam = $scope.forBrigades;
                     verificationsModal = $modal
                         .open({
                             animation: true,
