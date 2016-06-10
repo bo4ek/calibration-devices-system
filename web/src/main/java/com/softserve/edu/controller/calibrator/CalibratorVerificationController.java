@@ -619,15 +619,21 @@ public class CalibratorVerificationController {
      * @param verificationProviderEmployeeDTO
      */
     @RequestMapping(value = "assign/calibratorEmployee", method = RequestMethod.PUT)
-    public void assignCalibratorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationProviderEmployeeDTO) {
+    public void assignCalibratorEmployee(@RequestBody VerificationProviderEmployeeDTO verificationProviderEmployeeDTO,
+                                         @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails) {
 
         if (verificationProviderEmployeeDTO.getIdVerification() != null) {
             calibratorService.assignCalibratorEmployee(verificationProviderEmployeeDTO.getIdVerification(),
                     calibratorService.oneCalibratorEmployee(verificationProviderEmployeeDTO.getEmployeeCalibrator().getUsername()));
-        } else if (verificationProviderEmployeeDTO.getIdsOfVerifications() != null) {
+        } else if (verificationProviderEmployeeDTO.getIdsOfVerifications() != null && verificationProviderEmployeeDTO.getEmployeeCalibrator() != null) {
             for (String id : verificationProviderEmployeeDTO.getIdsOfVerifications()) {
                 calibratorService.assignCalibratorEmployee(id,
                         calibratorService.oneCalibratorEmployee(verificationProviderEmployeeDTO.getEmployeeCalibrator().getUsername()));
+            }
+        } else if (verificationProviderEmployeeDTO.getIdsOfVerifications() != null && verificationProviderEmployeeDTO.getEmployeeCalibrator() == null) {
+            for (String id : verificationProviderEmployeeDTO.getIdsOfVerifications()) {
+                calibratorService.assignCalibratorEmployee(id,
+                        calibratorService.oneCalibratorEmployee(userDetails.getUsername()));
             }
         }
     }

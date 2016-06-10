@@ -641,7 +641,6 @@ angular
                                     idVerification: verificationId,
                                     employeeCalibrator: formData.provider
                                 };
-                                $log.info(dataToSend);
                                 verificationServiceCalibrator
                                     .sendEmployeeCalibrator(dataToSend)
                                     .success(function () {
@@ -649,6 +648,7 @@ angular
                                     });
                             });
                         } else {
+
                             verificationServiceCalibrator
                                 .assignEmployeeCalibrator(verificationId)
                                 .then(function () {
@@ -699,9 +699,26 @@ angular
                                         $scope.tableParams.reload();
                                     });
                             });
+                        } else {
+                            var verificationIds = [];
+                            angular.forEach($scope.allVerifications, function (verification) {
+                                if (verification.calibratorEmployee === null) {
+                                    verificationIds.push(verification.id);
+                                }
+                            });
+                            var dataToSend = {
+                                idsOfVerifications: verificationIds
+                            };
+                            $log.info(dataToSend);
+                            verificationServiceCalibrator
+                                .sendEmployeeCalibrator(dataToSend)
+                                .success(function () {
+                                    $scope.tableParams.reload();
+                                });
                         }
                     });
             };
+
 
             $scope.uploadArchive = function () {
                 console.log("Entered upload archive function");
