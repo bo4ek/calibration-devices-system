@@ -237,6 +237,7 @@ angular
                                 $defer.resolve(result.content);
                                 $scope.allVerifications = result.content;
                                 params.total(result.totalItems);
+                                $scope.idsOfVerifications = [];
                             });
                     }
 
@@ -246,22 +247,6 @@ angular
             $scope.idsOfVerifications = [];
             $scope.checkedItems = [];
             $scope.allIsEmpty = true;
-
-            /**
-             * adds selected verificationId to the array
-             * or delete it if it when it is not selected
-             * but it it is still in the array
-             *
-             * @param id
-             */
-            $scope.resolveVerificationId = function (id) {
-                var index = $scope.idsOfVerifications.indexOf(id);
-                if (index > -1) {
-                    $scope.idsOfVerifications.splice(index, 1);
-                } else {
-                    $scope.idsOfVerifications.push(id);
-                }
-            };
 
             /**
              * opens task for station modal
@@ -288,9 +273,11 @@ angular
                     });
                     $scope.$modalInstance.result.then(function () {
                         $scope.tableParams.reload();
+                        $scope.idsOfVerifications = [];
                         $rootScope.$broadcast('verification-sent-to-station');
                     });
                 }
+                $scope.allIsEmpty = true;
             };
 
             /**
@@ -299,7 +286,6 @@ angular
              * table data
              */
             $scope.openTaskForTeam = function () {
-
                 if ($scope.idsOfVerifications.length === 0) {
                     toaster.pop('error', $filter('translate')('INFORMATION'),
                         $filter('translate')('NO_VERIFICATIONS_CHECKED'));
@@ -315,11 +301,11 @@ angular
                     });
                     $scope.$modalInstance.result.then(function () {
                         $scope.tableParams.reload();
-                        $scope.checkedItems = [];
-                        $scope.idsOfVerifications = [];
                         $rootScope.$broadcast('verification-sent-to-team');
+                        $scope.idsOfVerifications = [];
                     });
                 }
+                $scope.allIsEmpty = true;
             };
 
             /**
@@ -403,19 +389,7 @@ angular
              */
 
             $scope.resolveVerificationId = function (id) {
-                var index = $scope.idsOfVerifications.indexOf(id);
-                if (index === -1) {
-                    $scope.idsOfVerifications.push(id);
-                    index = $scope.idsOfVerifications.indexOf(id);
-                }
-
-                if (!$scope.checkedItems[index]) {
-                    $scope.idsOfVerifications.splice(index, 1, id);
-                    $scope.checkedItems.splice(index, 1, true);
-                } else {
-                    $scope.idsOfVerifications.splice(index, 1);
-                    $scope.checkedItems.splice(index, 1);
-                }
+                $scope.idsOfVerifications.push(id);
                 checkForEmpty();
             };
 
