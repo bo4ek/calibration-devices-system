@@ -262,11 +262,11 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     Long countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status status, String calibratorEmployeeUsername);
 
-    Long countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNullAndCounterStatusIsFalse(Status status, String calibratorEmployeeUsername);
+    Long countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNullAndCounterStatusIsFalseAndStatus(Status taskStatus, String calibratorEmployeeUsername, Status status);
 
     Long countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status status, Long calibratorId);
 
-    Long countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNullAndCounterStatusIsFalse(Status status, Long calibratorId);
+    Long countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNullAndCounterStatusIsFalseAndStatus(Status taskStatus, Long calibratorId, Status status);
 
     @Query("SELECT v FROM Verification v INNER JOIN v.counter c INNER JOIN v.calibrator o WHERE c.numberCounter = :numberCounter " +
             "AND o.id = :calibratorId")
