@@ -133,6 +133,7 @@ public class OrganizationController {
         ListToPageTransformer<Organization> queryResult = organizationService.getOrganizationsBySearchAndPagination(
                 pageNumber,
                 itemsPerPage,
+                searchData.getId(),
                 searchData.getName(),
                 searchData.getEmail(),
                 searchData.getType(),

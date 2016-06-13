@@ -31,6 +31,10 @@
                        class="table table-bordered table-hover users_table">
                     <tbody>
                     <tr ng-repeat="organization in $data">
+                        <td data-title="'ID' | translate" sortable="'id'"
+                            filter="{ 'id': 'textWithDelayedUpdate' }">
+                            {{ organization.id }}
+                        </td>
                         <td data-title="'NAME_ORGANIZATION' | translate" sortable="'name'"
                             filter="{ 'name': 'textWithDelayedUpdate' }">
                             {{ organization.name }}

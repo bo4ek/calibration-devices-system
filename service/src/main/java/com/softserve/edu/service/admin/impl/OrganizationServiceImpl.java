@@ -121,27 +121,34 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return ListToPageTransformer<Organization> contains required organizations
      */
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ListToPageTransformer<Organization> getOrganizationsBySearchAndPagination(
-            int pageNumber, int itemsPerPage, String name, String email,
+            int pageNumber, int itemsPerPage, String id, String name, String email,
             String number, String type, String region, String district, String locality,
             String streetToSearch, String sortCriteria, String sortOrder
     ) {
 
-        CriteriaQuery<Organization> criteriaQuery = ArchivalOrganizationsQueryConstructorAdmin
-                .buildSearchQuery(name, email, number, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
-
-        Long count = entityManager.createQuery(ArchivalOrganizationsQueryConstructorAdmin
-                .buildCountQuery(name, email, number, type, region, district, locality, streetToSearch, entityManager)).getSingleResult();
-
-        TypedQuery<Organization> typedQuery = entityManager.createQuery(criteriaQuery);
-        typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
-        typedQuery.setMaxResults(itemsPerPage);
-        List<Organization> OrganizationList = typedQuery.getResultList();
-
         ListToPageTransformer<Organization> result = new ListToPageTransformer<>();
-        result.setContent(OrganizationList);
-        result.setTotalItems(count);
+        try {
+            CriteriaQuery<Organization> criteriaQuery = ArchivalOrganizationsQueryConstructorAdmin
+                    .buildSearchQuery(id, name, email, number, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
+
+
+            Long count = entityManager.createQuery(ArchivalOrganizationsQueryConstructorAdmin
+                    .buildCountQuery(id, name, email, number, type, region, district, locality, streetToSearch, entityManager)).getSingleResult();
+
+            TypedQuery<Organization> typedQuery = entityManager.createQuery(criteriaQuery);
+            typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);
+            typedQuery.setMaxResults(itemsPerPage);
+            List<Organization> OrganizationList = typedQuery.getResultList();
+
+            result.setContent(OrganizationList);
+            result.setTotalItems(count);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 

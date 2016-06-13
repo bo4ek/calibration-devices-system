@@ -24,7 +24,7 @@ public interface OrganizationService {
                                   String username, Address address, Address addressRegistered, AdditionInfoOrganization additionInfoOrganization,
                                   String adminName, List<Long> localityIdList) throws UnsupportedEncodingException, MessagingException;
 
-    ListToPageTransformer<Organization> getOrganizationsBySearchAndPagination(int pageNumber, int itemsPerPage, String name,
+    ListToPageTransformer<Organization> getOrganizationsBySearchAndPagination(int pageNumber, int itemsPerPage, String id, String name,
                                                                               String email, String number, String type, String region,
                                                                               String district, String locality, String streetToSearch,
                                                                               String sortCriteria, String sortOrder);

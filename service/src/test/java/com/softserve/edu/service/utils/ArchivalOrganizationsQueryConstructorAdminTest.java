@@ -42,13 +42,14 @@ public class ArchivalOrganizationsQueryConstructorAdminTest {
     private Predicate predicate;
 
 
-    private String name, email, phone, type, region, district, locality, streetToSearch;
+    private String id, name, email, phone, type, region, district, locality, streetToSearch;
 
     private String sortCriteria;
 
     private String sortOrder;
 
     public ArchivalOrganizationsQueryConstructorAdminTest() {
+        id = null;
         name = null;
         email = null;
         phone = null;
@@ -75,28 +76,28 @@ public class ArchivalOrganizationsQueryConstructorAdminTest {
 
     @Test
     public void buildSearchQueryVerifySortCriteriaANDsortOrder() {
-        ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
+        ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(id, name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
         verify(criteriaQuery, times(1)).orderBy(SortCriteriaOrganization.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, criteriaBuilde, sortOrder));
     }
 
     @Test
     public void buildSearchQueryNotNullCriteriaQuery() {
         CriteriaQuery<Organization> criteriaQuery = ArchivalOrganizationsQueryConstructorAdmin
-                .buildSearchQuery(name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
+                .buildSearchQuery(id, name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
         assertNotNull("verificationCriteriaQuery present", criteriaQuery);
     }
 
     @Test
     public void buildSearchQueryVerifySortCriteriaANDsortOrderNULL() {
         sortOrder = null;
-        ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
+        ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(id, name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
         verify(criteriaQuery, times(1)).orderBy(criteriaBuilde.desc(root.get("id")));
     }
 
     @Test
     public void buildSearchQueryVerifySortCriteriaNULLANDsortOrder() {
         sortCriteria = null;
-        ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
+        ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(id, name, email, phone, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager);
         verify(criteriaQuery, times(1)).orderBy(criteriaBuilde.desc(root.get("id")));
     }
 
@@ -104,7 +105,7 @@ public class ArchivalOrganizationsQueryConstructorAdminTest {
     public void buildCountQueryNotNullCriteriaQuery() {
         when(criteriaBuilde.createQuery(Long.class)).thenReturn(countQueryForBuildCountQuery);
         CriteriaQuery<Long> criteriaQuery = ArchivalOrganizationsQueryConstructorAdmin
-                .buildCountQuery(name, email, phone, type, region, district, locality, streetToSearch, entityManager);
+                .buildCountQuery(id, name, email, phone, type, region, district, locality, streetToSearch, entityManager);
         assertNotNull("verificationCriteriaQuery present", criteriaQuery);
     }
 

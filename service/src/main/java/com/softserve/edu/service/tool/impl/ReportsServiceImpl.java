@@ -441,7 +441,7 @@ public class ReportsServiceImpl implements ReportsService {
     }
 
     public String getSentToVerificatorDate(Verification verification) {
-        return verification.getSentToVerificatorDate().toString().substring(0, 10);
+        return verification.getSentToVerificatorDate() != null ? verification.getSentToVerificatorDate().toString().substring(0, 10) : " ";
     }
 
     public String getStateVerificatorName(Verification verification) {

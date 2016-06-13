@@ -143,6 +143,7 @@ public class OrganizationServiceImplTest {
     public void testGetOrganizationsBySearchAndPagination() throws Exception {
         int pageNumber = 2;
         int itemsPerPage = 10;
+        String id = "id";
         String name = "name";
         String email = "email";
         String number = "0000000000";
@@ -160,17 +161,17 @@ public class OrganizationServiceImplTest {
         TypedQuery<Long> longTypedQuery = mock(TypedQuery.class);
 
         PowerMockito.mockStatic(ArchivalOrganizationsQueryConstructorAdmin.class);
-        PowerMockito.when(ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(name, email, number, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager)).thenReturn(organizationCriteriaQuery);
-        PowerMockito.when(ArchivalOrganizationsQueryConstructorAdmin.buildCountQuery(name, email, number, type, region, district, locality, streetToSearch, entityManager)).thenReturn(longCriteriaQuery);
+        PowerMockito.when(ArchivalOrganizationsQueryConstructorAdmin.buildSearchQuery(id, name, email, number, type, region, district, locality, streetToSearch, sortCriteria, sortOrder, entityManager)).thenReturn(organizationCriteriaQuery);
+        PowerMockito.when(ArchivalOrganizationsQueryConstructorAdmin.buildCountQuery(id, name, email, number, type, region, district, locality, streetToSearch, entityManager)).thenReturn(longCriteriaQuery);
 
         stub(entityManager.createQuery(longCriteriaQuery)).toReturn(longTypedQuery);
         stub(entityManager.createQuery(organizationCriteriaQuery)).toReturn(organizationTypedQuery);
 
         List<Organization> organizationList = organizationTypedQuery.getResultList();
         Long count = entityManager.createQuery(ArchivalOrganizationsQueryConstructorAdmin
-                .buildCountQuery(name, email, number, type, region, district, locality, streetToSearch, entityManager)).getSingleResult();
+                .buildCountQuery(id, name, email, number, type, region, district, locality, streetToSearch, entityManager)).getSingleResult();
 
-        ListToPageTransformer<Organization> actual = organizationService.getOrganizationsBySearchAndPagination(pageNumber, itemsPerPage, name, email,
+        ListToPageTransformer<Organization> actual = organizationService.getOrganizationsBySearchAndPagination(pageNumber, itemsPerPage, id, name, email,
                 number, type, region, district, locality, streetToSearch, sortCriteria, sortOrder);
 
         assertEquals(organizationList, actual.getContent());
