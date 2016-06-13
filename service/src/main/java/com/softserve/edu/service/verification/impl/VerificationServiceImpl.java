@@ -1116,10 +1116,10 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public Long findCountOfPlanedTasksByCalibratorEmployeeUsername(User calibratorEmployee) {
         if (calibratorEmployee.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN)) {
-            return verificationRepository.countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK,
+            return verificationRepository.countByTaskStatusAndCalibratorIdAndProviderEmployeeUsernameIsNotNullAndCounterStatusIsFalse(Status.PLANNING_TASK,
                     calibratorEmployee.getOrganization().getId());
         }
-        return verificationRepository.countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNull(Status.PLANNING_TASK,
+        return verificationRepository.countByTaskStatusAndCalibratorEmployeeUsernameAndProviderEmployeeUsernameIsNotNullAndCounterStatusIsFalse(Status.PLANNING_TASK,
                 calibratorEmployee.getUsername());
     }
 

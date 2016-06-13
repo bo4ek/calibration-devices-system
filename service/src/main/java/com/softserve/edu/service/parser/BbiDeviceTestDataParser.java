@@ -190,7 +190,7 @@ public class BbiDeviceTestDataParser implements DeviceTestDataParser {
         try {
             int imageSize = (int) readLongValue(Constants.TWO_BYTES);
             if (imageSize > Constants.ALLOCATED_IMAGE_SIZE) {
-                throw new IOException();
+                imageSize = Constants.ALLOCATED_IMAGE_SIZE;
             }
             byte[] decodedHex = new byte[imageSize];
             int n = reader.read(decodedHex, Constants.START_OFFSET_IN_ARRAY, imageSize);

@@ -66,9 +66,7 @@ public class ProviderEmployeeController {
         try {
             Date dateFrom = providerEmployeeService.convertToDate(fromDate);
             Date dateTo = providerEmployeeService.convertToDate(toDate);
-
             list = providerEmployeeService.buidGraphicMainPanel(dateFrom, dateTo, idOrganization);
-
         } catch (Exception e) {
             logger.error("Failed to get graphic data");
             logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
