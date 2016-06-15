@@ -1090,8 +1090,10 @@ public class VerificationServiceImpl implements VerificationService {
         List<String> verificationIds = new ArrayList<>();
         Set<Verification> verifications = new HashSet<>();
         String id;
+
         String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
-        long count = verificationRepository.getCountOfAllVerificationsCreatedWithDeviceTypeToday(verification.getInitialDate(), deviceType);
+        long count = verificationRepository.countByIdStartingWith(datePart);
+        System.out.println(count);
 
         VerificationGroup group = new VerificationGroup();
         groupRepository.save(group);

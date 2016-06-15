@@ -249,6 +249,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     long getCountOfAllVerificationsCreatedWithDeviceTypeToday(@Param("initialDate") Date initialDate,
                                                               @Param("deviceType") Device.DeviceType deviceType);
 
+    long countByIdStartingWith(String datepart);
+
     @Modifying
     @Query("UPDATE Verification u SET u.queue = :queue WHERE u.id = :id ")
     void updateVerificationQueueById(@Param("queue") int queue, @Param("id") String id);

@@ -235,6 +235,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 CalibrationModule calibrationModule = calibrationModuleRepository.findByModuleNumber(calibrationModuleNumber);
                 if (calibrationModule == null) {
                     throw new InvalidModuleIdException();
+
                 }
                 if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), correspondingVerificationMap.get(Constants.DATE), calibrationModule.getModuleNumber())) {
                     throw new FileAlreadyExistsException(bbiFile.getName());
@@ -297,7 +298,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 logger.error("Duplicate calibration test");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
-                logger.error("Unknown reason of rejection");
+                logger.error("Unknown reason of rejection", e);
             } finally {
                 if (inStream != null) {
                     bufferedInputStream.close();
@@ -399,7 +400,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 logger.error("Incorrect symbol and standard size");
             } catch (Exception e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.UNKNOWN_REASON_OF_REJECTION;
-                logger.error("Unknown reason of rejection");
+                logger.error("Unknown reason of rejection", e);
             } finally {
                 if (inStream != null) {
                     bufferedInputStream.close();
