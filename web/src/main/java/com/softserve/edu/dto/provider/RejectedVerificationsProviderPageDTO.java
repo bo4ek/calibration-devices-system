@@ -16,7 +16,7 @@ public class RejectedVerificationsProviderPageDTO {
     private String rejectedReason;
     private String employeeProvider;
     private String calibratorName;
-    private String customerName;
+    private String client_full_name;
     private String district;
     private String street;
     private String building;
@@ -41,7 +41,7 @@ public class RejectedVerificationsProviderPageDTO {
         this.rejectedReason = rejectedReason;
         this.employeeProvider = employeeProvider;
         this.calibratorName = calibratorName;
-        this.customerName = customerName;
+        this.client_full_name = customerName;
         this.district = district;
         this.street = street;
         this.building = building;

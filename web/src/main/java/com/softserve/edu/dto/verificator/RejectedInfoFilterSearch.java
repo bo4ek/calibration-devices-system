@@ -16,7 +16,7 @@ public class RejectedInfoFilterSearch {
     private String rejectedReason;
     private String employeeRejected;
     private String providerName;
-    private String customerName;
+    private String client_full_name;
     private String district;
     private String street;
     private String building;

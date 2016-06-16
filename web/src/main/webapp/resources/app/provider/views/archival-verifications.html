@@ -77,7 +77,7 @@
                                                ng-click="openDetails(verification.id, verification.initialDate)">
                                             </i>
                                             <i class="fa fa-exclamation-circle verification_protocol_user_icon"
-                                               ng-show="verification.status == 'SENT_TO_VERIFICATOR' || verification.status == 'TEST_COMPLETED' || verification.status == 'TEST_OK'"
+                                               ng-show="verification.status == 'SENT_TO_VERIFICATOR' || verification.status == 'TEST_COMPLETED' || verification.status == 'TEST_OK' || verification.status == 'TEST_NOK'"
                                                popover="{{'PROTOCOL_INFORMATION' | translate}}" popover-trigger="mouseenter"
                                                ng-click="openProtocol(verification.id)">
                                             </i>

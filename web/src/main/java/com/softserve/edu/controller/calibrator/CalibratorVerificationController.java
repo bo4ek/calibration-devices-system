@@ -476,7 +476,7 @@ public class CalibratorVerificationController {
                         searchData.getRejectedReason(),
                         searchData.getEmployeeRejected(),
                         searchData.getProviderName(),
-                        searchData.getCustomerName(),
+                        searchData.getClient_full_name(),
                         searchData.getDistrict(),
                         searchData.getStreet(),
                         searchData.getBuilding(),

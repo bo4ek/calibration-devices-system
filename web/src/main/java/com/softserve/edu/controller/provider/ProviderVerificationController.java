@@ -126,7 +126,7 @@ public class ProviderVerificationController {
                 searchData.getRejectedReason(),
                 searchData.getEmployeeProvider(),
                 searchData.getCalibratorName(),
-                searchData.getCustomerName(),
+                searchData.getClient_full_name(),
                 searchData.getDistrict(),
                 searchData.getStreet(),
                 searchData.getBuilding(),
