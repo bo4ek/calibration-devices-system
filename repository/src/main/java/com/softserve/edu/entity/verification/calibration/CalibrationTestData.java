@@ -49,7 +49,7 @@ public class CalibrationTestData {
     @JoinColumn(name = "calibrationTestId")
     private CalibrationTest calibrationTest;
 
-    @OneToMany(mappedBy = "calibrationTestData")
+    @OneToMany(mappedBy = "calibrationTestData", cascade = CascadeType.ALL)
     private List<CalibrationTestIMG> testIMGs;
 
     public CalibrationTestData(Double givenConsumption, Long acceptableError, Double volumeOfStandard,

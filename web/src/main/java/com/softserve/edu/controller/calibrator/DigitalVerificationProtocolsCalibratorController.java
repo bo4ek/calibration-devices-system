@@ -109,7 +109,7 @@ public class DigitalVerificationProtocolsCalibratorController {
 
     @RequestMapping(value = "rejected/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<ProtocolDTO> getPageOfAllRejectedVerificationsByStateCalibratorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
-                                                                                          NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                              NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
         searchData.setStatus(Status.PROTOCOL_REJECTED.toString());
         return getPageOfAllSentVerificationsByStateCalibratorIdAndSearch(pageNumber, itemsPerPage, sortCriteria,
@@ -121,12 +121,13 @@ public class DigitalVerificationProtocolsCalibratorController {
     public ResponseEntity cancelVerificationProtocol(@PathVariable String verificationId, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails) {
         Verification verification = verificationService.findById(verificationId);
         User user = userService.findOne(userDetails.getUsername());
-        if(verification != null && ((user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE) && verification.getCalibratorEmployee().getUsername().equals(user.getUsername()))
-                                      || (user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN) && verification.getCalibrator().getId().equals(user.getOrganization().getId())))) {
+        if (verification != null && ((user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE) && verification.getCalibratorEmployee().getUsername().equals(user.getUsername()))
+                || (user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN) && verification.getCalibrator().getId().equals(user.getOrganization().getId())))) {
             verification.setStatus(Status.IN_PROGRESS);
             verification.setTaskStatus(Status.PLANNING_TASK);
             verification.setCalibrationTests(null);
             verificationService.saveVerification(verification);
+            calibrationTestService.deleteTest(calibrationTestService.findByVerificationId(verification.getId()).getId());
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
