@@ -20,6 +20,7 @@ public class ProtocolDTOTransformer {
                 isVerificator = true;
             }
         }
+
         for (Verification verification : verifications) {
                 resultList.add(new ProtocolDTO(
                         verification.getId(),
@@ -29,7 +30,7 @@ public class ProtocolDTOTransformer {
                         verification.isManual(),
                         verification.isManual() ? verification.getCalibrationTestDataManualId()
                                 .getCalibrationTestManual().getCalibrationModule().getModuleNumber() : verification.getCalibrationModule().getModuleNumber(),
-                        Integer.parseInt(verification.getCounter().getReleaseYear()),
+                        verification.getCounter().getReleaseYear(),
                         verification.getCounter().getNumberCounter(),
                         verification.getVerificationTime(), verification.getReadStatus(),
                         verification.getCalibrationModule().getSerialNumber(),
@@ -39,6 +40,7 @@ public class ProtocolDTOTransformer {
                         verification.getRejectedMessage()
                 ));
         }
+
         return resultList;
     }
 }

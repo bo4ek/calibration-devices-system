@@ -18,7 +18,7 @@ public class ProtocolDTO {
     private String comment;
     private boolean isManual;
     private String moduleNumber;
-    private int realiseYear;
+    private String realiseYear;
     private String numberOfCounter;
     private String initialDate;
     private Verification.ReadStatus readStatus;
@@ -35,7 +35,7 @@ public class ProtocolDTO {
     }
 
     public ProtocolDTO(String id, String nameCalibrator, String status, String comment, boolean isManual, String moduleNumber,
-                       int realiseYear, String numberOfCounter, String initialDate, Verification.ReadStatus readStatus, String serialNumber, String numberOfProtocol,
+                       String realiseYear, String numberOfCounter, String initialDate, Verification.ReadStatus readStatus, String serialNumber, String numberOfProtocol,
                        User providerEmployee, User stateVerificatorEmployee, String sentToVerificatorDate, String rejectedMessage) {
         this.id = id;
         this.nameCalibrator = nameCalibrator;
