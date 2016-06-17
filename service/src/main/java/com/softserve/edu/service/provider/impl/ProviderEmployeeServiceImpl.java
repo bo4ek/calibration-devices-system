@@ -95,8 +95,8 @@ public class ProviderEmployeeServiceImpl implements ProviderEmployeeService {
         if (role.contains(UserRole.PROVIDER_ADMIN.name())) {
             List<User> allAvailableUsersList = providerEmployeeRepository.findAllAvailableUsersByEmployeeAndAdminRoleAndOrganizationId(
                     UserRole.PROVIDER_EMPLOYEE, UserRole.PROVIDER_ADMIN, employee.getOrganization().getId())
-                        .stream()
-                        .collect(Collectors.toList());
+                    .stream()
+                    .collect(Collectors.toList());
             providerListEmployee = EmployeeDTO.giveListOfEmployeeDTOs(allAvailableUsersList);
         } else {
             EmployeeDTO userPage = new EmployeeDTO(employee.getUsername(), employee.getFirstName(),
@@ -165,9 +165,7 @@ public class ProviderEmployeeServiceImpl implements ProviderEmployeeService {
     @Transactional
     public List<ProviderEmployeeGraphic> buidGraphicMainPanel(Date from, Date to, Long idOrganization) {
         Organization organization = organizationRepository.findOne(idOrganization);
-        List<Verification> verifications = verificationRepository.
-                findByProviderAndInitialDateBetween
-                        (organization, from, to);
+        List<Verification> verifications = verificationRepository.findByProviderAndInitialDateBetween(organization, from, to);
         List<ProviderEmployeeGraphic> graficData = null;
         try {
             List<MonthOfYear> monthList = GraphicBuilder.listOfMonths(from, to);

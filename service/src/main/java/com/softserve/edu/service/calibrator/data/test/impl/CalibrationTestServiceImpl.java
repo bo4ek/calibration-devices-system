@@ -64,7 +64,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         if (moduleId == null) {
             throw new InvalidModuleIdException();
         }
-        if(calibrationTestRepository.existByVerificationId(verificationId)) {
+        if (calibrationTestRepository.existByVerificationId(verificationId)) {
             throw new DuplicateCalibrationTestException();
         }
         CalibrationTest calibrationTest = new CalibrationTest(deviceTestData.getFileName(),
@@ -93,7 +93,7 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
                 calibrationTests.add(сalibrationTestData);
             }
         }
-        for(CalibrationTestData calibrationTestData : getLatestTests(calibrationTests)) {
+        for (CalibrationTestData calibrationTestData : getLatestTests(calibrationTests)) {
             if (calibrationTestData.getTestResult().equals(Verification.CalibrationTestResult.FAILED)) {
                 calibrationTest.setTestResult(Verification.CalibrationTestResult.FAILED);
             }
@@ -284,9 +284,10 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
             if (verification.getClientData().getEmail() != null) {
                 mailService.sendPassedTestMail(verification.getClientData().getEmail(), verification.getId(), statusToSend);
             }
-            if (verification.getProviderEmployee() != null && verification.getProviderEmployee().getEmail() != null) {
+            //switch of sending email to provider
+            /*if (verification.getProviderEmployee() != null && verification.getProviderEmployee().getEmail() != null) {
                 mailService.sendPassedTestMail(verification.getProviderEmployee().getEmail(), verification.getId(), statusToSend);
-            }
+            }*/
             verificationRepository.save(verification);
         } else {
             verification.setStatus(Status.TEST_COMPLETED);
