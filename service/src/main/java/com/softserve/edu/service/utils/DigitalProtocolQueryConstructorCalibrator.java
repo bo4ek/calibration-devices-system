@@ -85,8 +85,7 @@
 					numberOfProtocol, moduleNumber);
 
             if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
-                criteriaQuery.orderBy(cb.desc(root.get("verificationTime")), cb.asc((root.get("calibrationModule").get("moduleNumber"))),
-                        cb.asc(root.get("numberOfProtocol")));
+                criteriaQuery.orderBy(cb.desc(root.get("verificationDate")));
             } else if ((sortCriteria != null) && (sortOrder != null)) {
                 criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
             }
@@ -130,7 +129,7 @@
 
                 LocalDate startDate = LocalDate.parse(startDateToSearch, dbDateTimeFormatter);
                 LocalDate endDate = LocalDate.parse(endDateToSearch, dbDateTimeFormatter);
-                queryPredicate = cb.and(cb.between(root.get("initialDate"), java.sql.Date.valueOf(startDate),
+                queryPredicate = cb.and(cb.between(root.get("verificationDate"), java.sql.Date.valueOf(startDate),
                         java.sql.Date.valueOf(endDate)), queryPredicate);
 
             }
