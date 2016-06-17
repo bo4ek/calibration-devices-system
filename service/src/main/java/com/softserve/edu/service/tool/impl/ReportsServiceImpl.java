@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -98,6 +99,9 @@ public class ReportsServiceImpl implements ReportsService {
                 break;
             case VERIFICATOR_VERIFICATION_RESULT_REPORTS:
                 data = getDataForVerificatorVerificationResultReport(organisationId, fromDate, toDate);
+                break;
+            case PROVIDER_VERIFICATION_REJECTED_REPORTS:
+                data = getDataForProviderRejectedVerificationReport(organisationId, fromDate, toDate);
                 break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
@@ -227,6 +231,97 @@ public class ReportsServiceImpl implements ReportsService {
         return getDataForModulesResultReport(list, startDate, endDate);
     }
 
+    private List<TableExportColumn> getDataForProviderRejectedVerificationReport(Long providerId, Date startDate, Date endDate) {
+        Organization provider = organizationRepository.findOne(providerId);
+
+        List<Verification> verifications;
+        if (startDate != null && endDate != null) {
+            verifications = verificationRepository.findByProviderAndRejectedCalibratorDateBetweenAndStatusOrStatus(provider, startDate, endDate, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR);
+        } else {
+            verifications = verificationRepository.findByProviderAndRejectedCalibratorDateBetweenAndStatusOrStatus(provider, null, null, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR);
+        }
+        int initializedCapacity = verifications.size();
+        List<String> number = new ArrayList<>(initializedCapacity);
+        List<String> providerEmployee = new ArrayList<>(initializedCapacity);
+        List<String> calibrator = new ArrayList<>(initializedCapacity);
+        List<String> calibratorEmployee = new ArrayList<>(initializedCapacity);
+        List<String> rejectedDate = new ArrayList<>(initializedCapacity);
+        List<String> rejectedReason = new ArrayList<>(initializedCapacity);
+        List<String> customerSurname = new ArrayList<>(initializedCapacity);
+        List<String> customerName = new ArrayList<>(initializedCapacity);
+        List<String> cities = new ArrayList<>(initializedCapacity);
+        List<String> regions = new ArrayList<>(initializedCapacity);
+        List<String> streets = new ArrayList<>(initializedCapacity);
+        List<String> buildings = new ArrayList<>(initializedCapacity);
+        List<String> flats = new ArrayList<>(initializedCapacity);
+        List<String> id = new ArrayList<>(initializedCapacity);
+        List<String> comment = new ArrayList<>(initializedCapacity);
+
+        Integer i = 1;
+        for (Verification verification : verifications) {
+            number.add(String.valueOf(i));
+            String empty = " ";
+            id.add(verification.getId());
+
+            if (verification.getStatus().equals(Status.REJECTED_BY_CALIBRATOR)) {
+                providerEmployee.add(empty);
+                calibrator.add(getCalibratorFromVerification(verification));
+                calibratorEmployee.add(getCalibratorEmployeeFullName(verification));
+            } else if (verification.getStatus().equals((Status.REJECTED_BY_PROVIDER))) {
+                providerEmployee.add(getProviderEmployeeFullName(verification));
+                calibrator.add(empty);
+                calibratorEmployee.add(empty);
+            } else {
+                providerEmployee.add(empty);
+                calibrator.add(empty);
+                calibratorEmployee.add(empty);
+            }
+
+            rejectedDate.add(getRejectedDateInString(verification));
+            rejectedReason.add(getRejectedReason(verification));
+            customerSurname.add(getCustomerSurname(verification));
+            customerName.add(getCustomerName(verification));
+            comment.add(getComment(verification));
+
+            if (verification.getClientData() != null) {
+                if (verification.getClientData().getClientAddress() != null) {
+                    cities.add(getCitiesFromAddress(verification.getClientData().getClientAddress()));
+                    regions.add(getDistrictFromAddress(verification.getClientData().getClientAddress()));
+                    streets.add(getStreetFromAddress(verification.getClientData().getClientAddress()));
+                    buildings.add(getBuildingFromAddress(verification.getClientData().getClientAddress()));
+                    flats.add(getFlatFromAddress(verification.getClientData().getClientAddress()));
+                } else {
+                    cities.add(empty);
+                    regions.add(empty);
+                    streets.add(empty);
+                    buildings.add(empty);
+                    flats.add(empty);
+                }
+            }
+            ++i;
+        }
+
+        List<TableExportColumn> data = new ArrayList<>(initializedCapacity);
+
+        data.add(new TableExportColumn(Constants.NUMBER_IN_SEQUENCE_SHORT, number));
+        data.add(new TableExportColumn(Constants.PROVIDER_EMPLOYEE_FULL_NAME, providerEmployee));
+        data.add(new TableExportColumn(Constants.CALIBRATOR_ORGANIZATION_NAME, calibrator));
+        data.add(new TableExportColumn(Constants.CALIBRATOR_EMPLYEE_REJECTED_FULL_NAME, calibratorEmployee));
+        data.add(new TableExportColumn(Constants.REJECTED_CALIBRATOR_DATE, rejectedDate));
+        data.add(new TableExportColumn(Constants.REJECTED_REASON, rejectedReason));
+        data.add(new TableExportColumn(Constants.CUSTOMER_SURNAME, customerSurname));
+        data.add(new TableExportColumn(Constants.CUSTOMER_NAME, customerName));
+        data.add(new TableExportColumn(Constants.CITY, cities));
+        data.add(new TableExportColumn(Constants.REGION, regions));
+        data.add(new TableExportColumn(Constants.STREET, streets));
+        data.add(new TableExportColumn(Constants.BUILDING, buildings));
+        data.add(new TableExportColumn(Constants.FLAT, flats));
+        data.add(new TableExportColumn(Constants.VERIFICATION_ID, id));
+        data.add(new TableExportColumn(Constants.COMMENT, comment));
+
+        return data;
+    }
+
     private List<TableExportColumn> getDataForModulesResultReport(List<CalibrationModule> list, String startDate, String endDate) {
         int initializedCapacity = list.size();
         Date fromDate = getDateForDocument(startDate);
@@ -302,8 +397,8 @@ public class ReportsServiceImpl implements ReportsService {
             String empty = " ";
 
             if (verification.getClientData() != null) {
-                customerSurname.add(verification.getClientData().getLastName() != null ? verification.getClientData().getLastName() : empty);
-                customerName.add(verification.getClientData().getFirstName() != null ? verification.getClientData().getFirstName() : empty);
+                customerSurname.add(getCustomerSurname(verification));
+                customerName.add(getCustomerName(verification));
                 customerMiddleName.add(verification.getClientData().getMiddleName() != null ? verification.getClientData().getMiddleName() : empty);
                 phones.add(getPhones(verification));
 
@@ -409,6 +504,34 @@ public class ReportsServiceImpl implements ReportsService {
         }
         // endregion
         return data;
+    }
+
+    public String getComment(Verification verification) {
+        return verification.getComment() != null ? verification.getComment() : " ";
+    }
+
+    public String getCustomerName(Verification verification) {
+        return verification.getClientData().getFirstName() != null ? verification.getClientData().getFirstName() : " ";
+    }
+
+    public String getCustomerSurname(Verification verification) {
+        return verification.getClientData().getLastName() != null ? verification.getClientData().getLastName() : " ";
+    }
+
+    public String getClientFullName(Verification verification) {
+        return verification.getClientData().getFullName();
+    }
+
+    public String getRejectedReason(Verification verification) {
+        return verification.getRejectedInfo() != null ? verification.getRejectedInfo().getName() : " ";
+    }
+
+    public String getCalibratorEmployeeFullName(Verification verification) {
+        return verification.getCalibratorEmployee() != null ? verification.getCalibratorEmployee().getFullNameShort() : " ";
+    }
+
+    public String getProviderEmployeeFullName(Verification verification) {
+        return verification.getProviderEmployee() != null ? verification.getProviderEmployee().getFullNameShort() : " ";
     }
 
     public String getStatus(Verification verification) {
@@ -556,6 +679,10 @@ public class ReportsServiceImpl implements ReportsService {
 
     public String getSignProtocolDateInString(Verification verification) {
         return verification.getSignProtocolDate() != null ? verification.getSignProtocolDate().toString().substring(0, 10) : " ";
+    }
+
+    public String getRejectedDateInString(Verification verification) {
+        return verification.getRejectedCalibratorDate() != null ? verification.getRejectedCalibratorDate().toString().substring(0, 10) : " ";
     }
 
     public String getDocumentNumberFromVerification(Verification verification) {

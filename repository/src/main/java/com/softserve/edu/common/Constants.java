@@ -136,6 +136,8 @@ public interface Constants {
     String PHONE_NUMBER = "Телефон";
     String FULL_NAME_CUSTOMER = "ПІБ замовника";
     String FULL_NAME = "ПІБ працівника";
+    String PROVIDER_EMPLOYEE_FULL_NAME = "ПІБ працівника надавача";
+    String CALIBRATOR_EMPLYEE_REJECTED_FULL_NAME = "ПІБ працівника вимірювальної лабораторії, що відхилив";
     String VERIFICATOR_NAME = "Відповідальна особа";
     String FIRST_NAME = "Ім'я";
     String LAST_NAME = "Прізвище";
@@ -166,6 +168,8 @@ public interface Constants {
     String FULL_DATE = "dd.MM.yyyy HH:mm:ss";
     String DATE = "Дата";
     String SENT_TO_VERIFICATOR_DATE = "Дата надходження";
+    String REJECTED_CALIBRATOR_DATE = "Дата відхилення";
+    String REJECTED_REASON = "Причина відхилення";
 
     // endregion
 

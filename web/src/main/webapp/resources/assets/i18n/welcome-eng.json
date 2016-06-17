@@ -855,6 +855,7 @@
     "FILE_NAME": "File name",
     "TOTAL": "Total",
     "DOWNLOAD_SUCCESS": "Download success",
-    "DOWNLOAD_FAIL": "Download fail"
+    "DOWNLOAD_FAIL": "Download fail",
+    "PROVIDER_VERIFICATION_REJECTED_REPORTS": "Report of rejected verification"
 
 }

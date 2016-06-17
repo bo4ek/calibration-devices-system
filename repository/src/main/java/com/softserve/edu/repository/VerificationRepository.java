@@ -151,6 +151,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     List<Verification> findByProviderAndInitialDateBetween(Organization organization, Date dateFrom, Date DateTo);
 
+    List<Verification> findByProviderAndRejectedCalibratorDateBetweenAndStatusOrStatus(Organization organization, Date dateFrom, Date DateTo, Status status1, Status status2);
+
     List<Verification> findByCalibratorAndVerificationDateBetween(Organization organization, Date dateFrom, Date DateTo);
 
     List<Verification> findByStateVerificatorAndVerificationDateBetween(Organization organization, Date dateFrom, Date DateTo);

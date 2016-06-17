@@ -13,8 +13,7 @@
                     <div class="input-group pull-left" ng-show="showCalibrators">
                         <ui-select class="form-control" type="text" theme="select2" id="select_calibrators"
                                    ng-model="selectedValues.calibrator"
-                                   ng-click="initDatePicker()"
-                        >
+                                   ng-click="initDatePicker()">
                             <ui-select-match placeholder="{{'SELECT_CALIBRATOR' | translate}}" allow-clear="true">
                                 {{$select.selected.designation}}
                             </ui-select-match>
