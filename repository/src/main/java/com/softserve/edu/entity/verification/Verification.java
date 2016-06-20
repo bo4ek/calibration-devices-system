@@ -126,6 +126,9 @@ public class Verification implements Comparable {
     @Column(columnDefinition = "boolean default true")
     private boolean sealPresence;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean isCreatedByCalibrator;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "infoId")
     private AdditionalInfo info;

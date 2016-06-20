@@ -856,6 +856,6 @@
     "TOTAL": "Total",
     "DOWNLOAD_SUCCESS": "Download success",
     "DOWNLOAD_FAIL": "Download fail",
-    "PROVIDER_VERIFICATION_REJECTED_REPORTS": "Report of rejected verification"
-
+    "PROVIDER_VERIFICATION_REJECTED_REPORTS": "Report of rejected verification",
+    "PROVIDER_REPORTS": "Reports for provider"
 }

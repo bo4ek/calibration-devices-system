@@ -1090,10 +1090,21 @@ public class VerificationServiceImpl implements VerificationService {
         List<String> verificationIds = new ArrayList<>();
         Set<Verification> verifications = new HashSet<>();
         String id;
+        String datePart;
 
-        String datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
+        if (verification.getStatus().equals(Status.CREATED_BY_CALIBRATOR)) {
+            verification.setCreatedByCalibrator(true);
+            int deviceByBackFlow = deviceType.getId() + Constants.BACKFLOW_ID_BBI;
+            datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceByBackFlow;
+        } else if (verification.getStatus().equals(Status.CREATED_FOR_PROVIDER)) {
+            verification.setCreatedByCalibrator(true);
+            int deviceByBackFlow = deviceType.getId() + Constants.BACKFLOW_ID_MANUAL;
+            datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceByBackFlow;
+        } else {
+            datePart = (new SimpleDateFormat(Constants.DAY_MONTH_YEAR).format(verification.getInitialDate())) + deviceType.getId();
+        }
+
         long count = verificationRepository.countByIdStartingWith(datePart);
-        System.out.println(count);
 
         VerificationGroup group = new VerificationGroup();
         groupRepository.save(group);

@@ -92,6 +92,15 @@ public interface Constants {
     String TYPE_OF_SUPPLY = "Тип послуги";
     String WATER = "Холодна вода";
     String THERMAL = "Гаряча вода";
+    String SENT_BY_PROVIDER = "Надіслано заявок";
+    String CREATED_BY_CALIBRATOR = "Підтверджено заявок";
+    String TOTAL = "Всього заявок";
+    String TESTED_SENT_BY_PROVIDER = "Проведено вимірювань надісланих заявок";
+    String TESTED_CREATED_BY_CALIBRATOR = "Проведено вимірювань підтверджених заявок";
+    String TOTAL_TESTED = "Всього проведено вимірювань";
+    String REJECTED_SENT_BY_PROVIDER = "Відхилено заявок із надісланих";
+    String REJECTED_CREATED_BY_CALIBRATOR = "Відхилено заявок із підтверджених";
+    String TOTAL_REJECTED = "Всього відхилено";
 
     //reasons o counter unsuitability
     String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
@@ -188,4 +197,14 @@ public interface Constants {
     String TEMPORARY_DOC_NAME = "temporaryFolder";
     int PROTOCOL_NUMBER_START_INDEX = 6;
     int PROTOCOL_NUMBER_END_INDEX = 8;
+
+    // For separate verification created by calibrator from bbi
+    // WATER(3),
+    // THERMAL(4);
+    int BACKFLOW_ID_BBI = 2;
+
+    // For separate verification created by calibrator manually
+    // WATER(5),
+    // THERMAL(6);
+    int BACKFLOW_ID_MANUAL = 4;
 }

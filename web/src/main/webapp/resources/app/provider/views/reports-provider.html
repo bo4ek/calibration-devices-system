@@ -11,7 +11,7 @@
                 <li class="list-group-item-text" ng-click="downloadReport('PROVIDER_CALIBRATORS_REPORTS')">
                     <a><i class="fa fa-file-excel-o fa-fw"></i>{{'PROVIDER_CALIBRATORS_REPORTS' | translate}}</a>
                 </li>
-                <li class="list-group-item-text" ng-click="initDatePicker(); show=true; show2=false">
+                <li class="list-group-item-text" ng-click="initDatePicker(); show=true; show2=false; show3=false">
                     <a><i class="fa fa-file-excel-o fa-fw"></i>{{'PROVIDER_VERIFICATION_RESULT_REPORTS' |
                         translate}}</a>
                 </li>
@@ -26,7 +26,7 @@
                                id="datepickerfield" readonly/>
                     </div>
                 </li>
-                <li class="list-group-item-text" ng-click="initDatePicker(); show2=true; show=false">
+                <li class="list-group-item-text" ng-click="initDatePicker(); show2=true; show=false; show3=false">
                     <a><i class="fa fa-file-excel-o fa-fw"></i>{{'PROVIDER_VERIFICATION_REJECTED_REPORTS' |
                         translate}}</a>
                 </li>
@@ -37,6 +37,21 @@
                         <input date-range-picker="opts" class="form-control date-picker" type="text"
                                ng-model="myDatePicker.pickerDate"
                                ng-change="downloadReportProvider('PROVIDER_VERIFICATION_REJECTED_REPORTS'); show2=false"
+                               options="opts"
+                               id="datepickerfield" readonly/>
+                    </div>
+                </li>
+                <li class="list-group-item-text" ng-click="initDatePicker(); show3=true; show=false; show2=false">
+                    <a><i class="fa fa-file-excel-o fa-fw"></i>{{'PROVIDER_REPORTS' |
+                        translate}}</a>
+                </li>
+                <li>
+                    <div class="input-group right-inner-addon" style="width: 20%; min-width: 320px" ng-show="show3">
+                        <i id="calendar_icon" class="glyphicon glyphicon-calendar"
+                           ng-click="showPicker($event)"></i>
+                        <input date-range-picker="opts" class="form-control date-picker" type="text"
+                               ng-model="myDatePicker.pickerDate"
+                               ng-change="downloadReportProvider('PROVIDER_REPORTS'); show3=false"
                                options="opts"
                                id="datepickerfield" readonly/>
                     </div>

@@ -11,6 +11,7 @@ import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.organization.Agreement;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
@@ -60,6 +61,9 @@ public class ReportsServiceImpl implements ReportsService {
     @Autowired
     private CalibrationModuleRepository calibrationModuleRepository;
 
+    @Autowired
+    private AgreementRepository agreementRepository;
+
 
     private Logger logger = Logger.getLogger(ReportsServiceImpl.class);
 
@@ -103,6 +107,9 @@ public class ReportsServiceImpl implements ReportsService {
             case PROVIDER_VERIFICATION_REJECTED_REPORTS:
                 data = getDataForProviderRejectedVerificationReport(organisationId, fromDate, toDate);
                 break;
+            case PROVIDER_REPORTS:
+                data = getDataForProviderBackFlowReport(organisationId, fromDate, toDate);
+                break;
             default:
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
         }
@@ -124,6 +131,61 @@ public class ReportsServiceImpl implements ReportsService {
                 throw new IllegalArgumentException(documentType.name() + "is not supported");
         }
         return FileFactory.buildReportFile(data, fileParameters);
+    }
+
+    private List<TableExportColumn> getDataForProviderBackFlowReport(Long organizationId, Date startDate, Date endDate) {
+        List<TableExportColumn> data = new ArrayList<>();
+        Organization provider = organizationRepository.findOne(organizationId);
+        Set<Agreement> agreements = agreementRepository.findByCustomerId(organizationId);
+        List<String> calibrators = new ArrayList<>();
+        List<String> sentByProvider = new ArrayList<>();
+        List<String> createdByCalibrator = new ArrayList<>();
+        List<String> total = new ArrayList<>();
+        List<String> testCompletedSentByProvider = new ArrayList<>();
+        List<String> testCompletedCreatedByCalibrator = new ArrayList<>();
+        List<String> testCompletedTotal = new ArrayList<>();
+        List<String> rejectedSentByProvider = new ArrayList<>();
+        List<String> rejectedCreatedByCalibrator = new ArrayList<>();
+        List<String> rejectedTotal = new ArrayList<>();
+
+
+        for (Agreement agrement : agreements) {
+
+            calibrators.add(agrement.getExecutor().getName());
+
+            int countSentByProvider = verificationRepository.countByProviderAndInitialDateBetweenAndCalibratorAndStatusNotLikeAndIsCreatedByCalibratorFalse(provider, startDate, endDate, agrement.getExecutor(), Status.NOT_VALID);
+            int countCreatedByCalibrator = verificationRepository.countByProviderAndInitialDateBetweenAndCalibratorAndStatusNotLikeAndIsCreatedByCalibratorTrue(provider, startDate, endDate, agrement.getExecutor(), Status.NOT_VALID);
+            sentByProvider.add(String.valueOf(countSentByProvider));
+            createdByCalibrator.add(String.valueOf(countCreatedByCalibrator));
+            total.add(String.valueOf(countCreatedByCalibrator + countSentByProvider));
+
+            int countTestCompletedCreatedByCalibrator = verificationRepository.countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorTrueAndVerificationDateIsNotNullAndStatusNotLike(provider, startDate, endDate, agrement.getExecutor(), Status.NOT_VALID);
+            int countTestCompletedSentByProvider = verificationRepository.countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorFalseAndVerificationDateIsNotNullAndStatusNotLike(provider, startDate, endDate, agrement.getExecutor(), Status.NOT_VALID);
+            testCompletedSentByProvider.add(String.valueOf(countTestCompletedSentByProvider));
+            testCompletedCreatedByCalibrator.add(String.valueOf(countTestCompletedCreatedByCalibrator));
+            testCompletedTotal.add(String.valueOf(countTestCompletedSentByProvider + countTestCompletedCreatedByCalibrator));
+
+            int countRejectedCreatedByCalibrator = verificationRepository.countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorTrueAndRejectedInfoIsNotNullAndStatusNotLike(provider, startDate, endDate, agrement.getExecutor(), Status.NOT_VALID);
+            int countRejectedSentByProvider = verificationRepository.countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorFalseAndRejectedInfoIsNotNullAndStatusNotLike(provider, startDate, endDate, agrement.getExecutor(), Status.NOT_VALID);
+            rejectedCreatedByCalibrator.add(String.valueOf(countRejectedCreatedByCalibrator));
+            rejectedSentByProvider.add(String.valueOf(countRejectedSentByProvider));
+            rejectedTotal.add(String.valueOf(countRejectedCreatedByCalibrator + countRejectedSentByProvider));
+
+        }
+
+        data.add(new TableExportColumn(Constants.CALIBRATOR_ORGANIZATION_NAME, calibrators));
+        data.add(new TableExportColumn(Constants.SENT_BY_PROVIDER, sentByProvider));
+        data.add(new TableExportColumn(Constants.CREATED_BY_CALIBRATOR, createdByCalibrator));
+        data.add(new TableExportColumn(Constants.TOTAL, total));
+        data.add(new TableExportColumn(Constants.TESTED_SENT_BY_PROVIDER, testCompletedSentByProvider));
+        data.add(new TableExportColumn(Constants.TESTED_CREATED_BY_CALIBRATOR, testCompletedCreatedByCalibrator));
+        data.add(new TableExportColumn(Constants.TOTAL_TESTED, testCompletedTotal));
+        data.add(new TableExportColumn(Constants.REJECTED_SENT_BY_PROVIDER, rejectedSentByProvider));
+        data.add(new TableExportColumn(Constants.REJECTED_CREATED_BY_CALIBRATOR, rejectedCreatedByCalibrator));
+        data.add(new TableExportColumn(Constants.TOTAL_REJECTED, rejectedTotal));
+
+
+        return data;
     }
 
     private List<TableExportColumn> getDataForProviderEmployeesReport(Long providerId) {

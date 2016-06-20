@@ -151,6 +151,18 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     List<Verification> findByProviderAndInitialDateBetween(Organization organization, Date dateFrom, Date DateTo);
 
+    int countByProviderAndInitialDateBetweenAndCalibratorAndStatusNotLikeAndIsCreatedByCalibratorTrue(Organization provider, Date dateFrom, Date DateTo, Organization calibrator, Status status);
+
+    int countByProviderAndInitialDateBetweenAndCalibratorAndStatusNotLikeAndIsCreatedByCalibratorFalse(Organization provider, Date dateFrom, Date DateTo, Organization calibrator, Status status);
+
+    int countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorTrueAndVerificationDateIsNotNullAndStatusNotLike(Organization provider, Date dateFrom, Date DateTo, Organization calibrator, Status status);
+
+    int countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorFalseAndVerificationDateIsNotNullAndStatusNotLike(Organization provider, Date dateFrom, Date DateTo, Organization calibrator, Status status);
+
+    int countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorTrueAndRejectedInfoIsNotNullAndStatusNotLike(Organization provider, Date dateFrom, Date DateTo, Organization calibrator, Status status);
+
+    int countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorFalseAndRejectedInfoIsNotNullAndStatusNotLike(Organization provider, Date dateFrom, Date DateTo, Organization calibrator, Status status);
+
     List<Verification> findByProviderAndRejectedCalibratorDateBetweenAndStatusOrStatus(Organization organization, Date dateFrom, Date DateTo, Status status1, Status status2);
 
     List<Verification> findByCalibratorAndVerificationDateBetween(Organization organization, Date dateFrom, Date DateTo);
@@ -275,6 +287,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     @Query("SELECT v FROM Verification v INNER JOIN v.counter c INNER JOIN v.calibrator o WHERE c.numberCounter = :numberCounter " +
             "AND o.id = :calibratorId")
     List<Verification> findByCounterNumberAndCalibratorId(@Param("numberCounter") String numberCounter, @Param("calibratorId") Long calibratorId);
+
 }
 
 

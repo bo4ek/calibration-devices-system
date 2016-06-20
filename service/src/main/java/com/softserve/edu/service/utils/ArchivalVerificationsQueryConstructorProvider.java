@@ -35,9 +35,6 @@ public class ArchivalVerificationsQueryConstructorProvider {
         Predicate predicate = ArchivalVerificationsQueryConstructorProvider.buildPredicate(root, cb, employeeId, initialDateToSearch, endDateToSearch, idToSearch, fullNameToSearch, streetToSearch, region, district, locality,
                 status, employeeName, building, flat, calibratorName, providerEmployee, providerJoin);
 
-        System.out.println(sortCriteria);
-        System.out.println(sortOrder);
-
         if ((sortCriteria != null) && (sortOrder != null)) {
             criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
         } else {
@@ -168,9 +165,6 @@ public class ArchivalVerificationsQueryConstructorProvider {
         Root<Verification> root = criteriaQuery.from(Verification.class);
         Predicate predicate = ArchivalVerificationsQueryConstructorProvider.buildPredicateRejected(root, cb, organizationId, startDateToSearch, endDateToSearch,
                 rejectedReason, employeeRejected, providerName, customerName, district, street, building, flat, verificationId, status);
-
-        System.out.println(sortCriteria);
-        System.out.println(sortOrder);
 
         if ((sortCriteria != null) && (sortOrder != null)) {
             criteriaQuery.orderBy(SortCriteriaVerification.valueOf(sortCriteria.toUpperCase()).getSortOrder(root, cb, sortOrder));
