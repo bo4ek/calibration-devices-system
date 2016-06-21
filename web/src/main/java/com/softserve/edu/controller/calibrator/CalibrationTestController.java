@@ -175,10 +175,10 @@ public class CalibrationTestController {
     @RequestMapping(value = "getCounterTypeId/{verificationId}", method = RequestMethod.GET)
     public ResponseEntity<Long> getCounterTypeId(@PathVariable String verificationId) {
         ResponseEntity<Long> responseEntity;
-        try {
-            responseEntity = new ResponseEntity(verificationService.findById(verificationId).getCounter().getCounterType().getId(), HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("failed to get counterTypeId", e);
+        Verification verification = verificationService.findById(verificationId);
+        if (verification.getCounter() != null && verification.getCounter().getCounterType() != null) {
+            responseEntity = new ResponseEntity(verification.getCounter().getCounterType().getId(), HttpStatus.OK);
+        } else {
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -544,6 +544,7 @@ public class CalibrationTestController {
     @RequestMapping(value = "signTestWithoutEDS", method = RequestMethod.PUT)
     public ResponseEntity signTestProtocolWithoutEDS(@RequestBody VerificationResultDTO verificationResult) {
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
+        System.out.println("here");
         try {
             Verification verification = verificationService.findById(verificationResult.getId());
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationResult.getId());

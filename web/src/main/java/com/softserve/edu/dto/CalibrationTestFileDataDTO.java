@@ -84,7 +84,7 @@ public class CalibrationTestFileDataDTO {
     }
 
     public CalibrationTestFileDataDTO(CalibrationTest calibrationTest, CalibrationTestService testService, Verification verification) {
-        this.fileName = calibrationTest.getName();
+        this.fileName = calibrationTest != null ? calibrationTest.getName() : null;
         this.verificationId = verification.getId();
         Counter counter = verification.getCounter();
         this.counterNumber = counter.getNumberCounter();

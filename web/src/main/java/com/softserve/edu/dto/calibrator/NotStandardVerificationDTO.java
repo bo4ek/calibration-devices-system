@@ -1,5 +1,6 @@
 package com.softserve.edu.dto.calibrator;
 
+import com.softserve.edu.common.Constants;
 import com.softserve.edu.entity.Address;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.enumeration.verification.Status;
@@ -44,6 +45,7 @@ public class NotStandardVerificationDTO {
     private String comment;
     private Status status;
     private String calibrator;
+    private String typeWater;
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address, String firstName, String lastName,
                                       String middleName, Counter counter, Set<CalibrationTest> tests,
@@ -62,6 +64,7 @@ public class NotStandardVerificationDTO {
         this.fileName = (tests != null && tests.size() != 0) ? tests.iterator().next().getName() : null;
         this.testResult = (tests != null && tests.size() != 0) ? tests.iterator().next().getTestResult().toString() : null;
         this.status = status;
+        this.typeWater = getTypeWater(tests, counter);
     }
 
     public NotStandardVerificationDTO(String id, Date initialDate, Address address,
@@ -80,5 +83,19 @@ public class NotStandardVerificationDTO {
                                       String firstName, String lastName, String middleName, String calibrator) {
         this(id, initialDate, address, firstName, lastName, middleName);
         this.calibrator = calibrator;
+    }
+
+    private String getTypeWater(Set<CalibrationTest> tests, Counter counter) {
+        if (tests != null && tests.size() != 0) {
+            int temperature = tests.iterator().next().getTemperature();
+            if (temperature >= 0 && temperature <= 30) {
+                return Constants.WATER;
+            } else if (temperature > 30 && temperature <= 90) {
+                return Constants.THERMAL;
+            }
+        } else {
+            return counter != null && counter.getCounterType() != null && counter.getCounterType().getDevice() != null ? counter.getCounterType().getDevice().getDeviceType().toString() : " ";
+        }
+        return " ";
     }
 }
