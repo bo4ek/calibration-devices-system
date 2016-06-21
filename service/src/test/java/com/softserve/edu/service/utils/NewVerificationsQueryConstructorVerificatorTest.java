@@ -51,6 +51,7 @@ public class NewVerificationsQueryConstructorVerificatorTest {
     private String sentToVerificatorDateFrom;
     private String sentToVerificatorDateTo;
     private String serialNumber;
+    private String employeeLastName;
 
     @Mock
     private User verificatorEmployee;
@@ -114,6 +115,7 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         fullNameToSearch = null;
         streetToSearch = null;
         employeeSearchName = null;
+        employeeLastName = null;
         sortCriteria = "NUMBER_OF_PROTOCOL";
         sortOrder = "asc";
 
@@ -125,7 +127,7 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         CriteriaQuery<Verification> actual = NewVerificationsQueryConstructorVerificator
                 .buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch,
                         idToSearch, status, verificatorEmployee, nameProvider,
-                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, sortCriteria,
+                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, employeeLastName, sortCriteria,
                         sortOrder, entityManager);
         assertEquals(expected, actual);
     }
@@ -175,7 +177,7 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         CriteriaQuery<Verification> actual = NewVerificationsQueryConstructorVerificator
                 .buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch,
                         idToSearch, status, verificatorEmployee, nameProvider,
-                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, sortCriteria,
+                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, employeeLastName, sortCriteria,
                         sortOrder, entityManager);
         assertEquals(expected, actual);
 
@@ -188,7 +190,7 @@ public class NewVerificationsQueryConstructorVerificatorTest {
         CriteriaQuery<Long> expected = longCriteriaQuery;
         CriteriaQuery<Long> actual = NewVerificationsQueryConstructorVerificator
                 .buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee, nameProvider,
-                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, entityManager);
+                        nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, employeeLastName, entityManager);
         assertEquals(expected, actual);
 
     }

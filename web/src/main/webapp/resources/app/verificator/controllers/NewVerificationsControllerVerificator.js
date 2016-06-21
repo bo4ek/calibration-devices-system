@@ -7,7 +7,7 @@ angular
 
             $scope.resultsCount = 0;
             $scope.pageNumber = 1;
-            $scope.itemsPerPage = 10;
+            $scope.itemsPerPage = 50;
             $scope.sortCriteria = 'default';
             $scope.sortOrder = 'default';
             $scope.path = $location.path();
@@ -228,7 +228,6 @@ angular
                         }
                     }, {
                         total: 0,
-                        filterDelay: 1500,
                         getData: function ($defer, params) {
 
                             var sortCriteria = Object.keys(params.sorting())[0];

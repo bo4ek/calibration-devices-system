@@ -75,7 +75,7 @@ public interface VerificationService {
 
     ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String status, String nameProvider, String nameCalibrator,
                                                                                                 String numberOfCounter, String numberOfProtocol,
-                                                                                                String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber,
+                                                                                                String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String serialNumber, String employeeLastName,
                                                                                                 String sortCriteria, String sortOrder, User verificatorEmployee);
 
 

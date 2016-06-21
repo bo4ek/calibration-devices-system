@@ -486,12 +486,13 @@ public class VerificationServiceImplTest {
         String sentToVerificatorDateFrom = "1/9/2015";
         String sentToVerificatorDateTo = "1/10/2015";
         String serialNumber = null;
+        String employeeLastName = null;
 
         PowerMockito.mockStatic(NewVerificationsQueryConstructorVerificator.class);
         PowerMockito.when(NewVerificationsQueryConstructorVerificator.buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee, nameProvider,
-                nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, sortCriteria, sortOrder, mockEntityManager)).thenReturn(criteriaQuery);
+                nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, employeeLastName, sortCriteria, sortOrder, mockEntityManager)).thenReturn(criteriaQuery);
         PowerMockito.when(NewVerificationsQueryConstructorVerificator.buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee, nameProvider,
-                nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, mockEntityManager)).thenReturn(longCriteriaQuery);
+                nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, employeeLastName, mockEntityManager)).thenReturn(longCriteriaQuery);
 
         stub(mockEntityManager.createQuery(criteriaQuery)).toReturn(verificationTypedQuery);
         stub(mockEntityManager.createQuery(longCriteriaQuery)).toReturn(longTypedQuery);
@@ -501,7 +502,7 @@ public class VerificationServiceImplTest {
         Long count = mockEntityManager.createQuery(longCriteriaQuery).getSingleResult();
 
         ListToPageTransformer<Verification> actual = verificationService.findPageOfVerificationsByVerificatorIdAndCriteriaSearch(verificatorId, pageNumber, itemsPerPage, startDateToSearch, endDateToSearch, idToSearch,
-                status, nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, sortCriteria, sortOrder, verificatorEmployee);
+                status, nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, serialNumber, employeeLastName, sortCriteria, sortOrder, verificatorEmployee);
 
         assertEquals(verificationList, actual.getContent());
         assertEquals(count, actual.getTotalItems());

@@ -11,8 +11,8 @@ angular
 
             function checkPermissionToUnSing() {
                 verificationServiceVerificator.getIfEmployeeStateVerificator()
-                    .then(function(response) {
-                       $scope.hasPermissionToUnsing = !response.data;
+                    .then(function (response) {
+                        $scope.hasPermissionToUnsing = !response.data;
                     });
             }
 
@@ -103,7 +103,7 @@ angular
 
             $scope.tableParams = new ngTableParams({
                 page: 1,
-                count: 10,
+                count: 50,
                 sorting: {
                     date: 'desc'
                 }, filter: {
@@ -112,7 +112,6 @@ angular
                 }
             }, {
                 total: 0,
-                filterDelay: 1500,
                 getData: function ($defer, params) {
 
                     var sortCriteria = Object.keys(params.sorting())[0];
@@ -188,7 +187,7 @@ angular
 
             $scope.unsignProtocol = function (verificationId) {
                 var data = {
-                    data : verificationId
+                    data: verificationId
                 };
                 verificationServiceVerificator.unsignProtocol(data)
                     .then(function (response) {

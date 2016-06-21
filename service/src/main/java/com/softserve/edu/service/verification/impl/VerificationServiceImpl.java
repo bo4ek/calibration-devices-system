@@ -446,15 +446,15 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional(readOnly = true)
     public ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String status, String nameProvider,
-                                                                                                       String nameCalibrator, String numberOfCounter, String numberOfProtocol, String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber,
+                                                                                                       String nameCalibrator, String numberOfCounter, String numberOfProtocol, String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, String employeeLastName,
                                                                                                        String sortCriteria, String sortOrder, User verificatorEmployee) {
 
         CriteriaQuery<Verification> criteriaQuery = NewVerificationsQueryConstructorVerificator.buildSearchQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
-                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber, sortCriteria, sortOrder, em);
+                nameProvider, nameCalibrator, numberOfCounter, numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber, employeeLastName, sortCriteria, sortOrder, em);
 
         Long count = em.createQuery(NewVerificationsQueryConstructorVerificator.buildCountQuery(verificatorId, startDateToSearch, endDateToSearch, idToSearch, status, verificatorEmployee,
                 nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber, em)).getSingleResult();
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber, employeeLastName, em)).getSingleResult();
 
         TypedQuery<Verification> typedQuery = em.createQuery(criteriaQuery);
         typedQuery.setFirstResult((pageNumber - 1) * itemsPerPage);

@@ -35,22 +35,17 @@ public class NewVerificationsQueryConstructorVerificator {
     /**
      * Method dynamically builds query to database depending on input parameters specified.
      *
-     * @param verificatorID
-     * 		search by organization ID
-     * @param startDateToSearch
-     * 		search by initial date of verification (optional)
-     * @param idToSearch
-     * 		search by verification ID
-     * @param verificatorEmployee
-     * 		used to additional query restriction if logged user is simple employee (not admin)
-     * @param em
-     * 		EntityManager needed to have a possibility to create query
+     * @param verificatorID       search by organization ID
+     * @param startDateToSearch   search by initial date of verification (optional)
+     * @param idToSearch          search by verification ID
+     * @param verificatorEmployee used to additional query restriction if logged user is simple employee (not admin)
+     * @param em                  EntityManager needed to have a possibility to create query
      * @return CriteriaQuery<Verification>
      */
     public static CriteriaQuery<Verification> buildSearchQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
-                                                               User verificatorEmployee,  String nameProvider,String nameCalibrator, String numberOfCounter,
+                                                               User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
                                                                String numberOfProtocol,
-                                                               String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, String sortCriteria, String sortOrder, EntityManager em) {
+                                                               String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, String employeeLastName, String sortCriteria, String sortOrder, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Verification> criteriaQuery = cb.createQuery(Verification.class);
@@ -59,10 +54,10 @@ public class NewVerificationsQueryConstructorVerificator {
 
         Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
                 status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber);
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber, employeeLastName);
 
         if ((sortCriteria.equals("default")) && (sortOrder.equals("default"))) {
-            criteriaQuery.orderBy(cb.desc(root.get("sentToVerificatorDate")),cb.desc(root.get("initialDate")),
+            criteriaQuery.orderBy(cb.desc(root.get("sentToVerificatorDate")), cb.desc(root.get("initialDate")),
                     cb.asc((root.get("calibrationModule").get("moduleNumber"))), cb.asc(root.get("numberOfProtocol")));
         } else if ((sortCriteria != null) && (sortOrder != null)) {
             SortCriteriaVerification s = SortCriteriaVerification.valueOf(sortCriteria.toUpperCase());
@@ -77,24 +72,20 @@ public class NewVerificationsQueryConstructorVerificator {
     /**
      * Method dynamically builds query to database depending on input parameters specified.
      * Needed to get max count of rows with current predicates for pagination
+     * <p>
+     * search by client's last name
      *
-     * 		search by client's last name
-     * @param verificatorID
-     * 		search by organization ID
-     * @param startDateToSearch
-     * 		search by initial date of verification (optional)
-     * @param idToSearch
-     * 		search by verification ID
-     * 		search by client's street
-     * @param verificatorEmployee
- * 		used to additional query restriction if logged user is simple employee (not admin)
-     * @param em
-* 		EntityManager needed to have a possibility to create query    @return CriteriaQuery<Long>
+     * @param verificatorID       search by organization ID
+     * @param startDateToSearch   search by initial date of verification (optional)
+     * @param idToSearch          search by verification ID
+     *                            search by client's street
+     * @param verificatorEmployee used to additional query restriction if logged user is simple employee (not admin)
+     * @param em                  EntityManager needed to have a possibility to create query    @return CriteriaQuery<Long>
      */
     public static CriteriaQuery<Long> buildCountQuery(Long verificatorID, String startDateToSearch, String endDateToSearch, String idToSearch, String status,
                                                       User verificatorEmployee, String nameProvider, String nameCalibrator, String numberOfCounter,
                                                       String numberOfProtocol,
-                                                      String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, EntityManager em) {
+                                                      String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, String employeeLastName, EntityManager em) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
@@ -102,7 +93,7 @@ public class NewVerificationsQueryConstructorVerificator {
         Join<Verification, Organization> verificatorJoin = root.join("stateVerificator");
         Predicate predicate = NewVerificationsQueryConstructorVerificator.buildPredicate(root, cb, verificatorJoin, verificatorID, startDateToSearch, endDateToSearch, idToSearch,
                 status, verificatorEmployee, nameProvider, nameCalibrator, numberOfCounter,
-                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber);
+                numberOfProtocol, sentToVerificatorDateFrom, sentToVerificatorDateTo, moduleNumber, employeeLastName);
         countQuery.select(cb.count(root));
         countQuery.where(predicate);
         return countQuery;
@@ -115,19 +106,25 @@ public class NewVerificationsQueryConstructorVerificator {
     private static Predicate buildPredicate(Root<Verification> root, CriteriaBuilder cb, Join<Verification, Organization> joinSearch, Long verificatorId,
                                             String startDateToSearch, String endDateToSearch, String idToSearch, String status, User verificatorEmployee, String nameProvider, String nameCalibrator,
                                             String numberOfCounter, String numberOfProtocol,
-                                            String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber) {
+                                            String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, String employeeLastName) {
 
         String userName = verificatorEmployee.getUsername();
         Predicate queryPredicate = cb.conjunction();
-        Set<UserRole> roles= verificatorEmployee.getUserRoles();
+        Set<UserRole> roles = verificatorEmployee.getUserRoles();
         for (UserRole userRole : roles) {
             String role = userRole.name();
-            if(role.equalsIgnoreCase("STATE_VERIFICATOR_EMPLOYEE")) {
+            if (role.equalsIgnoreCase("STATE_VERIFICATOR_EMPLOYEE") | (role.equalsIgnoreCase("STATE_VERIFICATOR_ADMIN") && employeeLastName != null && (employeeLastName.length() > 0))) {
                 Join<Verification, User> joinVerificatorEmployee = root.join("stateVerificatorEmployee", JoinType.LEFT);
-                Predicate searchPredicateByUsername =cb.equal(joinVerificatorEmployee.get("username"), userName);
-                Predicate searchPredicateByEmptyField = cb.isNull(joinVerificatorEmployee.get("username"));
-                Predicate searchByVerificatorEmployee=cb.or(searchPredicateByUsername,searchPredicateByEmptyField);
-                queryPredicate=cb.and(searchByVerificatorEmployee, queryPredicate);
+                if (role.equalsIgnoreCase("STATE_VERIFICATOR_ADMIN")) {
+                    Predicate searchPredicateByVerificatorEmployeeName = cb.or(cb.like(joinVerificatorEmployee.get("lastName"),
+                            "%" + employeeLastName + "%"));
+                    queryPredicate = cb.and(searchPredicateByVerificatorEmployeeName, queryPredicate);
+                } else {
+                    Predicate searchPredicateByUsername = cb.equal(joinVerificatorEmployee.get("username"), userName);
+                    Predicate searchPredicateByEmptyField = cb.isNull(joinVerificatorEmployee.get("username"));
+                    Predicate searchByVerificatorEmployee = cb.or(searchPredicateByUsername, searchPredicateByEmptyField);
+                    queryPredicate = cb.and(searchByVerificatorEmployee, queryPredicate);
+                }
             }
         }
 
@@ -150,7 +147,7 @@ public class NewVerificationsQueryConstructorVerificator {
 
         }
 
-        if ((idToSearch != null)&&(idToSearch.length()>0)) {
+        if ((idToSearch != null) && (idToSearch.length() > 0)) {
             queryPredicate = cb.and(cb.like(root.get("id"), "%" + idToSearch + "%"), queryPredicate);
         }
 
@@ -176,6 +173,7 @@ public class NewVerificationsQueryConstructorVerificator {
                     cb.like(root.get("numberOfProtocol"), "%" + numberOfProtocol + "%"),
                     queryPredicate);
         }
+
 
         if ((moduleNumber != null) && (moduleNumber.length() > 0)) {
             queryPredicate = cb.and(

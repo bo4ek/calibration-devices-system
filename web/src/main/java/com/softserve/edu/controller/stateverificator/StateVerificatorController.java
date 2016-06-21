@@ -85,7 +85,7 @@ public class StateVerificatorController {
      */
     @RequestMapping(value = "new/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<ProtocolDTO> getPageOfAllSentVerificationsByStateVerificatorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
-    		NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                           NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
         User verificatorEmployee = stateVerificatorEmployeeService.oneProviderEmployee(employeeUser.getUsername());
         Set<UserRole> userRoles = verificatorEmployee.getUserRoles();
@@ -102,16 +102,17 @@ public class StateVerificatorController {
                 searchData.getSentToVerificatorDateFrom(),
                 searchData.getSentToVerificatorDateTo(),
                 searchData.getModuleNumber(),
+                searchData.getEmployee_last_name(),
                 sortCriteria,
                 sortOrder,
-	verificatorEmployee);
+                verificatorEmployee);
         List<ProtocolDTO> content = ProtocolDTOTransformer.toDTOFromList(queryResult.getContent(), userRoles);
         return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
     @RequestMapping(value = "rejected/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<ProtocolDTO> getPageOfAllrejectedVerificationsByStateVerificatorIdAndSearch(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
-                                                                                           NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                               NewVerificationsFilterSearch searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         searchData.setStatus(Status.PROTOCOL_REJECTED.toString());
         return getPageOfAllSentVerificationsByStateVerificatorIdAndSearch(pageNumber, itemsPerPage, sortCriteria,
                 sortOrder, searchData, employeeUser);
@@ -127,7 +128,7 @@ public class StateVerificatorController {
      */
     @RequestMapping(value = "new/mainpanel/{pageNumber}/{itemsPerPage}", method = RequestMethod.GET)
     public PageDTO<VerificationPageDTO> getPageOfAllSentVerificationsByVerificatorIdAndSearchOnMainPanel(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage,
-                                                                                                      @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                                         @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         User stateVerificatorEmployee = stateVerificatorEmployeeService.oneProviderEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfArchiveVerificationsByVerificatorIdOnMainPanel(
                 stateVerificatorEmployee.getOrganization().getId(),
@@ -165,6 +166,7 @@ public class StateVerificatorController {
 
     /**
      * Shows count of new verifications assigned on state-verificator
+     *
      * @param user
      * @return count of new verifications
      */
@@ -188,6 +190,7 @@ public class StateVerificatorController {
 
     /**
      * Updates verifications UNREAD status to READ
+     *
      * @param verificationDto
      */
     @RequestMapping(value = "new/read", method = RequestMethod.PUT)
@@ -197,6 +200,7 @@ public class StateVerificatorController {
 
     /**
      * Updates status of verification to TEST_OK and sent it to provider
+     *
      * @param verificationUpdateDTO
      */
     @RequestMapping(value = "new/update", method = RequestMethod.PUT)
@@ -210,6 +214,7 @@ public class StateVerificatorController {
 
     /**
      * Updates status of verification to TEST_NOK and sent it to provider
+     *
      * @param verificationUpdateDTO
      */
     @RequestMapping(value = "new/notOk", method = RequestMethod.PUT)
@@ -223,6 +228,7 @@ public class StateVerificatorController {
 
     /**
      * Updates status of verification to IN_PROGRESS and sent it to calibrator
+     *
      * @param verificationUpdateDTO
      */
     @RequestMapping(value = "new/reject", method = RequestMethod.PUT)
@@ -241,6 +247,7 @@ public class StateVerificatorController {
 
     /**
      * Displays details about verification in modal window
+     *
      * @param verificationId
      * @return
      */
@@ -259,7 +266,7 @@ public class StateVerificatorController {
 
     @RequestMapping(value = "unsign", method = RequestMethod.PUT)
     public ResponseEntity unsignVerification(@RequestBody SearchDTO searchDTO, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
-        if(user != null) {
+        if (user != null) {
             User loginedUser = userService.findOne(user.getUsername());
             if (loginedUser.getUserRoles().contains(UserRole.STATE_VERIFICATOR_ADMIN)) {
                 stateVerificatorService.unsignProtocol(searchDTO.getData());
@@ -271,6 +278,7 @@ public class StateVerificatorController {
 
     /**
      * Displays details about calibration-test by verification ID
+     *
      * @param verificationId
      * @return calibration-test
      */
@@ -283,6 +291,7 @@ public class StateVerificatorController {
 
     /**
      * Displays an archive with verifications of all statuses
+     *
      * @param pageNumber
      * @param itemsPerPage
      * @param searchData
@@ -291,7 +300,7 @@ public class StateVerificatorController {
      */
     @RequestMapping(value = "archive/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}", method = RequestMethod.GET)
     public PageDTO<VerificationPageDTO> getPageOfArchivalVerificationsByOrganizationId(@PathVariable Integer pageNumber, @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria, @PathVariable String sortOrder,
-    		ArchiveVerificationsFilterAndSort searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                       ArchiveVerificationsFilterAndSort searchData, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
 
         User verificatorEmployee = employeeService.oneProviderEmployee(employeeUser.getUsername());
         ListToPageTransformer<Verification> queryResult = verificationService.findPageOfArchiveVerificationsByVerificatorId(
@@ -311,6 +320,7 @@ public class StateVerificatorController {
 
     /**
      * Displays details about verification in archive
+     *
      * @param verificationId
      * @return verification
      */
@@ -328,9 +338,10 @@ public class StateVerificatorController {
 
     /**
      * Check if current user is Employee
+     *
      * @param user
      * @return true if user has role STATE_VERIFICATOR_EMPLOYEE
-     *         false if user has role STATE_VERIFICATOR_ADMIN
+     * false if user has role STATE_VERIFICATOR_ADMIN
      */
     @RequestMapping(value = "verificator/role", method = RequestMethod.GET)
     public Boolean isEmployeeStateVerificator(
@@ -343,6 +354,7 @@ public class StateVerificatorController {
     /**
      * return All Verificator Employee
      * using for add Employee to verification
+     *
      * @param user
      * @return
      */
@@ -360,6 +372,7 @@ public class StateVerificatorController {
      * set employee on a current verification,
      * and than this guy will have opportunity to
      * check this verification.
+     *
      * @param verificationProviderEmployeeDTO
      */
     @RequestMapping(value = "assign/verificatorEmployee", method = RequestMethod.PUT)
@@ -367,9 +380,9 @@ public class StateVerificatorController {
         String usernameVerificator = verificationProviderEmployeeDTO.getEmployeeVerificator().getUsername();
         User employeeVerificator = stateVerificatorEmployeeService.oneProviderEmployee(usernameVerificator);
         Integer count = verificationProviderEmployeeDTO.getIdsOfVerifications().size();
-        for (String idVerification : verificationProviderEmployeeDTO.getIdsOfVerifications()){
-        if(!stateVerificatorService.assignVerificatorEmployee(idVerification, employeeVerificator)){
-                count --;
+        for (String idVerification : verificationProviderEmployeeDTO.getIdsOfVerifications()) {
+            if (!stateVerificatorService.assignVerificatorEmployee(idVerification, employeeVerificator)) {
+                count--;
             }
         }
         return count;
@@ -377,6 +390,7 @@ public class StateVerificatorController {
 
     /**
      * remove assigned employee on a current verification
+     *
      * @param verificationUpdatingDTO
      */
     @RequestMapping(value = "remove/verificatorEmployee", method = RequestMethod.PUT)
