@@ -115,7 +115,9 @@ public class NotStandardVerificationProviderController {
                     verification.getClientData().getFirstName(),
                     verification.getClientData().getLastName(),
                     verification.getClientData().getMiddleName(),
-                    verification.getCalibrator().getName()));
+                    verification.getCalibrator().getName(),
+                    verification.getCalibrationTests(),
+                    verification.getCounter()));
         }
         return resultList;
     }

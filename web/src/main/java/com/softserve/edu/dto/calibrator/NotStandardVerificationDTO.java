@@ -85,6 +85,12 @@ public class NotStandardVerificationDTO {
         this.calibrator = calibrator;
     }
 
+    public NotStandardVerificationDTO(String id, Date initialDate, Address address,
+                                      String firstName, String lastName, String middleName, String calibrator, Set<CalibrationTest> tests, Counter counter) {
+        this(id, initialDate, address, firstName, lastName, middleName, calibrator);
+        this.typeWater = getTypeWater(tests, counter);
+    }
+
     private String getTypeWater(Set<CalibrationTest> tests, Counter counter) {
         if (tests != null && tests.size() != 0) {
             int temperature = tests.iterator().next().getTemperature();
