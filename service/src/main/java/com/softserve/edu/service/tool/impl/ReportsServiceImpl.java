@@ -545,6 +545,9 @@ public class ReportsServiceImpl implements ReportsService {
         if (organization.equals(OrganizationType.CALIBRATOR)) {
             data.add(new TableExportColumn(Constants.NOTES, notes));
         }
+        if (organization.equals(OrganizationType.CALIBRATOR)) {
+            data.add(new TableExportColumn(Constants.SENT_TO_VERIFICATOR_DATE_FOR_CALIBRATOR, sentToVerificatorDate));
+        }
         data.add(new TableExportColumn(Constants.COUNTER_NUMBER, counterNumbers));
         data.add(new TableExportColumn(Constants.COUNTER_TYPE, counterTypes));
         data.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, counterTypeSizes));

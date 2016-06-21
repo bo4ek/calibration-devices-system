@@ -177,6 +177,7 @@ public interface Constants {
     String FULL_DATE = "dd.MM.yyyy HH:mm:ss";
     String DATE = "Дата";
     String SENT_TO_VERIFICATOR_DATE = "Дата надходження";
+    String SENT_TO_VERIFICATOR_DATE_FOR_CALIBRATOR = "Дата надсилання";
     String REJECTED_CALIBRATOR_DATE = "Дата відхилення";
     String REJECTED_REASON = "Причина відхилення";
 
