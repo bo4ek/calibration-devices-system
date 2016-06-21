@@ -544,7 +544,6 @@ public class CalibrationTestController {
     @RequestMapping(value = "signTestWithoutEDS", method = RequestMethod.PUT)
     public ResponseEntity signTestProtocolWithoutEDS(@RequestBody VerificationResultDTO verificationResult) {
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
-        System.out.println("here");
         try {
             Verification verification = verificationService.findById(verificationResult.getId());
             CalibrationTest calibrationTest = testService.findByVerificationId(verificationResult.getId());

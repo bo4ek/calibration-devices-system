@@ -9,6 +9,7 @@ import com.softserve.edu.documents.parameter.FileParameters;
 import com.softserve.edu.documents.parameter.FileSystem;
 import com.softserve.edu.documents.resources.DocumentType;
 import com.softserve.edu.documents.utils.FileUtils;
+import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.repository.CalibrationTestRepository;
@@ -177,8 +178,7 @@ public class DocumentsServiceImpl implements DocumentService {
         FileParameters fileParameters = new FileParameters(documentType,
                 fileFormat);
         fileParameters.setFileSystem(FileSystem.RAM);
-        fileParameters.setFileName(String.format("%s-%s", verification.getCalibrationModule().getModuleNumber(), verification.getId()));
-
+        fileParameters.setFileName(getDocumentNumberFromVerification(verification));
         switch (fileFormat) {
             case PDF: {
                 FileObject fileDocx = FileUtils.createFile(fileParameters.getFileSystem(),
@@ -211,6 +211,30 @@ public class DocumentsServiceImpl implements DocumentService {
         fileParameters.setFileName(documentType.toString());
 
         return FileFactory.buildInfoFile(fileParameters);
+    }
+
+    private String getDocumentNumberFromVerification(Verification verification) {
+        if (verification.getStateVerificatorEmployee() != null && verification.getStateVerificatorEmployee().getVerificatorSubdivision() != null
+                && verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId() != null) {
+            String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
+            String moduleNumber = verification.getCalibrationModule().getModuleNumber();
+            String bbiProtocol = verification.getBbiProtocols().iterator().next().getFileName();
+
+            Calendar changeDate = Calendar.getInstance();
+            changeDate.set(2016, 04, 29);
+            Date signProtocolDate = verification.getSignProtocolDate();
+
+            if (changeDate.before(signProtocolDate)) {
+                if (verification.getStatus().equals(Status.TEST_OK)) {
+                    return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+                } else if (verification.getStatus().equals(Status.TEST_NOK)) {
+                    return String.format("%s-%s%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
+                }
+            } else {
+                return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+            }
+        }
+        return " ";
     }
 
 }
