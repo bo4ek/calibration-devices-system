@@ -70,6 +70,11 @@ public class CalibrationModuleServiceImpl implements CalibrationModuleService {
         return calibrationModuleRepository.findAllActing();
     }
 
+    @Override
+    public List<CalibrationModule> findAllByCalibrator(String CodeEDRPOU) {
+        return calibrationModuleRepository.findAllActingAndByCodeEDRPOU(CodeEDRPOU);
+    }
+
 
     public void updateCalibrationModule(Long moduleId, CalibrationModule calibrationModule) {
         CalibrationModule changedCalibrationModule = calibrationModuleRepository.findOne(moduleId);

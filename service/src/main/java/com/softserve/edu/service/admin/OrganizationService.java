@@ -71,4 +71,6 @@ public interface OrganizationService {
     Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceType(Long executorId, OrganizationType organizationType, String deviceType);
 
     Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceTypes(Long executorId, OrganizationType organizationType, Set<Device.DeviceType> deviceTypes);
+
+    Organization findOneById(Long Id);
 }

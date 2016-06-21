@@ -13,6 +13,7 @@ import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.UnsuitabilityReason;
 import com.softserve.edu.entity.enumeration.verification.Status;
+import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
@@ -23,6 +24,7 @@ import com.softserve.edu.exceptions.NotFoundException;
 import com.softserve.edu.repository.*;
 import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.admin.CounterTypeService;
+import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataManualService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestManualService;
@@ -99,6 +101,9 @@ public class CalibrationTestController {
     @Autowired
     private UsersService usersService;
 
+    @Autowired
+    private OrganizationService organizationService;
+
     /**
      * Finds all calibration-tests form database
      *
@@ -163,6 +168,7 @@ public class CalibrationTestController {
 
     /**
      * Finds counterTypeId from counter_type by verificationId
+     *
      * @param verificationId id from verification table
      * @return counterTypeId from counter_type table
      */
@@ -180,6 +186,7 @@ public class CalibrationTestController {
 
     /**
      * Find all countersTypes from counter_type table
+     *
      * @return list of countersTypes
      */
     @RequestMapping(value = "getCountersTypes", method = RequestMethod.GET)
@@ -195,6 +202,7 @@ public class CalibrationTestController {
 
     /**
      * Get all countersTypes from counter_type table by counterId
+     *
      * @param counterId id from counter table
      * @return httpStatus - OK or BAD_REQUEST
      */
@@ -214,6 +222,7 @@ public class CalibrationTestController {
 
     /**
      * Get all CountersTypes from counterType table by standardSize, deviceType, symbol
+     *
      * @param standardSize field of counterType table
      * @param deviceType   field of device table
      * @param symbol       field of counterType table
@@ -236,10 +245,10 @@ public class CalibrationTestController {
      * @return CalibrationModuleDTO
      */
     @RequestMapping(value = "getCalibrationModules", method = RequestMethod.GET)
-    public List<CalibrationModuleDTO> getCalibrationModules() {
+    public List<CalibrationModuleDTO> getCalibrationModules(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         List list = null;
         try {
-            list = CalibrationModuleDTOTransformer.toDtofromList(calibrationModuleService.findAllActing());
+            list = CalibrationModuleDTOTransformer.toDtofromList(calibrationModuleService.findAllByCalibrator(organizationService.findOneById(user.getOrganizationId()).getAdditionInfoOrganization().getCodeEDRPOU()));
         } catch (Exception e) {
             logger.error("failed to get list of calibrationModule", e);
         }
@@ -470,11 +479,11 @@ public class CalibrationTestController {
         LocalDate verificationDate = LocalDate.parse(testDate, dbDateTimeFormatter);
 
         long count = verificationService.findCountByVerificationIndexAndModuleNumberAndTestDate(moduleNumber, java.sql.Date.valueOf(verificationDate), user);
-        if(verificationIndex >= count) {
+        if (verificationIndex >= count) {
             verificationIndex = 0;
         } else {
             if (verificationIndex < 0) {
-                verificationIndex = (int)count - 1;
+                verificationIndex = (int) count - 1;
             }
         }
         Verification verification = verificationService.findNextVerificationByVerificationIndexAndModuleNumberAndTestDate(verificationIndex, moduleNumber, java.sql.Date.valueOf(verificationDate), user);
@@ -562,7 +571,7 @@ public class CalibrationTestController {
         DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
         FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
 
-        byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
+        byte[] documentByteArray = new byte[(int) file.getContent().getSize()];
         file.getContent().getInputStream().read(documentByteArray);
         return documentByteArray;
     }
@@ -579,7 +588,7 @@ public class CalibrationTestController {
             DocumentType documentType = verification.getStatus() == Status.TEST_OK ? DocumentType.VERIFICATION_CERTIFICATE : DocumentType.UNFITNESS_CERTIFICATE;
             FileObject file = documentService.buildFile(documentType, verification, calibrationTest, FileFormat.DOCX);
 
-            byte[] documentByteArray = new byte[(int)file.getContent().getSize()];
+            byte[] documentByteArray = new byte[(int) file.getContent().getSize()];
             file.getContent().getInputStream().read(documentByteArray);
 
             response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
@@ -599,7 +608,7 @@ public class CalibrationTestController {
     }
 
     @RequestMapping(value = "signEDSTest", method = RequestMethod.POST)
-    public ResponseEntity signEDSTestProtocol(@RequestBody VerificationResultDTO verificationResult){
+    public ResponseEntity signEDSTestProtocol(@RequestBody VerificationResultDTO verificationResult) {
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.OK);
         try {
             byte[] bytes = verificationResult.getFile().getBytes();
@@ -609,12 +618,13 @@ public class CalibrationTestController {
             verification.setSigned(true);
             testService.updateTest(verification, verificationResult.getStatus());
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Cannot sing protocol", e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
     }
+
     private String getStandardSize(Verification verification) {
         return verification.getCounter().getCounterType().getStandardSize();
     }

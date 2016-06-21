@@ -36,4 +36,6 @@ public interface CalibrationModuleService {
 
     List<CalibrationModule> findAllActing();
 
+    List<CalibrationModule> findAllByCalibrator(String CodeEDRPOU);
+
 }

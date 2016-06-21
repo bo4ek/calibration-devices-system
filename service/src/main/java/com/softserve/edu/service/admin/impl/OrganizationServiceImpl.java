@@ -325,6 +325,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional(readOnly = true)
+    public Organization findOneById(Long Id) {
+        return organizationRepository.findOne(Id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Organization> findByOrganizationType(OrganizationType organizationType) {
         return organizationRepository.findByOrganizationType(organizationType);
     }

@@ -28,6 +28,9 @@ public interface CalibrationModuleRepository
     @Query("select m from CalibrationModule m where m.workDate >= CURRENT_DATE")
     List<CalibrationModule> findAllActing();
 
+    @Query("select m from CalibrationModule m where m.workDate >= CURRENT_DATE AND m.organizationCode = :CodeEDRPOU")
+    List<CalibrationModule> findAllActingAndByCodeEDRPOU(@Param("CodeEDRPOU") String CodeEDRPOU);
+
     @Query("SELECT CM FROM CalibrationModule CM WHERE :deviceType in elements(CM.deviceType)")
     List<CalibrationModule> findCalibrationModulesByDeviceType(@Param("deviceType") Device.DeviceType deviceType);
 
