@@ -139,12 +139,10 @@ public class NewVerificationsQueryConstructorVerificator {
 
         if (startDateToSearch != null && endDateToSearch != null) {
             DateTimeFormatter dbDateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-
             LocalDate startDate = LocalDate.parse(startDateToSearch, dbDateTimeFormatter);
             LocalDate endDate = LocalDate.parse(endDateToSearch, dbDateTimeFormatter);
-            queryPredicate = cb.and(cb.between(root.get("initialDate"), java.sql.Date.valueOf(startDate),
+            queryPredicate = cb.and(cb.between(root.get("verificationDate"), java.sql.Date.valueOf(startDate),
                     java.sql.Date.valueOf(endDate)), queryPredicate);
-
         }
 
         if ((idToSearch != null) && (idToSearch.length() > 0)) {

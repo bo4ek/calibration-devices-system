@@ -322,6 +322,17 @@ public enum SortCriteriaVerification {
         }
     },
 
+    VERIFICATION_DATE() {
+        public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+
+            if (sortOrder.equalsIgnoreCase("asc")) {
+                return cb.asc(root.get("verificationDate"));
+            } else {
+                return cb.desc(root.get("verificationDate"));
+            }
+        }
+    },
+
     REJECTED_MESSAGE() {
         public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
 
