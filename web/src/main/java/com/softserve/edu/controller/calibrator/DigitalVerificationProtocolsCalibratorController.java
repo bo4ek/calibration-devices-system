@@ -126,6 +126,8 @@ public class DigitalVerificationProtocolsCalibratorController {
             verification.setStatus(Status.IN_PROGRESS);
             verification.setTaskStatus(Status.PLANNING_TASK);
             verification.setCalibrationTests(null);
+            verification.setVerificationDate(null);
+            verification.setVerificationTime(null);
             verificationService.saveVerification(verification);
             calibrationTestService.deleteTest(calibrationTestService.findByVerificationId(verification.getId()).getId());
             return new ResponseEntity(HttpStatus.OK);

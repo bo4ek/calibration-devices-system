@@ -1,6 +1,7 @@
 package com.softserve.edu.service.calibrator.impl;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
+import com.softserve.edu.entity.verification.BbiProtocol;
 import com.softserve.edu.repository.UploadBbiRepository;
 import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 
 @Service
@@ -38,9 +40,14 @@ public class BbiFileServiceImpl implements BbiFileService {
 
     @Override
     public boolean findByFileNameAndDate(String fileName, String date, String moduleNumber){
-        return uploadBbiRepository.findBBIProtocolByFileNameAndDateAndModuleNumber(fileName, date, moduleNumber).size() > 0;
-    }
+        List<BbiProtocol> protocolList = uploadBbiRepository.findBBIProtocolByFileNameAndDateAndModuleNumber(fileName, date, moduleNumber);
+        System.out.println(protocolList.size());
+        for (BbiProtocol protocol : protocolList) {
+            System.out.println(protocol.toString());
 
+        }
+        return protocolList.size() > 0;
+    }
 
     @Override
     public DeviceTestData parseBbiFile(InputStream fileStream, String fileName, boolean taskForStation) throws IOException, DecoderException,InvalidImageInBbiException {
