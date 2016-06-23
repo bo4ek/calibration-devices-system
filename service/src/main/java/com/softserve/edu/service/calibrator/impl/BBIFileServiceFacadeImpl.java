@@ -241,9 +241,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     throw new FileAlreadyExistsException(bbiFile.getName());
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
-                Counter counter = getCounterFromVerificationData(correspondingVerificationMap, deviceTestData);
                 if (correspondingVerification == null) {
-                    correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap, calibratorEmployee, deviceTestData, counter);
+
+                    correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap, calibratorEmployee, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                     Verification verification = verificationService.findById(correspondingVerification);
                     verification.setCalibrationModule(calibrationModule);
@@ -258,7 +258,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                         throw new IncorrectOrganizationException();
                     }
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-                    updateVerificationFromMap(correspondingVerificationMap, verification, deviceTestData, counter);
+                    updateVerificationFromMap(correspondingVerificationMap, verification, deviceTestData);
                 }
             } catch (MismatchBbiFilesNamesException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
@@ -501,7 +501,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return bbiFilesToVerification;
     }
 
-    private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData, Counter counter)
+    private String createNewVerificationFromMap(Map<String, String> verificationData, User calibratorEmployee, DeviceTestData deviceTestData)
             throws ParseException, InvalidDeviceTypeIdException, IncorrectCityIdException, IncorrectStreetIdException, InvalidSymbolAndStandardSizeException {
 
         String regionName = null;
@@ -542,6 +542,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
         Long calibratorOrganisationId = calibratorEmployee.getOrganization().getId();
         Organization calibrator = organizationService.getOrganizationById(calibratorOrganisationId);
+        Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         Date date = new SimpleDateFormat(Constants.FULL_DATE).parse(verificationData.get(Constants.DATE));
         Organization providerFromBBI = organizationService.getOrganizationById(Long.parseLong(verificationData.get(Constants.CUSTOMER_ID)));
         Long deviceId = getDeviceIdByDeviceTypeId(Integer.parseInt(verificationData.get(Constants.SERVICE_TYPE)));
@@ -557,7 +558,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
 
-    private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData, Counter counter) throws InvalidSymbolAndStandardSizeException, ParseException {
+    private void updateVerificationFromMap(Map<String, String> verificationData, Verification verification, DeviceTestData deviceTestData) throws InvalidSymbolAndStandardSizeException, ParseException {
         Long deviceId;
         Integer deviceTypeId = getDeviceTypeIdByTemperature(deviceTestData.getTemperature());
         if (deviceTypeId != null) {
@@ -568,6 +569,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         verification.setVerificationTime(verificationData.get(Constants.DATE));
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         verification.setVerificationDate(formatter.parse(verificationData.get(Constants.DATE)));
+        Counter counter = getCounterFromVerificationData(verificationData, deviceTestData);
         verification.setCounter(counter);
         verificationService.saveVerification(verification);
 
