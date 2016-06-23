@@ -257,8 +257,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     if (!verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
                         throw new IncorrectOrganizationException();
                     }
-                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                     updateVerificationFromMap(correspondingVerificationMap, verification, deviceTestData);
+                    saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 }
             } catch (MismatchBbiFilesNamesException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.NAME_OF_BBI_FILE_DOES_NOT_MATCH;
@@ -372,8 +372,8 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     throw new IncorrectOrganizationException();
                 }
                 correspondingVerification = verification.getId();
-                saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                 updateVerificationFromMapForStation(date, formattedDate, verification, deviceTestData);
+                saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
             }  catch (FileAlreadyExistsException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
                 logger.error("BBI file is already in database");

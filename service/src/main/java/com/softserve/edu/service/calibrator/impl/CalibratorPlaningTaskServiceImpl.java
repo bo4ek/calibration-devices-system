@@ -653,6 +653,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> countersNumber = new ArrayList<>();
         List<String> fullName = new ArrayList<>();
         List<String> telephone = new ArrayList<>();
+        List<String> dateOfVerif = new ArrayList<>();
         List<String> times = new ArrayList<>();
         List<String> comment = new ArrayList<>();
 
@@ -670,7 +671,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             provider.add(getProvider(verification));
             countersNumber.add(String.valueOf(1));
             comment.add(getComent(verification));
-            setAdditionalInfo(verification.getInfo(), entrance, floor, times);
+            dateOfVerif.add(getDateOfVerif(verification.getInfo()));
 
             ClientData clientData = verification.getClientData();
             if (clientData != null) {
@@ -693,6 +694,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         data.add(new TableExportColumn(Constants.COUNTERS_NUMBER, countersNumber));
         data.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
         data.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
+        data.add(new TableExportColumn(Constants.DESIRABLE_DATE, dateOfVerif));
         data.add(new TableExportColumn(Constants.DESIRABLE_TIME, times));
         data.add(new TableExportColumn(Constants.COMMENT, comment));
 
@@ -751,6 +753,10 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
     private String getTime(AdditionalInfo info) {
         return info.getTimeFrom() != null && info.getTimeTo() != null ? info.getTimeFrom() + "-" + info.getTimeTo() : " ";
+    }
+
+    private String getDateOfVerif(AdditionalInfo info) {
+        return info != null && info.getDateOfVerif() != null ? info.getDateOfVerif().toString() : " ";
     }
 
     private String getFloor(AdditionalInfo info) {

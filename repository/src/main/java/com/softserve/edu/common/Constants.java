@@ -165,6 +165,7 @@ public interface Constants {
     // region Task
     String TASK = "Завдання";
     String TASK_DATE = "Дата завдання";
+    String DESIRABLE_DATE = "Бажана дата";
     String DESIRABLE_TIME = "Бажаний час";
 
     // endregion
