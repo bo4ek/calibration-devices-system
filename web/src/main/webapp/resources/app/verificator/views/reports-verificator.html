@@ -15,10 +15,18 @@
                            ng-click="showPicker($event)"></i>
                         <input date-range-picker="opts" class="form-control date-picker" type="text"
                                ng-model="myDatePicker.pickerDate"
-                               ng-change="downloadReportProvider('VERIFICATOR_VERIFICATION_RESULT_REPORTS'); show=false"
+                               ng-change="show1=true"
                                options="opts"
                                id="datepickerfield" readonly/>
                     </div>
+                </li>
+                <li class="list-group-item-text" ng-show="show1"
+                    ng-click="downloadReportProvider('VERIFICATOR_VERIFICATION_RESULT_REPORTS'); show1=false; show=false">
+                    <a><i class="fa fa-calendar-plus-o fa-fw"></i>{{'BY_DATE_OF_TEST' | translate}}</a>
+                </li>
+                <li class="list-group-item-text" ng-show="show1"
+                    ng-click="downloadReportProvider('VERIFICATOR_VERIFICATION_RESULT_REPORTS_BY_SIGN_PROTOCOL_DATE'); show1=false; show=false">
+                    <a><i class="fa fa-calendar-check-o fa-fw"></i>{{'BY_DATE_OF_SIGN_PROTOCOL' | translate}}</a>
                 </li>
             </ul>
         </div>

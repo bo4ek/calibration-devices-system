@@ -857,5 +857,7 @@
     "DOWNLOAD_SUCCESS": "Download success",
     "DOWNLOAD_FAIL": "Download fail",
     "PROVIDER_VERIFICATION_REJECTED_REPORTS": "Report of rejected verification",
-    "PROVIDER_REPORTS": "Reports for provider"
+    "PROVIDER_REPORTS": "Reports for provider",
+    "BY_DATE_OF_TEST": "By date of verification",
+    "BY_DATE_OF_SIGN_PROTOCOL": "By date of sign protocol"
 }

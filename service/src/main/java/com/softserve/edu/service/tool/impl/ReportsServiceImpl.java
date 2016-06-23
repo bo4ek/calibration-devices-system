@@ -102,7 +102,10 @@ public class ReportsServiceImpl implements ReportsService {
                 data = getDataForCalibratorVerificationResultReport(organisationId, fromDate, toDate);
                 break;
             case VERIFICATOR_VERIFICATION_RESULT_REPORTS:
-                data = getDataForVerificatorVerificationResultReport(organisationId, fromDate, toDate);
+                data = getDataForVerificatorVerificationResultReport(organisationId, fromDate, toDate, false);
+                break;
+            case VERIFICATOR_VERIFICATION_RESULT_REPORTS_BY_SIGN_PROTOCOL_DATE:
+                data = getDataForVerificatorVerificationResultReport(organisationId, fromDate, toDate, true);
                 break;
             case PROVIDER_VERIFICATION_REJECTED_REPORTS:
                 data = getDataForProviderRejectedVerificationReport(organisationId, fromDate, toDate);
@@ -277,11 +280,13 @@ public class ReportsServiceImpl implements ReportsService {
         return getDataForVerificationResultReport(verifications, OrganizationType.CALIBRATOR);
     }
 
-    private List<TableExportColumn> getDataForVerificatorVerificationResultReport(Long organizationId, Date startDate, Date endDate) {
+    private List<TableExportColumn> getDataForVerificatorVerificationResultReport(Long organizationId, Date startDate, Date endDate, Boolean bySignProtocolDate) {
         Organization verificator = organizationRepository.findOne(organizationId);
         List<Verification> verifications;
-        if (startDate != null && endDate != null) {
+        if (startDate != null && endDate != null && !bySignProtocolDate) {
             verifications = verificationRepository.findByStateVerificatorAndVerificationDateBetween(verificator, startDate, endDate);
+        } else if (startDate != null && endDate != null && bySignProtocolDate) {
+            verifications = verificationRepository.findByStateVerificatorAndSignProtocolDateBetween(verificator, startDate, endDate);
         } else {
             verifications = verificationRepository.findByStateVerificator(verificator);
         }
