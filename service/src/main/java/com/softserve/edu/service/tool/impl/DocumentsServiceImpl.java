@@ -216,7 +216,6 @@ public class DocumentsServiceImpl implements DocumentService {
     private String getDocumentNumberFromVerification(Verification verification) {
         if (verification.getStateVerificatorEmployee() != null && verification.getStateVerificatorEmployee().getVerificatorSubdivision() != null
                 && verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId() != null) {
-            String subdivisionId = verification.getStateVerificatorEmployee().getVerificatorSubdivision().getId();
             String moduleNumber = verification.getCalibrationModule().getModuleNumber();
             String bbiProtocol = verification.getBbiProtocols().iterator().next().getFileName();
 
@@ -226,12 +225,12 @@ public class DocumentsServiceImpl implements DocumentService {
 
             if (changeDate.before(signProtocolDate)) {
                 if (verification.getStatus().equals(Status.TEST_OK)) {
-                    return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+                    return String.format("%s%s", moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
                 } else if (verification.getStatus().equals(Status.TEST_NOK)) {
-                    return String.format("%s-%s%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
+                    return String.format("%s%s%s", moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
                 }
             } else {
-                return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
+                return String.format("%s%s", moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
             }
         }
         return " ";
