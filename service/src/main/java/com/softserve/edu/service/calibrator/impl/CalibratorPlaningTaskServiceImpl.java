@@ -672,6 +672,9 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             countersNumber.add(String.valueOf(1));
             comment.add(getComent(verification));
             dateOfVerif.add(getDateOfVerif(verification.getInfo()));
+            times.add(getTime(verification.getInfo()));
+            floor.add(getFloor(verification.getInfo()));
+            entrance.add(getEntrance(verification.getInfo()));
 
             ClientData clientData = verification.getClientData();
             if (clientData != null) {
