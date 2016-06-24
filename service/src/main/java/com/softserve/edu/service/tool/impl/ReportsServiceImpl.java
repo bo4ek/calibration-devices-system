@@ -150,6 +150,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> rejectedSentByProvider = new ArrayList<>();
         List<String> rejectedCreatedByCalibrator = new ArrayList<>();
         List<String> rejectedTotal = new ArrayList<>();
+        List<String> inProgressTotal = new ArrayList<>();
 
 
         for (Agreement agrement : agreements) {
@@ -174,6 +175,7 @@ public class ReportsServiceImpl implements ReportsService {
             rejectedSentByProvider.add(String.valueOf(countRejectedSentByProvider));
             rejectedTotal.add(String.valueOf(countRejectedCreatedByCalibrator + countRejectedSentByProvider));
 
+            inProgressTotal.add(String.valueOf(countTestCompletedCreatedByCalibrator + countTestCompletedSentByProvider - countRejectedCreatedByCalibrator - countRejectedSentByProvider));
         }
 
         data.add(new TableExportColumn(Constants.CALIBRATOR_ORGANIZATION_NAME, calibrators));
@@ -186,6 +188,7 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.REJECTED_SENT_BY_PROVIDER, rejectedSentByProvider));
         data.add(new TableExportColumn(Constants.REJECTED_CREATED_BY_CALIBRATOR, rejectedCreatedByCalibrator));
         data.add(new TableExportColumn(Constants.TOTAL_REJECTED, rejectedTotal));
+        data.add(new TableExportColumn(Constants.TOTAL_IN_PROGRESS, inProgressTotal));
 
 
         return data;
