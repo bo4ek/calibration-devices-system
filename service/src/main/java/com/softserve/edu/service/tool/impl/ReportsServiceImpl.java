@@ -323,6 +323,7 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> flats = new ArrayList<>(initializedCapacity);
         List<String> id = new ArrayList<>(initializedCapacity);
         List<String> comment = new ArrayList<>(initializedCapacity);
+        List<String> phones = new ArrayList<>(initializedCapacity);
 
         Integer i = 1;
         for (Verification verification : verifications) {
@@ -349,6 +350,7 @@ public class ReportsServiceImpl implements ReportsService {
             customerSurname.add(getCustomerSurname(verification));
             customerName.add(getCustomerName(verification));
             comment.add(getComment(verification));
+            phones.add(getPhones(verification));
 
             if (verification.getClientData() != null) {
                 if (verification.getClientData().getClientAddress() != null) {
@@ -383,6 +385,7 @@ public class ReportsServiceImpl implements ReportsService {
         data.add(new TableExportColumn(Constants.STREET, streets));
         data.add(new TableExportColumn(Constants.BUILDING, buildings));
         data.add(new TableExportColumn(Constants.FLAT, flats));
+        data.add(new TableExportColumn(Constants.PHONE_NUMBER, phones));
         data.add(new TableExportColumn(Constants.VERIFICATION_ID, id));
         data.add(new TableExportColumn(Constants.COMMENT, comment));
 
