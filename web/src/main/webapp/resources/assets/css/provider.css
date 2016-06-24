@@ -806,6 +806,15 @@ button:focus {
     cursor: pointer;
 }
 
+.remove_attached_user_icon_button:hover {
+    color: #e38d13;
+}
+
+.remove_attached_user_icon_button {
+    color: #ffffff;
+    cursor: pointer;
+}
+
 .add_attached_user_icon:hover {
     color: #449D44;
 }

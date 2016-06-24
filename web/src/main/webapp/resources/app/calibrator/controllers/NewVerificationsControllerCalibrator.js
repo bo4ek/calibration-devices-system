@@ -719,6 +719,23 @@ angular
                     });
             };
 
+            $scope.cancelPersonForAll = function () {
+                var verificationIds = [];
+                angular.forEach($scope.allVerifications, function (verification) {
+                    if (verification.calibratorEmployee === null) {
+                        verificationIds.push(verification.id);
+                    }
+                });
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/common/views/modals/submit-cancel.html',
+                    controller: 'SubmitCancelControllerCalibrator',
+                    size: 'md'
+                })
+                alert
+            }
+
+            
 
             $scope.uploadArchive = function () {
                 console.log("Entered upload archive function");
@@ -740,7 +757,6 @@ angular
 
 
             $scope.openRejectVerificationModal = function (verificationId) {
-                console.log("Open rejected info modal window");
                 var modalInstance = $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
