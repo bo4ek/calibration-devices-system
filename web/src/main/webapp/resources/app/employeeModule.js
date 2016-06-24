@@ -345,6 +345,7 @@
         'provider/controllers/RejectedVerificationsControllerProvider',
 
         'calibrator/controllers/TopNavBarControllerCalibrator',
+        'calibrator/controllers/SubmitCancelControllerCalibrator',
         'calibrator/controllers/MainPanelControllerCalibrator',
         'calibrator/controllers/NewVerificationsControllerCalibrator',
         'calibrator/controllers/DetailsModalControllerCalibrator',

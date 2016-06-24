@@ -26,5 +26,8 @@ public interface UploadBbiRepository extends CrudRepository<BbiProtocol, Long> {
     @Query("SELECT b FROM BbiProtocol b WHERE b.verification=:verification")
     BbiProtocol findByVerification(Verification verification);
 
+    @Query("SELECT b FROM BbiProtocol b WHERE b.verification.id=:verificationId")
+    List<BbiProtocol> findFileByVerificationId(@Param("verificationId") String verificationId);
+
     BbiProtocol findOne(Long id);
 }

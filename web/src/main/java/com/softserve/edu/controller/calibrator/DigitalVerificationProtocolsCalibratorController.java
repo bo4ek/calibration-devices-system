@@ -11,11 +11,14 @@ import com.softserve.edu.entity.enumeration.verification.Status;
 import com.softserve.edu.dto.PageDTO;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
+import com.softserve.edu.entity.verification.BbiProtocol;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.service.admin.OrganizationService;
+import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.calibrator.CalibratorDigitalProtocolsService;
 import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
+import com.softserve.edu.service.calibrator.impl.BbiFileServiceImpl;
 import com.softserve.edu.service.state.verificator.StateVerificatorService;
 import com.softserve.edu.service.user.SecurityUserDetailsService;
 import com.softserve.edu.service.user.UserService;
@@ -50,6 +53,9 @@ public class DigitalVerificationProtocolsCalibratorController {
 
     @Autowired
     StateVerificatorService stateVerificatorService;
+
+    @Autowired
+    BbiFileService bbiFileService;
 
     @Autowired
     UserService userService;
@@ -123,11 +129,11 @@ public class DigitalVerificationProtocolsCalibratorController {
         User user = userService.findOne(userDetails.getUsername());
         if (verification != null && ((user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE) && verification.getCalibratorEmployee().getUsername().equals(user.getUsername()))
                 || (user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN) && verification.getCalibrator().getId().equals(user.getOrganization().getId())))) {
-            verification.setStatus(Status.IN_PROGRESS);
-            verification.setTaskStatus(Status.PLANNING_TASK);
-            verification.setCalibrationTests(null);
-            verification.setVerificationDate(null);
-            verification.setVerificationTime(null);
+            setFieldForCanceling(verification);
+            List<BbiProtocol> protocolList = bbiFileService.findBbiByVerification(verification);
+            for (BbiProtocol bbiProtocol : protocolList) {
+                bbiFileService.deleteBbi(bbiProtocol);
+            }
             verificationService.saveVerification(verification);
             calibrationTestService.deleteTest(calibrationTestService.findByVerificationId(verification.getId()).getId());
             return new ResponseEntity(HttpStatus.OK);
@@ -180,5 +186,23 @@ public class DigitalVerificationProtocolsCalibratorController {
         } else {
             return null;
         }
+    }
+
+    private void setFieldForCanceling(Verification verification) {
+        verification.setStatus(Status.IN_PROGRESS);
+        verification.setTaskStatus(Status.PLANNING_TASK);
+        verification.setCalibrationTests(null);
+        verification.setVerificationDate(null);
+        verification.setVerificationTime(null);
+        verification.setSignProtocolDate(null);
+        verification.setSigned(false);
+        verification.setSignedDocument(null);
+        verification.setCalibrationModule(null);
+        verification.setProviderFromBBI(null);
+        verification.setStateVerificator(null);
+        verification.setStateVerificatorEmployee(null);
+        verification.setExpirationDate(null);
+        verification.setTask(null);
+        verification.setRejectedMessage(null);
     }
 }

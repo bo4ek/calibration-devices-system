@@ -2,6 +2,7 @@ package com.softserve.edu.service.calibrator.impl;
 
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.entity.verification.BbiProtocol;
+import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.repository.UploadBbiRepository;
 import com.softserve.edu.service.calibrator.BbiFileService;
 import com.softserve.edu.service.exceptions.InvalidImageInBbiException;
@@ -39,15 +40,24 @@ public class BbiFileServiceImpl implements BbiFileService {
     }
 
     @Override
-    public boolean findByFileNameAndDate(String fileName, String date, String moduleNumber){
+    public boolean findByFileNameAndDate(String fileName, String date, String moduleNumber) {
         List<BbiProtocol> protocolList = uploadBbiRepository.findBBIProtocolByFileNameAndDateAndModuleNumber(fileName, date, moduleNumber);
         return protocolList.size() > 0;
     }
 
     @Override
-    public DeviceTestData parseBbiFile(InputStream fileStream, String fileName, boolean taskForStation) throws IOException, DecoderException,InvalidImageInBbiException {
+    public DeviceTestData parseBbiFile(InputStream fileStream, String fileName, boolean taskForStation) throws IOException, DecoderException, InvalidImageInBbiException {
         DeviceTestDataParser parser = testDataParserFactory.getParser(fileName);
         return parser.parse(fileStream, taskForStation);
     }
 
+    @Override
+    public List<BbiProtocol> findBbiByVerification(Verification verification) {
+        return uploadBbiRepository.findFileByVerificationId(verification.getId());
+    }
+
+    @Override
+    public void deleteBbi(BbiProtocol bbiProtocol) {
+        uploadBbiRepository.delete(bbiProtocol);
+    }
 }
