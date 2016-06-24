@@ -303,9 +303,9 @@ public class ReportsServiceImpl implements ReportsService {
 
         List<Verification> verifications;
         if (startDate != null && endDate != null) {
-            verifications = verificationRepository.findByProviderAndRejectedCalibratorDateBetweenAndStatusOrStatus(provider, startDate, endDate, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR);
+            verifications = verificationRepository.findByRejectedCalibratorDateBetweenAndStatusOrStatusAndProvider(startDate, endDate, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR, provider);
         } else {
-            verifications = verificationRepository.findByProviderAndRejectedCalibratorDateBetweenAndStatusOrStatus(provider, null, null, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR);
+            verifications = verificationRepository.findByRejectedCalibratorDateBetweenAndStatusOrStatusAndProvider(null, null, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR, provider);
         }
         int initializedCapacity = verifications.size();
         List<String> number = new ArrayList<>(initializedCapacity);

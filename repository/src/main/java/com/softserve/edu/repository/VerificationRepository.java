@@ -163,7 +163,7 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
 
     int countByProviderAndInitialDateBetweenAndCalibratorAndIsCreatedByCalibratorFalseAndRejectedInfoIsNotNullAndStatusNotLike(Organization provider, Date dateFrom, Date DateTo, Organization calibrator, Status status);
 
-    List<Verification> findByProviderAndRejectedCalibratorDateBetweenAndStatusOrStatus(Organization organization, Date dateFrom, Date DateTo, Status status1, Status status2);
+    List<Verification> findByRejectedCalibratorDateBetweenAndStatusOrStatusAndProvider(Date dateFrom, Date DateTo, Status status1, Status status2, Organization organization);
 
     List<Verification> findByCalibratorAndVerificationDateBetween(Organization organization, Date dateFrom, Date DateTo);
 
