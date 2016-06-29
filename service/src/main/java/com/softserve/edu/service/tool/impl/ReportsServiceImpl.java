@@ -303,12 +303,14 @@ public class ReportsServiceImpl implements ReportsService {
 
     private List<TableExportColumn> getDataForProviderRejectedVerificationReport(Long providerId, Date startDate, Date endDate) {
         Organization provider = organizationRepository.findOne(providerId);
-
+        List<Status> statuses = new ArrayList<>();
+        statuses.add(Status.REJECTED_BY_CALIBRATOR);
+        statuses.add(Status.REJECTED_BY_PROVIDER);
         List<Verification> verifications;
         if (startDate != null && endDate != null) {
-            verifications = verificationRepository.findByRejectedCalibratorDateBetweenAndStatusOrStatusAndProvider(startDate, endDate, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR, provider);
+            verifications = verificationRepository.findByProviderAndRejectedCalibratorDateBetweenAndStatusIn(provider, startDate, endDate, statuses);
         } else {
-            verifications = verificationRepository.findByRejectedCalibratorDateBetweenAndStatusOrStatusAndProvider(null, null, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR, provider);
+            verifications = verificationRepository.findByProviderAndRejectedCalibratorDateBetweenAndStatusIn(provider, null, null, statuses);
         }
         int initializedCapacity = verifications.size();
         List<String> number = new ArrayList<>(initializedCapacity);
