@@ -220,7 +220,7 @@ public interface VerificationService {
 
     Long getPositionOfVerification(String verificationId, String moduleId, Date date);
 
-    List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId);
+    List<Verification> findByCounterNumberAndCalibratorIdAndStatusNot(String numberCounter, Long calibratorId, Status status1, Status status2);
 
     public void rejectVerification(Verification verification, RejectedInfo rejectedInfo, Status status);
 

@@ -152,8 +152,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             return parseAndSaveArchiveOfBBIfiles(inputStream, originalFileName, calibratorEmployee);
         }
     }
-    public List<BBIOutcomeDTO>  parseAndSaveArchiveOfBBIfilesForStation(MultipartFile archiveFile, String originalFileName,
-                                                              User calibratorEmployee) throws IOException, ZipException,
+
+    public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfilesForStation(MultipartFile archiveFile, String originalFileName,
+                                                                       User calibratorEmployee) throws IOException, ZipException,
             SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
         return parseAndSaveArchiveOfBBIfilesForStation(archiveFile.getInputStream(), originalFileName, calibratorEmployee);
     }
@@ -167,7 +168,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
 
     @Transactional
     public List<BBIOutcomeDTO> parseAndSaveArchiveOfBBIfilesForStation(InputStream archiveStream, String originalFileName,
-                                                             User calibratorEmployee) throws IOException,
+                                                                       User calibratorEmployee) throws IOException,
             ZipException, SQLException, ClassNotFoundException, ParseException, InvalidImageInBbiException {
         File directoryWithUnpackedFiles = unpackArchive(archiveStream, originalFileName);
         List<File> listOfBBIfiles = new ArrayList<>(FileUtils.listFiles(directoryWithUnpackedFiles, bbiExtensions, true));
@@ -315,10 +316,9 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         return resultsOfBBIProcessing;
     }
 
-
-    private Verification findVerificationByDeviceTestData(DeviceTestData deviceTestData, User calibratorEmployee) throws InvalidVerificationCodeException {
-        List<Verification> verifications = verificationService.findByCounterNumberAndCalibratorId(deviceTestData.getCurrentCounterNumber(), calibratorEmployee.getOrganization().getId());
-        if(verifications.size() == 0) {
+    private Verification findVerificationByDeviceTestDataAndStatusNot(DeviceTestData deviceTestData, User calibratorEmployee, Status status1, Status status2) throws InvalidVerificationCodeException {
+        List<Verification> verifications = verificationService.findByCounterNumberAndCalibratorIdAndStatusNot(deviceTestData.getCurrentCounterNumber(), calibratorEmployee.getOrganization().getId(), status1, status2);
+        if (verifications.size() == 0) {
             throw new InvalidVerificationCodeException();
         }
         return verifications.get(0);
@@ -364,7 +364,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 if (bbiFileService.findByFileNameAndDate(bbiFile.getName(), formattedDate, calibrationModule.getModuleNumber())) {
                     throw new FileAlreadyExistsException(bbiFile.getName());
                 }
-                Verification verification = findVerificationByDeviceTestData(deviceTestData, calibratorEmployee);
+                Verification verification = findVerificationByDeviceTestDataAndStatusNot(deviceTestData, calibratorEmployee, Status.REJECTED_BY_PROVIDER, Status.REJECTED_BY_CALIBRATOR);
                 if (verification == null) {
                     throw new InvalidVerificationCodeException();
                 }
@@ -374,7 +374,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 correspondingVerification = verification.getId();
                 updateVerificationFromMapForStation(date, formattedDate, verification, deviceTestData);
                 saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
-            }  catch (FileAlreadyExistsException e) {
+            } catch (FileAlreadyExistsException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.BBI_FILE_IS_ALREADY_IN_DATABASE;
                 logger.error("BBI file is already in database");
             } catch (IOException e) {
@@ -386,7 +386,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             } catch (InvalidModuleIdException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_MODULE_ID;
                 logger.error("Wrong module serial number in BBI file");
-            }  catch (InvalidVerificationCodeException e) {
+            } catch (InvalidVerificationCodeException e) {
                 reasonOfRejection = BBIOutcomeDTO.ReasonOfRejection.INVALID_VERIFICATION_CODE;
                 logger.error("Invalid verification code");
             } catch (DuplicateCalibrationTestException e) {
@@ -647,13 +647,13 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             default: {
                 Long deviceId = getDeviceIdByDeviceTypeId(getDeviceTypeIdByTemperature(deviceTestData.getTemperature()));
                 Device.DeviceType deviceType = deviceService.getDeviceTypeById(deviceId);
-                for(CounterType counterType : counterTypes) {
-                    if(counterType.getDevice().getDeviceType().equals(deviceType)) {
+                for (CounterType counterType : counterTypes) {
+                    if (counterType.getDevice().getDeviceType().equals(deviceType)) {
                         resultCounterType = counterType;
                         break;
                     }
                 }
-                if(resultCounterType == null) {
+                if (resultCounterType == null) {
                     resultCounterType = counterTypes.get(0);
                 }
             }

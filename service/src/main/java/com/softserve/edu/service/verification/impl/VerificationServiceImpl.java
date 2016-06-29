@@ -497,8 +497,8 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public List<Verification> findByCounterNumberAndCalibratorId(String numberCounter, Long calibratorId) {
-        return verificationRepository.findByCounterNumberAndCalibratorId(numberCounter, calibratorId);
+    public List<Verification> findByCounterNumberAndCalibratorIdAndStatusNot(String numberCounter, Long calibratorId, Status status1, Status status2) {
+        return verificationRepository.findByCounterNumberAndCalibratorIdAndStatusNot(numberCounter, calibratorId, status1, status2);
     }
 
     @Override

@@ -290,6 +290,10 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
             "AND o.id = :calibratorId")
     List<Verification> findByCounterNumberAndCalibratorId(@Param("numberCounter") String numberCounter, @Param("calibratorId") Long calibratorId);
 
+    @Query("SELECT v FROM Verification v INNER JOIN v.counter c INNER JOIN v.calibrator o WHERE c.numberCounter = :numberCounter " +
+            "AND o.id = :calibratorId AND v.status NOT in ( :status1 , :status2) ")
+    List<Verification> findByCounterNumberAndCalibratorIdAndStatusNot(@Param("numberCounter") String numberCounter, @Param("calibratorId") Long calibratorId, @Param("status1") Status status1, @Param("status2") Status status2);
+
 }
 
 
