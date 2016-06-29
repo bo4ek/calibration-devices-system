@@ -175,7 +175,7 @@ public class ReportsServiceImpl implements ReportsService {
             rejectedSentByProvider.add(String.valueOf(countRejectedSentByProvider));
             rejectedTotal.add(String.valueOf(countRejectedCreatedByCalibrator + countRejectedSentByProvider));
 
-            inProgressTotal.add(String.valueOf(countTestCompletedCreatedByCalibrator + countTestCompletedSentByProvider - countRejectedCreatedByCalibrator - countRejectedSentByProvider));
+            inProgressTotal.add(String.valueOf(countCreatedByCalibrator + countSentByProvider - countTestCompletedCreatedByCalibrator - countTestCompletedSentByProvider - countRejectedCreatedByCalibrator - countRejectedSentByProvider));
         }
 
         data.add(new TableExportColumn(Constants.CALIBRATOR_ORGANIZATION_NAME, calibrators));

@@ -108,7 +108,6 @@ public class CalibrationTestServiceImpl implements CalibrationTestService {
         verification.setStatus(Status.TEST_COMPLETED);
         verification.setTaskStatus(Status.TEST_PLACE_DETERMINED);
 
-
         verification.setCalibrationModule(moduleId);
         verification.setNumberOfProtocol(deviceTestData.getFileName().substring(POSITION_OF_PROTOCOL,
                 deviceTestData.getFileName().indexOf('.')));
