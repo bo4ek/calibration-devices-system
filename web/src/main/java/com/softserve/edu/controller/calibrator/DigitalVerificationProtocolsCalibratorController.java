@@ -205,5 +205,24 @@ public class DigitalVerificationProtocolsCalibratorController {
         verification.setExpirationDate(null);
         verification.setTask(null);
         verification.setRejectedMessage(null);
+        verification.setComment(null);
+        if (verification.getCounter().getDateOfDismantled() == null) {
+            verification.getCounter().setAccumulatedVolume(null);
+            verification.getCounter().setCounterType(null);
+            verification.getCounter().setDateOfDismantled(null);
+            verification.getCounter().setDateOfMounted(null);
+            verification.getCounter().setNumberCounter(null);
+            verification.getCounter().setReleaseYear(null);
+            verification.getCounter().setStamp(null);
+            verification.getInfo().setDateOfVerif(null);
+            verification.getInfo().setDoorCode(null);
+            verification.getInfo().setEntrance(null);
+            verification.getInfo().setFloor(null);
+            verification.getInfo().setNoWaterToDate(null);
+            verification.getInfo().setNotes(null);
+            verification.getInfo().setServiceability(null);
+            verification.getInfo().setTimeFrom(null);
+            verification.getInfo().setTimeTo(null);
+        }
     }
 }
