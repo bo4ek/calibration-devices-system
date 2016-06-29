@@ -102,6 +102,8 @@ public interface Constants {
     String REJECTED_CREATED_BY_CALIBRATOR = "Відхилено заявок із підтверджених";
     String TOTAL_REJECTED = "Всього відхилено";
     String TOTAL_IN_PROGRESS = "В роботі";
+    String REJECTED_BY_CALIBRATOR = "Відхилено";
+    String REJECTED_BY_PROVIDER = "Відхилено";
 
     //reasons o counter unsuitability
     String MEASURING_ERROR_MESSAGE = "відносна похибка вимірювання об’єму перевищує межі допустимих значень за ";
