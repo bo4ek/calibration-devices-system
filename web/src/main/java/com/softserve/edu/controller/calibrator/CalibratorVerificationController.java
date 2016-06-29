@@ -726,10 +726,7 @@ public class CalibratorVerificationController {
         HttpStatus httpStatus = HttpStatus.OK;
         Verification verification = verificationService.findById(verificationId);
         RejectedInfo rejectedInfo = rejectedInfoService.findOneById(Long.valueOf(reasonId));
-        if (verification.getCalibratorEmployee() != null && verification.getCalibratorEmployee().getUsername().equals(userDetails.getUsername())) {
-            verificationService.rejectVerification(verification, rejectedInfo, Status.REJECTED_BY_CALIBRATOR);
-        } else if (verification.getCalibratorEmployee() == null && verification.getCalibrator().getId().equals(userDetails.getOrganizationId())) {
-            verification.setCalibratorEmployee(userService.findOne(userDetails.getUsername()));
+        if (verification.getCalibrator().getId() == userDetails.getOrganizationId()) {
             verificationService.rejectVerification(verification, rejectedInfo, Status.REJECTED_BY_CALIBRATOR);
         } else {
             httpStatus = HttpStatus.FORBIDDEN;
