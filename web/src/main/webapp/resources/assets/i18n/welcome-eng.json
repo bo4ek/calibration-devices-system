@@ -862,5 +862,7 @@
     "BY_DATE_OF_SIGN_PROTOCOL": "By date of sign protocol",
     "CANCEL__EMPLOYEE_FOR_ALL_FILTERED": "Cancel responsible person for all filtered verification",
     "SUBMIT_DELETE": "Submit deleting",
-    "CONFIRM_CANCEL_EMPLOYEE": "Confirm cancel responsible employee"
+    "CONFIRM_CANCEL_EMPLOYEE": "Confirm cancel responsible employee",
+    "PROTOCOL_SUCCESS_DELETE": "Protocol was success delete",
+    "ERROR_DELETING_PROTOCOL": "Error deleting protocol"
 }

@@ -132,11 +132,17 @@ angular
                             switch (response.status) {
                                 case 200:
                                 {
+                                    toaster.pop('success', $filter('translate')('INFORMATION'),
+                                        $filter('translate')('PROTOCOL_SUCCESS_DELETE'));
                                     $scope.tableParams.reload();
                                     break;
                                 }
-
-                            }
+                                default:
+                                {
+                                    toaster.pop('error', $filter('translate')('INFORMATION'),
+                                        $filter('translate')('ERROR_DELETING_PROTOCOL'));
+                                }
+                                }
                             }
                         );
                 }
