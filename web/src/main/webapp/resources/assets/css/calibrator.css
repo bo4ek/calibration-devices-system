@@ -272,6 +272,10 @@ body {
     color: #d9534f;
 }
 
+.glyphicon-ban-circle {
+    color: #d9534f;
+}
+
 .btn-primary.btn-outline:hover,
 .btn-success.btn-outline:hover,
 .btn-info.btn-outline:hover,

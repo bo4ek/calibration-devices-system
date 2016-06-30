@@ -13,7 +13,8 @@ angular
             'taskID',
             'toaster',
             'CalibrationTaskServiceCalibrator',
-            function ($rootScope, $scope, $translate, $modalInstance, $modal, $filter, ngTableParams, taskID, toaster, CalibrationTaskServiceCalibrator) {
+            'VerificationServiceCalibrator',
+            function ($rootScope, $scope, $translate, $modalInstance, $modal, $filter, ngTableParams, taskID, toaster, CalibrationTaskServiceCalibrator, verificationServiceCalibrator) {
 
                 /**
                  * Closes modal window on browser's back/forward button click.
@@ -128,6 +129,57 @@ angular
                     });
                 };
 
+                $scope.removeVerificationFromTaskAndReject = function (verificationId) {
+                    var modalInstance = $modal.open({
+                        animation: true,
+                        templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
+                        controller: 'RejectVerificationCalibratorController',
+                        size: 'md',
+                        windowClass: 'xx-dialog',
+                        resolve: {
+                            rejectVerification: function () {
+                                return verificationServiceCalibrator.receiveAllReasons()
+                                    .success(function (reasons) {
+                                            return reasons;
+                                        }
+                                    );
+                            }
+                        }
+                    });
+                    modalInstance.result.then(function (reason) {
+                        CalibrationTaskServiceCalibrator.removeVerificationFromTask(verificationId).then(function (result) {
+                            if (result.status == 200) {
+                                verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id).then(function (data) {
+                                    switch (data.status) {
+                                        case 200:
+                                        {
+                                            toaster.pop('success', $filter('translate')('INFORMATION'),
+                                                $filter('translate')('REJECTED'));
+                                            $scope.tableParams.reload();
+                                            break;
+                                        }
+                                        case 403:
+                                        {
+                                            toaster.pop('error', $filter('translate')('INFORMATION'),
+                                                $filter('translate')('ERROR_ACCESS'));
+                                            break;
+                                        }
+                                        default:
+                                        {
+                                            toaster.pop('error', $filter('translate')('INFORMATION'),
+                                                $filter('translate')('SAVE_VERIF_ERROR'));
+                                        }
+                                    }
+                                });
+                            } else {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_REMOVING_VERIFICATION_FROM_TASK'));
+                            }
+                        });
+                        $scope.tableParams.reload();
+                    });
+                };
+
                 $scope.tableParams = new ngTableParams({
                         page: 1,
                         count: 100,
@@ -141,7 +193,7 @@ angular
                             var sortCriteria = Object.keys(params.sorting())[0];
                             var sortOrder = params.sorting()[sortCriteria];
                             CalibrationTaskServiceCalibrator.getVerificationsByTask(params.page(), params.count(),
-                                    sortCriteria, sortOrder, taskID)
+                                sortCriteria, sortOrder, taskID)
                                 .success(function (result) {
                                     $scope.resultsCount = result.totalItems;
                                     $defer.resolve(result.content);
