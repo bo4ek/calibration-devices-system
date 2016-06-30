@@ -409,6 +409,51 @@ angular
                 $scope.allIsEmpty = $scope.idsOfVerifications.length === 0;
             };
 
+            $scope.openRejectVerificationModal = function (verificationId) {
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',
+                    controller: 'RejectVerificationCalibratorController',
+                    size: 'md',
+                    windowClass: 'xx-dialog',
+                    resolve: {
+                        rejectVerification: function () {
+                            return verificationServiceCalibrator.receiveAllReasons()
+                                .success(function (reasons) {
+                                        return reasons;
+                                    }
+                                );
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (reason) {
+                    $log.info(verificationId, reason.name.id);
+                    verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id).then(function (data) {
+                        switch (data.status) {
+                            case 200:
+                            {
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('REJECTED'));
+                                $scope.tableParams.reload();
+                                break;
+                            }
+                            case 403:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_ACCESS'));
+                                break;
+                            }
+                            default:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('SAVE_VERIF_ERROR'));
+                            }
+                        }
+                    });
+                });
+            }
+
         }]);
 
 

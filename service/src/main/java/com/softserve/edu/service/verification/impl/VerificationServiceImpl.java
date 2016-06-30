@@ -679,6 +679,7 @@ public class VerificationServiceImpl implements VerificationService {
         verification.setTaskStatus(null);
         verification.setRejectedCalibratorDate(new Date());
         verification.setRejectedInfo(rejectedInfo);
+        verification.setTaskStatus(Status.PLANNING_TASK);
         verificationRepository.save(verification);
     }
 

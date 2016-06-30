@@ -106,6 +106,12 @@
                                                popover-trigger="mouseenter"
                                                ng-click="openDetails(verification.verificationId)">
                                             </i>
+                                            <i class="fa fa-ban cancel_icon"
+                                               type="button"
+                                               popover="{{'REJECT_VERIFICATION' | translate}}"
+                                               popover-trigger="mouseenter"
+                                               ng-click="openRejectVerificationModal(verification.verificationId)">
+                                            </i>
                                         </td>
                                     </tr>
                                     </tbody>
