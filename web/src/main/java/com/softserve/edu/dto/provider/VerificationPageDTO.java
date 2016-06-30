@@ -43,6 +43,7 @@ public class VerificationPageDTO {
     private DocumentType documentType;
     private String documentTypeName;
     private String documentDate;
+    private Date sentToCalibratorDate;
     private Long calibrationTestId;
     private String address;
     private String nameProvider;
@@ -68,7 +69,7 @@ public class VerificationPageDTO {
                                boolean isUpload, Integer processTimeExceeding,
                                CalibrationTest calibrationTest,
                                Device device,
-                               String documentType, String documentDate, String address, String building, String flat, String comment) {
+                               String documentType, String documentDate, String address, String building, String flat, String comment, Date sentToCalibratorDate) {
         this.id = id;
         this.initialDate = initialDate;
         this.surname = surname;
@@ -88,12 +89,12 @@ public class VerificationPageDTO {
         this.processTimeExceeding = processTimeExceeding;
         this.documentDate = documentDate;
         this.comment = comment;
+        this.sentToCalibratorDate = sentToCalibratorDate;
         buildProviderEmployeeInfo(providerEmployee);
         buildCalibratorEmployeeInfo(calibratorEmployee);
         buildStateVerificatorEmployeeInfo(stateVerificatorEmployee);
         setProtocolInfo(calibrationTest);
         setMeasurementDeviceInfo(device);
-
     }
 
     public VerificationPageDTO(Long count) {

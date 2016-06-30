@@ -333,6 +333,17 @@ public enum SortCriteriaVerification {
         }
     },
 
+    SENT_TO_CALIBRATOR_DATE() {
+        public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
+
+            if (sortOrder.equalsIgnoreCase("asc")) {
+                return cb.asc(root.get("sentToCalibratorDate"));
+            } else {
+                return cb.desc(root.get("sentToCalibratorDate"));
+            }
+        }
+    },
+
     REJECTED_MESSAGE() {
         public Order getSortOrder(Root<Verification> root, CriteriaBuilder cb, String sortOrder) {
 
