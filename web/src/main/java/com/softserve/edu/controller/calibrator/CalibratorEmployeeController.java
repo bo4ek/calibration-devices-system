@@ -42,7 +42,7 @@ public class CalibratorEmployeeController {
 
     @Autowired
     private CalibratorService calibratorService;
-    
+
     @Autowired
     private VerificationService verificationService;
 
@@ -85,12 +85,12 @@ public class CalibratorEmployeeController {
     public void removeCalibratorEmployee(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
                                          @RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
         User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
-        if(calibratorService.isAdmin(user)) {
+        if (calibratorService.isAdmin(user)) {
             String idVerification = verificationUpdatingDTO.getIdVerification();
             calibratorService.removeCalibratorEmployee(idVerification, user);
         }
     }
-    
+
     @RequestMapping(value = "graphicmainpanel", method = RequestMethod.GET)
     public List<ProviderEmployeeGraphic> graphicMainPanel
             (@RequestParam String fromDate, @RequestParam String toDate,
@@ -100,16 +100,14 @@ public class CalibratorEmployeeController {
         try {
             Date dateFrom = calibratorEmployeeService.convertToDate(fromDate);
             Date dateTo = calibratorEmployeeService.convertToDate(toDate);
-
             list = calibratorEmployeeService.buidGraphicMainPanel(dateFrom, dateTo, idOrganization);
-
         } catch (Exception e) {
             logger.error("Failed to get graphic data");
             logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
-        }        
+        }
         return list;
     }
-    
+
     @RequestMapping(value = "piemainpanel", method = RequestMethod.GET)
     public Map pieMainPanel(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         Long idOrganization = user.getOrganizationId();

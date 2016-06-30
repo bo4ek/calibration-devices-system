@@ -138,7 +138,7 @@ public class CalibratorServiceImpl implements CalibratorService {
         if (verification.getStatus().equals(Status.IN_PROGRESS) &&
                 verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
             verification.setCalibratorEmployee(null);
-            verification.setTaskStatus(null);
+            verification.setTaskStatus(Status.PLANNING_TASK);
             verificationRepository.save(verification);
         }
     }

@@ -605,7 +605,6 @@ angular
                 var dataToSend = {
                     idVerification: verifId
                 };
-                $log.info(dataToSend);
                 verificationServiceCalibrator.cleanCalibratorEmployeeField(dataToSend)
                     .success(function () {
                         $scope.tableParams.reload();
@@ -720,22 +719,21 @@ angular
             };
 
             $scope.cancelPersonForAll = function () {
-                var verificationIds = [];
+                var idsOfVerifications = [];
                 angular.forEach($scope.allVerifications, function (verification) {
-                    if (verification.calibratorEmployee === null) {
-                        verificationIds.push(verification.id);
+                    if (verification.calibratorEmployee != null) {
+                        idsOfVerifications.push(verification.id);
                     }
                 });
-                var modalInstance = $modal.open({
-                    animation: true,
-                    templateUrl: 'resources/app/common/views/modals/submit-cancel.html',
-                    controller: 'SubmitCancelControllerCalibrator',
-                    size: 'md'
-                })
-                alert
+                var dataToSend = {
+                    idsOfVerifications: idsOfVerifications
+                };
+                verificationServiceCalibrator.cleanCalibratorEmployeeFieldForAll(dataToSend)
+                    .success(function () {
+                        $scope.tableParams.reload();
+                    });
             }
 
-            
 
             $scope.uploadArchive = function () {
                 console.log("Entered upload archive function");

@@ -750,6 +750,18 @@ public class CalibratorVerificationController {
     }
 
     /**
+     * remove calibrator employee for all filtered verifications
+     */
+    @RequestMapping(value = "remove/calibratorEmployeeForAll", method = RequestMethod.PUT)
+    public void removeCalibratorEmployeeForAll(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                               @RequestBody VerificationProviderEmployeeDTO verificationUpdatingDTO) {
+        User user = calibratorService.oneCalibratorEmployee(userDetails.getUsername());
+        for (String id : verificationUpdatingDTO.getIdsOfVerifications()) {
+            calibratorService.removeCalibratorEmployee(id, user);
+        }
+    }
+
+    /**
      * method for updating client information
      *
      * @param clientDTO
