@@ -357,6 +357,21 @@ angular
                 return result;
             };
 
+            $scope.cancelPersonForAll = function () {
+                var idsOfVerifications = [];
+                angular.forEach($scope.allVerifications, function (verification) {
+                    idsOfVerifications.push(verification.verificationId);
+                });
+                var dataToSend = {
+                    idsOfVerifications: idsOfVerifications
+                };
+                console.log(idsOfVerifications);
+                verificationServiceCalibrator.cleanCalibratorEmployeeFieldForAll(dataToSend)
+                    .success(function () {
+                        $scope.tableParams.reload();
+                    });
+            }
+
             var getAllSelected = function () {
                 if (!$scope.allVerifications) {
                     return false;

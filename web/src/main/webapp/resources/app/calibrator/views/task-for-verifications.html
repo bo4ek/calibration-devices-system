@@ -14,18 +14,21 @@
     </div>
 
     <div class="row">
+        <button class="btn btn-warning btn-sm pull-right"
+                type="button"
+                popover="{{'CANCEL__EMPLOYEE_FOR_ALL_FILTERED' | translate}}"
+                popover-trigger="mouseenter"
+                ng-click="cancelPersonForAll()">
+            <i class="fa fa-user-times remove_attached_user_icon_button"></i> {{ 'RESPONSIBLE_PERSON_CANCEL' | translate }}
+        </button>
         <div class="col-md-12">
             <br/>
             <div class="panel panel-default">
-
                 <div class="panel-heading">
                     <span>{{'INFORMATION' | translate}}</span>
                     <span class="pull-right">{{'VERIFS_FOUND' | translate }}: {{resultsCount}}</span>
                 </div>
-
                 <div class="panel-body">
-
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-responsive">
