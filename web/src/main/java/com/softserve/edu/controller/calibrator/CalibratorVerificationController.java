@@ -489,7 +489,7 @@ public class CalibratorVerificationController {
             RejectedVerificationPageDTO dto = new RejectedVerificationPageDTO(
                     verification.getRejectedCalibratorDate(),
                     verification.getRejectedInfo().getName(),
-                    verification.getCalibratorEmployee().getLastName() + " " + verification.getCalibratorEmployee().getFirstName() + " " + verification.getCalibratorEmployee().getMiddleName(),
+                    verification.getCalibratorEmployee(),
                     verification.getProvider().getName(),
                     verification.getClientData().getFullName(),
                     verification.getClientData().getClientAddress().getDistrict(),

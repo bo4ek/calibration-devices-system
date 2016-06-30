@@ -1,5 +1,6 @@
 package com.softserve.edu.dto.calibrator;
 
+import com.softserve.edu.entity.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,17 +27,11 @@ public class RejectedVerificationPageDTO {
     public RejectedVerificationPageDTO() {
     }
 
-    public RejectedVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, String employeeRejected) {
+    public RejectedVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, User employeeRejected, String providerName, String customerName,
+                                       String district, String street, String building, String flat, String verificationId) {
         this.rejectedCalibratorDate = rejectedCalibratorDate;
         this.rejectedReason = rejectedReason;
-        this.employeeRejected = employeeRejected;
-    }
-
-    public RejectedVerificationPageDTO(Date rejectedCalibratorDate, String rejectedReason, String employeeRejected, String providerName, String customerName,
-                                      String district, String street, String building, String flat, String verificationId) {
-        this.rejectedCalibratorDate = rejectedCalibratorDate;
-        this.rejectedReason = rejectedReason;
-        this.employeeRejected = employeeRejected;
+        this.employeeRejected = employeeRejected != null ? employeeRejected.getLastName() + " " + employeeRejected.getFirstName() + " " + employeeRejected.getMiddleName() : " ";
         this.providerName = providerName;
         this.customerName = customerName;
         this.district = district;
