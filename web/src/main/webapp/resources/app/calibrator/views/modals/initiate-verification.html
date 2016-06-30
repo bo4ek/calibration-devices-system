@@ -458,7 +458,7 @@
                 </accordion-group>
             </div>
 
-            <div class="panel panel-primary" ng-show="selectedData.editAll ? false : (!selectedData.verificationWithDismantle || taskForTeam)">
+            <div class="panel panel-primary" ng-show="!selectedData.editAll">
                 <accordion-group is-open="counter.open">
                     <accordion-heading>
                         <div class="panel-heading">
@@ -863,6 +863,7 @@
                 </accordion-group>
             </div>
         </accordion>
+
 
         <div class="row">
             <div class="form group col-md-10">
