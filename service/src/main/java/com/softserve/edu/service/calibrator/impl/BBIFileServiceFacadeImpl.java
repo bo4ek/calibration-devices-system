@@ -321,7 +321,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         if (verifications.size() == 0) {
             throw new InvalidVerificationCodeException();
         }
-        return verifications.get(0);
+        for (Verification verification : verifications) {
+            if (verification.getStatus().equals(Status.SENT_TO_TEST_DEVICE) | verification.getStatus().equals(Status.SENT_TO_DISMANTLING_TEAM)) {
+                return verification;
+            }
+        }
+        return null;
     }
 
     private List<BBIOutcomeDTO> processListOfBBIFilesForStation(List<File> listOfBBIfiles, User calibratorEmployee) throws
