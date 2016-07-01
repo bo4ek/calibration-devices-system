@@ -227,4 +227,6 @@ public interface VerificationService {
     ListToPageTransformer<Verification> findPageOfPlaningTaskVerificationsByCalibratorId(Long organizationId, Integer pageNumber, Integer itemsPerPage, User user, String date, String endDate, String client_full_name, String provider, String district,
                                                                                          String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
                                                                                          String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder);
+
+    void updateVerificationComment(String comment, String id);
 }

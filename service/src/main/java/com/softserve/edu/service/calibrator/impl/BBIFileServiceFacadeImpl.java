@@ -243,7 +243,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 }
                 correspondingVerification = correspondingVerificationMap.get(Constants.VERIFICATION_ID);
                 if (correspondingVerification == null) {
-
                     correspondingVerification = createNewVerificationFromMap(correspondingVerificationMap, calibratorEmployee, deviceTestData);
                     saveBBIFile(deviceTestData, correspondingVerification, bbiFile.getName());
                     Verification verification = verificationService.findById(correspondingVerification);
@@ -493,13 +492,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verificationMap.put(Constants.DISTRICT_ID, resultSet.getString("DistrictID"));
                     verificationMap.put(Constants.STREET_ID, resultSet.getString("StreetID"));
                     verificationMap.put(Constants.CUSTOMER_ID, resultSet.getString("CustomerID"));
-
                     verificationMap.put(Constants.COMMENT, resultSet.getString("Note"));
                     verificationMap.put(Constants.SERVICE_TYPE, resultSet.getString("serviceType"));
+                    verificationService.updateVerificationComment(resultSet.getString("Note"), resultSet.getString("Id_pc"));
                 } catch (SQLException e) {
                     logger.warn("User was trying to upload old archive format ");
                 }
-
                 bbiFilesToVerification.put(resultSet.getString("FileNumber"), verificationMap);
             }
         }

@@ -444,6 +444,20 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
+    @Transactional
+    public void updateVerificationComment(String comment, String id) {
+        Verification verification = verificationRepository.findOne(id);
+        String currentComment = verification.getComment();
+        if (currentComment.lastIndexOf('#') == -1) {
+            verification.setComment("#" + comment);
+            verificationRepository.save(verification);
+        } else if (!currentComment.substring(currentComment.lastIndexOf('#') + 1).equals(comment)) {
+            verification.setComment(verification.getComment() + " #" + comment);
+            verificationRepository.save(verification);
+        }
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public ListToPageTransformer<Verification> findPageOfVerificationsByVerificatorIdAndCriteriaSearch(Long verificatorId, int pageNumber, int itemsPerPage, String startDateToSearch, String endDateToSearch, String idToSearch, String status, String nameProvider,
                                                                                                        String nameCalibrator, String numberOfCounter, String numberOfProtocol, String sentToVerificatorDateFrom, String sentToVerificatorDateTo, String moduleNumber, String employeeLastName,
