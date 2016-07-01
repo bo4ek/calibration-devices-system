@@ -464,7 +464,6 @@ public class ReportsServiceImpl implements ReportsService {
         List<String> typeOfSupply = new ArrayList<>(initializedCapacity);
         List<String> stateVerificatorName = new ArrayList<>(initializedCapacity);
         List<String> sentToVerificatorDate = new ArrayList<>(initializedCapacity);
-        List<String> status = new ArrayList<>(initializedCapacity);
 
 
         Integer i = 1;
@@ -520,7 +519,6 @@ public class ReportsServiceImpl implements ReportsService {
             providers.add(getProviderFromVerification(verification));
             notes.add(getNotes(verification));
             counterNotes.add(getCounterNotes(verification));
-            status.add(getStatusDemo(verification));
 
             Integer temperature = getTemperaturesFromVerification(verification);
             temperatures.add(temperature == -1 ? " " : temperature.toString());
@@ -540,7 +538,6 @@ public class ReportsServiceImpl implements ReportsService {
         } else if (organization.equals(OrganizationType.STATE_VERIFICATOR)) {
             data.add(new TableExportColumn(Constants.LAB_NAME, calibrators));
         }
-        data.add(new TableExportColumn(Constants.VERIFICATION_STATUS, status));
         data.add(new TableExportColumn(Constants.VERIFICATION_TIME, verificationTime));
         data.add(new TableExportColumn(Constants.DOCUMENT_DATE, signProtocolDate));
         data.add(new TableExportColumn(Constants.DOCUMENT_NUMBER, documentNumber));
@@ -613,17 +610,6 @@ public class ReportsServiceImpl implements ReportsService {
 
     public String getProviderEmployeeFullName(Verification verification) {
         return verification.getProviderEmployee() != null ? verification.getProviderEmployee().getFullNameShort() : " ";
-    }
-
-    public String getStatusDemo(Verification verification) {
-        if (verification.getStatus().equals(Status.REJECTED_BY_CALIBRATOR)) {
-            return Constants.REJECTED_BY_CALIBRATOR;
-        } else if (verification.getStatus().equals(Status.REJECTED_BY_PROVIDER)) {
-            return Constants.REJECTED_BY_PROVIDER;
-        } else {
-            return " ";
-        }
-
     }
 
     public String getStatus(Verification verification) {
@@ -756,6 +742,12 @@ public class ReportsServiceImpl implements ReportsService {
             return Constants.STATUS_TEST_OK;
         } else if (verification.getStatus().equals(Status.TEST_NOK)) {
             return Constants.STATUS_TEST_NOK;
+        } else if (verification.getStatus().equals(Status.REJECTED_BY_CALIBRATOR)) {
+            return Constants.REJECTED_BY_CALIBRATOR;
+        } else if (verification.getStatus().equals(Status.REJECTED_BY_PROVIDER)) {
+            return Constants.REJECTED_BY_PROVIDER;
+        } else if (verification.getStatus().equals(Status.PROTOCOL_REJECTED)) {
+            return Constants.PROTOCOL_REJECTED;
         } else {
             return " ";
         }
