@@ -36,7 +36,7 @@
                         <div class="col-md-12">
                             <div class="table-responsive">
                                 <table show-filter="false" ng-table="tableParams"
-                                       class="table table-bordered table-hover users_table">
+                                       class="table table-bordered table-hover table-condensed">
                                     <tbody>
                                     <tr ng-repeat="verification in $data | orderBy: 'queue' as filtered_result track by  $index">
                                         <td data-title="'DATE_OF_ENTRY' | translate">
@@ -76,7 +76,7 @@
                                             {{ verification.notes }}
                                         </td>
                                         <td data-title="'QUEUE' | translate">
-                                            <input class="form-control input-xs" type="number" ng-model="$index" min="0" max="99"
+                                            <input class="form-control input-custom" type="number" ng-model="$index" min="0" max="99"
                                                    ng-blur="inputQueue(verification,$index,$data)">
                                         </td>
                                         <td data-title="'ACTIONS' | translate" class="text-center">
