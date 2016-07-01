@@ -39,7 +39,7 @@
                                        class="table table-bordered table-hover users_table">
                                     <tbody>
                                     <tr ng-repeat="verification in $data | orderBy: 'queue' as filtered_result track by  $index">
-                                        <td data-title="'INITIAL_DATE' | translate">
+                                        <td data-title="'DATE_OF_ENTRY' | translate">
                                             {{ verification.sentToCalibrator }}
                                         </td>
                                         <td data-title="'PROVIDER_NAME' | translate">
@@ -51,10 +51,10 @@
                                         <td data-title="'STREET' | translate">
                                             {{ verification.street }}
                                         </td>
-                                        <td data-title="'BUILDING' | translate">
+                                        <td data-title="'BUILDING_SHORT' | translate">
                                             {{ verification.building }}
                                         </td>
-                                        <td data-title="'FLAT' | translate">
+                                        <td data-title="'FLAT_SHORT' | translate">
                                             {{ verification.flat }}
                                         </td>
                                         <td data-title="'CLIENT_FULL_NAME' | translate">
@@ -76,11 +76,11 @@
                                             {{ verification.notes }}
                                         </td>
                                         <td data-title="'QUEUE' | translate">
-                                            <input class="form-control" type="number" ng-model="$index" min="0" max="99"
+                                            <input class="form-control input-xs" type="number" ng-model="$index" min="0" max="99"
                                                    ng-blur="inputQueue(verification,$index,$data)">
                                         </td>
                                         <td data-title="'ACTIONS' | translate" class="text-center">
-                                            <div class="btn-group-vertical">
+                                            <div class="btn-group-horizontal btn-group-xs">
                                                 <button type="button" class="btn btn-warning"
                                                         ng-hide="verification.status == 'TEST_COMPLETED' || verification.status == 'TEST_OK'
                                                          || verification.status == 'TEST_NOK' || verification.status == 'SENT_TO_VERIFICATOR'

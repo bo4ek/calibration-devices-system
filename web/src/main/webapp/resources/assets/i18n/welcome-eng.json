@@ -864,5 +864,8 @@
     "SUBMIT_DELETE": "Submit deleting",
     "CONFIRM_CANCEL_EMPLOYEE": "Confirm cancel responsible employee",
     "PROTOCOL_SUCCESS_DELETE": "Protocol was success delete",
-    "ERROR_DELETING_PROTOCOL": "Error deleting protocol"
+    "ERROR_DELETING_PROTOCOL": "Error deleting protocol",
+    "BUILDING_SHORT": "Build.",
+    "FLAT_SHORT": "Fl.",
+    "DATE_OF_ENTRY": "Entry"
 }
