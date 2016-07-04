@@ -448,11 +448,14 @@ public class VerificationServiceImpl implements VerificationService {
     public void updateVerificationComment(String comment, String id) {
         Verification verification = verificationRepository.findOne(id);
         String currentComment = verification.getComment();
-        if (currentComment.lastIndexOf('#') == -1) {
+        if (currentComment == null) {
             verification.setComment("#" + comment);
             verificationRepository.save(verification);
+        } else if (currentComment.lastIndexOf('#') == -1) {
+            verification.setComment(currentComment + " #" + comment);
+            verificationRepository.save(verification);
         } else if (!currentComment.substring(currentComment.lastIndexOf('#') + 1).equals(comment)) {
-            verification.setComment(verification.getComment() + " #" + comment);
+            verification.setComment(currentComment + " #" + comment);
             verificationRepository.save(verification);
         }
     }

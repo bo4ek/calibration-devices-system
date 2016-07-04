@@ -187,6 +187,69 @@ public class Verification implements Comparable {
         this.queue = queue;
     }
 
+    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, String verificationId) {
+
+        this.id = verificationId;
+        this.initialDate = initialDate;
+        this.clientData = clientData;
+        this.status = status;
+        this.calibrator = calibrator;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, String verificationId) {
+
+        this(initialDate, clientData, status, calibrator, verificationId);
+        this.provider = provider;
+        this.device = device;
+        this.readStatus = readStatus;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,
+                        User calibratorEmployee, Counter counter, String verificationId, String comment) {
+
+        this(initialDate, clientData, status, calibrator, verificationId);
+        this.expirationDate = null;
+        this.signProtocolDate = null;
+        this.sentToCalibratorDate = initialDate;
+        this.readStatus = ReadStatus.UNREAD;
+        this.calibratorEmployee = calibratorEmployee;
+        this.counter = counter;
+        this.counterStatus = false;
+        this.comment = comment;
+        this.device = counter.getCounterType() == null ? null : counter.getCounterType().getDevice();
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
+                        User calibratorEmployee, Counter counter, String verificationId, String comment, String verificationTime) {
+
+        this(initialDate, clientData, status, calibrator, calibratorEmployee, counter, verificationId, comment);
+        this.providerFromBBI = providerFromBBI;
+        this.verificationTime = verificationTime;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        try {
+            this.verificationDate = formatter.parse(verificationTime);
+        } catch (ParseException e) {
+            /*Ignore*/
+        }
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator,
+                        String comment, String verificationId) {
+
+        this(initialDate, clientData, provider, device, status, readStatus, calibrator, verificationId);
+        this.comment = comment;
+    }
+
+    public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator,
+                        String comment, String verificationId) {
+
+        this(initialDate, clientData, provider, device, status, readStatus, calibrator, comment, verificationId);
+        this.expirationDate = expirationDate;
+    }
+
     public Verification(
             Date initialDate, ClientData clientData, Organization provider,
             Device device, Status status, ReadStatus readStatus, AdditionalInfo info, boolean dismantled, Counter counter,
@@ -200,14 +263,7 @@ public class Verification implements Comparable {
                         Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
                         Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId) {
 
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.clientData = clientData;
-        this.provider = provider;
-        this.device = device;
-        this.status = status;
-        this.readStatus = readStatus;
-        this.calibrator = calibrator;
+        this(initialDate, clientData, provider, device, status, readStatus, calibrator, verificationId);
         this.info = info;
         this.counterStatus = dismantled;
         this.counter = counter;
@@ -220,27 +276,19 @@ public class Verification implements Comparable {
 
     public Verification(Date initialDate, ClientData clientData, Organization provider,
                         Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
+                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus) {
+
+        this(initialDate, clientData, provider, device, status, readStatus, calibrator, info, dismantled, counter, comment, sealPresence, verificationId);
+        this.sentToCalibratorDate = sentToCalibratorDate;
+        this.taskStatus = taskStatus;
+    }
+
+    public Verification(Date initialDate, ClientData clientData, Organization provider,
+                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
                         Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId,
                         Date sentToCalibratorDate, Status taskStatus, User calibratorEmployee) {
 
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.clientData = clientData;
-        this.provider = provider;
-        this.device = device;
-        this.status = status;
-        this.readStatus = readStatus;
-        this.calibrator = calibrator;
-        this.info = info;
-        this.counterStatus = dismantled;
-        this.counter = counter;
-        if (this.comment == null) {
-            this.comment = "";
-        }
-        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
-        this.sealPresence = sealPresence;
-        this.sentToCalibratorDate = sentToCalibratorDate;
-        this.taskStatus = taskStatus;
+        this(initialDate, clientData, provider, device, status, readStatus, calibrator, info, dismantled, counter, comment, sealPresence, verificationId, sentToCalibratorDate, taskStatus);
         this.calibratorEmployee = calibratorEmployee;
     }
 
@@ -255,52 +303,12 @@ public class Verification implements Comparable {
 
     public Verification(Date initialDate, ClientData clientData, Organization provider,
                         Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
-                        Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId, Date sentToCalibratorDate, Status taskStatus) {
-
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.clientData = clientData;
-        this.provider = provider;
-        this.device = device;
-        this.status = status;
-        this.readStatus = readStatus;
-        this.calibrator = calibrator;
-        this.info = info;
-        this.counterStatus = dismantled;
-        this.counter = counter;
-        if (this.comment == null) {
-            this.comment = "";
-        }
-        this.comment = (comment != null) ? this.comment + comment : this.comment + "";
-        this.sealPresence = sealPresence;
-        this.sentToCalibratorDate = sentToCalibratorDate;
-        this.taskStatus = taskStatus;
-    }
-
-    public Verification(Date initialDate, ClientData clientData, Organization provider,
-                        Device device, Status status, ReadStatus readStatus, Organization calibrator, AdditionalInfo info,
                         Boolean dismantled, Counter counter, String comment, boolean sealPresence, String verificationId,
                         Date sentToCalibratorDate, Status taskStatus, Boolean verificationWithDismantle) {
 
         this(initialDate, clientData, provider, device, status, readStatus, calibrator, info, dismantled, counter,
                 comment, sealPresence, verificationId, sentToCalibratorDate, taskStatus);
         this.verificationWithDismantle = verificationWithDismantle;
-    }
-
-    public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
-                        Device device, Status status, ReadStatus readStatus, Organization calibrator,
-                        String comment, String verificationId) {
-
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.expirationDate = expirationDate;
-        this.clientData = clientData;
-        this.provider = provider;
-        this.device = device;
-        this.status = status;
-        this.readStatus = readStatus;
-        this.calibrator = calibrator;
-        this.comment = comment;
     }
 
     public Verification(Date initialDate, Date expirationDate, ClientData clientData, Organization provider,
@@ -312,62 +320,9 @@ public class Verification implements Comparable {
 
     public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
                         User calibratorEmployee, Counter counter, String verificationId, String comment, String verificationTime, Device device) {
+
         this(initialDate, clientData, status, calibrator, providerFromBBI, calibratorEmployee, counter, verificationId, comment, verificationTime);
         this.device = device;
-    }
-
-    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator, Organization providerFromBBI,
-                        User calibratorEmployee, Counter counter, String verificationId, String comment, String verificationTime) {
-
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.expirationDate = null;
-        this.signProtocolDate = null;
-        this.sentToCalibratorDate = initialDate;
-        this.clientData = clientData;
-        this.status = status;
-        this.calibrator = calibrator;
-        this.providerFromBBI = providerFromBBI;
-        this.calibratorEmployee = calibratorEmployee;
-        this.counter = counter;
-        this.device = counter.getCounterType() == null ? null : counter.getCounterType().getDevice();
-        this.readStatus = ReadStatus.UNREAD;
-        this.counterStatus = false;
-        this.comment = comment;
-        this.verificationTime = verificationTime;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        try {
-            this.verificationDate = formatter.parse(verificationTime);
-        } catch (ParseException e) {
-            /*Ignore*/
-        }
-    }
-
-    public Verification(Date initialDate, ClientData clientData, Status status, Organization calibrator,
-                        User calibratorEmployee, Counter counter, String verificationId, String comment) {
-
-        this.id = verificationId;
-        this.initialDate = initialDate;
-        this.expirationDate = null;
-        this.signProtocolDate = null;
-        this.sentToCalibratorDate = initialDate;
-        this.clientData = clientData;
-        this.status = status;
-        this.calibrator = calibrator;
-        this.calibratorEmployee = calibratorEmployee;
-        this.counter = counter;
-        this.device = counter.getCounterType().getDevice();
-        this.readStatus = ReadStatus.UNREAD;
-        this.counterStatus = false;
-        this.comment = comment;
-    }
-
-    public void deleteCalibrationTest(CalibrationTest calibrationTest) {
-        calibrationTests.remove(calibrationTest);
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     @Override
