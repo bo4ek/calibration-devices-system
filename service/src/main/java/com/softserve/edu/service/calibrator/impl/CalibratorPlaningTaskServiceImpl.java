@@ -652,6 +652,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> flat = new ArrayList<>();
         List<String> entrance = new ArrayList<>();
         List<String> floor = new ArrayList<>();
+        List<String> doorCode = new ArrayList<>();
         List<String> countersNumber = new ArrayList<>();
         List<String> fullName = new ArrayList<>();
         List<String> telephone = new ArrayList<>();
@@ -677,6 +678,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             times.add(getTime(verification.getInfo()));
             floor.add(getFloor(verification.getInfo()));
             entrance.add(getEntrance(verification.getInfo()));
+            doorCode.add(getDoorCode(verification.getInfo()));
 
             ClientData clientData = verification.getClientData();
             if (clientData != null) {
@@ -696,6 +698,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         data.add(new TableExportColumn(Constants.FLAT, flat));
         data.add(new TableExportColumn(Constants.ENTRANCE, entrance));
         data.add(new TableExportColumn(Constants.FLOOR, floor));
+        data.add(new TableExportColumn(Constants.DOORCODE, doorCode));
         data.add(new TableExportColumn(Constants.COUNTERS_NUMBER, countersNumber));
         data.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
         data.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
@@ -773,7 +776,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     }
 
     private String getDoorCode(AdditionalInfo info) {
-        return info.getDoorCode() != 0 ? String.valueOf(info.getFloor()) : " ";
+        return String.valueOf(info.getDoorCode() != 0 ? info.getDoorCode() : " ");
     }
 
     private String getEntrance(AdditionalInfo info) {
