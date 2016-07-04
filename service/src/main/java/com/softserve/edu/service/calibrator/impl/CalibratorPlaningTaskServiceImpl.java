@@ -860,7 +860,11 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     }
 
     public String getPhoneNumber(ClientData clientData) {
-        return clientData.getPhone() != null ? clientData.getPhone() : " ";
+        if (clientData.getSecondPhone() != null) {
+            return clientData.getPhone() != null ? clientData.getPhone() + "," + clientData.getSecondPhone() : " ";
+        } else {
+            return clientData.getPhone() != null ? clientData.getPhone() : " ";
+        }
     }
 
     public String getFullName(ClientData clientData) {
