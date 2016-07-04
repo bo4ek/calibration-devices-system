@@ -532,6 +532,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> datetime = new ArrayList<>();
         List<String> counterNumber = new ArrayList<>();
         List<String> comment = new ArrayList<>();
+        List<String> note = new ArrayList<>();
         List<String> customer = new ArrayList<>();
         List<String> taskDate = new ArrayList<>();
         List<String> provider = new ArrayList<>();
@@ -564,6 +565,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             countersNumber.add(String.valueOf(1));
             counterNumber.add(getCounterNumber(verification.getCounter()));
             comment.add(getComent(verification));
+            note.add(getNotes(verification));
             customer.add(getCustomer(verification));
 
             Counter counter = verification.getCounter();
@@ -629,7 +631,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         dataDb.add(new TableExportColumn("Tel", "TEXT", telephone));
         dataDb.add(new TableExportColumn("Date_visit", "TEXT", datetime));
         dataDb.add(new TableExportColumn("Counter_number", "TEXT", counterNumber));
-        dataDb.add(new TableExportColumn("Note", "TEXT", comment));
+        dataDb.add(new TableExportColumn("Note", "TEXT", note));
         dataDb.add(new TableExportColumn("Customer", "TEXT", customer));
 
         ArrayList arrayList = new ArrayList(2);
@@ -754,6 +756,10 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         }
     }
 
+    private String getNotes(Verification verification) {
+        return Constants.ENTRANCE + ": " + getEntrance(verification.getInfo()) + ", " + Constants.DOORCODE + ": " + getDoorCode(verification.getInfo()) + ", " + Constants.FLOOR + ": " + getFloor(verification.getInfo()) + ", " + getComent(verification);
+    }
+
     private String getTime(AdditionalInfo info) {
         return info.getTimeFrom() != null && info.getTimeTo() != null ? info.getTimeFrom() + "-" + info.getTimeTo() : " ";
     }
@@ -764,6 +770,10 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
 
     private String getFloor(AdditionalInfo info) {
         return info.getFloor() != 0 ? String.valueOf(info.getFloor()) : " ";
+    }
+
+    private String getDoorCode(AdditionalInfo info) {
+        return info.getDoorCode() != 0 ? String.valueOf(info.getFloor()) : " ";
     }
 
     private String getEntrance(AdditionalInfo info) {
@@ -791,7 +801,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     }
 
     public String getCustomer(Verification verification) {
-        return verification.getCalibratorEmployee() != null && verification.getCalibratorEmployee().getUsername() != null ? verification.getCalibratorEmployee().getUsername() : " ";
+        return verification.getProvider().getName();
     }
 
     public String getComent(Verification verification) {

@@ -127,6 +127,7 @@ public interface Constants {
     String REGION = "Район";
     String DISTRICT_ID = "Id району";
     String ADDRESS = "Адреса";
+    String DOORCODE = "Код";
     String BUILDING = "Будинок";
     String FLAT = "Квартира";
     String ENTRANCE = "Під'їзд";
