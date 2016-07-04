@@ -445,18 +445,19 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional
-    public void updateVerificationComment(String comment, String id) {
+    public void updateAdditionalInfoNotes(String comment, String id) {
         Verification verification = verificationRepository.findOne(id);
-        String currentComment = verification.getComment();
+        AdditionalInfo additionalInfo = verification.getInfo();
+        String currentComment = additionalInfo.getNotes();
         if (currentComment == null) {
-            verification.setComment("#" + comment);
-            verificationRepository.save(verification);
-        } else if (currentComment.lastIndexOf('#') == -1) {
-            verification.setComment(currentComment + " #" + comment);
-            verificationRepository.save(verification);
-        } else if (!currentComment.substring(currentComment.lastIndexOf('#') + 1).equals(comment)) {
-            verification.setComment(currentComment + " #" + comment);
-            verificationRepository.save(verification);
+            additionalInfo.setNotes(Constants.DIVIDE_NOTES + comment);
+            additionalInfoRepository.save(additionalInfo);
+        } else if (currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) == -1) {
+            additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment);
+            additionalInfoRepository.save(additionalInfo);
+        } else if (!currentComment.substring(currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) + 1).equals(comment)) {
+            additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment);
+            additionalInfoRepository.save(additionalInfo);
         }
     }
 

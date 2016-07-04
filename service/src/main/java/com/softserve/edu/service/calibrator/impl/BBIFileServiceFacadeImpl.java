@@ -13,6 +13,7 @@ import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
+import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
@@ -494,7 +495,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                     verificationMap.put(Constants.CUSTOMER_ID, resultSet.getString("CustomerID"));
                     verificationMap.put(Constants.COMMENT, resultSet.getString("Note"));
                     verificationMap.put(Constants.SERVICE_TYPE, resultSet.getString("serviceType"));
-                    verificationService.updateVerificationComment(resultSet.getString("Note"), resultSet.getString("Id_pc"));
+                    verificationService.updateAdditionalInfoNotes(resultSet.getString("Note"), resultSet.getString("Id_pc"));
                 } catch (SQLException e) {
                     logger.warn("User was trying to upload old archive format ");
                 }
@@ -551,10 +552,10 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Long deviceId = getDeviceIdByDeviceTypeId(Integer.parseInt(verificationData.get(Constants.SERVICE_TYPE)));
         Device device = deviceService.getById(deviceId);
 
-        Verification verification = new Verification(date, clientData, Status.NOT_VALID, calibrator,
-                providerFromBBI, calibratorEmployee, counter, null, verificationData.get(Constants.COMMENT),
+        Verification verification = new Verification(date, clientData, Status.NOT_VALID, calibrator, providerFromBBI, calibratorEmployee, counter, null, null,
                 verificationData.get(Constants.DATE), device);
 
+        verification.getInfo().setNotes(Constants.DIVIDE_NOTES + verificationData.get(Constants.COMMENT));
         List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION,
                 device.getDeviceType());
 

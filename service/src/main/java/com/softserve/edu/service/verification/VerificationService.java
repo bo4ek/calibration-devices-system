@@ -228,5 +228,5 @@ public interface VerificationService {
                                                                                          String street, String building, String flat, String dateOfVerif, String time, String serviceability, String noWaterToDate, String sealPresence,
                                                                                          String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder);
 
-    void updateVerificationComment(String comment, String id);
+    void updateAdditionalInfoNotes(String comment, String id);
 }
