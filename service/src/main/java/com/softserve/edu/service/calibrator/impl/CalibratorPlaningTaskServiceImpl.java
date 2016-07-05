@@ -529,6 +529,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         List<String> flat = new ArrayList<>();
         List<String> street = new ArrayList<>();
         List<String> telephone = new ArrayList<>();
+        List<String> mainPhone = new ArrayList<>();
         List<String> datetime = new ArrayList<>();
         List<String> counterNumber = new ArrayList<>();
         List<String> comment = new ArrayList<>();
@@ -568,6 +569,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             note.add(getNotes(verification));
             customer.add(getCustomer(verification));
 
+
             Counter counter = verification.getCounter();
             symbols.add(getCounterSymbol(counter));
             standartSize.add(getCounterStandarSize(counter));
@@ -578,9 +580,11 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             if (clientData != null) {
                 setClientDataCard(clientData, fullName, surname, name, middlename, telephone);
                 setClientAddress(verification.getClientData().getClientAddress(), region, district, city, street, building, flat);
+                mainPhone.add(getMainPhoneNumber(verification.getClientData()));
             } else {
                 setClientDataCard(null, fullName, surname, name, middlename, telephone);
                 setClientAddress(null, region, district, city, street, building, flat);
+                mainPhone.add(null);
             }
             setAdditionalInfo(verification.getInfo(), entrance, floor, times);
         }
@@ -628,7 +632,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         dataDb.add(new TableExportColumn("street", "TEXT", street));
         dataDb.add(new TableExportColumn("Building", "TEXT", building));
         dataDb.add(new TableExportColumn("Apartment", "TEXT", flat));
-        dataDb.add(new TableExportColumn("Tel", "TEXT", telephone));
+        dataDb.add(new TableExportColumn("Tel", "TEXT", mainPhone));
         dataDb.add(new TableExportColumn("Date_visit", "TEXT", datetime));
         dataDb.add(new TableExportColumn("Counter_number", "TEXT", counterNumber));
         dataDb.add(new TableExportColumn("Note", "TEXT", note));
@@ -865,6 +869,10 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         } else {
             return clientData.getPhone() != null ? clientData.getPhone() : " ";
         }
+    }
+
+    public String getMainPhoneNumber(ClientData clientData) {
+        return clientData.getPhone() != null ? clientData.getPhone() : " ";
     }
 
     public String getFullName(ClientData clientData) {
