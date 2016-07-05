@@ -46,9 +46,6 @@ public class VerificationServiceImpl implements VerificationService {
     private Logger logger = Logger.getLogger(VerificationServiceImpl.class);
 
     @Autowired
-    private CalibrationPlanningTaskRepository taskRepository;
-
-    @Autowired
     private VerificationGroupRepository groupRepository;
 
     @Autowired
@@ -446,18 +443,23 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional
     public void updateAdditionalInfoNotes(String comment, String id) {
-        Verification verification = verificationRepository.findOne(id);
-        AdditionalInfo additionalInfo = verification.getInfo();
-        String currentComment = additionalInfo.getNotes();
-        if (currentComment == null) {
-            additionalInfo.setNotes(Constants.DIVIDE_NOTES + comment);
-            additionalInfoRepository.save(additionalInfo);
-        } else if (currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) == -1) {
-            additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment);
-            additionalInfoRepository.save(additionalInfo);
-        } else if (!currentComment.substring(currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) + 1).equals(comment)) {
-            additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment);
-            additionalInfoRepository.save(additionalInfo);
+        Verification verification = null;
+        if (id != null) {
+            verification = verificationRepository.findOne(id);
+        }
+        if (verification != null) {
+            AdditionalInfo additionalInfo = verification.getInfo();
+            String currentComment = additionalInfo.getNotes();
+            if (currentComment == null) {
+                additionalInfo.setNotes(Constants.DIVIDE_NOTES + comment + "  ");
+                additionalInfoRepository.save(additionalInfo);
+            } else if (currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) == -1) {
+                additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment + "  ");
+                additionalInfoRepository.save(additionalInfo);
+            } else if (!currentComment.substring(currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) + 1).equals(comment)) {
+                additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment + "  ");
+                additionalInfoRepository.save(additionalInfo);
+            }
         }
     }
 

@@ -14,6 +14,7 @@ import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
+import com.softserve.edu.repository.AdditionalInfoRepository;
 import com.softserve.edu.repository.CalibrationModuleRepository;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
@@ -84,16 +85,12 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private OrganizationService organizationService;
 
     @Autowired
-    private LocalityService localityService;
-
-    @Autowired
-    private DistrictService districtService;
+    private AdditionalInfoRepository additionalInfoRepository;
 
     @Autowired
     private StreetService streetService;
 
-    @Autowired
-    private RegionService regionService;
+
 
     @Transactional
     public DeviceTestData parseBBIFile(File BBIFile, String originalFileName, boolean taskForStation) throws IOException, DecoderException, InvalidImageInBbiException {
@@ -555,10 +552,11 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         Verification verification = new Verification(date, clientData, Status.NOT_VALID, calibrator, providerFromBBI, calibratorEmployee, counter, null, null,
                 verificationData.get(Constants.DATE), device);
 
-        verification.getInfo().setNotes(Constants.DIVIDE_NOTES + verificationData.get(Constants.COMMENT));
-        List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION,
-                device.getDeviceType());
-
+        AdditionalInfo additionalInfo = new AdditionalInfo();
+        additionalInfo.setNotes(Constants.DIVIDE_NOTES + "  " + verificationData.get(Constants.COMMENT) + "  ");
+        additionalInfoRepository.save(additionalInfo);
+        verification.setInfo(additionalInfo);
+        List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION, device.getDeviceType());
         return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
 

@@ -111,27 +111,20 @@ public class CalibratorVerificationController {
                                            @PathVariable String verificationID,
                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
-
-        boolean updateAll = verificationDTO.getEditAll();//get value from page
+        /*boolean updateAll = verificationDTO.getEditAll();//get value from page*/
 
         Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
         Verification verification = verificationService.findById(verificationID);
 
-        if (calibrator == null || verification == null) {
-            throw new RuntimeException();
+        if (!calibrator.equals(verification.getCalibrator())) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            return new ResponseEntity(httpStatus);
         }
 
-        List<Verification> verifications = verificationService.getTaskGroupVerifications(verification, updateAll);
+        System.out.println(verificationDTO);
 
-        for (Verification v : verifications) {
-            updateVerificationData(v, verificationDTO, calibrator, updateAll);
-            try {
-                verificationService.saveVerification(v);
-            } catch (Exception e) {
-                logger.error("GOT EXCEPTION WHILE UPDATING VERIFICATION", e);
-                httpStatus = HttpStatus.CONFLICT;
-            }
-        }
+        updateVerificationData(verification, verificationDTO);
+        verificationService.saveVerification(verification);
         return new ResponseEntity(httpStatus);
     }
 
@@ -421,6 +414,7 @@ public class CalibratorVerificationController {
                         calibratorEmployee);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Failed to load file " + e.getMessage());
             logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
         }
@@ -799,76 +793,84 @@ public class CalibratorVerificationController {
         return new ResponseEntity<>(httpStatus);
     }
 
-    private void updateVerificationData(Verification verification, OrganizationStageVerificationDTO verificationDTO,
-                                        Organization calibrator, boolean updateAll) {
-        // updating client data
-        ClientData clientData = new ClientData(
-                verificationDTO.getFirstName(),
-                verificationDTO.getLastName(),
-                verificationDTO.getMiddleName(),
-                verificationDTO.getEmail(),
-                verificationDTO.getPhone(),
-                verificationDTO.getSecondPhone(),
-                new Address(
-                        verificationDTO.getRegion(),
-                        verificationDTO.getDistrict(),
-                        verificationDTO.getLocality(),
-                        verificationDTO.getStreet(),
-                        verificationDTO.getBuilding(),
-                        verificationDTO.getFlat(),
-                        verificationDTO.getMailIndex()
-                )
-        );
+    private void updateVerificationData(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
 
-        // updating counter information
-        if (!updateAll) {
-            CounterType counterType = calibratorService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
-                    verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
-            Counter counter = verification.getCounter();
-            if (counter == null) {
-                counter = new Counter();
-            }
-            counter.setReleaseYear(verificationDTO.getReleaseYear());
-            counter.setDateOfDismantled(verificationDTO.getDateOfDismantled());
-            counter.setDateOfMounted(verificationDTO.getDateOfMounted());
-            counter.setNumberCounter(verificationDTO.getNumberCounter());
-            counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
-            counter.setCounterType(counterType);
+        updateClientDataOfVerification(verification, verificationDTO);
+        updateCounterDataOfVerification(verification, verificationDTO);
+        updateAdditionalInfoOfVerification(verification, verificationDTO);
+        updateProviderOfVerification(verification, verificationDTO);
+        updateDeviceTypeOfVerification(verification, verificationDTO);
+
+        if (verificationDTO.getDismantled() != null) verification.setCounterStatus(verificationDTO.getDismantled());
+        if (verificationDTO.getComment() != null) verification.setComment(verificationDTO.getComment());
+        if (verificationDTO.getSealPresence() != null) verification.setSealPresence(verificationDTO.getSealPresence());
+        if (verificationDTO.getVerificationWithDismantle() != null) verification.setVerificationWithDismantle(verificationDTO.getVerificationWithDismantle());
+
+    }
+
+    private void updateClientDataOfVerification(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
+        if (verificationDTO.getLastName() != null) verification.getClientData().setLastName(verificationDTO.getLastName());
+        if (verificationDTO.getFirstName() != null) verification.getClientData().setFirstName(verificationDTO.getFirstName());
+        if (verificationDTO.getMiddleName() != null) verification.getClientData().setMiddleName(verificationDTO.getMiddleName());
+        if (verificationDTO.getEmail() != null) verification.getClientData().setEmail(verificationDTO.getEmail());
+        if (verificationDTO.getPhone() != null) verification.getClientData().setPhone(verificationDTO.getPhone());
+        if (verificationDTO.getSecondPhone() != null) verification.getClientData().setSecondPhone(verificationDTO.getSecondPhone());
+        if (verificationDTO.getRegion() != null) verification.getClientData().getClientAddress().setRegion(verificationDTO.getRegion());
+        if (verificationDTO.getDistrict() != null) verification.getClientData().getClientAddress().setDistrict(verificationDTO.getDistrict());
+        if (verificationDTO.getLocality() != null) verification.getClientData().getClientAddress().setLocality(verificationDTO.getLocality());
+        if (verificationDTO.getStreet() != null) verification.getClientData().getClientAddress().setStreet(verificationDTO.getStreet());
+        if (verificationDTO.getBuilding() != null) verification.getClientData().getClientAddress().setBuilding(verificationDTO.getBuilding());
+        if (verificationDTO.getFlat() != null) verification.getClientData().getClientAddress().setFlat(verificationDTO.getFlat());
+        if (verificationDTO.getMailIndex() != null) verification.getClientData().getClientAddress().setMailIndex(verificationDTO.getMailIndex());
+    }
+
+    private void updateCounterDataOfVerification(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
+        CounterType counterType = calibratorService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
+                verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
+        Counter counter = verification.getCounter();
+        if (counter == null) {
+            counter = new Counter();
         }
-        // updating addition info
+        if (verificationDTO.getReleaseYear() != null) counter.setReleaseYear(verificationDTO.getReleaseYear());
+        if (verificationDTO.getDateOfDismantled() != null) counter.setDateOfDismantled(verificationDTO.getDateOfDismantled());
+        if (verificationDTO.getDateOfMounted() != null) counter.setDateOfMounted(verificationDTO.getDateOfMounted());
+        if (verificationDTO.getNumberCounter() != null) counter.setNumberCounter(verificationDTO.getNumberCounter());
+        if (verificationDTO.getAccumulatedVolume() != null) counter.setAccumulatedVolume(verificationDTO.getAccumulatedVolume());
+        counter.setCounterType(counterType);
+    }
+
+    private void updateAdditionalInfoOfVerification(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
+
         AdditionalInfo info = verification.getInfo();
         if (info == null) {
             info = new AdditionalInfo();
         }
-        info.setEntrance(verificationDTO.getEntrance());
-        info.setDoorCode(verificationDTO.getDoorCode());
-        info.setFloor(verificationDTO.getFloor());
-        info.setDateOfVerif(verificationDTO.getDateOfVerif());
-        info.setServiceability(verificationDTO.getServiceability());
-        info.setNoWaterToDate(verificationDTO.getNoWaterToDate());
-        info.setNotes(verificationDTO.getNotes());
+
+        if (verificationDTO.getEntrance() != null) info.setEntrance(verificationDTO.getEntrance());
+        if (verificationDTO.getDoorCode() != null) info.setDoorCode(verificationDTO.getDoorCode());
+        if (verificationDTO.getFloor() != null) info.setFloor(verificationDTO.getFloor());
+        if (verificationDTO.getDateOfVerif() != null) info.setDateOfVerif(verificationDTO.getDateOfVerif());
+        if (verificationDTO.getServiceability() != null) info.setServiceability(verificationDTO.getServiceability());
+        if (verificationDTO.getNoWaterToDate() != null) info.setNoWaterToDate(verificationDTO.getNoWaterToDate());
+        if (verificationDTO.getNotes() != null) info.setNotes(verificationDTO.getNotes());
+
         if (verificationDTO.getTimeFrom() != null && verificationDTO.getDateOfVerif() != null) {
             info.setTimeFrom(verificationDTO.getTimeFrom());
             info.setTimeTo(verificationDTO.getTimeTo());
         }
+    }
 
-        Organization provider = providerService.findById(verificationDTO.getProviderId());
-        Device device = deviceService.getById(verificationDTO.getDeviceId());
-        if (provider == null || device == null) {
-            throw new RuntimeException();
+    private void updateProviderOfVerification(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
+        if (verificationDTO.getProviderId() != null) {
+            Organization provider = providerService.findById(verificationDTO.getProviderId());
+            verification.setProvider(provider);
         }
+    }
 
-        // updating verification data
-        verification.setClientData(clientData);
-        verification.setProvider(provider);
-        verification.setDevice(device);
-        verification.setCalibrator(calibrator);
-        verification.setInfo(info);
-        if (!updateAll) {
-            verification.setCounterStatus(verificationDTO.getDismantled());
-            verification.setComment(verificationDTO.getComment());
-            verification.setSealPresence(verificationDTO.getSealPresence());
-            verification.setVerificationWithDismantle(verificationDTO.getVerificationWithDismantle());
+    private void updateDeviceTypeOfVerification(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
+        if (verificationDTO.getDeviceId() != null) {
+            Device device = deviceService.getById(verificationDTO.getDeviceId());
+            verification.setDevice(device);
         }
     }
 }

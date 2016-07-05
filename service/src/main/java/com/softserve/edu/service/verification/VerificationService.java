@@ -229,4 +229,5 @@ public interface VerificationService {
                                                                                          String telephone, String verificationWithDismantle, String notes, String sortCriteria, String sortOrder);
 
     void updateAdditionalInfoNotes(String comment, String id);
+
 }
