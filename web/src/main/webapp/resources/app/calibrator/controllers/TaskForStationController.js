@@ -253,7 +253,9 @@ angular
                         });
                 };
 
-                $scope.openVerificationListModal = function (calibrationTaskID) {
+                $scope.openVerificationListModal = function (calibrationTaskID, dateOfTask, nameOfStationOrTeam) {
+                    $rootScope.dateOfTaskModalView = dateOfTask;
+                    $rootScope.nameOfStationOrTeamModalView = nameOfStationOrTeam;
                     var verificationsModal;
                     $rootScope.taskForTeam = $scope.forBrigades;
                     verificationsModal = $modal

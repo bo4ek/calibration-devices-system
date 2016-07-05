@@ -867,5 +867,7 @@
     "ERROR_DELETING_PROTOCOL": "Error deleting protocol",
     "BUILDING_SHORT": "Build.",
     "FLAT_SHORT": "Fl.",
-    "DATE_OF_ENTRY": "Entry"
+    "DATE_OF_ENTRY": "Entry",
+    "TIME": "Time",
+    "PERFORMER_OF_THE_WORK": "Performer of the work"
 }
