@@ -869,5 +869,6 @@
     "FLAT_SHORT": "Fl.",
     "DATE_OF_ENTRY": "Entry",
     "TIME": "Time",
-    "PERFORMER_OF_THE_WORK": "Performer of the work"
+    "PERFORMER_OF_THE_WORK": "Performer of the work",
+    "NO_DATE": "No date"
 }
