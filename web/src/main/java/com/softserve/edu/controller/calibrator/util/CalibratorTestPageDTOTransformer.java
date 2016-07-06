@@ -17,7 +17,6 @@ public class CalibratorTestPageDTOTransformer {
                     calibrationTest.getName(),
                     calibrationTest.getDateTest(),
                     calibrationTest.getCapacity(),
-                 //   calibrationTest.getSettingNumber(),
                     calibrationTest.getLatitude(),
                     calibrationTest.getLongitude(),
                     calibrationTest.getConsumptionStatus(),

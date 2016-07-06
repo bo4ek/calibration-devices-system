@@ -120,9 +120,6 @@ public class CalibratorVerificationController {
             httpStatus = HttpStatus.FORBIDDEN;
             return new ResponseEntity(httpStatus);
         }
-
-        System.out.println(verificationDTO);
-
         updateVerificationData(verification, verificationDTO);
         verificationService.saveVerification(verification);
         return new ResponseEntity(httpStatus);

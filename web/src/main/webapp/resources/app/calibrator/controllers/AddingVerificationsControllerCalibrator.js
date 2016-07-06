@@ -343,8 +343,8 @@ angular.module('employeeModule')
                                 toaster.pop('error', $filter('translate')('INFORMATION'),
                                     $filter('translate')('ERROR_WHILE_CREATING_VERIFICATIONS'));
                             }
-                        }
-                    );
+                            }
+                        );
                 }
             };
 
@@ -447,131 +447,6 @@ angular.module('employeeModule')
                 $scope.selectedData.selectedStreet = "";
                 $scope.selectedData.selectedBuilding = "";
                 $scope.selectedData.firstDeviceCount = '1';
-            };
-
-
-            /**
-             * Fill application sending page from verification when some verification is checked and user clicks "Create by pattern"
-             * @param ID - Id of verification to fill from
-             */
-            $scope.createNew = function () {
-                var verifID;
-                if ($scope.verificationID) {
-                    verifID = $scope.verificationID;
-                } else {
-                    verifID = $rootScope.verifIDforTempl;
-                }
-                if (verifID) {
-                    verificationServiceCalibrator.getVerificationById(verifID).then(function (verification) {
-
-                        $scope.verification = verification;
-                        $scope.formData = {};
-                        $scope.formData.lastName = $scope.verification.data.lastName;
-                        $scope.formData.firstName = $scope.verification.data.firstName;
-                        $scope.formData.middleName = $scope.verification.data.middleName;
-                        $scope.formData.email = $scope.verification.data.email;
-                        $scope.formData.phone = $scope.verification.data.phone;
-                        $scope.formData.flat = $scope.verification.data.flat;
-                        $scope.formData.mailIndex = $scope.verification.data.mailIndex;
-                        $scope.formData.comment = $scope.verification.data.comment;
-
-                        $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null)
-                            ? $scope.verification.data.dismantled : true;
-                        $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null)
-                            ? $scope.verification.data.verificationWithDismantle : true;
-                        $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null)
-                            ? $scope.verification.data.sealPresence : true;
-                        $scope.selectedData.dateOfDismantled = $scope.verification.data.dateOfDismantled;
-                        $scope.selectedData.dateOfMounted = $scope.verification.data.dateOfMounted;
-                        $scope.selectedData.numberCounter = $scope.verification.data.numberCounter;
-                        $scope.selectedData.releaseYear = $scope.verification.data.releaseYear;
-                        $scope.formData.accumulatedVolume = $scope.verification.data.accumulatedVolume;
-
-                        $scope.addInfo.entrance = $scope.verification.data.entrance;
-                        $scope.addInfo.doorCode = $scope.verification.data.doorCode;
-                        $scope.addInfo.floor = $scope.verification.data.floor;
-                        $scope.addInfo.dateOfVerif = $scope.verification.data.dateOfVerif;
-                        if ($scope.verification.data.timeFrom && $scope.verification.data.timeTo) {
-                            $scope.addInfo.timeFrom = moment($scope.verification.data.timeFrom, "HH:mm");
-                            $scope.fillTimeToForEdit()
-                        } else {
-                            $scope.updateTimepicker();
-                        }
-                        $scope.addInfo.serviceability = ($scope.verification.data.serviceability !== null)
-                            ? $scope.verification.data.serviceability : true;
-                        $scope.addInfo.noWaterToDate = $scope.verification.data.noWaterToDate;
-                        $scope.addInfo.notes = $scope.verification.data.notes;
-
-                        $scope.selectedData.selectedBuilding = $scope.verification.data.building;
-
-                        dataReceivingService.findAllRegions().then(function (respRegions) {
-                            $scope.regions = respRegions.data;
-                            var index = arrayObjectIndexOf($scope.regions, $scope.verification.data.region, "designation");
-                            $scope.selectedData.region = $scope.regions[index];
-
-                            dataReceivingService.findDistrictsByRegionId($scope.selectedData.region.id)
-                                .then(function (districts) {
-                                    $scope.districts = districts.data;
-                                    var index = arrayObjectIndexOf($scope.districts, $scope.verification.data.district, "designation");
-                                    $scope.selectedData.district = $scope.districts[index];
-
-                                    dataReceivingService.findLocalitiesByDistrictId($scope.selectedData.district.id)
-                                        .then(function (localities) {
-                                            $scope.localities = localities.data;
-                                            var index = arrayObjectIndexOf($scope.localities, $scope.verification.data.locality, "designation");
-                                            $scope.selectedData.locality = $scope.localities[index];
-
-                                            dataReceivingService.findStreetsByLocalityId($scope.selectedData.locality.id)
-                                                .then(function (streets) {
-                                                    $scope.streets = streets.data;
-                                                    var index = arrayObjectIndexOf($scope.streets, $scope.verification.data.street, "designation");
-                                                    $scope.selectedData.selectedStreet = $scope.streets[index];
-                                                });
-                                        });
-                                });
-                        });
-
-                        if ($scope.verification.data.deviceName) {
-                            dataReceivingService.findAllDevices().then(function (devices) {
-                                $scope.devices = devices.data;
-                                var index = arrayObjectIndexOf($scope.devices, $scope.verification.data.deviceName, "designation");
-                                $scope.selectedData.firstSelectedDevice = $scope.devices[index];
-                            });
-
-                            dataReceivingService.findAllDeviceTypes().then(function (deviceTypes) {
-                                $scope.deviceTypes = deviceTypes.data;
-                                var index = arrayIndexOf($scope.deviceTypes, $scope.verification.data.deviceType);
-                                $scope.selectedData.firstSelectedDeviceType = $scope.deviceTypes[index];
-
-                                if ($scope.verification.data.symbol) {
-                                    dataReceivingService.findAllSymbols($scope.verification.data.deviceType).then(function (respSymbols) {
-                                        $scope.symbols = respSymbols.data;
-                                        var index = arrayIndexOf($scope.symbols, $scope.verification.data.symbol);
-                                        $scope.selectedData.counterSymbol = $scope.symbols[index];
-
-                                        dataReceivingService.findStandardSizesBySymbol($scope.selectedData.counterSymbol, $scope.verification.data.deviceType)
-                                            .then(function (standardSizes) {
-                                                $scope.standardSizes = standardSizes.data;
-                                                var index = arrayIndexOf($scope.standardSizes, $scope.verification.data.standardSize);
-                                                $scope.selectedData.counterStandardSize = $scope.standardSizes[index];
-                                            });
-                                    });
-
-                                }
-                            });
-                        }
-
-                        dataReceivingService.findProvidersForCalibratorByType($scope.verification.data.deviceType).then(function (providers) {
-                            $scope.providers = providers.data;
-                            var index = arrayObjectIndexOf($scope.providers, $scope.verification.data.calibratorName, "designation");
-                            $scope.selectedData.firstSelectedProvider = $scope.providers[index];
-                        });
-
-                    });
-                } else {
-                    toaster.pop('warning', $filter('translate')('CREATE_BY_PATTERN_WARNING'));
-                }
-
             };
 
             /**
@@ -766,6 +641,131 @@ angular.module('employeeModule')
 
                 }
             }
+
+            /**
+             * Fill application sending page from verification when some verification is checked and user clicks "Create by pattern"
+             * @param ID - Id of verification to fill from
+             */
+            $scope.createNew = function () {
+                var verifID;
+                if ($scope.verificationID) {
+                    verifID = $scope.verificationID;
+                } else {
+                    verifID = $rootScope.verifIDforTempl;
+                }
+                if (verifID) {
+                    verificationServiceCalibrator.getVerificationById(verifID).then(function (verification) {
+
+                        $scope.verification = verification;
+                        $scope.formData = {};
+                        $scope.formData.lastName = $scope.verification.data.lastName;
+                        $scope.formData.firstName = $scope.verification.data.firstName;
+                        $scope.formData.middleName = $scope.verification.data.middleName;
+                        $scope.formData.email = $scope.verification.data.email;
+                        $scope.formData.phone = $scope.verification.data.phone;
+                        $scope.formData.secondPhone = $scope.verification.data.secondPhone;
+                        $scope.formData.flat = $scope.verification.data.flat;
+                        $scope.formData.mailIndex = $scope.verification.data.mailIndex;
+                        $scope.formData.comment = $scope.verification.data.comment;
+
+                        $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null) ? $scope.verification.data.dismantled : true;
+                        $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null) ? $scope.verification.data.verificationWithDismantle : true;
+                        $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null) ? $scope.verification.data.sealPresence : true;
+                        $scope.selectedData.dateOfDismantled = $scope.verification.data.dateOfDismantled;
+                        $scope.selectedData.ViewDateOfDismantled = (new Date($scope.selectedData.dateOfDismantled)).toLocaleDateString();
+                        $scope.selectedData.dateOfMounted = $scope.verification.data.dateOfMounted;
+                        $scope.selectedData.ViewDatedateOfMounted = (new Date($scope.selectedData.dateOfMounted)).toLocaleDateString();
+                        $scope.selectedData.numberCounter = $scope.verification.data.numberCounter;
+                        $scope.selectedData.releaseYear = $scope.verification.data.releaseYear;
+                        $scope.formData.accumulatedVolume = $scope.verification.data.accumulatedVolume;
+
+                        $scope.addInfo.entrance = $scope.verification.data.entrance;
+                        $scope.addInfo.doorCode = $scope.verification.data.doorCode;
+                        $scope.addInfo.floor = $scope.verification.data.floor;
+                        $scope.addInfo.dateOfVerif = $scope.verification.data.dateOfVerif;
+                        $scope.addInfo.ViewDateOfVerif = (new Date($scope.addInfo.dateOfVerif)).toLocaleDateString();
+                        if ($scope.verification.data.timeFrom && $scope.verification.data.timeTo) {
+                            $scope.addInfo.timeFrom = moment($scope.verification.data.timeFrom, "HH:mm");
+                            $scope.fillTimeToForEdit()
+                        } else {
+                            $scope.updateTimepicker();
+                        }
+                        $scope.addInfo.serviceability = ($scope.verification.data.serviceability !== null) ? $scope.verification.data.serviceability : true;
+                        $scope.addInfo.noWaterToDate = $scope.verification.data.noWaterToDate;
+                        $scope.addInfo.ViewNoWaterToDate = (new Date($scope.addInfo.noWaterToDate)).toLocaleDateString();
+                        $scope.addInfo.notes = $scope.verification.data.notes;
+
+                        $scope.selectedData.selectedBuilding = $scope.verification.data.building;
+
+                        dataReceivingService.findAllRegions().then(function (respRegions) {
+                            $scope.regions = respRegions.data;
+                            var index = arrayObjectIndexOf($scope.regions, $scope.verification.data.region, "designation");
+                            $scope.selectedData.region = $scope.regions[index];
+
+                            dataReceivingService.findDistrictsByRegionId($scope.selectedData.region.id)
+                                .then(function (districts) {
+                                    $scope.districts = districts.data;
+                                    var index = arrayObjectIndexOf($scope.districts, $scope.verification.data.district, "designation");
+                                    $scope.selectedData.district = $scope.districts[index];
+
+                                    dataReceivingService.findLocalitiesByDistrictId($scope.selectedData.district.id)
+                                        .then(function (localities) {
+                                            $scope.localities = localities.data;
+                                            var index = arrayObjectIndexOf($scope.localities, $scope.verification.data.locality, "designation");
+                                            $scope.selectedData.locality = $scope.localities[index];
+
+                                            dataReceivingService.findStreetsByLocalityId($scope.selectedData.locality.id)
+                                                .then(function (streets) {
+                                                    $scope.streets = streets.data;
+                                                    var index = arrayObjectIndexOf($scope.streets, $scope.verification.data.street, "designation");
+                                                    $scope.selectedData.selectedStreet = $scope.streets[index];
+                                                });
+                                        });
+                                });
+                        });
+
+                        if ($scope.verification.data.deviceName) {
+                            dataReceivingService.findAllDevices().then(function (devices) {
+                                $scope.devices = devices.data;
+                                var index = arrayObjectIndexOf($scope.devices, $scope.verification.data.deviceName, "designation");
+                                $scope.selectedData.firstSelectedDevice = $scope.devices[index];
+                            });
+
+                            dataReceivingService.findAllDeviceTypes().then(function (deviceTypes) {
+                                $scope.deviceTypes = deviceTypes.data;
+                                var index = arrayIndexOf($scope.deviceTypes, $scope.verification.data.deviceType);
+                                $scope.selectedData.firstSelectedDeviceType = $scope.deviceTypes[index];
+
+                                if ($scope.verification.data.symbol) {
+                                    dataReceivingService.findAllSymbols($scope.verification.data.deviceType).then(function (respSymbols) {
+                                        $scope.symbols = respSymbols.data;
+                                        var index = arrayIndexOf($scope.symbols, $scope.verification.data.symbol);
+                                        $scope.selectedData.counterSymbol = $scope.symbols[index];
+
+                                        dataReceivingService.findStandardSizesBySymbol($scope.selectedData.counterSymbol, $scope.verification.data.deviceType)
+                                            .then(function (standardSizes) {
+                                                $scope.standardSizes = standardSizes.data;
+                                                var index = arrayIndexOf($scope.standardSizes, $scope.verification.data.standardSize);
+                                                $scope.selectedData.counterStandardSize = $scope.standardSizes[index];
+                                            });
+                                    });
+
+                                }
+                            });
+                        }
+
+                        dataReceivingService.findProvidersForCalibratorByType($scope.verification.data.deviceType).then(function (providers) {
+                            $scope.providers = providers.data;
+                            var index = arrayObjectIndexOf($scope.providers, $scope.verification.data.calibratorName, "designation");
+                            $scope.selectedData.firstSelectedProvider = $scope.providers[index];
+                        });
+
+                    });
+                } else {
+                    toaster.pop('warning', $filter('translate')('CREATE_BY_PATTERN_WARNING'));
+                }
+
+            };
 
             /**
              * if the form was opened for editing current verification data,

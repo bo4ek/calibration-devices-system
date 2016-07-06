@@ -17,7 +17,6 @@ public class OrganizationStageVerificationDTOTransformer {
                                   Device device, Boolean verificationWithDismantle) {
 
         String calibratorName = (calibrator != null) ? calibrator.getName() : null;
-
         String entrance = (info == null || info.getEntrance() == 0) ? null : "" + info.getEntrance();
         String doorCode = (info == null || info.getDoorCode() == 0) ? null : "" + info.getDoorCode();
         String floor = (info == null || info.getFloor() == 0) ? null : "" + info.getFloor();
@@ -28,17 +27,13 @@ public class OrganizationStageVerificationDTOTransformer {
         String timeFrom = (info != null && info.getTimeFrom() != null) ? info.getTimeFrom().toString() : null;
         String timeTo = (info != null && info.getTimeTo() != null) ? info.getTimeTo().toString() : null;
 
-        Long dateOfDismantled = ( counter != null && counter.getDateOfDismantled() != null) ?
-                counter.getDateOfDismantled().getTime() : null;
-        Long dateOfMounted = (counter != null && counter.getDateOfMounted() != null) ?
-                counter.getDateOfMounted().getTime() : null;
+        Long dateOfDismantled = (counter != null && counter.getDateOfDismantled() != null) ? counter.getDateOfDismantled().getTime() : null;
+        Long dateOfMounted = (counter != null && counter.getDateOfMounted() != null) ? counter.getDateOfMounted().getTime() : null;
         String numberCounter = (counter != null) ? counter.getNumberCounter() : null;
         String releaseYear = (counter != null) ? counter.getReleaseYear() : null;
         String accumulatedVolume = (counter != null) ? counter.getAccumulatedVolume() : null;
-        String symbol = (counter != null && counter.getCounterType() != null)
-                ? counter.getCounterType().getSymbol() : null;
-        String standardSize = (counter != null && counter.getCounterType() != null) ?
-                counter.getCounterType().getStandardSize() : null;
+        String symbol = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getSymbol() : null;
+        String standardSize = (counter != null && counter.getCounterType() != null) ? counter.getCounterType().getStandardSize() : null;
         String deviceName = device.getDeviceName();
         Device.DeviceType deviceType = device.getDeviceType();
         Long deviceId = device.getId();
