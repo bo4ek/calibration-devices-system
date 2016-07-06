@@ -589,7 +589,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             setAdditionalInfo(verification.getInfo(), entrance, floor, times);
         }
 
-        if (verifications[0].getCalibrationModule() != null && verifications[0].getCalibrationModule().getModuleType().equals(CalibrationModule.ModuleType.INSTALLATION_PORT)) {
+        if (verifications[0].getTask().getModule().getModuleType().equals(CalibrationModule.ModuleType.INSTALLATION_PORT)) {
             dataXls.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
             dataXls.add(new TableExportColumn(Constants.PROVIDER, provider));
             dataXls.add(new TableExportColumn(Constants.REGION, district));
@@ -616,7 +616,6 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             dataXls.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
             dataXls.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
             dataXls.add(new TableExportColumn(Constants.COMMENT, comment));
-            dataXls.add(new TableExportColumn(Constants.NOTES, note));
             dataXls.add(new TableExportColumn(Constants.COUNTER_SYMBOL, symbols));
             dataXls.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, standartSize));
             dataXls.add(new TableExportColumn(Constants.COUNTER_NUMBER, counterNumber));
@@ -766,7 +765,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     }
 
     private String getNotes(Verification verification) {
-        return getComent(verification) + " , " + Constants.ENTRANCE + ": " + getEntrance(verification.getInfo()) + ", " + Constants.DOORCODE + ": " + getDoorCode(verification.getInfo()) + ", " + Constants.FLOOR + ": " + getFloor(verification.getInfo());
+        return getNote(verification) + " , " + Constants.ENTRANCE + ": " + getEntrance(verification.getInfo()) + ", " + Constants.DOORCODE + ": " + getDoorCode(verification.getInfo()) + ", " + Constants.FLOOR + ": " + getFloor(verification.getInfo());
     }
 
     private String getTime(AdditionalInfo info) {
@@ -813,8 +812,12 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         return verification.getProvider().getName();
     }
 
+    public String getNote(Verification verification) {
+        return verification.getInfo() != null && verification.getInfo().getNotes() != null ? verification.getInfo().getNotes().toString() : " ";
+    }
+
     public String getComent(Verification verification) {
-        return verification.getInfo() != null && verification.getInfo().getNotes().toString() != null ? verification.getInfo().getNotes().toString() : " ";
+        return verification.getComment() != null ? verification.getComment().toString() : " ";
     }
 
     public String getTime(Verification verification) {
