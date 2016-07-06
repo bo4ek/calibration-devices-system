@@ -108,8 +108,10 @@ public class NewVerificationsQueryConstructorCalibrator {
                                             String fullNameToSearch, String streetToSearch, String region, String district, String locality, String status, User calibratorEmployee, String standardSize, String symbol,
                                             String nameProvider, String realiseYear, String dismantled, String building, String flat, String numberCounter, String comment, String employeeSearchName) {
 
-        String userName = calibratorEmployee.getUsername();
+
         Predicate queryPredicate = cb.conjunction();
+        // Temporary asks by owner's
+        /*String userName = calibratorEmployee.getUsername();
         Set<UserRole> roles = calibratorEmployee.getUserRoles();
         for (UserRole userRole : roles) {
             String role = userRole.name();
@@ -120,7 +122,7 @@ public class NewVerificationsQueryConstructorCalibrator {
                 Predicate searchByCalibratorEmployee = cb.or(searchPredicateByUsername, searchPredicateByEmptyField);
                 queryPredicate = cb.and(searchByCalibratorEmployee);
             }
-        }
+        }*/
 
         if (status != null) {
             queryPredicate = cb.and(cb.equal(root.get("status"), Status.valueOf(status.trim())), queryPredicate);
