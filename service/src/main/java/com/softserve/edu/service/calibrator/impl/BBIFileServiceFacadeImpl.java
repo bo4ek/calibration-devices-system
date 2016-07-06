@@ -91,7 +91,6 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
     private StreetService streetService;
 
 
-
     @Transactional
     public DeviceTestData parseBBIFile(File BBIFile, String originalFileName, boolean taskForStation) throws IOException, DecoderException, InvalidImageInBbiException {
         inStream = FileUtils.openInputStream(BBIFile);
@@ -553,7 +552,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
                 verificationData.get(Constants.DATE), device);
 
         AdditionalInfo additionalInfo = new AdditionalInfo();
-        additionalInfo.setNotes(Constants.DIVIDE_NOTES + "  " + verificationData.get(Constants.COMMENT) + "  ");
+        additionalInfo.setNotes("__" + Constants.DIVIDE_NOTES + "  " + verificationData.get(Constants.COMMENT) + "__");
         additionalInfoRepository.save(additionalInfo);
         verification.setInfo(additionalInfo);
         List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION, device.getDeviceType());
