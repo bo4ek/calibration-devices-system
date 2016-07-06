@@ -451,13 +451,13 @@ public class VerificationServiceImpl implements VerificationService {
             AdditionalInfo additionalInfo = verification.getInfo();
             String currentComment = additionalInfo.getNotes();
             if (currentComment == null) {
-                additionalInfo.setNotes(Constants.DIVIDE_NOTES + comment + "  ");
+                additionalInfo.setNotes("__" + Constants.DIVIDE_NOTES + comment + "__");
                 additionalInfoRepository.save(additionalInfo);
-            } else if (currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) == -1) {
-                additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment + "  ");
+            } else if (currentComment.lastIndexOf("__" + Constants.DIVIDE_NOTES.charAt(0)) == -1) {
+                additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment + "__");
                 additionalInfoRepository.save(additionalInfo);
             } else if (!currentComment.substring(currentComment.lastIndexOf(Constants.DIVIDE_NOTES.charAt(0)) + 1).equals(comment)) {
-                additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment + "  ");
+                additionalInfo.setNotes(currentComment + Constants.DIVIDE_NOTES + comment + "__");
                 additionalInfoRepository.save(additionalInfo);
             }
         }
