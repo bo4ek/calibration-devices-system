@@ -604,6 +604,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             dataXls.add(new TableExportColumn(Constants.DESIRABLE_TIME, times));
             dataXls.add(new TableExportColumn(Constants.VERIFICATION_ID, id));
             dataXls.add(new TableExportColumn(Constants.COMMENT, comment));
+            dataXls.add(new TableExportColumn(Constants.NOTES, note));
         } else {
             dataXls.add(new TableExportColumn(Constants.TASK_DATE, taskDate));
             dataXls.add(new TableExportColumn(Constants.PROVIDER, provider));
@@ -615,6 +616,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             dataXls.add(new TableExportColumn(Constants.FULL_NAME_SHORT, fullName));
             dataXls.add(new TableExportColumn(Constants.PHONE_NUMBER, telephone));
             dataXls.add(new TableExportColumn(Constants.COMMENT, comment));
+            dataXls.add(new TableExportColumn(Constants.NOTES, note));
             dataXls.add(new TableExportColumn(Constants.COUNTER_SYMBOL, symbols));
             dataXls.add(new TableExportColumn(Constants.COUNTER_TYPE_SIZE, standartSize));
             dataXls.add(new TableExportColumn(Constants.COUNTER_NUMBER, counterNumber));
@@ -764,7 +766,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     }
 
     private String getNotes(Verification verification) {
-        return Constants.ENTRANCE + ": " + getEntrance(verification.getInfo()) + ", " + Constants.DOORCODE + ": " + getDoorCode(verification.getInfo()) + ", " + Constants.FLOOR + ": " + getFloor(verification.getInfo()) + ", " + getComent(verification);
+        return getComent(verification) + " , " + Constants.ENTRANCE + ": " + getEntrance(verification.getInfo()) + ", " + Constants.DOORCODE + ": " + getDoorCode(verification.getInfo()) + ", " + Constants.FLOOR + ": " + getFloor(verification.getInfo());
     }
 
     private String getTime(AdditionalInfo info) {
@@ -812,7 +814,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     }
 
     public String getComent(Verification verification) {
-        return verification.getComment() != null ? verification.getComment().toString() : " ";
+        return verification.getInfo() != null && verification.getInfo().getNotes().toString() != null ? verification.getInfo().getNotes().toString() : " ";
     }
 
     public String getTime(Verification verification) {
