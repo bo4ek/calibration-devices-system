@@ -161,13 +161,14 @@ public class CalibratorPlanningTaskController {
             ClientData clientData = verification.getClientData();
             Address address = clientData.getClientAddress();
             if (verification.getQueue() == 0 && verification.getInfo() != null && verification.getInfo().getTimeFrom() != null) {
-                verification.setQueue(setQueueByTime(verification) + queryResult.getSize());
+                verification.setQueue(setQueueByTime(verification) - queryResult.getSize());
             }
             content.add(new VerificationPlanningTaskDTO(verification.getSentToCalibratorDate(), verification.getId(),
                     verification.getProvider().getName(), address.getDistrict(), address.getStreet(),
                     address.getBuilding(), address.getFlat(), clientData.getFullName(),
                     clientData.getPhone(), verification.getInfo(), verification.getQueue(), verification.getStatus().toString(), verification.isCounterStatus()));
         }
+
         Collections.sort(content);
         return new PageDTO<>(queryResult.getTotalElements(), content);
     }

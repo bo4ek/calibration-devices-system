@@ -70,20 +70,16 @@ angular
 
                 $scope.inputQueue = function (verification, input, allverification) {
 
-                    allverification.forEach(function (item, i, allverification) {
-                        item.queue = i;
-                    });
-
                     var current = verification.queue;
 
                     if (input < current) {
-                        allverification.forEach(function (item, i, allverification) {
+                        allverification.forEach(function (item) {
                             if (item.queue >= input && item.queue < current) {
                                 item.queue++;
                             }
                         });
                     } else if (input > current) {
-                        allverification.forEach(function (item, i, allverification) {
+                        allverification.forEach(function (item) {
                             if (item.queue > current && item.queue <= input) {
                                 item.queue--;
                             }
@@ -196,6 +192,9 @@ angular
                                 sortCriteria, sortOrder, taskID)
                                 .success(function (result) {
                                     $scope.resultsCount = result.totalItems;
+                                    result.content.forEach(function (item, i) {
+                                        item.queue = i;
+                                    });
                                     $defer.resolve(result.content);
                                     $scope.verifications = result.content;
                                     params.total(result.totalItems);
