@@ -204,6 +204,7 @@ public class DigitalVerificationProtocolsCalibratorController {
         verification.setStateVerificatorEmployee(null);
         verification.setExpirationDate(null);
         verification.setTask(null);
+        verification.setQueue(0);
         verification.setRejectedMessage(null);
         verification.setComment(null);
         if (verification.getCounter().getDateOfDismantled() == null) {

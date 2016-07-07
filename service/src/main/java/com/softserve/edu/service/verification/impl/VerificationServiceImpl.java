@@ -941,6 +941,7 @@ public class VerificationServiceImpl implements VerificationService {
         verification.setStatus(Status.IN_PROGRESS);
         verification.setTaskStatus(Status.PLANNING_TASK);
         verification.setTask(null);
+        verification.setQueue(0);
         verificationRepository.save(verification);
     }
 
