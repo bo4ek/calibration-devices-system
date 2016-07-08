@@ -1291,4 +1291,14 @@ public class VerificationServiceImpl implements VerificationService {
         return null;
     }
 
+    /**
+     * find all by taskId
+     *
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Verification> findAllByTaskId(String taskId) {
+        return verificationRepository.findByTaskId(Long.valueOf(taskId));
+    }
 }

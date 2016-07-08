@@ -1,15 +1,19 @@
 package com.softserve.edu.controller.calibrator;
 
+import com.softserve.edu.controller.calibrator.util.CalibrationModuleDTOTransformer;
 import com.softserve.edu.controller.calibrator.util.CalibratorTestPageDTOTransformer;
 import com.softserve.edu.controller.provider.util.VerificationPageDTOTransformer;
 import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.dto.*;
+import com.softserve.edu.dto.admin.CalibrationModuleDTO;
 import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
+import com.softserve.edu.dto.calibrator.ModuleAndTaskDTO;
 import com.softserve.edu.dto.calibrator.RejectedVerificationPageDTO;
 import com.softserve.edu.dto.provider.*;
 import com.softserve.edu.dto.verificator.RejectedInfoFilterSearch;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
 import com.softserve.edu.entity.device.Device;
@@ -21,17 +25,18 @@ import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
+import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.RejectedInfo;
+import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
-import com.softserve.edu.service.calibrator.BBIFileServiceFacade;
-import com.softserve.edu.service.calibrator.BbiFileService;
-import com.softserve.edu.service.calibrator.CalibratorEmployeeService;
-import com.softserve.edu.service.calibrator.CalibratorService;
+import com.softserve.edu.service.calibrator.*;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.catalogue.RejectedInfoService;
+import com.softserve.edu.service.exceptions.InvalidModuleSerialNumberException;
+import com.softserve.edu.service.exceptions.PermissionDeniedException;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.state.verificator.StateVerificatorService;
 import com.softserve.edu.service.tool.DeviceService;
@@ -105,6 +110,12 @@ public class CalibratorVerificationController {
 
     @Autowired
     BBIFileServiceFacade bbiFileServiceFacade;
+
+    @Autowired
+    CalibrationModuleService calibrationModuleService;
+
+    @Autowired
+    CalibratorPlanningTaskService planningTaskService;
 
     @RequestMapping(value = "edit/{verificationID}", method = RequestMethod.PUT)
     public ResponseEntity editVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
@@ -738,6 +749,56 @@ public class CalibratorVerificationController {
             rejectedInfoDTOs.add(new RejectedInfoDTO(rejectedInfo.getId(), rejectedInfo.getName()));
         }
         return rejectedInfoDTOs;
+    }
+
+    /**
+     * receive all workers by calibrator
+     *
+     * @return
+     */
+    @RequestMapping(value = "/receiveAllWorkers", method = RequestMethod.GET)
+    public List<RejectedInfoDTO> receiveAllWorkers(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails) {
+        Organization organization = organizationService.findOneById(userDetails.getOrganizationId());
+        List<CalibrationModule> modules = calibrationModuleService.findAllByCalibrator(organization.getAdditionInfoOrganization().getCodeEDRPOU());
+        List list = CalibrationModuleDTOTransformer.toDtofromList(modules);
+        return list;
+    }
+
+    /**
+     * change worker for tasks
+     *
+     * @return
+     */
+    @RequestMapping(value = "/changeWorker", method = RequestMethod.PUT)
+    public ResponseEntity receiveAllWorkers(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                            @RequestBody ModuleAndTaskDTO moduleAndTaskDTO) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        List<Verification> list = verificationService.findAllByTaskId(moduleAndTaskDTO.getTaskId());
+        List<String> listIds = new ArrayList<>(list.size());
+        for (Verification verification : list) {
+            listIds.add(verification.getId());
+        }
+        try {
+            planningTaskService.addNewTaskForStation(moduleAndTaskDTO.getDateOfTask(), moduleAndTaskDTO.getModuleSerialNumber(), listIds, userDetails.getUsername());
+        } catch (Exception e) {
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+        return new ResponseEntity<>(httpStatus);
+    }
+
+    /**
+     * change worker for tasks
+     *
+     * @return
+     */
+    @RequestMapping(value = "/checkStationByDateOfTask", method = RequestMethod.PUT)
+    public ResponseEntity checkStationByDateOfTask(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails,
+                                                   @RequestBody ModuleAndTaskDTO moduleAndTaskDTO) {
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        if (!calibrationModuleService.checkStationByDateOfTask(moduleAndTaskDTO.getDateOfTask(), moduleAndTaskDTO.getModuleSerialNumber())) {
+            httpStatus = HttpStatus.OK;
+        }
+        return new ResponseEntity<>(httpStatus);
     }
 
     /**

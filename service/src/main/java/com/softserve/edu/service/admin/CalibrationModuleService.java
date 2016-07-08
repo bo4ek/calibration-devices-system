@@ -38,4 +38,7 @@ public interface CalibrationModuleService {
 
     List<CalibrationModule> findAllByCalibrator(String CodeEDRPOU);
 
+    CalibrationModule findModuleBySerialNumber(String serialNumber);
+
+    boolean checkStationByDateOfTask(Date dateOfTask, String moduleSerialNumber);
 }

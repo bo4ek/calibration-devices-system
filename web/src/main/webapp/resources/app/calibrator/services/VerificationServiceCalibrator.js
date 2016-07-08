@@ -109,6 +109,15 @@ angular
             },
             receiveAllReasons: function () {
                 return getData('verifications/receiveAllReasons/')
+            },
+            receiveAllWorkers: function () {
+                return getData('verifications/receiveAllWorkers/')
+            },
+            changeWorkers: function (data) {
+                return updateData('changeWorker/', data)
+            },
+            checkStationByDateOfTask: function (data) {
+                return updateData('checkStationByDateOfTask/', data)
             }
         };
 

@@ -230,4 +230,5 @@ public interface VerificationService {
 
     void updateAdditionalInfoNotes(String comment, String id);
 
+    List<Verification> findAllByTaskId(String taskId);
 }

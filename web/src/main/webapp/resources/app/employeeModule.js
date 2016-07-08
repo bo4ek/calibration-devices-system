@@ -359,6 +359,7 @@
         'calibrator/controllers/CalibrationTestAddControllerCalibrator',
         'calibrator/controllers/TaskForStationController',
         'calibrator/controllers/VerificationListModalController',
+        'calibrator/controllers/catalogue/ChangeStationOrTeamModalController',
         'calibrator/controllers/AddingVerificationsControllerCalibrator',
         'calibrator/controllers/NotStandardNotificationsControllerCalibrator',
         'calibrator/controllers/PlaningTaskNotificationsControllerCalibrator',

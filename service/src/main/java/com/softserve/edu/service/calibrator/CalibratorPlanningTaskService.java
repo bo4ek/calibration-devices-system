@@ -30,7 +30,7 @@ public interface CalibratorPlanningTaskService {
 
     Boolean addNewTaskForStation(Date taskDate, String serialNumber, List<String> verificationsId, String userId) throws PermissionDeniedException, InvalidModuleSerialNumberException;
 
-    Boolean addNewTaskForTeam (Date taskDate, String serialNumber, List<String> verificationsId, String userId) throws PermissionDeniedException;
+    Boolean addNewTaskForTeam(Date taskDate, String serialNumber, List<String> verificationsId, String userId) throws PermissionDeniedException;
 
     long findVerificationsByCalibratorEmployeeAndTaskStatusCount(String userName);
 
@@ -45,4 +45,6 @@ public interface CalibratorPlanningTaskService {
 
     @Transactional
     void sendTaskToTeam(Long id, String senderUsername) throws Exception;
+
+    CalibrationTask findOneById(Long id);
 }

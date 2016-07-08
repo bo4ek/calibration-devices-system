@@ -1,0 +1,40 @@
+<form id="rejectVerification" name="rejectVerification" class="form-group"
+      ng-submit="submit()" novalidate>
+    <div class="modal-header col-md-offset-1">
+        <h3 class="modal-title">{{'CHOOSE' | translate}} {{'INSTALLATION_NUMBER' | translate}}</h3>
+    </div>
+
+
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-10 form-group">
+                <ui-select class="form-control" type="text"
+                           theme="select2"
+                           ng-model="modules.serialNumber"
+                           ng-change="checkStation($select.selected.serialNumber)"
+                           search-enabled="true">
+                    <ui-select-match>
+                        {{$select.selected.serialNumber}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="module in modules | filter: $select.search">
+                        <span ng-bind-html="module.serialNumber"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-offset-1 col-md-10 form-group">
+                <span ng-if="showMessege">{{ 'STATION_HAS_TASK_ON_THIS_DATE' | translate }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-success pull-left" type="submit" ng-if="access">
+            {{ 'CONFIRM' | translate }}
+        </button>
+
+        <button class="btn btn-danger pull-right" type="button" ng-click="cancel()">
+            {{ 'CANCEL' | translate }}
+        </button>
+    </div>
+
+</form>

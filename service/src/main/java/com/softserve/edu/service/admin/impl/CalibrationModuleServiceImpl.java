@@ -3,6 +3,7 @@ package com.softserve.edu.service.admin.impl;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.repository.CalibrationModuleRepository;
+import com.softserve.edu.repository.CalibrationPlanningTaskRepository;
 import com.softserve.edu.repository.UserRepository;
 import com.softserve.edu.service.admin.CalibrationModuleService;
 import com.softserve.edu.service.utils.filter.Filter;
@@ -20,10 +21,16 @@ import java.util.*;
 
 @Service
 public class CalibrationModuleServiceImpl implements CalibrationModuleService {
+
     @Autowired
     CalibrationModuleRepository calibrationModuleRepository;
+
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CalibrationPlanningTaskRepository calibrationPlanningTaskRepository;
+
     private Logger logger = Logger.getLogger(CalibrationModule.class);
 
     public CalibrationModule addCalibrationModule(CalibrationModule calibrationModule) {
@@ -34,6 +41,11 @@ public class CalibrationModuleServiceImpl implements CalibrationModuleService {
 
     public CalibrationModule findModuleById(Long calibrationModuleId) {
         return calibrationModuleRepository.findOne(calibrationModuleId);
+    }
+
+    @Override
+    public CalibrationModule findModuleBySerialNumber(String serialNumber) {
+        return calibrationModuleRepository.findBySerialNumber(serialNumber);
     }
 
     public void deleteCalibrationModule(Long moduleId) {
@@ -116,4 +128,10 @@ public class CalibrationModuleServiceImpl implements CalibrationModuleService {
         return calibrationModuleRepository.findEarliestDateAvailableCalibrationModule();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkStationByDateOfTask(Date dateOfTask, String moduleSerialNumber) {
+        CalibrationModule calibrationModule = calibrationModuleRepository.findBySerialNumber(moduleSerialNumber);
+        return calibrationPlanningTaskRepository.findByDateOfTaskAndModuleSerialNumber(dateOfTask, calibrationModule) != null ? false : true;
+    }
 }

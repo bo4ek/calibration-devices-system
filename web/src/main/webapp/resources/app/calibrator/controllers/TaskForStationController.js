@@ -14,9 +14,10 @@ angular
             '$timeout',
             'toaster',
             'CalibrationTaskServiceCalibrator',
+            'VerificationServiceCalibrator',
             '$location',
             function ($rootScope, $scope, $modal, $http, $filter, $q,
-                      ngTableParams, $translate, $timeout, toaster, CalibrationTaskServiceCalibrator, $location) {
+                      ngTableParams, $translate, $timeout, toaster, CalibrationTaskServiceCalibrator, verificationServiceCalibrator, $location) {
 
                 $scope.pageContent = [];
                 $scope.taskIDs = [];
@@ -246,10 +247,14 @@ angular
                             if (result.status == 200) {
                                 toaster.pop('success', $filter('translate')('INFORMATION'),
                                     $filter('translate')('DATE_OF_TASK_CHANGED'));
+                            } else if (result.status == 403) {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_CHANGE_DATE_OF_TASK'));
                             } else {
                                 toaster.pop('error', $filter('translate')('INFORMATION'),
                                     $filter('translate')('ERROR_WHILE_CHANGING_TASK_DATE'));
                             }
+                            $scope.tableParams.reload();
                         });
                 };
 
@@ -277,7 +282,7 @@ angular
                     });
                 };
 
-                $scope.refreshTable = function() {
+                $scope.refreshTable = function () {
                     $scope.tableParams.reload();
                 };
 
@@ -311,16 +316,16 @@ angular
                                 : CalibrationTaskServiceCalibrator.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder, $scope.allTests);
 
                             request.success(function (result) {
-                                    $scope.resultsCount = result.totalItems;
-                                    $defer.resolve(result.content);
-                                    params.total(result.totalItems);
-                                    $scope.calendars = {};
-                                    for (var i = 0; i < result.content.length; i++) {
-                                        $scope.calendars[result.content[i].taskID] = false;
-                                    }
-                                }, function (result) {
-                                    $log.debug('error fetching data:', result);
-                                });
+                                $scope.resultsCount = result.totalItems;
+                                $defer.resolve(result.content);
+                                params.total(result.totalItems);
+                                $scope.calendars = {};
+                                for (var i = 0; i < result.content.length; i++) {
+                                    $scope.calendars[result.content[i].taskID] = false;
+                                }
+                            }, function (result) {
+                                $log.debug('error fetching data:', result);
+                            });
                         }
                     }
                 );
@@ -346,5 +351,56 @@ angular
                         $scope.tableParams.reload();
                     });
                 }
+
+                $scope.changeModule = function (taskId, dateOfTask) {
+                    $rootScope.dateOfTask = dateOfTask;
+                    var modalInstance = $modal.open({
+                        animation: true,
+                        templateUrl: 'resources/app/calibrator/views/modals/change-stationOrTeam-modal.html',
+                        controller: 'ChangeStationOrTeamModalController',
+                        size: 'xs',
+                        windowClass: 'xx-dialog',
+                        resolve: {
+                            modules: function () {
+                                return verificationServiceCalibrator.receiveAllWorkers()
+                                    .success(function (modules) {
+                                            return modules;
+                                        }
+                                    );
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function (serialNumber) {
+                        var dto = {};
+                        dto.moduleSerialNumber = serialNumber;
+                        dto.taskId = taskId;
+                        dto.dateOfTask = $rootScope.dateOfTask
+                        verificationServiceCalibrator.changeWorkers(dto).then(function (data) {
+                            switch (data.status) {
+                                case 200:
+                                {
+                                    toaster.pop('success', $filter('translate')('INFORMATION'),
+                                        $filter('translate')('SUCCESSFUL_EDITED'));
+                                    $scope.tableParams.reload();
+                                    break;
+                                }
+                                case 403:
+                                {
+                                    toaster.pop('error', $filter('translate')('INFORMATION'),
+                                        $filter('translate')('ERROR_WHILE_CREATING_TASK'));
+                                    break;
+                                }
+                                default:
+                                {
+                                    toaster.pop('error', $filter('translate')('INFORMATION'),
+                                        $filter('translate')('SAVE_VERIF_ERROR'));
+                                }
+                            }
+                        });
+
+                    });
+                    $scope.tableParams.reload();
+                };
 
             }]);

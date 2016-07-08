@@ -74,6 +74,9 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
     @Autowired
     CalibratorEmployeeService calibratorEmployeeService;
 
+    @Autowired
+    CalibrationPlanningTaskRepository calibrationPlanningTaskRepository;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -159,11 +162,7 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
             throw new IllegalArgumentException();
         }
         task.setDateOfTask(dateOfTask);
-        try {
-            taskRepository.save(task);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
+        taskRepository.save(task);
     }
 
     /**
@@ -264,6 +263,11 @@ public class CalibratorPlaningTaskServiceImpl implements CalibratorPlanningTaskS
         }
         verificationRepository.save(verifications);
         return taskAlreadyExists;
+    }
+
+    @Override
+    public CalibrationTask findOneById(Long id) {
+        return calibrationPlanningTaskRepository.findOne(id);
     }
 
     /**

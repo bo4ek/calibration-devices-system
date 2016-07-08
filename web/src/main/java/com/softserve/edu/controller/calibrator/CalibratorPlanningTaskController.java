@@ -70,6 +70,12 @@ public class CalibratorPlanningTaskController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CalibrationModuleService calibrationModuleService;
+
+    @Autowired
+    CalibratorPlanningTaskService calibratorPlanningTaskService;
+
     private Logger logger = Logger.getLogger(CalibratorPlanningTaskController.class);
 
     /**
@@ -109,10 +115,10 @@ public class CalibratorPlanningTaskController {
 
     @RequestMapping(value = "forTeam/{pageNumber}/{itemsPerPage}/{sortCriteria}/{sortOrder}/{allTests}", method = RequestMethod.GET)
     public PageDTO<TaskForTeamDTO> getSortedAndFilteredPageOfCalibrationTasksForTeam(@PathVariable Integer pageNumber,
-                                                                                  @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
-                                                                                  @PathVariable String sortOrder, @PathVariable Boolean allTests,
-                                                                                  CalibrationTaskFilterSearch search,
-                                                                                  @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                                                                     @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
+                                                                                     @PathVariable String sortOrder, @PathVariable Boolean allTests,
+                                                                                     CalibrationTaskFilterSearch search,
+                                                                                     @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         User calibratorEmployee = calibratorEmployeeService.oneCalibratorEmployee(employeeUser.getUsername());
 
         ListToPageTransformer<CalibrationTask> queryResult = taskService.findPageOfCalibrationTasks(pageNumber, itemsPerPage,
@@ -133,7 +139,7 @@ public class CalibratorPlanningTaskController {
             content.add(new TaskForTeamDTO(task.getId(), task.getDateOfTask(), task.getTeam().getName(),
                     task.getTeam().getLeaderFullName(), task.getTeam().getLeaderPhone(), task.getStatus(), numOfVerifications, numOfCompletedVerifications));
         }
-        return  new PageDTO<>(queryResult.getTotalItems(), content);
+        return new PageDTO<>(queryResult.getTotalItems(), content);
     }
 
     /**
@@ -184,11 +190,15 @@ public class CalibratorPlanningTaskController {
     public ResponseEntity changeTaskDate(@PathVariable Long taskID, @RequestBody Date dateOfTask,
                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
-        try {
-            taskService.changeTaskDate(taskID, dateOfTask);
-        } catch (Exception e) {
-            logger.error("User " + employeeUser.getUsername() + "can not change task date", e);
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        if (calibrationModuleService.checkStationByDateOfTask(dateOfTask, calibratorPlanningTaskService.findOneById(taskID).getModule().getSerialNumber())) {
+            try {
+                taskService.changeTaskDate(taskID, dateOfTask);
+            } catch (Exception e) {
+                logger.error("User " + employeeUser.getUsername() + "can not change task date", e);
+                httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        } else {
+            httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity(httpStatus);
     }
@@ -217,7 +227,7 @@ public class CalibratorPlanningTaskController {
 
     @RequestMapping(value = "/sendTaskToTeam", method = RequestMethod.POST)
     public ResponseEntity sendTaskToTeam(@RequestBody List<Long> taskIDs,
-                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
+                                         @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
         try {
             for (Long taskID : taskIDs) {
