@@ -318,7 +318,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
             throw new InvalidVerificationCodeException();
         }
         for (Verification verification : verifications) {
-            if (verification.getStatus().equals(Status.SENT_TO_TEST_DEVICE) | verification.getStatus().equals(Status.SENT_TO_DISMANTLING_TEAM)) {
+            if (verification.getStatus().equals(Status.SENT_TO_TEST_DEVICE)) {
                 return verification;
             }
         }
