@@ -193,6 +193,8 @@ public class DigitalVerificationProtocolsCalibratorController {
         verification.setTaskStatus(Status.PLANNING_TASK);
         verification.setCalibrationTests(null);
         verification.setVerificationDate(null);
+        verification.setStateVerificator(null);
+        verification.setStateVerificatorEmployee(null);
         verification.setSentToVerificatorDate(null);
         verification.setVerificationTime(null);
         verification.setSignProtocolDate(null);
