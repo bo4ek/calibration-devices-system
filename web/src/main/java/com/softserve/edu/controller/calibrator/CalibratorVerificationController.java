@@ -29,6 +29,7 @@ import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.entity.verification.calibration.CalibrationTest;
 import com.softserve.edu.entity.verification.calibration.RejectedInfo;
 import com.softserve.edu.service.admin.CalibrationModuleService;
+import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.*;
@@ -116,6 +117,9 @@ public class CalibratorVerificationController {
 
     @Autowired
     CalibratorPlanningTaskService planningTaskService;
+
+    @Autowired
+    CounterTypeService counterTypeService;
 
     @RequestMapping(value = "edit/{verificationID}", method = RequestMethod.PUT)
     public ResponseEntity editVerification(@RequestBody OrganizationStageVerificationDTO verificationDTO,
@@ -883,8 +887,12 @@ public class CalibratorVerificationController {
     }
 
     private void updateCounterDataOfVerification(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
-        CounterType counterType = calibratorService.findOneBySymbolAndStandardSizeAndDeviceId(verificationDTO.getSymbol(),
-                verificationDTO.getStandardSize(), verificationDTO.getDeviceId());
+        System.out.println(verificationDTO.getSymbol());
+        System.out.println(verificationDTO.getStandardSize());
+        System.out.println(verificationDTO.getDeviceId());
+        List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(verificationDTO.getSymbol(),
+                verificationDTO.getStandardSize());
+        CounterType counterType = getCounterTypeByDeviceType(counterTypes, verificationDTO.getDeviceType());
         Counter counter = verification.getCounter();
         if (counter == null) {
             counter = new Counter();
@@ -930,5 +938,12 @@ public class CalibratorVerificationController {
             Device device = deviceService.getById(verificationDTO.getDeviceId());
             verification.setDevice(device);
         }
+    }
+
+    private CounterType getCounterTypeByDeviceType(List<CounterType> counterTypes, Device.DeviceType deviceType) {
+        for (CounterType counterType : counterTypes) {
+            if (counterType.getDevice().getDeviceType().equals(deviceType)) return counterType;
+        }
+        return null;
     }
 }
