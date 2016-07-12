@@ -80,7 +80,7 @@ angular
                         $scope.opts.ranges[$filter('translate')('THIS_WEEK')] = [moment().startOf('week'), moment().endOf('week')];
                         $scope.opts.ranges[$filter('translate')('THIS_MONTH')] = [moment().startOf('month'), moment().endOf('month')];
                         $scope.opts.ranges[$filter('translate')('LAST_MONTH')] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
-                        $scope.opts.ranges[$filter('translate')('ALL_TIME')] = [$scope.defaultDate.startDate, $scope.defaultDate.endDate];
+                        $scope.opts.ranges[$filter('translate')('ALL_TIME')] = [moment("2015-12-31", "YYYY-MM-DD"), moment()];
                     };
 
                     $scope.setTypeDataLangDatePicker();
@@ -304,13 +304,10 @@ angular
                             var sortCriteria = Object.keys(params.sorting())[0];
                             var sortOrder = params.sorting()[sortCriteria];
                             params.filter().isForStation = true;
-                            if (!$scope.isDateDefault()) {
-                                params.filter().startDateToSearch = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
+
+                            params.filter().startDateToSearch = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                                 params.filter().endDateToSearch = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
-                            } else {
-                                params.filter().startDateToSearch = null;
-                                params.filter().endDateToSearch = null;
-                            }
+
 
                             var request = $scope.forBrigades ? CalibrationTaskServiceCalibrator.getForTeam(params.page(), params.count(), params.filter(), sortCriteria, sortOrder, $scope.allTests)
                                 : CalibrationTaskServiceCalibrator.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder, $scope.allTests);

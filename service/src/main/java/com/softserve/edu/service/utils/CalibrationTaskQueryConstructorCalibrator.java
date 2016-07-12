@@ -107,7 +107,7 @@ public class CalibrationTaskQueryConstructorCalibrator {
 
             LocalDate startDate = LocalDate.parse(startDateToSearch, dbDateTimeFormatter);
             LocalDate endDate = LocalDate.parse(endDateToSearch, dbDateTimeFormatter);
-            queryPredicate = cb.and(cb.between(root.get("createTaskDate"), java.sql.Date.valueOf(startDate),
+            queryPredicate = cb.and(cb.between(root.get("dateOfTask"), java.sql.Date.valueOf(startDate),
                     java.sql.Date.valueOf(endDate)), queryPredicate);
 
         }
