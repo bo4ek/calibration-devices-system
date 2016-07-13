@@ -26,12 +26,12 @@
 
         <tr>
             <th>{{'DATE_TIME' | translate}}</th>
-            <th>{{calibrationTestData.testDate}}</th>
+            <th>{{calibrationTestData.testDate | date: 'dd-MM-yyyy'}}</th>
         </tr>
 
         <tr>
-            <th>{{'ORGANIZATION_SERVICE_TYPE_ADMIN' | translate}}</th>
-            <th>{{calibrationTestData.capacity}}</th>
+            <th>{{'SERVICE_TYPE' | translate}}</th>
+            <th>{{calibrationTestData.serviceType | translate}}</th>
         </tr>
 
         <tr>
@@ -41,7 +41,7 @@
 
         <tr>
             <th>{{'INSTALLMENT NUMBER' | translate}}</th>
-            <th>{{calibrationTestData.installmentNumber}}</th>
+            <th>{{calibrationTestData.serialNumber}}</th>
         </tr>
 
         <tr>
