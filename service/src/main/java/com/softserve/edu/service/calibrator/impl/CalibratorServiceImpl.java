@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+
 @Setter
 @Service
 public class CalibratorServiceImpl implements CalibratorService {
@@ -65,7 +66,7 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Override
     @Transactional
     public void uploadBbi(InputStream fileStream, String verificationId,
-                         String originalFileFullName) throws IOException{
+                          String originalFileFullName) throws IOException {
         Optional<Verification> retrievedVerification = Optional.ofNullable(verificationRepository.findOne(verificationId));
         Verification verification = retrievedVerification.get();
         uploadBbi(fileStream, verification, originalFileFullName);
@@ -74,7 +75,7 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Override
     @Transactional
     public void uploadBbi(InputStream fileStream, Verification verification,
-                          String originalFileFullName) throws IOException{
+                          String originalFileFullName) throws IOException {
         fileOperations.putBbiFile(fileStream, verification.getId(), originalFileFullName);
         BbiProtocol bbiProtocol = new BbiProtocol(originalFileFullName, verification);
         Set<BbiProtocol> bbiProtocolsOfVerification = verification.getBbiProtocols();
@@ -118,7 +119,7 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Transactional
     public void assignCalibratorEmployee(String verificationId, User calibratorEmployee) {
         Verification verification = verificationRepository.findOne(verificationId);
-        if(verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
+        if (verification.getCalibrator().getId().equals(calibratorEmployee.getOrganization().getId())) {
             verification.setCalibratorEmployee(calibratorEmployee);
             verification.setReadStatus(Verification.ReadStatus.READ);
             verification.setSentToCalibratorDate(new Date());
@@ -174,6 +175,11 @@ public class CalibratorServiceImpl implements CalibratorService {
     @Override
     public int getNumOfCompletedVerifications(CalibrationTask task) {
         return verificationRepository.countCompletedByTaskId(task);
+    }
+
+    @Override
+    public int getNumOfNotAcceptedVerifications(CalibrationTask task) {
+        return verificationRepository.countNotAcceptedByTaskId(task);
     }
 
     @Override

@@ -105,9 +105,10 @@ public class CalibratorPlanningTaskController {
         for (CalibrationTask task : queryResult) {
             int numOfVerifications = calibratorService.getNumOfVerifications(task.getId());
             int numOfCompletedVerifications = calibratorService.getNumOfCompletedVerifications(task);
+            int numOfNotAcceptedVerifications = calibratorService.getNumOfNotAcceptedVerifications(task);
             if (allTests || (numOfVerifications > 0 && numOfVerifications > numOfCompletedVerifications)) {
                 content.add(new CalibrationTaskDTO(task.getId(), task.getModule().getSerialNumber(), task.getDateOfTask(), task.getModule().getModuleType(), task.getModule().getEmployeeFullName(),
-                        task.getModule().getTelephone(), task.getStatus(), numOfVerifications, numOfCompletedVerifications));
+                        task.getModule().getTelephone(), task.getStatus(), numOfVerifications, numOfCompletedVerifications, numOfNotAcceptedVerifications));
             }
         }
         return new PageDTO<>(queryResult.getTotalElements(), content);

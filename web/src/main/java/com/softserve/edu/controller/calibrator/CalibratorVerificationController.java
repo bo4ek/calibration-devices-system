@@ -887,9 +887,6 @@ public class CalibratorVerificationController {
     }
 
     private void updateCounterDataOfVerification(Verification verification, OrganizationStageVerificationDTO verificationDTO) {
-        System.out.println(verificationDTO.getSymbol());
-        System.out.println(verificationDTO.getStandardSize());
-        System.out.println(verificationDTO.getDeviceId());
         List<CounterType> counterTypes = counterTypeService.findBySymbolAndStandardSize(verificationDTO.getSymbol(),
                 verificationDTO.getStandardSize());
         CounterType counterType = getCounterTypeByDeviceType(counterTypes, verificationDTO.getDeviceType());

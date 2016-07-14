@@ -47,7 +47,7 @@
                                     <tr ng-repeat="moduleTask in $data"
                                         ng-class="{ 'info': moduleTask.status === 'SENT_TO_TEST_DEVICE' }">
                                         <td data-title="''"><input type="checkbox"
-                                                                   ng-hide="moduleTask.numOfVerifications > 0 && moduleTask.numOfVerifications == moduleTask.numOfCompletedVerifications "
+                                                                   ng-hide="(moduleTask.numOfVerifications > 0 && moduleTask.numOfVerifications == moduleTask.numOfCompletedVerifications) || moduleTask.numOfNotAcceptedVerifications > 0 "
                                                                    ng-click="resolveTaskID(moduleTask.taskID)"/>
                                         </td>
                                         <td data-title="'DATE_OF_TASK' | translate" sortable="'dateOfTask'"
@@ -86,7 +86,7 @@
                                         </td>
                                         <td data-title="'COUNT_OF_VERIFICATION' | translate">
                                             {{ moduleTask.numOfVerifications }}
-                                            ({{moduleTask.numOfCompletedVerifications}})
+                                            ({{moduleTask.numOfCompletedVerifications}} / {{moduleTask.numOfNotAcceptedVerifications}})
                                         </td>
                                         <td data-title="'ACTIONS' | translate" style="width: 12%"
                                             class="control_buttons">

@@ -12,9 +12,9 @@ import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 public class OrganizationStageVerificationDTOTransformer {
 
     public static OrganizationStageVerificationDTO toDtoFromVerification(ClientData clientData,
-                                  Address address, String verificationId, Organization calibrator, String comment,
-                                  AdditionalInfo info, Boolean dismantled, Boolean sealPresence, Counter counter,
-                                  Device device, Boolean verificationWithDismantle) {
+                                                                         Address address, String verificationId, Organization calibrator, String comment,
+                                                                         AdditionalInfo info, Boolean dismantled, Boolean sealPresence, Counter counter,
+                                                                         Device device, Boolean verificationWithDismantle, Long taskId, Long groupId, Integer queue) {
 
         String calibratorName = (calibrator != null) ? calibrator.getName() : null;
         String entrance = (info == null || info.getEntrance() == 0) ? null : "" + info.getEntrance();
@@ -41,6 +41,6 @@ public class OrganizationStageVerificationDTOTransformer {
 
         return new OrganizationStageVerificationDTO(clientData, comment, address, verificationId, calibratorName, entrance, doorCode, floor, dateOfVerif,
                 serviceability, noWaterToDate, notes, timeFrom, timeTo, dismantled, dateOfDismantled, dateOfMounted, numberCounter,
-                releaseYear, accumulatedVolume,symbol, standardSize, deviceName, sealPresence, deviceType, deviceId, verificationWithDismantle);
+                releaseYear, accumulatedVolume, symbol, standardSize, deviceName, sealPresence, deviceType, deviceId, verificationWithDismantle, taskId, groupId, queue);
     }
 }

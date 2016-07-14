@@ -15,6 +15,24 @@ body {
     color: black;
 }
 
+.rejectedProviderClass {
+    background: rgba(2255, 161, 132, 0.55);
+    color: black;
+}
+
+.glyphicon-exclamation-sign {
+    color: crimson;
+}
+
+.glyphicon-info-sign {
+    color: #00b3ee;
+}
+
+.notAcceptedClass {
+    background: rgba(246, 255, 39, 0.55);
+    color: black;
+}
+
 .sent-to-provider {
     background: rgba(255, 161, 132, 0.55);
     color: black;
@@ -125,7 +143,7 @@ body {
 @media (min-width: 768px) {
     #page-wrapper {
         position: inherit;
-    / / margin : 0 0 0 250 px;
+    / / margin: 0 0 0 250 px;
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
     }
@@ -235,7 +253,7 @@ body {
     .sidebar {
         z-index: 1;
         position: absolute;
-    / / width : 250 px;
+    / / width: 250 px;
         margin-top: 56px;
     }
 
@@ -613,7 +631,6 @@ form[name='CalibrationTestForm'] .not-processed-result {
     background-color: #46b8da;
 }
 
-
 form[name='CalibrationTestForm'] #header-column {
     float: left;
     width: 185px;
@@ -623,17 +640,17 @@ form[name='CalibrationTestForm'] table {
     overflow: scroll;
 }
 
-form[name='CalibrationTestForm'] table .title-cell{
+form[name='CalibrationTestForm'] table .title-cell {
     height: 51px;
 }
 
-form[name='CalibrationTestForm'] table .title-cell > td{
+form[name='CalibrationTestForm'] table .title-cell > td {
     padding-top: 0;
     padding-bottom: 0;
 }
 
 form[name='CalibrationTestForm'] .control-label {
-   /* width: 90px;*/
+    /* width: 90px;*/
 }
 
 form[name='CalibrationTestForm'] .image-td {
@@ -721,9 +738,9 @@ form[name='CalibrationTestForm'] #testColumnHead {
 }
 
 .test-image img {
-     width: 640px;
-     height: 480px;
- }
+    width: 640px;
+    height: 480px;
+}
 
 .test-image-large img {
     width: 960px;
@@ -748,7 +765,7 @@ form[name='CalibrationTestForm'] tr > td {
     min-height: 30px;
 }
 
-.verification-list-modal .modal-dialog  {
+.verification-list-modal .modal-dialog {
     width: 100%;
 }
 
@@ -756,7 +773,6 @@ form[name='CalibrationTestForm'] tr > td {
     width: 100%;
     text-align: center;
 }
-
 
 form[name='handheldProtocolForm'] #reason {
     width: 100%;
@@ -799,6 +815,7 @@ form[name='CalibrationTestForm'] #testPN {
     width: 430px;
     height: 322px;
 }
+
 .image img {
 
     -webkit-transition: all 1s ease;
@@ -809,30 +826,29 @@ form[name='CalibrationTestForm'] #testPN {
 
 #box:hover .image img {
     cursor: pointer;
-    transform:scale(1.5);
+    transform: scale(1.5);
 }
 
 #box:hover .image img.rotated90 {
-    -ms-transform:scale(1.5) rotate(90deg);
-    -moz-transform:scale(1.5) rotate(90deg);
-    -webkit-transform:scale(1.5) rotate(90deg);
-    -o-transform:scale(1.5) rotate(90deg);
+    -ms-transform: scale(1.5) rotate(90deg);
+    -moz-transform: scale(1.5) rotate(90deg);
+    -webkit-transform: scale(1.5) rotate(90deg);
+    -o-transform: scale(1.5) rotate(90deg);
 }
 
 #box:hover .image img.rotated180 {
-    -ms-transform:scale(1.5) rotate(180deg);
-    -moz-transform:scale(1.5) rotate(180deg);
-    -webkit-transform:scale(1.5) rotate(180deg);
-    -o-transform:scale(1.5) rotate(180deg);
+    -ms-transform: scale(1.5) rotate(180deg);
+    -moz-transform: scale(1.5) rotate(180deg);
+    -webkit-transform: scale(1.5) rotate(180deg);
+    -o-transform: scale(1.5) rotate(180deg);
 }
 
 #box:hover .image img.rotated270 {
-    -ms-transform:scale(1.5) rotate(270deg);
-    -moz-transform:scale(1.5) rotate(270deg);
-    -webkit-transform:scale(1.5) rotate(270deg);
-    -o-transform:scale(1.5) rotate(270deg);
+    -ms-transform: scale(1.5) rotate(270deg);
+    -moz-transform: scale(1.5) rotate(270deg);
+    -webkit-transform: scale(1.5) rotate(270deg);
+    -o-transform: scale(1.5) rotate(270deg);
 }
-
 
 #missing-document-fields-modal {
     background-color: #FF7878;

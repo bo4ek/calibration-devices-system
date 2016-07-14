@@ -45,7 +45,6 @@ angular
 
                 $scope.openCheckGroupVerificationModal = function (verificationId) {
                     $rootScope.verifIDforEditing = verificationId;
-
                     CalibrationTaskServiceCalibrator.hasVerificationGroup(verificationId)
                         .success(function (response) {
                             $scope.hasGroup = response;
@@ -111,6 +110,9 @@ angular
                     });
                 };
 
+                $scope.refreshTable = function () {
+                    $scope.tableParams.reload();
+                }
 
                 $scope.removeVerificationFromTask = function (verificationId) {
                     CalibrationTaskServiceCalibrator.removeVerificationFromTask(verificationId).then(function (result) {

@@ -46,6 +46,7 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
             if (verification.getClientData() != null && verification.getClientData().getEmail() != null) {
                 mailService.sendAcceptMail(verification.getClientData().getEmail(), verificationId, verification.getDevice().getDeviceType().name());
             }
+
             verification.setReadStatus(Verification.ReadStatus.READ);
             verification.setExpirationDate(null);
             verificationRepository.save(verification);
@@ -72,8 +73,11 @@ public class VerificationProviderEmployeeServiceImpl implements VerificationProv
             if (providerEmployee == null) {
                 verification.setStatus(Status.SENT_TO_PROVIDER);
             } else {
-                if (verification.getVerificationTime() == null) {
+                if (verification.getVerificationTime() == null && verification.getTask() == null) {
                     verification.setStatus(Status.IN_PROGRESS);
+                } else if (verification.getVerificationTime() == null && verification.getTask() != null) {
+                    verification.setStatus(Status.TEST_PLACE_DETERMINED);
+                    verification.setTaskStatus(Status.TEST_PLACE_DETERMINED);
                 } else {
                     verification.setStatus(Status.TEST_COMPLETED);
                 }

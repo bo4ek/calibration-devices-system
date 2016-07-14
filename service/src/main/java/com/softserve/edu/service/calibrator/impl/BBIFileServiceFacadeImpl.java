@@ -555,7 +555,7 @@ public class BBIFileServiceFacadeImpl implements BBIFileServiceFacade {
         additionalInfo.setNotes("__" + Constants.DIVIDE_NOTES + "  " + verificationData.get(Constants.COMMENT) + "__");
         additionalInfoRepository.save(additionalInfo);
         verification.setInfo(additionalInfo);
-        List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION, device.getDeviceType());
+        List<String> listWithOneId = verificationService.saveVerificationCustom(verification, Constants.ONE_VERIFICATION, device.getDeviceType(), null);
         return listWithOneId.get(Constants.FIRST_INDEX_IN_ARRAY);
     }
 

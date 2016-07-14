@@ -6,7 +6,7 @@
 
     <div class="col-md-2">
         <h3>{{'TASK_VERIFICATIONS' | translate }}</h3>
-        </div>
+    </div>
     <div class="col-md-3">
         <span translate="NUMBER_OF_VERIFICATIONS_IN_TASK"></span>: {{ resultsCount }}
     </div>
@@ -20,8 +20,8 @@
         <button class="btn btn-danger btn-xs pull-right "
                 ng-click="closeModal()">
             <span class="glyphicon glyphicon-remove"></span>
-            </button>
-        </div>
+        </button>
+    </div>
 
 </div>
 
@@ -36,9 +36,22 @@
                                 <table show-filter="false" ng-table="tableParams"
                                        class="table table-bordered table-hover table-condensed">
                                     <tbody>
-                                    <tr ng-repeat="verification in $data | orderBy: 'queue' as filtered_result track by  $index">
+                                    <tr ng-repeat="verification in $data | orderBy: 'queue' as filtered_result track by  $index"
+                                        ng-class="{'rejectedProviderClass': verification.status =='CREATED_FOR_PROVIDER'}">
                                         <td data-title="'PROVIDER_NAME' | translate">
                                             {{ verification.providerName }}
+                                            <span class="glyphicon glyphicon-info-sign"
+                                                  ng-hide="verification.status == 'TEST_PLACE_DETERMINED' || verification.status == 'SENT_TO_TEST_DEVICE' || verification.status =='CREATED_FOR_PROVIDER' "
+                                                  popover="{{'WAITING_FOR_PROVIDER_ACCEPT' | translate}}"
+                                                  popover-trigger="mouseenter"
+                                                  popover-placement="top">
+                                            </span>
+                                            <span class="glyphicon glyphicon-exclamation-sign"
+                                                  ng-show="verification.status =='CREATED_FOR_PROVIDER'"
+                                                  popover="{{'WAITING_IN_VERIFICATIONS_FOR_PROVIDER' | translate}}"
+                                                  popover-trigger="mouseenter"
+                                                  popover-placement="top">
+                                            </span>
                                         </td>
                                         <td data-title="'DISTRICT' | translate">
                                             {{ verification.district }}
@@ -98,6 +111,9 @@
                                 </table>
                                 <button type="button" class="btn btn-success pull-right"
                                         ng-click="sendNewQueue()"> {{ 'SAVE' | translate }}
+                                </button>
+                                <button type="button" class="btn btn-warning pull-right"
+                                        ng-click="refreshTable()"> {{ 'REFRESH' | translate }}
                                 </button>
                             </div>
                         </div>

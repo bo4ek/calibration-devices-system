@@ -99,7 +99,7 @@ public class ClientApplicationController {
             verification.setCounter(new Counter());
             verification.setTaskStatus(Status.PLANNING_TASK);
             verification.setSealPresence(true);
-            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
+            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType(), null);
 
             logger.info("Verifications with ids " + String.join(",", verificationIds) + " was created by unauthorized user");
 

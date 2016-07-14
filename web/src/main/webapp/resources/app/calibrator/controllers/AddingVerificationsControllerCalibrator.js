@@ -328,9 +328,9 @@ angular.module('employeeModule')
                 $scope.isMailValid = true;
                 if ($scope.clientForm.$valid) {
                     $scope.fillFormData();
+                    $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif;
                     $scope.formData.providerId = $scope.selectedData.firstSelectedProvider.id;
                     $scope.formData.quantity = $scope.selectedData.firstDeviceCount;
-
                     verificationServiceCalibrator.sendInitiatedVerification($scope.formData)
                         .then(function (data) {
                             $rootScope.$broadcast('calibrator-save-verification');
@@ -345,6 +345,10 @@ angular.module('employeeModule')
                             }
                             }
                         );
+
+                }
+                if ($scope.verificationID) {
+                    $scope.closeModal();
                 }
             };
 
@@ -667,7 +671,9 @@ angular.module('employeeModule')
                         $scope.formData.flat = $scope.verification.data.flat;
                         $scope.formData.mailIndex = $scope.verification.data.mailIndex;
                         $scope.formData.comment = $scope.verification.data.comment;
-
+                        $scope.formData.taskId = $scope.verification.data.taskId;
+                        $scope.formData.queue = $scope.verification.data.queue;
+                        $scope.formData.groupId = $scope.verification.data.groupId;
                         $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null) ? $scope.verification.data.dismantled : true;
                         $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null) ? $scope.verification.data.verificationWithDismantle : true;
                         $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null) ? $scope.verification.data.sealPresence : true;

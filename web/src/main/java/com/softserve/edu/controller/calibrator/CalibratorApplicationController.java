@@ -19,10 +19,13 @@ import com.softserve.edu.entity.user.User;
 import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.Verification;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
+import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 import com.softserve.edu.repository.UserRepository;
 import com.softserve.edu.service.admin.CounterTypeService;
 import com.softserve.edu.service.admin.OrganizationService;
+import com.softserve.edu.service.calibrator.CalibratorPlanningTaskService;
 import com.softserve.edu.service.calibrator.CalibratorService;
+import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
 import com.softserve.edu.service.catalogue.DistrictService;
 import com.softserve.edu.service.catalogue.LocalityService;
 import com.softserve.edu.service.catalogue.RegionService;
@@ -79,6 +82,9 @@ public class CalibratorApplicationController {
 
     @Autowired
     private MailService mail;
+
+    @Autowired
+    private CalibratorPlanningTaskService calibratorPlanningTaskService;
 
     private final Logger logger = Logger.getLogger(CalibratorApplicationController.class);
 
@@ -145,20 +151,36 @@ public class CalibratorApplicationController {
             Organization provider = providerService.findById(verificationDTO.getProviderId());
             Device device = deviceService.getById(verificationDTO.getDeviceId());
 
+            //Creating Verification without ID
 
-              /*Creating Verification without ID*/
-
-            Verification verification = new Verification(new Date(), clientData, provider, device,
+            Verification newVerification = new Verification(new Date(), clientData, provider, device,
                     Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info,
                     verificationDTO.getDismantled(), counter, verificationDTO.getComment(),
                     verificationDTO.getSealPresence(), null, new Date(), Status.PLANNING_TASK,
                     calibratorEmployee, verificationDTO.getVerificationWithDismantle());
 
-            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
+            verificationIds = verificationService.saveVerificationCustom(newVerification, verificationDTO.getQuantity(), device.getDeviceType(), verificationDTO.getGroupId());
+
+            if (verificationDTO.getTaskId() != null) {
+                CalibrationTask task = calibratorPlanningTaskService.findOneById(verificationDTO.getTaskId());
+                for (String id : verificationIds) {
+                    Verification verification = verificationService.findById(id);
+                    verification.setTask(task);
+                    verification.setStatus(Status.SENT_TO_PROVIDER);
+                    verification.setQueue(verificationDTO.getQueue());
+                    if (verificationDTO.getTimeFrom() != null && verificationDTO.getDateOfVerif() != null) {
+                        verification.getInfo().setDateOfVerif(verificationDTO.getDateOfVerif());
+                        verification.getInfo().setTimeFrom(verificationDTO.getTimeFrom());
+                        verification.getInfo().setTimeTo(verificationDTO.getTimeTo());
+                    }
+                    verificationService.saveVerification(verification);
+                }
+            }
+
             if (verificationDTO.getEmail() != null) {
                 String name = clientData.getFirstName() + " " + clientData.getLastName();
-                mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), verification.getProvider().getName(),
-                        verification.getDevice().getDeviceType().toString());
+                mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), newVerification.getProvider().getName(),
+                        newVerification.getDevice().getDeviceType().toString());
             }
         } catch (Exception e) {
             logger.error("Exception while inserting calibrator's verifications into DB ", e);
@@ -186,7 +208,10 @@ public class CalibratorApplicationController {
                     verification.isSealPresence(),
                     verification.getCounter(),
                     verification.getDevice(),
-                    verification.isVerificationWithDismantle()
+                    verification.isVerificationWithDismantle(),
+                    verification.getTask().getId(),
+                    verification.getGroup().getId(),
+                    verification.getQueue()
             );
         } else {
             return null;

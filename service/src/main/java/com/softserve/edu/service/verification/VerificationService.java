@@ -211,7 +211,7 @@ public interface VerificationService {
 
     Set<String> findAllStandardSizes();
 
-    List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType);
+    List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType, Long groupId);
 
     boolean hasVerificationGroup(String verificationId);
 

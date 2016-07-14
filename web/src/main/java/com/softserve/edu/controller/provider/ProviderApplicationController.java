@@ -154,7 +154,7 @@ public class ProviderApplicationController {
                 verification.setStatus(Status.ACCEPTED);
                 verification.setProviderEmployee(user);
             }
-            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType());
+            verificationIds = verificationService.saveVerificationCustom(verification, verificationDTO.getQuantity(), device.getDeviceType(), null);
             if (verificationDTO.getEmail() != null) {
                 String name = clientData.getFirstName() + " " + clientData.getLastName();
                 mail.sendMail(clientData.getEmail(), name, String.join(",", verificationIds), verification.getProvider().getName(),
@@ -252,7 +252,10 @@ public class ProviderApplicationController {
                     verification.isSealPresence(),
                     verification.getCounter(),
                     verification.getDevice(),
-                    verification.isVerificationWithDismantle()
+                    verification.isVerificationWithDismantle(),
+                    null,
+                    null,
+                    0
             );
         } else {
             return null;

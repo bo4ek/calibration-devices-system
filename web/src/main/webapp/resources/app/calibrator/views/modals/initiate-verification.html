@@ -117,7 +117,7 @@
                             </div>
                             <div class="form-group" show-errors>
                                 <label for="phoneNumber" class="col-md-4 control-label">
-                                        {{'PHONE_NUMBER' | translate}}
+                                    {{'PHONE_NUMBER' | translate}}
                                 </label>
                                 <div class="col-md-8 form-group">
                                     <div class="input-group">
@@ -376,7 +376,7 @@
                                     <label>{{'COUNTER' | translate}}</label>
                                 </div>
 
-                                <div class="col-md-8 form-group" >
+                                <div class="col-md-8 form-group">
 
                                     <div class="pull-left col-xs-2">
                                         <ui-select class="form-control" type="text" theme="select2"
@@ -660,7 +660,7 @@
                                     <label for="releaseYear">{{' YEAR OF COUNTER ' |
                                         translate}}</label>
                                 </div>
-                                <div class="col-md-8 form-group"  show-errors>
+                                <div class="col-md-8 form-group" show-errors>
                                     <input type="text"
                                            ng-model="selectedData.releaseYear"
                                            ng-required="selectedData.dismantled"
@@ -678,7 +678,7 @@
                             </div>
 
                             <!--ACCUMULATED VOLUME-->
-                            <div class="form-group" >
+                            <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="accumulatedVolume">{{'ACCUMULATED_VOLUME' | translate}}</label>
                                 </div>
@@ -798,7 +798,7 @@
                                 </div>
                                 <div class="form-group col-md-8" id="timeVerification">
                                     <div class="col-xs-4">
-                                        <timepicker  ng-model="addInfo.timeFrom" hour-step="1" minute-step="15" show-meridian="false" ng-change="updateTimeTo()"></timepicker>
+                                        <timepicker ng-model="addInfo.timeFrom" hour-step="1" minute-step="15" show-meridian="false" ng-change="updateTimeTo()"></timepicker>
                                     </div>
 
                                     <div class="col-xs-4">
@@ -879,11 +879,18 @@
                         ng-click="resetApplicationForm()">
                     {{'CLEAR_FORM'|translate}}
                 </button>
-                <button type="button" class="btn btn-primary" ng-hide="verificationID"
+                <button type="button" class="btn btn-primary"
+                        ng-hide="verificationID"
                         ng-click="createNew()">
                     {{'CREATE_BY_PATTERN'| translate}}
                 </button>
-                <button type="button" class="btn btn-primary" ng-hide="verificationID"
+                <button type="button" class="btn btn-primary"
+                        ng-hide="!verificationID"
+                        ng-click="saveAndCreateByPattern()">
+                    {{'CREATE_BY_PATTERN'| translate}}
+                </button>
+                <button type="button" class="btn btn-primary"
+                        ng-hide="verificationID"
                         ng-click="saveAndCreateByPattern()">
                     {{'SAVE_AND_CREATE_BY_PATTERN'| translate}}
                 </button>

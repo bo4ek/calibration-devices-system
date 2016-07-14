@@ -700,6 +700,7 @@ public class VerificationServiceImpl implements VerificationService {
         verification.setRejectedCalibratorDate(new Date());
         verification.setRejectedInfo(rejectedInfo);
         verification.setTaskStatus(Status.PLANNING_TASK);
+        verification.setTask(null);
         verificationRepository.save(verification);
     }
 
@@ -1108,7 +1109,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     @Transactional
-    public synchronized List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType) {
+    public synchronized List<String> saveVerificationCustom(Verification verification, Byte quantity, Device.DeviceType deviceType, Long groupId) {
         List<String> verificationIds = new ArrayList<>();
         Set<Verification> verifications = new HashSet<>();
         String id;
@@ -1128,8 +1129,13 @@ public class VerificationServiceImpl implements VerificationService {
 
         long count = verificationRepository.countByIdStartingWith(datePart);
 
-        VerificationGroup group = new VerificationGroup();
-        groupRepository.save(group);
+        VerificationGroup group;
+        if (groupId == null) {
+            group = new VerificationGroup();
+            groupRepository.save(group);
+        } else {
+            group = groupRepository.findOne(groupId);
+        }
 
         for (byte i = 0; i < quantity; i++) {
             id = datePart + String.format("%05d", count += 1);

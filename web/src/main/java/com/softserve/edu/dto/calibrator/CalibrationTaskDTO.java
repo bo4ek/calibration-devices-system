@@ -35,6 +35,8 @@ public class CalibrationTaskDTO {
 
     private Integer numOfCompletedVerifications;
 
+    private Integer numOfNotAcceptedVerifications;
+
     public CalibrationTaskDTO() {
     }
 
@@ -50,6 +52,16 @@ public class CalibrationTaskDTO {
         this.numOfVerifications = numOfVerifications;
         this.status = status.toString();
         this.numOfCompletedVerifications = numOfCompletedVerifications;
+
+    }
+
+    public CalibrationTaskDTO(Long taskID, String moduleSerialNumber, Date dateOfTask,
+                              CalibrationModule.ModuleType moduleType, String employeeFullName, String telephone,
+                              Status status, Integer numOfVerifications, Integer numOfCompletedVerifications, Integer numOfNotAcceptedVerifications) {
+
+        this(taskID, moduleSerialNumber, dateOfTask, moduleType, employeeFullName, telephone, status, numOfVerifications, numOfCompletedVerifications);
+        this.numOfNotAcceptedVerifications = numOfNotAcceptedVerifications;
+
     }
 
     private Integer countNumberOfTestedVerification(Set<Verification> verifications) {

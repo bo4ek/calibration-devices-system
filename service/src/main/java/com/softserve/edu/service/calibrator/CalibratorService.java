@@ -43,5 +43,7 @@ public interface CalibratorService {
 
     int getNumOfCompletedVerifications(CalibrationTask task);
 
+    int getNumOfNotAcceptedVerifications(CalibrationTask task);
+
     int getNumOfRemovedMeters(CalibrationTask task);
 }
