@@ -477,7 +477,6 @@ angular.module('employeeModule')
             $scope.initDatePicker = function () {
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.selectedData.dateOfDismantled);
                     $scope.defaultDate = angular.copy($scope.selectedData.dateOfMounted);
                     $scope.defaultDate = angular.copy($scope.addInfo.dateOfVerif);
@@ -520,9 +519,9 @@ angular.module('employeeModule')
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('uk'); 
                 } else {
-                    moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('en'); 
                 }
             };
 

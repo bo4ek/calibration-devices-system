@@ -468,7 +468,6 @@ angular
                         size: 'md',
                         resolve: {
                             response: function () {
-                                //todo need to find verificators by agreements(договорах)
                                 return verificationServiceCalibrator.getVerificators()
                                     .success(function (verificators) {
                                         $log.debug(verificators);
@@ -478,7 +477,6 @@ angular
                         }
                     });
 
-                    //executes when modal closing
                     modalInstance.result.then(function (verificator) {
 
                         var dataToSend = {

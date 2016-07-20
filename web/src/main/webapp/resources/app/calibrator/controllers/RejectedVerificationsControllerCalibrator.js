@@ -11,14 +11,12 @@ angular
 
             $scope.clearAll = function () {
                 $scope.tableParams.filter({});
-                $scope.clearDate(); // sets 'all time' timerange
+                $scope.clearDate(); 
             };
 
 
             $scope.clearDate = function () {
-                //daterangepicker doesn't support null dates
                 $scope.myDatePicker.pickerDate = $scope.defaultDate;
-                //setting corresponding filters with 'all time' range
                 $scope.tableParams.filter()['starDate'] = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                 $scope.tableParams.filter()['endDate'] = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
@@ -41,16 +39,13 @@ angular
                 
                 $scope.myDatePicker.pickerDate = {
                     startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
-                    //earliest day of  all the verifications available in table
-                    //we should reformat it here, because backend currently gives date in format "YYYY-MM-DD"
-                    endDate: moment() // current day
+                    endDate: moment() 
                 };
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                 }
-                moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                moment.locale('uk');
                 $scope.opts = {
                     format: 'DD-MM-YYYY',
                     showDropdowns: true,
@@ -82,7 +77,7 @@ angular
             $scope.isDateDefault = function () {
                 var pickerDate = $scope.myDatePicker.pickerDate;
 
-                if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+                if (pickerDate == null || $scope.defaultDate == null) {
                     return true;
                 }
                 if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
