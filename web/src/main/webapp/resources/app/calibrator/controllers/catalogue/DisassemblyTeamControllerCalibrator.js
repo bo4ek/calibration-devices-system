@@ -77,7 +77,6 @@ angular
                             $filter('translate')('SUCCESSFUL_DELETE_TEAM'));
                     });
                 $timeout(function () {
-                    console.log('delete with timeout');
                     $rootScope.onTableHandling();
                 }, 700);
             }

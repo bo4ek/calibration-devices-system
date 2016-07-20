@@ -377,7 +377,6 @@ angular
             };
 
             $scope.openRejectVerificationModal = function (verificationId) {
-                console.log("Open rejected info modal window");
                 var modalInstance = $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/common/views/modals/reject-verification-modal.html',

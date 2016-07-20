@@ -19,7 +19,6 @@ angular
              * Closes edit modal window.
              */
             $scope.closeModal = function () {
-                console.log("close modal window");
                 $modalInstance.close();
             };
 
@@ -107,7 +106,6 @@ angular
              * and receive the teams info
              */
             $scope.receiveTeams = function () {
-                console.log($scope.calibrationTask.taskDate + " " + $scope.calibrationTask.applicationFiled);
                 var taskDate = $scope.calibrationTask.taskDate;
                 var applicationFiled = $scope.calibrationTask.applicationFiled;
                 verificationPlanningTaskService.getTeams(taskDate, applicationFiled)
@@ -133,7 +131,6 @@ angular
                         "moduleNumber": $scope.calibrationTask.mountingCrew.teamNumber,
                         "verificationsId": $rootScope.verifIds
                     };
-                    console.log(calibrationTask);
                     verificationPlanningTaskService.saveTaskForTeam(calibrationTask).then(function (data) {
                         switch (data.status) {
                             case 200: {

@@ -144,8 +144,7 @@ angular
             };
 
             $scope.isFilter = function () {
-                //console.log("isFilter");
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false; 
                 var obj = $scope.tableParams.filter();
                 for (var i in obj) {
                     if (i == 'isActive' || (i == "startDateToSearch" || i == "endDateToSearch")) {
@@ -365,7 +364,6 @@ angular
                 var dataToSend = {
                     idsOfVerifications: idsOfVerifications
                 };
-                console.log(idsOfVerifications);
                 verificationServiceCalibrator.cleanCalibratorEmployeeFieldForAll(dataToSend)
                     .success(function () {
                         $scope.tableParams.reload();

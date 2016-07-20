@@ -103,7 +103,6 @@ angular
                     .then(function (response) {
                         var file = new Blob([response.data], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
                         var fileURL = URL.createObjectURL(file);
-                        console.log(file);
                         return file;
                     });
             },

@@ -331,7 +331,6 @@ angular.module('employeeModule')
                     $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif.getMilliseconds;
                     $scope.formData.providerId = $scope.selectedData.firstSelectedProvider.id;
                     $scope.formData.quantity = $scope.selectedData.firstDeviceCount;
-                    console.log($scope.formData);
                     verificationServiceCalibrator.sendInitiatedVerification($scope.formData)
                         .then(function (data) {
                             $rootScope.$broadcast('calibrator-save-verification');

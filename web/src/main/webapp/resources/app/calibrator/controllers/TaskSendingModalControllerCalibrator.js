@@ -17,7 +17,6 @@ angular
              * Closes edit modal window.
              */
             $scope.closeModal = function () {
-                console.log("close modal window");
                 $modalInstance.close();
             };
 
@@ -136,7 +135,6 @@ angular
                         return true;
                     }
                 }  catch (e) {
-                    console.log("Got an error!",e);
                 }
             }
 
@@ -148,7 +146,6 @@ angular
                         return true;
                     }
                 }  catch (e) {
-                    console.log("Got an error!",e);
                 }
             }
 
@@ -166,7 +163,6 @@ angular
                         return true;
                     }
                 } catch (e) {
-                    console.log("Got an error!",e);
                 }
 
             }
@@ -272,7 +268,6 @@ angular
             $scope.modulesSerialNumbers = {};
 
             $scope.receiveModuleNumbers = function(){
-                console.log($scope.calibrationTask.place + " " + $scope.calibrationTask.taskDate);
                 var place = $scope.calibrationTask.place;
                 var taskDate = $scope.calibrationTask.taskDate;
                 var applicationFiled = $scope.calibrationTask.applicationFiled;
@@ -292,22 +287,18 @@ angular
             $scope.save = function (){
                 if ($rootScope.emptyStatus == true) {
                     $scope.showSendingMessage = true;
-                    console.log("Ви не вибрали заявок для надсилання")
                 } else {
-                    console.log($rootScope.verifIds);
                     $scope.calibrationTask = {
                         taskDate: $scope.calibrationTask.taskDate,
                         serialNumber: $scope.calibrationTask.installationNumber,
                         verificationsId: $rootScope.verifIds
                     };
-                    console.log($scope.calibrationTask);
                     verificationPlanningTaskService.saveTask($scope.calibrationTask).then(
                         function (data) {
                             if (data == 200) {
                                 $scope.closeModal();
                             } else {
                              $scope.incorrectValue = true;
-                             console.log($scope.incorrectValue);
                             }
                         });
 

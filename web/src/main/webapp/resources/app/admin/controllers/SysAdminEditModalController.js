@@ -224,10 +224,8 @@ angular
                             if (data == 200) {
                                 $scope.closeModal();
                                 $scope.resetSysAdminForm();
-                                console.log(data);
                                 $rootScope.onTableHandling();
                             }
-                            else (console.log(data));
                         })
                 }
 

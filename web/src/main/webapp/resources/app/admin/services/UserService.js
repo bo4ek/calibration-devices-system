@@ -12,12 +12,9 @@ angular
             saveUser: function (userData) {
                 return $http.post('admin/sysadmins/add', userData)
                     .success(function (response, status) {
-                        console.log("Done status: " + status);
                         return response;
                     })
                     .error(function (err) {
-                        alert(err);
-                        alert("in error");
                         return err;
                     });
             },

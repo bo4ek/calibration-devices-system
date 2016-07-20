@@ -139,7 +139,6 @@ angular
                         $rootScope.categoryId).then(
                         function (data) {
                             $rootScope.countersCategory = data;
-                            console.log($rootScope.countersCategory);
 
                             var deviceDTOModal = $modal
                                 .open({
@@ -161,7 +160,6 @@ angular
                  */
                 $scope.deleteDeviceCategory = function (id) {
                     $rootScope.deviceCategoryId = id;
-                    console.log($rootScope.deviceCategoryId);
                     devicesService.deleteDeviceCategory(id).then(function (status) {
                         if (status == 409) {
                             toaster.pop('info', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_DELETED_CATEGORY'));
@@ -170,7 +168,6 @@ angular
                         }
                     });
                     $timeout(function () {
-                        console.log('delete with timeout');
                         $rootScope.onTableHandling();
                     }, 700);
                 };

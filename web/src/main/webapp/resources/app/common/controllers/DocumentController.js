@@ -82,7 +82,6 @@ angular
                         var container = document.getElementById('pdf').contentWindow.document.body;
 
                         renderPDF(url, container).then(function (success) {
-                            console.log(success);
                             setTimeout("document.getElementById('pdf').contentWindow.print()", 500);
                         })
                     } else {

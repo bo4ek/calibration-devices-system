@@ -97,7 +97,6 @@ angular
                     for (var i = 0; i < $scope.defaultData.organizationTypes.length; i++) {
                         switch ($scope.defaultData.organizationTypes[i].type) {
                             case "PROVIDER":
-                                console.log($scope.defaultData.organizationTypes[i]);
                                 $scope.defaultData.organizationTypes[i].label = 'Постачальник послуг';
                                 break;
                             case "CALIBRATOR":
@@ -107,22 +106,18 @@ angular
                                 $scope.defaultData.organizationTypes[i].label = 'Уповноважена повірочна лабораторія';
                                 break;
                             default:
-                                console.log($scope.defaultData.organizationTypes[i].type + " not organization type");
                         }
                     }
 
                     for (var i = 0; i < $scope.defaultData.deviceType.length; i++) {
                         switch ($scope.defaultData.deviceType[i].type) {
                             case "WATER":
-                                console.log($scope.defaultData.deviceType[i]);
                                 $scope.defaultData.deviceType[i].label = 'Холодна вода';
                                 break;
                             case "THERMAL":
-                                console.log($scope.defaultData.deviceType[i]);
                                 $scope.defaultData.deviceType[i].label = 'Гаряча вода';
                                 break;
                             default:
-                                console.log($scope.defaultData.deviceType[i].type + " not device type");
                         }
                     }
 
@@ -152,7 +147,6 @@ angular
                                 $scope.defaultData.deviceType[i].label = 'Hot water';
                                 break;
                             default:
-                                console.log($scope.defaultData.deviceType[i].type + " not device type");
                         }
                     }
                 }
@@ -186,9 +180,6 @@ angular
             }
 
             $scope.setTypeDataLanguage();
-
-            console.log($scope.defaultData.organizationTypes);
-            console.log($scope.defaultData.deviceType);
 
             $scope.regions = regions;
             $scope.districts = [];
@@ -243,8 +234,6 @@ angular
                     $scope.adminsMiddleName = data.middleName;
                     $scope.adminsUserName = data.username;
                     $scope.oldUsername = data.username;
-                    console.log(data);
-                    console.log(data.firstName);
                 }
             );
 
@@ -531,7 +520,6 @@ angular
                 $scope.localities = [];
                 addressService.findLocalitiesByDistrictId(selectedDistrict.id)
                     .then(function (localities) {
-                        console.log(localities);
                         $scope.localities = localities;
                         $scope.selectedValues.selectedLocality = undefined;
                         $scope.selectedValues.selectedStreet = "";
@@ -575,7 +563,6 @@ angular
                 $scope.localitiesReg = [];
                 addressService.findLocalitiesByDistrictId(selectedDistrict.id)
                     .then(function (localities) {
-                        console.log(localities);
                         $scope.localitiesReg = localities;
                         $scope.selectedValues.localityRegistered = undefined;
                         $scope.selectedValues.streetRegistered = "";
@@ -705,9 +692,6 @@ angular
                 }
             }
 
-            console.log($rootScope.organization.types);
-            console.log($rootScope.organization.counters);
-
             /**
              * Finds districts in a given region.
              * @param regionId
@@ -831,7 +815,6 @@ angular
                     organizationForm, $rootScope.organizationId).then(
                     function (data) {
                         if (data == 200) {
-                            console.log(data);
                             $rootScope.onTableHandling();
                         }
                         $modalInstance.close();

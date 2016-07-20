@@ -332,7 +332,6 @@ angular
                 };
 
                 $scope.uploadArchive = function () {
-                    console.log("Entered upload archive function");
                     var modalInstance = $modal.open({
                         animation: true,
                         templateUrl: 'resources/app/calibrator/views/modals/upload-archive.html',
