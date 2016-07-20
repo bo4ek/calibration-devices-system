@@ -301,7 +301,7 @@ public class DocumentsController {
      */
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
-        // register custom editor for the FileFormat enum
+
         dataBinder.registerCustomEditor(FileFormat.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
@@ -311,7 +311,6 @@ public class DocumentsController {
             }
         });
 
-        // register custom editor for the DocumentType enum
         dataBinder.registerCustomEditor(DocumentType.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {

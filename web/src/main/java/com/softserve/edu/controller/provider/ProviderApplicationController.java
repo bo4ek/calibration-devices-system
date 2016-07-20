@@ -401,7 +401,7 @@ public class ProviderApplicationController {
         Verification verification = verificationService.findById(reject.getVerifID());
         String name = verification.getClientData().getFirstName();
         String sendTo = verification.getClientData().getEmail();
-        //saving rejectMessage in database if verification is rejected
+
         if (verification.getStatus() == Status.REJECTED) {
             verification.setRejectedMessage(reject.getMsg());
             verificationService.saveVerification(verification);

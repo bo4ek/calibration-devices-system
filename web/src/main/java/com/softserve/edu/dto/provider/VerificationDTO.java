@@ -41,7 +41,6 @@ public class VerificationDTO extends ClientStageVerificationDTO {
     private Address providerAddress;
     private Address calibratorAddress;
     private String rejectedMessage;
-    //private String comment;
 
     public VerificationDTO(ClientData clientData, String id, Date initialDate, Date expirationDate, Status status,
                            Organization calibrator, User calibratorEmployee, Device device, Organization provider,
@@ -64,7 +63,6 @@ public class VerificationDTO extends ClientStageVerificationDTO {
         this.calibratorAddress = (calibrator == null) ? null : calibrator.getAddress();
     }
 
-    //add new constructor for delegation rejected message
     public VerificationDTO(ClientData clientData, String id, Date initialDate, Date expirationDate, Status status,
                            Organization calibrator, User calibratorEmployee, Device device, Organization provider,
                            User providerEmployee, Organization stateVerificator, User stateVerificatorEmployee, String rejectedMessage) {

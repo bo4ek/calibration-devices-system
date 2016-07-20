@@ -43,7 +43,7 @@ public class FileUploadController {
                 return "Wrong file type";
             }
         } catch (Exception e) {
-            logger.info(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.info(e);
             return "You failed to upload => " + e.getMessage();
         }
     }

@@ -18,8 +18,8 @@ angular
                 $rootScope.editMode = false;
 
                 $scope.filterData = {};
-                $scope.filterData.selectedRegion = 'Київ'; //default value for filter
-                $scope.filterData.selectedCity = 'Київ'; //default value for filter
+                $scope.filterData.selectedRegion = 'Київ';
+                $scope.filterData.selectedCity = 'Київ'; 
 
                 $scope.doSearch = function () {
                     $scope.tableParams.reload();

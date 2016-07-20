@@ -52,7 +52,7 @@ public class ProviderEmployeeController {
             list = providerEmployeeService.buildGraphic(dateFrom, dateTo, idOrganization, providerEmployee);
         } catch (Exception e) {
             logger.error("Failed to get graphic data");
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error(e);
         }
         return list;
     }
@@ -69,7 +69,7 @@ public class ProviderEmployeeController {
             list = providerEmployeeService.buidGraphicMainPanel(dateFrom, dateTo, idOrganization);
         } catch (Exception e) {
             logger.error("Failed to get graphic data");
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error(e);
         }
         return list;
     }

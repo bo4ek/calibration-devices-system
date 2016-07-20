@@ -39,8 +39,8 @@ public class CalibrationTestDataController {
     		CalibrationTestData updatedTestData = service.editTestData(testDataId, testDataDTO.saveTestData());
 		} catch (Exception e) {
 			logger.error("GOT EXCEPTION " + e.getMessage());
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
-			httpStatus = HttpStatus.CONFLICT;
+            logger.error(e);
+            httpStatus = HttpStatus.CONFLICT;
 		}
     	return new ResponseEntity<>(httpStatus);
     }

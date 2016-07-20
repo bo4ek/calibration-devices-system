@@ -179,9 +179,8 @@ public class CalibrationModuleController {
     public PageDTO<CalibrationModuleDTO> getSortedAndFilteredPageOfCalibrationModules(@PathVariable Integer pageNumber,
                                                                                       @PathVariable Integer itemsPerPage, @PathVariable String sortCriteria,
                                                                                       @PathVariable String sortOrder, CalibrationModuleDTO searchData) {
-        // converting object to map and filtering the map to have only not-null fields
+
         Map<String, Object> searchDataMap = constructSearchDataMap(searchData);
-        // creating Sort object for using as a parameter for Pageable creation
         Sort sort;
         if ((sortCriteria.equals("undefined") && sortOrder.equals("undefined")) ||
                 sortCriteria == null && sortOrder == null) {
@@ -190,12 +189,11 @@ public class CalibrationModuleController {
             sort = new Sort(Sort.Direction.valueOf(sortOrder.toUpperCase()), sortCriteria);
         }
         Pageable pageable = new PageRequest(pageNumber - 1, itemsPerPage, sort);
-        // fetching data from database, receiving a sorted and filtered page of calibration modules
         Page<CalibrationModule> queryResult = searchDataMap.isEmpty() ?
                 calibrationModuleService.findAllModules(pageable) :
                 calibrationModuleService.getFilteredPageOfCalibrationModule(searchDataMap, pageable);
         List<CalibrationModuleDTO> content = new ArrayList<CalibrationModuleDTO>();
-        // converting Page of CalibrationModules to List of CalibrationModuleDTOs
+
         for (CalibrationModule calibrationModule : queryResult) {
             content.add(new CalibrationModuleDTO(calibrationModule.getModuleId(),
                     calibrationModule.getDeviceType().stream().map(Device.DeviceType::toString).collect(Collectors.toList()),

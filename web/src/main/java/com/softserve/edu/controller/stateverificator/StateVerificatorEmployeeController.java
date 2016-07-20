@@ -132,7 +132,7 @@ public class StateVerificatorEmployeeController {
 
 		} catch (Exception e) {
 			logger.error("Failed to get graphic data");
-			logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+			logger.error(e);
 		}
 		return list;
 	}

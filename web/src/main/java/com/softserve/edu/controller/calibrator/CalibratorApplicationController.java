@@ -151,8 +151,6 @@ public class CalibratorApplicationController {
             Organization provider = providerService.findById(verificationDTO.getProviderId());
             Device device = deviceService.getById(verificationDTO.getDeviceId());
 
-            //Creating Verification without ID
-
             Verification newVerification = new Verification(new Date(), clientData, provider, device,
                     Status.CREATED_FOR_PROVIDER, Verification.ReadStatus.UNREAD, calibrator, info,
                     verificationDTO.getDismantled(), counter, verificationDTO.getComment(),

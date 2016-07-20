@@ -223,7 +223,6 @@ public class EmployeeController {
         List<UsersPageItem> resultList = new ArrayList<>();
         for (User providerEmployee : queryResult.getContent()) {
 
-            //hide information about PROVIDER_ADMIN, CALIBRATOR_ADMIN, STATE_VERIFICATOR_ADMIN
             List<String> userRoles = usersService.getRoles(providerEmployee.getUsername())
                     .stream()
                     .distinct()

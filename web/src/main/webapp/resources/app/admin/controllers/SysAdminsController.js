@@ -16,7 +16,7 @@ angular
                 page: 1,
                 count: 5,
                 sorting: {
-                    lastName: 'asc'     // initial sorting
+                    lastName: 'asc'
                 }
             }, {
                 total: 0,
@@ -96,7 +96,6 @@ angular
 
             $scope.openSubmitSysAdminDeleteModal = function (username) {
                 $rootScope.username = username;
-                //userService.deleteSysAdmin(username);
                 var sysAdminDTOModal = $modal
                     .open({
                         animation: true,

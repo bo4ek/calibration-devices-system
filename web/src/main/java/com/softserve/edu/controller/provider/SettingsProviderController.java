@@ -90,7 +90,7 @@ public class SettingsProviderController {
             response = new ResponseEntity<>(employeeDTO, HttpStatus.OK);
         } catch (ClassCastException e) {
             response = new ResponseEntity<>(new EmployeeDTO(), HttpStatus.CONFLICT);
-            logger.info(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.info(e);
         }
         return response;
     }

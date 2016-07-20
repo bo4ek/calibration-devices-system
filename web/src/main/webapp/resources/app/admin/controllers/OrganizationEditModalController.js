@@ -1,28 +1,27 @@
 angular
     .module('adminModule')
     .filter('organizationFilter', function () {
-        // filters available options in the Organization Type multiselect,
-        // depends on what options are selected
+
         return function (allTypes, currentTypes) {
-            var filtered = allTypes; //all types in select
+            var filtered = allTypes; 
 
             if (currentTypes != undefined && currentTypes.length == 0) {
-                return filtered; //nothing in the input, all the options available
+                return filtered; 
             }
 
             if (currentTypes.length == 2)
-                return []; //no options available, everything set already
+                return []; 
 
             if (currentTypes[0].type == 'CALIBRATOR') {
                 filtered = [];
-                filtered.push(allTypes[0]); //provider
-                filtered.push(allTypes[2]); //verificator
+                filtered.push(allTypes[0]);
+                filtered.push(allTypes[2]); 
                 return filtered;
             }
 
             if (currentTypes[0].type == 'PROVIDER' || currentTypes[0].type == 'STATE_VERIFICATOR') {
                 filtered = [];
-                filtered.push(allTypes[1]); //calibrator
+                filtered.push(allTypes[1]); 
                 return filtered;
             }
             return filtered;
@@ -187,7 +186,6 @@ angular
             }
 
             $scope.setTypeDataLanguage();
-            // setTimeout(setCurrentTypeDataLanguage(), 3000);
 
             console.log($scope.defaultData.organizationTypes);
             console.log($scope.defaultData.deviceType);
@@ -880,7 +878,6 @@ angular
              * @param index
              */
             $scope.selectRegionsFromDistrict = function (selectedDistrict, index) {
-                // if (!$scope.blockSearchFunctions) {
                 if ($scope.serviceArea.locality === undefined) {
                     $scope.serviceArea.locality = [
                         []
@@ -893,7 +890,6 @@ angular
 
                         });
                 }
-                //}
             };
 
             $scope.serviceArea = {};

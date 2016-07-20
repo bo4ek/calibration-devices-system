@@ -55,7 +55,7 @@ angular
                 page: 1,
                 count: 5,
                 sorting: {
-                    lastname: 'asc'     // initial sorting
+                    lastname: 'asc'
                 }
             }, {
                 total: 0,
@@ -64,7 +64,7 @@ angular
                         params.filter().role = $scope.selectedUserType.name.id;
                     }
                     else {
-                        params.filter().role = null;//case when the filter is cleared with a button on the select
+                        params.filter().role = null;
                     }
                     var sortCriteria = Object.keys(params.sorting())[0];
                     var sortOrder = params.sorting()[sortCriteria];

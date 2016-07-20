@@ -27,10 +27,10 @@ angular
         $scope.isDateDefault = function () {
             var pickerDate = $scope.myDatePicker.pickerDate;
 
-            if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+            if (pickerDate == null || $scope.defaultDate == null) { 
                 return true;
             }
-            if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+            if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') 
                 && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
                 return true;
             }
@@ -48,7 +48,7 @@ angular
 
         $scope.initDatePicker = function () {
 
-            moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+            moment.locale('uk'); 
             $scope.opts = {
                 format: 'DD-MM-YYYY',
                 showDropdowns: true,

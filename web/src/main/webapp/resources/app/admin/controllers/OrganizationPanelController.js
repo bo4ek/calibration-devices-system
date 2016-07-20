@@ -58,7 +58,7 @@ angular
                             params.filter().type = $scope.selectedOrganizationType.name.id;
                         }
                         else {
-                            params.filter().type = null;//case when the filter is cleared with a button on the select
+                            params.filter().type = null;
                         }
 
                         var sortCriteria = Object.keys(params.sorting())[0];

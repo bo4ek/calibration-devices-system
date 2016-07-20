@@ -146,7 +146,6 @@ public class StateVerificatorController {
     @RequestMapping(value = "new/providers", method = RequestMethod.GET)
     public Set<Organization> getMatchingVerificators(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
 
-        //todo need to fix finding verificators by agreements(договорах)
         Organization userOrganization = organizationService.getOrganizationById(user.getOrganizationId());
         return organizationService.findByIdAndTypeAndActiveAgreementDeviceType(user.getOrganizationId(), OrganizationType.PROVIDER, userOrganization.getDeviceTypes().iterator().next());
     }
@@ -159,7 +158,6 @@ public class StateVerificatorController {
     @RequestMapping(value = "new/calibrators", method = RequestMethod.GET)
     public Set<Organization> updateVerification(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
 
-        //todo need to fix finding calibrators by agreements(договорах)
         Organization userOrganization = organizationService.getOrganizationById(user.getOrganizationId());
         return organizationService.findByIdAndTypeAndActiveAgreementDeviceType(user.getOrganizationId(), OrganizationType.PROVIDER, userOrganization.getDeviceTypes().iterator().next());
     }

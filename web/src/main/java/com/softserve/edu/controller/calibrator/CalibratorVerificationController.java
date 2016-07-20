@@ -127,7 +127,6 @@ public class CalibratorVerificationController {
                                            @PathVariable String verificationID,
                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails employeeUser) {
         HttpStatus httpStatus = HttpStatus.OK;
-        /*boolean updateAll = verificationDTO.getEditAll();//get value from page*/
 
         Organization calibrator = calibratorService.findById(employeeUser.getOrganizationId());
         Verification verification = verificationService.findById(verificationID);
@@ -177,7 +176,7 @@ public class CalibratorVerificationController {
             }
         } catch (Exception e) {
             logger.error("Failed to load file " + e.getMessage());
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error(e);
             responseEntity = new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -401,7 +400,7 @@ public class CalibratorVerificationController {
             }
         } catch (Exception e) {
             logger.error("Failed to load file " + e.getMessage());
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error(e);
         }
         return bbiOutcomeDTOList;
     }
@@ -429,7 +428,7 @@ public class CalibratorVerificationController {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Failed to load file " + e.getMessage());
-            logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+            logger.error(e);
         }
         return bbiOutcomeDTOList;
     }

@@ -199,13 +199,13 @@ public class ProviderVerificationController {
                 searchData.getDate(),
                 searchData.getEndDate(),
                 searchData.getId(),
-                searchData.getClient_full_name(), //TODO: WHY????!!!
+                searchData.getClient_full_name(),
                 searchData.getStreet(),
                 searchData.getRegion(),
                 searchData.getDistrict(),
                 searchData.getLocality(),
                 searchData.getStatus(),
-                searchData.getEmployee_last_name(), //TODO: WHY????!!!
+                searchData.getEmployee_last_name(),
                 sortCriteria,
                 sortOrder,
                 providerEmployee
@@ -339,7 +339,7 @@ public class ProviderVerificationController {
      */
     @RequestMapping(value = "new/calibrators", method = RequestMethod.GET)
     public Set<OrganizationDTO> updateVerification(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
-        //todo agreement
+
         Organization userOrganization = organizationService.getOrganizationById(user.getOrganizationId());
         return organizationService.findByIdAndTypeAndActiveAgreementDeviceType(user.getOrganizationId(),
                 OrganizationType.CALIBRATOR, userOrganization.getDeviceTypes().iterator().next()).stream()

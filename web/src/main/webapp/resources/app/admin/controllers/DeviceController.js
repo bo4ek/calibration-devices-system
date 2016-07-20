@@ -19,7 +19,6 @@ angular
                 $scope.itemsPerPage = 5;
                 $scope.pageContent = [];
 
-                //for devices kinds
                 $scope.selectedDeviceType = {
                     name: null
                 }
@@ -82,7 +81,7 @@ angular
                             params.filter().deviceType = $scope.selectedDeviceType.name.id;
                         }
                         else {
-                            params.filter().deviceType = null; //case when the filter is cleared with a button on the select
+                            params.filter().deviceType = null; 
                         }
 
                         devicesService.getPage(params.page(), params.count(), params.filter(), sortCriteria, sortOrder)

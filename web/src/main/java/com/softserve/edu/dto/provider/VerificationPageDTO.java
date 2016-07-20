@@ -19,7 +19,7 @@ import java.util.Date;
 public class VerificationPageDTO {
     private String id;
     private Date initialDate;
-    private String surname; //TODO: surname and name not needed anymore
+    private String surname;
     private String name;
     private String fullName;
     private String district;

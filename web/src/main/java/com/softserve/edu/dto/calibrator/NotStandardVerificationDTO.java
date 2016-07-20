@@ -60,7 +60,6 @@ public class NotStandardVerificationDTO {
         this.comment = comment;
         this.providerFromBBI = (providerFromBBI != null) ? providerFromBBI.getName() : null;
         this.nameProvider = (nameProvider != null) ? nameProvider.getName() : null;
-        // In case of Not Standard Verifications one verification has only one test
         this.fileName = (tests != null && tests.size() != 0) ? tests.iterator().next().getName() : null;
         this.testResult = (tests != null && tests.size() != 0) ? tests.iterator().next().getTestResult().toString() : null;
         this.status = status;

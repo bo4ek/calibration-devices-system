@@ -43,7 +43,6 @@ public class CalibrationTestDTO  {
                               Double longitude, Verification.ConsumptionStatus consumptionStatus, Verification.CalibrationTestResult testResult) {
         this.name = name;
         this.capacity = capacity;
-      //  this.settingNumber = settingNumber;
         this.latitude = latitude;
         this.longitude = longitude;
         this.consumptionStatus = consumptionStatus;
@@ -55,7 +54,6 @@ public class CalibrationTestDTO  {
         this.name = calibrationTest.getName();
         this.dateTest = calibrationTest.getDateTest();
         this.capacity = calibrationTest.getCapacity();
-     //   this.settingNumber = calibrationTest.getSettingNumber();
         this.latitude = calibrationTest.getLatitude();
         this.longitude = calibrationTest.getLongitude();
         this.consumptionStatus = calibrationTest.getConsumptionStatus();
@@ -66,7 +64,6 @@ public class CalibrationTestDTO  {
         this.name = name;
         this.dateTest = dateTest;
         this.capacity = capacity;
-       // this.settingNumber = settingNumber;
         this.latitude = latitude;
         this.longitude = longitude;
         this.consumptionStatus = consumptionStatus;
@@ -80,7 +77,6 @@ public class CalibrationTestDTO  {
         this. measurementDeviceId =  measurementDeviceId;
         this.measurementDeviceType = measurementDeviceType;
         this.documentTypeName = documentTypeName;
-    //    this.documentDate = documentDate;
     }
 
     public String getName() {
@@ -248,7 +244,6 @@ public class CalibrationTestDTO  {
         calibrationTest.setName(name);
         calibrationTest.setDateTest(new Date());
         calibrationTest.setCapacity(capacity);
-       // calibrationTest.setSettingNumber(settingNumber);
         calibrationTest.setLatitude(latitude);
         calibrationTest.setLongitude(longitude);
         calibrationTest.setConsumptionStatus(consumptionStatus);

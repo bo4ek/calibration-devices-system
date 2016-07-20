@@ -25,7 +25,6 @@ angular
                  * Date
                  */
                 $scope.clearDate = function () {
-                    // date-range picker doesn't support null dates
                     $scope.defaultDate.startDate = moment();
                     $scope.defaultDate.endDate = moment();
                     $scope.myDatePicker.pickerDate = $scope.defaultDate;
@@ -36,7 +35,7 @@ angular
                 $scope.myDatePicker.pickerDate = null;
                 $scope.defaultDate = {
                     startDate: moment(),
-                    endDate: moment() // current day
+                    endDate: moment()
                 };
 
                 $scope.initDatePicker = function (workDate) {
@@ -47,10 +46,10 @@ angular
                      *TODO: i18n*/
                     $scope.myDatePicker.pickerDate = {
                         startDate: $scope.defaultDate.startDate,
-                        endDate: $scope.defaultDate.endDate // current day
+                        endDate: $scope.defaultDate.endDate 
                     };
 
-                    moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('uk'); 
                     $scope.opts = {
                         format: 'DD-MM-YYYY',
                         showDropdowns: true,

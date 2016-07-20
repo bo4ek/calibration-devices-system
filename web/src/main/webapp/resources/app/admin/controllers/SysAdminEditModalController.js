@@ -159,7 +159,6 @@ angular
                  * Change password
                  */
                 $scope.changePassword = function () {
-                    //$scope.preventDefault();
                     $scope.password = 'generate';
                     $scope.generationMessage = true;
                 };

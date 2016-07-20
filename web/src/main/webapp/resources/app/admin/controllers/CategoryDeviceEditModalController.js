@@ -43,13 +43,9 @@ angular
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    // $scope.deviceTypeData[0].label = 'Електричний';
-                    //$scope.deviceTypeData[1].label = 'Газовий';
                     $scope.deviceTypeData[0].label = 'Холодна вода';
                     $scope.deviceTypeData[1].label = 'Гаряча вода';
                 } else if (lang === 'eng') {
-                    //$scope.deviceTypeData[0].label = 'Electrical';
-                    // $scope.deviceTypeData[1].label = 'Gaseous';
                     $scope.deviceTypeData[0].label = 'Cold water';
                     $scope.deviceTypeData[1].label = 'Hot water';
                 }

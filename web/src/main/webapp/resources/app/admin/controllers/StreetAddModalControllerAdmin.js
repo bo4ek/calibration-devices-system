@@ -57,7 +57,7 @@ angular
                     $scope.regions = [];
                     addressService.findAllRegions().then(function (regions) {
                             $scope.regions = regions;
-                            $scope.selectedValues.selectedRegion = undefined; //for ui-selects
+                        $scope.selectedValues.selectedRegion = undefined; 
                             $scope.selectedValues.selectedDistrict = undefined;
                             $scope.selectedValues.selectedLocality = undefined;
                         }

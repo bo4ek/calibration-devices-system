@@ -19,7 +19,6 @@ angular
                 $scope.itemsPerPage = 5;
                 $scope.pageContent = [];
 
-                //for measurement device type
                 $scope.selectedDeviceType = {
                     name: null
                 };
@@ -27,9 +26,8 @@ angular
                  * Date
                  */
                 $scope.clearDate = function () {
-                    //daterangepicker doesn't support null dates
+
                     $scope.myDatePicker.pickerDate = $scope.defaultDate;
-                    //setting corresponding filters with 'all time' range
                     $scope.tableParams.filter().startDateToSearch = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                     $scope.tableParams.filter().endDateToSearch = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
                 };
@@ -46,16 +44,13 @@ angular
                     /*TODO: i18n*/
                     $scope.myDatePicker.pickerDate = {
                         startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
-                        //earliest day of  all the verifications available in table
-                        //we should reformat it here, because backend currently gives date in format "YYYY-MM-DD"
-                        endDate: moment() // current day
+                        endDate: moment()
                     };
 
                     if ($scope.defaultDate == null) {
-                        //copy of original daterange
                         $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                     }
-                    moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('uk'); 
                     $scope.opts = {
                         format: 'DD-MM-YYYY',
                         showDropdowns: true,
@@ -78,7 +73,6 @@ angular
                         eventHandlers: {}
                     };
                 };
-                // $scope.initDatePicker();
 
                 $scope.showPicker = function ($event) {
                     angular.element("#datepickerfield").trigger("click");
@@ -87,10 +81,10 @@ angular
                 $scope.isDateDefault = function () {
                     var pickerDate = $scope.myDatePicker.pickerDate;
 
-                    if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+                    if (pickerDate == null || $scope.defaultDate == null) { 
                         return true;
                     }
-                    if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                    if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') 
                         && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
                         return true;
                     }
@@ -127,14 +121,11 @@ angular
                  * Updates the table.
                  */
                 $rootScope.onTableHandling = function () {
-                    //if ($scope.tableParams == null) return false; //table not yet initialized
                     $scope.tableParams.reload();
                 };
 
-                // $rootScope.onTableHandling();
-
                 $scope.isFilter = function () {
-                    if ($scope.tableParams == null) return false; //table not yet initialized
+                    if ($scope.tableParams == null) return false; 
                     var obj = $scope.tableParams.filter();
                     for (var i in obj) {
                         if (obj.hasOwnProperty(i) && obj[i]) {
@@ -169,7 +160,7 @@ angular
                                     params.filter().deviceType = $scope.selectedDeviceType.name.id;
                                 }
                                 else {
-                                    params.filter().deviceType = null; //case when the filter is cleared with a button on the select
+                                    params.filter().deviceType = null; 
                                 }
 
                                 params.filter().startDateToSearch = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
@@ -185,7 +176,6 @@ angular
                                     });
                             }
                         });
-                    //$rootScope.onTableHandling();
                 });
 
                 /**

@@ -95,7 +95,7 @@ public class MeasuringEquipmentController {
 			measureEquipmentService.addMeasuringEquipment(createdMeasuringEquipment);
 		} catch (Exception e) {
 			logger.error("GOT EXCEPTION " + e.getMessage());
-			logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+			logger.error(e);
 			httpStatus = HttpStatus.CONFLICT;
 		}
 		return new ResponseEntity(httpStatus);
@@ -119,7 +119,7 @@ public class MeasuringEquipmentController {
 					mEquipmentDTO.getDeviceType(), mEquipmentDTO.getManufacturer(), mEquipmentDTO.getVerificationInterval());
 		} catch (Exception e) {
 			logger.error("GOT EXCEPTION " + e.getMessage());
-			logger.error(e); // for prevent critical issue "Either log or rethrow this exception"
+			logger.error(e);
 			httpStatus = HttpStatus.CONFLICT;
 		}
 		return new ResponseEntity(httpStatus);
