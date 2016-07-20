@@ -65,39 +65,41 @@ public class MailServiceImpl implements MailService {
     @Async
     public void sendMail(String to, String userName, String clientCode, String providerName, String deviceType) {
 
-        MimeMessagePreparator preparator = new MimeMessagePreparator() {
-            public void prepare(MimeMessage mimeMessage) throws Exception {
-                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-                message.setTo(to);
-                message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
-                String domain = null;
-                try {
-                    domain = InetAddress.getLocalHost().getHostAddress();
-                } catch (UnknownHostException ue) {
-                    logger.error("Cannot get host address ", ue);
-                }
+        if (to != null && to.contains("@")) {
+            MimeMessagePreparator preparator = new MimeMessagePreparator() {
+                public void prepare(MimeMessage mimeMessage) throws Exception {
+                    MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                    message.setTo(to);
+                    message.setFrom(new InternetAddress(env.getProperty(MailConstant.MAIL_FROM), MailConstant.MAIL_FROM_NAME));
+                    String domain = null;
+                    try {
+                        domain = InetAddress.getLocalHost().getHostAddress();
+                    } catch (UnknownHostException ue) {
+                        logger.error("Cannot get host address ", ue);
+                    }
 
-                SimpleDateFormat form = new SimpleDateFormat("dd-MM-yyyy");
-                String date = form.format(new Date());
-                Map<String, Object> templateVariables = new HashMap<>();
-                templateVariables.put(MailConstant.NAME, userName);
-                templateVariables.put(MailConstant.PROTOCOL, protocol);
-                templateVariables.put(MailConstant.DOMAIN, domain);
-                templateVariables.put(MailConstant.APPLICATION_ID, clientCode);
-                templateVariables.put(MailConstant.ID, clientCode.substring(0, Constants.LENGHT_ID_VERIFICATIONS));
-                templateVariables.put(MailConstant.PROVIDER_NAME, providerName);
-                if (deviceType.equals(Device.DeviceType.WATER.toString())) {
-                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.WATER_DEVICE_MAIL);
-                } else {
-                    templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
+                    SimpleDateFormat form = new SimpleDateFormat("dd-MM-yyyy");
+                    String date = form.format(new Date());
+                    Map<String, Object> templateVariables = new HashMap<>();
+                    templateVariables.put(MailConstant.NAME, userName);
+                    templateVariables.put(MailConstant.PROTOCOL, protocol);
+                    templateVariables.put(MailConstant.DOMAIN, domain);
+                    templateVariables.put(MailConstant.APPLICATION_ID, clientCode);
+                    templateVariables.put(MailConstant.ID, clientCode.substring(0, Constants.LENGHT_ID_VERIFICATIONS));
+                    templateVariables.put(MailConstant.PROVIDER_NAME, providerName);
+                    if (deviceType.equals(Device.DeviceType.WATER.toString())) {
+                        templateVariables.put(MailConstant.DEVICE_TYPE, Constants.WATER_DEVICE_MAIL);
+                    } else {
+                        templateVariables.put(MailConstant.DEVICE_TYPE, Constants.THERMAL_DEVICE_MAIL);
+                    }
+                    templateVariables.put(MailConstant.DATE, date);
+                    String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailTemplate.vm", "UTF-8", templateVariables);
+                    message.setText(body, true);
+                    message.setSubject(MailConstant.MAIL_SUBJECT);
                 }
-                templateVariables.put(MailConstant.DATE, date);
-                String body = mergeTemplateIntoString(velocityEngine, "/velocity/templates/mailTemplate.vm", "UTF-8", templateVariables);
-                message.setText(body, true);
-                message.setSubject(MailConstant.MAIL_SUBJECT);
-            }
-        };
-        mailSender.send(preparator);
+            };
+            mailSender.send(preparator);
+        }
     }
 
 
