@@ -142,7 +142,7 @@ angular
                     $scope.deviceTypes = deviceTypes;
                     $log.debug('deviceTypes');
                     $log.debug(deviceTypes);
-                    $scope.counterData.deviceType = undefined;  //$scope.devices[0];
+                    $scope.counterData.deviceType = undefined;
                     $log.debug($scope.counterData.selectedCount);
                 });
 
@@ -468,7 +468,6 @@ angular
             $scope.initDatePicker = function () {
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.counterData.dateOfDismantled);
                     $scope.defaultDate = angular.copy($scope.counterData.dateOfMounted);
                     $scope.defaultDate = angular.copy($scope.addInfo.dateOfVerif);
@@ -514,9 +513,9 @@ angular
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('uk'); 
                 } else {
-                    moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('en');
                 }
             };
 

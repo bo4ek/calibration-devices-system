@@ -31,7 +31,6 @@ angular
                  *
                  */
                 $scope.clearDate = function () {
-                    // date-range picker doesn't support null dates
                     $scope.defaultDate.startDate = moment();
                     $scope.defaultDate.endDate = moment();
                     $scope.myDatePicker.pickerDate = $scope.defaultDate;
@@ -42,7 +41,7 @@ angular
                 $scope.myDatePicker.pickerDate = null;
                 $scope.defaultDate = {
                     startDate: moment(),
-                    endDate: moment() // current day
+                    endDate: moment() 
                 };
 
                 $scope.initDatePicker = function (workDate) {
@@ -51,15 +50,15 @@ angular
                      */
                     $scope.myDatePicker.pickerDate = {
                         startDate: $scope.defaultDate.startDate,
-                        endDate: $scope.defaultDate.endDate // current day
+                        endDate: $scope.defaultDate.endDate 
                     };
 
                     $scope.setTypeDataLangDatePicker = function () {
                         var lang = $translate.use();
                         if (lang === 'ukr') {
-                            moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                            moment.locale('uk');
                         } else {
-                            moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                            moment.locale('en');
                         }
                         $scope.opts = {
                             format: 'DD-MM-YYYY',
@@ -102,7 +101,7 @@ angular
                 };
 
                 $scope.isDateDefault = function () {
-                    return ($scope.myDatePicker.pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') // compare by day
+                    return ($scope.myDatePicker.pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') 
                     && $scope.myDatePicker.pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day'));
                 };
 
@@ -229,7 +228,7 @@ angular
                 };
 
                 $scope.isFilter = function () {
-                    if ($scope.tableParams == null) return false; // table not yet initialized
+                    if ($scope.tableParams == null) return false; 
                     var obj = $scope.tableParams.filter();
                     for (var i in obj) {
                         if (i == 'isForStation') {

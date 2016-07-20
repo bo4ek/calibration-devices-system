@@ -21,7 +21,6 @@ angular
                 name: null
             };
 
-            //types
             $scope.userTypeData = [
                 {id: 'CALIBRATOR_EMPLOYEE', label: null},
                 {id: 'CALIBRATOR_ADMIN', label: null},
@@ -49,7 +48,7 @@ angular
                 page: 1,
                 count: 5,
                 sorting: {
-                    lastName: 'asc'     // initial sorting
+                    lastName: 'asc' 
                 }, filter: {
                     role: null
                 }
@@ -61,7 +60,7 @@ angular
                         params.filter().role = $scope.selectedUserType.name.id;
                     }
                     else {
-                        params.filter().role = null;//case when the filter is cleared with a button on the select
+                        params.filter().role = null;
                     }
                     UserServiceCalibrator.getPage(params.page(), params.count(), params.filter(), params.sorting())
                         .success(function (result) {

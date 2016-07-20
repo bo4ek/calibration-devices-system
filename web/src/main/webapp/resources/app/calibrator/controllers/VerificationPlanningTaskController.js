@@ -75,22 +75,19 @@ angular
                 /*TODO: i18n*/
                 $scope.myDatePicker.pickerDate = {
                     startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
-                    //earliest day of  all the verifications available in table
-                    //we should reformat it here, because backend currently gives date in format "YYYY-MM-DD"
-                    endDate: moment() // current day
+                    endDate: moment() 
                 };
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                 }
 
                 $scope.setTypeDataLangDatePicker = function () {
                     var lang = $translate.use();
                     if (lang === 'ukr') {
-                        moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                        moment.locale('uk'); 
                     } else {
-                        moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                        moment.locale('en'); 
                     }
                     $scope.opts = {
                         format: 'DD-MM-YYYY',
@@ -126,10 +123,10 @@ angular
             $scope.isDateDefault = function () {
                 var pickerDate = $scope.myDatePicker.pickerDate;
 
-                if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+                if (pickerDate == null || $scope.defaultDate == null) { 
                     return true;
                 }
-                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day')
                     && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
                     return true;
                 }
@@ -157,12 +154,12 @@ angular
             };
 
             $scope.checkFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false; 
                 var obj = $scope.tableParams.filter();
                 for (var i in obj) {
                     if (obj.hasOwnProperty(i) && obj[i]) {
                         if (i == 'date' || i == 'endDate')
-                            continue; //check for these filters is in another function
+                            continue; 
                         return true;
                     }
                 }
@@ -170,7 +167,7 @@ angular
             };
 
             $scope.checkDateFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false; 
                 var obj = $scope.tableParams.filter();
                 if ($scope.isDateDefault())
                     return false;

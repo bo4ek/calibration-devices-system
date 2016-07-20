@@ -68,9 +68,9 @@ angular.module('employeeModule')
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('uk'); 
                 } else {
-                    moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('en'); 
                 }
             };
 

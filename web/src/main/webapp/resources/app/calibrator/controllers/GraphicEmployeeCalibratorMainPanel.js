@@ -38,7 +38,7 @@ angular
                             },
                             title: {
                                 text: $filter('translate')('COUNT_OF_VERIFICATION_CHART_TITLE'),
-                                x: -20 //center
+                                x: -20 
                             },
                             xAxis: {
                                 categories: $scope.listMonth,
@@ -72,7 +72,7 @@ angular
                     $scope.chartConfig = {
                         title: {
                             text: $filter('translate')('NO_INFO_IN_PERIOD'),
-                            x: -20 //center
+                            x: -20 
                         }
                     }
                 }

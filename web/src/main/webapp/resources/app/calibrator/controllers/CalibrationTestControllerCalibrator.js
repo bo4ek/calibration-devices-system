@@ -33,7 +33,7 @@ angular
             $scope.myDatePicker.pickerDate = null;
             $scope.myDatePicker.pickerDate = {
                 startDate: moment(),
-                endDate: moment() // current day
+                endDate: moment() 
             };
 
             $scope.tableParams = new ngTableParams({
@@ -156,7 +156,6 @@ angular
                                 }
                             })
                         }
-                        //URL.revokeObjectURL($scope.fileURL)
                     })
             };
 
@@ -596,7 +595,6 @@ angular
             $scope.initDatePicker = function () {
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                 }
 
@@ -623,9 +621,9 @@ angular
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('uk'); 
                 } else {
-                    moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                    moment.locale('en'); 
                 }
             };
 
@@ -772,7 +770,6 @@ angular
 
             $scope.openAddTest = function () {
                 if ($scope.pathToScanDoc != null && $scope.isSavedScanDoc) {
-                    //deleteScanDoc();
                 }
                 calibrationTestServiceCalibrator
                     .getEmptyTest($scope.testId)
