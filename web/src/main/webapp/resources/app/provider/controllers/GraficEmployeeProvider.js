@@ -38,7 +38,7 @@ angular
                             },
                             title: {
                                 text: $filter('translate')('EMPLOYEE_PRODUCTIVITY'),
-                                x: -20 //center
+                                x: -20 
                             },
                             subtitle: {
                                 text: $filter('translate')('COUNT_OF_VERIFICATION_CHART_TITLE'),
@@ -77,7 +77,7 @@ angular
                     $scope.chartConfig = {
                         title: {
                             text: $filter('translate')('NO_INFO_IN_PERIOD'),
-                            x: -20 //center
+                            x: -20 
                         }
                     }
                 }

@@ -291,9 +291,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                                 $filter('translate')('ERROR_WHILE_CREATING_VERIFICATIONS'));
                         }
                     });
-
-                //hide form because application status is shown
-
             }
         };
 
@@ -600,7 +597,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         $scope.initDatePicker = function () {
 
             if ($scope.defaultDate == null) {
-                //copy of original daterange
                 $scope.defaultDate = angular.copy($scope.selectedData.dateOfDismantled);
                 $scope.defaultDate = angular.copy($scope.selectedData.dateOfMounted);
                 $scope.defaultDate = angular.copy($scope.addInfo.dateOfVerif);
@@ -646,9 +642,9 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         $scope.setTypeDataLanguage = function () {
             var lang = $translate.use();
             if (lang === 'ukr') {
-                moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                moment.locale('uk'); 
             } else {
-                moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                moment.locale('en'); 
             }
         };
 
@@ -659,7 +655,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.addInfo.pickerDate = null;
         };
 
-        // Disable weekend selection
         $scope.disabled = function(date, mode) {
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
         };

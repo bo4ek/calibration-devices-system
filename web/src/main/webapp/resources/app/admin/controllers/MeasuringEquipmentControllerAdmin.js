@@ -80,7 +80,7 @@ angular
                 };
 
                 $scope.isDateDefault = function () {
-                    return ($scope.myDatePicker.pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') // compare by day
+                    return ($scope.myDatePicker.pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') 
                     && $scope.myDatePicker.pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day'));
                 };
 
@@ -104,8 +104,6 @@ angular
                 $scope.deviceTypeData = [
                     {id: 'WATER', label: $filter('translate')('WATER')},
                     {id: 'THERMAL', label: $filter('translate')('THERMAL')}
-//                {id: 'ELECTRICAL', label: $filter('translate')('ELECTRICAL')},
-//                {id: 'GASEOUS', label: $filter('translate')('GASEOUS')}
                 ];
 
                 $scope.moduleTypeData = [
@@ -116,9 +114,6 @@ angular
                 $scope.setTypeDataLanguage = function () {
                     $scope.deviceTypeData[0].label = $filter('translate')('WATER');
                     $scope.deviceTypeData[1].label = $filter('translate')('THERMAL');
-//                $scope.deviceTypeData[2].label = $filter('translate')('ELECTRICAL');
-//                $scope.deviceTypeData[3].label = $filter('translate')('GASEOUS');
-
                     $scope.moduleTypeData[0].label = $filter('translate')('INSTALLATION_FIX');
                     $scope.moduleTypeData[1].label = $filter('translate')('INSTALLATION_PORT');
                 };
@@ -138,7 +133,7 @@ angular
                 };
 
                 $scope.isFilter = function () {
-                    if ($scope.tableParams == null) return false; //table not yet initialized
+                    if ($scope.tableParams == null) return false;
                     var obj = $scope.tableParams.filter();
                     for (var i in obj) {
                         if (i == 'isActive') {
@@ -184,14 +179,14 @@ angular
                                 params.filter().deviceType = $scope.selectedDeviceType.name.id;
                             }
                             else {
-                                params.filter().deviceType = null; //case when the filter is cleared with a button on the select
+                                params.filter().deviceType = null; 
                             }
 
                             if ($scope.selectedModuleType.name != null) {
                                 params.filter().moduleType = $scope.selectedModuleType.name.id;
                             }
                             else {
-                                params.filter().moduleType = null; //case when the filter is cleared with a button on the select
+                                params.filter().moduleType = null; 
                             }
 
                             if (!$scope.isDateDefault()) {

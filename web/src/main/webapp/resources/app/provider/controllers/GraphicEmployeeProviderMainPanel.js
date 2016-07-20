@@ -28,7 +28,7 @@ angular
                             },
                             title: {
                                 text: 'Кількість заявок, що надійшли до організації',
-                                x: -20 //center
+                                x: -20 
                             },
                             xAxis: {
                                 categories: $scope.listMonth,
@@ -62,7 +62,7 @@ angular
                     $scope.chartConfig = {
                         title: {
                             text: 'За даний період немає інформації про працівників',
-                            x: -20 //center
+                            x: -20 
                         }
                     }
                 }

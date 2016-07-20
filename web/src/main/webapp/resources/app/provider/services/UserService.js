@@ -9,10 +9,10 @@ angular
                 return saveData('employee/admin/users/add', userData);
             },
             isAdmin: function () {
-                return getData('employee/admin/users/verificator');  // Url only for Admins (by SecurityConfig), return roles
+                return getData('employee/admin/users/verificator');  
             },
             getLoggedInUserRoles: function () {
-                return getData('loginuser/roles');					// Url for all, return roles
+                return getData('loginuser/roles');					
             },
             getPage: function (currentPage, itemsPerPage, searchObj, filterObj) {
                 var field;

@@ -68,7 +68,6 @@ angular
                     });
             };
 
-            //for cases when user reopen modal
             if (address) {
                 $scope.addressData = address;
                 $scope.receiveDistricts(address.selectedRegion);

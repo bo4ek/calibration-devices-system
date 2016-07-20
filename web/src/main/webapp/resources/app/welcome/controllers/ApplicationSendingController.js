@@ -129,10 +129,10 @@ angular
                 dataReceivingService.findAllRegions()
                     .success(function (regions) {
                         $scope.regions = regions;
-                        $scope.selectedValues.selectedRegion = undefined; //for ui-selects
+                        $scope.selectedValues.selectedRegion = undefined; 
                         $scope.selectedValues.selectedDistrict = undefined;
                         $scope.selectedValues.selectedLocality = undefined;
-                        $scope.selectedValues.selectedStreet = ""; //for bootstrap typeahead (ui.typeahead)
+                        $scope.selectedValues.selectedStreet = ""; 
                     }
                 );
             };
