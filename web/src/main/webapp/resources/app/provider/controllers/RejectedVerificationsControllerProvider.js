@@ -10,14 +10,12 @@ angular
             
             $scope.clearAll = function () {
                 $scope.tableParams.filter({});
-                $scope.clearDate(); // sets 'all time' timerange
+                $scope.clearDate(); 
             };
 
 
             $scope.clearDate = function () {
-                //daterangepicker doesn't support null dates
                 $scope.myDatePicker.pickerDate = $scope.defaultDate;
-                //setting corresponding filters with 'all time' range
                 $scope.tableParams.filter()['starDate'] = $scope.myDatePicker.pickerDate.startDate.format("YYYY-MM-DD");
                 $scope.tableParams.filter()['endDate'] = $scope.myDatePicker.pickerDate.endDate.format("YYYY-MM-DD");
 
@@ -40,16 +38,13 @@ angular
 
                 $scope.myDatePicker.pickerDate = {
                     startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
-                    //earliest day of  all the verifications available in table
-                    //we should reformat it here, because backend currently gives date in format "YYYY-MM-DD"
-                    endDate: moment() // current day
+                    endDate: moment() 
                 };
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                 }
-                moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                moment.locale('uk'); 
                 $scope.opts = {
                     format: 'DD-MM-YYYY',
                     showDropdowns: true,
@@ -81,10 +76,10 @@ angular
             $scope.isDateDefault = function () {
                 var pickerDate = $scope.myDatePicker.pickerDate;
 
-                if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+                if (pickerDate == null || $scope.defaultDate == null) { 
                     return true;
                 }
-                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') 
                     && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
                     return true;
                 }
@@ -157,12 +152,12 @@ angular
 
 
             $scope.checkFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false;
                 var obj = $scope.tableParams.filter();
                 for (var i in obj) {
                     if (obj.hasOwnProperty(i) && obj[i]) {
                         if (i == 'date' || i == 'endDate')
-                            continue; //check for these filters is in another function
+                            continue; 
                         return true;
                     }
                 }
@@ -170,14 +165,12 @@ angular
             };
 
             $scope.checkDateFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false; 
                 var obj = $scope.tableParams.filter();
                 if ($scope.isDateDefault())
                     return false;
                 else if (!moment(obj.date).isSame($scope.defaultDate.startDate)
                     || !moment(obj.endDate).isSame($scope.defaultDate.endDate)) {
-                    //filters are string,
-                    // so we are temporarily convertin them to momentjs objects
                     return true;
                 }
                 return false;

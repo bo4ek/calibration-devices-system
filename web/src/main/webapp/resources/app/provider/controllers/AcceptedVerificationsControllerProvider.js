@@ -112,9 +112,6 @@ angular
             };
 
             verificationServiceProvider.getNewVerificationEarliestDate().success(function (date) {
-                //first we will try to receive date period
-                // to populate ng-table filter
-                // I did this to reduce reloading and flickering of the table
                 $scope.initDatePicker(date);
                 $scope.tableParams = new ngTableParams({
                     page: 1,
