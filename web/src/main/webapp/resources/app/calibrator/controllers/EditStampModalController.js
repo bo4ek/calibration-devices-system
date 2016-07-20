@@ -27,7 +27,7 @@ angular
                             $filter('translate')('ERROR_ACCESS'));
                     } else {
                         toaster.pop('error', $filter('translate')('INFORMATION'),
-                            $filter('translate')('ERROR_UPDATE_QUEUE'));
+                            $filter('translate')('SAVE_VERIF_ERROR'));
                     }
                 });
                 $modalInstance.close();

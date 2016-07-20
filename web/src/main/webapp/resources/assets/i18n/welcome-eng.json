@@ -875,5 +875,6 @@
   "ERROR_CHANGE_DATE_OF_TASK": "This station has task on this day",
   "WAITING_FOR_PROVIDER_ACCEPT": "Waiting for provider accept",
   "WAITING_IN_VERIFICATIONS_FOR_PROVIDER": "Verifications waiting in verifications for provider",
-  "EDIT_STAMP": "Edit stamp"
+  "EDIT_STAMP": "Edit stamp",
+  "FILL_BY_PATTERN": "Fill by pattern"
 }
