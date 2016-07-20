@@ -48,7 +48,7 @@ angular
             sendInitiatedVerification:function(form){
                 return sendData("send",form);
             },
-            getVerificatorsCorrespondingProvider:function(url){ // ??
+            getVerificatorsCorrespondingProvider: function (url) { 
                 return getData("applications/verificators");
             },
             getLocalitiesCorrespondingProvider:function(url){

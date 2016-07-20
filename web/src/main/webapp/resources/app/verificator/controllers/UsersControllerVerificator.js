@@ -12,7 +12,7 @@ angular
                     page: 1,
                     count: 5,
                     sorting: {
-                        lastName: 'asc'     // initial sorting
+                        lastName: 'asc'
                     }
                 },
                 {

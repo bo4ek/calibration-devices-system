@@ -425,8 +425,6 @@ angular
                 }
             };
 
-
-            //For NOT_OK!!!
             $scope.openSendingModalNotOK = function () {
                 if (!$scope.allIsEmpty) {
                     var modalInstance = $modal.open({
@@ -444,8 +442,6 @@ angular
                         }
                     });
 
-
-                    //executes when modal closing
                     modalInstance.result.then(function (formData) {
 
                         var dataToSend = {

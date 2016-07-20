@@ -22,16 +22,15 @@ angular
                 };
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                 }
 
                 $scope.setTypeDataLangDatePicker = function () {
                     var lang = $translate.use();
                     if (lang === 'ukr') {
-                        moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                        moment.locale('uk');
                     } else {
-                        moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                        moment.locale('en');
                     }
                     $scope.opts = {
                         format: 'DD-MM-YYYY',
@@ -63,10 +62,10 @@ angular
             $scope.isDateDefault = function () {
                 var pickerDate = $scope.myDatePicker.pickerDate;
 
-                if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+                if (pickerDate == null || $scope.defaultDate == null) { 
                     return true;
                 }
-                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') 
                     && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
                     return true;
                 }
@@ -74,7 +73,6 @@ angular
             };
 
             $scope.clearDate = function () {
-                //daterangepicker doesn't support null dates
                 $scope.myDatePicker.pickerDate = $scope.defaultDate;
             };
 
@@ -264,7 +262,7 @@ angular
                 page: 1,
                 count: 5,
                 sorting: {
-                    lastName: 'asc'     // initial sorting
+                    lastName: 'asc'
                 },
             }, {
                 total: 0,

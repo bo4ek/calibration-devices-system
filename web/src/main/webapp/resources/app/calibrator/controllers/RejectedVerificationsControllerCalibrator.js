@@ -80,7 +80,7 @@ angular
                 if (pickerDate == null || $scope.defaultDate == null) {
                     return true;
                 }
-                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                if (pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day')
                     && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day')) {
                     return true;
                 }
@@ -124,12 +124,12 @@ angular
 
 
             $scope.checkFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false;
                 var obj = $scope.tableParams.filter();
                 for (var i in obj) {
                     if (obj.hasOwnProperty(i) && obj[i]) {
                         if (i == 'date' || i == 'endDate')
-                            continue; //check for these filters is in another function
+                            continue; 
                         return true;
                     }
                 }
@@ -137,14 +137,12 @@ angular
             };
 
             $scope.checkDateFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false;
                 var obj = $scope.tableParams.filter();
                 if ($scope.isDateDefault())
                     return false;
                 else if (!moment(obj.date).isSame($scope.defaultDate.startDate)
                     || !moment(obj.endDate).isSame($scope.defaultDate.endDate)) {
-                    //filters are string,
-                    // so we are temporarily convertin them to momentjs objects
                     return true;
                 }
                 return false;

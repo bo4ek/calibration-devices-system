@@ -10,7 +10,7 @@ angular
                             },
                             title: {
                                 text: '',
-                                x: -20 //center
+                                x: -20 
                             },
 
                             tooltip: {

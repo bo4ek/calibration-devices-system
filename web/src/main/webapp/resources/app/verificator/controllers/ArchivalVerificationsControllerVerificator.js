@@ -42,16 +42,15 @@ angular
                 $scope.myDatePicker.pickerDate = {};
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                 }
 
                 $scope.setTypeDataLangDatePicker = function () {
                     var lang = $translate.use();
                     if (lang === 'ukr') {
-                        moment.locale('uk'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                        moment.locale('uk'); 
                     } else {
-                        moment.locale('en'); //setting locale for momentjs library (to get monday as first day of the week in ranges)
+                        moment.locale('en'); 
                     }
                     $scope.opts = {
                         format: 'DD-MM-YYYY',
@@ -69,7 +68,6 @@ angular
             };
 
             $scope.clearDate = function () {
-                //daterangepicker doesn't support null dates
                 $scope.myDatePicker.pickerDate = $scope.defaultDate;
                 $scope.tableParams.filter({});
             };

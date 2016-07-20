@@ -288,6 +288,4 @@
                 }
             };
         });
-    //define(['services/globalSearchService'],function(){}
-    //);
 })();
