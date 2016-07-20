@@ -209,7 +209,7 @@ public class CalibratorApplicationController {
                     verification.getCounter(),
                     verification.getDevice(),
                     verification.isVerificationWithDismantle(),
-                    verification.getTask().getId(),
+                    verification.getTask(),
                     verification.getGroup().getId(),
                     verification.getQueue()
             );

@@ -38,19 +38,19 @@
                                                 translate}}</b>
                                             </div>
                                         </td>
-                                        <td data-title="'VERIFICATION_ID' | translate" sortable="'id'"
+                                        <td data-title="'VERIFICATION_ID' | translate" sortable="'id'" style="width: 6%"
                                             filter="{ 'id': 'textWithDelayedUpdate' }" ng-model="filters.id">{{ verification.id }}
                                         </td>
 
                                         <td data-title="'ACTIONS' | translate" class="control_buttons"
-                                            style="width: 30%">
+                                            style="width: 3%">
 
 
                                             <div class="ui simple dropdown icon item">
                                                 <i class="fa fa-wrench"></i>
 
                                                 <div class="menu">
-                                                    <div class="ui simple dropdown icon item">
+                                                    <div class="ui simple dropdown icon item ">
                                                         <span>{{ 'VERIFICATION_DROPDOWN' | translate }}</span>
 
                                                         <div class="menu">
@@ -60,10 +60,15 @@
                                                                     {{ 'DETAIL' | translate }}
                                                                 </a>
                                                             </div>
+                                                            <div class="item" ng-click="editStamp(verification.id)">
+                                                                <a>
+                                                                    <i class="fa fa-pencil"></i>
+                                                                    {{ 'EDIT_STAMP' | translate }}
+                                                                </a>
+                                                            </div>
                                                             <div class="item">
-                                                                <a
-                                                                        target="_blank"
-                                                                        href="{{'/doc/info/' + verification.id + '/docx'}}">
+                                                                <a target="_blank"
+                                                                   href="{{'/doc/info/' + verification.id + '/docx'}}">
                                                                     <i class="fa fa-file-word-o"></i>
                                                                     {{ 'DOWNLOAD_DOC' | translate }}
                                                                 </a>
@@ -126,14 +131,18 @@
                                         <td data-title="'CLIENT_STREET' | translate" sortable="'street'"
                                             filter="{ 'street': 'textWithDelayedUpdate' }">{{ verification.street }}
                                         </td>
+                                        <td data-title="'BUILDING_SHORT' | translate" sortable="'building'">{{ verification.building }}
+                                        </td>
+                                        <td data-title="'PHONE_NUMBER' | translate">{{ verification.phone }}
+                                        </td>
+                                        <td data-title="'FLAT_SHORT' | translate" sortable="'flat'">{{ verification.flat }}
+                                        </td>
                                         <td data-title="'STATUS' | translate" sortable="'status'"
                                             filter="{ 'status': 'status' }">{{ verification.status | translate }}
                                         </td>
-                                        <td data-title="'EMPLOYEE_SINGLE' | translate" sortable="'calibrator_employee_last_name'"
-                                            filter="{ 'employee_last_name': 'textWithDelayedUpdate' }">{{ verification.calibratorEmployee
-                                            }}
+                                        <td data-title="'CALIBRATOR_NAME' | translate">{{ verification.nameCalibrator}}
                                         </td>
-                                        <td data-title="'PROTOCOL_ID' | translate " sortable="'protocol_id'"
+                                        <td data-title="'PROTOCOL_ID' | translate " sortable="'protocol_id'" style="width: 6%"
                                             filter="{ protocol_id : 'textWithDelayedUpdate' }">{{verification.protocolId}}
                                         </td>
                                         <!-- TODO: add protocol date-->
@@ -141,10 +150,16 @@
                                             filter="{ protocol_status : 'protocolStatus'}">{{
                                             verification.protocolStatus | translate}}
                                         </td>
+                                        <td data-title="'SYMBOL' | translate">{{ verification.symbol}}
+                                        </td>
                                         <td data-title="'MEASUREMENT_DEVICE_ID' | translate"
                                             sortable="'NUMBER_OF_COUNTER'"
                                             filter="{ numberCounter : 'textWithDelayedUpdate' }">
                                             {{verification.numberCounter}}
+                                        </td>
+                                        <td data-title="'YEAR_OF_COUNTER_PRODUCTION' | translate">{{ verification.realiseYear}}
+                                        </td>
+                                        <td data-title="'PROVIDER' | translate">{{ verification.nameProvider}}
                                         </td>
                                         <td data-title="'MEASUREMENT_DEVICE_TYPE' | translate"
                                             sortable="'measurement_device_type'"

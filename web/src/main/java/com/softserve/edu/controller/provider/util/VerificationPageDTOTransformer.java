@@ -131,7 +131,7 @@ public class VerificationPageDTOTransformer {
                 dto.setFlat(verification.getClientData().getClientAddress().getFlat());
             }
             dto.setRejectedReason(verification.getRejectedInfo().getName());
-            dto.setEmployeeProvider(verification.getProviderEmployee().getLastName() + " " + verification.getProviderEmployee().getFirstName() + " " + verification.getProviderEmployee().getMiddleName());
+            dto.setEmployeeProvider(verification.getProviderEmployee() != null ? verification.getProviderEmployee().getLastName() + " " + verification.getProviderEmployee().getFirstName() + " " + verification.getProviderEmployee().getMiddleName() : null);
             dto.setRejectedCalibratorDate(verification.getRejectedCalibratorDate());
             dto.setClient_full_name(verification.getClientData().getFullName());
             dto.setStatus(verification.getStatus().toString());

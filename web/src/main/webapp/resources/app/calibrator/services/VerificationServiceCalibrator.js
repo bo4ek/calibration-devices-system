@@ -6,6 +6,9 @@ angular
             getArchivalVerificationDetails: function (verificationId) {
                 return getData('verifications/archive/' + verificationId);
             },
+            getArchivalVerificationStamp: function (verificationId) {
+                return getData('verifications/archive/stamp/' + verificationId);
+            },
             getNewVerifications: function (currentPage, itemsPerPage, params, sortCriteria, sortOrder) {
                 return sendDataToUrl('calibrator/verifications/new/' + currentPage + '/' + itemsPerPage + '/' + sortCriteria + '/' + sortOrder, params);
             },
@@ -36,6 +39,9 @@ angular
             },
             sendEditedVerification: function (verificationId, form) {
                 return updateData("edit/" + verificationId, form);
+            },
+            sendEditedStamp: function (data) {
+                return updateData("editStamp", data);
             },
             getCalibratorsCorrespondingProvider: function () {
                 return getData("applications/calibrators");

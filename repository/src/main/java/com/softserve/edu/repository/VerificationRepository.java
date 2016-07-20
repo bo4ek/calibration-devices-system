@@ -125,7 +125,8 @@ public interface VerificationRepository extends PagingAndSortingRepository<Verif
     @Query("SELECT COUNT(u.id) FROM Verification u WHERE u.status IN ('TEST_COMPLETED', 'SENT_TO_VERIFICATOR', 'TEST_OK', 'TEST_NOK') and u.task = :task")
     int countCompletedByTaskId(@Param("task") CalibrationTask task);
 
-    @Query("SELECT COUNT(u.id) FROM Verification u WHERE u.status NOT IN ('TEST_PLACE_DETERMINED','SENT_TO_TEST_DEVICE') and u.task = :task")
+    @Query("SELECT COUNT(u.id) FROM Verification u WHERE u.status NOT IN ('TEST_PLACE_DETERMINED','SENT_TO_TEST_DEVICE','TEST_OK','TEST_NOK','PROTOCOL_REJECTED'," +
+            " 'SENT_TO_VERIFICATOR', 'REJECTED_BY_CALIBRATOR', 'REJECTED_BY_PROVIDER', 'REJECTED') and u.task = :task")
     int countNotAcceptedByTaskId(@Param("task") CalibrationTask task);
 
     @Query("SELECT COUNT(u.id) FROM Verification u WHERE u.counterStatus = true and u.task = :task")

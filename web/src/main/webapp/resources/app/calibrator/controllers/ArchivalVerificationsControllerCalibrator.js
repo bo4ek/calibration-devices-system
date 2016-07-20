@@ -265,6 +265,25 @@ angular
                         }
                     }
                 });
+
+            };
+
+            $scope.editStamp = function (verifId) {
+                $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/calibrator/views/modals/edit-stamp-modal.html',
+                    controller: 'EditStampModalController',
+                    size: 'xs',
+                    resolve: {
+                        response: function () {
+                            return verificationServiceCalibrator.getArchivalVerificationStamp(verifId)
+                                .success(function (verification) {
+                                    return verification;
+                                });
+                        }
+                    }
+                });
+
             };
 
             /**

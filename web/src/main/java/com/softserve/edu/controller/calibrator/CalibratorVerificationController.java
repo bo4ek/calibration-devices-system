@@ -10,6 +10,7 @@ import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
 import com.softserve.edu.dto.calibrator.ModuleAndTaskDTO;
 import com.softserve.edu.dto.calibrator.RejectedVerificationPageDTO;
+import com.softserve.edu.dto.calibrator.StampDTO;
 import com.softserve.edu.dto.provider.*;
 import com.softserve.edu.dto.verificator.RejectedInfoFilterSearch;
 import com.softserve.edu.entity.Address;
@@ -530,6 +531,27 @@ public class CalibratorVerificationController {
                 verification.getStateVerificatorEmployee(),
                 verification.getRejectedMessage(),
                 verification.getCounter());
+    }
+
+    @RequestMapping(value = "archive/stamp/{verificationId}", method = RequestMethod.GET)
+    public StampDTO getArchivalVerificationStampById(@PathVariable String verificationId,
+                                                     @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        Verification verification = verificationService.findByIdAndCalibratorId(verificationId,
+                user.getOrganizationId());
+
+        return new StampDTO(verification.getCounter().getStamp(), verification.getId());
+    }
+
+    @RequestMapping(value = "editStamp", method = RequestMethod.PUT)
+    public ResponseEntity getArchivalVerificationStampById(@RequestBody StampDTO stampDTO,
+                                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        HttpStatus httpStatus = HttpStatus.OK;
+        Verification verification = verificationService.findByIdAndCalibratorId(stampDTO.getVerificationId(),
+                user.getOrganizationId());
+        verification.getCounter().setStamp(stampDTO.getStamp());
+        verificationService.saveVerification(verification);
+
+        return new ResponseEntity<>(httpStatus);
     }
 
     @RequestMapping(value = "new/earliest_date/calibrator", method = RequestMethod.GET)
