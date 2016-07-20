@@ -165,7 +165,6 @@ angular
                 };
 
                 if ($scope.defaultDate == null) {
-                    //copy of original daterange
                     $scope.defaultDate = angular.copy($scope.myDatePicker.pickerDate);
                 }
                 moment.locale('uk'); 
@@ -199,18 +198,15 @@ angular
             $scope.isDateDefault = function () {
                 var pickerDate = $scope.myDatePicker.pickerDate;
 
-                if (pickerDate == null || $scope.defaultDate == null) { //moment when page is just loaded
+                if (pickerDate == null || $scope.defaultDate == null) { 
                     return true;
                 }
-                return !!(pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day') //compare by day
+                return !!(pickerDate.startDate.isSame($scope.defaultDate.startDate, 'day')
                 && pickerDate.endDate.isSame($scope.defaultDate.endDate, 'day'));
 
             };
 
             verificationServiceCalibrator.getNewVerificationEarliestDate().success(function (date) {
-                //first we will try to receive date period
-                // to populate ng-table filter
-                // I did this to reduce reloading and flickering of the table
                 $scope.initDatePicker(date);
                 $scope.tableParams = new ngTableParams({
                     page: 1,
@@ -234,7 +230,7 @@ angular
                             params.filter().status = $scope.selectedStatus.name.id;
                         }
                         else {
-                            params.filter().status = null; //case when the filter is cleared with a button on the select
+                            params.filter().status = null; 
                         }
                         if ($scope.selectedDismantled.name != null) {
                             params.filter().dismantled = $scope.selectedDismantled.name.id;
@@ -265,12 +261,12 @@ angular
             });
 
             $scope.checkFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false; 
                 var obj = $scope.tableParams.filter();
                 for (var i in obj) {
                     if (obj.hasOwnProperty(i) && obj[i]) {
                         if (i == 'date' || i == 'endDate')
-                            continue; //check for these filters is in another function
+                            continue; 
                         return true;
                     }
                 }
@@ -278,14 +274,12 @@ angular
             };
 
             $scope.checkDateFilters = function () {
-                if ($scope.tableParams == null) return false; //table not yet initialized
+                if ($scope.tableParams == null) return false;
                 var obj = $scope.tableParams.filter();
                 if ($scope.isDateDefault())
                     return false;
                 else if (!moment(obj.date).isSame($scope.defaultDate.startDate)
                     || !moment(obj.endDate).isSame($scope.defaultDate.endDate)) {
-                    //filters are string,
-                    // so we are temporarily convertin them to momentjs objects
                     return true;
                 }
                 return false;
