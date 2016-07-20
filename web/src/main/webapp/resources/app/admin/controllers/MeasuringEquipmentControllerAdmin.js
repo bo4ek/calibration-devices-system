@@ -139,7 +139,6 @@ angular
                 };
 
                 $scope.isFilter = function () {
-                    //console.log("isFilter");
                     if ($scope.tableParams == null) return false; //table not yet initialized
                     var obj = $scope.tableParams.filter();
                     for (var i in obj) {
@@ -293,7 +292,6 @@ angular
                         $scope.popNotification($filter('translate')('INFORMATION'),
                             $filter('translate')('SUCCESSFULLY_DISABLED_CALIBRATION_MODULE'));
                         $timeout(function () {
-                            console.log('delete with timeout');
                             $rootScope.onTableHandling();
                         }, 700);
                     });
@@ -308,7 +306,6 @@ angular
                             $filter('translate')('SUCCESSFULLY_ENABLED_CALIBRATION_MODULE'));
                     });
                     $timeout(function () {
-                        console.log('enable with timeout');
                         $rootScope.onTableHandling();
                     }, 700);
                 };
@@ -320,8 +317,6 @@ angular
                     });
 
                     $timeout(function () {
-                        console.log('delete with timeout');
-                        //$rootScope.onTableHandling();
                     }, 700);
                 };
 

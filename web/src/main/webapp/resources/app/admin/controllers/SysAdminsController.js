@@ -24,7 +24,6 @@ angular
 
                     userService.getSysAdminsPage()
                         .success(function (result) {
-                            console.log(result);
                             $scope.totalEmployee = result.totalItems;
                             $defer.resolve(result.content);
                             params.total(result.totalItems);
@@ -73,7 +72,6 @@ angular
                     $rootScope.username).then(
                     function (result) {
                         $rootScope.sysAdmin = result.data;
-                        console.log($rootScope.sysAdmin);
 
                         var sysAdminDTOModal = $modal
                             .open({

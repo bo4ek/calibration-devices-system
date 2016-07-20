@@ -211,11 +211,9 @@ angular
         function saveInfo(url, data) {
             return $http.post(url, data)
                 .success(function (response) {
-                    console.log(response);
                     return response;
                 })
                 .error(function (err) {
-                    console.log(err);
                     return err;
                 });
         }

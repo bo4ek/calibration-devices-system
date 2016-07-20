@@ -92,7 +92,6 @@ angular
                         size: 'lg',
                         resolve: {
                             devices: function () {
-                                console.log(counterTypeService.findAllDevices());
                                 return counterTypeService.findAllDevices();
                             }
                         }
@@ -114,7 +113,6 @@ angular
                         $rootScope.counterTypeId).then(
                         function (data) {
                             $rootScope.countersType = data;
-                            console.log($rootScope.countersType);
 
                             var counterTypeDTOModal = $modal
                                 .open({
@@ -124,7 +122,6 @@ angular
                                     size: 'lg',
                                     resolve: {
                                         devices: function () {
-                                            console.log(counterTypeService.findAllDevices());
                                             return counterTypeService.findAllDevices();
                                         }
                                     }
@@ -158,7 +155,6 @@ angular
                  */
                 $scope.deleteCounterType = function (id) {
 
-                    console.log(id);
                     counterTypeService.deleteCounterType(id).then(function (status) {
                         if (status == 409) {
                             toaster.pop('error', $filter('translate')('INFORMATION'), $filter('translate')('ERROR_DELETED_COUNTER_TYPE'));
@@ -167,7 +163,6 @@ angular
                         }
                     });
                     $timeout(function () {
-                        console.log('delete with timeout');
                         $rootScope.onTableHandling();
                     }, 700);
                 };

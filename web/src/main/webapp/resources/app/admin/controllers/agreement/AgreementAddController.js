@@ -144,7 +144,6 @@ angular
              * Saves agreement
              */
             function saveAgreement() {
-                console.log($scope.addAgreementFormData);
                 if (agreement === undefined) {
                     agreementService.saveAgreement($scope.addAgreementFormData)
                         .then(function (result) {

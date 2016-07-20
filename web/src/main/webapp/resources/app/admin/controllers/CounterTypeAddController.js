@@ -78,7 +78,7 @@ angular
              * form and updates table with counter types.
              */
             function saveCounterType() {
-                console.log($scope.addCounterTypeFormData);
+
                 counterTypeService.saveCounterType($scope.addCounterTypeFormData)
                     .then(function (data) {
                         if (data == 201) {

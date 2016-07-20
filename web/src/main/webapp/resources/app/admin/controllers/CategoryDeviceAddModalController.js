@@ -99,7 +99,6 @@ angular
              * form and updates table with devices categories.
              */
             function saveDeviceCategory() {
-                console.log($scope.addCategoryFormData);
                 devicesService.saveDeviceCategory($scope.addCategoryFormData)
                     .then(function (data) {
                         if (data == 201) {

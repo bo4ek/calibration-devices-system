@@ -104,7 +104,6 @@ angular
                     function (data) {
                         if (data == 200) {
                             $scope.closeModal(true);
-                            console.log(data);
                             $rootScope.onTableHandling();
                         }
                     });

@@ -232,7 +232,6 @@ angular
                     $scope.localities = [];
                     addressService.findLocalitiesByDistrictId(selectedDistrict.id)
                         .then(function (localities) {
-                            console.log(localities);
                             $scope.localities = localities;
                             $scope.sysAdminFormData.address.locality = undefined;
                             $scope.sysAdminFormData.address.street = "";
@@ -384,9 +383,7 @@ angular
                             $modalInstance.close();
                             $rootScope.onTableHandling();
                             $scope.resetSysAdminFormData();
-                        } else {
-                            console.log(data.status);
-                        }
+                        } 
                     });
             }
 

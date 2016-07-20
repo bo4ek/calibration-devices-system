@@ -246,7 +246,6 @@ angular
                     });
 
                     $timeout(function () {
-                        console.log('delete with timeout');
                         $rootScope.onTableHandling();
                     }, 700);
                 };

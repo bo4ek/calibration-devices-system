@@ -3,11 +3,9 @@ angular
     .factory('EmployeeService', function ($http) {
         return {
             getAll: function (pageNumber, itemsPerPage) {
-                console.log(pageNumber);
                 return getData('employee/admin/users/' + pageNumber + "/" + itemsPerPage);
             },
             getPage: function (currentPage, itemsPerPage, searchObj, filterObj) {
-                console.log(currentPage);
                 var field;
                 var value;
                 for (var key in filterObj) {

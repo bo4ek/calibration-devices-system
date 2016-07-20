@@ -60,15 +60,12 @@ angular
                 if (lang === 'ukr') {
                     switch ($scope.defaultData.deviceType.type) {
                         case "WATER":
-                            console.log($scope.defaultData.deviceType);
                             $scope.defaultData.deviceType.label = 'Холодна вода';
                             break;
                         case "THERMAL":
-                            console.log($scope.defaultData.deviceType);
                             $scope.defaultData.deviceType.label = 'Гаряча вода';
                             break;
                         default:
-                            console.log($scope.defaultData.deviceType.type + " not device type");
                     }
                 } else if (lang === 'eng') {
                     switch ($scope.defaultData.deviceType.type) {
@@ -79,7 +76,6 @@ angular
                             $scope.defaultData.deviceType.label = 'Hot water';
                             break;
                         default:
-                            console.log($scope.defaultData.deviceType.type + " not device type");
                     }
                 }
             };
