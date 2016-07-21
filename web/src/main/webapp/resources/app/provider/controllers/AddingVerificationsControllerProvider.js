@@ -59,19 +59,19 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         /**
          * For timepicker
          */
-        $scope.updateTimepicker = function() {
+        $scope.updateTimepicker = function () {
             $scope.addInfo.timeFrom = new Date();
-            $scope.addInfo.timeFrom.setHours( 8 );
-            $scope.addInfo.timeFrom.setMinutes( 0 );
+            $scope.addInfo.timeFrom.setHours(8);
+            $scope.addInfo.timeFrom.setMinutes(0);
 
             $scope.updateTimeTo();
         };
 
-        $scope.updateTimeTo = function() {
+        $scope.updateTimeTo = function () {
             $scope.moments = [];
             var time = undefined;
             var plusTime;
-            angular.forEach($scope.options.hstep, function(value) {
+            angular.forEach($scope.options.hstep, function (value) {
                 time = moment((new Date($scope.addInfo.timeFrom)).getTime());
                 plusTime = 60 * value;
                 $scope.moments.push(time.add(plusTime, 'minutes').format("HH:mm"));
@@ -113,7 +113,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             return 0;
         }
 
-        $scope.fillTimeToForEdit = function() {
+        $scope.fillTimeToForEdit = function () {
             $scope.updateTimeTo();
             var index = arrayObjectIndexOfMoments($scope.moments, moment($scope.verification.data.timeTo, "HH:mm"));
             $scope.addInfo.timeTo = $scope.moments[index];
@@ -159,8 +159,8 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
          * select device by deviceType (isn't very usefull. only not to broke another functionality)
          * this method gets all devices and set wrong deviceId, right deviceId chooses on server side
          */
-        $scope.selectDevice = function() {
-            angular.forEach($scope.devices, function(value){
+        $scope.selectDevice = function () {
+            angular.forEach($scope.devices, function (value) {
                 if (value.deviceType === $scope.selectedData.firstSelectedDeviceType) {
                     $scope.selectedData.selectedDevice = value;
                     $scope.formData.deviceType = value.deviceType;
@@ -172,13 +172,13 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         /**
          * Receives list of all symbols from table counter_type
          */
-        $scope.receiveAllSymbols = function(deviceType) {
+        $scope.receiveAllSymbols = function (deviceType) {
             $scope.symbols = [];
             addressServiceProvider.findAllSymbols(deviceType)
-                .success(function(symbols) {
-                   $scope.symbols = symbols;
-                   $scope.selectedData.counterSymbol = undefined;
-                   $scope.selectedData.counterStandardSize = undefined;
+                .success(function (symbols) {
+                    $scope.symbols = symbols;
+                    $scope.selectedData.counterSymbol = undefined;
+                    $scope.selectedData.counterStandardSize = undefined;
                 });
         };
 
@@ -188,9 +188,9 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         $scope.recieveStandardSizesBySymbol = function (symbol, deviceType) {
             $scope.standardSizes = [];
             addressServiceProvider.findStandardSizesBySymbol(symbol, deviceType)
-                .success(function(standardSizes) {
-                   $scope.standardSizes = standardSizes;
-                   $scope.selectedData.counterStandardSize = undefined;
+                .success(function (standardSizes) {
+                    $scope.standardSizes = standardSizes;
+                    $scope.selectedData.counterStandardSize = undefined;
                 });
         };
 
@@ -237,7 +237,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             .success(function (streetsTypes) {
                 $scope.streetsTypes = streetsTypes;
                 $scope.selectedData.selectedStreetType = "";
-        });
+            });
 
         /**
          * Receives all possible streets.
@@ -283,7 +283,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                 $scope.formData.quantity = $scope.selectedData.firstDeviceCount;
                 verificationServiceProvider.sendInitiatedVerification($scope.formData)
                     .then(function (data) {
-                        if(data.status == 201) {
+                        if (data.status == 201) {
                             $scope.applicationCodes = data.data;
                             $scope.isShownForm = false;
                         } else {
@@ -305,7 +305,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                 verificationServiceProvider.sendInitiatedVerification($scope.formData)
                     .then(function (data) {
                         $rootScope.$broadcast('calibrator-save-verification');
-                        if(data.status == 201) {
+                        if (data.status == 201) {
                             toaster.pop('success', $filter('translate')('APP_SENT_ORG'), data.data);
                             $scope.selectedData.firstDeviceCount = '1';
                             $scope.selectedData.selectedCalibrator = undefined;
@@ -314,24 +314,24 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                             toaster.pop('error', $filter('translate')('INFORMATION'),
                                 $filter('translate')('ERROR_WHILE_CREATING_VERIFICATIONS'));
                         }
-                    }
-                );
+                        }
+                    );
             }
         };
 
         /**
          * create and save in database the verification from filled fields in form when user clicks "Save"
          */
-        $scope.save = function() {
+        $scope.save = function () {
             $scope.selectedData.calibratorRequired = false;
             $scope.$broadcast('show-errors-check-validity');
-            if($scope.clientForm.$valid) {
+            if ($scope.clientForm.$valid) {
 
                 $scope.fillFormData();
 
                 verificationServiceProvider.saveVerification($scope.formData)
                     .success(function (applicationCode) {
-                        if(applicationCode) {
+                        if (applicationCode) {
                             if (!$scope.applicationCodes) {
                                 $scope.applicationCodes = [];
                             }
@@ -350,7 +350,7 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         /**
          * Assing all data into FormData for sending to server. "Save" or "Send" button
          */
-        $scope.fillFormData = function() {
+        $scope.fillFormData = function () {
 
             $scope.selectDevice();
 
@@ -358,23 +358,21 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.formData.region = $scope.selectedData.region.designation;
             $scope.formData.district = $scope.selectedData.district.designation;
             $scope.formData.locality = $scope.selectedData.locality.designation;
-            $scope.formData.street = $scope.selectedData.selectedStreet.designation ||  $scope.selectedData.selectedStreet;
-            $scope.formData.building =  $scope.selectedData.selectedBuilding.designation || $scope.selectedData.selectedBuilding;
+            $scope.formData.street = $scope.selectedData.selectedStreet.designation || $scope.selectedData.selectedStreet;
+            $scope.formData.building = $scope.selectedData.selectedBuilding.designation || $scope.selectedData.selectedBuilding;
             $scope.formData.deviceId = $scope.selectedData.selectedDevice.id;
 
             // COUNTER
             $scope.formData.dismantled = $scope.selectedData.dismantled;
             $scope.formData.verificationWithDismantle = $scope.selectedData.verificationWithDismantle;
-            $scope.formData.dateOfDismantled = ($scope.convertDateToLong($scope.selectedData.dateOfDismantled) !== 0) ?
-                $scope.convertDateToLong($scope.selectedData.dateOfDismantled.startDate) : null;
-            $scope.formData.dateOfMounted = ($scope.convertDateToLong($scope.selectedData.dateOfMounted) !== 0) ?
-                $scope.convertDateToLong($scope.selectedData.dateOfMounted.startDate) : null;
+            $scope.formData.dateOfDismantled = $scope.selectedData.dateOfDismantled !== 0 ? $scope.selectedData.dateOfDismantled.startDate : null;
+            $scope.formData.dateOfMounted = $scope.selectedData.dateOfMounted !== 0 ? $scope.selectedData.dateOfMounted.startDate : null;
             $scope.formData.numberCounter = $scope.selectedData.numberCounter;
             $scope.formData.sealPresence = $scope.selectedData.sealPresence;
-            if($scope.selectedData.counterSymbol) {
+            if ($scope.selectedData.counterSymbol) {
                 $scope.formData.symbol = $scope.selectedData.counterSymbol;
             }
-            if($scope.selectedData.counterStandardSize) {
+            if ($scope.selectedData.counterStandardSize) {
                 $scope.formData.standardSize = $scope.selectedData.counterStandardSize;
             }
             $scope.formData.releaseYear = $scope.selectedData.releaseYear;
@@ -383,15 +381,11 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.formData.entrance = $scope.addInfo.entrance;
             $scope.formData.doorCode = $scope.addInfo.doorCode;
             $scope.formData.floor = $scope.addInfo.floor;
-            $scope.formData.dateOfVerif = ($scope.convertDateToLong($scope.addInfo.dateOfVerif) !== 0) ?
-                $scope.convertDateToLong($scope.addInfo.dateOfVerif.startDate) : null;
+            $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif !== 0 ? $scope.addInfo.dateOfVerif.startDate : null;
             $scope.formData.timeFrom = moment($scope.convertDateToLong($scope.addInfo.timeFrom)).format("HH:mm");
             $scope.formData.timeTo = $scope.addInfo.timeTo;
-
             $scope.formData.serviceability = $scope.addInfo.serviceability;
-
-            $scope.formData.noWaterToDate = ($scope.convertDateToLong($scope.addInfo.noWaterToDate) !== 0) ?
-                $scope.convertDateToLong($scope.addInfo.noWaterToDate.startDate) : null;
+            $scope.formData.noWaterToDate = $scope.addInfo.noWaterToDate !== 0 ? $scope.addInfo.noWaterToDate.startDate : null;
             $scope.formData.notes = $scope.addInfo.notes;
         };
 
@@ -400,25 +394,25 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
          * @param date
          * @returns {number}
          */
-        $scope.convertDateToLong = function(date) {
+        $scope.convertDateToLong = function (date) {
             return (new Date(date)).getTime();
         };
 
         $scope.closeAlert = function () {
-            if($scope.isShownForm) {
+            if ($scope.isShownForm) {
                 $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/common/views/modals/close-alert.html',
                     controller: 'VerificationCloseAlertController',
                     size: 'md'
                 })
-            }else {
+            } else {
                 $modalInstance.close();
             }
 
         };
 
-        $scope.$on('close-form', function(event, args) {
+        $scope.$on('close-form', function (event, args) {
             $modalInstance.close();
         });
 
@@ -435,11 +429,11 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
         };
 
-        $scope.$on('reset-form', function(event, args){
+        $scope.$on('reset-form', function (event, args) {
             $scope.reset();
         });
 
-        $scope.reset = function() {
+        $scope.reset = function () {
             $scope.$broadcast('show-errors-reset');
 
             $scope.clientForm.$setPristine();
@@ -484,34 +478,43 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                     $scope.formData.flat = $scope.verification.data.flat;
                     $scope.formData.comment = $scope.verification.data.comment;
                     $scope.formData.mailIndex = $scope.verification.data.mailIndex;
-
-                    $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null)
-                        ? $scope.verification.data.dismantled : true;
-                    $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null)
-                        ? $scope.verification.data.verificationWithDismantle : true;
-                    $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null)
-                        ? $scope.verification.data.sealPresence : true;
-                    $scope.selectedData.dateOfDismantled = $scope.verification.data.dateOfDismantled;
-                    $scope.selectedData.dateOfMounted = $scope.verification.data.dateOfMounted;
+                    $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null) ? $scope.verification.data.dismantled : true;
+                    $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null) ? $scope.verification.data.verificationWithDismantle : true;
+                    $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null) ? $scope.verification.data.sealPresence : true;
+                    $scope.selectedData.dateOfDismantled = {};
+                    if ($scope.verification.data.dateOfDismantled != null) {
+                        $scope.selectedData.dateOfDismantled.startDate = new Date($scope.verification.data.dateOfDismantled);
+                        $scope.selectedData.dateOfDismantled.endDate = new Date($scope.verification.data.dateOfDismantled);
+                    }
+                    $scope.selectedData.dateOfMounted = {};
+                    if ($scope.verification.data.dateOfMounted) {
+                        $scope.selectedData.dateOfMounted.startDate = new Date($scope.verification.data.dateOfMounted);
+                        $scope.selectedData.dateOfMounted.endDate = new Date($scope.verification.data.dateOfMounted);
+                    }
                     $scope.selectedData.numberCounter = $scope.verification.data.numberCounter;
                     $scope.selectedData.releaseYear = $scope.verification.data.releaseYear;
                     $scope.formData.accumulatedVolume = $scope.verification.data.accumulatedVolume;
-
                     $scope.addInfo.entrance = $scope.verification.data.entrance;
                     $scope.addInfo.doorCode = $scope.verification.data.doorCode;
                     $scope.addInfo.floor = $scope.verification.data.floor;
-                    $scope.addInfo.dateOfVerif = $scope.verification.data.dateOfVerif;
-                    if($scope.verification.data.timeFrom && $scope.verification.data.timeTo) {
+                    $scope.addInfo.dateOfVerif = {};
+                    if ($scope.verification.data.dateOfVerif != null) {
+                        $scope.addInfo.dateOfVerif.startDate = (new Date($scope.verification.data.dateOfVerif));
+                        $scope.addInfo.dateOfVerif.endDate = (new Date($scope.verification.data.dateOfVerif));
+                    }
+                    if ($scope.verification.data.timeFrom && $scope.verification.data.timeTo) {
                         $scope.addInfo.timeFrom = moment($scope.verification.data.timeFrom, "HH:mm");
                         $scope.fillTimeToForEdit()
                     } else {
                         $scope.updateTimepicker();
                     }
-                    $scope.addInfo.serviceability = ($scope.verification.data.serviceability !== null)
-                        ? $scope.verification.data.serviceability : true;
-                    $scope.addInfo.noWaterToDate = $scope.verification.data.noWaterToDate;
+                    $scope.addInfo.serviceability = ($scope.verification.data.serviceability !== null) ? $scope.verification.data.serviceability : true;
+                    $scope.addInfo.noWaterToDate = {}
+                    if ($scope.verification.data.noWaterToDate) {
+                        $scope.addInfo.noWaterToDate.startDate = new Date($scope.verification.data.noWaterToDate);
+                        $scope.addInfo.noWaterToDate.endDate = new Date($scope.verification.data.noWaterToDate);
+                    }
                     $scope.addInfo.notes = $scope.verification.data.notes;
-
                     $scope.selectedData.selectedBuilding = $scope.verification.data.building;
 
                     addressServiceProvider.findAllRegions().then(function (respRegions) {
@@ -532,24 +535,24 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
                                         $scope.selectedData.locality = $scope.localities[index];
 
                                         addressServiceProvider.findStreetsByLocalityId($scope.selectedData.locality.id)
-                                            .then(function(streets) {
+                                            .then(function (streets) {
                                                 $scope.streets = streets.data;
                                                 var index = arrayObjectIndexOf($scope.streets, $scope.verification.data.street, "designation");
                                                 $scope.selectedData.selectedStreet = $scope.streets[index];
                                             });
                                     });
                             });
-                         });
+                    });
 
 
-                    if($scope.verification.data.deviceName) {
+                    if ($scope.verification.data.deviceName) {
                         addressServiceProvider.findAllDevices().then(function (devices) {
                             $scope.devices = devices.data;
                             var index = arrayObjectIndexOf($scope.devices, $scope.verification.data.deviceName, "designation");
                             $scope.selectedData.selectedDevice = $scope.devices[index];
                         });
 
-                        addressServiceProvider.findAllDeviceTypes().then(function(deviceTypes) {
+                        addressServiceProvider.findAllDeviceTypes().then(function (deviceTypes) {
                             $scope.deviceTypes = deviceTypes.data;
                             var index = arrayIndexOf($scope.deviceTypes, $scope.verification.data.deviceType);
                             $scope.selectedData.firstSelectedDeviceType = $scope.deviceTypes[index];
@@ -576,8 +579,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
 
                 });
             } else {
-
-
                 toaster.pop('warning', $filter('translate')('CREATE_BY_PATTERN_WARNING'));
             }
         };
@@ -586,7 +587,6 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
          *  Date picker and formatter setup
          *
          */
-
 
         $scope.selectedData.dateOfDismantled = null;
         $scope.selectedData.dateOfMounted = null;
@@ -642,9 +642,9 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
         $scope.setTypeDataLanguage = function () {
             var lang = $translate.use();
             if (lang === 'ukr') {
-                moment.locale('uk'); 
+                moment.locale('uk');
             } else {
-                moment.locale('en'); 
+                moment.locale('en');
             }
         };
 
@@ -655,11 +655,11 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.addInfo.pickerDate = null;
         };
 
-        $scope.disabled = function(date, mode) {
+        $scope.disabled = function (date, mode) {
             return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
         };
 
-        $scope.toggleMin = function() {
+        $scope.toggleMin = function () {
             $scope.minDate = $scope.minDate ? null : new Date();
         };
 
@@ -677,11 +677,11 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.addInfo.noWaterToDate = null;
         };
 
-        $scope.clearDateOfDismantled = function() {
+        $scope.clearDateOfDismantled = function () {
             $scope.selectedData.dateOfDismantled = null;
         };
 
-        $scope.clearDateOfMounted = function() {
+        $scope.clearDateOfMounted = function () {
             $scope.selectedData.dateOfMounted = null;
         };
 

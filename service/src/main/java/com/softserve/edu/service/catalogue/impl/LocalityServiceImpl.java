@@ -67,6 +67,11 @@ public class LocalityServiceImpl implements LocalityService {
     }
 
     @Override
+    public List<Locality> findByDesignationAndDistrictId(String designation, Long id) {
+        return localityRepository.findByDesignationAndDistrictId(designation, id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean existByIdAndDistrictId(Long id, Long districtId) {
         return localityRepository.existByIdAndDistrictId(id, districtId);

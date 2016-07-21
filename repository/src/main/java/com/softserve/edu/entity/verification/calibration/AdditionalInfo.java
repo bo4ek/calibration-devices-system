@@ -42,8 +42,8 @@ public class AdditionalInfo {
     @JoinColumn(name = "verification_id")
     private Verification verification;
 
-    public AdditionalInfo(int entrance, int  doorCode, int floor, Date dateOfVerif, LocalTime timeFrom,
-                          LocalTime timeTo, Boolean serviceability, Date noWaterToDate, String notes, Verification verification){
+    public AdditionalInfo(int entrance, int doorCode, int floor, Date dateOfVerif, LocalTime timeFrom,
+                          LocalTime timeTo, Boolean serviceability, Date noWaterToDate, String notes, Verification verification) {
         this.entrance = entrance;
         this.doorCode = doorCode;
         this.floor = floor;
@@ -55,11 +55,24 @@ public class AdditionalInfo {
         setTimeIfDateOfVerifIsnotNullWithouParsing(timeFrom, timeTo);
     }
 
-    public AdditionalInfo(String entrance,String doorCode, String floor, Long dateOfVerif, Boolean serviceability,
-                        Long noWaterToDate, String notes, String timeFrom, String timeTo) {
+    public AdditionalInfo(String entrance, String doorCode, String floor, Date dateOfVerif, Boolean serviceability,
+                          Date noWaterToDate, String notes, String timeFrom, String timeTo) {
 
         this.entrance = (entrance != null && !entrance.equals("")) ? Integer.parseInt(entrance) : 0;
-        this.doorCode = (doorCode != null && !doorCode.equals("")) ? Integer.parseInt(doorCode): 0;
+        this.doorCode = (doorCode != null && !doorCode.equals("")) ? Integer.parseInt(doorCode) : 0;
+        this.floor = (floor != null && !floor.equals("")) ? Integer.parseInt(floor) : 0;
+        this.dateOfVerif = (dateOfVerif != null) ? dateOfVerif : null;
+        this.serviceability = serviceability == null ? false : serviceability;
+        this.noWaterToDate = (noWaterToDate != null) ? noWaterToDate : null;
+        this.notes = notes;
+        setTimeIfDateOfVerifIsnotNull(dateOfVerif, timeFrom, timeTo);
+    }
+
+    public AdditionalInfo(String entrance, String doorCode, String floor, Long dateOfVerif, Boolean serviceability,
+                          Long noWaterToDate, String notes, String timeFrom, String timeTo) {
+
+        this.entrance = (entrance != null && !entrance.equals("")) ? Integer.parseInt(entrance) : 0;
+        this.doorCode = (doorCode != null && !doorCode.equals("")) ? Integer.parseInt(doorCode) : 0;
         this.floor = (floor != null && !floor.equals("")) ? Integer.parseInt(floor) : 0;
         this.dateOfVerif = (dateOfVerif != null) ? new Date(dateOfVerif) : null;
         this.serviceability = serviceability == null ? false : serviceability;
@@ -68,7 +81,7 @@ public class AdditionalInfo {
         setTimeIfDateOfVerifIsnotNull(dateOfVerif, timeFrom, timeTo);
     }
 
-    public AdditionalInfo(int entrance,int doorCode, int floor, Long dateOfVerif, Boolean serviceability,
+    public AdditionalInfo(int entrance, int doorCode, int floor, Long dateOfVerif, Boolean serviceability,
                           Long noWaterToDate, String notes, String timeFrom, String timeTo) {
         this.entrance = entrance;
         this.doorCode = doorCode;
@@ -76,6 +89,18 @@ public class AdditionalInfo {
         this.dateOfVerif = (dateOfVerif != null) ? new Date(dateOfVerif) : null;
         this.serviceability = serviceability == null ? false : serviceability;
         this.noWaterToDate = (noWaterToDate != null) ? new Date(noWaterToDate) : null;
+        this.notes = notes;
+
+    }
+
+    public AdditionalInfo(int entrance, int doorCode, int floor, Date dateOfVerif, Boolean serviceability,
+                          Date noWaterToDate, String notes, String timeFrom, String timeTo) {
+        this.entrance = entrance;
+        this.doorCode = doorCode;
+        this.floor = floor;
+        this.dateOfVerif = (dateOfVerif != null) ? dateOfVerif : null;
+        this.serviceability = serviceability == null ? false : serviceability;
+        this.noWaterToDate = (noWaterToDate != null) ? noWaterToDate : null;
         this.notes = notes;
 
     }
@@ -97,7 +122,7 @@ public class AdditionalInfo {
     }
 
     public void setDoorCode(String doorCode) {
-        this.doorCode = (doorCode != null && !doorCode.equals("")) ? Integer.parseInt(doorCode): 0;
+        this.doorCode = (doorCode != null && !doorCode.equals("")) ? Integer.parseInt(doorCode) : 0;
     }
 
     public void setDoorCode(int doorCode) {
@@ -112,12 +137,20 @@ public class AdditionalInfo {
         this.floor = floor;
     }
 
-    public void setDateOfVerif(Long dateOfVerif) {
+    public void setDateOfVerifLong(Long dateOfVerif) {
         this.dateOfVerif = (dateOfVerif != null) ? new Date(dateOfVerif) : null;
     }
 
-    public void setNoWaterToDate(Long noWaterToDate) {
+    public void setDateOfVerif(Date dateOfVerif) {
+        this.dateOfVerif = (dateOfVerif != null) ? dateOfVerif : null;
+    }
+
+    public void setNoWaterToDateLong(Long noWaterToDate) {
         this.noWaterToDate = (noWaterToDate != null) ? new Date(noWaterToDate) : null;
+    }
+
+    public void setNoWaterToDate(Date noWaterToDate) {
+        this.noWaterToDate = (noWaterToDate != null) ? noWaterToDate : null;
     }
 
     public void setTimeFrom(String timeFrom) {
@@ -138,7 +171,7 @@ public class AdditionalInfo {
         }
     }
 
-    private void setTimeIfDateOfVerifIsnotNull(Long dateOfVerif, String timeFrom, String timeTo) {
+    private void setTimeIfDateOfVerifIsnotNull(Object dateOfVerif, String timeFrom, String timeTo) {
         if (dateOfVerif != null && timeFrom != null && timeTo != null) {
             this.timeFrom = LocalTime.parse(timeFrom);
             this.timeTo = LocalTime.parse(timeTo);

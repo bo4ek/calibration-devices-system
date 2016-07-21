@@ -6,6 +6,10 @@ import com.softserve.edu.dto.admin.OrganizationDTO;
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
 import com.softserve.edu.dto.provider.*;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.catalogue.District;
+import com.softserve.edu.entity.catalogue.Locality;
+import com.softserve.edu.entity.catalogue.Region;
+import com.softserve.edu.entity.catalogue.Street;
 import com.softserve.edu.entity.enumeration.organization.OrganizationType;
 import com.softserve.edu.entity.enumeration.user.UserRole;
 import com.softserve.edu.entity.enumeration.verification.Status;
@@ -17,7 +21,7 @@ import com.softserve.edu.entity.verification.calibration.RejectedInfo;
 import com.softserve.edu.service.admin.OrganizationService;
 import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.CalibratorService;
-import com.softserve.edu.service.catalogue.RejectedInfoService;
+import com.softserve.edu.service.catalogue.*;
 import com.softserve.edu.service.provider.ProviderEmployeeService;
 import com.softserve.edu.service.provider.ProviderService;
 import com.softserve.edu.service.tool.MailService;
@@ -67,6 +71,18 @@ public class ProviderVerificationController {
 
     @Autowired
     VerificationProviderEmployeeService verificationProviderEmployeeService;
+
+    @Autowired
+    RegionService regionService;
+
+    @Autowired
+    DistrictService districtService;
+
+    @Autowired
+    LocalityService localityService;
+
+    @Autowired
+    StreetService streetService;
 
     @Autowired
     private OrganizationService organizationServiceImpl;
@@ -506,8 +522,35 @@ public class ProviderVerificationController {
      * @return
      */
     @RequestMapping(value = "editClientInfo", method = RequestMethod.PUT)
-    public ResponseEntity editClientInfo(@RequestBody ClientStageVerificationDTO clientDTO) {
+    public ResponseEntity editClientInfo(@RequestBody ClientStageVerificationDTO clientDTO,
+                                         @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         HttpStatus httpStatus = HttpStatus.OK;
+
+        if (verificationService.findById(clientDTO.getVerificationId()).getProvider().getId() != user.getOrganizationId()) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            return new ResponseEntity<>(httpStatus);
+        }
+
+        Region region = regionService.getRegionByDesignation(clientDTO.getRegion());
+        if (region == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
+        District district = districtService.findDistrictByDesignationAndRegion(clientDTO.getDistrict(), region.getId());
+        if (district == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
+        List<Locality> locality = localityService.findByDesignationAndDistrictId(clientDTO.getLocality(), district.getId());
+        if (locality == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
+        Street street = streetService.findByDesignation(clientDTO.getStreet());
+        if (street == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
 
         Address address = new Address(clientDTO.getRegion(),
                 clientDTO.getDistrict(),

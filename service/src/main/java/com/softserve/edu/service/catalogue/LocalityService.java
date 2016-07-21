@@ -24,5 +24,7 @@ public interface LocalityService {
 
     List<Locality> findByLocalityIdIn(List<Long> organizationIds);
 
+    List<Locality> findByDesignationAndDistrictId(String designation, Long id);
+
     boolean existByIdAndDistrictId(Long id, Long districtId);
 }

@@ -47,7 +47,7 @@ public class Counter {
 
     public Counter(String releaseYear, Long dateOfDismantled, Long dateOfMounted, String numberCounter,
                    CounterType counterType, Verification verification) {
-        this(releaseYear, dateOfDismantled, dateOfMounted,numberCounter, counterType);
+        this(releaseYear, dateOfDismantled, dateOfMounted, numberCounter, counterType);
         this.verification = verification;
     }
 
@@ -60,9 +60,25 @@ public class Counter {
         this.releaseYear = releaseYear;
     }
 
+    public Counter(String releaseYear, Date dateOfDismantled, Date dateOfMounted, String numberCounter,
+                   CounterType counterType) {
+        this.dateOfDismantled = (dateOfDismantled != null) ? dateOfDismantled : null;
+        this.dateOfMounted = (dateOfMounted != null) ? dateOfMounted : null;
+        this.numberCounter = numberCounter;
+        this.counterType = counterType;
+        this.releaseYear = releaseYear;
+    }
+
+
     public Counter(String releaseYear, Long dateOfDismantled, Long dateOfMounted, String numberCounter,
                    CounterType counterType, String accumulatedVolume) {
-        this(releaseYear, dateOfDismantled,dateOfMounted,numberCounter, counterType);
+        this(releaseYear, dateOfDismantled, dateOfMounted, numberCounter, counterType);
+        this.accumulatedVolume = accumulatedVolume;
+    }
+
+    public Counter(String releaseYear, Date dateOfDismantled, Date dateOfMounted, String numberCounter,
+                   CounterType counterType, String accumulatedVolume) {
+        this(releaseYear, dateOfDismantled, dateOfMounted, numberCounter, counterType);
         this.accumulatedVolume = accumulatedVolume;
     }
 
@@ -73,11 +89,11 @@ public class Counter {
         this.stamp = stamp;
     }
 
-    public void setDateOfDismantled(Long dateOfDismantled) {
+    public void setDateOfDismantledLong(Long dateOfDismantled) {
         this.dateOfDismantled = (dateOfDismantled != null) ? new Date(dateOfDismantled) : null;
     }
 
-    public void setDateOfMounted(Long dateOfMounted) {
+    public void setDateOfMountedLong(Long dateOfMounted) {
         this.dateOfMounted = (dateOfMounted != null) ? new Date(dateOfMounted) : null;
     }
 }

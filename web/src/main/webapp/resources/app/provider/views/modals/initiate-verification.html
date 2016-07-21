@@ -6,8 +6,8 @@
                 <accordion-group is-open="generalInformation">
                     <accordion-heading>
                         <div class="panel-heading">
-                        {{'GENERAL_INFORMATION' | translate }}
-                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': generalInformation,
+                            {{'GENERAL_INFORMATION' | translate }}
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': generalInformation,
                             'glyphicon-chevron-right': !generalInformation}"></i>
                         </div>
                     </accordion-heading>
@@ -146,7 +146,7 @@
 
                             <div class="form-group" ng-show="checkboxModel" show-errors>
                                 <label for="phoneNumberSecond" class="col-md-4 control-label">
-                                        {{'SECOND_PHONE' | translate}}
+                                    {{'SECOND_PHONE' | translate}}
                                 </label>
                                 <div class="col-md-8">
                                     <div class="input-group" ng-show="checkboxModel">
@@ -504,7 +504,6 @@
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button>
                                 </span>
-
                                         <input type="text" class="form-control date-picker"
                                                ng-model="selectedData.dateOfMounted"
                                                ng-click="showPicker()"
@@ -539,8 +538,7 @@
                             <!--NUMBER OF COUNTER-->
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label for="numberCounter" class="control-label">{{' NUMBER_OF_COUNTER ' |
-                                        translate}}</label>
+                                    <label for="numberCounter" class="control-label">{{' NUMBER_OF_COUNTER ' | translate}}</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input type="text"
@@ -646,7 +644,7 @@
                             </div>
 
                             <!--ACCUMULATED VOLUME-->
-                            <div class="form-group" >
+                            <div class="form-group">
                                 <div class="col-md-4 form-group">
                                     <label for="accumulatedVolume">{{'ACCUMULATED_VOLUME' | translate}}</label>
                                 </div>
@@ -705,7 +703,7 @@
                                 </div>
                                 <div class="form-group col-md-8" ng-class="floorValidation.css">
                                     <input type="text"
-                                               ng-model="addInfo.doorCode"
+                                           ng-model="addInfo.doorCode"
                                            ng-change="checkAll('doorCode')"
                                            id="doorCode" name="doorCode" class="form-control">
 
@@ -767,12 +765,12 @@
                                 </div>
                                 <div class="form-group col-md-8" ng-class="timeValidation.css" id="timeVerification">
                                     <div class="col-xs-4">
-                                        <timepicker  ng-model="addInfo.timeFrom" hour-step="1" minute-step="15" show-meridian="false" ng-change="updateTimeTo()"></timepicker>
+                                        <timepicker ng-model="addInfo.timeFrom" hour-step="1" minute-step="15" show-meridian="false" ng-change="updateTimeTo()"></timepicker>
                                     </div>
                                     <br>
                                     <div class="col-xs-4">
                                         <div>
-                                            <select class="form-control"  ng-model="addInfo.timeTo" ng-options="opt for opt in moments"></select>
+                                            <select class="form-control" ng-model="addInfo.timeTo" ng-options="opt for opt in moments"></select>
                                         </div>
                                     </div>
                                 </div>

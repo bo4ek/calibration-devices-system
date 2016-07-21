@@ -14,6 +14,10 @@ import com.softserve.edu.dto.calibrator.StampDTO;
 import com.softserve.edu.dto.provider.*;
 import com.softserve.edu.dto.verificator.RejectedInfoFilterSearch;
 import com.softserve.edu.entity.Address;
+import com.softserve.edu.entity.catalogue.District;
+import com.softserve.edu.entity.catalogue.Locality;
+import com.softserve.edu.entity.catalogue.Region;
+import com.softserve.edu.entity.catalogue.Street;
 import com.softserve.edu.entity.device.CalibrationModule;
 import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.CounterType;
@@ -36,7 +40,7 @@ import com.softserve.edu.service.admin.UsersService;
 import com.softserve.edu.service.calibrator.*;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestDataService;
 import com.softserve.edu.service.calibrator.data.test.CalibrationTestService;
-import com.softserve.edu.service.catalogue.RejectedInfoService;
+import com.softserve.edu.service.catalogue.*;
 import com.softserve.edu.service.exceptions.InvalidModuleSerialNumberException;
 import com.softserve.edu.service.exceptions.PermissionDeniedException;
 import com.softserve.edu.service.provider.ProviderService;
@@ -106,6 +110,18 @@ public class CalibratorVerificationController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    RegionService regionService;
+
+    @Autowired
+    DistrictService districtService;
+
+    @Autowired
+    LocalityService localityService;
+
+    @Autowired
+    StreetService streetService;
 
     @Autowired
     BbiFileService bbiFileService;
@@ -845,8 +861,35 @@ public class CalibratorVerificationController {
      * @return
      */
     @RequestMapping(value = "editClientInfo", method = RequestMethod.PUT)
-    public ResponseEntity editClientInfo(@RequestBody ClientStageVerificationDTO clientDTO) {
+    public ResponseEntity editClientInfo(@RequestBody ClientStageVerificationDTO clientDTO,
+                                         @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         HttpStatus httpStatus = HttpStatus.OK;
+
+        if (verificationService.findById(clientDTO.getVerificationId()).getCalibrator().getId() != user.getOrganizationId()) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            return new ResponseEntity<>(httpStatus);
+        }
+
+        Region region = regionService.getRegionByDesignation(clientDTO.getRegion());
+        if (region == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
+        District district = districtService.findDistrictByDesignationAndRegion(clientDTO.getDistrict(), region.getId());
+        if (district == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
+        List<Locality> locality = localityService.findByDesignationAndDistrictId(clientDTO.getLocality(), district.getId());
+        if (locality == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
+        Street street = streetService.findByDesignation(clientDTO.getStreet());
+        if (street == null) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(httpStatus);
+        }
 
         Address address = new Address(clientDTO.getRegion(),
                 clientDTO.getDistrict(),

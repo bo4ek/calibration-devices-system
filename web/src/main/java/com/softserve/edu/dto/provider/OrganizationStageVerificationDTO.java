@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
@@ -40,8 +42,8 @@ public class OrganizationStageVerificationDTO {
 
     private Boolean dismantled;
 
-    private Long dateOfDismantled;
-    private Long dateOfMounted;
+    private Date dateOfDismantled;
+    private Date dateOfMounted;
     private String numberCounter;
     private Boolean sealPresence;
     private String releaseYear;
@@ -52,12 +54,12 @@ public class OrganizationStageVerificationDTO {
     private String entrance;
     private String doorCode;
     private String floor;
-    private Long dateOfVerif;
+    private Date dateOfVerif;
     private String timeFrom;
     private String timeTo;
 
     private Boolean serviceability;
-    private Long noWaterToDate;
+    private Date noWaterToDate;
     private String notes;
 
     private Long initialDate;
@@ -78,9 +80,9 @@ public class OrganizationStageVerificationDTO {
     }
 
     public OrganizationStageVerificationDTO(ClientData clientData, String comment, Address address, String verificationId, String calibratorName,
-                                            String entrance, String doorCode, String floor, Long dateOfVerif, Boolean serviceability,
-                                            Long noWaterToDate, String notes, String timeFrom, String timeTo, Boolean dismantled, Long dateOfDismantled,
-                                            Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol,
+                                            String entrance, String doorCode, String floor, Date dateOfVerif, Boolean serviceability,
+                                            Date noWaterToDate, String notes, String timeFrom, String timeTo, Boolean dismantled, Date dateOfDismantled,
+                                            Date dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol,
                                             String standardSize, String deviceName, Boolean sealPresence, Device.DeviceType deviceType,
                                             Long deviceId, Boolean verificationWithDismantle, Long taskId, Long groupId, Integer queue) {
         this.firstName = clientData.getFirstName();
@@ -132,22 +134,5 @@ public class OrganizationStageVerificationDTO {
         this.queue = queue;
 
         this.verificationWithDismantle = verificationWithDismantle;
-    }
-
-
-    public OrganizationStageVerificationDTO(ClientData clientData, String comment, Address address, String verificationId, String calibratorName,
-                                            String entrance, String doorCode, String floor, Long dateOfVerif, Boolean serviceability,
-                                            Long noWaterToDate, String notes, String timeFrom, String timeTo, Boolean dismantled, Long dateOfDismantled,
-                                            Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol,
-                                            String standardSize, String deviceName, Boolean sealPresence, Device.DeviceType deviceType,
-                                            Long deviceId, Boolean verificationWithDismantle, Boolean editAll) {
-
-        this(clientData, comment, address, verificationId, calibratorName,
-                entrance, doorCode, floor, dateOfVerif, serviceability,
-                noWaterToDate, notes, timeFrom, timeTo, dismantled, dateOfDismantled,
-                dateOfMounted, numberCounter, releaseYear, accumulatedVolume, symbol,
-                standardSize, deviceName, sealPresence, deviceType,
-                deviceId, verificationWithDismantle, null, null, 0);
-        this.editAll = editAll;
     }
 }

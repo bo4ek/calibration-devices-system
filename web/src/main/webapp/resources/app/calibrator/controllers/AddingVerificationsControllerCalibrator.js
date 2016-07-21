@@ -328,7 +328,6 @@ angular.module('employeeModule')
                 $scope.isMailValid = true;
                 if ($scope.clientForm.$valid) {
                     $scope.fillFormData();
-                    $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif.getMilliseconds;
                     $scope.formData.providerId = $scope.selectedData.firstSelectedProvider.id;
                     $scope.formData.quantity = $scope.selectedData.firstDeviceCount;
                     verificationServiceCalibrator.sendInitiatedVerification($scope.formData)
@@ -371,10 +370,8 @@ angular.module('employeeModule')
                 // COUNTER
                 $scope.formData.dismantled = $scope.selectedData.dismantled;
                 $scope.formData.verificationWithDismantle = $scope.selectedData.verificationWithDismantle;
-                $scope.formData.dateOfDismantled = ($scope.convertDateToLong($scope.selectedData.dateOfDismantled) !== 0) ?
-                    $scope.convertDateToLong($scope.selectedData.dateOfDismantled.startDate) : null;
-                $scope.formData.dateOfMounted = ($scope.convertDateToLong($scope.selectedData.dateOfMounted) !== 0) ?
-                    $scope.convertDateToLong($scope.selectedData.dateOfMounted.startDate) : null;
+                $scope.formData.dateOfDismantled = $scope.selectedData.dateOfDismantled !== 0 ? $scope.selectedData.dateOfDismantled.startDate : null;
+                $scope.formData.dateOfMounted = $scope.selectedData.dateOfMounted !== 0 ? $scope.selectedData.dateOfMounted.startDate : null;
                 $scope.formData.numberCounter = $scope.selectedData.numberCounter;
                 $scope.formData.sealPresence = $scope.selectedData.sealPresence;
                 if ($scope.selectedData.counterSymbol) {
@@ -389,14 +386,11 @@ angular.module('employeeModule')
                 $scope.formData.entrance = $scope.addInfo.entrance;
                 $scope.formData.doorCode = $scope.addInfo.doorCode;
                 $scope.formData.floor = $scope.addInfo.floor;
-                $scope.formData.dateOfVerif = ($scope.convertDateToLong($scope.addInfo.dateOfVerif) !== 0) ?
-                    $scope.convertDateToLong($scope.addInfo.dateOfVerif.startDate) : null;
+                $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif !== 0 ? $scope.addInfo.dateOfVerif.startDate : null;
                 $scope.formData.timeFrom = moment($scope.convertDateToLong($scope.addInfo.timeFrom)).format("HH:mm");
                 $scope.formData.timeTo = $scope.addInfo.timeTo;
                 $scope.formData.serviceability = $scope.addInfo.serviceability;
-
-                $scope.formData.noWaterToDate = ($scope.convertDateToLong($scope.addInfo.noWaterToDate) !== 0) ?
-                    $scope.convertDateToLong($scope.addInfo.noWaterToDate.startDate) : null;
+                $scope.formData.noWaterToDate = $scope.addInfo.noWaterToDate !== 0 ? $scope.addInfo.noWaterToDate.startDate : null;
                 $scope.formData.notes = $scope.addInfo.notes;
             };
 
@@ -519,9 +513,9 @@ angular.module('employeeModule')
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    moment.locale('uk'); 
+                    moment.locale('uk');
                 } else {
-                    moment.locale('en'); 
+                    moment.locale('en');
                 }
             };
 
@@ -676,10 +670,16 @@ angular.module('employeeModule')
                         $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null) ? $scope.verification.data.dismantled : true;
                         $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null) ? $scope.verification.data.verificationWithDismantle : true;
                         $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null) ? $scope.verification.data.sealPresence : true;
-                        $scope.selectedData.dateOfDismantled = $scope.verification.data.dateOfDismantled;
-                        $scope.selectedData.ViewDateOfDismantled = $scope.selectedData.dateOfDismantled !== null ? (new Date($scope.selectedData.dateOfDismantled)).toLocaleDateString() : $filter('translate')('NO_DATE');
-                        $scope.selectedData.dateOfMounted = $scope.verification.data.dateOfMounted;
-                        $scope.selectedData.ViewDatedateOfMounted = $scope.selectedData.dateOfMounted !== null ? (new Date($scope.selectedData.dateOfMounted)).toLocaleDateString() : $filter('translate')('NO_DATE');
+                        $scope.selectedData.dateOfDismantled = {};
+                        if ($scope.verification.data.dateOfDismantled != null) {
+                            $scope.selectedData.dateOfDismantled.startDate = new Date($scope.verification.data.dateOfDismantled);
+                            $scope.selectedData.dateOfDismantled.endDate = new Date($scope.verification.data.dateOfDismantled);
+                        }
+                        $scope.selectedData.dateOfMounted = {};
+                        if ($scope.verification.data.dateOfMounted != null) {
+                            $scope.selectedData.dateOfMounted.startDate = new Date($scope.verification.data.dateOfMounted);
+                            $scope.selectedData.dateOfMounted.endDate = new Date($scope.verification.data.dateOfMounted);
+                        }
                         $scope.selectedData.numberCounter = $scope.verification.data.numberCounter;
                         $scope.selectedData.releaseYear = $scope.verification.data.releaseYear;
                         $scope.formData.accumulatedVolume = $scope.verification.data.accumulatedVolume;
@@ -687,8 +687,11 @@ angular.module('employeeModule')
                         $scope.addInfo.entrance = $scope.verification.data.entrance;
                         $scope.addInfo.doorCode = $scope.verification.data.doorCode;
                         $scope.addInfo.floor = $scope.verification.data.floor;
-                        $scope.addInfo.dateOfVerif = $scope.verification.data.dateOfVerif;
-                        $scope.addInfo.ViewDateOfVerif = $scope.addInfo.dateOfVerif !== null ? (new Date($scope.addInfo.dateOfVerif)).toLocaleDateString() : $filter('translate')('NO_DATE');
+                        $scope.addInfo.dateOfVerif = {};
+                        if ($scope.verification.data.dateOfVerif) {
+                            $scope.addInfo.dateOfVerif.startDate = (new Date($scope.verification.data.dateOfVerif));
+                            $scope.addInfo.dateOfVerif.endDate = (new Date($scope.verification.data.dateOfVerif));
+                        }
                         if ($scope.verification.data.timeFrom && $scope.verification.data.timeTo) {
                             $scope.addInfo.timeFrom = moment($scope.verification.data.timeFrom, "HH:mm");
                             $scope.fillTimeToForEdit()
@@ -696,8 +699,11 @@ angular.module('employeeModule')
                             $scope.updateTimepicker();
                         }
                         $scope.addInfo.serviceability = ($scope.verification.data.serviceability !== null) ? $scope.verification.data.serviceability : true;
-                        $scope.addInfo.noWaterToDate = $scope.verification.data.noWaterToDate;
-                        $scope.addInfo.ViewNoWaterToDate = $scope.addInfo.noWaterToDate !== null ? (new Date($scope.addInfo.noWaterToDate)).toLocaleDateString() : $filter('translate')('NO_DATE');
+                        $scope.addInfo.noWaterToDate = {}
+                        if ($scope.verification.data.noWaterToDate != null) {
+                            $scope.addInfo.noWaterToDate.startDate = new Date($scope.verification.data.noWaterToDate);
+                            $scope.addInfo.noWaterToDate.endDate = new Date($scope.verification.data.noWaterToDate);
+                        }
                         $scope.addInfo.notes = $scope.verification.data.notes;
 
                         $scope.selectedData.selectedBuilding = $scope.verification.data.building;

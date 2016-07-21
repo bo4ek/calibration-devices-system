@@ -10,6 +10,8 @@ import com.softserve.edu.entity.verification.ClientData;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 
+import java.util.Date;
+
 public class OrganizationStageVerificationDTOTransformer {
 
     public static OrganizationStageVerificationDTO toDtoFromVerification(ClientData clientData,
@@ -21,15 +23,15 @@ public class OrganizationStageVerificationDTOTransformer {
         String entrance = (info == null || info.getEntrance() == 0) ? null : "" + info.getEntrance();
         String doorCode = (info == null || info.getDoorCode() == 0) ? null : "" + info.getDoorCode();
         String floor = (info == null || info.getFloor() == 0) ? null : "" + info.getFloor();
-        Long dateOfVerif = (info != null && info.getDateOfVerif() != null) ? info.getDateOfVerif().getTime() : null;
+        Date dateOfVerif = (info != null && info.getDateOfVerif() != null) ? info.getDateOfVerif() : null;
         Boolean serviceability = (info != null) ? info.getServiceability() : null;
-        Long noWaterToDate = (info != null && info.getNoWaterToDate() != null) ? info.getNoWaterToDate().getTime() : null;
+        Date noWaterToDate = (info != null && info.getNoWaterToDate() != null) ? info.getNoWaterToDate() : null;
         String notes = (info != null) ? info.getNotes() : null;
         String timeFrom = (info != null && info.getTimeFrom() != null) ? info.getTimeFrom().toString() : null;
         String timeTo = (info != null && info.getTimeTo() != null) ? info.getTimeTo().toString() : null;
 
-        Long dateOfDismantled = (counter != null && counter.getDateOfDismantled() != null) ? counter.getDateOfDismantled().getTime() : null;
-        Long dateOfMounted = (counter != null && counter.getDateOfMounted() != null) ? counter.getDateOfMounted().getTime() : null;
+        Date dateOfDismantled = (counter != null && counter.getDateOfDismantled() != null) ? counter.getDateOfDismantled() : null;
+        Date dateOfMounted = (counter != null && counter.getDateOfMounted() != null) ? counter.getDateOfMounted() : null;
         String numberCounter = (counter != null) ? counter.getNumberCounter() : null;
         String releaseYear = (counter != null) ? counter.getReleaseYear() : null;
         String accumulatedVolume = (counter != null) ? counter.getAccumulatedVolume() : null;

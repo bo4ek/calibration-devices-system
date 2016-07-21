@@ -7,11 +7,11 @@ angular
             $scope.ACCUMULATED_VOLUME_REGEX = /^[\d]{5}$/;
 
             /**
-	         * Closes modal window on browser's back/forward button click.
-	         */ 
-	    	$scope.$on('$locationChangeStart', function() {
-			    $modalInstance.close();
-			});
+             * Closes modal window on browser's back/forward button click.
+             */
+            $scope.$on('$locationChangeStart', function () {
+                $modalInstance.close();
+            });
 
             $scope.verificationData = response.data;
 
@@ -57,7 +57,7 @@ angular
             $scope.verificationDataMain.initialDate = $scope.verificationData.initialDate;
             $scope.verificationDataMain.id = $scope.verificationData.id;
             $scope.verificationDataMain.rejectedMessage = $scope.verificationData.rejectedMessage;
-            if(!$scope.verificationData.provider) {
+            if (!$scope.verificationData.provider) {
                 $scope.standardVerification = false;
             } else {
                 $scope.verificationDataMain.provider = $scope.verificationData.provider;
@@ -75,19 +75,19 @@ angular
             /**
              * For timepicker
              */
-            $scope.updateTimepicker = function() {
+            $scope.updateTimepicker = function () {
                 $scope.addInfo.timeFrom = new Date();
-                $scope.addInfo.timeFrom.setHours( 8 );
-                $scope.addInfo.timeFrom.setMinutes( 0 );
+                $scope.addInfo.timeFrom.setHours(8);
+                $scope.addInfo.timeFrom.setMinutes(0);
 
                 $scope.updateTimeTo();
             };
 
-            $scope.updateTimeTo = function() {
+            $scope.updateTimeTo = function () {
                 $scope.moments = [];
                 var time = undefined;
                 var plusTime;
-                angular.forEach($scope.options.hstep, function(value) {
+                angular.forEach($scope.options.hstep, function (value) {
                     time = moment((new Date($scope.addInfo.timeFrom)).getTime());
                     plusTime = 60 * value;
                     $scope.moments.push(time.add(plusTime, 'minutes').format("HH:mm"));
@@ -116,7 +116,7 @@ angular
                 return 0;
             }
 
-            $scope.fillTimeToForEdit = function() {
+            $scope.fillTimeToForEdit = function () {
                 $scope.updateTimeTo();
                 var index = arrayObjectIndexOfMoments($scope.moments, moment($scope.verificationInfo.timeTo, "HH:mm"));
                 $scope.addInfo.timeTo = $scope.moments[index];
@@ -150,9 +150,9 @@ angular
              * select device by deviceType (isn't very usefull. only not to broke another functionality)
              * this method gets all devices and set wrong deviceId, right deviceId chooses on server side
              */
-            $scope.selectDevice = function() {
-                angular.forEach($scope.devices, function(value){
-                    if(value.deviceType ===  $scope.counterData.deviceType){
+            $scope.selectDevice = function () {
+                angular.forEach($scope.devices, function (value) {
+                    if (value.deviceType === $scope.counterData.deviceType) {
                         $scope.counterData.selectedDevice = value;
                         $scope.counterData.deviceType = value.deviceType;
                     }
@@ -164,10 +164,10 @@ angular
             /**
              * Receives list of all symbols from table counter_type
              */
-            $scope.receiveAllSymbols = function(deviceType) {
+            $scope.receiveAllSymbols = function (deviceType) {
                 $scope.symbols = [];
                 dataReceivingService.findAllSymbols(deviceType)
-                    .success(function(symbols) {
+                    .success(function (symbols) {
                         $scope.symbols = symbols;
                         $scope.counterData.counterSymbol = undefined;
                         $scope.counterData.counterStandardSize = undefined;
@@ -180,7 +180,7 @@ angular
             $scope.recieveStandardSizesBySymbol = function (symbol, deviceType) {
                 $scope.standardSizes = [];
                 dataReceivingService.findStandardSizesBySymbol(symbol, deviceType)
-                    .success(function(standardSizes) {
+                    .success(function (standardSizes) {
                         $scope.standardSizes = standardSizes;
                         $scope.counterData.counterStandardSize = undefined;
                     });
@@ -255,7 +255,7 @@ angular
             };
 
             verificationService.getVerificationById($scope.verificationData.id)
-                .success(function(info) {
+                .success(function (info) {
                     $scope.verificationInfo = info;
                     $scope.convertCounterForView();
                     $scope.convertInfoForView();
@@ -264,7 +264,7 @@ angular
                     $scope.fillAddInfoForEdit();
                 });
 
-            $scope.convertCounterForView = function() {
+            $scope.convertCounterForView = function () {
 
                 // COUNTER
                 $scope.counterInfo.deviceType = $scope.verificationInfo.deviceType;
@@ -284,13 +284,13 @@ angular
                 $scope.counterInfo.accumulatedVolume = $scope.verificationInfo.accumulatedVolume;
             };
 
-            $scope.convertInfoForView = function() {
+            $scope.convertInfoForView = function () {
                 //ADDITION INFO
                 $scope.additionalInfo.entrance = $scope.verificationInfo.entrance;
                 $scope.additionalInfo.doorCode = $scope.verificationInfo.doorCode;
                 $scope.additionalInfo.floor = $scope.verificationInfo.floor;
                 $scope.additionalInfo.dateOfVerif = ($scope.verificationInfo.dateOfVerif)
-                    ? new Date($scope.verificationInfo.dateOfVerif).toLocaleDateString() :  $filter('translate')('NO_TIME');
+                    ? new Date($scope.verificationInfo.dateOfVerif).toLocaleDateString() : $filter('translate')('NO_TIME');
                 $scope.additionalInfo.time = ($scope.verificationInfo.timeFrom && $scope.verificationInfo.timeTo)
                     ? ($scope.verificationInfo.timeFrom + " - " + $scope.verificationInfo.timeTo) : $filter('translate')('NO_TIME');
                 $scope.additionalInfo.serviceability = ($scope.verificationInfo.serviceability) ? $filter('translate')('YES') : $filter('translate')('NO');
@@ -300,7 +300,7 @@ angular
 
             };
 
-            $scope.fillClientInfoForEdit = function() {
+            $scope.fillClientInfoForEdit = function () {
 
                 //CLIENT INFO
                 $scope.formData.lastName = $scope.verificationData.lastName;
@@ -309,7 +309,7 @@ angular
                 $scope.formData.email = $scope.verificationData.email;
                 $scope.formData.phone = $scope.verificationData.phone;
                 $scope.formData.secondPhone = $scope.verificationData.secondPhone;
-                if($scope.formData.secondPhone != null) {
+                if ($scope.formData.secondPhone != null) {
                     $scope.checkboxModel = true;
                 }
                 $scope.formData.mailIndex = $scope.verificationData.mailIndex;
@@ -335,7 +335,7 @@ angular
                                     $scope.selectedData.locality = $scope.localities[index];
 
                                     dataReceivingService.findStreetsByLocalityId($scope.selectedData.locality.id)
-                                        .then(function(streets) {
+                                        .then(function (streets) {
                                             $scope.streets = streets.data;
                                             var index = arrayObjectIndexOf($scope.streets, $scope.verificationData.street, "designation");
                                             $scope.selectedData.selectedStreet = $scope.streets[index];
@@ -346,7 +346,7 @@ angular
                 });
             };
 
-            $scope.fillCounterForEdit = function() {
+            $scope.fillCounterForEdit = function () {
                 //COUNTER
                 $scope.counterData.dismantled = $scope.verificationInfo.dismantled;
                 $scope.counterData.verificationWithDismantle = $scope.verificationInfo.verificationWithDismantle;
@@ -371,13 +371,13 @@ angular
                         $scope.counterData.selectedDevice = $scope.devices[index];
                     });
 
-                    dataReceivingService.findAllDeviceTypes().then(function(deviceTypes) {
-                            $scope.deviceTypes = deviceTypes.data;
-                            var index = arrayIndexOf($scope.deviceTypes, $scope.verificationInfo.deviceType);
-                            $scope.counterData.deviceType = $scope.deviceTypes[index];
+                    dataReceivingService.findAllDeviceTypes().then(function (deviceTypes) {
+                        $scope.deviceTypes = deviceTypes.data;
+                        var index = arrayIndexOf($scope.deviceTypes, $scope.verificationInfo.deviceType);
+                        $scope.counterData.deviceType = $scope.deviceTypes[index];
 
 
-                            if ($scope.verificationInfo.symbol) {
+                        if ($scope.verificationInfo.symbol) {
 
                             dataReceivingService.findAllSymbols($scope.counterData.deviceType).then(function (respSymbols) {
                                 $scope.symbols = respSymbols.data;
@@ -393,19 +393,19 @@ angular
                             });
                         }
                         $scope.selectDevice();
-                        });
+                    });
                 }
 
             };
 
-            $scope.fillAddInfoForEdit = function() {
+            $scope.fillAddInfoForEdit = function () {
 
                 //ADDITION INFO
                 $scope.addInfo.entrance = $scope.verificationInfo.entrance;
                 $scope.addInfo.doorCode = $scope.verificationInfo.doorCode;
                 $scope.addInfo.floor = $scope.verificationInfo.floor;
                 $scope.addInfo.dateOfVerif = $scope.verificationInfo.dateOfVerif;
-                if($scope.verificationInfo.timeFrom && $scope.verificationInfo.timeTo) {
+                if ($scope.verificationInfo.timeFrom && $scope.verificationInfo.timeTo) {
                     $scope.addInfo.timeFrom = moment($scope.verificationInfo.timeFrom, "HH:mm");
                     $scope.fillTimeToForEdit()
                 } else {
@@ -427,7 +427,7 @@ angular
              * @param date
              * @returns {number}
              */
-            $scope.convertDateToLong = function(date) {
+            $scope.convertDateToLong = function (date) {
                 return (new Date(date)).getTime();
             };
 
@@ -437,8 +437,8 @@ angular
             $scope.addInfo = {};
 
             /**
-            * Toggle button (additional info) functionality
-            */
+             * Toggle button (additional info) functionality
+             */
             $scope.showStatus = {
                 opened: false
             };
@@ -451,7 +451,7 @@ angular
                 opened: false
             };
 
-            $scope.openCounterInfo = function() {
+            $scope.openCounterInfo = function () {
                 $scope.showCounter.opened = !$scope.showCounter.opened;
             };
 
@@ -513,7 +513,7 @@ angular
             $scope.setTypeDataLanguage = function () {
                 var lang = $translate.use();
                 if (lang === 'ukr') {
-                    moment.locale('uk'); 
+                    moment.locale('uk');
                 } else {
                     moment.locale('en');
                 }
@@ -526,11 +526,11 @@ angular
             };
 
             // Disable weekend selection
-            $scope.disabled = function(date, mode) {
+            $scope.disabled = function (date, mode) {
                 return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
             };
 
-            $scope.toggleMin = function() {
+            $scope.toggleMin = function () {
                 $scope.minDate = $scope.minDate ? null : new Date();
             };
 
@@ -547,11 +547,11 @@ angular
                 $scope.addInfo.noWaterToDate = null;
             };
 
-            $scope.clearDateOfDismantled = function() {
+            $scope.clearDateOfDismantled = function () {
                 $scope.counterData.dateOfDismantled = null;
             };
 
-            $scope.clearDateOfMounted = function() {
+            $scope.clearDateOfMounted = function () {
                 $scope.counterData.dateOfMounted = null;
             };
 
@@ -655,7 +655,7 @@ angular
             /**
              * reset additional info form
              */
-            $scope.resetAddInfoForm = function(){
+            $scope.resetAddInfoForm = function () {
                 $scope.$broadcast('show-errors-reset');
                 $scope.fillAddInfoForEdit();
             };
@@ -663,7 +663,7 @@ angular
             /**
              * reset counter form
              */
-            $scope.resetCounterForm = function() {
+            $scope.resetCounterForm = function () {
                 $scope.$broadcast('show-errors-reset');
                 $scope.fillCounterForEdit();
             };
@@ -671,7 +671,7 @@ angular
             /**
              * reset client form
              */
-            $scope.resetClientForm = function() {
+            $scope.resetClientForm = function () {
                 $scope.$broadcast('show-errors-reset');
                 $scope.fillClientInfoForEdit();
             };
@@ -683,8 +683,8 @@ angular
             /**
              * send clientInfo to server for updating
              */
-            $scope.editClientForm = function() {
-                if(!$scope.checkboxModel || !$scope.formData.secondPhone){
+            $scope.editClientForm = function () {
+                if (!$scope.checkboxModel || !$scope.formData.secondPhone) {
                     $scope.formData.secondPhone = null;
                     $scope.checkboxModel = false;
                 }
@@ -705,10 +705,10 @@ angular
                     "mailIndex": $scope.formData.mailIndex
                 };
                 verificationService.editClientInfo(clientInfo)
-                    .then(function(response) {
+                    .then(function (response) {
                         if (response.status == 200) {
                             verificationService.getVerificationById($scope.verificationDataMain.id)
-                                .success(function(info) {
+                                .success(function (info) {
                                     $scope.verificationData = info;
                                     $scope.toEditClientInfo = !$scope.toEditClientInfo;
                                 });
@@ -722,7 +722,7 @@ angular
             /**
              * sent form data about counter to the server for updating
              */
-            $scope.editCounter = function() {
+            $scope.editCounter = function () {
 
                 var counter = {
                     "verificationId": $scope.verificationDataMain.id,
@@ -730,10 +730,8 @@ angular
                     "deviceName": $scope.counterData.selectedDevice.designation,
                     "dismantled": $scope.counterData.dismantled,
                     "verificationWithDismantle": $scope.counterData.verificationWithDismantle,
-                    "dateOfDismantled": ($scope.convertDateToLong($scope.counterData.dateOfDismantled) !== 0)
-                        ? $scope.convertDateToLong($scope.counterData.dateOfDismantled.endDate) : null,
-                    "dateOfMounted": ($scope.convertDateToLong($scope.counterData.dateOfMounted) !== 0)
-                        ? $scope.convertDateToLong($scope.counterData.dateOfMounted.endDate) : null,
+                    "dateOfDismantled": $scope.counterData.dateOfDismantled !== 0 ? $scope.counterData.dateOfDismantled.startDate : null,
+                    "dateOfMounted": $scope.counterData.dateOfMounted !== 0 ? $scope.counterData.dateOfMounted.startDate : null,
                     "comment": $scope.counterData.comment,
                     "numberCounter": $scope.counterData.numberCounter,
                     "sealPresence": $scope.counterData.sealPresence,
@@ -744,10 +742,10 @@ angular
                     "deviceType": $scope.counterData.deviceType
                 };
                 verificationService.editCounterInfo(counter)
-                    .then(function(response) {
+                    .then(function (response) {
                         if (response.status == 200) {
                             verificationService.getVerificationById($scope.verificationDataMain.id)
-                                .success(function(info) {
+                                .success(function (info) {
                                     $scope.verificationInfo = info;
                                     $scope.convertCounterForView();
                                     $scope.toEditCounter = !$scope.toEditCounter;
@@ -761,11 +759,10 @@ angular
             /**
              * send form data about addition information to the server for updating
              */
-            $scope.editAdditionalInfo = function(){
+            $scope.editAdditionalInfo = function () {
 
                 if (!$scope.addInfo.entrance && !$scope.addInfo.doorCode && !$scope.addInfo.floor
-                    && !$scope.addInfo.dateOfVerif && !$scope.addInfo.time &&
-                    !$scope.addInfo.noWaterToDate && !$scope.addInfo.notes){
+                    && !$scope.addInfo.dateOfVerif && !$scope.addInfo.time && !$scope.addInfo.noWaterToDate && !$scope.addInfo.notes) {
                     $scope.showMessage.status = true;
                 } else {
                     $scope.showMessage.status = false;
@@ -785,19 +782,18 @@ angular
                         .then(function (response) {
                             if (response.status == 200) {
                                 verificationService.getVerificationById($scope.verificationDataMain.id)
-                                    .success(function(info) {
+                                    .success(function (info) {
                                         $scope.verificationInfo = info;
                                         $scope.convertInfoForView();
                                         $scope.toEditInfo = !$scope.toEditInfo;
                                     });
                             } else {
-                             $scope.incorrectValue = true;
+                                $scope.incorrectValue = true;
                             }
                         });
                 }
 
             };
-
 
 
         }]);

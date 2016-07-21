@@ -979,6 +979,40 @@ public class VerificationServiceImpl implements VerificationService {
         List<CounterType> counterTypes = counterTypeRepository.findBySymbolAndStandardSize(symbol, standardSize);
         CounterType counterType = getCounterTypeByDeviceType(counterTypes, deviceType);
         if (counter != null) {
+            counter.setDateOfDismantledLong(dateOfDismantled);
+            counter.setDateOfMountedLong(dateOfMounted);
+            counter.setNumberCounter(numberCounter);
+            counter.setReleaseYear(releaseYear);
+            counter.setAccumulatedVolume(accumulatedVolume);
+            if (counterType != null) {
+                counter.setCounterType(counterType);
+            }
+            counterRepository.save(counter);
+        } else {
+            counter = new Counter(releaseYear, dateOfDismantled, dateOfMounted, numberCounter, counterType);
+            verification.setCounter(counter);
+        }
+        verificationRepository.save(verification);
+
+    }
+
+    @Override
+    @Transactional
+    public void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence,
+                            Date dateOfDismantled, Date dateOfMounted, String numberCounter, String releaseYear,
+                            String accumulatedVolume, String symbol, String standardSize, String comment, Long deviceId,
+                            Boolean verificationWithDismantle, Device.DeviceType deviceType) {
+        Verification verification = verificationRepository.findOne(verificationId);
+
+        verification.setCounterStatus(dismantled);
+        verification.setSealPresence(sealPresence);
+        verification.setVerificationWithDismantle(verificationWithDismantle);
+        verification.setComment(comment);
+
+        Counter counter = verification.getCounter();
+        List<CounterType> counterTypes = counterTypeRepository.findBySymbolAndStandardSize(symbol, standardSize);
+        CounterType counterType = getCounterTypeByDeviceType(counterTypes, deviceType);
+        if (counter != null) {
             counter.setDateOfDismantled(dateOfDismantled);
             counter.setDateOfMounted(dateOfMounted);
             counter.setNumberCounter(numberCounter);
@@ -1022,6 +1056,34 @@ public class VerificationServiceImpl implements VerificationService {
             info.setEntrance(entrance);
             info.setDoorCode(doorCode);
             info.setFloor(floor);
+            info.setDateOfVerifLong(dateOfVerif);
+            info.setServiceability(serviceability);
+            info.setNoWaterToDateLong(noWaterToDate);
+            info.setNotes(notes);
+            info.setTimeFrom(timeFrom);
+            info.setTimeTo(timeTo);
+
+            additionalInfoRepository.save(info);
+        } else {
+            AdditionalInfo newInfo = new AdditionalInfo(entrance, doorCode, floor, dateOfVerif, serviceability, noWaterToDate,
+                    notes, timeFrom, timeTo);
+            verification.setInfo(newInfo);
+            verificationRepository.save(verification);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void editAddInfo(int entrance, int doorCode, int floor, Date dateOfVerif, String timeFrom, String timeTo,
+                            Boolean serviceability, Date noWaterToDate, String notes, String verificationId) {
+        Verification verification = verificationRepository.findOne(verificationId);
+
+        AdditionalInfo info = verification.getInfo();
+
+        if (info != null) {
+            info.setEntrance(entrance);
+            info.setDoorCode(doorCode);
+            info.setFloor(floor);
             info.setDateOfVerif(dateOfVerif);
             info.setServiceability(serviceability);
             info.setNoWaterToDate(noWaterToDate);
@@ -1047,11 +1109,8 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     @Transactional
     public void editClientInfo(String verificationId, ClientData clientData) {
-
         Verification verification = verificationRepository.findOne(verificationId);
-
         verification.setClientData(clientData);
-
         verificationRepository.save(verification);
     }
 

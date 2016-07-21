@@ -124,8 +124,8 @@ public class ProviderApplicationController {
 
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
-                    verificationDTO.getDateOfDismantled(),
-                    verificationDTO.getDateOfMounted(),
+                    verificationDTO.getDateOfDismantled().getTime(),
+                    verificationDTO.getDateOfMounted().getTime(),
                     verificationDTO.getNumberCounter(),
                     counterType,
                     verificationDTO.getAccumulatedVolume()

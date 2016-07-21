@@ -2,7 +2,6 @@ package com.softserve.edu.repository.catalogue;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -54,5 +53,8 @@ public interface LocalityRepository extends CrudRepository<Locality, Long> {
     Long findIdByDesignation(@Param("Designation") String designation); // find city id by city name???
 
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Locality c JOIN c.district d WHERE c.id = :id AND d.id =:districtId")
-    boolean existByIdAndDistrictId(@Param("id")Long id, @Param("districtId") Long districtId);
+    boolean existByIdAndDistrictId(@Param("id") Long id, @Param("districtId") Long districtId);
+
+    @Query("SELECT l FROM Locality l JOIN l.district d WHERE l.designation = :designation AND d.id =:districtId")
+    List<Locality> findByDesignationAndDistrictId(@Param("designation") String designation, @Param("districtId") Long districtId);
 }

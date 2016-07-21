@@ -100,7 +100,7 @@ angular
                     $scope.deviceTypes = deviceTypes;
                     $log.debug('deviceTypes');
                     $log.debug(deviceTypes);
-                    $scope.counterData.deviceType = undefined;  
+                    $scope.counterData.deviceType = undefined;
                     $log.debug($scope.counterData.selectedCount);
                 });
 
@@ -313,33 +313,24 @@ angular
                 $scope.counterData.verificationWithDismantle = $scope.verificationInfo.verificationWithDismantle;
                 $scope.counterData.dateOfDismantled = $scope.verificationInfo.dateOfDismantled;
                 $scope.counterData.dateOfMounted = $scope.verificationInfo.dateOfMounted;
-                $scope.counterData.dateOfDismantled = {
-                    endDate: ($scope.verificationInfo.dateOfDismantled)
-                };
-                $scope.counterData.dateOfMounted = {
-                    endDate: ($scope.verificationInfo.dateOfMounted)
-                };
+                $scope.counterData.dateOfDismantled = {endDate: ($scope.verificationInfo.dateOfDismantled)};
+                $scope.counterData.dateOfMounted = {endDate: ($scope.verificationInfo.dateOfMounted)};
                 $scope.counterData.comment = $scope.verificationInfo.comment;
                 $scope.counterData.numberCounter = $scope.verificationInfo.numberCounter;
                 $scope.counterData.sealPresence = $scope.verificationInfo.sealPresence;
                 $scope.counterData.releaseYear = $scope.verificationInfo.releaseYear;
                 $scope.counterData.accumulatedVolume = $scope.verificationInfo.accumulatedVolume;
-
                 if ($scope.verificationInfo.deviceName) {
                     addressServiceProvider.findAllDevices().then(function (devices) {
                         $scope.devices = devices.data;
                         var index = arrayObjectIndexOf($scope.devices, $scope.verificationInfo.deviceName, "designation");
                         $scope.counterData.selectedDevice = $scope.devices[index];
                     });
-
                     addressServiceProvider.findAllDeviceTypes().then(function (deviceTypes) {
                         $scope.deviceTypes = deviceTypes.data;
                         var index = arrayIndexOf($scope.deviceTypes, $scope.verificationInfo.deviceType);
                         $scope.counterData.deviceType = $scope.deviceTypes[index];
-
-
                         if ($scope.verificationInfo.symbol) {
-
                             addressServiceProvider.findAllSymbols($scope.counterData.deviceType).then(function (respSymbols) {
                                 $scope.symbols = respSymbols.data;
                                 var index = arrayIndexOf($scope.symbols, $scope.verificationInfo.symbol);
@@ -470,7 +461,6 @@ angular
             $scope.defaultDate = null;
 
             $scope.initDatePicker = function () {
-
                 if ($scope.defaultDate == null) {
                     $scope.defaultDate = angular.copy($scope.counterData.dateOfDismantled);
                     $scope.defaultDate = angular.copy($scope.counterData.dateOfMounted);
@@ -735,10 +725,8 @@ angular
                     "deviceName": $scope.counterData.selectedDevice.designation,
                     "dismantled": $scope.counterData.dismantled,
                     "verificationWithDismantle": $scope.counterData.verificationWithDismantle,
-                    "dateOfDismantled": ($scope.convertDateToLong($scope.counterData.dateOfDismantled) !== 0)
-                        ? $scope.convertDateToLong($scope.counterData.dateOfDismantled.endDate) : null,
-                    "dateOfMounted": ($scope.convertDateToLong($scope.counterData.dateOfMounted) !== 0)
-                        ? $scope.convertDateToLong($scope.counterData.dateOfMounted.endDate) : null,
+                    "dateOfDismantled": $scope.counterData.dateOfDismantled !== 0 ? $scope.counterData.dateOfDismantled.startDate : null,
+                    "dateOfMounted": $scope.counterData.dateOfMounted !== 0 ? $scope.counterData.dateOfMounted.startDate : null,
                     "comment": $scope.counterData.comment,
                     "numberCounter": $scope.counterData.numberCounter,
                     "sealPresence": $scope.counterData.sealPresence,

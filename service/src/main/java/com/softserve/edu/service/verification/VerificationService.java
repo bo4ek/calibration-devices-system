@@ -180,8 +180,15 @@ public interface VerificationService {
                      Long dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol, String standardSize,
                      String comment, Long deviceId, Boolean verificationWithDismantle, Device.DeviceType deviceType);
 
+    void editCounter(String verificationId, String deviceName, Boolean dismantled, Boolean sealPresence, Date dateOfDismantled,
+                     Date dateOfMounted, String numberCounter, String releaseYear, String accumulatedVolume, String symbol, String standardSize,
+                     String comment, Long deviceId, Boolean verificationWithDismantle, Device.DeviceType deviceType);
+
     void editAddInfo(int entrance, int doorCode, int floor, Long dateOfVerif, String timeFrom, String timeTo, Boolean serviceability,
                      Long noWaterToDate, String notes, String verificationId);
+
+    void editAddInfo(int entrance, int doorCode, int floor, Date dateOfVerif, String timeFrom, String timeTo, Boolean serviceability,
+                     Date noWaterToDate, String notes, String verificationId);
 
     void editClientInfo(String verificationDTO, ClientData clientData);
 
