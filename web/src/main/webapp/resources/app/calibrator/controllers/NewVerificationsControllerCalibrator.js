@@ -370,7 +370,6 @@ angular
              * redirect to manual test
              */
             $scope.openTests = function (verification) {
-                $log.debug("inside");
                 if (!$scope.dataToManualTest.has(verification.id)) {
                     $scope.createDataForManualTest(verification);
                 }
@@ -470,7 +469,6 @@ angular
                             response: function () {
                                 return verificationServiceCalibrator.getVerificators()
                                     .success(function (verificators) {
-                                        $log.debug(verificators);
                                         return verificators;
                                     });
                             }
@@ -483,10 +481,6 @@ angular
                             idsOfVerifications: $scope.idsOfVerifications,
                             organizationId: verificator.id
                         };
-
-                        $log.debug(dataToSend);
-                        $log.debug(verificator);
-
                         verificationServiceCalibrator
                             .sendVerificationsToCalibrator(dataToSend)
                             .success(function () {
@@ -679,7 +673,7 @@ angular
                                     idsOfVerifications: verificationIds,
                                     employeeCalibrator: formData.provider
                                 };
-                                $log.info(dataToSend);
+
                                 verificationServiceCalibrator
                                     .sendEmployeeCalibrator(dataToSend)
                                     .success(function () {
@@ -696,7 +690,7 @@ angular
                             var dataToSend = {
                                 idsOfVerifications: verificationIds
                             };
-                            $log.info(dataToSend);
+
                             verificationServiceCalibrator
                                 .sendEmployeeCalibrator(dataToSend)
                                 .success(function () {
@@ -760,7 +754,7 @@ angular
                 });
 
                 modalInstance.result.then(function (reason) {
-                    $log.info(verificationId, reason.name.id);
+
                     verificationServiceCalibrator.rejectVerificationByIdAndReason(verificationId, reason.name.id).then(function (data) {
                         switch (data.status) {
                             case 200:

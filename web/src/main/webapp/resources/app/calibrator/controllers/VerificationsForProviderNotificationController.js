@@ -50,7 +50,6 @@ angular
             });
 
             $rootScope.$on('test-is-created', function(event, args){
-                $log.info("gotcha... verif was read ");
                 verificationServiceCalibrator.getCountOfNewVerificationsForProvider().success(function (count) {
                     $scope.countOfUnreadVerifications = count;
                 });

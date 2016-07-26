@@ -5,8 +5,6 @@ angular
 
             $scope.verificationData = response.data;
 
-            $log.info($scope.verificationData);
-
             $scope.close = function () {
                 $modalInstance.close();
             };

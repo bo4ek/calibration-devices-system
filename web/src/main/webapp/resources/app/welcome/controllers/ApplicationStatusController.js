@@ -99,8 +99,6 @@ angular
             $scope.responseSuccess = false;
             $scope.showSendingAlert = false;
             $scope.feedbackModal = function (ID) {
-                $log.debug('ID');
-                $log.debug(ID);
                 var modalInstance = $modal.open({
                     animation: true,
                     templateUrl: 'resources/app/welcome/views/modals/feedback-window.html',
@@ -123,8 +121,6 @@ angular
                         .success(function () {
                             $scope.responseSuccess = true;
                             $scope.showSendingAlert = false;
-                            $log.debug('response val');
-                            $log.debug($scope.responseSuccess);
                         });
                 });
 

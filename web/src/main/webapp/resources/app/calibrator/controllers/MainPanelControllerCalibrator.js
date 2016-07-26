@@ -2,8 +2,6 @@ angular
     .module('employeeModule')
     .controller('MainPanelControllerCalibrator', ['$rootScope', '$scope', '$log', 'VerificationServiceCalibrator', 'ngTableParams', '$modal', 'UserServiceCalibrator', '$controller', '$filter', '$translate',
         function ($rootScope, $scope, $log, verificationServiceCalibrator, ngTableParams, $modal, userServiceCalibrator, $controller, $filter, $translate) {
-            $log.debug('inside main panel contr calibr');
-
             /**
              *  Date picker and formatter setup
              *
@@ -242,7 +240,6 @@ angular
                         idVerification: verifId,
                         employeeCalibrator: formData.provider
                     };
-                    $log.info(dataToSend);
                     verificationServiceCalibrator
                         .sendEmployeeCalibrator(dataToSend)
                         .success(function () {

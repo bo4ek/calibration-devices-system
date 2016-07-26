@@ -237,8 +237,6 @@ angular
             $scope.checkPasswords = function () {
                 var first = $scope.employeeFormData.password;
                 var second = $scope.employeeFormData.rePassword;
-                $log.info(first);
-                $log.info(second);
                 var isValid = false;
                 if (first != second) {
                     isValid = true;

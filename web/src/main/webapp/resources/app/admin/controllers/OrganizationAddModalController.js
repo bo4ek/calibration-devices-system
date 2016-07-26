@@ -171,7 +171,6 @@ angular
                 $scope.serviceArea = {};
                 $scope.organizationFormData.serviceArea = null;
 
-                $log.debug("$scope.resetApplicationForm");
             };
 
             /**

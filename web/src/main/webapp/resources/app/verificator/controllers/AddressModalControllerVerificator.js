@@ -2,7 +2,6 @@ angular
     .module('employeeModule')
     .controller('AddressModalControllerVerificator', ['$scope', '$log', '$modalInstance', 'address', 'AddressServiceVerificator',
         function ($scope, $log, $modalInstance, address, AddressServiceVerificator) {
-            $log.info(address);
 
             $scope.addressData = {};
 

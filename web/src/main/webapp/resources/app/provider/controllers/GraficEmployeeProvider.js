@@ -28,8 +28,7 @@ angular
                 }else{
                     $scope.listMonth.push($filter('translate')('NO_INFO_IN_PERIOD'));
                 }
-
-                $log.debug(graficData)
+                
                 if (graficData.length > 0) {
                     $scope.chartConfig = {
                         options: {

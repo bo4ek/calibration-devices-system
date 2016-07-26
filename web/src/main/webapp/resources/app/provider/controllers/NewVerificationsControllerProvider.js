@@ -218,7 +218,6 @@ angular
                 var dataToSend = {
                     idVerification: verifId
                 };
-                $log.info(dataToSend);
                 verificationServiceProvider.cleanProviderEmployeeField(dataToSend)
                     .success(function () {
                         $scope.tableParams.reload();
@@ -254,7 +253,6 @@ angular
                                     idVerification: verificationId,
                                     employeeProvider: formData.provider
                                 };
-                                $log.info(dataToSend);
                                 verificationServiceProvider
                                     .sendEmployeeProvider(dataToSend)
                                     .success(function () {

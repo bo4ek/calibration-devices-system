@@ -249,9 +249,6 @@ angular
                             $scope.sysAdminFormData.address.street = "";
                             $scope.sysAdminFormData.address.building = "";
                             $scope.sysAdminFormData.address.flat = "";
-                            $log.debug("$scope.streets");
-                            $log.debug($scope.streets);
-
                         }
                     );
                 }

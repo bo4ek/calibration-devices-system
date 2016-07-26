@@ -155,7 +155,6 @@ angular
         function updateData(url, data) {
             return $http.put('provider/verifications/' + url, data)
                 .success(function (responseData) {
-                    $log.info('response'  + responseData);
                     return responseData;
                 })
                 .error(function (err) {

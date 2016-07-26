@@ -94,17 +94,14 @@ angular
 
 
             $scope.clearDate1 = function () {
-                $log.debug($scope.calibrationTask.taskDate);
                 $scope.calibrationTask.taskDate = null;
             };
 
             $scope.clearDate2 = function () {
-                $log.debug($scope.calibrationTask.dateOfVerif);
                 $scope.calibrationTask.dateOfVerif = null;
             };
 
             $scope.clearDate3 = function () {
-                $log.debug($scope.calibrationTask.noWaterToDate);
                 $scope.calibrationTask.noWaterToDate = null;
             };
 
@@ -273,9 +270,7 @@ angular
                 var applicationFiled = $scope.calibrationTask.applicationFiled;
                 verificationPlanningTaskService.getModules(place, taskDate, applicationFiled)
                     .then(function (result) {
-                        $log.debug('result ', result);
                         $scope.modulesSerialNumbers = result.data;
-                        $log.debug('my array ', $scope.modulesSerialNumbers);
                     }, function (result) {
                         $log.debug('error fetching data:', result);
                     });

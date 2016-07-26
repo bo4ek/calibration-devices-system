@@ -91,7 +91,6 @@ angular
                 return getData('applications/verification/' + code);
             },
             saveAdditionalInfo: function (data) {
-                $log.debug("from service " + data);
                 return updateData('saveInfo', data);
             },
             editCounterInfo: function (data) {
@@ -139,7 +138,6 @@ angular
         function updateData(url, data) {
             return $http.put('calibrator/verifications/' + url, data)
                 .success(function (responseData) {
-                    $log.info('response' + responseData);
                     return responseData;
                 })
                 .error(function (err) {

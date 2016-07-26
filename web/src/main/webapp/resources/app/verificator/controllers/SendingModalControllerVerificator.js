@@ -12,7 +12,6 @@ angular
     	
             $scope.providers = response.data;
             $scope.formData={};
-            $log.debug('Inside Sending');
             $scope.cancel = function () {
                 $modalInstance.dismiss();
             };

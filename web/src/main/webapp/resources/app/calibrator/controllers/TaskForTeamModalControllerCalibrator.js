@@ -69,7 +69,6 @@ angular
 
 
             $scope.clearDate1 = function () {
-                $log.debug($scope.calibrationTask.taskDate);
                 $scope.calibrationTask.taskDate = null;
             };
 

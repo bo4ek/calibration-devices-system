@@ -30,7 +30,6 @@ angular
                 });
 
                 addressModal.result.then(function (address) {
-                    $log.info(address);
                     $scope.address = address;
                     $scope.addressMessage = null;
 
@@ -42,7 +41,6 @@ angular
                             address.selectedStreet.designation + " " +
                             (address.selectedBuilding.designation || address.selectedBuilding) + " " +
                             (address.selectedFlat || "");
-                        $log.info($scope.addressMessage);
                     }
                 });
             };
@@ -59,8 +57,6 @@ angular
             $scope.checkPasswords = function () {
                 var first = $scope.employeeData.password;
                 var second = $scope.form.rePassword;
-                $log.info(first);
-                $log.info(second);
                 if (first && second) {
                     var isMatch = first === second;
                     $scope.form.employee.password.$setValidity("isMatch", isMatch);
@@ -89,12 +85,8 @@ angular
                         flat: address.selectedFlat
                     };
 
-
-                    $log.info(employeeData);
-
                     userServiceVerificator.saveUser(employeeData)
                         .success(function (response) {
-                            $log.info(response);
 
                             $modal.open({
                                 animation: true,

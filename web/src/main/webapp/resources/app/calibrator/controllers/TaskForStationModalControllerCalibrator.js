@@ -131,7 +131,6 @@ angular
             $scope.maxDate = new Date(2100, 5, 22);
 
             $scope.clearDate = function () {
-                $log.debug($scope.calibrationTask.dateOfTask);
                 $scope.noModulesAvailable = false;
                 $scope.calibrationTask.dateOfTask = null;
                 $scope.moduleSerialNumbers = [];
@@ -155,7 +154,6 @@ angular
                     var moduleType = $scope.calibrationTask.moduleType;
                     verificationPlanningTaskService.getModules(moduleType, dateOfTask, deviceType)
                         .then(function (result) {
-                            $log.debug(result);
                             $scope.moduleSerialNumbers = result.data;
                             $scope.noModulesAvailable = $scope.moduleSerialNumbers.length === 0;
                         }, function (result) {

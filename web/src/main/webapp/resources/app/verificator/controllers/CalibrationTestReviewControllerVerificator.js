@@ -11,8 +11,6 @@ angular
 		
             $scope.calibrationTest = response.data;
 
-            $log.info($scope.calibrationTest);
-
             $scope.close = function () {
                 $modalInstance.close();
             };

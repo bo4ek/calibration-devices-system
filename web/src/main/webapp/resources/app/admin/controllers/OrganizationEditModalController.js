@@ -536,9 +536,6 @@ angular
                         $scope.selectedValues.selectedStreet = "";
                         $scope.organization.building = "";
                         $scope.organization.flat = "";
-                        $log.debug("$scope.streets");
-                        $log.debug($scope.streets);
-
                     }
                 );
             };
@@ -579,7 +576,6 @@ angular
                         $scope.selectedValues.streetRegistered = "";
                         $scope.selectedValues.buildingRegistered = "";
                         $rootScope.organization.flatRegistered = "";
-                        $log.debug("$scope.streetsReg");
                         $log.debug($scope.streetsReg);
 
                     }

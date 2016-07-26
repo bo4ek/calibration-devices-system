@@ -18,8 +18,7 @@ angular
                 }else{
                     $scope.listMonth.push('За даний період немає інформації про працівників');
                 }
-
-                $log.debug(graficData)
+                
                 if (graficData.length > 0) {
                     $scope.chartConfig = {
                         options: {

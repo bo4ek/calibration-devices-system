@@ -2,7 +2,6 @@ angular
     .module('employeeModule')
     .controller('AddressModalControllerCalibrator', ['$scope', '$log', '$modalInstance', 'address', 'AddressServiceCalibrator',
         function ($scope, $log, $modalInstance, address, addressServiceCalibrator) {
-            $log.info(address);
 
             $scope.addressData = {};
 

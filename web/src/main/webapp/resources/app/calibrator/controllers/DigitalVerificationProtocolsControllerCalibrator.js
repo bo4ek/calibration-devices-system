@@ -278,7 +278,6 @@ angular
                         };
                         digitalVerificationProtocolsServiceCalibrator.sendProtocols(dataToSend)
                             .success(function () {
-                                $log.debug('success sending');
                                 $scope.tableParams.reload();
                                 $rootScope.$broadcast('verification-sent-to-verificator');
                                 toaster.pop('success', $filter('translate')('INFORMATION'),

@@ -470,12 +470,6 @@ angular.module('employeeModule')
 
             $scope.initDatePicker = function () {
 
-                if ($scope.defaultDate == null) {
-                    $scope.defaultDate = angular.copy($scope.selectedData.dateOfDismantled);
-                    $scope.defaultDate = angular.copy($scope.selectedData.dateOfMounted);
-                    $scope.defaultDate = angular.copy($scope.addInfo.dateOfVerif);
-                    $scope.defaultDate = angular.copy($scope.addInfo.noWaterToDate);
-                }
 
                 $scope.setTypeDataLangDatePicker = function () {
 
@@ -670,18 +664,16 @@ angular.module('employeeModule')
                         $scope.selectedData.dismantled = ($scope.verification.data.dismantled !== null) ? $scope.verification.data.dismantled : true;
                         $scope.selectedData.verificationWithDismantle = ($scope.verification.data.verificationWithDismantle !== null) ? $scope.verification.data.verificationWithDismantle : true;
                         $scope.selectedData.sealPresence = ($scope.verification.data.sealPresence !== null) ? $scope.verification.data.sealPresence : true;
-                        $scope.selectedData.dateOfDismantled = {};
                         if ($scope.verification.data.dateOfDismantled != null) {
+                            $scope.selectedData.dateOfDismantled = {};
                             $scope.selectedData.dateOfDismantled.startDate = new Date($scope.verification.data.dateOfDismantled);
                             $scope.selectedData.dateOfDismantled.endDate = new Date($scope.verification.data.dateOfDismantled);
                         }
-                        $scope.selectedData.dateOfMounted = {};
                         if ($scope.verification.data.dateOfMounted != null) {
+                            $scope.selectedData.dateOfMounted = {};
                             $scope.selectedData.dateOfMounted.startDate = new Date($scope.verification.data.dateOfMounted);
                             $scope.selectedData.dateOfMounted.endDate = new Date($scope.verification.data.dateOfMounted);
-                        } else {
-                            $scope.selectedData.dateOfMounted = undefined;
-                        }
+                        } 
                         $scope.selectedData.numberCounter = $scope.verification.data.numberCounter;
                         $scope.selectedData.releaseYear = $scope.verification.data.releaseYear;
                         $scope.formData.accumulatedVolume = $scope.verification.data.accumulatedVolume;
@@ -689,8 +681,8 @@ angular.module('employeeModule')
                         $scope.addInfo.entrance = $scope.verification.data.entrance;
                         $scope.addInfo.doorCode = $scope.verification.data.doorCode;
                         $scope.addInfo.floor = $scope.verification.data.floor;
-                        $scope.addInfo.dateOfVerif = {};
                         if ($scope.verification.data.dateOfVerif != null) {
+                            $scope.addInfo.dateOfVerif = {};
                             $scope.addInfo.dateOfVerif.startDate = (new Date($scope.verification.data.dateOfVerif));
                             $scope.addInfo.dateOfVerif.endDate = (new Date($scope.verification.data.dateOfVerif));
                         }
@@ -701,8 +693,8 @@ angular.module('employeeModule')
                             $scope.updateTimepicker();
                         }
                         $scope.addInfo.serviceability = ($scope.verification.data.serviceability !== null) ? $scope.verification.data.serviceability : true;
-                        $scope.addInfo.noWaterToDate = {}
                         if ($scope.verification.data.noWaterToDate != null) {
+                            $scope.addInfo.noWaterToDate = {};
                             $scope.addInfo.noWaterToDate.startDate = new Date($scope.verification.data.noWaterToDate);
                             $scope.addInfo.noWaterToDate.endDate = new Date($scope.verification.data.noWaterToDate);
                         }

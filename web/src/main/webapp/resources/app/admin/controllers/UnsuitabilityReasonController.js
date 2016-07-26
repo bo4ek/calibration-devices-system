@@ -77,7 +77,6 @@ angular
                         };
                         unsuitabilityReasonService.saveUnsuitabilityReason(dataToAdd)
                             .success(function () {
-                                $log.debug('success sending');
                                 $scope.tableParams.reload();
                                 $rootScope.$broadcast('save-new-reason');
                                 toaster.pop('success', $filter('translate')('INFORMATION'), $filter('translate')('SUCCESSFUL_ADDED_NEW_REASON'));

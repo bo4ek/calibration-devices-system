@@ -96,9 +96,6 @@ angular
         };
        
         function getData(url) {
-
-            $log.info(url);
-
             return $http.get('verificator/' + url)
                 .success(function (data) {
                     return data;

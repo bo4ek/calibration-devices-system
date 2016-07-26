@@ -185,7 +185,6 @@ angular
                 var dataToSend = {
                     idVerification: verifId
                 };
-                $log.info(dataToSend);
                 verificationServiceProvider.cleanProviderEmployeeField(dataToSend)
                     .success(function () {
                         $scope.tableParams.reload();
@@ -290,7 +289,6 @@ angular
                         verificationServiceProvider
                             .sendVerificationsToCalibrator(dataToSend)
                             .success(function () {
-                                $log.debug('success sending');
                                 $scope.tableParams.reload();
                                 $rootScope.$broadcast('verification-sent-to-calibrator');
                             });
@@ -315,8 +313,6 @@ angular
              * Modal window used to explain the reason of verification rejection
              */
             $scope.openMailModal = function (ID) {
-                $log.debug('ID');
-                $log.debug(ID);
                 var modalInstance = $modal.open({
                     animation: true,
                     backdrop: 'static',

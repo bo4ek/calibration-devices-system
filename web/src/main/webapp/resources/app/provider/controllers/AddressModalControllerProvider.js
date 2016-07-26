@@ -2,7 +2,6 @@ angular
     .module('employeeModule')
     .controller('AddressModalControllerProvider', ['$scope', '$log', '$modalInstance', 'address', 'AddressServiceProvider',
         function ($scope, $log, $modalInstance, address, addressServiceProvider) {
-            $log.info(address);
 
             $scope.addressData = {};
 

@@ -199,7 +199,6 @@ angular
                         $scope.selectedData.condDesignation = null;
                         $scope.selectedData.moduleType = null;
                         $scope.selectedData.manufacturerNumber = null;
-                        $log.debug("inside");
                         $scope.receiveAllOriginalCondDesignation($scope.calibrationModelDATA);
                         $scope.receiveAllOriginalModuleType($scope.calibrationModelDATA);
                         $scope.receiveAllManufacturerNumbers($scope.calibrationModelDATA);
@@ -774,7 +773,6 @@ angular
                 calibrationTestServiceCalibrator
                     .getEmptyTest($scope.testId)
                     .then(function (data) {
-                        $log.debug("inside");
                         var testId = data.id;
                         var url = $location.path('calibrator/verifications/calibration-test-add/').search({'param': $scope.testId});
                     })

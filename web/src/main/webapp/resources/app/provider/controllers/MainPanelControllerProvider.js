@@ -2,8 +2,6 @@ angular
     .module('employeeModule')
     .controller('MainPanelControllerProvider', ['$rootScope', '$scope', '$log', 'VerificationServiceProvider', 'ngTableParams', '$modal', 'UserService', '$controller', '$filter', '$translate',
         function ($rootScope, $scope, $log, verificationServiceProvider, ngTableParams, $modal, userService, $controller, $filter, $translate) {
-            $log.debug('inside main pan ctrl provider');
-
             /**
              *  Date picker and formatter setup
              *
@@ -247,7 +245,6 @@ angular
                         idVerification: verifId,
                         employeeProvider: formData.provider
                     };
-                    $log.info(dataToSend);
                     verificationServiceProvider
                         .sendEmployeeProvider(dataToSend)
                         .success(function () {

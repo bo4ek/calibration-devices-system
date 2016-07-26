@@ -90,17 +90,14 @@ angular.module('employeeModule')
 
 
             $scope.clearDate1 = function () {
-                $log.debug($scope.team.effectiveTo);
                 $scope.team.effectiveTo = null;
             };
 
             $scope.clearDate2 = function () {
-                $log.debug($scope.team.dateOfVerif);
                 $scope.team.dateOfVerif = null;
             };
 
             $scope.clearDate3 = function () {
-                $log.debug($scope.team.noWaterToDate);
                 $scope.team.noWaterToDate = null;
             };
 

@@ -452,7 +452,6 @@ angular
                 $scope.secondDeviceProviders = [];
                 $scope.selectedValues.firstSelectedProvider = undefined;
                 $scope.selectedValues.secondSelectedProvider = undefined;
-                $log.debug("$scope.resetApplicationForm");
             };
 
             $scope.$watch('selectedValues.selectedRegion', function () {

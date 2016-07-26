@@ -103,7 +103,6 @@ angular
 
                         verificationService.sendVerification(dataToSend)
                             .success(function () {
-                                $log.debug('success sending');
                                 $scope.tableParams.reload();
                                 $rootScope.$broadcast('verification-sent-to-provider');
                                 toaster.pop('success', $filter('translate')('INFORMATION'),

@@ -42,7 +42,6 @@ angular
             });
 
             $rootScope.$on('verification-was-read', function () {
-                $log.info("gotcha... verif was read ");
                 VerificationServiceVerificator.getCountOfNewVerifications().success(function (count) {
                     $scope.countOfUnreadVerifications = count;
                 });

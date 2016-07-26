@@ -128,7 +128,6 @@ angular
             dataReceivingService.findAllDevices()
                 .success(function (devices) {
                     $scope.devices = devices;
-                    $log.debug('device');
                     $log.debug(devices);
                     $scope.counterData.selectedDevice = [];
                     $log.debug($scope.counterData.selectedCount);
@@ -140,7 +139,6 @@ angular
             dataReceivingService.findAllDeviceTypes()
                 .success(function (deviceTypes) {
                     $scope.deviceTypes = deviceTypes;
-                    $log.debug('deviceTypes');
                     $log.debug(deviceTypes);
                     $scope.counterData.deviceType = undefined;
                     $log.debug($scope.counterData.selectedCount);
@@ -217,7 +215,6 @@ angular
             dataReceivingService.findStreetsTypes().success(function (streetsTypes) {
                 $scope.streetsTypes = streetsTypes;
                 $scope.selectedData.selectedStreetType = "";
-                $log.debug("$scope.streetsTypes");
                 $log.debug($scope.streetsTypes);
             });
 
