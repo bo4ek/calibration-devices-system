@@ -272,10 +272,10 @@
                                     <label for="mailIndex">{{'INDEX' | translate}} </label>
                                 </div>
                                 <div class="col-md-8 form-group" show-errors>
-                                    <input id="mailIndex" name="mailIndex" class="form-control" type="text"
+                                    <input id="mailIndex" name="mailIndex" class="form-control"
                                            ng-model="formData.mailIndex"
-                                           ng-pattern="MAIL_INDEX_REGEX"
-                                           ng-disabled="!selectedData.locality"
+                                           maxlength="5" minlength="5"
+                                           onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')"
                                            required>
                                     <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
                                           id="okFeedBack"></span>

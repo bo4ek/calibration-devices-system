@@ -49,14 +49,14 @@
 					<table class="table table-striped table-bordered table-hover" >
 						<thead>
 							<tr>
-								<th>Прізвище клієнта</th>
-								<th>Ім'я</th>
-								<th>Дата початку процесу повірки</th>
-								<th>Населений пункт</th>
-								<th>Вулиця</th>
-								<th>Будинок</th>
+								<th>{{'CLIENT_LAST_NAME' | translate}}</th>
+								<th>{{'CLIENT_FIRST_NAME' | translate}}</th>
+								<th>{{'DATE_OF_START_VERIFICATION' | translate}}</th>
+								<th>{{'LOCALITY' | translate}}</th>
+								<th>{{'STREET' | translate}}</th>
+								<th>{{'BUILDING' | translate}}</th>
 
-								<th>Дії</th>
+								<th>{{'ACTIONS' | translate}}</th>
 							</tr>
 						</thead>
 
@@ -72,14 +72,14 @@
 									popover-trigger="mouseenter" ng-click="openDetails()"> <i
 										class="fa fa-info-circle"></i>
 								</a> <a ng-show="verification.status === 'TEST_OK'"
-									popover="Завантажити тестові дані у форматі 'docx'"
-									popover-trigger="mouseenter"
-									href="{{'/doc/' + verification.id + '/docx'}}"> <i
+										popover="{{'DOWNLOAD_TEST_DOC' | translate}}"
+										popover-trigger="mouseenter"
+										href="{{'/doc/' + verification.id + '/docx'}}"> <i
 										class="fa fa-file-word-o"></i>
 								</a> <a ng-show="verification.status === 'TEST_OK'"
-									popover="Завантажити тестові дані у форматі 'pdf'"
-									popover-trigger="mouseenter"
-									href="{{'/doc/' + verification.id + '/pdf'}}"> <i
+										popover="{{'DOWNLOAD_TEST_PDF' | translate}}"
+										popover-trigger="mouseenter"
+										href="{{'/doc/' + verification.id + '/pdf'}}"> <i
 										class="fa fa-file-pdf-o"></i>
 								</a></td>
 							</tr>
@@ -158,18 +158,7 @@
 				data-target="#myModal"  ng-click="createNew(verification.id)" ng-if="verification.status">
 				<span class="glyphicon glyphicon-duplicate"></span>  {{'CREATE_BY_PATTERN'| translate}}
 			</button>
-		</div>	
-	<!-- 		<button type="button" class="btn btn-info btn-lg" data-toggle="modal"
-				data-target="#myModal" popover="Model chat"
-				popover-trigger="mouseenter" ng-click="chatOpen()" ng-if="verification.status">
-				<span class=" glyphicon glyphicon-envelope"></span> Open Feedback
-				Modal
-			</button>
-			
-		
- -->
-
-			
+		</div>
 		</div>
 	</div>
 </section>

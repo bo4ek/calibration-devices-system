@@ -124,8 +124,8 @@ public class ProviderApplicationController {
 
             Counter counter = new Counter(
                     verificationDTO.getReleaseYear(),
-                    verificationDTO.getDateOfDismantled().getTime(),
-                    verificationDTO.getDateOfMounted().getTime(),
+                    verificationDTO.getDateOfDismantled(),
+                    verificationDTO.getDateOfMounted(),
                     verificationDTO.getNumberCounter(),
                     counterType,
                     verificationDTO.getAccumulatedVolume()
@@ -162,7 +162,8 @@ public class ProviderApplicationController {
             }
         } catch (Exception e) {
             logger.error("Exception while inserting calibrator's verifications into DB ", e);
-            httpStatus = HttpStatus.CONFLICT;
+            e.printStackTrace();
+            httpStatus = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(verificationIds, httpStatus);
         }
         return new ResponseEntity<>(verificationIds, httpStatus);

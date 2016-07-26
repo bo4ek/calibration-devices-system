@@ -9,7 +9,7 @@ public interface StreetService {
 
     List<Street> getStreetsCorrespondingLocality(Long localityId);
 
-    Street findByDesignation(String designation);
+    List<Street> findByDesignation(String designation);
 
     Street findByLocalityIdAndDesignation(Long localityId, String designation);
 

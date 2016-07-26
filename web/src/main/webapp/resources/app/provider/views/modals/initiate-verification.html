@@ -267,10 +267,10 @@
                                 </div>
 
                                 <div class="col-md-8 form-group" show-errors>
-                                    <input id="mailIndex" name="mailIndex" class="form-control" type="text"
+                                    <input id="mailIndex" name="mailIndex" class="form-control"
                                            ng-model="formData.mailIndex"
-                                           ng-pattern="MAIL_INDEX_REGEX"
-                                           ng-disabled="!selectedData.locality"
+                                           maxlength="5" minlength="5"
+                                           onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')"
                                            required>
                                     <span class="form-control-feedback glyphicon form-horizontal glyphicon glyphicon-ok-sign"
                                           id="okFeedBack"></span>
@@ -805,6 +805,7 @@
                                     </span>
 
                                         <input type="text" class="form-control date-picker"
+                                               placeholder=""
                                                ng-model="addInfo.noWaterToDate"
                                                ng-click="showPicker()"
                                                date-range-picker="optsMin" options="optsMin"
@@ -827,7 +828,6 @@
                                 <textarea type="text" rows="5" cols="45" ng-model="addInfo.notes"
                                           id="notes" name="notes" class="form-control"></textarea>
                                 </div>
-
                             </div>
                         </div>
                     </div>

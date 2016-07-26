@@ -1060,8 +1060,13 @@ public class VerificationServiceImpl implements VerificationService {
             info.setServiceability(serviceability);
             info.setNoWaterToDateLong(noWaterToDate);
             info.setNotes(notes);
-            info.setTimeFrom(timeFrom);
-            info.setTimeTo(timeTo);
+            if (dateOfVerif != null) {
+                info.setTimeFrom(timeFrom);
+                info.setTimeTo(timeTo);
+            } else {
+                info.setTimeFrom(null);
+                info.setTimeTo(null);
+            }
 
             additionalInfoRepository.save(info);
         } else {
@@ -1088,8 +1093,13 @@ public class VerificationServiceImpl implements VerificationService {
             info.setServiceability(serviceability);
             info.setNoWaterToDate(noWaterToDate);
             info.setNotes(notes);
-            info.setTimeFrom(timeFrom);
-            info.setTimeTo(timeTo);
+            if (dateOfVerif != null) {
+                info.setTimeFrom(timeFrom);
+                info.setTimeTo(timeTo);
+            } else {
+                info.setTimeFrom(null);
+                info.setTimeTo(null);
+            }
 
             additionalInfoRepository.save(info);
         } else {

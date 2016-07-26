@@ -370,8 +370,8 @@ angular.module('employeeModule')
                 // COUNTER
                 $scope.formData.dismantled = $scope.selectedData.dismantled;
                 $scope.formData.verificationWithDismantle = $scope.selectedData.verificationWithDismantle;
-                $scope.formData.dateOfDismantled = $scope.selectedData.dateOfDismantled !== 0 ? $scope.selectedData.dateOfDismantled.startDate : null;
-                $scope.formData.dateOfMounted = $scope.selectedData.dateOfMounted !== 0 ? $scope.selectedData.dateOfMounted.startDate : null;
+                $scope.formData.dateOfDismantled = $scope.selectedData.dateOfDismantled != undefined ? $scope.selectedData.dateOfDismantled.startDate : null;
+                $scope.formData.dateOfMounted = $scope.selectedData.dateOfMounted != undefined ? $scope.selectedData.dateOfMounted.startDate : null;
                 $scope.formData.numberCounter = $scope.selectedData.numberCounter;
                 $scope.formData.sealPresence = $scope.selectedData.sealPresence;
                 if ($scope.selectedData.counterSymbol) {
@@ -386,11 +386,11 @@ angular.module('employeeModule')
                 $scope.formData.entrance = $scope.addInfo.entrance;
                 $scope.formData.doorCode = $scope.addInfo.doorCode;
                 $scope.formData.floor = $scope.addInfo.floor;
-                $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif !== 0 ? $scope.addInfo.dateOfVerif.startDate : null;
+                $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif != undefined ? $scope.addInfo.dateOfVerif.startDate : null;
                 $scope.formData.timeFrom = moment($scope.convertDateToLong($scope.addInfo.timeFrom)).format("HH:mm");
                 $scope.formData.timeTo = $scope.addInfo.timeTo;
                 $scope.formData.serviceability = $scope.addInfo.serviceability;
-                $scope.formData.noWaterToDate = $scope.addInfo.noWaterToDate !== 0 ? $scope.addInfo.noWaterToDate.startDate : null;
+                $scope.formData.noWaterToDate = $scope.addInfo.noWaterToDate != undefined ? $scope.addInfo.noWaterToDate.startDate : null;
                 $scope.formData.notes = $scope.addInfo.notes;
             };
 
@@ -541,19 +541,19 @@ angular.module('employeeModule')
 
 
             $scope.clearDate1 = function () {
-                $scope.addInfo.dateOfVerif = null;
+                $scope.addInfo.dateOfVerif = undefined;
             };
 
             $scope.clearDate2 = function () {
-                $scope.addInfo.noWaterToDate = null;
+                $scope.addInfo.noWaterToDate = undefined;
             };
 
             $scope.clearDateOfDismantled = function () {
-                $scope.selectedData.dateOfDismantled = null;
+                $scope.selectedData.dateOfDismantled = undefined;
             };
 
             $scope.clearDateOfMounted = function () {
-                $scope.selectedData.dateOfMounted = null;
+                $scope.selectedData.dateOfMounted = undefined;
             };
 
             /**
@@ -679,6 +679,8 @@ angular.module('employeeModule')
                         if ($scope.verification.data.dateOfMounted != null) {
                             $scope.selectedData.dateOfMounted.startDate = new Date($scope.verification.data.dateOfMounted);
                             $scope.selectedData.dateOfMounted.endDate = new Date($scope.verification.data.dateOfMounted);
+                        } else {
+                            $scope.selectedData.dateOfMounted = undefined;
                         }
                         $scope.selectedData.numberCounter = $scope.verification.data.numberCounter;
                         $scope.selectedData.releaseYear = $scope.verification.data.releaseYear;
@@ -688,7 +690,7 @@ angular.module('employeeModule')
                         $scope.addInfo.doorCode = $scope.verification.data.doorCode;
                         $scope.addInfo.floor = $scope.verification.data.floor;
                         $scope.addInfo.dateOfVerif = {};
-                        if ($scope.verification.data.dateOfVerif) {
+                        if ($scope.verification.data.dateOfVerif != null) {
                             $scope.addInfo.dateOfVerif.startDate = (new Date($scope.verification.data.dateOfVerif));
                             $scope.addInfo.dateOfVerif.endDate = (new Date($scope.verification.data.dateOfVerif));
                         }

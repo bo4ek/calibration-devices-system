@@ -369,7 +369,6 @@ public class ProviderVerificationController {
             @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         User employee = providerEmployeeService.oneProviderEmployee(user.getUsername());
         List<String> role = usersService.getRoles(user.getUsername());
-
         return providerEmployeeService
                 .getAllProviders(role, employee);
     }
@@ -546,7 +545,7 @@ public class ProviderVerificationController {
             httpStatus = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(httpStatus);
         }
-        Street street = streetService.findByDesignation(clientDTO.getStreet());
+        List<Street> street = streetService.findByDesignation(clientDTO.getStreet());
         if (street == null) {
             httpStatus = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(httpStatus);
@@ -557,7 +556,8 @@ public class ProviderVerificationController {
                 clientDTO.getLocality(),
                 clientDTO.getStreet(),
                 clientDTO.getBuilding(),
-                clientDTO.getFlat()
+                clientDTO.getFlat(),
+                clientDTO.getMailIndex()
         );
 
         ClientData clientData = new ClientData(

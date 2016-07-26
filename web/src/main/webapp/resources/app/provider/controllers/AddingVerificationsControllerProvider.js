@@ -365,8 +365,8 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             // COUNTER
             $scope.formData.dismantled = $scope.selectedData.dismantled;
             $scope.formData.verificationWithDismantle = $scope.selectedData.verificationWithDismantle;
-            $scope.formData.dateOfDismantled = $scope.selectedData.dateOfDismantled !== 0 ? $scope.selectedData.dateOfDismantled.startDate : null;
-            $scope.formData.dateOfMounted = $scope.selectedData.dateOfMounted !== 0 ? $scope.selectedData.dateOfMounted.startDate : null;
+            $scope.formData.dateOfDismantled = $scope.selectedData.dateOfDismantled != undefined ? $scope.selectedData.dateOfDismantled.startDate : null;
+            $scope.formData.dateOfMounted = $scope.selectedData.dateOfMounted != undefined ? $scope.selectedData.dateOfMounted.startDate : null;
             $scope.formData.numberCounter = $scope.selectedData.numberCounter;
             $scope.formData.sealPresence = $scope.selectedData.sealPresence;
             if ($scope.selectedData.counterSymbol) {
@@ -381,11 +381,11 @@ angular.module('employeeModule').controller('AddingVerificationsControllerProvid
             $scope.formData.entrance = $scope.addInfo.entrance;
             $scope.formData.doorCode = $scope.addInfo.doorCode;
             $scope.formData.floor = $scope.addInfo.floor;
-            $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif !== 0 ? $scope.addInfo.dateOfVerif.startDate : null;
+            $scope.formData.dateOfVerif = $scope.addInfo.dateOfVerif != undefined ? $scope.addInfo.dateOfVerif.startDate : null;
             $scope.formData.timeFrom = moment($scope.convertDateToLong($scope.addInfo.timeFrom)).format("HH:mm");
             $scope.formData.timeTo = $scope.addInfo.timeTo;
             $scope.formData.serviceability = $scope.addInfo.serviceability;
-            $scope.formData.noWaterToDate = $scope.addInfo.noWaterToDate !== 0 ? $scope.addInfo.noWaterToDate.startDate : null;
+            $scope.formData.noWaterToDate = $scope.addInfo.noWaterToDate != undefined ? $scope.addInfo.noWaterToDate.startDate : null;
             $scope.formData.notes = $scope.addInfo.notes;
         };
 

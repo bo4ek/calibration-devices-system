@@ -7,6 +7,7 @@ import com.softserve.edu.entity.device.Counter;
 import com.softserve.edu.entity.device.Device;
 import com.softserve.edu.entity.organization.Organization;
 import com.softserve.edu.entity.verification.ClientData;
+import com.softserve.edu.entity.verification.VerificationGroup;
 import com.softserve.edu.entity.verification.calibration.AdditionalInfo;
 import com.softserve.edu.entity.verification.calibration.CalibrationTask;
 
@@ -17,7 +18,7 @@ public class OrganizationStageVerificationDTOTransformer {
     public static OrganizationStageVerificationDTO toDtoFromVerification(ClientData clientData,
                                                                          Address address, String verificationId, Organization calibrator, String comment,
                                                                          AdditionalInfo info, Boolean dismantled, Boolean sealPresence, Counter counter,
-                                                                         Device device, Boolean verificationWithDismantle, CalibrationTask task, Long groupId, Integer queue) {
+                                                                         Device device, Boolean verificationWithDismantle, CalibrationTask task, VerificationGroup group, Integer queue) {
 
         String calibratorName = (calibrator != null) ? calibrator.getName() : null;
         String entrance = (info == null || info.getEntrance() == 0) ? null : "" + info.getEntrance();
@@ -41,6 +42,7 @@ public class OrganizationStageVerificationDTOTransformer {
         Device.DeviceType deviceType = device.getDeviceType();
         Long deviceId = device.getId();
         Long taskId = (task != null) ? task.getId() : null;
+        Long groupId = group != null ? group.getId() : null;
 
 
         return new OrganizationStageVerificationDTO(clientData, comment, address, verificationId, calibratorName, entrance, doorCode, floor, dateOfVerif,

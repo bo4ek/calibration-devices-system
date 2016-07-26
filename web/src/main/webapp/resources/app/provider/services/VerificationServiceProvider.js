@@ -83,7 +83,6 @@ angular
                 return sendData('save', data);
             },
             saveAdditionalInfo: function(data) {
-                $log.debug("from service " +  data)
                 return updateData('saveInfo', data);
             },
             editCounterInfo: function(data) {

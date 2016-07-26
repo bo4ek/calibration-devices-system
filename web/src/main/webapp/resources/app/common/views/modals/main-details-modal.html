@@ -87,8 +87,7 @@
             <div class="col-md-8 form-group" show-errors>
                 <input id="email" name="email" type="email" class="form-control"
                        ng-model="formData.email"
-                       placeholder="example@gmail.com"
-                       ng-pattern="EMAIL_REGEX" required>
+                       placeholder="example@gmail.com">
                                 <span class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"
                                       id="okFeedBack"></span>
 
@@ -242,24 +241,11 @@
                 <label for="mailIndex">{{'INDEX' | translate}} </label>
             </div>
             <div class="col-md-8 form-group" show-errors>
-                <input id="mailIndex" name="mailIndex" class="form-control" type="text"
-                       ng-model="formData.mailIndex"
-                       ng-pattern="MAIL_INDEX_REGEX"
-                       ng-disabled="!selectedData.locality"
-                       required>
+                <input id="mailIndex" name="mailIndex" class="form-control" type="text" maxlength="5" minlength="5"
+                       onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')"
+                       ng-model="formData.mailIndex" required>
                 <span class="form-control-feedback glyphicon  form-horizontal glyphicon glyphicon-ok-sign"
                                           id="okFeedBack"></span>
-
-                <p class="help-block" ng-if="clientForm.mailIndex.$error.required">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    {{'REQUIRED' | translate}}
-                </p>
-
-                <p class="help-block" ng-if="clientForm.mailIndex.$error.pattern">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    {{'MAIL_INDEX_ERROR' | translate}}
-                </p>
-
             </div>
         </div>
 

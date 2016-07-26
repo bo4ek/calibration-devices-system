@@ -127,19 +127,24 @@ public class DigitalVerificationProtocolsCalibratorController {
     public ResponseEntity cancelVerificationProtocol(@PathVariable String verificationId, @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails userDetails) {
         Verification verification = verificationService.findById(verificationId);
         User user = userService.findOne(userDetails.getUsername());
-        if (verification != null && ((user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE) && verification.getCalibratorEmployee().getUsername().equals(user.getUsername()))
-                || (user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN) && verification.getCalibrator().getId().equals(user.getOrganization().getId())))) {
-            setFieldForCanceling(verification);
-            List<BbiProtocol> protocolList = bbiFileService.findBbiByVerification(verification);
-            for (BbiProtocol bbiProtocol : protocolList) {
-                bbiFileService.deleteBbi(bbiProtocol);
+        try {
+            if (verification != null && ((user.getUserRoles().contains(UserRole.CALIBRATOR_EMPLOYEE) && verification.getCalibratorEmployee().getUsername().equals(user.getUsername()))
+                    || (user.getUserRoles().contains(UserRole.CALIBRATOR_ADMIN) && verification.getCalibrator().getId().equals(user.getOrganization().getId())))) {
+                setFieldForCanceling(verification);
+                List<BbiProtocol> protocolList = bbiFileService.findBbiByVerification(verification);
+                for (BbiProtocol bbiProtocol : protocolList) {
+                    bbiFileService.deleteBbi(bbiProtocol);
+                }
+                verificationService.saveVerification(verification);
+                calibrationTestService.deleteTest(calibrationTestService.findByVerificationId(verification.getId()).getId());
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-            verificationService.saveVerification(verification);
-            calibrationTestService.deleteTest(calibrationTestService.findByVerificationId(verification.getId()).getId());
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -218,6 +223,8 @@ public class DigitalVerificationProtocolsCalibratorController {
             verification.getCounter().setNumberCounter(null);
             verification.getCounter().setReleaseYear(null);
             verification.getCounter().setStamp(null);
+        }
+        if (verification.getInfo() != null) {
             verification.getInfo().setDateOfVerif(null);
             verification.getInfo().setDoorCode(null);
             verification.getInfo().setEntrance(null);

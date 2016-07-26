@@ -865,6 +865,7 @@ public class CalibratorVerificationController {
                                          @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
         HttpStatus httpStatus = HttpStatus.OK;
 
+
         if (verificationService.findById(clientDTO.getVerificationId()).getCalibrator().getId() != user.getOrganizationId()) {
             httpStatus = HttpStatus.FORBIDDEN;
             return new ResponseEntity<>(httpStatus);
@@ -885,7 +886,7 @@ public class CalibratorVerificationController {
             httpStatus = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(httpStatus);
         }
-        Street street = streetService.findByDesignation(clientDTO.getStreet());
+        List<Street> street = streetService.findByDesignation(clientDTO.getStreet());
         if (street == null) {
             httpStatus = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(httpStatus);

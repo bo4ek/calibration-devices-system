@@ -876,5 +876,6 @@
   "WAITING_FOR_PROVIDER_ACCEPT": "Waiting for provider accept",
   "WAITING_IN_VERIFICATIONS_FOR_PROVIDER": "Verifications waiting in verifications for provider",
   "EDIT_STAMP": "Edit stamp",
-  "FILL_BY_PATTERN": "Fill by pattern"
+  "FILL_BY_PATTERN": "Fill by pattern",
+  "DATE_OF_START_VERIFICATION": "Date of start verification process"
 }

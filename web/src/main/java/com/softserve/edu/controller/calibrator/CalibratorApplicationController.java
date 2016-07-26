@@ -182,7 +182,7 @@ public class CalibratorApplicationController {
             }
         } catch (Exception e) {
             logger.error("Exception while inserting calibrator's verifications into DB ", e);
-            httpStatus = HttpStatus.CONFLICT;
+            httpStatus = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(verificationIds, httpStatus);
         }
         return new ResponseEntity<>(verificationIds, httpStatus);
@@ -194,6 +194,7 @@ public class CalibratorApplicationController {
     @RequestMapping(value = "verification/{verificationId}", method = RequestMethod.GET)
     public OrganizationStageVerificationDTO getVerificationCode(@PathVariable String verificationId) {
         Verification verification = verificationService.findById(verificationId);
+
         if (verification != null) {
             return OrganizationStageVerificationDTOTransformer.toDtoFromVerification(
                     verification.getClientData(),
@@ -208,7 +209,7 @@ public class CalibratorApplicationController {
                     verification.getDevice(),
                     verification.isVerificationWithDismantle(),
                     verification.getTask(),
-                    verification.getGroup().getId(),
+                    verification.getGroup(),
                     verification.getQueue()
             );
         } else {

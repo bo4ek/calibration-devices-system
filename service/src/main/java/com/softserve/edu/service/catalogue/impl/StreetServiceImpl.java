@@ -33,7 +33,7 @@ public class StreetServiceImpl implements StreetService {
     }
 
     @Override
-    public Street findByDesignation(String designation) {
+    public List<Street> findByDesignation(String designation) {
         return streetRepository.findByDesignation(designation);
     }
 

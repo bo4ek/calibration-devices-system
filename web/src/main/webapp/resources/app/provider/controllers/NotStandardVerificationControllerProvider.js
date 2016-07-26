@@ -73,7 +73,6 @@ angular
                                 notStandardVerificationService
                                     .sendEmployeeProvider(dataToSend)
                                     .success(function () {
-                                        $log.info($scope.idsOfVerifications);
                                         $scope.tableParams.reload();
                                         $rootScope.$broadcast('verification-sent-to-calibrator');
                                         toaster.pop('success', $filter('translate')('INFORMATION'),

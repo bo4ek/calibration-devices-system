@@ -233,12 +233,6 @@ angular
                             $scope.streets = streets;
                             $scope.selectedData.selectedStreet = "";
                         });
-                    $scope.indexes = [];
-                    dataReceivingService.findMailIndexByLocality(selectedLocality.designation, selectedDistrict.id)
-                        .success(function (indexes) {
-                            $scope.indexes = indexes;
-                            $scope.selectedData.index = indexes[0];
-                        });
                 }
             };
 
@@ -257,18 +251,18 @@ angular
             verificationService.getVerificationById($scope.verificationData.id)
                 .success(function (info) {
                     $scope.verificationInfo = info;
-                    $scope.convertCounterForView();
-                    $scope.convertInfoForView();
                     $scope.fillClientInfoForEdit();
                     $scope.fillCounterForEdit();
                     $scope.fillAddInfoForEdit();
+                    $scope.convertInfoForView();
+                    $scope.convertCounterForView();
+                    $scope.receiveAllSymbols($scope.counterInfo.deviceType);
                 });
 
             $scope.convertCounterForView = function () {
 
                 // COUNTER
                 $scope.counterInfo.deviceType = $scope.verificationInfo.deviceType;
-                $scope.receiveAllSymbols($scope.counterInfo.deviceType);
                 $scope.counterInfo.counterStatus = ($scope.verificationInfo.dismantled) ? $filter('translate')('YES') : $filter('translate')('NO');
                 $scope.counterInfo.verificationWithDismantle = ($scope.verificationInfo.verificationWithDismantle) ? $filter('translate')('YES') : $filter('translate')('NO');
                 $scope.counterInfo.dateOfDismantled = ($scope.verificationInfo.dateOfDismantled)
@@ -388,6 +382,7 @@ angular
                                     .then(function (standardSizes) {
                                         $scope.standardSizes = standardSizes.data;
                                         var index = arrayIndexOf($scope.standardSizes, $scope.verificationInfo.standardSize);
+                                        console.log($scope.standardSizes);
                                         $scope.counterData.counterStandardSize = $scope.standardSizes[index];
                                     });
                             });
@@ -730,8 +725,8 @@ angular
                     "deviceName": $scope.counterData.selectedDevice.designation,
                     "dismantled": $scope.counterData.dismantled,
                     "verificationWithDismantle": $scope.counterData.verificationWithDismantle,
-                    "dateOfDismantled": $scope.counterData.dateOfDismantled !== 0 ? $scope.counterData.dateOfDismantled.startDate : null,
-                    "dateOfMounted": $scope.counterData.dateOfMounted !== 0 ? $scope.counterData.dateOfMounted.startDate : null,
+                    "dateOfDismantled": $scope.counterData.dateOfDismantled != undefined ? $scope.counterData.dateOfDismantled.startDate : null,
+                    "dateOfMounted": $scope.counterData.dateOfMounted != undefined ? $scope.counterData.dateOfMounted.startDate : null,
                     "comment": $scope.counterData.comment,
                     "numberCounter": $scope.counterData.numberCounter,
                     "sealPresence": $scope.counterData.sealPresence,
@@ -761,20 +756,15 @@ angular
              */
             $scope.editAdditionalInfo = function () {
 
-                if (!$scope.addInfo.entrance && !$scope.addInfo.doorCode && !$scope.addInfo.floor
-                    && !$scope.addInfo.dateOfVerif && !$scope.addInfo.time && !$scope.addInfo.noWaterToDate && !$scope.addInfo.notes) {
-                    $scope.showMessage.status = true;
-                } else {
-                    $scope.showMessage.status = false;
-                    var info = {
+                var info = {
                         "entrance": $scope.addInfo.entrance,
                         "doorCode": $scope.addInfo.doorCode,
                         "floor": $scope.addInfo.floor,
-                        "dateOfVerif": $scope.addInfo.dateOfVerif.endDate,
+                    "dateOfVerif": $scope.addInfo.dateOfVerif != undefined ? $scope.addInfo.dateOfVerif.endDate : null,
                         "timeFrom": moment($scope.convertDateToLong($scope.addInfo.timeFrom)).format("HH:mm"),
                         "timeTo": $scope.addInfo.timeTo,
                         "serviceability": $scope.addInfo.serviceability,
-                        "noWaterToDate": $scope.addInfo.noWaterToDate.endDate,
+                    "noWaterToDate": $scope.addInfo.noWaterToDate != undefined ? $scope.addInfo.noWaterToDate.endDate : null,
                         "notes": $scope.addInfo.notes,
                         "verificationId": $scope.verificationDataMain.id
                     };
@@ -791,9 +781,5 @@ angular
                                 $scope.incorrectValue = true;
                             }
                         });
-                }
-
             };
-
-
         }]);
