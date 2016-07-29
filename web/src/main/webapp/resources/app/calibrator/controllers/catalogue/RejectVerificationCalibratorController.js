@@ -13,7 +13,6 @@ angular
             };
 
             $scope.submit = function () {
-                $scope.$broadcast('show-errors-check-validity');
                 $modalInstance.close($scope.rejectedReason);
             }
         }]);

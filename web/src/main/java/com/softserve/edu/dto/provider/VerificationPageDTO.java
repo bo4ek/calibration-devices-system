@@ -58,6 +58,8 @@ public class VerificationPageDTO {
     private Long counterId;
     private boolean isManual;
     private String comment;
+    private String bbiProtocol;
+    private String expirationDate;
 
     public VerificationPageDTO() {
     }

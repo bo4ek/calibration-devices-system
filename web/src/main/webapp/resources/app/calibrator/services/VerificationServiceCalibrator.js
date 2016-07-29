@@ -6,6 +6,9 @@ angular
             getArchivalVerificationDetails: function (verificationId) {
                 return getData('verifications/archive/' + verificationId);
             },
+            getAllProviders: function () {
+                return getData('verifications/archive/getAllProviders');
+            },
             getArchivalVerificationStamp: function (verificationId) {
                 return getData('verifications/archive/stamp/' + verificationId);
             },
@@ -110,6 +113,9 @@ angular
             },
             rejectVerificationByIdAndReason: function (verificationId, reasonId) {
                 return updateData('rejectVerification/' + verificationId + '/' + reasonId);
+            },
+            changeProviderInArchive: function (verificationId, providerId) {
+                return updateData('changeProviderInArchive/' + verificationId + '/' + providerId);
             },
             receiveAllReasons: function () {
                 return getData('verifications/receiveAllReasons/')

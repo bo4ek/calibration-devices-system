@@ -330,7 +330,7 @@ angular
                     toaster.pop('success', title, text);
                 };
 
-                $scope.uploadArchive = function () {
+                $scope.uploadArchiveFix = function () {
                     var modalInstance = $modal.open({
                         animation: true,
                         templateUrl: 'resources/app/calibrator/views/modals/upload-archive.html',
@@ -339,6 +339,23 @@ angular
                         resolve: {
                             uploadForStation: function () {
                                 return true;
+                            }
+                        }
+                    });
+                    modalInstance.result.then(function () {
+                        $scope.tableParams.reload();
+                    });
+                }
+
+                $scope.uploadArchivePortable = function () {
+                    var modalInstance = $modal.open({
+                        animation: true,
+                        templateUrl: 'resources/app/calibrator/views/modals/upload-archive.html',
+                        controller: 'UploadArchiveController',
+                        size: 'lg',
+                        resolve: {
+                            uploadForStation: function () {
+                                return false;
                             }
                         }
                     });

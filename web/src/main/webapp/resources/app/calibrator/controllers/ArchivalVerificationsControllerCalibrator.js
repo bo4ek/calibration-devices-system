@@ -1,10 +1,10 @@
 angular
     .module('employeeModule')
     .controller('ArchivalVerificationsControllerCalibrator', ['$scope', '$modal', '$log',
-        'VerificationServiceCalibrator', 'CalibrationTestServiceCalibrator', 'ngTableParams', '$location', '$filter', '$rootScope', '$timeout', '$translate',
+        'VerificationServiceCalibrator', 'CalibrationTestServiceCalibrator', 'ngTableParams', '$location', '$filter', '$rootScope', '$timeout', '$translate', 'toaster',
 
         function ($scope, $modal, $log, verificationServiceCalibrator, calibrationTestServiceCalibrator, ngTableParams, $location, $filter, $rootScope,
-                  $timeout, $translate) {
+                  $timeout, $translate, toaster) {
 
             $scope.resultsCount = 0;
 
@@ -97,8 +97,6 @@ angular
                  *
                  */
 
-
-                /*TODO: i18n*/
                 $scope.myDatePicker.pickerDate = {
                     startDate: (date ? moment(date, "YYYY-MM-DD") : moment()),
                     endDate: moment() 
@@ -265,7 +263,48 @@ angular
                         }
                     }
                 });
+            };
 
+            $scope.editProvider = function (verificationId) {
+                var modalInstance = $modal.open({
+                    animation: true,
+                    templateUrl: 'resources/app/calibrator/views/modals/edit-provider-modal.html',
+                    controller: 'EditProviderModalController',
+                    size: 'xs',
+                    resolve: {
+                        response: function () {
+                            return verificationServiceCalibrator.getAllProviders()
+                                .success(function (providers) {
+                                    return providers;
+                                });
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (provider) {
+                    verificationServiceCalibrator.changeProviderInArchive(verificationId, provider.id).then(function (data) {
+                        switch (data.status) {
+                            case 200:
+                            {
+                                toaster.pop('success', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('SUCCESSFUL_EDITED'));
+                                $scope.tableParams.reload();
+                                break;
+                            }
+                            case 403:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('ERROR_ACCESS'));
+                                break;
+                            }
+                            default:
+                            {
+                                toaster.pop('error', $filter('translate')('INFORMATION'),
+                                    $filter('translate')('SAVE_VERIF_ERROR'));
+                            }
+                        }
+                    });
+                });
             };
 
             /**

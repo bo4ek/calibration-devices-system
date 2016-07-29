@@ -87,7 +87,6 @@ angular
                 .success(function (devices) {
                     $scope.devices = devices;
                     $scope.counterData.selectedDevice = [];
-                    $log.debug($scope.counterData.selectedCount);
                 });
 
             /**

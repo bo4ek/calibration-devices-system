@@ -7,6 +7,7 @@ import com.softserve.edu.device.test.data.DeviceTestData;
 import com.softserve.edu.dto.*;
 import com.softserve.edu.dto.admin.CalibrationModuleDTO;
 import com.softserve.edu.dto.admin.OrganizationDTO;
+import com.softserve.edu.dto.application.ApplicationFieldDTO;
 import com.softserve.edu.dto.application.ClientStageVerificationDTO;
 import com.softserve.edu.dto.calibrator.ModuleAndTaskDTO;
 import com.softserve.edu.dto.calibrator.RejectedVerificationPageDTO;
@@ -557,6 +558,37 @@ public class CalibratorVerificationController {
         return new StampDTO(verification.getCounter().getStamp(), verification.getId());
     }
 
+    @RequestMapping(value = "archive/getAllProviders", method = RequestMethod.GET)
+    public Set<ApplicationFieldDTO> getAllProviders(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+        Set<Organization> list = organizationService.findByActiveAgreement(user.getOrganizationId());
+        list.stream().filter(organization -> !organization.getOrganizationTypes().contains(OrganizationType.PROVIDER)).forEach(list::remove);
+        return list.stream().map(organization -> new ApplicationFieldDTO(organization.getId(), organization.getName())).collect(Collectors.toSet());
+    }
+
+    @RequestMapping(value = "changeProviderInArchive/{verificationId}/{providerId}", method = RequestMethod.PUT)
+    public ResponseEntity getArchivalVerificationStampById(@PathVariable String verificationId,
+                                                           @PathVariable String providerId,
+                                                           @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
+
+        HttpStatus httpStatus = HttpStatus.OK;
+        Verification verification = verificationService.findById(verificationId);
+
+        if (!verification.getCalibrator().getId().equals(user.getOrganizationId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        Organization organization = organizationService.findOneById(Long.valueOf(providerId));
+        if (organization != null && organization.getOrganizationTypes().contains(OrganizationType.PROVIDER)) {
+            verification.setProvider(organization);
+            verification.setProviderEmployee(null);
+            verificationService.saveVerification(verification);
+            return new ResponseEntity<>(httpStatus);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @RequestMapping(value = "editStamp", method = RequestMethod.PUT)
     public ResponseEntity getArchivalVerificationStampById(@RequestBody StampDTO stampDTO,
                                                            @AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {
@@ -568,6 +600,7 @@ public class CalibratorVerificationController {
 
         return new ResponseEntity<>(httpStatus);
     }
+
 
     @RequestMapping(value = "new/earliest_date/calibrator", method = RequestMethod.GET)
     public String getNewVerificationEarliestDateByProviderId(@AuthenticationPrincipal SecurityUserDetailsService.CustomUserDetails user) {

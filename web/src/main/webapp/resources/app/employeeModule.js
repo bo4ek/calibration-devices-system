@@ -382,6 +382,7 @@
         'calibrator/controllers/GraphicEmployeeCalibratorMainPanel',
         'calibrator/controllers/InstallPrivateKeyController',
         'calibrator/controllers/EditStampModalController',
+        'calibrator/controllers/EditProviderModalController',
         'calibrator/services/VerificationPlanningTaskService',
         'calibrator/services/CalibrationTestServiceCalibrator',
         'calibrator/services/InitializeLibForDigitalSignService',

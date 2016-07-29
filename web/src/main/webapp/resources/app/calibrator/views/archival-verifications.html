@@ -30,12 +30,11 @@
                                        class="table table-bordered table-hover users_table" id="info_table">
                                     <tbody>
                                     <tr ng-repeat="verification in $data">
-                                        <td data-title="'INITIAL_DATE' | translate" class="datecolumn" sortable="'date'"
-                                            filter="{ 'date': 'daterange' }">{{ verification.initialDate | date :
-                                            'dd-MM-yyyy'}}
-                                            <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' |
-                                                translate}} {{verification.processTimeExceeding}} {{'DAYS' |
-                                                translate}}</b>
+                                        <td data-title="'INITIAL_DATE' | translate"
+                                            class="datecolumn"
+                                            sortable="'date'"
+                                            filter="{ 'date': 'daterange' }">{{ verification.initialDate | date : 'dd-MM-yyyy'}}
+                                            <div ng-show="verification.processTimeExceeding>0"><b>{{'TIME_EXCEEDED' | translate}} {{verification.processTimeExceeding}} {{'DAYS' | translate}}</b>
                                             </div>
                                         </td>
                                         <td data-title="'VERIFICATION_ID' | translate" sortable="'id'" style="width: 6%"
@@ -64,6 +63,12 @@
                                                                 <a>
                                                                     <i class="fa fa-pencil"></i>
                                                                     {{ 'EDIT_STAMP' | translate }}
+                                                                </a>
+                                                            </div>
+                                                            <div class="item" ng-click="editProvider(verification.id)">
+                                                                <a>
+                                                                    <i class="fa fa-pencil"></i>
+                                                                    {{ 'CHANGE_PROVIDER' | translate }}
                                                                 </a>
                                                             </div>
                                                             <div class="item">
@@ -161,16 +166,11 @@
                                         </td>
                                         <td data-title="'PROVIDER' | translate">{{ verification.nameProvider}}
                                         </td>
-                                        <td data-title="'MEASUREMENT_DEVICE_TYPE' | translate"
+                                        <td data-title="'SERVICE_TYPE' | translate"
                                             sortable="'measurement_device_type'"
                                             filter="{ measurement_device_type : 'deviceType' }">
                                             {{verification.measurementDeviceType | translate}}
                                         </td>
-                                        <td data-title="'DOCUMENT_TYPE' | translate" sortable="'protocol_status'"
-                                            filter="{ protocol_status : 'protocolStatus'}">{{
-                                            verification.documentTypeName }}
-                                        </td>
-                                        <!-- TODO: add date of creation document-->
                                     </tr>
                                     </tbody>
                                 </table>

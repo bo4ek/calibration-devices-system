@@ -55,6 +55,8 @@ public interface OrganizationService {
 
     Set<Device.DeviceType> findDeviceTypesByOrganizationId(Long organizationId);
 
+    Set<Organization> findByActiveAgreement(Long customerId);
+
     /**
      * Find all organizations by organization types and device types
      *

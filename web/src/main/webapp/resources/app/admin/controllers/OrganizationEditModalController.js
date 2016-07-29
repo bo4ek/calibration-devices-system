@@ -576,8 +576,6 @@ angular
                         $scope.selectedValues.streetRegistered = "";
                         $scope.selectedValues.buildingRegistered = "";
                         $rootScope.organization.flatRegistered = "";
-                        $log.debug($scope.streetsReg);
-
                     }
                 );
             };

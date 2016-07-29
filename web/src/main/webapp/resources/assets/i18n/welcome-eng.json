@@ -877,5 +877,8 @@
   "WAITING_IN_VERIFICATIONS_FOR_PROVIDER": "Verifications waiting in verifications for provider",
   "EDIT_STAMP": "Edit stamp",
   "FILL_BY_PATTERN": "Fill by pattern",
-  "DATE_OF_START_VERIFICATION": "Date of start verification process"
+  "DATE_OF_START_VERIFICATION": "Date of start verification process",
+  "CHANGE_PROVIDER": "Change provider organization",
+  "UPLOAD_ARCHIVE_FIX_STATION": "Upload archive from fixed station",
+  "UPLOAD_ARCHIVE_PORTABLE_STATION": "Upload archive from portable station"
 }

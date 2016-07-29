@@ -786,7 +786,7 @@ public class ReportsServiceImpl implements ReportsService {
                 } else if (verification.getStatus().equals(Status.TEST_NOK)) {
                     return String.format("%s-%s%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')), Constants.DOCUMEN_SUFIX_TEST_NOK);
                 }
-            } else {
+            } else if (!verification.getStatus().equals(Status.REJECTED_BY_CALIBRATOR) && !verification.getStatus().equals(Status.REJECTED_BY_PROVIDER) && !verification.getStatus().equals(Status.REJECTED) && !verification.getStatus().equals(Status.PROTOCOL_REJECTED)) {
                 return String.format("%s-%s%s", subdivisionId, moduleNumber, bbiProtocol.substring(0, bbiProtocol.indexOf('.')));
             }
         }

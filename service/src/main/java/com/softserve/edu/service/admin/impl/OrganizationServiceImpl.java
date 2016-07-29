@@ -343,6 +343,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional(readOnly = true)
+    public Set<Organization> findByActiveAgreement(Long customerId) {
+        return organizationRepository.findByActiveAgreement(customerId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Set<Organization> findCustomersByIdAndTypeAndActiveAgreementDeviceType(Long executorId, OrganizationType organizationType, String deviceType) {
         return organizationRepository.findCustomersByIdAndTypeAndActiveAgreementDeviceType(executorId, deviceType);
     }

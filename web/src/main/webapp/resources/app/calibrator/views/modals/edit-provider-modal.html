@@ -1,0 +1,58 @@
+<form class="form-group" ng-submit="submit()" novalidate>
+
+    <div class="modal-header">
+        <h3 class="modal-title">{{'CHANGE_PROVIDER' | translate}}</h3>
+    </div>
+
+    <div class="col-md-12 modal-body">
+        <ui-select class="form-control" type="text" theme="select2"
+                   ng-model="selectedData.firstSelectedDeviceType"
+                   search-enabled="false"
+                   on-select="receiveProviders(selectedData.firstSelectedDeviceType)"
+                   id="firstSelectedDeviceType"
+                   name="firstSelectedDeviceType" required>
+            <ui-select-match placeholder="{{'SERVICE_TYPE' | translate}}">
+                {{$select.selected | translate}}
+            </ui-select-match>
+            <ui-select-choices repeat="deviceType in deviceTypes | filter: $select.search">
+                <span ng-bind-html="deviceType | translate"></span>
+            </ui-select-choices>
+        </ui-select>
+
+        <p class="help-block">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            {{'REQUIRED' | translate}}
+        </p>
+    </div>
+
+    <div class="col-md-12 modal-body">
+        <ui-select class="form-control" type="text" theme="select2"
+                   ng-model="selectedData.firstSelectedProvider"
+                   search-enable="false"
+                   name="firstDeviceProvider"
+
+                   id="firstDeviceProvider" required>
+            <ui-select-match placeholder="{{'SELECT_PROVIDER' | translate}}">
+                {{ $select.selected.designation}}
+            </ui-select-match>
+            <ui-select-choices repeat="provider in firstDeviceProviders">
+                <span ng-bind-html="provider.designation"></span>
+            </ui-select-choices>
+        </ui-select>
+        <p class="help-block">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            {{'REQUIRED' | translate}}
+        </p>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-success pull-left" type="submit">
+            {{ 'CONFIRM' | translate }}
+        </button>
+
+        <button class="btn btn-danger pull-right" type="button" ng-click="close()">
+            {{ 'CANCEL' | translate }}
+        </button>
+    </div>
+
+</form>

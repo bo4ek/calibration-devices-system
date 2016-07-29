@@ -716,25 +716,6 @@ angular
                     });
             }
 
-
-            $scope.uploadArchive = function () {
-                var modalInstance = $modal.open({
-                    animation: true,
-                    templateUrl: 'resources/app/calibrator/views/modals/upload-archive.html',
-                    controller: 'UploadArchiveController',
-                    size: 'lg',
-                    resolve: {
-                        uploadForStation: function () {
-                            return false;
-                        }
-                    }
-                });
-                modalInstance.result.then(function () {
-                    $scope.tableParams.reload();
-                });
-            }
-
-
             $scope.openRejectVerificationModal = function (verificationId) {
                 var modalInstance = $modal.open({
                     animation: true,

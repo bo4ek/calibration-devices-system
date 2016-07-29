@@ -16,19 +16,22 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-lg-8">
-                            <button type="button" class="btn btn-primary" ng-click="sendTaskToStation()">
+                        <div class="col-md-11">
+                            <button type="button" class="btn btn-success btn-md" ng-click="sendTaskToStation()">
                                 <span class="glyphicon glyphicon-send" style="margin-right: 10px"></span>
                                 {{ 'SEND' | translate }}
                             </button>
 
-                            <button class="btn btn-primary" type="button" ng-click="uploadArchive()">
-                                <i class="fa fa-file-archive-o"></i> {{ 'UPLOAD_ARCHIVE' | translate }}
+                            <button class="btn btn-primary btn-md" type="button" ng-click="uploadArchiveFix()">
+                                <i class="fa fa-file-archive-o"></i> {{ 'UPLOAD_ARCHIVE_FIX_STATION' | translate }}
+                            </button>
+                            <button class="btn btn-info btn-md pull-right" type="button" ng-click="uploadArchivePortable()">
+                                <i class="fa fa-file-archive-o"></i> {{ 'UPLOAD_ARCHIVE_PORTABLE_STATION' | translate }}
                             </button>
                         </div>
-                        <div class="col-lg-4">
-                            <span class="pull-right"><span
-                                    translate="OVERALL_NUMBER_OF_CALIBRATION_TASKS"></span>: {{ resultsCount }}
+                        <div class="col-md-">
+                            <span class="pull-right">
+                                <span translate="OVERALL_NUMBER_OF_CALIBRATION_TASKS"></span>: {{ resultsCount }}
                             </span>
                         </div>
                     </div>
